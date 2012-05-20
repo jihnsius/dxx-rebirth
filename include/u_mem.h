@@ -20,7 +20,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 void mem_init(void);
 
-#if !defined(NDEBUG)
+#ifdef DEBUG_MEMORY_ALLOCATIONS
 
 void mem_display_blocks();
 extern void * mem_malloc( unsigned int size, char * var, char * file, int line, int fill_zero );
