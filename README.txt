@@ -15,6 +15,8 @@ http://www.dxx-rebirth.com
    I hope you enjoy the game as you did when you played it the first time.
    If you have something to say about my release, feel free to contact me at zico [at] dxx-rebirth [dot] com
 
+[ Valhalla Legends note: although the github fork is heavily derived from zico's release, and continues to incorporate his improvements over time, he does not support it.  Please do not report problems seen in the github code to zico, unless you confirm that it is also present in the Bazaar version he maintains. ]
+
 
 1. Features:
 ============
@@ -67,5 +69,13 @@ http://www.dxx-rebirth.com
 5. Contact:
 ===========
 
+For code from the bzr/ refs, which are mirrors of upstream code, contact
+the upstream dxx-rebirth project at:
    http://www.dxx-rebirth.com/
    zico [at] dxx-rebirth [dot] com
+
+For code containing commits attributed to Valhalla Legends members,
+please contact those authors or use the Github issue tracker.  Even if
+the problematic commit is attributed to upstream, it is possible that
+the problem is a negative interaction between otherwise valid upstream
+code and a change specific to the Valhalla Legends changes.
