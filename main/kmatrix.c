@@ -178,15 +178,13 @@ void kmatrix_phallic ()
 	gr_printf( CENTERSCREEN-(sw/2), FSPACY(55+72+3), message);
 }
 
-void kmatrix_status_msg (fix time, int reactor)
+void kmatrix_status_msg (fix time, int reactor, int paused)
 {
 	grd_curcanv->cv_font = GAME_FONT;
 	gr_set_fontcolor(gr_find_closest_color(255,255,255),-1);
-
-	if (reactor)
-		gr_printf(0x8000, SHEIGHT-LINE_SPACING, "Waiting for players to finish level. Reactor time: T-%d", time);
-	else
-		gr_printf(0x8000, SHEIGHT-LINE_SPACING, "Level finished. Wait (%d) to proceed or ESC to Quit.", time);
+	gr_printf(0x8000, SHEIGHT-LINE_SPACING, (reactor
+		? "%sWaiting for players to finish level. Reactor time: T-%d"
+		: "%sLevel finished. Wait (%d) to proceed or ESC to Quit."), "[pause] " + (paused ? 0 : 8), time);
 }
 
 typedef struct kmatrix_screen
@@ -194,6 +192,7 @@ typedef struct kmatrix_screen
 	grs_bitmap background;
 	int network;
 	fix64 end_time;
+	fix64 pause_time;
 	int playing;
 } kmatrix_screen;
 
@@ -304,6 +303,9 @@ int kmatrix_handler(window *wind, d_event *event, kmatrix_screen *km)
 						return 1;
 					}
 					return 1;
+				case KEY_PAUSE:
+					km->pause_time = !km->pause_time;
+					break;
 					
 				default:
 					break;
@@ -329,11 +331,19 @@ int kmatrix_handler(window *wind, d_event *event, kmatrix_screen *km)
 				Countdown_seconds_left = -1;
 			
 			// If Reactor is finished and end_time not inited, set the time when we will exit this loop
+			{
+			const fix64 now = timer_query();
 			if (km->end_time == -1 && Countdown_seconds_left < 0 && !km->playing)
-				km->end_time = timer_query() + (KMATRIX_VIEW_SEC * F1_0);
+				km->end_time = now + (KMATRIX_VIEW_SEC * F1_0);
 			
 			// Check if end_time has been reached and exit loop
-			if (timer_query() >= km->end_time && km->end_time != -1)
+			if (km->pause_time)
+			{
+				if (now >= km->end_time && km->end_time != -1)
+					km->end_time = now + (1 * F1_0);
+			}
+			else
+			if (now >= km->end_time && km->end_time != -1)
 			{
 				if (km->network)
 					multi_send_endlevel_packet();  // make sure
@@ -358,13 +368,14 @@ int kmatrix_handler(window *wind, d_event *event, kmatrix_screen *km)
 				window_close(wind);
 				break;
 			}
+			}
 
 			kmatrix_redraw(km);
 			
 			if (km->playing)
-				kmatrix_status_msg(Countdown_seconds_left, 1);
+				kmatrix_status_msg(Countdown_seconds_left, 1, !! km->pause_time);
 			else
-				kmatrix_status_msg(f2i(timer_query()-km->end_time), 0);
+				kmatrix_status_msg(f2i(timer_query()-km->end_time), 0, !! km->pause_time);
 			break;
 			
 		case EVENT_WINDOW_CLOSE:
@@ -402,6 +413,7 @@ void kmatrix_view(int network)
 	
 	km->network = network;
 	km->end_time = -1;
+	km->pause_time = 0;
 	km->playing = 0;
 	
 	set_screen_mode( SCREEN_MENU );
