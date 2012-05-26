@@ -77,7 +77,7 @@ void songs_init()
 	memset(sng_file, '\0', sizeof(sng_file));
 	if (Current_mission != NULL) // try MISSION_NAME.sngdxx - might be rarely used but handy if you want a songfile for a specific mission outside of the mission hog file. use special extension to not crash with other ports of the game
 	{
-		snprintf(sng_file, strlen(Current_mission_filename)+8, "%s.sngdxx", Current_mission_filename);
+		snprintf(sng_file, sizeof(sng_file), "%s.sngdxx", Current_mission_filename);
 		fp = PHYSFSX_openReadBuffered(sng_file);
 	}
 
