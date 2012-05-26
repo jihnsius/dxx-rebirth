@@ -1413,6 +1413,8 @@ void multi_send_message_end()
 		multi_send_msgsend_state(0);
 		return;
 	}
+	else if (Network_message[0] == '/')
+		return;
 
 	else
 		HUD_init_message(HM_MULTI, "%s '%s'", TXT_SENDING, Network_message);
