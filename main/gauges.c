@@ -2609,8 +2609,9 @@ void show_HUD_names()
 		else
 			objnum = Players[pnum].objnum;
 
-		if ((show_name || show_typing || show_indi) && see_object(objnum))
+		if ((show_name || show_typing || show_indi))
 		{
+			const int can_see_object = see_object(objnum);
 			g3s_point player_point;
 			g3_rotate_point(&player_point,&Objects[objnum].pos);
 
@@ -2621,7 +2622,7 @@ void show_HUD_names()
 				if (!(player_point.p3_flags & PF_OVERFLOW))
 				{
 					fix x,y,dx,dy;
-					char s[CALLSIGN_LEN+10];
+					char s[CALLSIGN_LEN+30] = "";
 					int w, h, aw, x1, y1, color_num;
 
 					x = player_point.p3_sx;
@@ -2629,18 +2630,25 @@ void show_HUD_names()
 					dy = -fixmuldiv(fixmul(Objects[objnum].size,Matrix_scale.y),i2f(grd_curcanv->cv_bitmap.bm_h)/2,player_point.p3_z);
 					dx = fixmul(dy,grd_curscreen->sc_aspect);
 					color_num = (Game_mode & GM_TEAM)?get_team(pnum):pnum;
-					memset(&s, '\0', CALLSIGN_LEN+10);
+					char leader_text_can_see_object[32];
+					if (can_see_object)
+						leader_text_can_see_object[0] = 0;
+					else
+					{
+						const fix distance = vm_vec_dist_quick(&Viewer->pos, &Objects[objnum].pos);
+						snprintf(leader_text_can_see_object, sizeof(leader_text_can_see_object), "%i: ", distance >> 16);
+					}
 					/* Set the text to show */
 					if( Game_mode & GM_BOUNTY && pnum == Bounty_target )
-						strncpy( s, "Target", 6 );
+						snprintf(s, sizeof(s), "%sTarget: %s", leader_text_can_see_object, Players[pnum].callsign);
 					else if (show_name)
-						snprintf(s, sizeof(s), "%s", Players[pnum].callsign);
+						snprintf(s, sizeof(s), "%s%s", leader_text_can_see_object, Players[pnum].callsign);
 					if (show_typing && multi_sending_message[pnum])
 					{
 						if (s[0])
 							strncat( s, ", typing", 8);
 						else
-							strncpy( s, "Typing", 6 );
+							snprintf(s, sizeof(s), "%sTyping", leader_text_can_see_object);
 					}
 					if (s[0])
 					{
