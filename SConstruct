@@ -352,7 +352,7 @@ else:
 		ogllibs = ['GLES_CM', 'EGL']
 	else:
 		ogllibs = ['GL', 'GLU']
-	lflags = '-L/usr/X11R6/lib'
+	lflags = os.environ["LDFLAGS"] if os.environ.has_key('LDFLAGS') else ''
 
 # set endianess
 if (checkEndian() == "big"):
