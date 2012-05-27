@@ -41,14 +41,22 @@ extern void args_exit();
 //   Dbg - Debugging/Undocumented Options
 typedef struct Arg
 {
+	char *SysHogDir;
+	char *SysPilot;
+	const char *MplUdpHostAddr;
+	char *EdiAutoLoad;
+	char *DbgAltTex;
+	char *DbgTexMap;
+#ifdef USE_TRACKER
+	const char *MplTrackerAddr;
+	int MplTrackerPort;
+#endif
 	int SysShowCmdHelp;
 	int SysUseNiceFPS;
 	int SysMaxFPS;
-	char *SysHogDir;
 	int SysNoHogDir;
 	int SysUsePlayersDir;
 	int SysLowMem;
-	char *SysPilot;
 	int SysWindow;
 	int SysNoBorders;
 	int SysAutoDemo;
@@ -66,22 +74,14 @@ typedef struct Arg
 #ifdef OGL
 	int OglFixedFont;
 #endif
-	const char *MplUdpHostAddr;
 	int MplUdpHostPort;
 	int MplUdpMyPort;
-#ifdef USE_TRACKER
-	const char *MplTrackerAddr;
-	int MplTrackerPort;
-#endif
-	char *EdiAutoLoad;
 	int EdiSaveHoardData;
 	int EdiMacData; // also used for some read routines in non-editor build
 	int DbgVerbose;
 	int DbgSafelog;
 	int DbgNoRun;
 	int DbgRenderStats;
-	char *DbgAltTex;
-	char *DbgTexMap;
 	int DbgShowMemInfo;
 	int DbgUseDoubleBuffer;
 	int DbgBigPig;
