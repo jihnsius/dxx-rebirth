@@ -76,6 +76,7 @@ typedef struct Arg
 #endif
 	int MplUdpHostPort;
 	int MplUdpMyPort;
+	int MplDirectMenu;
 	int EdiSaveHoardData;
 	int EdiMacData; // also used for some read routines in non-editor build
 	int DbgVerbose;

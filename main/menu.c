@@ -469,6 +469,30 @@ int main_menu_handler(newmenu *menu, d_event *event, int *menu_choice )
 
 		case EVENT_NEWMENU_DRAW:
 			draw_copyright();
+			if (GameArg.MplDirectMenu != MULTI_DIRECT_NONE)
+			{
+				int MplDirectMenu = GameArg.MplDirectMenu;
+				/*
+				 * Only do this once, else the player would have difficulty
+				 * returning to the main menu.
+				 */
+				GameArg.MplDirectMenu = MULTI_DIRECT_NONE;
+				switch(MplDirectMenu)
+				{
+					case MULTI_DIRECT_NONE:
+					default:
+						break;
+					case MULTI_DIRECT_JOIN:
+						do_option(MENU_JOIN_MANUAL_UDP_NETGAME);
+						break;
+					case MULTI_DIRECT_HOST:
+						do_option(MENU_START_UDP_NETGAME);
+						break;
+					case MULTI_DIRECT_FIND:
+						do_option(MENU_JOIN_LIST_UDP_NETGAME);
+						break;
+				}
+			}
 			break;
 
 		case EVENT_NEWMENU_SELECTED:

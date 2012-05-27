@@ -24,6 +24,14 @@ int net_udp_level_sync();
 void net_udp_send_mdata_direct(ubyte *data, int data_len, int pnum, int priority);
 void net_udp_send_netgame_update();
 
+enum
+{
+	MULTI_DIRECT_NONE,
+	MULTI_DIRECT_JOIN,
+	MULTI_DIRECT_HOST,
+	MULTI_DIRECT_FIND,
+};
+
 // Some defines
 #ifdef IPv6
 #define UDP_MCASTv6_ADDR "ff02::1"

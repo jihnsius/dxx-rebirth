@@ -186,6 +186,9 @@ void ReadCmdArgs(void)
 	GameArg.MplUdpHostAddr		= get_str_arg("-udp_hostaddr", UDP_MANUAL_ADDR_DEFAULT);
 	GameArg.MplUdpHostPort		= get_int_arg("-udp_hostport", 0);
 	GameArg.MplUdpMyPort		= get_int_arg("-udp_myport", 0);
+	if (FindArg("-multiplayer-join"))	GameArg.MplDirectMenu = MULTI_DIRECT_JOIN;
+	else if (FindArg("-multiplayer-host"))	GameArg.MplDirectMenu = MULTI_DIRECT_HOST;
+	else if (FindArg("-multiplayer-find"))	GameArg.MplDirectMenu = MULTI_DIRECT_FIND;
 #ifdef USE_TRACKER
 	GameArg.MplTrackerAddr		= get_str_arg("-tracker_hostaddr", TRACKER_ADDR_DEFAULT);
 	GameArg.MplTrackerPort		= get_int_arg("-tracker_hostport", TRACKER_PORT_DEFAULT);
