@@ -1722,7 +1722,8 @@ void do_escort_menu(void)
 	window *wind;
 
 	if (Game_mode & GM_MULTI) {
-		HUD_init_message(HM_DEFAULT, "No Guide-Bot in Multiplayer!");
+		extern unsigned g_coop_position_relative;
+		g_coop_position_relative = (g_coop_position_relative + 1) % 3;
 		return;
 	}
 

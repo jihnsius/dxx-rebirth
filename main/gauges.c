@@ -55,6 +55,8 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #ifdef OGL
 #include "ogl_init.h"
 #endif
+#include "automap.h"
+#include "gameseg.h"
 
 //bitmap numbers for gauges
 #define GAUGE_SHIELDS			0		//0..9, in decreasing order (100%,90%...0%)
@@ -2434,6 +2436,47 @@ void show_mousefs_indicator(int mx, int my, int mz, int x, int y, int size)
 }
 
 #ifdef NETWORK
+unsigned g_coop_position_relative;
+
+static unsigned show_player_score_with_position(const unsigned player_num, const int x1, const int y)
+{
+	const unsigned coop_position_relative = g_coop_position_relative;
+	if (coop_position_relative >= 2)
+		// hidden
+		return 0;
+	if (Newdemo_state == ND_STATE_PLAYBACK)
+		return 0;
+	const unsigned objnum_of_player_num = Players[player_num].objnum;
+	if (objnum_of_player_num > Highest_object_index)
+		return 0;
+	const vms_vector *vvop = &Objects[objnum_of_player_num].pos;
+	fix dx, dy, dz;
+	if (coop_position_relative == 0)
+		// relative
+	{
+		/*
+		 * If self, then rotate relative to special.
+		 * Else, rotate relative to object.
+		 */
+		if (Player_num == player_num)
+			return 0;
+		g3s_point player_point;
+		g3_rotate_point(&player_point, vvop);
+		dx = player_point.p3_vec.x;
+		dy = player_point.p3_vec.y;
+		dz = player_point.p3_vec.z;
+	}
+	else
+		// absolute
+	{
+		dx = vvop->x;
+		dy = vvop->y;
+		dz = vvop->z;
+	}
+	gr_printf(x1,y,"%-6d X:%-4d Y:%-4d Z:%-4d",Players[player_num].score, dx >> 16, dy >> 16, dz >> 16);
+	return 1;
+}
+
 void hud_show_kill_list()
 {
 	int n_players,player_list[MAX_PLAYERS];
@@ -2547,7 +2590,15 @@ void hud_show_kill_list()
 		else if (Show_kill_list == 3)
 			gr_printf(x1,y,"%3d",team_kills[i]);
 		else if (Game_mode & GM_MULTI_COOP)
+		{
+			/*
+			 * Little 'player_num' is the player being considered by
+			 * this loop.  Big 'Player_num' is the player running this
+			 * instance of the game.
+			 */
+			if (!show_player_score_with_position(player_num, x1, y))
 			gr_printf(x1,y,"%-6d",Players[player_num].score);
+		}
 		else if (Netgame.PlayTimeAllowed || Netgame.KillGoal)
 			gr_printf(x1,y,"%3d(%d)",Players[player_num].net_kills_total,Players[player_num].KillGoalCount);
 		else
