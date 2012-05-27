@@ -2301,6 +2301,8 @@ void net_udp_send_game_info(struct _sockaddr sender_addr, ubyte info_upid)
 
 static void net_udp_broadcast_game_info(ubyte info_upid)
 {
+	if (GameArg.MplNoAnnounce)
+		return;
 	net_udp_send_game_info(GBcast, info_upid);
 #ifdef IPv6
 	net_udp_send_game_info(GMcast_v6, info_upid);

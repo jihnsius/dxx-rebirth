@@ -189,6 +189,7 @@ void ReadCmdArgs(void)
 	if (FindArg("-multiplayer-join"))	GameArg.MplDirectMenu = MULTI_DIRECT_JOIN;
 	else if (FindArg("-multiplayer-host"))	GameArg.MplDirectMenu = MULTI_DIRECT_HOST;
 	else if (FindArg("-multiplayer-find"))	GameArg.MplDirectMenu = MULTI_DIRECT_FIND;
+	if (FindArg("-multiplayer-hidden"))	GameArg.MplNoAnnounce = 1;
 #ifdef USE_TRACKER
 	GameArg.MplTrackerAddr		= get_str_arg("-tracker_hostaddr", TRACKER_ADDR_DEFAULT);
 	GameArg.MplTrackerPort		= get_int_arg("-tracker_hostport", TRACKER_PORT_DEFAULT);

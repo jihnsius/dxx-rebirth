@@ -158,6 +158,7 @@ void print_commandline_help()
 	printf( "  -multiplayer-join             Jump to multiplayer manual join menu\n");
 	printf( "  -multiplayer-host             Jump to multiplayer host menu\n");
 	printf( "  -multiplayer-find             Jump to multiplayer find game menu\n");
+	printf( "  -multiplayer-hidden           Do not broadcast the existence of this game\n");
 #ifdef USE_TRACKER
 	printf( "  -tracker_hostaddr <n>         Address of Tracker server to register/query games to/from\n\t\t\t\t(default: %s)\n", TRACKER_ADDR_DEFAULT);
 	printf( "  -tracker_hostport <n>         Port of Tracker server to register/query games to/from\n\t\t\t\t(default: %i)\n", TRACKER_PORT_DEFAULT);
