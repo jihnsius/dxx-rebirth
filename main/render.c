@@ -110,6 +110,17 @@ int found_seg,found_side,found_face,found_poly;
 #define _search_mode 0
 #endif
 
+#ifdef ALWAYS_OUTLINE_WALLS
+static void draw_outline2(unsigned nverts, g3s_point **pointlist, unsigned color)
+{
+	unsigned i;
+	gr_setcolor(color);
+	for (i=0;i<nverts-1;i++)
+		g3_draw_line(pointlist[i],pointlist[i+1]);
+	g3_draw_line(pointlist[i],pointlist[0]);
+}
+#endif
+
 #ifdef NDEBUG		//if no debug code, set these vars to constants
 
 #define Outline_mode 0
@@ -213,6 +224,13 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
 		dyn_light[i].r = dyn_light[i].g = dyn_light[i].b = uvl_copy[i].l = uvlp[i].l;
 		pointlist[i] = &Segment_points[vp[i]];
 	}
+
+#ifdef ALWAYS_OUTLINE_WALLS
+	if (Segments[segnum].sides[sidenum].wall_num >= 0 && Segments[segnum].sides[sidenum].wall_num < 255)
+		draw_outline2(nv, pointlist, BM_XRGB(63,63,63));
+	if (!(wid_flags & WID_RENDER_FLAG))
+		return;
+#endif
 
 	//handle cloaked walls
 	if (wid_flags & WID_CLOAKED_FLAG) {
@@ -409,6 +427,9 @@ void render_side(segment *segp, int sidenum)
 	wid_flags = WALL_IS_DOORWAY(segp,sidenum);
 
 	if (!(wid_flags & WID_RENDER_FLAG))		//if (WALL_IS_DOORWAY(segp, sidenum) == WID_NO_WALL)
+#ifdef ALWAYS_OUTLINE_WALLS
+		if (!(segp->sides[sidenum].wall_num >= 0 && segp->sides[sidenum].wall_num < 255))
+#endif
 		return;
 
 #ifdef COMPACT_SEGS
