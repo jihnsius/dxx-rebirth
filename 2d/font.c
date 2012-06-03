@@ -857,7 +857,7 @@ int gr_ustring(int x, int y, char *s )
 }
 
 
-void gr_get_string_size(char *s, int *string_width, int *string_height, int *average_width )
+void gr_get_string_size(const char *s, int *string_width, int *string_height, int *average_width )
 {
 	int i = 0;
 	float width=0.0,spacing=0.0,longest_width=0.0,string_width_f=0.0,string_height_f=0.0;

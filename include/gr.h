@@ -334,7 +334,7 @@ int gr_string(int x, int y, char *s );
 int gr_ustring(int x, int y, char *s );
 int gr_printf( int x, int y, char * format, ... );
 int gr_uprintf( int x, int y, char * format, ... );
-void gr_get_string_size(char *s, int *string_width, int *string_height, int *average_width );
+void gr_get_string_size(const char *s, int *string_width, int *string_height, int *average_width );
 
 
 //  From roller.c
