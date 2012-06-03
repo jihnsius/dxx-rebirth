@@ -35,13 +35,7 @@ typedef struct keyboard	{
 
 static keyboard key_data;
 
-typedef struct key_props {
-	char *key_text;
-	unsigned char ascii_value;
-	SDLKey sym;
-} key_props;
-
-key_props key_properties[256] = {
+const key_props key_properties[256] = {
 { "",       255,    -1                 }, // 0
 { "ESC",    255,    SDLK_ESCAPE        },
 { "1",      '1',    SDLK_1             },

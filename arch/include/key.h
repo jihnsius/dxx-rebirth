@@ -20,6 +20,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #ifndef _KEY_H
 #define _KEY_H 
 
+#include <SDL/SDL_keysym.h>
 #include "pstypes.h"
 #include "fix.h"
 #include "event.h"
@@ -184,5 +185,13 @@ extern char * key_text[256];
 #define KEY_PRINT_SCREEN	0xB7
 
 #define KEY_PAUSE			0x61
+
+typedef struct key_props {
+	const char *key_text;
+	unsigned char ascii_value;
+	SDLKey sym;
+} key_props;
+
+extern const key_props key_properties[256];
 
 #endif
