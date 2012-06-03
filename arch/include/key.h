@@ -53,8 +53,6 @@ extern volatile unsigned char keyd_last_released;
 
 extern void key_toggle_repeat(int enable);
 
-extern char * key_text[256];
-
 // for key_ismodlck
 #define KEY_ISMOD	1
 #define KEY_ISLCK	2

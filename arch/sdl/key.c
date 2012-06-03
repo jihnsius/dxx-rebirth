@@ -300,8 +300,6 @@ typedef struct d_event_keycommand
 	int			keycode;
 } d_event_keycommand;
 
-char *key_text[256];
-
 int key_ismodlck(int keycode)
 {
 	switch (keycode)
@@ -435,8 +433,6 @@ void key_close()
 
 void key_init()
 {
-	int i;
-	
 	if (Installed) return;
 
 	Installed=1;
@@ -444,10 +440,6 @@ void key_init()
 	key_toggle_repeat(1);
 
 	keyd_time_when_last_pressed = timer_query();
-	
-	for(i=0; i<256; i++)
-		key_text[i] = key_properties[i].key_text;
-	  
 	// Clear the keyboard array
 	key_flush();
 }
