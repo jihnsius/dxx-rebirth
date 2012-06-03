@@ -39,7 +39,7 @@ extern void key_close();
 extern fix64 keyd_time_when_last_pressed;
 
 // Stores Unicode values registered in one event_loop call
-unsigned char unicode_frame_buffer[KEY_BUFFER_SIZE];
+extern unsigned char unicode_frame_buffer[KEY_BUFFER_SIZE];
 
 extern void key_flush();    // Clears the 256 char buffer
 extern int event_key_get(d_event *event);	// Get the keycode from the EVENT_KEY_COMMAND event
