@@ -25,6 +25,10 @@ struct console_buffer con_buffer[CON_LINES_MAX];
 static int con_state = CON_STATE_CLOSED, con_scroll_offset = 0, con_size = 0;
 extern void game_flush_inputs();
 
+//cxxconsole.cpp
+void cxx_handle_misc_con_key(const unsigned key);
+void cxx_con_interactive_print(int *const py);
+
 void con_add_buffer_line(int priority, char *buffer)
 {
 	int i=0;
@@ -120,6 +124,11 @@ void con_draw(void)
 	gr_settransblend(GR_FADE_OFF, GR_BLEND_NORMAL);
 	y=FSPACY(1)+(LINE_SPACING*con_size);
 	i+=con_scroll_offset;
+	{
+		cxx_con_interactive_print(&y);
+		if (y<=0)
+			done=1;
+	}
 	while (!done)
 	{
 		int w,h,aw;
@@ -204,6 +213,7 @@ int con_handler(window *wind, d_event *event)
 						con_scroll_offset=0;
 					break;
 				default:
+					cxx_handle_misc_con_key(key);
 					break;
 			}
 			return 1;

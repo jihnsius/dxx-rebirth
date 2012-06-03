@@ -102,6 +102,7 @@ common_sources = [
 'main/collide.c',
 'main/config.c',
 'main/console.c',
+'main/cxxconsole.cpp',
 'main/controls.c',
 'main/credits.c',
 'main/digiobj.c',
@@ -280,11 +281,13 @@ if (verbosebuild == 0):
 	env["RANLIBCOMSTR"] = "Indexing $TARGET ..."
 
 # flags and stuff for all platforms
-env.Append(CPPFLAGS = ['-Wall', '-funsigned-char'])
+env.Append(CPPFLAGS = ['-Wall'])
+env.Append(CCFLAGS = ['-Wall', '-Werror=implicit-int', '-Werror=implicit-function-declaration', '-funsigned-char'])
 env.Append(CPPDEFINES = [('PROGRAM_NAME', '\\"' + str(PROGRAM_NAME) + '\\"'), ('D2XMAJOR', '\\"' + str(D2XMAJOR) + '\\"'), ('D2XMINOR', '\\"' + str(D2XMINOR) + '\\"'), ('D2XMICRO', '\\"' + str(D2XMICRO) + '\\"')])
 env.Append(CPPDEFINES = ['NETWORK', '_REENTRANT'])
 env.Append(CPPPATH = ['include', 'main', 'arch/include'])
 libs = ['physfs', 'm']
+env['CXXFLAGS'] += ['-Wextra', '-std=gnu++0x']
 
 # Get traditional compiler environment variables
 if os.environ.has_key('CC'):

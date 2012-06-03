@@ -24,6 +24,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "pstypes.h"
 #include "fix.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // some defines for transparency and blending
 #define TRANSPARENCY_COLOR   255            // palette entry of transparency color -- 255 on the PC
 #define GR_FADE_LEVELS       34
@@ -431,5 +435,9 @@ int gr_check_fullscreen(void);
  * check_fullscreen immediatly after)
  */
 int gr_toggle_fullscreen(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* def _GR_H */
