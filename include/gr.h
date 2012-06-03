@@ -330,10 +330,10 @@ void gr_remap_mono_fonts();
 // Writes a string using current font. Returns the next column after last char.
 void gr_set_curfont( grs_font * );
 void gr_set_fontcolor( int fg_color, int bg_color );
-int gr_string(int x, int y, char *s );
-int gr_ustring(int x, int y, char *s );
-int gr_printf( int x, int y, char * format, ... );
-int gr_uprintf( int x, int y, char * format, ... );
+int gr_string(int x, int y, const char *s );
+int gr_ustring(int x, int y, const char *s );
+int gr_printf( int x, int y, const char * format, ... );
+int gr_uprintf( int x, int y, const char * format, ... );
 void gr_get_string_size(const char *s, int *string_width, int *string_height, int *average_width );
 
 
