@@ -215,7 +215,7 @@ int con_handler(window *wind, d_event *event)
 				if (con_size < CON_LINES_ONSCREEN && timer_query() >= last_scroll_time+(F1_0/30))
 				{
 					last_scroll_time = timer_query();
-					con_size++;
+					con_size = CON_LINES_ONSCREEN;
 				}
 			}
 			else if (con_state == CON_STATE_CLOSING)
@@ -223,7 +223,7 @@ int con_handler(window *wind, d_event *event)
 				if (con_size > 0 && timer_query() >= last_scroll_time+(F1_0/30))
 				{
 					last_scroll_time = timer_query();
-					con_size--;
+					con_size = 0;
 				}
 			}
 			if (con_size >= CON_LINES_ONSCREEN)
