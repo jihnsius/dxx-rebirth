@@ -57,9 +57,14 @@ void con_printf(int priority, char *fmt, ...)
 	if (priority <= ((int)GameArg.DbgVerbose))
 	{
 		char *p1, *p2;
+		struct tm *lt;
+		time_t t;
+		t=time(NULL);
+		lt=localtime(&t);
 
 		va_start (arglist, fmt);
-		vsprintf (buffer,  fmt, arglist);
+		snprintf(buffer, sizeof(buffer), "%02i:%02i:%02i ",lt->tm_hour,lt->tm_min,lt->tm_sec);
+		vsnprintf (buffer + 9, sizeof(buffer) - 9, fmt, arglist);
 		va_end (arglist);
 
 		/* Produce a sanitised version and send it to the console */
@@ -88,11 +93,6 @@ void con_printf(int priority, char *fmt, ...)
 		/* Print output to gamelog.txt */
 		if (gamelog_fp)
 		{
-			struct tm *lt;
-			time_t t;
-			t=time(NULL);
-			lt=localtime(&t);
-			PHYSFSX_printf(gamelog_fp,"%02i:%02i:%02i ",lt->tm_hour,lt->tm_min,lt->tm_sec);
 #ifdef _WIN32 // stupid hack to force DOS-style newlines
 			if (buffer[strlen(buffer)-1] == '\n' && strlen(buffer) <= CON_LINE_LENGTH)
 			{
