@@ -1017,7 +1017,7 @@ grs_font * gr_init_font( char * fontname )
 	}
 
 	PHYSFS_read(fontfile, file_id, 4, 1);
-	if ( !strncmp( file_id, "NFSP", 4 ) ) {
+	if (memcmp( file_id, "PSFN", 4 )) {
 		con_printf(CON_NORMAL, "File %s is not a font file\n", fontname);
 		return NULL;
 	}
