@@ -977,7 +977,7 @@ void gr_remap_mono_fonts()
 /*
  * reads a grs_font structure from a PHYSFS_file
  */
-void grs_font_read(grs_font *gf, PHYSFS_file *fp)
+static void grs_font_read(grs_font *gf, PHYSFS_file *fp)
 {
 	gf->ft_w = PHYSFSX_readShort(fp);
 	gf->ft_h = PHYSFSX_readShort(fp);
@@ -986,10 +986,10 @@ void grs_font_read(grs_font *gf, PHYSFS_file *fp)
 	gf->ft_minchar = PHYSFSX_readByte(fp);
 	gf->ft_maxchar = PHYSFSX_readByte(fp);
 	gf->ft_bytewidth = PHYSFSX_readShort(fp);
-	gf->ft_data = (ubyte *)(size_t)PHYSFSX_readInt(fp);
+	gf->ft_data = (ubyte *)((size_t)PHYSFSX_readInt(fp) - GRS_FONT_SIZE);
 	gf->ft_chars = (ubyte **)(size_t)PHYSFSX_readInt(fp);
-	gf->ft_widths = (short *)(size_t)PHYSFSX_readInt(fp);
-	gf->ft_kerndata = (ubyte *)(size_t)PHYSFSX_readInt(fp);
+	gf->ft_widths = (short *)((size_t)PHYSFSX_readInt(fp) - GRS_FONT_SIZE);
+	gf->ft_kerndata = (ubyte *)((size_t)PHYSFSX_readInt(fp) - GRS_FONT_SIZE);
 }
 
 grs_font * gr_init_font( char * fontname )
@@ -1033,11 +1033,6 @@ grs_font * gr_init_font( char * fontname )
 
 	open_font[fontnum].ptr = font;
 	open_font[fontnum].dataptr = font_data;
-
-	// make these offsets relative to font_data
-	font->ft_data = (ubyte *)((size_t)font->ft_data - GRS_FONT_SIZE);
-	font->ft_widths = (short *)((size_t)font->ft_widths - GRS_FONT_SIZE);
-	font->ft_kerndata = (ubyte *)((size_t)font->ft_kerndata - GRS_FONT_SIZE);
 
 	nchars = font->ft_maxchar - font->ft_minchar + 1;
 
@@ -1128,11 +1123,6 @@ void gr_remap_font( grs_font *font, char * fontname, char *font_data )
 	grs_font_read(font, fontfile); // have to reread in case mission hogfile overrides font.
 
 	PHYSFS_read(fontfile, font_data, 1, datasize);  //read raw data
-
-	// make these offsets relative to font_data
-	font->ft_data = (ubyte *)((size_t)font->ft_data - GRS_FONT_SIZE);
-	font->ft_widths = (short *)((size_t)font->ft_widths - GRS_FONT_SIZE);
-	font->ft_kerndata = (ubyte *)((size_t)font->ft_kerndata - GRS_FONT_SIZE);
 
 	nchars = font->ft_maxchar - font->ft_minchar + 1;
 
