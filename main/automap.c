@@ -1457,8 +1457,6 @@ int MarkerInputMessage(int key)
 			break;
 		case KEY_ENTER:
 			strcpy (MarkerMessage[(Player_num*2)+MarkerBeingDefined],Marker_input);
-			if (Game_mode & GM_MULTI)
-			strcpy (MarkerOwner[(Player_num*2)+MarkerBeingDefined],Players[Player_num].callsign);
 			DropMarker(MarkerBeingDefined);
 			LastMarkerDropped = MarkerBeingDefined;
 			key_toggle_repeat(0);

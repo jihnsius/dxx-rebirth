@@ -118,7 +118,6 @@ int imulti_new_game=0; // to prep stuff for level only when starting new game
 
 extern vms_vector MarkerPoint[];
 extern char MarkerMessage[16][40];
-extern char MarkerOwner[16][40];
 extern int MarkerObject[];
 
 int who_killed_controlcen = -1;  // -1 = noone
@@ -2339,7 +2338,6 @@ void multi_do_drop_marker (char *buf)
 		obj_delete(MarkerObject[(pnum*2)+mesnum]);
 
 	MarkerObject[(pnum*2)+mesnum] = drop_marker_object(&position,Objects[Players[Player_num].objnum].segnum,&Objects[Players[Player_num].objnum].orient,(pnum*2)+mesnum);
-	strcpy (MarkerOwner[(pnum*2)+mesnum],Players[pnum].callsign);
 }
 
 
