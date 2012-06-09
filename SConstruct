@@ -29,6 +29,7 @@ opengl = int(ARGUMENTS.get('opengl', 1))
 opengles = int(ARGUMENTS.get('opengles', 0))
 asm = int(ARGUMENTS.get('asm', 0))
 editor = int(ARGUMENTS.get('editor', 0))
+extra_version = str(ARGUMENTS.get('extra_version', ''))
 sdlmixer = int(ARGUMENTS.get('sdlmixer', 1))
 ipv6 = int(ARGUMENTS.get('ipv6', 0))
 use_udp = int(ARGUMENTS.get('use_udp', 1))
@@ -431,6 +432,10 @@ if (use_udp == 1):
 print '\n'
 
 env.Append(CPPDEFINES = [('SHAREPATH', '\\"' + str(sharepath) + '\\"')])
+versid_cppdefines=env['CPPDEFINES'][:]
+versid_cppdefines.append(('DESCENT_VERSION_EXTRA', '\\"%s\\"' % extra_version))
+env.Object(source = ['main/vers_id.c'], CPPDEFINES=versid_cppdefines)
+common_sources += ['main/vers_id.o']
 # finally building program...
 env.Program(target=str(target), source = common_sources, LIBS = libs, LINKFLAGS = str(lflags))
 if (sys.platform != 'darwin'):

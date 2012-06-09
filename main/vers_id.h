@@ -12,6 +12,8 @@
 
 #define BASED_VERSION "Full Version v1.2"
 #define VERSION D2XMAJOR "." D2XMINOR "." D2XMICRO
-#define DESCENT_VERSION "D2X-Rebirth v" VERSION
+#define DESCENT_VERSION g_descent_version
+
+extern const char g_descent_version[];
 
 #endif /* _VERS_ID */
