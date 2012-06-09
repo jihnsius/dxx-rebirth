@@ -26,6 +26,7 @@ static int con_state = CON_STATE_CLOSED, con_scroll_offset = 0, con_size = 0;
 extern void game_flush_inputs();
 
 //cxxconsole.cpp
+void cxx_con_init();
 void cxx_handle_misc_con_key(const unsigned key);
 void cxx_con_interactive_print(int *const py);
 
@@ -280,6 +281,7 @@ static void con_close(void)
 
 void con_init(void)
 {
+	cxx_con_init();
 	memset(con_buffer,0,sizeof(con_buffer));
 
 	if (GameArg.DbgSafelog)

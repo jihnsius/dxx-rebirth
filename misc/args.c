@@ -194,6 +194,9 @@ void ReadCmdArgs(void)
 	GameArg.DbgUseDoubleBuffer 	= !FindArg("-nodoublebuffer");
 	GameArg.DbgBigPig 		= !FindArg("-bigpig");
 	GameArg.DbgBpp 			= (FindArg("-16bpp") ? 16 : 32);
+#ifdef USE_PYTHON
+	GameArg.SysPythonSrc = get_str_arg("-python-load", NULL);
+#endif
 
 #ifdef OGL
 	GameArg.DbgAltTexMerge 		= !FindArg("-gl_oldtexmerge");

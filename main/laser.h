@@ -115,9 +115,9 @@ void Laser_do_weapon_sequence(struct dxxobject *obj);
 void Flare_create(struct dxxobject *obj);
 int laser_are_related(int o1, int o2);
 
-extern int do_laser_firing_player(void);
-extern void do_missile_firing(int drop_bomb);
-extern void net_missile_firing(int player, int weapon, int flags);
+int do_laser_firing_player(void);
+void do_missile_firing(int drop_bomb);
+void net_missile_firing(int player, int weapon, int flags);
 extern int Network_laser_track;
 
 int Laser_create_new(vms_vector * direction, vms_vector * position, int segnum, int parent, int type, int make_sound);
@@ -129,7 +129,7 @@ int Laser_create_new(vms_vector * direction, vms_vector * position, int segnum, 
 // Returns the number of shots actually fired, which will typically be
 // 1, but could be higher for low frame rates when rapidfire weapons,
 // such as vulcan or plasma are fired.
-extern int do_laser_firing(int objnum, int weapon_id, int level, int flags, int nfires);
+int do_laser_firing(int objnum, int weapon_id, int level, int flags, int nfires);
 
 // Easier to call than Laser_create_new because it determines the
 // segment containing the firing point and deals with it being stuck
@@ -146,8 +146,8 @@ int create_weapon_object(int weapon_type,int segnum,vms_vector *position);
 // give up control of the guided missile
 void release_guided_missile(int player_num);
 
-extern void create_smart_children(struct dxxobject *objp, int count);
-extern int object_to_object_visibility(struct dxxobject *obj1, struct dxxobject *obj2, int trans_type);
+void create_smart_children(struct dxxobject *objp, int count);
+int object_to_object_visibility(struct dxxobject *obj1, struct dxxobject *obj2, int trans_type);
 
 extern int Muzzle_queue_index;
 
@@ -163,11 +163,10 @@ extern muzzle_info Muzzle_data[MUZZLE_QUEUE_MAX];
 #define MAX_OMEGA_CHARGE    (F1_0)  //  Maximum charge level for omega cannonw
 extern fix Omega_charge;
 // NOTE: OMEGA_CHARGE_SCALE moved to laser.c to avoid long rebuilds if changed
-extern int ok_to_do_omega_damage(struct dxxobject *weapon);
+int ok_to_do_omega_damage(struct dxxobject *weapon);
 
 #ifdef __cplusplus
 }
-#undef object
 #endif
 
 #endif /* _LASER_H */

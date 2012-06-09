@@ -33,6 +33,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 struct dxxobject;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 extern struct window *Game_wind;
 
 // from mglobal.c
@@ -270,5 +274,9 @@ typedef struct game_cheats
 } __pack__ game_cheats;
 extern game_cheats cheats;
 void game_disable_cheats();
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _GAME_H */

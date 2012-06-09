@@ -23,6 +23,10 @@
 #define CON_STATE_CLOSING -1
 #define CON_STATE_CLOSED -2
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct console_buffer
 {
 	char line[CON_LINE_LENGTH];
@@ -32,6 +36,10 @@ typedef struct console_buffer
 void con_init(void);
 void con_printf(int level, const char *fmt, ...) __attribute_gcc_format((printf, 2, 3));
 void con_showup(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _CONSOLE_H_ */
 

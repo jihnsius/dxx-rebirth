@@ -26,8 +26,6 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "vecmat.h" //the vector/matrix library
 #include "gr.h"
 
-struct object;
-
 extern int g3d_interp_outline;      //if on, polygon models outlined in white
 
 extern vms_vector Matrix_scale;     //how the matrix is currently scaled
@@ -99,10 +97,10 @@ typedef struct g3s_object {
 //start the frame
 void g3_start_frame(void);
 
-//set view from x,y,z & p,b,h, zoom.  Must call one of g3_set_view_*() 
+//set view from x,y,z & p,b,h, zoom.  Must call one of g3_set_view_*()
 void g3_set_view_angles(const vms_vector *view_pos,const vms_angvec *view_orient,fix zoom);
 
-//set view from x,y,z, viewer matrix, and zoom.  Must call one of g3_set_view_*() 
+//set view from x,y,z, viewer matrix, and zoom.  Must call one of g3_set_view_*()
 void g3_set_view_matrix(const vms_vector *view_pos,const vms_matrix *view_matrix,fix zoom);
 
 //end the frame
@@ -128,7 +126,7 @@ void g3_done_instance();
 //the given FOV along the given axis.
 fix g3_get_zoom(char axis,fixang fov,short window_width,short window_height);
 
-//returns true if a plane is facing the viewer. takes the unrotated surface 
+//returns true if a plane is facing the viewer. takes the unrotated surface
 //normal of the plane, and a point on it.  The normal need not be normalized
 bool g3_check_normal_facing(const vms_vector *v,const vms_vector *norm);
 
@@ -183,7 +181,7 @@ int g3_draw_sphere(g3s_point *pnt,fix rad);
 
 
 //like g3_draw_poly(), but checks to see if facing.  If surface normal is
-//NULL, this routine must compute it, which will be slow.  It is better to 
+//NULL, this routine must compute it, which will be slow.  It is better to
 //pre-compute the normal, and pass it to this function.  When the normal
 //is passed, this function works like g3_check_normal_facing() plus
 //g3_draw_poly().

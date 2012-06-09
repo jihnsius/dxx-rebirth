@@ -47,6 +47,9 @@ typedef struct Arg
 	char *EdiAutoLoad;
 	char *DbgAltTex;
 	char *DbgTexMap;
+#ifdef USE_PYTHON
+	const char *SysPythonSrc;
+#endif
 #ifdef USE_TRACKER
 	const char *MplTrackerAddr;
 	int MplTrackerPort;

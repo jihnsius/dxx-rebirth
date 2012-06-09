@@ -42,6 +42,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #endif
 #include "vclip.h"
 #include "fireball.h"
+#include "pybinding.h"
 
 //look at keyboard, mouse, joystick, CyberMan, whatever, and set 
 //physics vars rotvel, velocity
@@ -58,6 +59,7 @@ extern fix	Seismic_tremor_magnitude;
 void read_flying_controls( dxxobject * obj )
 {
 	fix	forward_thrust_time;
+	fix script_max_forward_thrust;
 
 	Assert(FrameTime > 0); 		//Get MATT if hit this!
 
@@ -85,6 +87,8 @@ void read_flying_controls( dxxobject * obj )
 		rotangs.b = Controls.bank_time / 2 + Seismic_tremor_magnitude/16;
 		rotangs.h = Controls.heading_time / 2 + Seismic_tremor_magnitude/64;
 
+		cxx_script_get_guided_missile_rotang(&rotangs);
+
 		vm_angles_2_matrix(&rotmat,&rotangs);
 
 		vm_matrix_x_matrix(&tempm,&Guided_missile[Player_num]->orient,&rotmat);
@@ -105,13 +109,15 @@ void read_flying_controls( dxxobject * obj )
 		obj->mtype.phys_info.rotthrust.y = Controls.heading_time;
 		obj->mtype.phys_info.rotthrust.z = Controls.bank_time;
 	}
+	cxx_script_get_player_ship_rotthrust(obj);
 
 	forward_thrust_time = Controls.forward_thrust_time;
+	script_max_forward_thrust = FrameTime;
 
 	if (Players[Player_num].flags & PLAYER_FLAGS_AFTERBURNER)
 	{
 		if (Controls.afterburner_state) {			//player has key down
-			//if (forward_thrust_time >= 0) { 		//..and isn't moving backward
+			//if (forward_thrust_time >= 0) {} 		//..and isn't moving backward
 			{
 				fix afterburner_scale;
 				int old_count,new_count;
@@ -120,6 +126,7 @@ void read_flying_controls( dxxobject * obj )
 				afterburner_scale = f1_0 + min(f1_0/2,Afterburner_charge) * 2;
 	
 				forward_thrust_time = fixmul(FrameTime,afterburner_scale);	//based on full thrust
+				script_max_forward_thrust = forward_thrust_time;
 	
 				old_count = (Afterburner_charge / (DROP_DELTA_TIME/AFTERBURNER_USE_SECS));
 
@@ -151,6 +158,9 @@ void read_flying_controls( dxxobject * obj )
 		}
 	}
 
+	if (!cxx_script_get_player_ship_vecthrust(obj, script_max_forward_thrust))
+	{
+
 	// Set object's thrust vector for forward/backward
 	vm_vec_copy_scale(&obj->mtype.phys_info.thrust,&obj->orient.fvec, forward_thrust_time );
 	
@@ -159,6 +169,8 @@ void read_flying_controls( dxxobject * obj )
 
 	// slide up/down
 	vm_vec_scale_add2(&obj->mtype.phys_info.thrust,&obj->orient.uvec, Controls.vertical_thrust_time );
+
+	}
 
 	if (obj->mtype.phys_info.flags & PF_WIGGLE)
 	{

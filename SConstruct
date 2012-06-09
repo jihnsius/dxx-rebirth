@@ -33,6 +33,7 @@ extra_version = str(ARGUMENTS.get('extra_version', ''))
 extra_version_build_time = str(ARGUMENTS.get('extra_version_build_time', ''))
 sdlmixer = int(ARGUMENTS.get('sdlmixer', 1))
 ipv6 = int(ARGUMENTS.get('ipv6', 0))
+use_python = str(ARGUMENTS.get('use_python', ''))
 use_udp = int(ARGUMENTS.get('use_udp', 1))
 use_tracker = int(ARGUMENTS.get('use_tracker', 1))
 verbosebuild = int(ARGUMENTS.get('verbosebuild', 0))
@@ -105,6 +106,14 @@ common_sources = [
 'main/config.c',
 'main/console.c',
 'main/cxxconsole.cpp',
+'main/pybinding.cpp',
+'python/input.cpp',
+'python/object.cpp',
+'python/player.cpp',
+'python/powerup.cpp',
+'python/robot.cpp',
+'python/traceback.cpp',
+'python/weapon.cpp',
 'main/controls.c',
 'main/credits.c',
 'main/digiobj.c',
@@ -288,6 +297,10 @@ env.Append(CCFLAGS = ['-Wall', '-Werror=implicit-int', '-Werror=implicit-functio
 env.Append(CPPDEFINES = [('PROGRAM_NAME', '\\"' + str(PROGRAM_NAME) + '\\"'), ('D2XMAJORi', str(D2XMAJOR)), ('D2XMINORi', str(D2XMINOR)), ('D2XMICROi', str(D2XMICRO))])
 env.Append(CPPDEFINES = ['NETWORK', '_REENTRANT'])
 env.Append(CPPPATH = ['include', 'main', 'arch/include'])
+if use_python != '':
+	env.Append(CPPDEFINES = [ ('USE_PYTHON', use_python) ])
+	env.Append(CPPPATH = ['/usr/include/python%s' % use_python])
+	env.Append(LIBS = ['-lboost_python-%s' % use_python, '-lpython%s' % use_python])
 libs = ['physfs', 'm']
 env['CXXFLAGS'] += ['-Wextra', '-std=gnu++0x']
 

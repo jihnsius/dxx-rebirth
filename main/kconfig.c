@@ -58,6 +58,8 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "ogl_init.h"
 #endif
 
+void cxx_script_hook_controls();
+
 vms_vector ExtForceVec;
 vms_matrix ExtApplyForceMatrix;
 
@@ -1516,6 +1518,8 @@ void kconfig_read_controls(d_event *event, int automap_flag)
 	if (Cruise_speed > i2f(100) ) Cruise_speed = i2f(100);
 	if (Cruise_speed < 0 ) Cruise_speed = 0;
 	if (Controls.forward_thrust_time==0) Controls.forward_thrust_time = fixmul(Cruise_speed,FrameTime)/100;
+
+	cxx_script_hook_controls();
 
 	//----------- Clamp values between -FrameTime and FrameTime
 	if (Controls.pitch_time > FrameTime/2 ) Controls.pitch_time = FrameTime/2;

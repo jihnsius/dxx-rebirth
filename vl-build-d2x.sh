@@ -9,6 +9,7 @@ mysconsargs=(
 	sdlmixer=1
 	use_tracker=0
 	ipv6=1
+	use_python=3.2
 )
 
 set -x
