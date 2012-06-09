@@ -51,7 +51,7 @@ void con_add_buffer_line(int priority, char *buffer)
 	}
 }
 
-void con_printf(int priority, char *fmt, ...)
+void con_printf(int priority, const char *fmt, ...)
 {
 	va_list arglist;
 	char buffer[CON_LINE_LENGTH];

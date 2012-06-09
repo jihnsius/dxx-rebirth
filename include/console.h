@@ -30,7 +30,7 @@ typedef struct console_buffer
 } __pack__ console_buffer;
 
 void con_init(void);
-void con_printf(int level, char *fmt, ...);
+void __attribute__((format(printf, 2, 3))) con_printf(int level, const char *fmt, ...);
 void con_showup(void);
 
 #endif /* _CONSOLE_H_ */
