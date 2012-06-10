@@ -243,7 +243,7 @@ int ToggleBottom(void)
 	Update_flags = UF_WORLD_CHANGED;
 	return 0;
 }
-		
+
 // ---------------------------------------------------------------------------------------------
 //           ---------- Segment interrogation functions ----------
 // ----------------------------------------------------------------------------
@@ -420,7 +420,7 @@ int med_create_duplicate_segment(segment *sp)
 
 	segnum = get_free_segment_number();
 
-	Segments[segnum] = *sp;	
+	Segments[segnum] = *sp;
 
 	return segnum;
 }
@@ -656,7 +656,7 @@ void change_vertex_occurrences(int dest, int src)
 	int	g,s,v;
 
 	// Fix vertices in groups
-	for (g=0;g<num_groups;g++) 
+	for (g=0;g<num_groups;g++)
 		for (v=0; v<GroupList[g].num_vertices; v++)
 			if (GroupList[g].vertices[v] == src)
 				GroupList[g].vertices[v] = dest;
@@ -690,7 +690,7 @@ void compress_vertices(void)
 				// Ok, hole is the index of a hole, vert is the index of a vertex which follows it.
 				// Copy vert into hole, update pointers to it.
 				Vertices[hole] = Vertices[vert];
-				
+
 				change_vertex_occurrences(hole, vert);
 
 				vert--;
@@ -733,7 +733,7 @@ void compress_segments(void)
 					Markedsegp = &Segments[hole];
 
 				// Fix segments in groups
-				for (g=0;g<num_groups;g++) 
+				for (g=0;g<num_groups;g++)
 					for (s=0; s<GroupList[g].num_segments; s++)
 						if (GroupList[g].segments[s] == seg)
 							GroupList[g].segments[s] = hole;
@@ -895,7 +895,7 @@ int med_attach_segment_rotated(segment *destseg, segment *newseg, int destside, 
 	// clear all connections
 	for (side=0; side<MAX_SIDES_PER_SEGMENT; side++) {
 		nsp->children[side] = -1;
-		nsp->sides[side].wall_num = -1;	
+		nsp->sides[side].wall_num = -1;
 	}
 
 	// Form the connection
@@ -1082,8 +1082,6 @@ void delete_vertices_in_segment(segment *sp)
 	update_num_vertices();
 }
 
-extern void validate_segment_side(segment *sp, int sidenum);
-
 // -------------------------------------------------------------------------------
 //	Delete segment *sp in Segments array.
 // Return value:
@@ -1114,7 +1112,7 @@ int med_delete_segment(segment *sp)
 
 	// If deleted segment has walls on any side, wipe out the wall.
 	for (side=0; side < MAX_SIDES_PER_SEGMENT; side++)
-		if (sp->sides[side].wall_num != -1) 
+		if (sp->sides[side].wall_num != -1)
 			wall_remove_side(sp, side);
 
 	// Find out what this segment was connected to and break those connections at the other end.
@@ -1140,14 +1138,14 @@ int med_delete_segment(segment *sp)
 	// If deleted segment = marked segment, then say there is no marked segment
 	if (sp == Markedsegp)
 		Markedsegp = 0;
-	
+
 	//	If deleted segment = a Group segment ptr, then wipe it out.
-	for (s=0;s<num_groups;s++) 
-		if (sp == Groupsegp[s]) 
+	for (s=0;s<num_groups;s++)
+		if (sp == Groupsegp[s])
 			Groupsegp[s] = 0;
 
 	// If deleted segment = group segment, wipe it off the group list.
-	if (sp->group > -1) 
+	if (sp->group > -1)
 			delete_segment_from_group(sp-Segments, sp->group);
 
 	// If we deleted something which was not connected to anything, must now select a new current segment.
@@ -1233,7 +1231,7 @@ int med_rotate_segment(segment *seg, vms_matrix *rotmat)
 	destside = 0;
 	while ((destseg->children[destside] != seg-Segments) && (destside < MAX_SIDES_PER_SEGMENT))
 		destside++;
-		
+
 	// Before deleting the segment, copy its texture maps to New_segment
 	copy_tmaps_to_segment(&New_segment,seg);
 
@@ -1380,7 +1378,7 @@ int med_form_joint(segment *seg1, int side1, segment *seg2, int side2)
 	if (IS_CHILD(seg1->children[side1]) || IS_CHILD(seg2->children[side2]))
 		return 2;
 
-	// Make sure there is no wall there 
+	// Make sure there is no wall there
 	if ((seg1->sides[side1].wall_num != -1) || (seg2->sides[side2].wall_num != -1))
 		return 2;
 
@@ -1857,16 +1855,16 @@ int med_find_closest_threshold_segment_side(segment *sp, int side, segment **adj
 	if (IS_CHILD(sp->children[side]))
 		return 0;
 
-	compute_center_point_on_side(&vsc, sp, side); 
+	compute_center_point_on_side(&vsc, sp, side);
 
 	closest_seg_dist = JOINT_THRESHOLD;
 
 	//	Scan all segments, looking for a segment which contains the four abs_verts
-	for (seg=0; seg<=Highest_segment_index; seg++) 
-		if (seg != sp-Segments) 
+	for (seg=0; seg<=Highest_segment_index; seg++)
+		if (seg != sp-Segments)
 			for (s=0;s<MAX_SIDES_PER_SEGMENT;s++) {
 				if (!IS_CHILD(Segments[seg].children[s])) {
-					compute_center_point_on_side(&vtc, &Segments[seg], s); 
+					compute_center_point_on_side(&vtc, &Segments[seg], s);
 					current_dist = vm_vec_dist( &vsc, &vtc );
 					if (current_dist < closest_seg_dist) {
 						*adj_sp = &Segments[seg];
@@ -1874,7 +1872,7 @@ int med_find_closest_threshold_segment_side(segment *sp, int side, segment **adj
 						closest_seg_dist = current_dist;
 					}
 				}
-			}	
+			}
 
 	if (closest_seg_dist < threshold)
 		return 1;
@@ -1894,7 +1892,7 @@ void med_check_all_vertices()
 		if (sp->segnum != -1)
 			for (v=0; v<MAX_VERTICES_PER_SEGMENT; v++)
 				Assert(sp->verts[v] <= Highest_vertex_index);
-					
+
 	}
 
 }

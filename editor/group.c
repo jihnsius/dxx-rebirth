@@ -80,212 +80,210 @@ int		Group_orientation[MAX_GROUPS+1];
 int		current_group=-1;
 int		num_groups=0;
 
-extern void validate_segment_side(segment *sp, int sidenum);
-
 // -- void swap_negate_columns(vms_matrix *rotmat, int col1, int col2)
 // -- {
 // -- 	fix	col1_1,col1_2,col1_3;
 // -- 	fix	col2_1,col2_2,col2_3;
-// -- 
+// --
 // -- 	switch (col1) {
 // -- 		case 0:
 // -- 			col1_1 = rotmat->m1;
 // -- 			col1_2 = rotmat->m2;
 // -- 			col1_3 = rotmat->m3;
 // -- 			break;
-// -- 
+// --
 // -- 		case 1:
 // -- 			col1_1 = rotmat->m4;
 // -- 			col1_2 = rotmat->m5;
 // -- 			col1_3 = rotmat->m6;
 // -- 			break;
-// -- 
+// --
 // -- 		case 2:
 // -- 			col1_1 = rotmat->m7;
 // -- 			col1_2 = rotmat->m8;
 // -- 			col1_3 = rotmat->m9;
 // -- 			break;
 // -- 	}
-// -- 
+// --
 // -- 	switch (col2) {
 // -- 		case 0:
 // -- 			col2_1 = rotmat->m1;
 // -- 			col2_2 = rotmat->m2;
 // -- 			col2_3 = rotmat->m3;
 // -- 			break;
-// -- 
+// --
 // -- 		case 1:
 // -- 			col2_1 = rotmat->m4;
 // -- 			col2_2 = rotmat->m5;
 // -- 			col2_3 = rotmat->m6;
 // -- 			break;
-// -- 
+// --
 // -- 		case 2:
 // -- 			col2_1 = rotmat->m7;
 // -- 			col2_2 = rotmat->m8;
 // -- 			col2_3 = rotmat->m9;
 // -- 			break;
 // -- 	}
-// -- 
+// --
 // -- 	switch (col2) {
 // -- 		case 0:
 // -- 			rotmat->m1 = -col1_1;
 // -- 			rotmat->m2 = -col1_2;
 // -- 			rotmat->m3 = -col1_3;
 // -- 			break;
-// -- 
+// --
 // -- 		case 1:
 // -- 			rotmat->m4 = -col1_1;
 // -- 			rotmat->m5 = -col1_2;
 // -- 			rotmat->m6 = -col1_3;
 // -- 			break;
-// -- 
+// --
 // -- 		case 2:
 // -- 			rotmat->m7 = -col1_1;
 // -- 			rotmat->m8 = -col1_2;
 // -- 			rotmat->m9 = -col1_3;
 // -- 			break;
 // -- 	}
-// -- 
+// --
 // -- 	switch (col1) {
 // -- 		case 0:
 // -- 			rotmat->m1 = -col2_1;
 // -- 			rotmat->m2 = -col2_2;
 // -- 			rotmat->m3 = -col2_3;
 // -- 			break;
-// -- 
+// --
 // -- 		case 1:
 // -- 			rotmat->m4 = -col2_1;
 // -- 			rotmat->m5 = -col2_2;
 // -- 			rotmat->m6 = -col2_3;
 // -- 			break;
-// -- 
+// --
 // -- 		case 2:
 // -- 			rotmat->m7 = -col2_1;
 // -- 			rotmat->m8 = -col2_2;
 // -- 			rotmat->m9 = -col2_3;
 // -- 			break;
 // -- 	}
-// -- 
+// --
 // -- }
-// -- 
+// --
 // -- void swap_negate_rows(vms_matrix *rotmat, int row1, int row2)
 // -- {
 // -- 	fix	row1_1,row1_2,row1_3;
 // -- 	fix	row2_1,row2_2,row2_3;
-// -- 
+// --
 // -- 	switch (row1) {
 // -- 		case 0:
 // -- 			row1_1 = rotmat->m1;
 // -- 			row1_2 = rotmat->m4;
 // -- 			row1_3 = rotmat->m7;
 // -- 			break;
-// -- 
+// --
 // -- 		case 1:
 // -- 			row1_1 = rotmat->m2;
 // -- 			row1_2 = rotmat->m5;
 // -- 			row1_3 = rotmat->m8;
 // -- 			break;
-// -- 
+// --
 // -- 		case 2:
 // -- 			row1_1 = rotmat->m3;
 // -- 			row1_2 = rotmat->m6;
 // -- 			row1_3 = rotmat->m9;
 // -- 			break;
 // -- 	}
-// -- 
+// --
 // -- 	switch (row2) {
 // -- 		case 0:
 // -- 			row2_1 = rotmat->m1;
 // -- 			row2_2 = rotmat->m4;
 // -- 			row2_3 = rotmat->m7;
 // -- 			break;
-// -- 
+// --
 // -- 		case 1:
 // -- 			row2_1 = rotmat->m2;
 // -- 			row2_2 = rotmat->m5;
 // -- 			row2_3 = rotmat->m8;
 // -- 			break;
-// -- 
+// --
 // -- 		case 2:
 // -- 			row2_1 = rotmat->m3;
 // -- 			row2_2 = rotmat->m6;
 // -- 			row2_3 = rotmat->m9;
 // -- 			break;
 // -- 	}
-// -- 
+// --
 // -- 	switch (row2) {
 // -- 		case 0:
 // -- 			rotmat->m1 = -row1_1;
 // -- 			rotmat->m4 = -row1_2;
 // -- 			rotmat->m7 = -row1_3;
 // -- 			break;
-// -- 
+// --
 // -- 		case 1:
 // -- 			rotmat->m2 = -row1_1;
 // -- 			rotmat->m5 = -row1_2;
 // -- 			rotmat->m8 = -row1_3;
 // -- 			break;
-// -- 
+// --
 // -- 		case 2:
 // -- 			rotmat->m3 = -row1_1;
 // -- 			rotmat->m6 = -row1_2;
 // -- 			rotmat->m9 = -row1_3;
 // -- 			break;
 // -- 	}
-// -- 
+// --
 // -- 	switch (row1) {
 // -- 		case 0:
 // -- 			rotmat->m1 = -row2_1;
 // -- 			rotmat->m4 = -row2_2;
 // -- 			rotmat->m7 = -row2_3;
 // -- 			break;
-// -- 
+// --
 // -- 		case 1:
 // -- 			rotmat->m2 = -row2_1;
 // -- 			rotmat->m5 = -row2_2;
 // -- 			rotmat->m8 = -row2_3;
 // -- 			break;
-// -- 
+// --
 // -- 		case 2:
 // -- 			rotmat->m3 = -row2_1;
 // -- 			rotmat->m6 = -row2_2;
 // -- 			rotmat->m9 = -row2_3;
 // -- 			break;
 // -- 	}
-// -- 
+// --
 // -- }
-// -- 
+// --
 // -- // ------------------------------------------------------------------------------------------------
 // -- void	side_based_matrix(vms_matrix *rotmat,int destside)
 // -- {
 // -- 	vms_angvec	rotvec;
 // -- 	vms_matrix	r1,rtemp;
-// -- 
+// --
 // -- 	switch (destside) {
 // -- 		case WLEFT:
 // -- //			swap_negate_columns(rotmat,1,2);
 // -- //			swap_negate_rows(rotmat,1,2);
 // -- 			break;
-// -- 
+// --
 // -- 		case WTOP:
 // -- 			break;
-// -- 
+// --
 // -- 		case WRIGHT:
 // -- //			swap_negate_columns(rotmat,1,2);
 // -- //			swap_negate_rows(rotmat,1,2);
 // -- 			break;
-// -- 
+// --
 // -- 		case WBOTTOM:
 // -- 			break;
-// -- 
+// --
 // -- 		case WFRONT:
 // -- 			break;
-// -- 
+// --
 // -- 		case WBACK:
 // -- 			break;
 // -- 	}
-// -- 
+// --
 // -- }
 
 
@@ -320,10 +318,10 @@ void med_create_group_rotation_matrix(vms_matrix *result_mat, int delta_flag, se
 	 	vm_matrix_x_matrix(&rotmat2,&rotmat,&rotmat4);			// this is the desired orientation of the new segment
 	} else {
 	 	//	Create rotation matrix describing rotation.
- 
+
 	 	med_extract_matrix_from_segment(base_seg, &rotmat);		// get rotation matrix describing desired orientation
 	 	set_matrix_based_on_side(&rotmat, base_side);				// modify rotation matrix for desired side
- 
+
 	 	//	If the new segment is to be attached without rotation, then its orientation is the same as the base_segment
 	 	vm_matrix_x_matrix(&rotmat4,&rotmat,orient_matrix);			// this is the desired orientation of the new segment
 
@@ -335,13 +333,13 @@ void med_create_group_rotation_matrix(vms_matrix *result_mat, int delta_flag, se
 	 	rotmat = rotmat4;
 
 	 	med_extract_matrix_from_segment(first_seg, &rotmat3);		// get rotation matrix describing current orientation of first seg
- 
+
 	 	// It is curious that the following statement has no analogue in the med_attach_segment_rotated code.
 	 	//	Perhaps it is because segments are always attached at their front side.  If the back side is the side
 	 	//	passed to the function, then the matrix is not modified, which might suggest that what you need to do below
 	 	//	is use Side_opposite[first_side].
 	 	set_matrix_based_on_side(&rotmat3, Side_opposite[first_side]);				// modify rotation matrix for desired side
- 
+
 	 	vm_transpose_matrix(&rotmat3);								// get the inverse of the current orientation matrix
 	 	vm_matrix_x_matrix(&rotmat2,&rotmat,&rotmat3);			// now rotmat2 takes the current segment to the desired orientation
 	 	vm_transpose_matrix(&rotmat2);
@@ -381,7 +379,7 @@ void med_rotate_group(vms_matrix *rotmat, short *group_seglist, int group_size, 
 			vm_vec_add(&Objects[objnum].pos, &tv, &rotate_center);
 
 			objnum = Objects[objnum].next;
-		}			
+		}
 	}
 
 	// Do the pre-rotation xlate, do the rotation, do the post-rotation xlate
@@ -568,7 +566,7 @@ int med_copy_group(int delta_flag, segment *base_seg, int base_side, segment *gr
 	// Find groupsegp index
 	for (s=0;s<GroupList[current_group].num_segments;s++)
 		if (GroupList[current_group].segments[s] == (Groupsegp[current_group]-Segments))
-			gs_index=s; 
+			gs_index=s;
 
 	GroupList[new_current_group] = GroupList[current_group];
 
@@ -604,7 +602,7 @@ int med_copy_group(int delta_flag, segment *base_seg, int base_side, segment *gr
 	// Breaking connections between segments in the current group and segments not in the group.
 	for (s=0; s<GroupList[new_current_group].num_segments; s++) {
 		segp = &Segments[GroupList[new_current_group].segments[s]];
-		for (c=0; c<MAX_SIDES_PER_SEGMENT; c++) 
+		for (c=0; c<MAX_SIDES_PER_SEGMENT; c++)
 			if (IS_CHILD(segp->children[c])) {
 				if (!in_group(segp->children[c], new_current_group)) {
 					segp->children[c] = -1;
@@ -614,7 +612,7 @@ int med_copy_group(int delta_flag, segment *base_seg, int base_side, segment *gr
 	}
 
 	copy_uvs_seg_to_seg(&New_segment, Groupsegp[new_current_group]);
-	
+
 	//	Now do the copy
 	//	First, xlate all vertices so center of group_seg:group_side is at origin
 	compute_center_point_on_side(&srcv,group_seg,group_side);
@@ -749,7 +747,7 @@ int med_move_group(int delta_flag, segment *base_seg, int base_side, segment *gr
 	for (s=0; s<GroupList[current_group].num_segments; s++)
 		{
 		segp = &Segments[GroupList[current_group].segments[s]];
-		for (c=0; c<MAX_SIDES_PER_SEGMENT; c++) 
+		for (c=0; c<MAX_SIDES_PER_SEGMENT; c++)
 			if (IS_CHILD(segp->children[c]))
 				{
 				csegp = &Segments[segp->children[c]];
@@ -922,20 +920,20 @@ void validate_selected_segments(void)
 void delete_segment_from_group(int segment_num, int group_num)
 {
 	int g, del_seg_index;
-	
+
 	del_seg_index = -1;
 	for (g=0; g<GroupList[group_num].num_segments; g++)
-		if (segment_num == GroupList[group_num].segments[g]) {  
+		if (segment_num == GroupList[group_num].segments[g]) {
 			del_seg_index = g;
 			break;
 		}
 
 	if (IS_CHILD(del_seg_index)) {
-		for (g=del_seg_index;g<GroupList[group_num].num_segments-1;g++) { 
+		for (g=del_seg_index;g<GroupList[group_num].num_segments-1;g++) {
 			GroupList[group_num].segments[g] = GroupList[group_num].segments[g+1];
 			}
 		GroupList[group_num].num_segments--;
-		Segments[segment_num].group = -1;		
+		Segments[segment_num].group = -1;
 		}
 
 }
@@ -944,7 +942,7 @@ void delete_segment_from_group(int segment_num, int group_num)
 
 //	-----------------------------------------------------------------------------
 void add_segment_to_group(int segment_num, int group_num)
-{  
+{
 	GroupList[group_num].num_segments++;
 	GroupList[group_num].segments[GroupList[group_num].num_segments-1] = segment_num;
 }
@@ -970,7 +968,7 @@ int rotate_segment_new(vms_angvec *pbh)
 	current_group_save = current_group;
 	current_group = ROT_GROUP;
 	Groupsegp[ROT_GROUP] = Cursegp;
-	
+
 	save_selected_segs(&n_selected_segs_save, selected_segs_save);
 	GroupList[ROT_GROUP].num_segments = 0;
 	newseg = Cursegp - Segments;
@@ -1100,9 +1098,9 @@ int med_save_group( char *filename, int *vertex_ids, short *segment_ids, int num
 	if (Groupsegp[current_group]) {
 		segnum = Groupsegp[current_group]-Segments;
 		for (i=0;i<num_segments;i++)
-			if (segnum == segment_ids[i])	
+			if (segnum == segment_ids[i])
 				group_editor.Groupsegp = i;
-	} 
+	}
 	else
 		group_editor.Groupsegp      	=   0;
 	group_editor.Groupside		 =   Groupside[current_group];
@@ -1115,8 +1113,8 @@ int med_save_group( char *filename, int *vertex_ids, short *segment_ids, int num
 
 	vertex_offset = PHYSFS_tell(SaveFile);
 	for (i=0;i<num_vertices;i++) {
-		tvert = Vertices[vertex_ids[i]];	
-		PHYSFS_write( SaveFile, &tvert, sizeof(tvert), 1); 
+		tvert = Vertices[vertex_ids[i]];
+		PHYSFS_write( SaveFile, &tvert, sizeof(tvert), 1);
 	}
 
 	//===================== SAVE SEGMENT INFO =========================
@@ -1125,15 +1123,15 @@ int med_save_group( char *filename, int *vertex_ids, short *segment_ids, int num
 	segment_offset = PHYSFS_tell(SaveFile);
 	for (i=0;i<num_segments;i++) {
 		tseg = Segments[segment_ids[i]];
-		
+
 		for (j=0;j<6;j++)	{
 			found = 0;
-			for (k=0;k<num_segments;k++) 
-				if (tseg.children[j] == segment_ids[k]) { 
+			for (k=0;k<num_segments;k++)
+				if (tseg.children[j] == segment_ids[k]) {
 					tseg.children[j] = k;
 					found = 1;
 					break;
-					}	
+					}
 			if (found==0) tseg.children[j] = -1;
 		}
 
@@ -1165,7 +1163,7 @@ int med_save_group( char *filename, int *vertex_ids, short *segment_ids, int num
 	group_fileinfo.vertex_offset     =   vertex_offset;
 	group_fileinfo.segment_offset    =   segment_offset;
 	group_fileinfo.texture_offset    =   texture_offset;
-	
+
 	// Write the fileinfo
 	PHYSFSX_fseek(  SaveFile, 0, SEEK_SET );  // Move to TOF
 	PHYSFS_write( SaveFile, &group_fileinfo, sizeof(group_fileinfo), 1);
@@ -1189,7 +1187,7 @@ int med_load_group( char *filename, int *vertex_ids, short *segment_ids, int *nu
 	short tmap_xlate;
         int     translate=0;
 	char 	*temptr;
-	int i, j; 
+	int i, j;
 	segment tseg;
    vms_vector tvert;
 	PHYSFS_file * LoadFile;
@@ -1298,7 +1296,7 @@ int med_load_group( char *filename, int *vertex_ids, short *segment_ids, int *nu
 
 				if (PHYSFS_read( LoadFile, &tvert, sizeof(tvert),1 )!=1)
 					Error( "Error reading tvert in group.c" );
-				vertex_ids[i] = med_create_duplicate_vertex( &tvert ); 
+				vertex_ids[i] = med_create_duplicate_vertex( &tvert );
 			}
 
 		}
@@ -1313,9 +1311,9 @@ int med_load_group( char *filename, int *vertex_ids, short *segment_ids, int *nu
 		for (i=0;i<group_header.num_segments;i++) {
 			if (PHYSFS_read( LoadFile, &tseg, sizeof(segment),1 )!=1)
 				Error( "Error reading tseg in group.c" );
-				
+
 			segment_ids[i] = get_free_segment_number();
-			Segments[segment_ids[i]] = tseg; 
+			Segments[segment_ids[i]] = tseg;
 			Segments[segment_ids[i]].objects = -1;
 
 			fuelcen_activate(&Segments[segment_ids[i]], Segment2s[segment_ids[i]].special);
@@ -1334,7 +1332,7 @@ int med_load_group( char *filename, int *vertex_ids, short *segment_ids, int *nu
 				if (IS_CHILD(Segments[segment_ids[i]].children[j])) {
 					segnum = segment_ids[Segments[segment_ids[i]].children[j]];
 					Segments[segment_ids[i]].children[j] = segnum;
-					} 
+					}
 				//Translate textures.
 				if (translate == 1) {
 					int	temp;
@@ -1348,7 +1346,7 @@ int med_load_group( char *filename, int *vertex_ids, short *segment_ids, int *nu
 				}
 			}
 	}
-	
+
 	//===================== READ TEXTURE INFO ==========================
 
 	if ( (group_fileinfo.texture_offset > -1) && (group_fileinfo.texture_howmany > 0))
@@ -1366,7 +1364,7 @@ int med_load_group( char *filename, int *vertex_ids, short *segment_ids, int *nu
 	//=============== GENERATE TEXTURE TRANSLATION TABLE ===============
 
 	translate = 0;
-	
+
 	Assert (NumTextures < MAX_TEXTURES);
 {
 	hashtable ht;
@@ -1403,7 +1401,7 @@ int med_load_group( char *filename, int *vertex_ids, short *segment_ids, int *nu
 
 	//========================= UPDATE VARIABLES ======================
 
-	if (group_editor.Groupsegp != -1 ) 
+	if (group_editor.Groupsegp != -1 )
 		Groupsegp[current_group] = &Segments[segment_ids[group_editor.Groupsegp]];
 	else
 		Groupsegp[current_group] = NULL;
@@ -1413,7 +1411,7 @@ int med_load_group( char *filename, int *vertex_ids, short *segment_ids, int *nu
 	*num_vertices = group_fileinfo.vertex_howmany;
 	*num_segments = group_fileinfo.segment_howmany;
 	warn_if_concave_segments();
-	
+
 	return 0;
 }
 
@@ -1474,11 +1472,11 @@ int SaveGroup()
 	for (s=0; s<GroupList[current_group].num_segments; s++)
 		for (v=0; v<MAX_VERTICES_PER_SEGMENT; v++) {
 			vertex_list[Segments[GroupList[current_group].segments[s]].verts[v]] = 1;
-		}	
+		}
 
 	v=0;
-	for (i=0; i<=Highest_vertex_index; i++) 
-		if (vertex_list[i] == 1) { 
+	for (i=0; i<=Highest_vertex_index; i++)
+		if (vertex_list[i] == 1) {
 			GroupList[current_group].vertices[v++] = i;
 		}
 	GroupList[current_group].num_vertices = v;
@@ -1492,7 +1490,7 @@ int SaveGroup()
 			return 0;
 		mine_changed = 0;
 	}
-	
+
 	return 1;
 }
 
@@ -1519,7 +1517,7 @@ int LoadGroup()
       checkforgrpext(group_filename);
       med_load_group(group_filename, GroupList[current_group].vertices, GroupList[current_group].segments,
 					 &GroupList[current_group].num_vertices, &GroupList[current_group].num_segments) ;
-		
+
 	if (!med_move_group(0, Cursegp, Curside, Groupsegp[current_group], Groupside[current_group], &vmd_identity_matrix, 0)) {
 		autosave_mine(mine_filename);
 		set_view_target_from_segment(Cursegp);
@@ -1538,14 +1536,14 @@ int LoadGroup()
 int UngroupSegment( void )
 {
 	if (Cursegp->group == current_group) {
-	
+
 		Cursegp->group = -1;
 		delete_segment_from_group( Cursegp-Segments, current_group );
-	
+
 	   Update_flags |= UF_WORLD_CHANGED;
 	   mine_changed = 1;
 	   diagnostic_message("Segment Ungrouped from Group %d.", current_group);
-	
+
 		return 1;
 	} else
 	return 0;
@@ -1557,7 +1555,7 @@ int GroupSegment( void )
 
 		Cursegp->group = current_group;
 		add_segment_to_group( Cursegp-Segments, current_group );
-	
+
 	   Update_flags |= UF_WORLD_CHANGED;
 	   mine_changed = 1;
 	   diagnostic_message("Segment Added to Group %d.", current_group);
@@ -1591,7 +1589,7 @@ int Degroup( void )
 
 	GroupList[num_groups].num_segments = 0;
 	Groupsegp[num_groups] = 0;
-	
+
 	if (current_group > num_groups-1) current_group--;
 
 	if (num_groups == 0)
@@ -1606,27 +1604,27 @@ int Degroup( void )
 	return 1;
 }
 
-void NextGroup( void ) 
+void NextGroup( void )
 {
 
 	if (num_groups > 0)
 		{
 		current_group++;
 		if (current_group >= num_groups ) current_group = 0;
-		
+
 		Update_flags |= UF_ED_STATE_CHANGED;
 		mine_changed = 1;
 		}
 	else editor_status("No Next Group\n");
 }
 
-void PrevGroup( void ) 
+void PrevGroup( void )
 {
 	if (num_groups > 0)
 		{
 		current_group--;
 		if (current_group < 0 ) current_group = num_groups-1;
-		
+
 		Update_flags |= UF_ED_STATE_CHANGED;
 		mine_changed = 1;
 		}
@@ -1665,7 +1663,7 @@ int MoveGroup(void)
 		return 0;
 	} else
 		return 1;
-}				  
+}
 
 
 //	-----------------------------------------------------------------------------
@@ -1702,7 +1700,7 @@ int CopyGroup(void)
 		mine_changed = 1;
 		diagnostic_message("Group copied.");
 		return 0;
-	} else	  
+	} else
 		return 1;
 }
 
@@ -1721,7 +1719,7 @@ int RotateGroup(void)
 		Group_orientation[current_group]=0;
 
 	med_compress_mine();
-	
+
 	if (!med_move_group(0, Cursegp, Curside, Groupsegp[current_group], Groupside[current_group],
 								&vmd_identity_matrix, Group_orientation[current_group]))
 			{
@@ -1729,8 +1727,8 @@ int RotateGroup(void)
 			mine_changed = 1;
 			diagnostic_message("Group rotated.");
 			return 0;
-			} 
-		else	  
+			}
+		else
 			return 1;
 }
 
@@ -1754,7 +1752,7 @@ int SubtractFromGroup(void)
 	if (num_groups == MAX_GROUPS) {
 		x = ui_messagebox( -2, -2, 2, "Warning: You are about to wipe out a group.", "ARGH! NO!", "No problemo." );
 		if (x==1) return 0;
-	}					   
+	}
 
 	if (current_group == -1) {
 		editor_status("Error -- No current group.  Cannot subtract.");
@@ -1815,13 +1813,13 @@ int SubtractFromGroup(void)
 
 	for (x=0;x<GroupList[current_group].num_segments;x++)
 		Segments[GroupList[current_group].segments[x]].group = current_group;
-	
+
 	Update_flags |= UF_WORLD_CHANGED;
 	mine_changed = 1;
 	diagnostic_message("Group created.");
 
-	return 1; 
-				  
+	return 1;
+
 }
 
 //	-----------------------------------------------------------------------------
@@ -1843,7 +1841,7 @@ int CreateGroup(void)
 		x = ui_messagebox( -2, -2, 2, "Warning: You are about to wipe out a group.", "ARGH! NO!", "No problemo." );
 		if (x==1)
 			return 0;				// Aborting at user's request.
-	}					   
+	}
 
 	if (num_groups < MAX_GROUPS) {
 		num_groups++;
@@ -1854,7 +1852,7 @@ int CreateGroup(void)
 	//	Create a list of segments to copy.
 	GroupList[current_group].num_segments = 0;
 	create_group_list(Markedsegp, GroupList[current_group].segments, &GroupList[current_group].num_segments, Selected_segs, 0);
-	
+
 	// Replace Marked segment with Group Segment.
 	Groupsegp[current_group] = Markedsegp;
 	Groupside[current_group] = Markedside;
@@ -1863,13 +1861,13 @@ int CreateGroup(void)
 
 	for (x=0;x<GroupList[current_group].num_segments;x++)
 		Segments[GroupList[current_group].segments[x]].group = current_group;
-	
+
 	Update_flags |= UF_WORLD_CHANGED;
 	mine_changed = 1;
 	diagnostic_message("Group created.");
 
-	return 1; 
-				  
+	return 1;
+
 }
 
 //	-----------------------------------------------------------------------------
@@ -1879,11 +1877,11 @@ int DeleteGroup( void )
 	int i, numsegs;
 
 	autosave_mine(mine_filename);
-		
+
 	if (num_groups==0) return 0;
 
 	numsegs = GroupList[current_group].num_segments;
-	
+
 	for (i=0; i<numsegs; i++) {
 		med_delete_segment(&Segments[GroupList[current_group].segments[0]]);
 	}
