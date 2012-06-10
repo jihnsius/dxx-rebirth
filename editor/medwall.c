@@ -63,11 +63,11 @@ static int Current_door_type=1;
 
 typedef struct count_wall {
 	short wallnum;
-	short	segnum,sidenum;	
+	short	segnum,sidenum;
 } count_wall;
 
 //---------------------------------------------------------------------
-extern void create_removable_wall(segment *sp, int sidenum, int tmap_num);
+void create_removable_wall(segment *sp, int sidenum, int tmap_num);
 
 // Add a wall (removable 2 sided)
 int add_wall(segment *seg, short side)
@@ -81,7 +81,7 @@ int add_wall(segment *seg, short side)
  			seg->sides[side].wall_num = Num_walls;
 			Num_walls++;
 			}
-				 
+
 		csegp = &Segments[seg->children[side]];
 		Connectside = find_connect_side(seg, csegp);
 
@@ -89,7 +89,7 @@ int add_wall(segment *seg, short side)
 			csegp->sides[Connectside].wall_num = Num_walls;
 			Num_walls++;
 			}
-		
+
 		create_removable_wall( seg, side, CurrentTexture );
 		create_removable_wall( csegp, Connectside, CurrentTexture );
 
@@ -118,7 +118,7 @@ int wall_assign_door(int door_type)
 
  	csegp = &Segments[Cursegp->children[Curside]];
  	Connectside = find_connect_side(Cursegp, csegp);
-	
+
  	Walls[Cursegp->sides[Curside].wall_num].clip_num = door_type;
   	Walls[csegp->sides[Connectside].wall_num].clip_num = door_type;
 
@@ -188,7 +188,7 @@ int wall_automate_door()
 {
 	return wall_add_door_flag(WALL_DOOR_AUTO);
 }
-	
+
 int wall_deautomate_door()
 {
 	return wall_remove_door_flag(WALL_DOOR_AUTO);
@@ -240,7 +240,7 @@ int GotoNextWall() {
 	}
 
 	Cursegp = &Segments[Walls[current_wall].segnum];
-	Curside = Walls[current_wall].sidenum;	
+	Curside = Walls[current_wall].sidenum;
 
 	return 1;
 }
@@ -266,7 +266,7 @@ int PrevWall() {
 				wall_type = Num_wall_anims-1;
 
 			if (wall_type == Walls[Cursegp->sides[Curside].wall_num].clip_num)
-				Error("Cannot find clip for door."); 
+				Error("Cannot find clip for door.");
 
 		} while (WallAnims[wall_type].num_frames == -1 || WallAnims[wall_type].flags & WCF_BLASTABLE);
 
@@ -282,7 +282,7 @@ int PrevWall() {
 				wall_type = Num_wall_anims-1;
 
 			if (wall_type == Walls[Cursegp->sides[Curside].wall_num].clip_num)
-				Error("Cannot find clip for blastable wall."); 
+				Error("Cannot find clip for blastable wall.");
 
 		} while (WallAnims[wall_type].num_frames == -1 || !(WallAnims[wall_type].flags & WCF_BLASTABLE));
 
@@ -313,7 +313,7 @@ int NextWall() {
 			if (wall_type >= Num_wall_anims) {
 				wall_type = 0;
 				if (Walls[Cursegp->sides[Curside].wall_num].clip_num==-1)
-					Error("Cannot find clip for door."); 
+					Error("Cannot find clip for door.");
 			}
 
 		} while (WallAnims[wall_type].num_frames == -1 || WallAnims[wall_type].flags & WCF_BLASTABLE);
@@ -328,14 +328,14 @@ int NextWall() {
 			if (wall_type >= Num_wall_anims) {
 				wall_type = 0;
 				if (Walls[Cursegp->sides[Curside].wall_num].clip_num==-1)
-					Error("Cannot find clip for blastable wall."); 
+					Error("Cannot find clip for blastable wall.");
 			}
 
 		} while (WallAnims[wall_type].num_frames == -1 || !(WallAnims[wall_type].flags & WCF_BLASTABLE));
 
 	}
 
-	wall_assign_door(wall_type);	
+	wall_assign_door(wall_type);
 
 	Update_flags |= UF_WORLD_CHANGED;
 	return 1;
@@ -361,7 +361,7 @@ int do_wall_dialog()
 
 	wd->framenum = 0;
 
-	// Close other windows.	
+	// Close other windows.
 	close_all_windows();
 
 	// Open a window with a quit button
@@ -385,7 +385,7 @@ int do_wall_dialog()
 	// A bunch of buttons...
 	i = 80;
 	ui_add_gadget_button( MainWindow,155,i,70, 22, "<< Clip", PrevWall );
-	ui_add_gadget_button( MainWindow,155+70,i,70, 22, "Clip >>", NextWall );i += 25;		
+	ui_add_gadget_button( MainWindow,155+70,i,70, 22, "Clip >>", NextWall );i += 25;
 	ui_add_gadget_button( MainWindow,155,i,140, 22, "Add Blastable", wall_add_blastable ); i += 25;
 	ui_add_gadget_button( MainWindow,155,i,140, 22, "Add Door", wall_add_door  );	i += 25;
 	ui_add_gadget_button( MainWindow,155,i,140, 22, "Add Illusory", wall_add_illusion);	i += 25;
@@ -396,7 +396,7 @@ int do_wall_dialog()
 	ui_add_gadget_button( MainWindow,155,i,140, 22, "Remove Wall", wall_remove ); i += 25;
 	ui_add_gadget_button( MainWindow,155,i,140, 22, "Bind to Trigger", bind_wall_to_trigger ); i += 25;
 	ui_add_gadget_button( MainWindow,155,i,140, 22, "Bind to Control", bind_wall_to_control_center ); i+=25;
-	
+
 	wd->old_wall_num = -2;		// Set to some dummy value so everything works ok on the first frame.
 
 	return 1;
@@ -418,10 +418,10 @@ int wall_dialog_handler(UI_DIALOG *dlg, d_event *event, wall_dialog *wd)
 	fix64 Temp;
 	int keypress = 0;
 	int rval = 0;
-	
+
 	if (event->type == EVENT_KEY_COMMAND)
 		keypress = event_key_get(event);
-	
+
 	Assert(MainWindow != NULL);
 
 	//------------------------------------------------------------
@@ -431,7 +431,7 @@ int wall_dialog_handler(UI_DIALOG *dlg, d_event *event, wall_dialog *wd)
 
 	//------------------------------------------------------------
 	// If we change walls, we need to reset the ui code for all
-	// of the checkboxes that control the wall flags.  
+	// of the checkboxes that control the wall flags.
 	//------------------------------------------------------------
 	if (wd->old_wall_num != Cursegp->sides[Curside].wall_num)
 	{
@@ -449,7 +449,7 @@ int wall_dialog_handler(UI_DIALOG *dlg, d_event *event, wall_dialog *wd)
 			ui_radio_set_value(wd->keyFlag[3], w->keys & KEY_GOLD);
 		}
 	}
-	
+
 	//------------------------------------------------------------
 	// If any of the checkboxes that control the wallflags are set, then
 	// update the corresponding wall flag.
@@ -458,7 +458,7 @@ int wall_dialog_handler(UI_DIALOG *dlg, d_event *event, wall_dialog *wd)
 	if (Walls[Cursegp->sides[Curside].wall_num].type == WALL_DOOR) {
 		if (GADGET_PRESSED(wd->doorFlag[0]))
 		{
-			if ( wd->doorFlag[0]->flag == 1 )	
+			if ( wd->doorFlag[0]->flag == 1 )
 				Walls[Cursegp->sides[Curside].wall_num].flags |= WALL_DOOR_LOCKED;
 			else
 				Walls[Cursegp->sides[Curside].wall_num].flags &= ~WALL_DOOR_LOCKED;
@@ -466,7 +466,7 @@ int wall_dialog_handler(UI_DIALOG *dlg, d_event *event, wall_dialog *wd)
 		}
 		else if (GADGET_PRESSED(wd->doorFlag[1]))
 		{
-			if ( wd->doorFlag[1]->flag == 1 )	
+			if ( wd->doorFlag[1]->flag == 1 )
 				Walls[Cursegp->sides[Curside].wall_num].flags |= WALL_DOOR_AUTO;
 			else
 				Walls[Cursegp->sides[Curside].wall_num].flags &= ~WALL_DOOR_AUTO;
@@ -494,15 +494,15 @@ int wall_dialog_handler(UI_DIALOG *dlg, d_event *event, wall_dialog *wd)
 	if (Walls[Cursegp->sides[Curside].wall_num].type == WALL_ILLUSION) {
 		if (GADGET_PRESSED(wd->doorFlag[2]))
 		{
-			if ( wd->doorFlag[2]->flag == 1 )	
+			if ( wd->doorFlag[2]->flag == 1 )
 				Walls[Cursegp->sides[Curside].wall_num].flags |= WALL_ILLUSION_OFF;
 			else
 				Walls[Cursegp->sides[Curside].wall_num].flags &= ~WALL_ILLUSION_OFF;
 			rval = 1;
 		}
-	} else 
-		for (	i=2; i < 3; i++ )	
-			if (wd->doorFlag[i]->flag == 1) { 
+	} else
+		for (	i=2; i < 3; i++ )
+			if (wd->doorFlag[i]->flag == 1) {
 				wd->doorFlag[i]->flag = 0;		// Tells ui that this button isn't checked
 				wd->doorFlag[i]->status = 1;	// Tells ui to redraw button
 			}
@@ -575,7 +575,7 @@ int wall_dialog_handler(UI_DIALOG *dlg, d_event *event, wall_dialog *wd)
 				default:
 					ui_dprintf_at( MainWindow, 12, 23, " Type: Unknown  " );
 					break;
-			}			
+			}
 			if (Walls[Cursegp->sides[Curside].wall_num].type != WALL_DOOR)
 					ui_dprintf_at( MainWindow, 223, 6, "            " );
 
@@ -588,7 +588,7 @@ int wall_dialog_handler(UI_DIALOG *dlg, d_event *event, wall_dialog *wd)
 			ui_dprintf_at( MainWindow, 12, 57, " Trigger: none  ");
 		}
 	}
-	
+
 	if (ui_button_any_drawn || (wd->old_wall_num != Cursegp->sides[Curside].wall_num) )
 		Update_flags |= UF_WORLD_CHANGED;
 
@@ -603,16 +603,15 @@ int wall_dialog_handler(UI_DIALOG *dlg, d_event *event, wall_dialog *wd)
 	{
 		close_wall_window();
 		return 1;
-	}		
+	}
 
 	wd->old_wall_num = Cursegp->sides[Curside].wall_num;
-	
+
 	return rval;
 }
 
 
 //---------------------------------------------------------------------
-extern void wall_close_door_num(int door_num);
 
 // Restore all walls to original status (closed doors, repaired walls)
 int wall_restore_all()
@@ -645,7 +644,7 @@ int wall_restore_all()
 
 	for (i=0;i<Num_triggers;i++)
 		Triggers[i].flags |= TRIGGER_ON;
-	
+
 	Update_flags |= UF_GAME_VIEW_CHANGED;
 
 	return 1;
@@ -667,7 +666,7 @@ int wall_delete_bogus(short wall_num)
 	for (w=wall_num; w<Num_walls; w++) {
 		Walls[w] = Walls[w+1];
 	}
-		
+
 	Num_walls--;
 
 	for (seg=0;seg<=Highest_segment_index;seg++)
@@ -697,7 +696,7 @@ int wall_remove_side(segment *seg, short side)
 		remove_trigger(csegp, Connectside);
 
 		// Remove walls 'wall_num' and connecting side 'wall_num'
-		//  from Walls array.  
+		//  from Walls array.
 	 	lower_wallnum = seg->sides[side].wall_num;
 		if (csegp->sides[Connectside].wall_num < lower_wallnum)
 			 lower_wallnum = csegp->sides[Connectside].wall_num;
@@ -726,7 +725,7 @@ int wall_remove_side(segment *seg, short side)
 						Triggers[t].seg[t1] = Triggers[t].seg[t1+1];
 						Triggers[t].side[t1] = Triggers[t].side[t1+1];
 					}
-					Triggers[t].num_links--;	
+					Triggers[t].num_links--;
 				}
 
 		// Destroy control center links as well.
@@ -736,7 +735,7 @@ int wall_remove_side(segment *seg, short side)
 					ControlCenterTriggers.seg[t1] = ControlCenterTriggers.seg[t1+1];
 					ControlCenterTriggers.side[t1] = ControlCenterTriggers.side[t1+1];
 				}
-				ControlCenterTriggers.num_links--;	
+				ControlCenterTriggers.num_links--;
 			}
 
 		seg->sides[side].wall_num = -1;
@@ -792,10 +791,10 @@ int wall_add_to_side(segment *segp, int side, sbyte type)
 		if (type == WALL_BLASTABLE) {
 	  		Walls[segp->sides[side].wall_num].hps = WALL_HPS;
 			Walls[csegp->sides[connectside].wall_num].hps = WALL_HPS;
-			
+
 	  		//Walls[segp->sides[side].wall_num].clip_num = 0;
 			//Walls[csegp->sides[connectside].wall_num].clip_num = 0;
-			}	
+			}
 
 		if (type != WALL_DOOR) {
 			segp->sides[side].tmap_num2 = 0;
@@ -863,10 +862,10 @@ int wall_add_to_markedside(sbyte type)
 		if (type == WALL_BLASTABLE) {
 	  		Walls[wall_num].hps = WALL_HPS;
 			Walls[cwall_num].hps = WALL_HPS;
-			
+
 	  		Walls[wall_num].clip_num = 0;
 			Walls[cwall_num].clip_num = 0;
-			}	
+			}
 
 		if (type != WALL_DOOR) {
 			Markedsegp->sides[Markedside].tmap_num2 = 0;
@@ -1023,7 +1022,7 @@ int wall_unlink_door()
 
 #define	DIAGNOSTIC_MESSAGE_MAX				150
 
-int check_walls() 
+int check_walls()
 {
 	int w, seg, side, wall_count, trigger_count;
 	int w1;
@@ -1032,7 +1031,7 @@ int check_walls()
 	int matcen_num;
 
 	wall_count = 0;
-	for (seg=0;seg<=Highest_segment_index;seg++) 
+	for (seg=0;seg<=Highest_segment_index;seg++)
 		if (Segments[seg].segnum != -1) {
 			// Check fuelcenters
 			matcen_num = Segment2s[seg].matcen_num;
@@ -1040,12 +1039,12 @@ int check_walls()
 				if (RobotCenters[0].segnum != seg) {
 				 	Segment2s[seg].matcen_num = -1;
 				}
-	
+
 			if (matcen_num > -1)
 				if (RobotCenters[matcen_num].segnum != seg) {
 					RobotCenters[matcen_num].segnum = seg;
 				}
-	
+
 			for (side=0;side<MAX_SIDES_PER_SEGMENT;side++)
 				if (Segments[seg].sides[side].wall_num != -1) {
 					CountedWalls[wall_count].wallnum = Segments[seg].sides[side].wall_num;
@@ -1093,7 +1092,7 @@ int check_walls()
 }
 
 
-int delete_all_walls() 
+int delete_all_walls()
 {
 	char Message[DIAGNOSTIC_MESSAGE_MAX];
 	int seg, side;
@@ -1130,9 +1129,9 @@ int delete_all_triggers()
 	return 0;
 }
 
-int dump_walls_info() 
+int dump_walls_info()
 {
-	int w; 
+	int w;
 	PHYSFS_file *fp;
 
 	fp = PHYSFSX_openWriteBuffered("WALL.OUT");
@@ -1144,7 +1143,7 @@ int dump_walls_info()
 		PHYSFSX_printf(fp, "WALL #%d\n", w);
 		PHYSFSX_printf(fp, "  seg: %d\n", Walls[w].segnum);
 		PHYSFSX_printf(fp, "  sidenum: %d\n", Walls[w].sidenum);
-	
+
 		switch (Walls[w].type) {
 			case WALL_NORMAL:
 				PHYSFSX_printf(fp, "  type: NORMAL\n");
@@ -1168,7 +1167,7 @@ int dump_walls_info()
 				PHYSFSX_printf(fp, "  type: ILLEGAL!!!!! <-----------------\n");
 				break;
 		}
-	
+
 		PHYSFSX_printf(fp, "  flags:\n");
 
 		if (Walls[w].flags & WALL_BLASTED)
@@ -1209,7 +1208,7 @@ int dump_walls_info()
 
 		PHYSFSX_printf(fp, "  linked_wall %d\n", Walls[w].linked_wall);
 	}
-	
+
 	PHYSFS_close(fp);
 	return 1;
 }
