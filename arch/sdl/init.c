@@ -53,7 +53,7 @@ void arch_init(void)
 		joy_init();
 
 	if ((t = gr_init(0)) != 0)
-		Error(TXT_CANT_INIT_GFX,t);
+		Error("Graphics initialization failed: %u",t);
 
 	atexit(arch_close);
 }
