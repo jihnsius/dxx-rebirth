@@ -99,8 +99,6 @@ fix Cruise_speed=0;
 #define STATE_BIT4		8
 #define STATE_BIT5		16
 
-char *btype_text[] = { "BT_KEY", "BT_MOUSE_BUTTON", "BT_MOUSE_AXIS", "BT_JOY_BUTTON", "BT_JOY_AXIS", "BT_INVERT" };
-
 #define INFO_Y (188)
 
 typedef struct kc_item {
@@ -729,6 +727,7 @@ int kconfig_key_command(window *wind, d_event *event, kc_menu *menu)
 			return 1;
 #ifdef TABLE_CREATION
 		case KEY_F12:	{
+			static const char *const btype_text[] = { "BT_KEY", "BT_MOUSE_BUTTON", "BT_MOUSE_AXIS", "BT_JOY_BUTTON", "BT_JOY_AXIS", "BT_INVERT" };
 				PHYSFS_file * fp;
 				for (i=0; i<NUM_KEY_CONTROLS; i++ )	{
 					kc_keyboard[i].u = find_next_item_up( kc_keyboard,NUM_KEY_CONTROLS, i);
