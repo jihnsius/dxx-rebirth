@@ -68,6 +68,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #ifdef USE_UDP
 #include "net_udp.h"
 #endif
+#include "automap.h"
 
 void multi_reset_player_object(object *objp);
 void multi_reset_object_texture(object *objp);
@@ -117,7 +118,6 @@ int multi_protocol=0; // set and determinate used protocol
 int imulti_new_game=0; // to prep stuff for level only when starting new game
 
 extern vms_vector MarkerPoint[];
-extern char MarkerMessage[16][40];
 extern int MarkerObject[];
 
 int who_killed_controlcen = -1;  // -1 = noone
