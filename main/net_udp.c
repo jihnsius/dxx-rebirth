@@ -1277,10 +1277,7 @@ net_udp_new_player(UDP_sequence_packet *their)
 
 	ClipRank (&their->player.rank);
 
-	if (PlayerCfg.NoRankings)
-		HUD_init_message(HM_MULTI, "'%s' %s\n",their->player.callsign, TXT_JOINING);
-	else
-		HUD_init_message(HM_MULTI, "%s'%s' %s\n",RankStrings[their->player.rank],their->player.callsign, TXT_JOINING);
+	HUD_init_message(HM_MULTI, "%s'%s'(%i) %s\n",PlayerCfg.NoRankings ? "" : RankStrings[their->player.rank],their->player.callsign, pnum, TXT_JOINING);
 	
 	multi_make_ghost_player(pnum);
 
@@ -1413,10 +1410,7 @@ void net_udp_welcome_player(UDP_sequence_packet *their)
 
 		digi_play_sample(SOUND_HUD_MESSAGE, F1_0);
 		
-		if (PlayerCfg.NoRankings)
-			HUD_init_message(HM_MULTI, "'%s' %s", Players[player_num].callsign, TXT_REJOIN);
-		else
-			HUD_init_message(HM_MULTI, "%s'%s' %s", RankStrings[Netgame.players[player_num].rank],Players[player_num].callsign, TXT_REJOIN);
+		HUD_init_message(HM_MULTI, "%s'%s'(%i) %s\n",PlayerCfg.NoRankings ? "" : RankStrings[Netgame.players[player_num].rank],Players[player_num].callsign, player_num, TXT_REJOIN);
 
 		multi_send_score();
 
@@ -4763,10 +4757,7 @@ void net_udp_read_pdata_short_packet(UDP_frame_info *pd)
 			digi_play_sample( SOUND_HUD_MESSAGE, F1_0);
 			ClipRank (&Netgame.players[TheirPlayernum].rank);
 			
-			if (PlayerCfg.NoRankings)
-				HUD_init_message(HM_MULTI,  "'%s' %s", Players[TheirPlayernum].callsign, TXT_REJOIN );
-			else
-				HUD_init_message(HM_MULTI,  "%s'%s' %s", RankStrings[Netgame.players[TheirPlayernum].rank],Players[TheirPlayernum].callsign, TXT_REJOIN );
+			HUD_init_message(HM_MULTI, "%s'%s'(%i) %s\n",PlayerCfg.NoRankings ? "" : RankStrings[Netgame.players[TheirPlayernum].rank],Players[TheirPlayernum].callsign, TheirPlayernum, TXT_REJOIN);
 
 			multi_send_score();
 
