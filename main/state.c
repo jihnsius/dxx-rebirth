@@ -1303,6 +1303,7 @@ int state_restore_all_sub(char *filename, int secret_restore)
 	tmptime32 = PHYSFSX_readSXE32(fp, swap);
 	GameTime64 = (fix64)tmptime32;
 
+	coop_org_objnum = Players[Player_num].objnum;
 // Start new game....
 	if (!(Game_mode & GM_MULTI_COOP))
 	{
@@ -1320,7 +1321,6 @@ int state_restore_all_sub(char *filename, int secret_restore)
 	else // in coop we want to stay the player we are already.
 	{
 		strcpy( org_callsign, Players[Player_num].callsign );
-		coop_org_objnum = Players[Player_num].objnum;
 		if (!secret_restore)
 			init_player_stats_game(Player_num);
 	}
