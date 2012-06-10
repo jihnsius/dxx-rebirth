@@ -706,8 +706,6 @@ int DosShell()
 	key_close();
 #ifdef __MSDOS__
 	ok = spawnl(P_WAIT,getenv("COMSPEC"), NULL );
-#elif defined(__linux__)
-        system("");
 #endif
 	key_init();
 
