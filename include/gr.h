@@ -435,6 +435,7 @@ int gr_check_fullscreen(void);
  * check_fullscreen immediatly after)
  */
 int gr_toggle_fullscreen(void);
+void ogl_do_palfx(void);
 
 #ifdef __cplusplus
 }
