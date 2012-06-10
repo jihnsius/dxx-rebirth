@@ -83,6 +83,7 @@ typedef struct Arg
 	int DbgVerbose;
 	int DbgSafelog;
 	int DbgNoRun;
+	int DbgForbidConsoleGrab;
 	int DbgRenderStats;
 	int DbgShowMemInfo;
 	int DbgUseDoubleBuffer;

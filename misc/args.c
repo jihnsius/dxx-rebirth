@@ -212,6 +212,7 @@ void ReadCmdArgs(void)
 
 	GameArg.DbgSafelog 		= FindArg("-safelog");
 	GameArg.DbgNoRun 		= FindArg("-norun");
+	GameArg.DbgForbidConsoleGrab = FindArg("-no-grab");
 	GameArg.DbgRenderStats 		= FindArg("-renderstats");
 	GameArg.DbgAltTex 		= get_str_arg("-text", NULL);
 	GameArg.DbgTexMap 		= get_str_arg("-tmap", NULL);
