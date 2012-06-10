@@ -88,7 +88,7 @@ bool TestEGLError(char* pszLocation)
 		con_printf(CON_URGENT, "%s failed (%d).\n", pszLocation, iErr);
 		return 0;
 	}
-	
+
 	return 1;
 }
 #endif
@@ -142,7 +142,7 @@ int ogl_init_window(int x, int y)
 	}
 
 	SDL_VERSION(&info.version);
-	
+
 	if (SDL_GetWMInfo(&info) > 0) {
 		if (info.subsystem == SDL_SYSWM_X11) {
 			x11Display = info.info.x11.display;
@@ -150,34 +150,34 @@ int ogl_init_window(int x, int y)
 			printf ("Display: %p, Window: %i ===\n", x11Display, x11Window);
 		}
 	}
-	
+
 	eglDisplay = eglGetDisplay((NativeDisplayType)x11Display);
 	if (!eglInitialize(eglDisplay, &ver_maj, &ver_min)) {
 		con_printf(CON_URGENT, "EGL: Error initializing EGL\n");
 	} else {
 		con_printf(CON_URGENT, "EGL: Initialized, version: major %i minor %i\n", ver_maj, ver_min);
 	}
-	
+
 	if (!eglChooseConfig(eglDisplay, configAttribs, &eglConfig, 1, &iConfigs) || (iConfigs != 1)) {
 		con_printf(CON_URGENT, "EGL: Error choosing config\n");
 	} else {
 		con_printf(CON_URGENT, "EGL: Choosed config\n", ver_maj, ver_min);
 	}
-	
+
 	eglSurface = eglCreateWindowSurface(eglDisplay, eglConfig, (NativeWindowType)x11Window, NULL);
 	if (!TestEGLError("eglCreateWindowSurface")) {
 		con_printf(CON_URGENT, "EGL: Error creating window surface\n");
 	} else {
 		con_printf(CON_URGENT, "EGL: Created window surface\n");
 	}
-	
+
 	eglContext = eglCreateContext(eglDisplay, eglConfig, NULL, NULL);
 	if (!TestEGLError("eglCreateContext")) {
 		con_printf(CON_URGENT, "EGL: Error creating context\n");
 	} else {
 		con_printf(CON_URGENT, "EGL: Created context\n");
 	}
-	
+
 	eglMakeCurrent(eglDisplay, eglSurface, eglSurface, eglContext);
 	if (!TestEGLError("eglMakeCurrent")) {
 		con_printf(CON_URGENT, "EGL: Error making current\n");
@@ -239,8 +239,7 @@ int gr_toggle_fullscreen(void)
 	return (sdl_video_flags & SDL_FULLSCREEN)?1:0;
 }
 
-extern void ogl_init_pixel_buffers(int w, int h);
-extern void ogl_close_pixel_buffers(void);
+void ogl_init_pixel_buffers(int w, int h);
 
 void ogl_init_state(void)
 {
@@ -575,7 +574,7 @@ unsigned char ogl_ugpixel( grs_bitmap * bitmap, int x, int y )
 #endif
 
 	glReadPixels(bitmap->bm_x + x, SHEIGHT - bitmap->bm_y - y, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, buf);
-	
+
 	return gr_find_closest_color(buf[0]/4, buf[1]/4, buf[2]/4);
 }
 
@@ -618,7 +617,7 @@ void ogl_urect(int left,int top,int right,int bot)
 	vertex_array[5] = yf;
 	vertex_array[6] = xf;
 	vertex_array[7] = yo;
-	
+
 	glVertexPointer(2, GL_FLOAT, 0, vertex_array);
 	glColorPointer(4, GL_FLOAT, 0, color_array);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);//replaced GL_QUADS
@@ -633,12 +632,12 @@ void ogl_ulinec(int left,int top,int right,int bot,int c)
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
-	
+
 	xo = (left + grd_curcanv->cv_bitmap.bm_x + 0.5) / (float)last_width;
 	xf = (right + grd_curcanv->cv_bitmap.bm_x + 1.0) / (float)last_width;
 	yo = 1.0 - (top + grd_curcanv->cv_bitmap.bm_y + 0.5) / (float)last_height;
 	yf = 1.0 - (bot + grd_curcanv->cv_bitmap.bm_y + 1.0) / (float)last_height;
- 
+
 	OGL_DISABLE(TEXTURE_2D);
 
 	vertex_array[0] = xo;
@@ -665,7 +664,7 @@ void ogl_do_palfx(void)
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
- 
+
 	if (do_pal_step)
 	{
 		glEnable(GL_BLEND);
@@ -673,7 +672,7 @@ void ogl_do_palfx(void)
 	}
 	else
 		return;
- 
+
 	glVertexPointer(2, GL_FLOAT, 0, vertex_array);
 	glColorPointer(4, GL_FLOAT, 0, color_array);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);//replaced GL_QUADS
