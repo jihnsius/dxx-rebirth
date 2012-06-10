@@ -30,8 +30,6 @@ static char rcsid[] = "$Id: icon.c,v 1.1.1.1 2006/03/17 19:52:19 zicodxx Exp $";
 
 #define Middle(x) ((2*(x)+1)/4)
 
-extern void ui_draw_shad( short x1, short y1, short x2, short y2, short c1, short c2 );
-
 void ui_draw_box_in1( short x1, short y1, short x2, short y2 )
 {
 
@@ -46,7 +44,7 @@ void ui_draw_icon( UI_GADGET_ICON * icon )
 {
 	int height, width, avg;
 	int x, y;
-	
+
 #if 0  //ndef OGL
 	if ((icon->status==1) || (icon->position != icon->oldposition))
 #endif
@@ -55,7 +53,7 @@ void ui_draw_icon( UI_GADGET_ICON * icon )
 
 		gr_set_current_canvas( icon->canvas );
 		gr_get_string_size(icon->text, &width, &height, &avg );
-	
+
 		x = ((icon->width-1)/2)-((width-1)/2);
 		y = ((icon->height-1)/2)-((height-1)/2);
 
@@ -69,15 +67,15 @@ void ui_draw_icon( UI_GADGET_ICON * icon )
 		{
 			// Draw part out
 			ui_draw_box_in1( 0, 0, icon->width, icon->height );
-			x += 1; y += 1;	
+			x += 1; y += 1;
 		}
 		else
 		{
 			// Draw released!
 			ui_draw_box_out( 0, 0, icon->width, icon->height );
 		}
-	
-		gr_set_fontcolor( CBLACK, -1 );		
+
+		gr_set_fontcolor( CBLACK, -1 );
 		gr_ustring( x, y, icon->text );
 	}
 }
@@ -117,14 +115,14 @@ UI_GADGET_ICON * ui_add_gadget_icon( UI_DIALOG * dlg, char * text, short x, shor
 int ui_icon_do( UI_DIALOG *dlg, UI_GADGET_ICON * icon, d_event *event )
 {
 	int rval = 0;
-	
+
 	icon->oldposition = icon->position;
 	icon->pressed = 0;
 
 	if (event->type == EVENT_MOUSE_BUTTON_DOWN || event->type == EVENT_MOUSE_BUTTON_UP)
 	{
 		int OnMe;
-		
+
 		OnMe = ui_mouse_on_gadget( (UI_GADGET *)icon );
 
 		if (B1_JUST_PRESSED && OnMe)
@@ -136,7 +134,7 @@ int ui_icon_do( UI_DIALOG *dlg, UI_GADGET_ICON * icon, d_event *event )
 		{
 			if ((icon->position == 1) && OnMe)
 				icon->pressed = 1;
-				
+
 			icon->position = 0;
 		}
 	}
@@ -145,9 +143,9 @@ int ui_icon_do( UI_DIALOG *dlg, UI_GADGET_ICON * icon, d_event *event )
 	if (event->type == EVENT_KEY_COMMAND)
 	{
 		int key;
-		
+
 		key = event_key_get(event);
-		
+
 		if (key == icon->trap_key)
 		{
 			icon->position = 1;
@@ -157,15 +155,15 @@ int ui_icon_do( UI_DIALOG *dlg, UI_GADGET_ICON * icon, d_event *event )
 	else if (event->type == EVENT_KEY_RELEASE)
 	{
 		int key;
-		
+
 		key = event_key_get(event);
-		
+
 		icon->position = 0;
-		
+
 		if (key == icon->trap_key)
 			icon->pressed = 1;
 	}
-		
+
 	if (icon->pressed == 1)
 	{
 		icon->status = 1;

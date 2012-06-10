@@ -58,9 +58,6 @@ static unsigned char SavedState[256];
 
 static int PlaybackSpeed = 1;
 
-extern void ui_draw_frame( short x1, short y1, short x2, short y2 );
-extern void save_screen_shot(int automap_flag);		// avoids conflict with FrameCount when including game.h
-
 // 1=1x faster, 2=2x faster, etc
 void ui_set_playback_speed( int speed )
 {
@@ -140,23 +137,23 @@ void ui_dialog_draw(UI_DIALOG *dlg)
 
 	req_w = w;
 	req_h = h;
-	
+
 	if (dlg->flags & DF_BORDER)
 	{
 		req_w -= 2*BORDER_WIDTH;
 		req_h -= 2*BORDER_WIDTH;
-		
+
 		gr_set_current_canvas( NULL );
 		ui_draw_frame( x, y, x+w-1, y+h-1 );
 	}
-	
+
 	ui_dialog_set_current_canvas(dlg);
-	
+
 	if (dlg->flags & DF_FILLED)
 		ui_draw_box_out( 0, 0, req_w-1, req_h-1 );
-	
+
 	gr_set_fontcolor( CBLACK, CWHITE );
-	
+
 	D_TEXT_X = 0;
 	D_TEXT_Y = 0;
 }
@@ -171,7 +168,7 @@ int ui_dialog_handler(window *wind, d_event *event, UI_DIALOG *dlg)
 		event->type == EVENT_WINDOW_ACTIVATED ||
 		event->type == EVENT_WINDOW_DEACTIVATED)
 		return 0;
-	
+
 	if (dlg->callback)
 		if ((*dlg->callback)(dlg, event, dlg->userdata))
 			return 1;		// event handled
@@ -190,7 +187,7 @@ int ui_dialog_handler(window *wind, d_event *event, UI_DIALOG *dlg)
 
 			rval = mouse_in_window(dlg->wind);
 			break;
-			
+
 		case EVENT_KEY_COMMAND:
 		case EVENT_KEY_RELEASE:
 			rval = ui_dialog_do_gadgets(dlg, event);
@@ -200,7 +197,7 @@ int ui_dialog_handler(window *wind, d_event *event, UI_DIALOG *dlg)
 			timer_delay2(50);
 			rval = ui_dialog_do_gadgets(dlg, event);
 			break;
-			
+
 		case EVENT_WINDOW_DRAW:
 		{
 			d_event event2 = { EVENT_UI_DIALOG_DRAW };
@@ -215,11 +212,11 @@ int ui_dialog_handler(window *wind, d_event *event, UI_DIALOG *dlg)
 			selected_gadget = NULL;
 			d_free( dlg );
 			break;
-			
+
 		default:
 			break;
 	}
-	
+
 	return rval;
 }
 
@@ -238,7 +235,7 @@ UI_DIALOG * ui_create_dialog( short x, short y, short w, short h, enum dialog_fl
 
 	req_w = w;
 	req_h = h;
-	
+
 	dlg->flags = flags;
 
 	if (flags & DF_BORDER)
@@ -268,7 +265,7 @@ UI_DIALOG * ui_create_dialog( short x, short y, short w, short h, enum dialog_fl
 						 x + ((flags & DF_BORDER) ? BORDER_WIDTH : 0),
 						 y + ((flags & DF_BORDER) ? BORDER_WIDTH : 0),
 						 req_w, req_h, (int (*)(window *, d_event *, void *)) ui_dialog_handler, dlg);
-	
+
 	if (!dlg->wind)
 	{
 		d_free(dlg);
@@ -314,7 +311,7 @@ void ui_mega_process()
 {
 	int mx, my, mz;
 	unsigned char k;
-	
+
 	event_process();
 
 	switch( Record )
@@ -461,22 +458,22 @@ void ui_mega_process()
 		last_keypress = 0;
 
 		if ( keyd_last_pressed ) {
-			_disable();			
+			_disable();
 			k = keyd_last_pressed;
 			keyd_last_pressed = 0;
 			_disable();
 			SavedState[k] = 1;
 		}
 
-		if ( keyd_last_released ) 
+		if ( keyd_last_released )
 		{
-			_disable();			
+			_disable();
 			k = keyd_last_released;
 			keyd_last_released = 0;
 			_disable();
 			SavedState[k] = 0;
 		}
-		
+
 		if (key_inkey() == KEY_F12 )
 		{
 			restore_state();
@@ -531,28 +528,28 @@ void ui_mega_process()
 		case 2:
 			{
 				int next_frame;
-			
+
 				if ( ui_event_counter < ui_number_of_events )
 				{
 					next_frame = EventBuffer[ui_event_counter].frame;
-					
+
 					if ( (FrameCount+PlaybackSpeed) < next_frame )
 						FrameCount = next_frame - PlaybackSpeed;
 					else
 						FrameCount++;
 				} else {
 				 	FrameCount++;
-				}	
+				}
 			}
 			break;
 
-		case 3:			
- 			if ( ui_event_counter < ui_number_of_events ) 
+		case 3:
+ 			if ( ui_event_counter < ui_number_of_events )
 				FrameCount = EventBuffer[ui_event_counter].frame;
-			else 		
+			else
 				FrameCount++;
 			break;
-		default:		
+		default:
 			FrameCount++;
 		}
 	}
