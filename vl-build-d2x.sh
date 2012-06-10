@@ -12,6 +12,14 @@ mysconsargs=(
 )
 
 set -x
+
+while read l; do
+	n="${l%%=*}"
+	v="${l##*=\"}"
+	printf -v "$n" '%s %s' "${v%\"}" "${!n}"
+done < <( grep -e '^\(C\|CXX\|LD\)FLAGS=".*"$' /etc/portage/make.conf )
+export CFLAGS CXXFLAGS LDFLAGS
+
 if git rev-parse --git-dir >/dev/null 2>&1; then
 	printf -v mysconsargs[${#mysconsargs[@]}] 'extra_version=%s%s%s' \
 		"$(git describe --tags 2>/dev/null)" \
