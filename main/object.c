@@ -144,7 +144,7 @@ void object_goto_next_viewer()
 	int i, start_obj = 0;
 
 	start_obj = Viewer - Objects;		//get viewer object number
-	
+
 	for (i=0;i<=Highest_object_index;i++) {
 
 		start_obj++;
@@ -166,7 +166,7 @@ void object_goto_prev_viewer()
 	int i, start_obj = 0;
 
 	start_obj = Viewer - Objects;		//get viewer object number
-	
+
 	for (i=0; i<=Highest_object_index; i++) {
 
 		start_obj--;
@@ -274,10 +274,6 @@ extern fix Max_thrust;
 //used for robot engine glow
 #define MAX_VELOCITY i2f(50)
 
-//function that takes the same parms as draw_tmap, but renders as flat poly
-//we need this to do the cloaked effect
-extern void draw_tmap_flat();
-
 //what darkening level to use when cloaked
 #define CLOAKED_FADE_LEVEL		28
 
@@ -344,7 +340,7 @@ void draw_cloaked_object(object *obj,g3s_lrgb light,fix *glow,fix64 cloak_start_
 		}
 
 		cloak_value = CLOAKED_FADE_LEVEL - cloak_delta;
-	
+
 	} else if (GameTime64 < cloak_end_time-Cloak_fadeout_duration/2) {
 
 		cloak_value = f2i(fixdiv(total_cloaked_time - Cloak_fadeout_duration/2 - cloak_delta_time,Cloak_fadeout_duration/2) * CLOAKED_FADE_LEVEL);
@@ -501,7 +497,7 @@ void draw_polygon_object(object *obj)
 				draw_cloaked_object(obj,light,engine_glow_value, GameTime64-F1_0*10, GameTime64+F1_0*10);
 		} else {
 			bitmap_index * alt_textures = NULL;
-	
+
 			#ifdef NETWORK
 			if ( obj->rtype.pobj_info.alt_textures > 0 )
 				alt_textures = multi_player_textures[obj->rtype.pobj_info.alt_textures-1];
@@ -530,7 +526,7 @@ void draw_polygon_object(object *obj)
 							   engine_glow_value,
 							   alt_textures);
 			}
-			
+
 			draw_polygon_model(&obj->pos,
 					   &obj->orient,
 					   (vms_angvec *)&obj->rtype.pobj_info.anim_angles,obj->rtype.pobj_info.model_num,
@@ -586,13 +582,13 @@ void draw_polygon_object(object *obj)
 //091494: {
 //091494: 	fix dist;
 //091494:
-//091494: 	if ( (obj->type != OBJ_ROBOT) || (Object_draw_lock_boxes==0) )	
+//091494: 	if ( (obj->type != OBJ_ROBOT) || (Object_draw_lock_boxes==0) )
 //091494: 		return;
 //091494:
 //091494: 	// The following code keeps a list of the 10 closest robots to the
 //091494: 	// viewer.  See comments in front of this function for how this works.
 //091494: 	dist = vm_vec_dist( &obj->pos, &Viewer->pos );
-//091494: 	if ( dist < i2f(20*10) )	{				
+//091494: 	if ( dist < i2f(20*10) )	{
 //091494: 		if ( Object_num_close < MAX_CLOSE_ROBOTS )	{
 //091494: 			Object_close_ones[Object_num_close] = obj;
 //091494: 			Object_close_distance[Object_num_close] = dist;
@@ -896,7 +892,7 @@ void init_objects()
 	num_objects = 1;						//just the player
 	Highest_object_index = 0;
 
-	
+
 }
 
 //after calling init_object(), the network code has grabbed specific
@@ -999,7 +995,7 @@ void remove_all_objects_but( int segnum, int objnum )
 int check_duplicate_objects()
 {
 	int i, count=0;
-	
+
 	for (i=0;i<=Highest_object_index;i++) {
 		if ( Objects[i].type != OBJ_NONE )	{
 			count = search_all_segments_for_object( i );
@@ -1043,14 +1039,14 @@ void obj_link(int objnum,int segnum)
 	Assert(segnum>=0 && segnum<=Highest_segment_index);
 
 	obj->segnum = segnum;
-	
+
 	obj->next = Segments[segnum].objects;
 	obj->prev = -1;
 
 	Segments[segnum].objects = objnum;
 
 	if (obj->next != -1) Objects[obj->next].prev = objnum;
-	
+
 	//list_seg_objects( segnum );
 	//check_duplicate_objects();
 
@@ -1391,7 +1387,7 @@ int obj_create_copy(int objnum, vms_vector *new_pos, int newsegnum)
 }
 #endif
 
-extern void newdemo_record_guided_end();
+void newdemo_record_guided_end();
 
 //remove object from the world
 void obj_delete(int objnum)
@@ -1413,7 +1409,7 @@ void obj_delete(int objnum)
 		}
 		else if (Newdemo_state==ND_STATE_RECORDING)
 			newdemo_record_guided_end();
-		
+
 	}
 
 	if (obj == Viewer)		//deleting the viewer?
@@ -1531,9 +1527,9 @@ void set_camera_pos(vms_vector *camera_pos, object *objp)
 	}
 }
 
-extern void drop_player_eggs(object *objp);
-extern int get_explosion_vclip(object *obj,int stage);
-extern void multi_cap_objects();
+void drop_player_eggs(object *objp);
+int get_explosion_vclip(object *obj,int stage);
+void multi_cap_objects();
 
 //	------------------------------------------------------------------------------------------------------------------
 void dead_player_frame(void)
@@ -1557,7 +1553,7 @@ void dead_player_frame(void)
 			else {
 				Int3();
 			}
-		}		
+		}
 
 		ConsoleObject->mtype.phys_info.rotvel.x = max(0, DEATH_SEQUENCE_EXPLODE_TIME - time_dead)/4;
 		ConsoleObject->mtype.phys_info.rotvel.y = max(0, DEATH_SEQUENCE_EXPLODE_TIME - time_dead)/2;
@@ -1606,7 +1602,7 @@ void dead_player_frame(void)
 				if (Game_mode & GM_NETWORK)
 					multi_powcap_cap_objects();
 #endif
-				
+
 				drop_player_eggs(ConsoleObject);
 				Player_eggs_dropped = 1;
 				#ifdef NETWORK
@@ -1638,12 +1634,12 @@ void dead_player_frame(void)
 
 		if (Death_sequence_aborted) { //time_dead > DEATH_SEQUENCE_LENGTH) {
 			if (!Player_eggs_dropped) {
-			
+
 #ifdef NETWORK
 				if (Game_mode & GM_NETWORK)
 					multi_powcap_cap_objects();
 #endif
-				
+
 				drop_player_eggs(ConsoleObject);
 				Player_eggs_dropped = 1;
 				#ifdef NETWORK
@@ -1699,10 +1695,10 @@ void start_player_death_sequence(object *player)
 		 if (Players[Player_num].secondary_ammo[PROXIMITY_INDEX]<12)
 			if (!Multi_killed_yourself)
 				Players[Player_num].secondary_ammo[PROXIMITY_INDEX]++;
-	
+
 	}
 	#endif
-	
+
 	PaletteRedAdd = 40;
 	Player_is_dead = 1;
 
@@ -1759,7 +1755,7 @@ void obj_delete_all_that_should_be_dead()
 									// Ok to continue, won't start death sequence again!
 					// kill_player();
 				}
-			} else {					
+			} else {
 				obj_delete(i);
 			}
 		}
@@ -1787,16 +1783,16 @@ void obj_relink_all(void)
 	int segnum;
 	int objnum;
 	object *obj;
-	
+
 	for (segnum=0; segnum <= Highest_segment_index; segnum++)
 		Segments[segnum].objects = -1;
-	
+
 	for (objnum=0,obj=&Objects[0];objnum<=Highest_object_index;objnum++,obj++)
 		if (obj->type != OBJ_NONE)
 		{
 			segnum = obj->segnum;
 			obj->next = obj->prev = obj->segnum = -1;
-			
+
 			if (segnum > Highest_segment_index)
 				segnum = 0;
 			obj_link(objnum, segnum);
@@ -1825,8 +1821,8 @@ spin_object(object *obj)
 }
 
 int Drop_afterburner_blob_flag;		//ugly hack
-extern void multi_send_drop_blobs(char);
-extern void fuelcen_check_for_goal (segment *);
+void multi_send_drop_blobs(char);
+void fuelcen_check_for_goal (segment *);
 
 //see if wall is volatile, and if so, cause damage to player
 //returns true if player is in lava
@@ -1848,7 +1844,7 @@ void object_move_one( object * obj )
 
 	if ((obj->type==OBJ_PLAYER) && (Player_num==obj->id))	{
 		fix fuel, shields;
-		
+
 #ifdef NETWORK
       if (Game_mode & GM_CAPTURE)
 			 fuelcen_check_for_goal (&Segments[obj->segnum]);
@@ -1885,7 +1881,7 @@ void object_move_one( object * obj )
 		case CT_REPAIRCEN: Int3();	// -- hey! these are no longer supported!! -- do_repair_sequence(obj); break;
 
 		case CT_POWERUP: do_powerup_frame(obj); break;
-	
+
 		case CT_MORPH:			//morph implies AI
 			do_morph_frame(obj);
 			//NOTE: FALLS INTO AI HERE!!!!
@@ -1987,7 +1983,7 @@ void object_move_one( object * obj )
 			sidemask = get_seg_masks(&obj->pos, obj->segnum, obj->size, __FILE__, __LINE__).sidemask;
 			if (sidemask) {
 				int sidenum,bit,wall_num;
-	
+
 				for (sidenum=0,bit=1;sidenum<6;bit<<=1,sidenum++)
 					if ((sidemask & bit) && ((wall_num=Segments[obj->segnum].sides[sidenum].wall_num)!=-1) && Walls[wall_num].type==WALL_ILLUSION) {
 						int type;
@@ -2001,7 +1997,7 @@ void object_move_one( object * obj )
 						}
 					}
 			}
-	
+
 			if (!under_lavafall && lavafall_hiss_playing[obj->id]) {
 				digi_kill_sound_linked_to_object( obj-Objects);
 				lavafall_hiss_playing[obj->id] = 0;
@@ -2148,7 +2144,7 @@ void compress_objects(void)
 			while (Objects[--Highest_object_index].type == OBJ_NONE);
 
 			//last_i = find_last_obj(last_i);
-			
+
 		}
 
 	reset_objects(num_objects);
@@ -2248,7 +2244,7 @@ fix_object_segs()
 //--unused-- 			obj->next = obj->prev = obj->segnum = -1;
 //--unused-- 		}
 //--unused-- 	}
-//--unused-- 	
+//--unused--
 //--unused-- }
 
 //delete objects, such as weapons & explosions, that shouldn't stay between levels
@@ -2352,7 +2348,7 @@ int drop_marker_object(vms_vector *pos,int segnum,vms_matrix *orient, int marker
 		obj->lifeleft = IMMORTAL_TIME - 1;
 	}
 
-	return objnum;	
+	return objnum;
 }
 
 extern int Ai_last_missile_camera;
@@ -2378,7 +2374,7 @@ void wake_up_rendered_objects(object *viewer, int window_num)
 		objnum = Window_rendered_data[window_num].rendered_objects[i];
 		if ((objnum & 3) == fcval) {
 			objp = &Objects[objnum];
-	
+
 			if (objp->type == OBJ_ROBOT) {
 				if (vm_vec_dist_quick(&viewer->pos, &objp->pos) < F1_0*100) {
 					ai_local		*ailp = &Ai_local_info[objnum];
@@ -2399,7 +2395,7 @@ void object_rw_swap(object_rw *obj, int swap)
 {
 	if (!swap)
 		return;
-	
+
 	obj->signature     = SWAPINT(obj->signature);
 	obj->next          = SWAPSHORT(obj->next);
 	obj->prev          = SWAPSHORT(obj->prev);
@@ -2423,7 +2419,7 @@ void object_rw_swap(object_rw *obj, int swap)
 	obj->last_pos.y    = SWAPINT(obj->last_pos.y);
 	obj->last_pos.z    = SWAPINT(obj->last_pos.z);
 	obj->lifeleft      = SWAPINT(obj->lifeleft);
-	
+
 	switch (obj->movement_type)
 	{
 		case MT_PHYSICS:
@@ -2445,14 +2441,14 @@ void object_rw_swap(object_rw *obj, int swap)
 			obj->mtype.phys_info.turnroll    = SWAPINT(obj->mtype.phys_info.turnroll);
 			obj->mtype.phys_info.flags       = SWAPSHORT(obj->mtype.phys_info.flags);
 			break;
-			
+
 		case MT_SPINNING:
 			obj->mtype.spin_rate.x = SWAPINT(obj->mtype.spin_rate.x);
 			obj->mtype.spin_rate.y = SWAPINT(obj->mtype.spin_rate.y);
 			obj->mtype.spin_rate.z = SWAPINT(obj->mtype.spin_rate.z);
 			break;
 	}
-	
+
 	switch (obj->control_type)
 	{
 		case CT_WEAPON:
@@ -2464,7 +2460,7 @@ void object_rw_swap(object_rw *obj, int swap)
 			obj->ctype.laser_info.track_goal       = SWAPSHORT(obj->ctype.laser_info.track_goal);
 			obj->ctype.laser_info.multiplier       = SWAPINT(obj->ctype.laser_info.multiplier);
 			break;
-			
+
 		case CT_EXPLOSION:
 			obj->ctype.expl_info.spawn_time    = SWAPINT(obj->ctype.expl_info.spawn_time);
 			obj->ctype.expl_info.delete_time   = SWAPINT(obj->ctype.expl_info.delete_time);
@@ -2473,7 +2469,7 @@ void object_rw_swap(object_rw *obj, int swap)
 			obj->ctype.expl_info.prev_attach   = SWAPSHORT(obj->ctype.expl_info.prev_attach);
 			obj->ctype.expl_info.next_attach   = SWAPSHORT(obj->ctype.expl_info.next_attach);
 			break;
-			
+
 		case CT_AI:
 			obj->ctype.ai_info.hide_segment           = SWAPSHORT(obj->ctype.ai_info.hide_segment);
 			obj->ctype.ai_info.hide_index             = SWAPSHORT(obj->ctype.ai_info.hide_index);
@@ -2482,18 +2478,18 @@ void object_rw_swap(object_rw *obj, int swap)
 			obj->ctype.ai_info.danger_laser_signature = SWAPINT(obj->ctype.ai_info.danger_laser_signature);
 			obj->ctype.ai_info.dying_start_time       = SWAPINT(obj->ctype.ai_info.dying_start_time);
 			break;
-			
+
 		case CT_LIGHT:
 			obj->ctype.light_info.intensity = SWAPINT(obj->ctype.light_info.intensity);
 			break;
-			
+
 		case CT_POWERUP:
 			obj->ctype.powerup_info.count         = SWAPINT(obj->ctype.powerup_info.count);
 			obj->ctype.powerup_info.creation_time = SWAPINT(obj->ctype.powerup_info.creation_time);
 			obj->ctype.powerup_info.flags         = SWAPINT(obj->ctype.powerup_info.flags);
 			break;
 	}
-	
+
 	switch (obj->render_type)
 	{
 		case RT_MORPH:
@@ -2515,7 +2511,7 @@ void object_rw_swap(object_rw *obj, int swap)
 			obj->rtype.pobj_info.alt_textures             = SWAPINT(obj->rtype.pobj_info.alt_textures);
 			break;
 		}
-			
+
 		case RT_WEAPON_VCLIP:
 		case RT_HOSTAGE:
 		case RT_POWERUP:
@@ -2523,9 +2519,9 @@ void object_rw_swap(object_rw *obj, int swap)
 			obj->rtype.vclip_info.vclip_num = SWAPINT(obj->rtype.vclip_info.vclip_num);
 			obj->rtype.vclip_info.frametime = SWAPINT(obj->rtype.vclip_info.frametime);
 			break;
-			
+
 		case RT_LASER:
 			break;
-			
+
 	}
 }
