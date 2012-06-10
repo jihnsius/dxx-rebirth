@@ -1,7 +1,7 @@
 /*
- * 
+ *
  * Routines for managing UDP-protocol network play.
- * 
+ *
  */
 
 #ifdef HAVE_CONFIG_H
@@ -93,13 +93,7 @@ void net_udp_noloss_init_mdata_queue(void);
 void net_udp_noloss_clear_mdata_got(ubyte player_num);
 void net_udp_noloss_process_queue(fix64 time);
 void net_udp_send_extras ();
-extern void multi_reset_object_texture(object *objp);
-extern void multi_send_stolen_items ();
-extern void multi_send_kill_goal_counts();
-extern void multi_send_door_open_specific(int pnum,int segnum, int side,ubyte flag);
-extern void multi_send_wall_status_specific (int pnum,int wallnum,ubyte type,ubyte flags,ubyte state);
-extern void multi_send_light_specific (int pnum,int segnum,ubyte val);
-extern void multi_send_trigger_specific (char pnum,char trig);
+void multi_reset_object_texture(object *objp);
 
 static void net_udp_broadcast_game_info(ubyte info_upid);
 
@@ -166,19 +160,19 @@ int udp_dns_filladdr( char *host, int port, struct _sockaddr *sAddr )
 	// Variables
 	struct addrinfo *result, hints;
 	char sPort[6];
-	
+
 	// Build the port
 	snprintf( sPort, 6, "%d", port );
-	
+
 	// Set up hints
 	memset( &hints, 0, sizeof( hints ) );
-	
+
 	// Uncomment the following if we want ONLY what we compile for
 	// hints.ai_family = _af;
-	
+
 	// We are always UDP
 	hints.ai_socktype = SOCK_DGRAM;
-	
+
 	// Resolve the domain name
 	if( getaddrinfo( host, sPort, &hints, &result ) != 0 )
 	{
@@ -186,13 +180,13 @@ int udp_dns_filladdr( char *host, int port, struct _sockaddr *sAddr )
 		nm_messagebox( TXT_ERROR, 1, TXT_OK, "Could not resolve address" );
 		return -1;
 	}
-	
+
 	// Zero out the target first
 	memset( sAddr, 0, sizeof( struct _sockaddr ) );
-	
+
 	// Now copy it over
 	memcpy( sAddr, result->ai_addr, result->ai_addrlen );
-	
+
 	/* WARNING:  NERDY CONTENT
 	 *
 	 * The above works, since result->ai_addr contains the socket family,
@@ -204,7 +198,7 @@ int udp_dns_filladdr( char *host, int port, struct _sockaddr *sAddr )
 	 *
 	 * -- Matt
 	 */
-	
+
 	// Free memory
 	freeaddrinfo( result );
 	return 0;
@@ -257,9 +251,9 @@ int udp_open_socket(int socknum, int port)
 	sAddr.sin_addr.s_addr = INADDR_ANY; // automatically fill with my IP
 	memset (&(sAddr.sin_zero), '\0', 8); // zero the rest of the struct
 #endif
-	
-	if (bind (UDP_Socket[socknum], (struct sockaddr *) &sAddr, sizeof (struct sockaddr)) < 0) 
-	{      
+
+	if (bind (UDP_Socket[socknum], (struct sockaddr *) &sAddr, sizeof (struct sockaddr)) < 0)
+	{
 		con_printf(CON_URGENT,"udp_open_socket: bind name to socket failed\n");
 		nm_messagebox(TXT_ERROR,1,TXT_OK,"Could not bind name to socket");
 		udp_close_socket(socknum);
@@ -270,14 +264,14 @@ int udp_open_socket(int socknum, int port)
 	struct addrinfo hints,*res,*sres;
 	int err,ai_family_;
 	char cport[6];
-	
+
 	memset (&hints, '\0', sizeof (struct addrinfo));
 	memset(cport,'\0',sizeof(char)*6);
-	
+
 	hints.ai_flags = AI_PASSIVE;
 	hints.ai_family = _pf;
 	hints.ai_socktype = SOCK_DGRAM;
-	
+
 	ai_family_ = 0;
 
 	sprintf(cport,"%i",port);
@@ -292,10 +286,10 @@ int udp_open_socket(int socknum, int port)
 			else
 				sres = sres->ai_next;
 		}
-	
+
 		if (sres == NULL)
 			sres = res;
-	
+
 		ai_family_ = sres->ai_family;
 		if (ai_family_ != _pf && _pf != PF_UNSPEC)
 		{
@@ -303,7 +297,7 @@ int udp_open_socket(int socknum, int port)
 			freeaddrinfo (res);
 			return -1;
 		}
-	
+
 		if ((UDP_Socket[socknum] = socket (sres->ai_family, SOCK_DGRAM, 0)) < 0)
 		{
 			con_printf(CON_URGENT,"udp_open_socket: socket creation failed\n");
@@ -311,7 +305,7 @@ int udp_open_socket(int socknum, int port)
 			freeaddrinfo (res);
 			return -1;
 		}
-	
+
 		if ((err = bind (UDP_Socket[socknum], sres->ai_addr, sres->ai_addrlen)) < 0)
 		{
 			con_printf(CON_URGENT,"udp_open_socket: bind name to socket failed\n");
@@ -320,7 +314,7 @@ int udp_open_socket(int socknum, int port)
 			freeaddrinfo (res);
 			return -1;
 		}
-	
+
 		freeaddrinfo (res);
 	}
 	else {
@@ -388,14 +382,14 @@ int udp_tracker_init()
 {
 	// Zero it out
 	memset( &TrackerSocket, 0, sizeof( TrackerSocket ) );
-	
+
 	// Open the socket
 	udp_open_socket( 2, d_rand() % 0xffff );
-	
+
 	// Fill the address
 	if( udp_dns_filladdr( (char *)GameArg.MplTrackerAddr, GameArg.MplTrackerPort, &TrackerSocket ) < 0 )
 		return -1;
-	
+
 	// Yay
 	return 0;
 }
@@ -406,13 +400,13 @@ int udp_tracker_unregister()
 	// Variables
 	int iLen = 5;
 	ubyte pBuf[iLen];
-	
+
 	// Put the opcode
 	pBuf[0] = TRACKER_PKT_UNREGISTER;
-	
+
 	// Put the GameID
 	PUT_INTEL_INT( &pBuf[1], Netgame.protocol.udp.GameID );
-	
+
 	// Send it off
 	return dxx_sendto( UDP_Socket[2], pBuf, iLen, 0, (struct sockaddr *)&TrackerSocket, sizeof( TrackerSocket ) );
 }
@@ -423,30 +417,30 @@ int udp_tracker_register()
 	// Variables
 	int iLen = 14;
 	ubyte pBuf[iLen];
-	
+
 	// Reset the last tracker message
 	iTrackerVerified = 0;
-	
+
 	// Put the opcode
 	pBuf[0] = TRACKER_PKT_REGISTER;
-	
+
 	// Put the protocol version
 	pBuf[1] = TRACKER_SYS_VERSION;
-	
+
 	// Write the game version (d1 = 1, d2 = 2, x = oshiii)
 	pBuf[2] = 0x02;
-	
+
 	// Write the port we're running on
 	PUT_INTEL_SHORT( &pBuf[3], atoi( UDP_MyPort ) );
-	
+
 	// Put the GameID
 	PUT_INTEL_INT( &pBuf[5], Netgame.protocol.udp.GameID );
-	
+
 	// Now, put the game version
 	PUT_INTEL_SHORT( &pBuf[9], D2XMAJORi );
 	PUT_INTEL_SHORT( &pBuf[11], D2XMINORi );
 	PUT_INTEL_SHORT( &pBuf[13], D2XMICROi );
-	
+
 	// Send it off
 	return dxx_sendto( UDP_Socket[2], pBuf, iLen, 0, (struct sockaddr *)&TrackerSocket, sizeof( TrackerSocket ) );
 }
@@ -457,20 +451,20 @@ int udp_tracker_reqgames()
 	// Variables
 	int iLen = 3;
 	ubyte pBuf[iLen];
-	
+
 	// Put the opcode
 	pBuf[0] = TRACKER_PKT_GAMELIST;
-	
+
 	// Put the game version (d2)
 	pBuf[1] = 2;
-	
+
 	// If we're IPv6 ready, send that too
 #ifdef IPv6
 	pBuf[2] = 1;
 #else
 	pBuf[2] = 0;
 #endif
-	
+
 	// Send it off
 	return dxx_sendto( UDP_Socket[2], pBuf, iLen, 0, (struct sockaddr *)&TrackerSocket, sizeof( TrackerSocket ) );
 }
@@ -484,26 +478,26 @@ int udp_tracker_process_game( ubyte *data, int data_len )
 	int iPort = 0;
 	int bIPv6 = 0;
 	char *sIP = NULL;
-	
+
 	// Zero it out
 	memset( &sAddr, 0, sizeof( sAddr ) );
-	
+
 	// Get the IPv6 flag from the tracker
 	bIPv6 = data[iPos++];
 	(void)bIPv6; // currently unused
-	
+
 	// Get the IP
 	sIP = (char *)&data[iPos];
 	iPos += strlen( sIP ) + 1;
-	
+
 	// Get the port
 	iPort = GET_INTEL_SHORT( &data[iPos] );
 	iPos += 2;
-	
+
 	// Get the DNS stuff
 	if( udp_dns_filladdr( sIP, iPort, &sAddr ) < 0 )
 		return -1;
-	
+
 	// Now move on to BIGGER AND BETTER THINGS!
 	net_udp_process_game_info( &data[iPos - 1], data_len - iPos, sAddr, 1 );
 	return 0;
@@ -532,14 +526,14 @@ int net_udp_game_connect(direct_join *dj)
 		dj->connecting = 0;
 		return 0;
 	}
-	
+
 	if (Netgame.protocol.udp.valid == -1)
 	{
 		nm_messagebox(TXT_ERROR,1,TXT_OK,"Version mismatch! Cannot join Game.\nHost game version: %i.%i.%i\nHost game protocol: %i\nYour game version: %s\nYour game protocol: %i",Netgame.protocol.udp.program_iver[0],Netgame.protocol.udp.program_iver[1],Netgame.protocol.udp.program_iver[2],Netgame.protocol.udp.program_iver[3],VERSION, MULTI_PROTO_VERSION);
 		dj->connecting = 0;
 		return 0;
 	}
-	
+
 	if (timer_query() >= dj->last_time + F1_0)
 	{
 		net_udp_request_game_info(dj->host_addr, 0);
@@ -568,9 +562,9 @@ int net_udp_game_connect(direct_join *dj)
 			return 0;
 		}
 	}
-		
+
 	dj->connecting = 0;
-	
+
 	return net_udp_do_join_game();
 }
 
@@ -591,7 +585,7 @@ static int manual_join_game_handler(newmenu *menu, d_event *event, direct_join *
 				return 1;
 			}
 			break;
-			
+
 		case EVENT_IDLE:
 			if (dj->connecting)
 			{
@@ -605,21 +599,21 @@ static int manual_join_game_handler(newmenu *menu, d_event *event, direct_join *
 		case EVENT_NEWMENU_SELECTED:
 		{
 			int sockres = -1;
-			
+
 			if ((atoi(UDP_MyPort)) < 0 ||(atoi(UDP_MyPort)) > 65535)
 			{
 				snprintf (UDP_MyPort, sizeof(UDP_MyPort), "%d", UDP_PORT_DEFAULT);
 				nm_messagebox(TXT_ERROR, 1, TXT_OK, "Illegal port");
 				return 1;
 			}
-			
+
 			sockres = udp_open_socket(0, atoi(UDP_MyPort));
-			
+
 			if (sockres != 0)
 			{
 				return 1;
 			}
-			
+
 			// Resolve address
 			if (udp_dns_filladdr(dj->addrbuf, atoi(dj->portbuf), &dj->host_addr) < 0)
 			{
@@ -632,9 +626,9 @@ static int manual_join_game_handler(newmenu *menu, d_event *event, direct_join *
 				change_playernum_to(1);
 				dj->start_time = timer_query();
 				dj->last_time = 0;
-				
+
 				memcpy((struct _sockaddr *)&Netgame.players[0].protocol.udp.addr, (struct _sockaddr *)&dj->host_addr, sizeof(struct _sockaddr));
-				
+
 				dj->connecting = 1;
 				items[6].text = connecting_txt;
 				return 1;
@@ -642,17 +636,17 @@ static int manual_join_game_handler(newmenu *menu, d_event *event, direct_join *
 
 			break;
 		}
-			
+
 		case EVENT_WINDOW_CLOSE:
 			if (!Game_wind) // they cancelled
 				net_udp_close();
 			d_free(dj);
 			break;
-			
+
 		default:
 			break;
 	}
-	
+
 	return 0;
 }
 
@@ -668,7 +662,7 @@ void net_udp_manual_join_game()
 	dj->connecting = 0;
 	dj->addrbuf[0] = '\0';
 	dj->portbuf[0] = '\0';
-	
+
 	net_udp_init();
 
 	memset(&dj->addrbuf,'\0', sizeof(char)*128);
@@ -685,7 +679,7 @@ void net_udp_manual_join_game()
 		snprintf (UDP_MyPort, sizeof(UDP_MyPort), "%d", UDP_PORT_DEFAULT);
 
 	nitems = 0;
-	
+
 	m[nitems].type = NM_TYPE_TEXT;  m[nitems].text="GAME ADDRESS OR HOSTNAME:";     	nitems++;
 	m[nitems].type = NM_TYPE_INPUT; m[nitems].text=dj->addrbuf; m[nitems].text_len=128; 	nitems++;
 	m[nitems].type = NM_TYPE_TEXT;  m[nitems].text="GAME PORT:";                    	nitems++;
@@ -758,13 +752,13 @@ int net_udp_list_join_poll( newmenu *menu, d_event *event, direct_join *dj )
 				memset(Active_udp_games, 0, sizeof(UDP_netgame_info_lite)*UDP_MAX_NETGAMES);
 				num_active_udp_changed = 1;
 				num_active_udp_games = 0;
-				
+
 				// Request LAN games
 				net_udp_request_game_info(GBcast, 1);
 #ifdef IPv6
 				net_udp_request_game_info(GMcast_v6, 1);
 #endif
-				
+
 #ifdef USE_TRACKER
 				udp_tracker_reqgames();
 #endif
@@ -790,10 +784,10 @@ int net_udp_list_join_poll( newmenu *menu, d_event *event, direct_join *dj )
 				memset( Active_udp_games, 0, sizeof( UDP_netgame_info_lite ) * UDP_MAX_NETGAMES );
 				num_active_udp_changed = 1;
 				num_active_udp_games = 0;
-				
+
 				// Request from the tracker
 				udp_tracker_reqgames();
-				
+
 				// Break off
 				break;
 			}
@@ -845,7 +839,7 @@ int net_udp_list_join_poll( newmenu *menu, d_event *event, direct_join *dj )
 		default:
 			break;
 	}
-	
+
 	net_udp_listen();
 
 	if (!num_active_udp_changed && !newpage)
@@ -925,9 +919,9 @@ int net_udp_list_join_poll( newmenu *menu, d_event *event, direct_join *dj )
 		}
 		else
 			snprintf(status, sizeof(status), "BETWEEN ");
-		
+
 		snprintf (menus[i+4].text,sizeof(char)*74,"%d.\t%s \t%s \t  %d/%d \t%s \t %s \t%s",(i+(NLPage*UDP_NETGAMES_PPAGE))+1,GameName,GMNamesShrt[Active_udp_games[(i+(NLPage*UDP_NETGAMES_PPAGE))].gamemode],nplayers, Active_udp_games[(i+(NLPage*UDP_NETGAMES_PPAGE))].max_numplayers,MissName,levelname,status);
-			
+
 		Assert(strlen(menus[i+4].text) < 75);
 	}
 	return 0;
@@ -1023,19 +1017,19 @@ void net_udp_send_sequence_packet(UDP_sequence_packet seq, struct _sockaddr recv
 	memcpy(&buf[len], seq.player.callsign, CALLSIGN_LEN+1);		len += CALLSIGN_LEN+1;
 	buf[len] = seq.player.connected;				len++;
 	buf[len] = seq.player.rank;					len++;
-	
+
 	dxx_sendto (UDP_Socket[0], buf, len, 0, (struct sockaddr *)&recv_addr, sizeof(struct _sockaddr));
 }
 
 void net_udp_receive_sequence_packet(ubyte *data, UDP_sequence_packet *seq, struct _sockaddr sender_addr)
 {
 	int len = 0;
-	
+
 	seq->type = data[0];						len++;
 	memcpy(seq->player.callsign, &(data[len]), CALLSIGN_LEN+1);	len += CALLSIGN_LEN+1;
 	seq->player.connected = data[len];				len++;
 	memcpy (&(seq->player.rank),&(data[len]),1);			len++;
-	
+
 	if (multi_i_am_master())
 		memcpy(&seq->player.protocol.udp.addr, (struct _sockaddr *)&sender_addr, sizeof(struct _sockaddr));
 }
@@ -1067,11 +1061,11 @@ void net_udp_init()
 	UDP_Seq.type = UPID_REQUEST;
 	memcpy(UDP_Seq.player.callsign, Players[Player_num].callsign, CALLSIGN_LEN+1);
 
-	UDP_Seq.player.rank=GetMyNetRanking();	
+	UDP_Seq.player.rank=GetMyNetRanking();
 
 	multi_new_game();
 	net_udp_flush();
-	
+
 #ifdef USE_TRACKER
 	// Initialize the tracker info
 	udp_tracker_init();
@@ -1098,12 +1092,12 @@ int net_udp_kmatrix_poll1( newmenu *menu, d_event *event, void *userdata )
 	// Polling loop for End-of-level menu
 	if (event->type != EVENT_WINDOW_DRAW)
 		return 0;
-	
+
 	menu = menu;
 	userdata = userdata;
 
 	net_udp_do_frame(0, 1);
-	
+
 	return 0;
 }
 
@@ -1116,15 +1110,15 @@ int net_udp_kmatrix_poll2( newmenu *menu, d_event *event, void *userdata )
 	// Polling loop for End-of-level menu
 	if (event->type != EVENT_WINDOW_DRAW)
 		return 0;
-	
+
 	menu = menu;
 	userdata = userdata;
-	
+
 	if (timer_query() > (StartAbortMenuTime+(F1_0*3)))
 		rval = -2;
 
 	net_udp_do_frame(0, 1);
-	
+
 	return rval;
 }
 
@@ -1153,11 +1147,11 @@ int net_udp_endlevel(int *secret)
 	net_udp_listen();
 	net_udp_send_endlevel_packet();
 
-	for (i=0; i<N_players; i++) 
+	for (i=0; i<N_players; i++)
 	{
 		Netgame.players[i].LastPacketTime = timer_query();
 	}
-   
+
 	net_udp_send_endlevel_packet();
 	net_udp_send_endlevel_packet();
 
@@ -1166,7 +1160,7 @@ int net_udp_endlevel(int *secret)
 	return(0);
 }
 
-int 
+int
 net_udp_can_join_netgame(netgame_info *game)
 {
 	// Can this player rejoin a netgame in progress?
@@ -1187,20 +1181,20 @@ net_udp_can_join_netgame(netgame_info *game)
 
 	if (!(game->game_flags & NETGAME_FLAG_CLOSED)) {
 		// Look for player that is not connected
-		
+
 		if (game->numconnected==game->max_numplayers)
 			return (2);
-		
+
 		if (game->RefusePlayers)
 			return (3);
-		
+
 		if (game->numplayers < game->max_numplayers)
 			return 1;
 
 		if (game->numconnected<num_players)
 			return 1;
 	}
-	
+
 	// Search to see if we were already in this closed netgame in progress
 
 	for (i = 0; i < num_players; i++) {
@@ -1210,7 +1204,7 @@ net_udp_can_join_netgame(netgame_info *game)
 
 	if (i != num_players)
 		return 1;
- 
+
 	return 0;
 }
 
@@ -1218,9 +1212,9 @@ net_udp_can_join_netgame(netgame_info *game)
 void net_udp_disconnect_player(int playernum)
 {
 	// A player has disconnected from the net game, take whatever steps are
-	// necessary 
+	// necessary
 
-	if (playernum == Player_num) 
+	if (playernum == Player_num)
 	{
 		Int3(); // Weird, see Rob
 		return;
@@ -1231,7 +1225,7 @@ void net_udp_disconnect_player(int playernum)
 
 	net_udp_noloss_clear_mdata_got(playernum);
 }
-		
+
 void
 net_udp_new_player(UDP_sequence_packet *their)
 {
@@ -1241,7 +1235,7 @@ net_udp_new_player(UDP_sequence_packet *their)
 
 	Assert(pnum >= 0);
 	Assert(pnum < Netgame.max_numplayers);
-	
+
 	if (Newdemo_state == ND_STATE_RECORDING) {
 		int new_player;
 
@@ -1254,7 +1248,7 @@ net_udp_new_player(UDP_sequence_packet *their)
 
 	memcpy(Players[pnum].callsign, their->player.callsign, CALLSIGN_LEN+1);
 	memcpy(Netgame.players[pnum].callsign, their->player.callsign, CALLSIGN_LEN+1);
-	memcpy(&Netgame.players[pnum].protocol.udp.addr, &their->player.protocol.udp.addr, sizeof(struct _sockaddr));	
+	memcpy(&Netgame.players[pnum].protocol.udp.addr, &their->player.protocol.udp.addr, sizeof(struct _sockaddr));
 
 	ClipRank (&their->player.rank);
 	Netgame.players[pnum].rank=their->player.rank;
@@ -1262,7 +1256,7 @@ net_udp_new_player(UDP_sequence_packet *their)
 	Players[pnum].connected = CONNECT_PLAYING;
 	Players[pnum].net_kills_total = 0;
 	Players[pnum].net_killed_total = 0;
-	memset(kill_matrix[pnum], 0, MAX_PLAYERS*sizeof(short)); 
+	memset(kill_matrix[pnum], 0, MAX_PLAYERS*sizeof(short));
 	Players[pnum].score = 0;
 	Players[pnum].flags = 0;
 	Players[pnum].KillGoalCount=0;
@@ -1278,7 +1272,7 @@ net_udp_new_player(UDP_sequence_packet *their)
 	ClipRank (&their->player.rank);
 
 	HUD_init_message(HM_MULTI, "%s'%s'(%i) %s\n",PlayerCfg.NoRankings ? "" : RankStrings[their->player.rank],their->player.callsign, pnum, TXT_JOINING);
-	
+
 	multi_make_ghost_player(pnum);
 
 	multi_send_score();
@@ -1301,7 +1295,7 @@ void net_udp_welcome_player(UDP_sequence_packet *their)
 	if ((Endlevel_sequence) || (Control_center_destroyed))
 	{
 		net_udp_dump_player(their->player.protocol.udp.addr, DUMP_ENDLEVEL);
-		return; 
+		return;
 	}
 
 	if (Network_send_objects || Network_sending_extras)
@@ -1352,7 +1346,7 @@ void net_udp_welcome_player(UDP_sequence_packet *their)
 		{
 			// Slots are full but game is open, see if anyone is
 			// disconnected and replace the oldest player with this new one
-		
+
 			int oldest_player = -1;
 			fix64 oldest_time = timer_query();
 			int activeplayers = 0;
@@ -1381,7 +1375,7 @@ void net_udp_welcome_player(UDP_sequence_packet *their)
 
 			if (oldest_player == -1)
 			{
-				// Everyone is still connected 
+				// Everyone is still connected
 				net_udp_dump_player(their->player.protocol.udp.addr, DUMP_FULL);
 				return;
 			}
@@ -1397,7 +1391,7 @@ void net_udp_welcome_player(UDP_sequence_packet *their)
 	else
 	{
 		// Player is reconnecting
-		
+
 		if (Players[player_num].connected)
 		{
 			return;
@@ -1409,7 +1403,7 @@ void net_udp_welcome_player(UDP_sequence_packet *their)
 		Network_player_added = 0;
 
 		digi_play_sample(SOUND_HUD_MESSAGE, F1_0);
-		
+
 		HUD_init_message(HM_MULTI, "%s'%s'(%i) %s\n",PlayerCfg.NoRankings ? "" : RankStrings[Netgame.players[player_num].rank],Players[player_num].callsign, player_num, TXT_REJOIN);
 
 		multi_send_score();
@@ -1421,7 +1415,7 @@ void net_udp_welcome_player(UDP_sequence_packet *their)
 
 	// Send updated Objects data to the new/returning player
 
-	
+
 	UDP_sync_player = *their;
 	UDP_sync_player.player.connected = player_num;
 	Network_send_objects = 1;
@@ -1435,7 +1429,7 @@ int net_udp_objnum_is_past(int objnum)
 {
 	// determine whether or not a given object number has already been sent
 	// to a re-joining player.
-	
+
 	int player_num = UDP_sync_player.player.connected;
 	int obj_mode = !((object_owner[objnum] == -1) || (object_owner[objnum] == player_num));
 
@@ -1455,9 +1449,9 @@ int net_udp_objnum_is_past(int objnum)
 void net_udp_send_door_updates(int pnum)
 {
 	// Send door status when new player joins
-	
+
 	int i;
-   
+
    pnum=pnum;
 
 //   Assert (pnum>-1 && pnum<N_players);
@@ -1479,7 +1473,7 @@ void net_udp_send_markers()
  {
   // send marker positions/text to new player
 
-  
+
   int i;
 
   for (i = 0; i < N_players; i++)
@@ -1496,7 +1490,7 @@ void net_udp_process_monitor_vector(int vector)
 	int i, j;
 	int count = 0;
 	segment *seg;
-	
+
 	for (i=0; i <= Highest_segment_index; i++)
 	{
 		int tm, ec, bm;
@@ -1539,15 +1533,15 @@ int net_udp_create_monitor_vector(void)
 				Assert(num_blown_bitmaps < NUM_BLOWN_BITMAPS);
 			}
 		}
-	}               
-		
+	}
+
 	for (i=0; i <= Highest_segment_index; i++)
 	{
 		int tm, ec;
 		seg = &Segments[i];
 		for (j = 0; j < 6; j++)
 		{
-			if ((tm = seg->sides[j].tmap_num2) != 0) 
+			if ((tm = seg->sides[j].tmap_num2) != 0)
 			{
 				if ( ((ec = TmapInfo[tm&0x3fff].eclip_num) != -1) &&
 					  (Effects[ec].dest_bm_num != -1) )
@@ -1595,7 +1589,7 @@ void net_udp_send_objects(void)
 	static int obj_count = 0;
 	int loc = 0, i = 0, remote_objnum = 0, obj_count_frame = 0;
 	static fix64 last_send_time = 0;
-	
+
 	if (last_send_time + (F1_0/50) > timer_query())
 		return;
 	last_send_time = timer_query();
@@ -1611,7 +1605,7 @@ void net_udp_send_objects(void)
 		// Endlevel started before we finished sending the goods, we'll
 		// have to stop and try again after the level.
 		net_udp_dump_player(UDP_sync_player.player.protocol.udp.addr, DUMP_ENDLEVEL);
-		Network_send_objects = 0; 
+		Network_send_objects = 0;
 		return;
 	}
 
@@ -1629,7 +1623,7 @@ void net_udp_send_objects(void)
 		Network_send_objnum = 0;
 		obj_count_frame = 1;
 	}
-	
+
 	for (i = Network_send_objnum; i <= Highest_object_index; i++)
 	{
 		if ((Objects[i].type != OBJ_POWERUP) && (Objects[i].type != OBJ_PLAYER) &&
@@ -1679,9 +1673,9 @@ void net_udp_send_objects(void)
 			Network_send_objnum = 0;
 			Network_send_object_mode = 1; // go to next mode
 		}
-		else 
+		else
 		{
-			Assert(Network_send_object_mode == 1); 
+			Assert(Network_send_object_mode == 1);
 
 			// Send count so other side can make sure he got them all
 			object_buffer[0] = UPID_OBJECT_DATA;
@@ -1733,7 +1727,7 @@ void net_udp_read_object_packet( ubyte *data )
 	sbyte obj_owner;
 	static int mode = 0, object_count = 0, my_pnum = 0;
 	int i = 0, segnum = 0, objnum = 0, remote_objnum = 0, nobj = 0, loc = 5;
-	
+
 	nobj = GET_INTEL_INT(data + 1);
 
 	for (i = 0; i < nobj; i++)
@@ -1742,7 +1736,7 @@ void net_udp_read_object_packet( ubyte *data )
 		obj_owner = data[loc];                                      loc += 1;
 		remote_objnum = GET_INTEL_INT(data + loc);                  loc += 4;
 
-		if (objnum == -1) 
+		if (objnum == -1)
 		{
 			// Clear object array
 			init_objects();
@@ -1765,16 +1759,16 @@ void net_udp_read_object_packet( ubyte *data )
 			}
 			if (net_udp_verify_objects(remote_objnum, object_count))
 			{
-				// Failed to sync up 
+				// Failed to sync up
 				nm_messagebox(NULL, 1, TXT_OK, TXT_NET_SYNC_FAILED);
-				Network_status = NETSTAT_MENU;                          
+				Network_status = NETSTAT_MENU;
 				return;
 			}
 		}
-		else 
+		else
 		{
 			object_count++;
-			if ((obj_owner == my_pnum) || (obj_owner == -1)) 
+			if ((obj_owner == my_pnum) || (obj_owner == -1))
 			{
 				if (mode != 1)
 					Int3(); // SEE ROB
@@ -1804,7 +1798,7 @@ void net_udp_read_object_packet( ubyte *data )
 				obj->attached_obj = -1;
 				if (segnum > -1)
 					obj_link(obj-Objects,segnum);
-				if (obj_owner == my_pnum) 
+				if (obj_owner == my_pnum)
 					map_objnum_local_to_local(objnum);
 				else if (obj_owner != -1)
 					map_objnum_local_to_remote(objnum, remote_objnum, obj_owner);
@@ -1829,7 +1823,7 @@ void net_udp_send_rejoin_sync(int player_num)
 
 		net_udp_dump_player(UDP_sync_player.player.protocol.udp.addr, DUMP_ENDLEVEL);
 
-		Network_send_objects = 0; 
+		Network_send_objects = 0;
 		Network_sending_extras=0;
 		return;
 	}
@@ -1896,18 +1890,18 @@ void net_udp_resend_sync_due_to_packet_loss()
 
 char * net_udp_get_player_name( int objnum )
 {
-	if ( objnum < 0 ) return NULL; 
+	if ( objnum < 0 ) return NULL;
 	if ( Objects[objnum].type != OBJ_PLAYER ) return NULL;
 	if ( Objects[objnum].id >= MAX_PLAYERS ) return NULL;
 	if ( Objects[objnum].id >= N_players ) return NULL;
-	
+
 	return Players[Objects[objnum].id].callsign;
 }
 
 void net_udp_add_player(UDP_sequence_packet *p)
 {
 	int i;
-	
+
 	for (i=0; i<N_players; i++ )
 	{
 		if ( !memcmp( (struct _sockaddr *)&Netgame.players[i].protocol.udp.addr, (struct _sockaddr *)&p->player.protocol.udp.addr, sizeof(struct _sockaddr)))
@@ -1933,7 +1927,7 @@ void net_udp_add_player(UDP_sequence_packet *p)
 	N_players++;
 	Netgame.numplayers = N_players;
 
-	net_udp_send_netgame_update();	
+	net_udp_send_netgame_update();
 }
 
 // One of the players decided not to join the game
@@ -1941,7 +1935,7 @@ void net_udp_add_player(UDP_sequence_packet *p)
 void net_udp_remove_player(UDP_sequence_packet *p)
 {
 	int i,pn;
-	
+
 	pn = -1;
 	for (i=0; i<N_players; i++ )
 	{
@@ -1951,7 +1945,7 @@ void net_udp_remove_player(UDP_sequence_packet *p)
 			break;
 		}
 	}
-	
+
 	if (pn < 0 )
 		return;
 
@@ -1962,7 +1956,7 @@ void net_udp_remove_player(UDP_sequence_packet *p)
 		Netgame.players[i].rank=Netgame.players[i+1].rank;
 		ClipRank (&Netgame.players[i].rank);
 	}
-		
+
 	N_players--;
 	Netgame.numplayers = N_players;
 
@@ -1975,10 +1969,10 @@ void net_udp_dump_player(struct _sockaddr dump_addr, int why)
 
 	ubyte buf[UPID_DUMP_SIZE];
 	int i;
-	
+
 	buf[0] = UPID_DUMP;
 	buf[1] = why;
-	
+
 	dxx_sendto (UDP_Socket[0], buf, sizeof(buf), 0, (struct sockaddr *)&dump_addr, sizeof(struct _sockaddr));
 
 	if (multi_i_am_master())
@@ -2000,7 +1994,7 @@ void net_udp_update_netgame(void)
 
 // This is great: D2 1.0 and 1.1 ignore upper part of the game_flags field of
 //	the lite_info struct when you're sitting on the join netgame screen.  We can
-//	"sneak" Hoard information into this field.  This is better than sending 
+//	"sneak" Hoard information into this field.  This is better than sending
 //	another packet that could be lost in transit.
 
 	if (HoardEquipped())
@@ -2017,14 +2011,14 @@ void net_udp_update_netgame(void)
 			Netgame.game_flags &= ~NETGAME_FLAG_TEAM_HOARD;
 		}
 	}
-	
+
 	if (Network_status == NETSTAT_STARTING)
 		return;
 
 	Netgame.numplayers = N_players;
 	Netgame.game_status = Network_status;
 
-	for (i = 0; i < MAX_PLAYERS; i++) 
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		Netgame.players[i].connected = Players[i].connected;
 		for(j = 0; j < MAX_PLAYERS; j++)
@@ -2097,13 +2091,13 @@ void net_udp_send_endlevel_packet(void)
 void net_udp_send_version_deny(struct _sockaddr sender_addr)
 {
 	ubyte buf[UPID_VERSION_DENY_SIZE];
-	
+
 	buf[0] = UPID_VERSION_DENY;
 	PUT_INTEL_SHORT(buf + 1, D2XMAJORi);
 	PUT_INTEL_SHORT(buf + 3, D2XMINORi);
 	PUT_INTEL_SHORT(buf + 5, D2XMICROi);
 	PUT_INTEL_SHORT(buf + 7, MULTI_PROTO_VERSION);
-	
+
 	dxx_sendto (UDP_Socket[0], buf, sizeof(buf), 0, (struct sockaddr *)&sender_addr, sizeof(struct _sockaddr));
 }
 
@@ -2119,7 +2113,7 @@ void net_udp_process_version_deny(ubyte *data, struct _sockaddr sender_addr)
 void net_udp_request_game_info(struct _sockaddr game_addr, int lite)
 {
 	ubyte buf[UPID_GAME_INFO_REQ_SIZE];
-	
+
 	buf[0] = (lite?UPID_GAME_INFO_LITE_REQ:UPID_GAME_INFO_REQ);
 	memcpy(&(buf[1]), UDP_REQ_ID, 4);
 	PUT_INTEL_SHORT(buf + 5, D2XMAJORi);
@@ -2127,7 +2121,7 @@ void net_udp_request_game_info(struct _sockaddr game_addr, int lite)
 	PUT_INTEL_SHORT(buf + 9, D2XMICROi);
 	if (!lite)
 		PUT_INTEL_SHORT(buf + 11, MULTI_PROTO_VERSION);
-	
+
 	dxx_sendto (UDP_Socket[0], buf, sizeof(buf), 0, (struct sockaddr *)&game_addr, sizeof(struct _sockaddr));
 }
 
@@ -2143,13 +2137,13 @@ int net_udp_check_game_info_request(ubyte *data, int lite)
 	sender_iver[2] = GET_INTEL_SHORT(&(data[9]));
 	if (!lite)
 		sender_iver[3] = GET_INTEL_SHORT(&(data[11]));
-	
+
 	if (memcmp(&sender_id, UDP_REQ_ID, 4))
 		return 0;
-	
+
 	if ((sender_iver[0] != D2XMAJORi) || (sender_iver[1] != D2XMINORi) || (sender_iver[2] != D2XMICROi) || (!lite && sender_iver[3] != MULTI_PROTO_VERSION))
 		return -1;
-		
+
 	return 1;
 }
 
@@ -2160,22 +2154,22 @@ void net_udp_send_game_info(struct _sockaddr sender_addr, ubyte info_upid)
 	// Send game info to someone who requested it
 
 	int len = 0;
-	
+
 	net_udp_update_netgame(); // Update the values in the netgame struct
-	
+
 	if (info_upid == UPID_GAME_INFO_LITE)
 	{
 		ubyte buf[UPID_GAME_INFO_LITE_SIZE];
 		int tmpvar = 0;
 
 		memset(buf, 0, sizeof(buf));
-		
+
 		buf[0] = info_upid;								len++;				// 1
 		PUT_INTEL_SHORT(buf + len, D2XMAJORi); 						len += 2;			// 3
 		PUT_INTEL_SHORT(buf + len, D2XMINORi); 						len += 2;			// 5
 		PUT_INTEL_SHORT(buf + len, D2XMICROi); 						len += 2;			// 7
 		PUT_INTEL_INT(buf + len, Netgame.protocol.udp.GameID);				len += 4;			// 11
-		memcpy(&(buf[len]), Netgame.game_name, NETGAME_NAME_LEN+1);			len += (NETGAME_NAME_LEN+1);	
+		memcpy(&(buf[len]), Netgame.game_name, NETGAME_NAME_LEN+1);			len += (NETGAME_NAME_LEN+1);
 		memcpy(&(buf[len]), Netgame.mission_title, MISSION_NAME_LEN+1);			len += (MISSION_NAME_LEN+1);
 		memcpy(&(buf[len]), Netgame.mission_name, 9);		            		len += 9;
 		PUT_INTEL_INT(buf + len, Netgame.levelnum);					len += 4;
@@ -2196,16 +2190,16 @@ void net_udp_send_game_info(struct _sockaddr sender_addr, ubyte info_upid)
 		buf[len] = Netgame.numconnected;						len++;
 		buf[len] = Netgame.max_numplayers;						len++;
 		buf[len] = Netgame.game_flags;							len++;
-		
+
 		dxx_sendto (UDP_Socket[0], buf, len, 0, (struct sockaddr *)&sender_addr, sizeof(struct _sockaddr));
 	}
 	else
 	{
 		ubyte buf[UPID_GAME_INFO_SIZE];
 		int i = 0, j = 0, tmpvar = 0;
-		
+
 		memset(buf, 0, sizeof(buf));
-		
+
 		buf[0] = info_upid;								len++;
 		PUT_INTEL_SHORT(buf + len, D2XMAJORi); 						len += 2;
 		PUT_INTEL_SHORT(buf + len, D2XMINORi); 						len += 2;
@@ -2289,7 +2283,7 @@ void net_udp_send_game_info(struct _sockaddr sender_addr, ubyte info_upid)
 		PUT_INTEL_SHORT(buf + len, Netgame.PacketsPerSec);				len += 2;
 		buf[len] = Netgame.PacketLossPrevention;					len++;
 		buf[len] = Netgame.NoFriendlyFire;						len++;
-		
+
 		dxx_sendto (UDP_Socket[0], buf, len, 0, (struct sockaddr *)&sender_addr, sizeof(struct _sockaddr));
 	}
 }
@@ -2308,7 +2302,7 @@ static void net_udp_broadcast_game_info(ubyte info_upid)
 void net_udp_send_netgame_update()
 {
 	int i = 0;
-	
+
 	for (i=1; i<N_players; i++ )
 	{
 		net_udp_send_game_info(Netgame.players[i].protocol.udp.addr, UPID_GAME_INFO);
@@ -2342,17 +2336,17 @@ int net_udp_send_request(void)
 void net_udp_process_game_info(ubyte *data, int data_len, struct _sockaddr game_addr, int lite_info)
 {
 	int len = 0, i = 0, j = 0;
-	
+
 	if (lite_info)
 	{
 		UDP_netgame_info_lite recv_game;
-		
+
 		memcpy(&recv_game, &game_addr, sizeof(struct _sockaddr));
 												len++; // skip UPID byte
 		recv_game.program_iver[0] = GET_INTEL_SHORT(&(data[len]));			len += 2;
 		recv_game.program_iver[1] = GET_INTEL_SHORT(&(data[len]));			len += 2;
 		recv_game.program_iver[2] = GET_INTEL_SHORT(&(data[len]));			len += 2;
-		
+
 		if ((recv_game.program_iver[0] != D2XMAJORi) || (recv_game.program_iver[1] != D2XMINORi) || (recv_game.program_iver[2] != D2XMICROi))
 			return;
 
@@ -2368,9 +2362,9 @@ void net_udp_process_game_info(ubyte *data, int data_len, struct _sockaddr game_
 		recv_game.numconnected = data[len];						len++;
 		recv_game.max_numplayers = data[len];						len++;
 		recv_game.game_flags = data[len];						len++;
-	
+
 		num_active_udp_changed = 1;
-		
+
 		for (i = 0; i < num_active_udp_games; i++)
 			if (!strcasecmp(Active_udp_games[i].game_name, recv_game.game_name) && Active_udp_games[i].GameID == recv_game.GameID)
 				break;
@@ -2379,9 +2373,9 @@ void net_udp_process_game_info(ubyte *data, int data_len, struct _sockaddr game_
 		{
 			return;
 		}
-		
+
 		memcpy(&Active_udp_games[i], &recv_game, sizeof(UDP_netgame_info_lite));
-		
+
 		// See if this is really a Hoard game
 		// If so, adjust all the data accordingly
 		if (HoardEquipped())
@@ -2390,7 +2384,7 @@ void net_udp_process_game_info(ubyte *data, int data_len, struct _sockaddr game_
 			{
 				Active_udp_games[i].gamemode=NETGAME_HOARD;
 				Active_udp_games[i].game_status=NETSTAT_PLAYING;
-				
+
 				if (Active_udp_games[i].game_flags & NETGAME_FLAG_TEAM_HOARD)
 					Active_udp_games[i].gamemode=NETGAME_TEAM_HOARD;
 				if (Active_udp_games[i].game_flags & NETGAME_FLAG_REALLY_ENDLEVEL)
@@ -2399,7 +2393,7 @@ void net_udp_process_game_info(ubyte *data, int data_len, struct _sockaddr game_
 					Active_udp_games[i].game_status=NETSTAT_STARTING;
 			}
 		}
-		
+
 		if (i == num_active_udp_games)
 			num_active_udp_games++;
 
@@ -2428,7 +2422,7 @@ void net_udp_process_game_info(ubyte *data, int data_len, struct _sockaddr game_
 		}
 		memcpy(&Netgame.game_name, &(data[len]), NETGAME_NAME_LEN+1);			len += (NETGAME_NAME_LEN+1);
 		memcpy(&Netgame.mission_title, &(data[len]), MISSION_NAME_LEN+1);		len += (MISSION_NAME_LEN+1);
-		memcpy(&Netgame.mission_name, &(data[len]), 9);					len += 9;		
+		memcpy(&Netgame.mission_name, &(data[len]), 9);					len += 9;
 		Netgame.levelnum = GET_INTEL_INT(&(data[len]));					len += 4;
 		Netgame.gamemode = data[len];							len++;
 		Netgame.RefusePlayers = data[len];						len++;
@@ -2458,7 +2452,7 @@ void net_udp_process_game_info(ubyte *data, int data_len, struct _sockaddr game_
 			}
 		}
 		Netgame.segments_checksum = GET_INTEL_SHORT(&(data[len]));			len += 2;
-		Netgame.team_kills[0] = GET_INTEL_SHORT(&(data[len]));				len += 2;	
+		Netgame.team_kills[0] = GET_INTEL_SHORT(&(data[len]));				len += 2;
 		Netgame.team_kills[1] = GET_INTEL_SHORT(&(data[len]));				len += 2;
 		for (i = 0; i < MAX_PLAYERS; i++)
 		{
@@ -2484,7 +2478,7 @@ void net_udp_process_game_info(ubyte *data, int data_len, struct _sockaddr game_
 		Netgame.PacketsPerSec = GET_INTEL_SHORT(&(data[len]));				len += 2;
 		Netgame.PacketLossPrevention = data[len];					len++;
 		Netgame.NoFriendlyFire = data[len];						len++;
-		
+
 		Netgame.protocol.udp.valid = 1; // This game is valid! YAY!
 	}
 }
@@ -2604,7 +2598,7 @@ void net_udp_process_packet(ubyte *data, struct _sockaddr sender_addr, int lengt
 			if (!multi_i_am_master() || length != UPID_SEQUENCE_SIZE)
 				break;
 			net_udp_receive_sequence_packet(data, &their, sender_addr);
-			if (Network_status == NETSTAT_STARTING) 
+			if (Network_status == NETSTAT_STARTING)
 			{
 				// Someone wants to join our game!
 				net_udp_add_player(&their);
@@ -2691,7 +2685,7 @@ void net_udp_read_endlevel_packet( ubyte *data, int data_len, struct _sockaddr s
 {
 	int len = 0, i = 0, j = 0;
 	ubyte tmpvar = 0;
-	
+
 	if (multi_i_am_master())
 	{
 		ubyte pnum = data[1];
@@ -2770,10 +2764,10 @@ int net_udp_sync_poll( newmenu *menu, d_event *event, void *userdata )
 
 	if (event->type != EVENT_WINDOW_DRAW)
 		return 0;
-	
+
 	menu = menu;
 	userdata = userdata;
-	
+
 	net_udp_listen();
 
 	// Leave if Host disconnects
@@ -2788,14 +2782,14 @@ int net_udp_sync_poll( newmenu *menu, d_event *event, void *userdata )
 		int i;
 
 		// Poll time expired, re-send request
-		
+
 		t1 = timer_query();
 
 		i = net_udp_send_request();
 		if (i < 0)
 			rval = -2;
 	}
-	
+
 	return rval;
 }
 
@@ -2804,12 +2798,12 @@ int net_udp_start_poll( newmenu *menu, d_event *event, void *userdata )
 	newmenu_item *menus = newmenu_get_items(menu);
 	int nitems = newmenu_get_nitems(menu);
 	int i,n,nm;
-	
+
 	if (event->type != EVENT_WINDOW_DRAW)
 		return 0;
-	
+
 	userdata = userdata;
-	
+
 	Assert(Network_status == NETSTAT_STARTING);
 
 	if (!menus[0].value) {
@@ -2836,19 +2830,19 @@ int net_udp_start_poll( newmenu *menu, d_event *event, void *userdata )
 		nm_messagebox( TXT_ERROR, 1, TXT_OK, "%s %d %s", TXT_SORRY_ONLY, Netgame.max_numplayers, TXT_NETPLAYERS_IN );
 		// Turn off the last player highlighted
 		for (i = N_players; i > 0; i--)
-			if (menus[i].value == 1) 
+			if (menus[i].value == 1)
 			{
 				menus[i].value = 0;
 				break;
 			}
 	}
 
-//       if (nitems > MAX_PLAYERS ) return; 
-	
+//       if (nitems > MAX_PLAYERS ) return;
+
 	n = Netgame.numplayers;
 	net_udp_listen();
-	
-	if (n < Netgame.numplayers )    
+
+	if (n < Netgame.numplayers )
 	{
 		digi_play_sample (SOUND_HUD_MESSAGE,F1_0);
 
@@ -2861,17 +2855,17 @@ int net_udp_start_poll( newmenu *menu, d_event *event, void *userdata )
 		{
 			menus[N_players-1].value = 1;
 		}
-	} 
-	else if ( n > Netgame.numplayers )      
+	}
+	else if ( n > Netgame.numplayers )
 	{
 		// One got removed...
 
       digi_play_sample (SOUND_HUD_KILL,F1_0);
-  
-		for (i=0; i<N_players; i++ )    
+
+		for (i=0; i<N_players; i++ )
 		{
-	 
-	 if (PlayerCfg.NoRankings)	
+
+	 if (PlayerCfg.NoRankings)
 		 sprintf( menus[i].text, "%d. %-20s", i+1, Netgame.players[i].callsign );
 	 else
 		 sprintf( menus[i].text, "%d. %s%-20s", i+1, RankStrings[Netgame.players[i].rank],Netgame.players[i].callsign );
@@ -2880,7 +2874,7 @@ int net_udp_start_poll( newmenu *menu, d_event *event, void *userdata )
 			else
 				menus[i].value = 0;
 		}
-		for (i=N_players; i<n; i++ )    
+		for (i=N_players; i<n; i++ )
 		{
 			sprintf( menus[i].text, "%d. ", i+1 );          // Clear out the deleted entries...
 			menus[i].value = 0;
@@ -2922,7 +2916,7 @@ void net_udp_more_game_options ()
 {
 	int opt=0,i;
 	char PlayText[80],KillText[80],srinvul[50],packstring[5];
-	
+
 #ifdef USE_TRACKER
 	newmenu_item m[17];
 #else
@@ -2930,7 +2924,7 @@ void net_udp_more_game_options ()
 #endif
 
 	snprintf(packstring,sizeof(char)*4,"%d",Netgame.PacketsPerSec);
-	
+
 	opt_difficulty = opt;
 	m[opt].type = NM_TYPE_SLIDER; m[opt].value=Netgame.difficulty; m[opt].text=TXT_DIFFICULTY; m[opt].min_value=0; m[opt].max_value=(NDL-1); opt++;
 
@@ -2959,16 +2953,16 @@ void net_udp_more_game_options ()
 
 	opt_show_names=opt;
 	m[opt].type = NM_TYPE_CHECK; m[opt].text = "Show enemy names on HUD"; m[opt].value=Netgame.ShowEnemyNames; opt++;
-	
+
 	opt_show_on_map=opt;
 	m[opt].type = NM_TYPE_CHECK; m[opt].text = TXT_SHOW_ON_MAP; m[opt].value=(Netgame.game_flags & NETGAME_FLAG_SHOW_MAP); opt_show_on_map=opt; opt++;
 
 	opt_ffire=opt;
 	m[opt].type = NM_TYPE_CHECK; m[opt].text = "No friendly fire (Team, Coop)"; m[opt].value=Netgame.NoFriendlyFire; opt++;
-	
+
 	opt_setpower = opt;
 	m[opt].type = NM_TYPE_MENU;  m[opt].text = "Set Objects allowed..."; opt++;
-	
+
 	m[opt].type = NM_TYPE_TEXT; m[opt].text = "Packets per second (2 - 20)"; opt++;
 	opt_packets=opt;
 	m[opt].type = NM_TYPE_INPUT; m[opt].text=packstring; m[opt].text_len=2; opt++;
@@ -2976,12 +2970,12 @@ void net_udp_more_game_options ()
 	m[opt].type = NM_TYPE_TEXT; m[opt].text = "Network port"; opt++;
 	opt_port = opt;
 	m[opt].type = NM_TYPE_INPUT; m[opt].text = UDP_MyPort; m[opt].text_len=5; opt++;
-	
+
 #ifdef USE_TRACKER
 	opt_tracker = opt;
 	m[opt].type = NM_TYPE_CHECK; m[opt].text = "Track this game"; m[opt].value = Netgame.Tracker; opt++;
 #endif
-	
+
 menu:
 	i = newmenu_do1( NULL, "Advanced netgame options", opt, m, net_udp_more_options_handler, NULL, 0 );
 
@@ -2994,7 +2988,7 @@ menu:
 	}
 
 	Netgame.PacketsPerSec=atoi(packstring);
-	
+
 	if (Netgame.PacketsPerSec>20)
 	{
 		Netgame.PacketsPerSec=20;
@@ -3012,19 +3006,19 @@ menu:
 		snprintf (UDP_MyPort, sizeof(UDP_MyPort), "%d", UDP_PORT_DEFAULT);
 		nm_messagebox(TXT_ERROR, 1, TXT_OK, "Illegal port");
 	}
-	
-	Netgame.InvulAppear=m[opt_start_invul].value;	
+
+	Netgame.InvulAppear=m[opt_start_invul].value;
 	Netgame.BrightPlayers=m[opt_bright].value;
 	Netgame.ShowEnemyNames=m[opt_show_names].value;
-	Netgame.Allow_marker_view=m[opt_marker_view].value;   
-	Netgame.AlwaysLighting=m[opt_light].value;     
+	Netgame.Allow_marker_view=m[opt_marker_view].value;
+	Netgame.AlwaysLighting=m[opt_light].value;
 	Netgame.difficulty=Difficulty_level = m[opt_difficulty].value;
 	if (m[opt_show_on_map].value)
 		Netgame.game_flags |= NETGAME_FLAG_SHOW_MAP;
 	else
 		Netgame.game_flags &= ~NETGAME_FLAG_SHOW_MAP;
 	Netgame.NoFriendlyFire = m[opt_ffire].value;
-	
+
 #ifdef USE_TRACKER
 	Netgame.Tracker = m[opt_tracker].value;
 #endif
@@ -3034,7 +3028,7 @@ int net_udp_more_options_handler( newmenu *menu, d_event *event, void *userdata 
 {
 	newmenu_item *menus = newmenu_get_items(menu);
 	int citem = newmenu_get_citem(menu);
-	
+
 	switch (event->type)
 	{
 		case EVENT_NEWMENU_CHANGED:
@@ -3048,7 +3042,7 @@ int net_udp_more_options_handler( newmenu *menu, d_event *event, void *userdata 
 					menus[opt_playtime].value=0;
 					return 0;
 				}
-				
+
 				Netgame.PlayTimeAllowed=menus[opt_playtime].value;
 				sprintf( menus[opt_playtime].text, "Max Time: %d %s", Netgame.PlayTimeAllowed*5, TXT_MINUTES_ABBREV );
 			}
@@ -3060,18 +3054,18 @@ int net_udp_more_options_handler( newmenu *menu, d_event *event, void *userdata 
 					menus[opt_killgoal].value=0;
 					return 0;
 				}
-				
+
 				Netgame.KillGoal=menus[opt_killgoal].value;
 				sprintf( menus[opt_killgoal].text, "Kill Goal: %d kills", Netgame.KillGoal*5);
 			}
 			break;
-			
+
 		default:
 			break;
 	}
-	
+
 	userdata = userdata;
-	
+
 	return 0;
 }
 
@@ -3091,27 +3085,27 @@ int net_udp_game_param_handler( newmenu *menu, d_event *event, param_opt *opt )
 	switch (event->type)
 	{
 		case EVENT_NEWMENU_CHANGED:
-			if (((HoardEquipped() && (citem == opt->team_hoard)) || ((citem == opt->team_anarchy) || (citem == opt->capture))) && !menus[opt->closed].value && !menus[opt->refuse].value) 
+			if (((HoardEquipped() && (citem == opt->team_hoard)) || ((citem == opt->team_anarchy) || (citem == opt->capture))) && !menus[opt->closed].value && !menus[opt->refuse].value)
 			{
 				menus[opt->refuse].value = 1;
 				menus[opt->refuse-1].value = 0;
 				menus[opt->refuse-2].value = 0;
 			}
-			
+
 			if (menus[opt->coop].value)
 			{
-				if (menus[opt->maxnet].value>2) 
+				if (menus[opt->maxnet].value>2)
 				{
 					menus[opt->maxnet].value=2;
 				}
-				
+
 				if (menus[opt->maxnet].max_value>2)
 				{
 					menus[opt->maxnet].max_value=2;
 				}
 				sprintf( menus[opt->maxnet].text, "Maximum players: %d", menus[opt->maxnet].value+2 );
 				Netgame.max_numplayers = menus[opt->maxnet].value+2;
-				
+
 				if (!(Netgame.game_flags & NETGAME_FLAG_SHOW_MAP))
 					Netgame.game_flags |= NETGAME_FLAG_SHOW_MAP;
 
@@ -3132,13 +3126,13 @@ int net_udp_game_param_handler( newmenu *menu, d_event *event, param_opt *opt )
 					Netgame.max_numplayers = menus[opt->maxnet].value+2;
 				}
 			}
-			
+
 			if (citem == opt->level)
 			{
 				char *slevel = menus[opt->level].text;
 				Netgame.levelnum = atoi(slevel);
 			}
-			
+
 			if (citem == opt->maxnet)
 			{
 				sprintf( menus[opt->maxnet].text, "Maximum players: %d", menus[opt->maxnet].value+2 );
@@ -3149,7 +3143,7 @@ int net_udp_game_param_handler( newmenu *menu, d_event *event, param_opt *opt )
 			{
 				if ( menus[opt->anarchy].value )
 					Netgame.gamemode = NETGAME_ANARCHY;
-				
+
 				else if (menus[opt->team_anarchy].value) {
 					Netgame.gamemode = NETGAME_TEAM_ANARCHY;
 				}
@@ -3161,9 +3155,9 @@ int net_udp_game_param_handler( newmenu *menu, d_event *event, param_opt *opt )
 					menus[opt->anarchy].value = 1;
 		 			return 0;
 		 		}
-				else if ( menus[opt->robot_anarchy].value ) 
+				else if ( menus[opt->robot_anarchy].value )
 					Netgame.gamemode = NETGAME_ROBOT_ANARCHY;
-				else if ( menus[opt->coop].value ) 
+				else if ( menus[opt->coop].value )
 					Netgame.gamemode = NETGAME_COOPERATIVE;
 				else if (menus[opt->capture].value)
 					Netgame.gamemode = NETGAME_CAPTURE_FLAG;
@@ -3182,7 +3176,7 @@ int net_udp_game_param_handler( newmenu *menu, d_event *event, param_opt *opt )
 				Netgame.game_flags &= ~NETGAME_FLAG_CLOSED;
 			Netgame.RefusePlayers=menus[opt->refuse].value;
 			break;
-			
+
 		case EVENT_NEWMENU_SELECTED:
 			if ((Netgame.levelnum < 1) || (Netgame.levelnum > Last_level))
 			{
@@ -3204,11 +3198,11 @@ int net_udp_game_param_handler( newmenu *menu, d_event *event, param_opt *opt )
 			if (citem==opt->start_game)
 				return !net_udp_start_game();
 			return 1;
-			
+
 		default:
 			break;
 	}
-	
+
 	return 0;
 }
 
@@ -3225,7 +3219,7 @@ int net_udp_setup_game()
 	net_udp_init();
 
 	multi_new_game();
-	
+
 	change_playernum_to(0);
 
 	for (i=0;i<MAX_PLAYERS;i++)
@@ -3248,7 +3242,7 @@ int net_udp_setup_game()
 	Netgame.AllowedItems |= NETFLAG_DOPOWERUP;
 	Netgame.PacketLossPrevention = 1;
 	Netgame.NoFriendlyFire = 0;
-	
+
 #ifdef USE_TRACKER
 	Netgame.Tracker = 1;
 #endif
@@ -3299,7 +3293,7 @@ int net_udp_setup_game()
 	{
 		opt.hoard = opt.team_hoard = 0; // NOTE: Make sure if you use these, use them in connection with HoardEquipped() only!
 	}
-	
+
 	m[optnum].type = NM_TYPE_RADIO; m[optnum].text = "Bounty"; m[optnum].value = ( Netgame.gamemode & NETGAME_BOUNTY ); m[optnum].group = 0; opt.mode_end=opt.bounty=optnum; optnum++;
 
 	m[optnum].type = NM_TYPE_TEXT; m[optnum].text = ""; optnum++;
@@ -3312,9 +3306,9 @@ int net_udp_setup_game()
 
 	opt.maxnet = optnum;
 	sprintf( srmaxnet, "Maximum players: %d", Netgame.max_numplayers);
-	m[optnum].type = NM_TYPE_SLIDER; m[optnum].value=Netgame.max_numplayers-2; m[optnum].text= srmaxnet; m[optnum].min_value=0; 
+	m[optnum].type = NM_TYPE_SLIDER; m[optnum].value=Netgame.max_numplayers-2; m[optnum].text= srmaxnet; m[optnum].min_value=0;
 	m[optnum].max_value=Netgame.max_numplayers-2; optnum++;
-	
+
 	opt.moreopts=optnum;
 	m[optnum].type = NM_TYPE_MENU;  m[optnum].text = "Advanced Options"; optnum++;
 
@@ -3339,7 +3333,7 @@ net_udp_set_game_mode(int gamemode)
 		Game_mode = GM_NETWORK;
 	else if ( gamemode == NETGAME_ROBOT_ANARCHY )
 		Game_mode = GM_NETWORK | GM_MULTI_ROBOTS;
-	else if ( gamemode == NETGAME_COOPERATIVE ) 
+	else if ( gamemode == NETGAME_COOPERATIVE )
 		Game_mode = GM_NETWORK | GM_MULTI_COOP | GM_MULTI_ROBOTS;
 	else if (gamemode == NETGAME_CAPTURE_FLAG)
 		{
@@ -3392,7 +3386,7 @@ void net_udp_read_sync_packet( ubyte * data, int data_len, struct _sockaddr send
 	// Discover my player number
 
 	memcpy(temp_callsign, Players[Player_num].callsign, CALLSIGN_LEN+1);
-	
+
 	Player_num = -1;
 
 	for (i=0; i<MAX_PLAYERS; i++ )
@@ -3407,7 +3401,7 @@ void net_udp_read_sync_packet( ubyte * data, int data_len, struct _sockaddr send
 			if (Player_num!=-1) {
 				Int3(); // Hey, we've found ourselves twice
 				Network_status = NETSTAT_MENU;
-				return; 
+				return;
 			}
 			change_playernum_to(i);
 		}
@@ -3429,7 +3423,7 @@ void net_udp_read_sync_packet( ubyte * data, int data_len, struct _sockaddr send
 		return;
 	}
 
-	if (Network_rejoined) 
+	if (Network_rejoined)
 		for (i=0; i<N_players;i++)
 			Players[i].net_killed_total = Netgame.killed[i];
 
@@ -3441,7 +3435,7 @@ void net_udp_read_sync_packet( ubyte * data, int data_len, struct _sockaddr send
 
 	team_kills[0] = Netgame.team_kills[0];
 	team_kills[1] = Netgame.team_kills[1];
-	
+
 	Players[Player_num].connected = CONNECT_PLAYING;
 	Netgame.players[Player_num].connected = CONNECT_PLAYING;
 	Netgame.players[Player_num].rank=GetMyNetRanking();
@@ -3483,7 +3477,7 @@ int net_udp_send_sync(void)
 
 	// Randomize their starting locations...
 	d_srand( (fix)timer_query() );
-	for (i=0; i<NumNetPlayerPositions; i++ )        
+	for (i=0; i<NumNetPlayerPositions; i++ )
 	{
 		if (Players[i].connected)
 			Players[i].connected = CONNECT_PLAYING; // Get rid of endlevel connect statuses
@@ -3491,12 +3485,12 @@ int net_udp_send_sync(void)
 		if (Game_mode & GM_MULTI_COOP)
 			Netgame.locations[i] = i;
 		else {
-			do 
+			do
 			{
 				np = d_rand() % NumNetPlayerPositions;
-				for (j=0; j<i; j++ )    
+				for (j=0; j<i; j++ )
 				{
-					if (Netgame.locations[j]==np)   
+					if (Netgame.locations[j]==np)
 					{
 						np =-1;
 						break;
@@ -3548,7 +3542,7 @@ net_udp_select_teams(void)
 
 	// Here comes da menu
 menu:
-	m[0].type = NM_TYPE_INPUT; m[0].text = team_names[0]; m[0].text_len = CALLSIGN_LEN; 
+	m[0].type = NM_TYPE_INPUT; m[0].text = team_names[0]; m[0].text_len = CALLSIGN_LEN;
 
 	opt = 1;
 	for (i = 0; i < N_players; i++)
@@ -3571,13 +3565,13 @@ menu:
 	m[opt].type = NM_TYPE_MENU; m[opt].text = TXT_ACCEPT; opt++;
 
 	Assert(opt <= MAX_PLAYERS+4);
-	
+
 	choice = newmenu_do(NULL, TXT_TEAM_SELECTION, opt, m, NULL, NULL);
 
 	if (choice == opt-1)
 	{
 #if 0 // no need to wait for other players
-		if ((opt-2-opt_team_b < 2) || (opt_team_b == 1)) 
+		if ((opt-2-opt_team_b < 2) || (opt_team_b == 1))
 		{
 			nm_messagebox(NULL, 1, TXT_OK, TXT_TEAM_MUST_ONE);
 			#ifdef RELEASE
@@ -3612,7 +3606,7 @@ net_udp_select_players(void)
 	int save_nplayers;              //how may people would like to join
 
 	net_udp_add_player( &UDP_Seq );
-		
+
 	for (i=0; i< MAX_PLAYERS+4; i++ ) {
 		sprintf( text[i], "%d.  %-20s", i+1, "" );
 		m[i].type = NM_TYPE_CHECK; m[i].text = text[i]; m[i].value = 0;
@@ -3637,7 +3631,7 @@ GetPlayersAgain:
 
 	save_nplayers = N_players;
 
-	if (j<0) 
+	if (j<0)
 	{
 		// Aborted!
 		// Dump all players and go back to menu mode
@@ -3664,10 +3658,10 @@ abort:
 	N_players = 0;
 	for (i=0; i<save_nplayers; i++ )
 	{
-		if (m[i].value) 
+		if (m[i].value)
 			N_players++;
 	}
-	
+
 	if ( N_players > Netgame.max_numplayers) {
 		nm_messagebox( TXT_ERROR, 1, TXT_OK, "%s %d %s", TXT_SORRY_ONLY, Netgame.max_numplayers, TXT_NETPLAYERS_IN );
 		N_players = save_nplayers;
@@ -3696,7 +3690,7 @@ abort:
 	N_players = 0;
 	for (i=0; i<save_nplayers; i++ )
 	{
-		if (m[i].value) 
+		if (m[i].value)
 		{
 			if (i > N_players)
 			{
@@ -3735,7 +3729,7 @@ int net_udp_start_game(void)
 
 	if (i != 0)
 		return 0;
-	
+
 	if (atoi(UDP_MyPort) != UDP_PORT_DEFAULT)
 		i = udp_open_socket(1, UDP_PORT_DEFAULT); // Default port open for Broadcasts
 
@@ -3761,7 +3755,7 @@ int net_udp_start_game(void)
 	net_udp_set_game_mode(Netgame.gamemode);
 
 	Netgame.players[0].protocol.udp.isyou = 1; // I am Host. I need to know that y'know? For syncing later.
-	
+
 	if(net_udp_select_players())
 	{
 		StartNewLevel(Netgame.levelnum, 0);
@@ -3772,7 +3766,7 @@ int net_udp_start_game(void)
 		return 0;	// see if we want to tweak the game we setup
 	}
 	net_udp_broadcast_game_info(UPID_GAME_INFO_LITE); // game started. broadcast our current status to everyone who wants to know
-	
+
 	return 1;	// don't keep params menu or mission listbox (may want to join a game next time)
 }
 
@@ -3781,12 +3775,12 @@ int net_udp_wait_for_sync(void)
 	char text[60];
 	newmenu_item m[2];
 	int i, choice=0;
-	
+
 	Network_status = NETSTAT_WAITING;
 
 	m[0].type=NM_TYPE_TEXT; m[0].text = text;
 	m[1].type=NM_TYPE_TEXT; m[1].text = TXT_NET_LEAVE;
-	
+
 	i = net_udp_send_request();
 
 	if (i < 0)
@@ -3800,7 +3794,7 @@ int net_udp_wait_for_sync(void)
 		choice=newmenu_do( NULL, TXT_WAIT, 2, m, net_udp_sync_poll, NULL );
 	}
 
-	if (Network_status != NETSTAT_PLAYING)  
+	if (Network_status != NETSTAT_PLAYING)
 	{
 		UDP_sequence_packet me;
 
@@ -3824,10 +3818,10 @@ int net_udp_request_poll( newmenu *menu, d_event *event, void *userdata )
 
 	if (event->type != EVENT_WINDOW_DRAW)
 		return 0;
-	
+
 	menu = menu;
 	userdata = userdata;
-	
+
 	net_udp_listen();
 	net_udp_timeout_check(timer_query());
 
@@ -3841,7 +3835,7 @@ int net_udp_request_poll( newmenu *menu, d_event *event, void *userdata )
 	{
 		return -2;
 	}
-	
+
 	return 0;
 }
 
@@ -3850,7 +3844,7 @@ int net_udp_wait_for_requests(void)
 	// Wait for other players to load the level before we send the sync
 	int choice, i;
 	newmenu_item m[1];
-	
+
 	Network_status = NETSTAT_WAITING;
 
 	m[0].type=NM_TYPE_TEXT; m[0].text = TXT_NET_LEAVE;
@@ -3862,7 +3856,7 @@ int net_udp_wait_for_requests(void)
 	Players[Player_num].connected = CONNECT_PLAYING;
 
 menu:
-	choice = newmenu_do(NULL, TXT_WAIT, 1, m, net_udp_request_poll, NULL);	
+	choice = newmenu_do(NULL, TXT_WAIT, 1, m, net_udp_request_poll, NULL);
 
 	if (choice == -1)
 	{
@@ -3874,9 +3868,9 @@ menu:
 		}
 		if (choice != 0)
 			goto menu;
-		
+
 		// User confirmed abort
-		
+
 		for (i=0; i < N_players; i++) {
 			if ((Players[i].connected != CONNECT_DISCONNECTED) && (i != Player_num)) {
 				net_udp_dump_player(Netgame.players[i].protocol.udp.addr, DUMP_ABORTED);
@@ -3985,7 +3979,7 @@ int net_udp_do_join_game()
 	net_udp_set_game_mode(Netgame.gamemode);
 
 	StartNewLevel(Netgame.levelnum, 0);
-	
+
 	return 1;     // look ma, we're in a game!!!
 }
 
@@ -4029,7 +4023,7 @@ void net_udp_leave_game()
 void net_udp_flush()
 {
 	ubyte packet[UPID_MAX_SIZE];
-	struct _sockaddr sender_addr; 
+	struct _sockaddr sender_addr;
 
 	if (UDP_Socket[0] != -1)
 		while (udp_receive_packet( 0, packet, UPID_MAX_SIZE, &sender_addr) > 0);
@@ -4061,7 +4055,7 @@ void net_udp_listen()
 			size = udp_receive_packet( 1, packet, UPID_MAX_SIZE, &sender_addr );
 		}
 	}
-	
+
 #ifdef USE_TRACKER
 	if( UDP_Socket[2] != -1 )
 	{
@@ -4104,7 +4098,7 @@ void net_udp_timeout_check(fix64 time)
 {
 	int i = 0;
 	static fix64 last_timeout_time = 0;
-	
+
 	if (time>=last_timeout_time+F1_0)
 	{
 		// Check for player timeouts
@@ -4145,7 +4139,7 @@ void net_udp_do_frame(int force, int listen)
 		last_pdata_time = time;
 		net_udp_send_pdata();
 	}
-	
+
 	if (force || (time >= (last_mdata_time+(F1_0/10))))
 	{
 		last_mdata_time = time;
@@ -4182,11 +4176,11 @@ void net_udp_do_frame(int force, int listen)
 		static fix64 iLastQuery = 0;
 		static int iAttempts = 0;
 		fix64 iNow = timer_query();
-		
+
 		// Set the last query to now if we must
 		if( iLastQuery == 0 )
 			iLastQuery = iNow;
-		
+
 		// Test it
 		if( iTrackerVerified == 0 && iNow >= iLastQuery + ( F1_0 * 3 ) )
 		{
@@ -4194,17 +4188,17 @@ void net_udp_do_frame(int force, int listen)
 			iLastQuery = iNow;
 			iAttempts++;
 		}
-		
+
 		// Have we had all our attempts?
 		if( iTrackerVerified == 0 && iAttempts > 3 )
 		{
 			// Turn off tracker
 			Netgame.Tracker = 0;
-			
+
 			// Reset the static variables for next time
 			iLastQuery = 0;
 			iAttempts = 0;
-			
+
 			// Warn
 			nm_messagebox( TXT_WARNING, 1, TXT_OK, "No response from tracker!\nPossible causes:\nTracker is down\nYour port is likely not open!\n\nTracker: %s\nGame port: %s", GameArg.MplTrackerAddr, UDP_MyPort );
 		}
@@ -4279,7 +4273,7 @@ void net_udp_noloss_add_queue_pkt(uint32_t pkt_num, fix64 time, ubyte *data, ush
 			multi_reset_stuff();
 		}
 	}
-	
+
 	con_printf(CON_VERBOSE, "P#%i: Adding MData pkt_num %i, type %i from P#%i to MData store list\n", Player_num, pkt_num, data[0], pnum);
 	UDP_mdata_queue[found].used = 1;
 	UDP_mdata_queue[found].pkt_initial_timestamp = time;
@@ -4287,7 +4281,7 @@ void net_udp_noloss_add_queue_pkt(uint32_t pkt_num, fix64 time, ubyte *data, ush
 		UDP_mdata_queue[found].pkt_timestamp[i] = time;
 	UDP_mdata_queue[found].pkt_num = pkt_num;
 	UDP_mdata_queue[found].Player_num = pnum;
-	memcpy( &UDP_mdata_queue[found].player_ack, player_ack, sizeof(ubyte)*MAX_PLAYERS); 
+	memcpy( &UDP_mdata_queue[found].player_ack, player_ack, sizeof(ubyte)*MAX_PLAYERS);
 	memcpy( &UDP_mdata_queue[found].data, data, sizeof(char)*data_size );
 	UDP_mdata_queue[found].data_size = data_size;
 }
@@ -4312,7 +4306,7 @@ int net_udp_noloss_validate_mdata(uint32_t pkt_num, ubyte sender_pnum, struct _s
 		if (memcmp((struct _sockaddr *)&sender_addr, (struct _sockaddr *)&Netgame.players[0].protocol.udp.addr, sizeof(struct _sockaddr)))
 			return 0;
 	}
-	
+
 	con_printf(CON_VERBOSE, "P#%i: Sending MData ACK for pkt %i - pnum %i\n",Player_num, pkt_num, sender_pnum);
 	memset(&buf,0,sizeof(buf));
 	buf[len] = UPID_MDATA_ACK;													len++;
@@ -4320,7 +4314,7 @@ int net_udp_noloss_validate_mdata(uint32_t pkt_num, ubyte sender_pnum, struct _s
 	buf[len] = sender_pnum;														len++;
 	PUT_INTEL_INT(buf + len, pkt_num);											len += 4;
 	dxx_sendto (UDP_Socket[0], buf, len, 0, (struct sockaddr *)&sender_addr, sizeof(struct _sockaddr));
-	
+
 	for (i = 0; i < UDP_MDATA_STOR_QUEUE_SIZE; i++)
 	{
 		if (pkt_num == UDP_mdata_got[sender_pnum].pkt_num[i])
@@ -4392,7 +4386,7 @@ void net_udp_noloss_process_queue(fix64 time)
 	for (queuec = 0; queuec < UDP_MDATA_STOR_QUEUE_SIZE; queuec++)
 	{
 		int needack = 0;
-		
+
 		if (!UDP_mdata_queue[queuec].used)
 			continue;
 
@@ -4410,12 +4404,12 @@ void net_udp_noloss_process_queue(fix64 time)
 				{
 					ubyte buf[sizeof(UDP_mdata_info)];
 					int len = 0;
-					
+
 					con_printf(CON_VERBOSE, "P#%i: Resending pkt_num %i from pnum %i to pnum %i\n",Player_num, UDP_mdata_queue[queuec].pkt_num, UDP_mdata_queue[queuec].Player_num, plc);
-					
+
 					UDP_mdata_queue[queuec].pkt_timestamp[plc] = time;
 					memset(&buf, 0, sizeof(UDP_mdata_info));
-					
+
 					// Prepare the packet and send it
 					buf[len] = UPID_MDATA_PNEEDACK;													len++;
 					buf[len] = UDP_mdata_queue[queuec].Player_num;								len++;
@@ -4471,7 +4465,7 @@ void net_udp_send_mdata_direct(ubyte *data, int data_len, int pnum, int needack)
 	ubyte buf[sizeof(UDP_mdata_info)];
 	ubyte pack[MAX_PLAYERS];
 	int len = 0;
-	
+
 	if (!(Game_mode&GM_NETWORK) || UDP_Socket[0] == -1)
 		return;
 
@@ -4516,7 +4510,7 @@ void net_udp_send_mdata(int needack, fix64 time)
 	ubyte buf[sizeof(UDP_mdata_info)];
 	ubyte pack[MAX_PLAYERS];
 	int len = 0, i = 0;
-	
+
 	if (!(Game_mode&GM_NETWORK) || UDP_Socket[0] == -1)
 		return;
 
@@ -4558,7 +4552,7 @@ void net_udp_send_mdata(int needack, fix64 time)
 		dxx_sendto (UDP_Socket[0], buf, len, 0, (struct sockaddr *)&Netgame.players[0].protocol.udp.addr, sizeof(struct _sockaddr));
 		pack[0] = 0;
 	}
-	
+
 	if (needack)
 		net_udp_noloss_add_queue_pkt(UDP_MData.pkt_num, time, UDP_MData.mbuf, UDP_MData.mbuf_size, Player_num, pack);
 
@@ -4607,7 +4601,7 @@ void net_udp_process_mdata (ubyte *data, int data_len, struct _sockaddr sender_a
 		int i = 0;
 
 		memset(&pack, 1, sizeof(ubyte)*MAX_PLAYERS);
-		
+
 		for (i = 1; i < MAX_PLAYERS; i++)
 		{
 			if ((i != pnum) && Players[i].connected == CONNECT_PLAYING)
@@ -4652,7 +4646,7 @@ void net_udp_send_pdata()
 		return;
 
 	memset(&buf, 0, sizeof(UDP_frame_info));
-	
+
 	buf[len] = UPID_PDATA;										len++;
 	buf[len] = Player_num;										len++;
 	buf[len] = Players[Player_num].connected;							len++;
@@ -4691,7 +4685,7 @@ void net_udp_process_pdata ( ubyte *data, int data_len, struct _sockaddr sender_
 	len++;
 
 	memset(&pd, 0, sizeof(UDP_frame_info));
-	
+
 	if (data_len > sizeof(UDP_frame_info))
 		return;
 
@@ -4709,7 +4703,7 @@ void net_udp_process_pdata ( ubyte *data, int data_len, struct _sockaddr sender_
 	pd.pos.velx = GET_INTEL_SHORT(&data[len]);							len += 2;
 	pd.pos.vely = GET_INTEL_SHORT(&data[len]);							len += 2;
 	pd.pos.velz = GET_INTEL_SHORT(&data[len]);							len += 2;
-	
+
 	if (multi_i_am_master()) // I am host - must relay this packet to others!
 	{
 		if (pd.Player_num > 0 && pd.Player_num <= N_players && Players[pd.Player_num].connected == CONNECT_PLAYING) // some checking wether this packet is legal
@@ -4756,7 +4750,7 @@ void net_udp_read_pdata_short_packet(UDP_frame_info *pd)
 
 			digi_play_sample( SOUND_HUD_MESSAGE, F1_0);
 			ClipRank (&Netgame.players[TheirPlayernum].rank);
-			
+
 			HUD_init_message(HM_MULTI, "%s'%s'(%i) %s\n",PlayerCfg.NoRankings ? "" : RankStrings[Netgame.players[TheirPlayernum].rank],Players[TheirPlayernum].callsign, TheirPlayernum, TXT_REJOIN);
 
 			multi_send_score();
@@ -4791,20 +4785,20 @@ void net_udp_read_pdata_short_packet(UDP_frame_info *pd)
 		set_thrust_from_velocity(TheirObj);
 }
 
-void net_udp_send_smash_lights (int pnum) 
+void net_udp_send_smash_lights (int pnum)
  {
   // send the lights that have been blown out
 
   int i;
 
   pnum=pnum;
-  
+
   for (i=0;i<=Highest_segment_index;i++)
    if (Light_subtracted[i])
     multi_send_light_specific(pnum,i,Light_subtracted[i]);
  }
 
-void net_udp_send_fly_thru_triggers (int pnum) 
+void net_udp_send_fly_thru_triggers (int pnum)
  {
   // send the fly thru triggers that have been disabled
 
@@ -4827,12 +4821,12 @@ void net_udp_send_player_flags()
 void net_udp_ping_frame(fix64 time)
 {
 	static fix64 PingTime = 0;
-	
+
 	if ((PingTime + F1_0) < time)
 	{
 		ubyte buf[UPID_PING_SIZE];
 		int len = 0, i = 0;
-		
+
 		memset(&buf, 0, sizeof(ubyte)*UPID_PING_SIZE);
 		buf[len] = UPID_PING;							len++;
 		memcpy(&buf[len], &time, 8);						len += 8;
@@ -4840,7 +4834,7 @@ void net_udp_ping_frame(fix64 time)
 		{
 			PUT_INTEL_INT(buf + len, Netgame.players[i].ping);		len += 4;
 		}
-		
+
 		for (i = 1; i < MAX_PLAYERS; i++)
 		{
 			if (Players[i].connected == CONNECT_DISCONNECTED)
@@ -4867,11 +4861,11 @@ void net_udp_process_ping(ubyte *data, int data_len, struct _sockaddr sender_add
 	{
 		Netgame.players[i].ping = GET_INTEL_INT(&(data[len]));		len += 4;
 	}
-	
+
 	buf[0] = UPID_PONG;
 	buf[1] = Player_num;
 	memcpy(&buf[2], &host_ping_time, 8);
-	
+
 	dxx_sendto (UDP_Socket[0], buf, sizeof(buf), 0, (struct sockaddr *)&sender_addr, sizeof(struct _sockaddr));
 }
 
@@ -4880,22 +4874,22 @@ void net_udp_process_pong(ubyte *data, int data_len, struct _sockaddr sender_add
 {
 	fix64 client_pong_time = 0;
 	int i = 0;
-	
+
 	if (memcmp((struct _sockaddr *)&sender_addr, (struct _sockaddr *)&Netgame.players[data[1]].protocol.udp.addr, sizeof(struct _sockaddr)))
 		return;
 
 	if (data[1] >= MAX_PLAYERS || data[1] < 1)
 		return;
-	
+
 	if (i == MAX_PLAYERS)
 		return;
-	
+
 	memcpy(&client_pong_time, &data[2], 8);
 	Netgame.players[data[1]].ping = f2i(fixmul(timer_query() - client_pong_time,i2f(1000)));
-	
+
 	if (Netgame.players[data[1]].ping < 0)
 		Netgame.players[data[1]].ping = 0;
-		
+
 	if (Netgame.players[data[1]].ping > 9999)
 		Netgame.players[data[1]].ping = 9999;
 }
@@ -4903,9 +4897,9 @@ void net_udp_process_pong(ubyte *data, int data_len, struct _sockaddr sender_add
 void net_udp_do_refuse_stuff (UDP_sequence_packet *their)
 {
 	int i,new_player_num;
-	
+
 	ClipRank (&their->player.rank);
-		
+
 	for (i=0;i<MAX_PLAYERS;i++)
 	{
 		if (!strcmp (their->player.callsign,Players[i].callsign))
@@ -4925,9 +4919,9 @@ void net_udp_do_refuse_stuff (UDP_sequence_packet *their)
 				return;
 			}
 		}
-	
+
 		digi_play_sample (SOUND_HUD_JOIN_REQUEST,F1_0*2);
-	
+
 		if (Game_mode & GM_TEAM)
 		{
 			if (!PlayerCfg.NoRankings)
@@ -4944,7 +4938,7 @@ void net_udp_do_refuse_stuff (UDP_sequence_packet *their)
 		{
 			HUD_init_message(HM_MULTI, "%s wants to join (accept: F6)",their->player.callsign);
 		}
-	
+
 		strcpy (RefusePlayerName,their->player.callsign);
 		RefuseTimeLimit=timer_query();
 		RefuseThisPlayer=0;
@@ -4960,10 +4954,10 @@ void net_udp_do_refuse_stuff (UDP_sequence_packet *their)
 				return;
 			}
 		}
-	
+
 		if (strcmp(their->player.callsign,RefusePlayerName))
 			return;
-	
+
 		if (RefuseThisPlayer)
 		{
 			RefuseTimeLimit=0;
@@ -4972,10 +4966,10 @@ void net_udp_do_refuse_stuff (UDP_sequence_packet *their)
 			if (Game_mode & GM_TEAM)
 			{
 				new_player_num=net_udp_get_new_player_num (their);
-	
-				Assert (RefuseTeam==1 || RefuseTeam==2);        
-			
-				if (RefuseTeam==1)      
+
+				Assert (RefuseTeam==1 || RefuseTeam==2);
+
+				if (RefuseTeam==1)
 					Netgame.team_vector &=(~(1<<new_player_num));
 				else
 					Netgame.team_vector |=(1<<new_player_num);
@@ -5006,17 +5000,17 @@ void net_udp_do_refuse_stuff (UDP_sequence_packet *their)
 int net_udp_get_new_player_num (UDP_sequence_packet *their)
   {
 	 int i;
-	
+
 	 their=their;
-	
+
 		if ( N_players < Netgame.max_numplayers)
 			return (N_players);
-		
+
 		else
 		{
 			// Slots are full but game is open, see if anyone is
 			// disconnected and replace the oldest player with this new one
-		
+
 			int oldest_player = -1;
 			fix64 oldest_time = timer_query();
 
@@ -5037,7 +5031,7 @@ int net_udp_get_new_player_num (UDP_sequence_packet *their)
 void net_udp_send_extras ()
 {
 	static fix64 last_send_time = 0;
-	
+
 	if (last_send_time + (F1_0/50) > timer_query())
 		return;
 	last_send_time = timer_query();
@@ -5057,9 +5051,9 @@ void net_udp_send_extras ()
 	if (Network_sending_extras==4)
 		net_udp_send_smash_lights(Player_joining_extras);
 	if (Network_sending_extras==3)
-		net_udp_send_player_flags();    
+		net_udp_send_player_flags();
 	if (Network_sending_extras==2)
-		multi_send_powcap_update(); 
+		multi_send_powcap_update();
 	if (Network_sending_extras==1 && Game_mode & GM_BOUNTY)
 		multi_send_bounty();
 
@@ -5072,13 +5066,13 @@ static int show_game_rules_handler(window *wind, d_event *event, netgame_info *n
 {
 	int k;
 	int w = FSPACX(280), h = FSPACY(170);
-	
+
 	switch (event->type)
 	{
 		case EVENT_WINDOW_ACTIVATED:
 			game_flush_inputs();
 			break;
-			
+
 		case EVENT_KEY_COMMAND:
 			k = event_key_get(event);
 			switch (k)
@@ -5090,20 +5084,20 @@ static int show_game_rules_handler(window *wind, d_event *event, netgame_info *n
 					return 1;
 			}
 			break;
-			
+
 		case EVENT_WINDOW_DRAW:
 			timer_delay2(50);
 
 			gr_set_current_canvas(NULL);
 			nm_draw_background(((SWIDTH-w)/2)-BORDERX,((SHEIGHT-h)/2)-BORDERY,((SWIDTH-w)/2)+w+BORDERX,((SHEIGHT-h)/2)+h+BORDERY);
-			
+
 			gr_set_current_canvas(window_get_canvas(wind));
-			
+
 			grd_curcanv->cv_font = MEDIUM3_FONT;
-			
+
 			gr_set_fontcolor(gr_find_closest_color_current(29,29,47),-1);
 			gr_string( 0x8000, FSPACY(15), "NETGAME INFO");
-			
+
 			grd_curcanv->cv_font = GAME_FONT;
 			gr_printf( FSPACX( 25),FSPACY( 35), "Reactor Life:");
 			gr_printf( FSPACX( 25),FSPACY( 41), "Max Time:");
@@ -5143,7 +5137,7 @@ static int show_game_rules_handler(window *wind, d_event *event, netgame_info *n
 			gr_printf( FSPACX(170),FSPACY(160), "Invulnerability:");
 			gr_printf( FSPACX(170),FSPACY(166), "Cloaking Device:");
 			gr_printf( FSPACX(170),FSPACY(172), "Ammo Rack:");
-			
+
 			gr_set_fontcolor(BM_XRGB(255,255,255),-1);
 			gr_printf( FSPACX(115),FSPACY( 35), "%i Min", netgame->control_invul_time/F1_0/60);
 			gr_printf( FSPACX(115),FSPACY( 41), "%i Min", netgame->PlayTimeAllowed*5);
@@ -5188,7 +5182,7 @@ static int show_game_rules_handler(window *wind, d_event *event, netgame_info *n
 		default:
 			break;
 	}
-	
+
 	return 0;
 }
 
@@ -5196,7 +5190,7 @@ void net_udp_show_game_rules(netgame_info *netgame)
 {
 	gr_set_current_canvas(NULL);
 
-	window_create(&grd_curscreen->sc_canvas, (SWIDTH - FSPACX(320))/2, (SHEIGHT - FSPACY(200))/2, FSPACX(320), FSPACY(200), 
+	window_create(&grd_curscreen->sc_canvas, (SWIDTH - FSPACX(320))/2, (SHEIGHT - FSPACY(200))/2, FSPACX(320), FSPACY(200),
 				  (int (*)(window *, d_event *, void *))show_game_rules_handler, netgame);
 }
 
@@ -5204,12 +5198,12 @@ static int show_game_info_handler(newmenu *menu, d_event *event, netgame_info *n
 {
 	if (event->type != EVENT_NEWMENU_SELECTED)
 		return 0;
-	
+
 	if (newmenu_get_citem(menu) != 1)
 		return 0;
 
 	net_udp_show_game_rules(netgame);
-	
+
 	return 1;
 }
 
