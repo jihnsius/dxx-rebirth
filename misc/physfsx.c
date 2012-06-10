@@ -162,7 +162,7 @@ void PHYSFSX_init(int argc, char *argv[])
 
 // Add a searchpath, but that searchpath is relative to an existing searchpath
 // It will add the first one it finds and return 1, if it doesn't find any it returns 0
-int PHYSFSX_addRelToSearchPath(char *relname, int add_to_end)
+int PHYSFSX_addRelToSearchPath(const char *relname, int add_to_end)
 {
 	char relname2[PATH_MAX], pathname[PATH_MAX];
 
@@ -175,7 +175,7 @@ int PHYSFSX_addRelToSearchPath(char *relname, int add_to_end)
 	return PHYSFS_addToSearchPath(pathname, add_to_end);
 }
 
-int PHYSFSX_removeRelFromSearchPath(char *relname)
+int PHYSFSX_removeRelFromSearchPath(const char *relname)
 {
 	char relname2[PATH_MAX], pathname[PATH_MAX];
 
@@ -188,7 +188,7 @@ int PHYSFSX_removeRelFromSearchPath(char *relname)
 	return PHYSFS_removeFromSearchPath(pathname);
 }
 
-int PHYSFSX_fsize(char *hogname)
+int PHYSFSX_fsize(const char *hogname)
 {
 	PHYSFS_file *fp;
 	char hogname2[PATH_MAX];
@@ -294,7 +294,7 @@ int PHYSFSX_getRealPath(const char *stdPath, char *realPath)
 }
 
 // checks if path is already added to Searchpath. Returns 0 if yes, 1 if not.
-int PHYSFSX_isNewPath(char *path)
+int PHYSFSX_isNewPath(const char *path)
 {
 	int is_new_path = 1;
 	char **i, **list;
@@ -312,7 +312,7 @@ int PHYSFSX_isNewPath(char *path)
 	return is_new_path;
 }
 
-int PHYSFSX_rename(char *oldpath, char *newpath)
+int PHYSFSX_rename(const char *oldpath, const char *newpath)
 {
 	char old[PATH_MAX], new[PATH_MAX];
 	
@@ -323,10 +323,11 @@ int PHYSFSX_rename(char *oldpath, char *newpath)
 
 // Find files at path that have an extension listed in exts
 // The extension list exts must be NULL-terminated, with each ext beginning with a '.'
-char **PHYSFSX_findFiles(char *path, char **exts)
+char **PHYSFSX_findFiles(const char *path, const char *const *exts)
 {
 	char **list = PHYSFS_enumerateFiles(path);
-	char **i, **j = list, **k;
+	char **i, **j = list;
+	const char *const *k;
 	char *ext;
 	
 	if (list == NULL)
@@ -351,10 +352,11 @@ char **PHYSFSX_findFiles(char *path, char **exts)
 
 // Same function as above but takes a real directory as second argument, only adding files originating from this directory.
 // This can be used to further seperate files in search path but it must be made sure realpath is properly formatted.
-char **PHYSFSX_findabsoluteFiles(char *path, char *realpath, char **exts)
+char **PHYSFSX_findabsoluteFiles(const char *path, const char *realpath, const char *const *exts)
 {
 	char **list = PHYSFS_enumerateFiles(path);
-	char **i, **j = list, **k;
+	char **i, **j = list;
+	const char *const *k;
 	char *ext;
 	
 	if (list == NULL)
@@ -409,7 +411,7 @@ int PHYSFSX_exists(const char *filename, int ignorecase)
 }
 
 //Open a file for reading, set up a buffer
-PHYSFS_file *PHYSFSX_openReadBuffered(char *filename)
+PHYSFS_file *PHYSFSX_openReadBuffered(const char *filename)
 {
 	PHYSFS_file *fp;
 	PHYSFS_uint64 bufSize;
@@ -436,7 +438,7 @@ PHYSFS_file *PHYSFSX_openReadBuffered(char *filename)
 }
 
 //Open a file for writing, set up a buffer
-PHYSFS_file *PHYSFSX_openWriteBuffered(char *filename)
+PHYSFS_file *PHYSFSX_openWriteBuffered(const char *filename)
 {
 	PHYSFS_file *fp;
 	PHYSFS_uint64 bufSize = 1024*1024;	// hmm, seems like an OK size.
@@ -459,7 +461,8 @@ PHYSFS_file *PHYSFSX_openWriteBuffered(char *filename)
 void PHYSFSX_addArchiveContent()
 {
 	char **list = NULL;
-	char *archive_exts[] = { ".zip", ".7z", NULL }, *file[2];
+	static const char *const archive_exts[] = { ".zip", ".7z", NULL };
+	char *file[2];
 	int i = 0, content_updated = 0;
 
 	con_printf(CON_DEBUG, "PHYSFS: Adding archives to the game.\n");
@@ -517,7 +520,8 @@ void PHYSFSX_addArchiveContent()
 void PHYSFSX_removeArchiveContent()
 {
 	char **list = NULL;
-	char *archive_exts[] = { ".zip", ".7z", NULL }, *file[2];
+	static const char *const archive_exts[] = { ".zip", ".7z", NULL };
+	char *file[2];
 	int i = 0;
 
 	// find files in Searchpath ...
