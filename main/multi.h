@@ -210,6 +210,10 @@ extern int multi_protocol; // set and determinate used protocol
 #define MULTI_ALLOW_POWERUP_MAX 26
 extern char *multi_allow_powerup_text[MULTI_ALLOW_POWERUP_MAX];
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // Exported functions
 
 extern int GetMyNetRanking();
@@ -392,6 +396,10 @@ void multi_send_light_specific (int pnum,int segnum,ubyte val);
 int HoardEquipped();
 #ifdef EDITOR
 void save_hoard_data(void);
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 /*

@@ -34,6 +34,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #define MAX_FVI_SEGS 100
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 //this data structure gets filled in by find_vector_intersection()
 typedef struct fvi_info {
 	int hit_type;					//what sort of intersection
@@ -83,6 +87,10 @@ void find_hitpoint_uv(fix *u,fix *v,fix *l, vms_vector *pnt,segment *seg,int sid
 //Returns true if the object is through any walls
 int object_intersects_wall(object *objp);
 int object_intersects_wall_d(object *objp,int *hseg,int *hside,int *hface); // same as above but more detailed
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 

@@ -335,6 +335,9 @@ extern int Player_fired_laser_this_frame;
  * FUNCTIONS
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 // do whatever setup needs to be done
 void init_objects();
@@ -482,5 +485,9 @@ extern void wake_up_rendered_objects(object *gmissp, int window_num);
 void reset_player_object(void);
 
 extern void object_rw_swap(object_rw *obj_rw, int swap);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

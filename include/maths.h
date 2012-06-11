@@ -10,9 +10,16 @@
 
 #define D_RAND_MAX 32767
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void d_srand (unsigned int seed);
 int d_rand ();			// Random number function which returns in the range 0-0x7FFF
 
+#ifdef __cplusplus
+}
+#endif
 
 //=============================== FIXED POINT ===============================
 

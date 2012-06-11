@@ -26,6 +26,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #define MIN_LIGHT_DIST  (F1_0*4)
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 extern fix Beam_brightness;
 extern g3s_lrgb Dynamic_light[MAX_VERTICES];
 
@@ -48,5 +52,9 @@ g3s_lrgb compute_object_light(object *obj,vms_vector *rotated_pnt);
 
 // turn headlight boost on & off
 void toggle_headlight_active(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _LIGHTING_H */

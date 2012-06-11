@@ -22,6 +22,10 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #include "maths.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 //#define INLINE 1              //are some of these functions inline?
 
 //The basic fixed-point vector.  Access elements by name or position
@@ -411,6 +415,7 @@ vms_matrix * vm_copy_transpose_matrix (vms_matrix * dest, vms_matrix * src);
 //dest CANNOT equal either source
 vms_matrix * vm_matrix_x_matrix (vms_matrix * dest, vms_matrix * src0, vms_matrix * src1);
 
+vms_angvec *vm_extract_angles_vector_normalized(vms_angvec *a,vms_vector *v);
 
 //extract angles from a matrix
 vms_angvec * vm_extract_angles_matrix (vms_angvec * a, vms_matrix * m);
@@ -426,6 +431,9 @@ vms_angvec * vm_extract_angles_vector (vms_angvec * a, vms_vector * v);
 //distance is signed, so negative dist is on the back of the plane
 fix vm_dist_to_plane (vms_vector * checkp, vms_vector * norm, vms_vector * planep);
 
+#ifdef __cplusplus
+}
+#endif
 
 //fills in fields of an angle vector
 #define vm_angvec_make(v,_p,_b,_h) (((v)->p=(_p), (v)->b=(_b), (v)->h=(_h)), (v))

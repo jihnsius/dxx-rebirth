@@ -158,6 +158,10 @@ typedef struct weapon_info {
 
 #define NUM_SMART_CHILDREN  6   // Number of smart children created by default.
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 extern weapon_info Weapon_info[];
 extern int N_weapon_types;
 extern void do_weapon_select(int weapon_num, int secondary_flag);
@@ -232,5 +236,9 @@ extern void init_smega_detonates(void);
  * reads n weapon_info structs from a PHYSFS_file
  */
 extern int weapon_info_read_n(weapon_info *wi, int n, PHYSFS_file *fp, int file_version);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
