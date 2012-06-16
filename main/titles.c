@@ -85,7 +85,6 @@ static int rescale_y(int y)
 typedef struct title_screen
 {
 	grs_bitmap title_bm;
-	fix64 timer;
 	int allow_keys;
 } title_screen;
 
@@ -110,9 +109,6 @@ int title_handler(window *wind, d_event *event, title_screen *ts)
 			return 1;
 
 		case EVENT_IDLE:
-			timer_delay2(50);
-
-			if (timer_query() > ts->timer)
 			{
 				window_close(wind);
 				return 1;
@@ -162,8 +158,6 @@ int show_title_screen( char * filename, int allow_keys, int from_hog_only )
 	if ((pcx_error=pcx_read_bitmap( filename, &ts->title_bm, BM_LINEAR, gr_palette ))!=PCX_ERROR_NONE)	{
 		Error( "Error loading briefing screen <%s>, PCX load error: %s (%i)\n",filename, pcx_errormsg(pcx_error), pcx_error);
 	}
-
-	ts->timer = timer_query() + i2f(3);
 
 	gr_palette_load( gr_palette );
 
