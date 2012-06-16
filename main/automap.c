@@ -232,7 +232,7 @@ void DrawMarkerNumber (automap *am, int num)
 				{1.0, 1.0, 1.0, -1.0, -1.0, -1.0, -1.0, 1.0, 0.0, 0.0},
 				{1.0, 1.0, 1.0, -1.0, 0.0, 0.0, 0.0, 1.0}
 				};
-	int NumOfPoints[]={6,10,8,6,10,10,4,10,8};
+	static const int NumOfPoints[9]={6,10,8,6,10,10,4,10,8};
 	
 	for (i=0;i<NumOfPoints[num];i++)
 	{
@@ -246,7 +246,7 @@ void DrawMarkerNumber (automap *am, int num)
 		gr_setcolor (am->blue_48);
 	
 	
-	g3_rotate_point(&BasePoint,&Objects[MarkerObject[(Player_num*2)+num]].pos);
+	g3_rotate_point(&BasePoint,&Objects[MarkerObject[num]].pos);
 	
 	for (i=0;i<NumOfPoints[num];i+=2)
 	{
@@ -309,31 +309,35 @@ void DropBuddyMarker(object *objp)
 
 #define MARKER_SPHERE_SIZE 0x58000
 
+static void DrawOneMarker(automap *am, const unsigned i, const int cyc)
+{
+	g3s_point sphere_point;
+	if (MarkerObject[i] != -1) {
+		g3_rotate_point(&sphere_point,&Objects[MarkerObject[i]].pos);
+		gr_setcolor (gr_find_closest_color_current(cyc,0,0));
+		g3_draw_sphere(&sphere_point,MARKER_SPHERE_SIZE);
+		gr_setcolor (gr_find_closest_color_current(cyc+10,0,0));
+		g3_draw_sphere(&sphere_point,MARKER_SPHERE_SIZE/2);
+		gr_setcolor (gr_find_closest_color_current(cyc+20,0,0));
+		g3_draw_sphere(&sphere_point,MARKER_SPHERE_SIZE/4);
+		DrawMarkerNumber (am, i);
+	}
+}
+
 void DrawMarkers (automap *am)
  {
-	int i,maxdrop;
+	int i;
 	static int cyc=10,cycdir=1;
-	g3s_point sphere_point;
 
+	const int icyc = cyc;
 	if (Game_mode & GM_MULTI)
-		maxdrop=2;
+	{
+		for (i=0;i<8;i++)
+			DrawOneMarker(am, i, icyc);
+	}
 	else
-		maxdrop=9;
-
-	for (i=0;i<maxdrop;i++)
-		if (MarkerObject[(Player_num*2)+i] != -1) {
-
-			g3_rotate_point(&sphere_point,&Objects[MarkerObject[(Player_num*2)+i]].pos);
-
-			gr_setcolor (gr_find_closest_color_current(cyc,0,0));
-			g3_draw_sphere(&sphere_point,MARKER_SPHERE_SIZE);
-			gr_setcolor (gr_find_closest_color_current(cyc+10,0,0));
-			g3_draw_sphere(&sphere_point,MARKER_SPHERE_SIZE/2);
-			gr_setcolor (gr_find_closest_color_current(cyc+20,0,0));
-			g3_draw_sphere(&sphere_point,MARKER_SPHERE_SIZE/4);
-
-			DrawMarkerNumber (am, i);
-		}
+		for (i=0;i<9;i++)
+			DrawOneMarker(am, i, icyc);
 
 	if (cycdir)
 		cyc+=2;
@@ -535,8 +539,8 @@ void draw_automap(automap *am)
 	if (HighlightMarker>-1 && MarkerMessage[HighlightMarker][0]!=0)
 	{
 		char msg[10+MARKER_MESSAGE_LEN+1];
-		sprintf(msg,"Marker %d: %s",HighlightMarker+1,MarkerMessage[(Player_num*2)+HighlightMarker]);
-		gr_printf((SWIDTH/64),(SHEIGHT/18),"%s", msg);
+		snprintf(msg, sizeof(msg), "Marker %d: %s",HighlightMarker+1,MarkerMessage[HighlightMarker]);
+		gr_string((SWIDTH/64),(SHEIGHT/18),msg);
 	}
 
 	if (PlayerCfg.MouseFlightSim && PlayerCfg.MouseFSIndicator)
@@ -566,7 +570,6 @@ int automap_key_command(window *wind, d_event *event, automap *am)
 {
 	int c = event_key_get(event);
 	int marker_num;
-	char maxdrop;
 
 	switch (c)
 	{
@@ -620,13 +623,21 @@ int automap_key_command(window *wind, d_event *event, automap *am)
 		case KEY_8:
 		case KEY_9:
 		case KEY_0:
-			if (Game_mode & GM_MULTI)
-				maxdrop=2;
-			else
-				maxdrop=9;
-			
 			marker_num = c-KEY_1;
-			if (marker_num<=maxdrop)
+			if (Game_mode & GM_MULTI)
+			{
+				const unsigned min_marker = Player_num * 2;
+				if (marker_num < min_marker)
+					return 1;
+				if (marker_num > min_marker + 1)
+					return 1;
+			}
+			else
+			{
+				if (marker_num > 9)
+					return 1;
+			}
+			
 			{
 				if (MarkerObject[marker_num] != -1)
 					HighlightMarker=marker_num;
