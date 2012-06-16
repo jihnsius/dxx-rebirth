@@ -458,7 +458,6 @@ int main(int argc, char *argv[])
 				strcpy(strstr(filename,".plr"),"\0");
 				strcpy(Players[Player_num].callsign, GameArg.SysUsePlayersDir? &filename[8] : filename);
 				read_player_file();
-				WriteConfigFile();
 			}
 		}
 	}
