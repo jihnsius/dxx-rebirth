@@ -30,7 +30,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "mouse.h"
 
 typedef struct _control_info {
-	fix joy_axis[JOY_MAX_AXES], raw_joy_axis[JOY_MAX_AXES], mouse_axis[3], raw_mouse_axis[3];
 	fix pitch_time;
 	fix vertical_thrust_time;
 	fix heading_time;
@@ -60,6 +59,7 @@ typedef struct _control_info {
 	ubyte afterburner_state;
 	ubyte headlight_count;
 	ubyte energy_to_shield_state;
+	fix joy_axis[JOY_MAX_AXES], raw_joy_axis[JOY_MAX_AXES], mouse_axis[3], raw_mouse_axis[3];
 } control_info;
 
 #define CONTROL_USING_JOYSTICK	1
