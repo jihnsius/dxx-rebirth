@@ -391,7 +391,7 @@ void change_guidebot_name()
 }
 
 //	-----------------------------------------------------------------------------
-void buddy_message(char * format, ... )
+void buddy_message(const char * format, ... )
 {
 	if (Buddy_messages_suppressed)
 		return;

@@ -263,8 +263,8 @@ extern int ui_scrollbar_do( UI_DIALOG *dlg, UI_GADGET_SCROLLBAR * scrollbar, str
 extern void ui_draw_scrollbar( UI_DIALOG *dlg, UI_GADGET_SCROLLBAR * scrollbar );
 
 
-extern void ui_dprintf( UI_DIALOG * dlg, char * format, ... );
-extern void ui_dprintf_at( UI_DIALOG * dlg, short x, short y, char * format, ... );
+extern void ui_dprintf( UI_DIALOG * dlg, const char * format, ... ) __attribute_gcc_format((printf, 2, 3));
+extern void ui_dprintf_at( UI_DIALOG * dlg, short x, short y, const char * format, ... ) __attribute_gcc_format((printf, 4, 5));
 
 extern void ui_draw_radio( UI_DIALOG *dlg, UI_GADGET_RADIO * radio );
 extern UI_GADGET_RADIO * ui_add_gadget_radio( UI_DIALOG * dlg, short x, short y, short w, short h, short group, char * text );
@@ -325,8 +325,6 @@ extern unsigned int ui_event_counter;
 
 
 int ui_get_file( char * filename, char * Filespec  );
-
-int ui_messagebox_n( short xc, short yc, int NumButtons, const char * text, char * Button[] );
 
 void ui_draw_icon( UI_GADGET_ICON * icon );
 int ui_icon_do( UI_DIALOG *dlg, UI_GADGET_ICON * icon, struct d_event *event );

@@ -305,7 +305,7 @@ extern int Buddy_objnum, Buddy_allowed_to_talk;
 
 extern void start_robot_death_sequence(dxxobject *objp);
 extern int do_any_robot_dying_frame(dxxobject *objp);
-extern void buddy_message(char * format, ... );
+extern void buddy_message(const char * format, ... ) __attribute_gcc_format((printf, 1, 2));
 
 #define SPECIAL_REACTOR_ROBOT   65
 extern void special_reactor_stuff(void);

@@ -190,13 +190,14 @@ static inline char * PHYSFSX_fgets(char *buf, size_t n, PHYSFS_file *const fp)
 	return buf;
 }
 
+static inline int PHYSFSX_printf(PHYSFS_file *file, const char *format, ...) __attribute_gcc_format((printf, 2, 3));
 static inline int PHYSFSX_printf(PHYSFS_file *file, const char *format, ...)
 {
 	char buffer[1024];
 	va_list args;
 
 	va_start(args, format);
-	vsprintf(buffer, format, args);
+	vsnprintf(buffer, sizeof(buffer), format, args);
 
 	return PHYSFSX_puts(file, buffer);
 }

@@ -336,8 +336,8 @@ void gr_set_curfont( grs_font * );
 void gr_set_fontcolor( int fg_color, int bg_color );
 int gr_string(int x, int y, const char *s );
 int gr_ustring(int x, int y, const char *s );
-int gr_printf( int x, int y, const char * format, ... );
-int gr_uprintf( int x, int y, const char * format, ... );
+int gr_printf( int x, int y, const char * format, ... ) __attribute_gcc_format((printf, 3, 4));
+int gr_uprintf( int x, int y, const char * format, ... ) __attribute_gcc_format((printf, 3, 4));
 void gr_get_string_size(const char *s, int *string_width, int *string_height, int *average_width );
 
 
