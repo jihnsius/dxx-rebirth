@@ -47,14 +47,14 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #define NUM_D2_BOSSES 8
 
-extern ubyte Boss_teleports[NUM_D2_BOSSES];     // Set byte if this boss can teleport
-extern ubyte Boss_spew_more[NUM_D2_BOSSES];     // Set byte if this boss can teleport
+extern const ubyte Boss_teleports[NUM_D2_BOSSES];     // Set byte if this boss can teleport
+extern const ubyte Boss_spew_more[NUM_D2_BOSSES];     // Set byte if this boss can teleport
 //extern ubyte Boss_cloaks[NUM_D2_BOSSES];        // Set byte if this boss can cloak
-extern ubyte Boss_spews_bots_energy[NUM_D2_BOSSES];     // Set byte if boss spews bots when hit by energy weapon.
-extern ubyte Boss_spews_bots_matter[NUM_D2_BOSSES];     // Set byte if boss spews bots when hit by matter weapon.
-extern ubyte Boss_invulnerable_energy[NUM_D2_BOSSES];   // Set byte if boss is invulnerable to energy weapons.
-extern ubyte Boss_invulnerable_matter[NUM_D2_BOSSES];   // Set byte if boss is invulnerable to matter weapons.
-extern ubyte Boss_invulnerable_spot[NUM_D2_BOSSES];     // Set byte if boss is invulnerable in all but a certain spot.  (Dot product fvec|vec_to_collision < BOSS_INVULNERABLE_DOT)
+extern const ubyte Boss_spews_bots_energy[NUM_D2_BOSSES];     // Set byte if boss spews bots when hit by energy weapon.
+extern const ubyte Boss_spews_bots_matter[NUM_D2_BOSSES];     // Set byte if boss spews bots when hit by matter weapon.
+extern const ubyte Boss_invulnerable_energy[NUM_D2_BOSSES];   // Set byte if boss is invulnerable to energy weapons.
+extern const ubyte Boss_invulnerable_matter[NUM_D2_BOSSES];   // Set byte if boss is invulnerable to matter weapons.
+extern const ubyte Boss_invulnerable_spot[NUM_D2_BOSSES];     // Set byte if boss is invulnerable in all but a certain spot.  (Dot product fvec|vec_to_collision < BOSS_INVULNERABLE_DOT)
 
 extern fix64 Boss_cloak_start_time, Boss_cloak_end_time;
 extern int Num_boss_teleport_segs;
