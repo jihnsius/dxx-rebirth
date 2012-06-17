@@ -1664,7 +1664,7 @@ int FinalCheats(int key)
 
 	if (cheat_codes[gotcha].stateptr == &cheats.wowie)
 	{
-		HUD_init_message(HM_DEFAULT, TXT_WOWIE_ZOWIE);
+		HUD_init_message(HM_DEFAULT, "%s", TXT_WOWIE_ZOWIE);
 
 		if (Piggy_hamfile_version < 3) // SHAREWARE
 		{
@@ -1700,7 +1700,7 @@ int FinalCheats(int key)
 
 	if (cheat_codes[gotcha].stateptr == &cheats.allkeys)
 	{
-		HUD_init_message(HM_DEFAULT, TXT_ALL_KEYS);
+		HUD_init_message(HM_DEFAULT, "%s", TXT_ALL_KEYS);
 		Players[Player_num].flags |= PLAYER_FLAGS_BLUE_KEY | PLAYER_FLAGS_RED_KEY | PLAYER_FLAGS_GOLD_KEY;
 	}
 
@@ -1722,7 +1722,7 @@ int FinalCheats(int key)
 
 	if (cheat_codes[gotcha].stateptr == &cheats.shields)
 	{
-		HUD_init_message(HM_DEFAULT, TXT_FULL_SHIELDS);
+		HUD_init_message(HM_DEFAULT, "%s", TXT_FULL_SHIELDS);
 		Players[Player_num].shields = MAX_SHIELDS;
 	}
 

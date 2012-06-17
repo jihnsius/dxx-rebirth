@@ -188,7 +188,7 @@ dxxobject *object_create_explosion_sub(dxxobject *objp, short segnum, vms_vector
 									for (i=0; i<count; i++)
 										strcat(ouch_str, "ouch! ");
 
-									buddy_message(ouch_str);
+									buddy_message("%s", ouch_str);
 								}
 								break;
 								}
