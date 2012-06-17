@@ -525,12 +525,12 @@ int check_trigger_sub(int trigger_num, int pnum,int shot)
 
 		case TT_LIGHT_OFF:
 			if (do_light_off(trigger_num))
-				print_trigger_message (pnum,trigger_num,shot,"Lights off!");
+				print_trigger_message (pnum,trigger_num,shot,"Light%s off!");
 			break;
 
 		case TT_LIGHT_ON:
 			if (do_light_on(trigger_num))
-				print_trigger_message (pnum,trigger_num,shot,"Lights on!");
+				print_trigger_message (pnum,trigger_num,shot,"Light%s on!");
 
 			break;
 
