@@ -175,7 +175,7 @@ void kmatrix_phallic ()
 	grd_curcanv->cv_font = GAME_FONT;
 	gr_set_fontcolor(gr_find_closest_color(63,63,63),-1);
 	gr_get_string_size(message, &sw, &sh, &aw);
-	gr_printf( CENTERSCREEN-(sw/2), FSPACY(55+72+3), message);
+	gr_string( CENTERSCREEN-(sw/2), FSPACY(55+72+3), message);
 }
 
 void kmatrix_status_msg (fix time, int reactor, int paused)
