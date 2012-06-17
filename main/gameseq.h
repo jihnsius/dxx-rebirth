@@ -33,6 +33,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #define LEVEL_NAME_LEN 36       //make sure this is multiple of 4!
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // Current_level_num starts at 1 for the first level
 // -1,-2,-3 are secret levels
 // 0 means not a real level loaded
@@ -93,7 +97,7 @@ void open_message_window(void);
 void close_message_window(void);
 
 // create flash for player appearance
-extern void create_player_appearance_effect(object *player_obj);
+extern void create_player_appearance_effect(dxxobject *player_obj);
 
 // goto whatever secrect level is appropriate given the current level
 extern void goto_secret_level();
@@ -108,5 +112,9 @@ extern void DoEndLevelScoreGlitz(int network);
 extern int NumNetPlayerPositions;
 
 void bash_to_shield(int, char *);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _GAMESEQ_H */

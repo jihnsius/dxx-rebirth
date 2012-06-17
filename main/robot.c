@@ -86,7 +86,7 @@ jointpos Robot_joints[MAX_ROBOT_JOINTS] = {
 
 //given an object and a gun number, return position in 3-space of gun
 //fills in gun_point
-void calc_gun_point(vms_vector *gun_point,object *obj,int gun_num)
+void calc_gun_point(vms_vector *gun_point,dxxobject *obj,int gun_num)
 {
 	polymodel *pm;
 	robot_info *r;
@@ -144,7 +144,7 @@ int robot_get_anim_state(jointpos **jp_list_ptr,int robot_type,int gun_num,int s
 
 
 //for test, set a robot to a specific state
-void set_robot_state(object *obj,int state)
+void set_robot_state(dxxobject *obj,int state)
 {
 	int g,j,jo;
 	robot_info *ri;

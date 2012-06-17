@@ -57,7 +57,7 @@ int N_powerup_types = 0;
 powerup_type_info Powerup_info[MAX_POWERUP_TYPES];
 
 //process this powerup for this frame
-void do_powerup_frame(object *obj)
+void do_powerup_frame(dxxobject *obj)
 {
 	fix fudge;
 	vclip_info *vci = &obj->rtype.vclip_info;
@@ -112,7 +112,7 @@ void draw_blob_outline(void)
 }
 #endif
 
-void draw_powerup(object *obj)
+void draw_powerup(dxxobject *obj)
 {
 	#ifdef EDITOR
 	blob_vertices[0] = 0x80000;
@@ -227,7 +227,7 @@ extern void check_to_use_primary(int);
 extern void multi_send_got_flag (char);
 
 //	returns true if powerup consumed
-int do_powerup(object *obj)
+int do_powerup(dxxobject *obj)
 {
 	int used=0;
 	int special_used=0;		//for when hitting vulcan cannon gets vulcan ammo

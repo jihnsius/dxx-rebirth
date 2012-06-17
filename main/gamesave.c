@@ -120,9 +120,9 @@ struct {
 #endif // EDITOR
 
 //  LINT: adding function prototypes
-void read_object(object *obj, PHYSFS_file *f, int version);
+void read_object(dxxobject *obj, PHYSFS_file *f, int version);
 #ifdef EDITOR
-void write_object(object *obj, short version, PHYSFS_file *f);
+void write_object(dxxobject *obj, short version, PHYSFS_file *f);
 void do_load_save_levels(int save);
 #endif
 #ifndef NDEBUG
@@ -168,7 +168,7 @@ char Save_pof_names[MAX_POLYGON_MODELS][FILENAME_LEN];
 
 void check_and_fix_matrix(vms_matrix *m);
 
-void verify_object( object * obj )	{
+void verify_object( dxxobject * obj )	{
 
 	obj->lifeleft = IMMORTAL_TIME;		//all loaded object are immortal, for now
 
@@ -342,7 +342,7 @@ void verify_object( object * obj )	{
 
 extern int multi_powerup_is_4pack(int);
 //reads one object of the given version from the given file
-void read_object(object *obj,PHYSFS_file *f,int version)
+void read_object(dxxobject *obj,PHYSFS_file *f,int version)
 {
 
 	obj->type           = PHYSFSX_readByte(f);
@@ -546,7 +546,7 @@ void read_object(object *obj,PHYSFS_file *f,int version)
 #ifdef EDITOR
 
 //writes one object to the given file
-void write_object(object *obj, short version, PHYSFS_file *f)
+void write_object(dxxobject *obj, short version, PHYSFS_file *f)
 {
 	PHYSFSX_writeU8(f, obj->type);
 	PHYSFSX_writeU8(f, obj->id);
@@ -1543,7 +1543,7 @@ int save_game_data(PHYSFS_file *SaveFile)
 
 #define WRITE_HEADER_ENTRY(t, n) do { PHYSFS_writeSLE32(SaveFile, -1); PHYSFS_writeSLE32(SaveFile, n); PHYSFS_writeSLE32(SaveFile, sizeof(t)); } while(0)
 
-	WRITE_HEADER_ENTRY(object, Highest_object_index + 1);
+	WRITE_HEADER_ENTRY(dxxobject, Highest_object_index + 1);
 	WRITE_HEADER_ENTRY(wall, Num_walls);
 	WRITE_HEADER_ENTRY(active_door, Num_open_doors);
 	WRITE_HEADER_ENTRY(trigger, Num_triggers);

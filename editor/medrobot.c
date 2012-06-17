@@ -67,7 +67,7 @@ typedef struct robot_dialog
 	vms_angvec angles, goody_angles;
 } robot_dialog;
 
-void call_init_ai_object(object *objp, int behavior)
+void call_init_ai_object(dxxobject *objp, int behavior)
 {
 	int	hide_segment;
 
@@ -96,7 +96,7 @@ int RobotNextType()
 {
 	if (Cur_object_index > -1 )	{
 		if ( Objects[Cur_object_index].type == OBJ_ROBOT )	{
-			object * obj = &Objects[Cur_object_index];
+			dxxobject * obj = &Objects[Cur_object_index];
 			obj->id++;
 			if (obj->id >= N_robot_types )
 				obj->id = 0;
@@ -124,7 +124,7 @@ int RobotPrevType()
 {
 	if (Cur_object_index > -1 )	{
 		if ( Objects[Cur_object_index].type == OBJ_ROBOT )	{
-			object * obj = &Objects[Cur_object_index];
+			dxxobject * obj = &Objects[Cur_object_index];
 			if (obj->id == 0 ) 
 				obj->id = N_robot_types-1;
 			else
@@ -184,7 +184,7 @@ void update_goody_info(void)
 {
 	if (Cur_object_index > -1 )	{
 		if ( Objects[Cur_object_index].type == OBJ_ROBOT )	{
-			object * obj = &Objects[Cur_object_index];
+			dxxobject * obj = &Objects[Cur_object_index];
 
 			obj->contains_type = Cur_goody_type;
 			obj->contains_id = Cur_goody_id;
@@ -593,7 +593,7 @@ int robot_dialog_handler(UI_DIALOG *dlg, d_event *event, robot_dialog *r)
 		r->time = Temp;
 
 		if (Cur_object_index > -1 )	{
-			object *obj = &Objects[Cur_object_index];
+			dxxobject *obj = &Objects[Cur_object_index];
 
 			gr_set_current_canvas( r->robotViewBox->canvas );
 			draw_object_picture(obj->id, &r->angles, obj->type );
@@ -751,7 +751,7 @@ int object_dialog_handler(UI_DIALOG *dlg, d_event *event, object_dialog *o);
 int do_object_dialog()
 {
 	char	Xmessage[MATT_LEN], Ymessage[MATT_LEN], Zmessage[MATT_LEN];
-	object *obj=&Objects[Cur_object_index];
+	dxxobject *obj=&Objects[Cur_object_index];
 	object_dialog *o;
 
 	if (obj->type == OBJ_ROBOT)		//don't do this for robots
@@ -799,7 +799,7 @@ int do_object_dialog()
 
 int object_dialog_handler(UI_DIALOG *dlg, d_event *event, object_dialog *o)
 {
-	object *obj=&Objects[Cur_object_index];
+	dxxobject *obj=&Objects[Cur_object_index];
 	int keypress = 0;
 	int rval = 0;
 	

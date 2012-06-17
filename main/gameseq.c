@@ -549,10 +549,10 @@ void set_sound_sources()
 fix flash_dist=fl2f(.9);
 
 //create flash for player appearance
-void create_player_appearance_effect(object *player_obj)
+void create_player_appearance_effect(dxxobject *player_obj)
 {
 	vms_vector pos;
-	object *effect_obj;
+	dxxobject *effect_obj;
 
 #ifndef NDEBUG
 	{
@@ -1357,7 +1357,7 @@ void DoPlayerDead()
 
 	#ifdef EDITOR
 	if (Game_mode == GM_EDITOR) {			//test mine, not real level
-		object * playerobj = &Objects[Players[Player_num].objnum];
+		dxxobject * playerobj = &Objects[Players[Player_num].objnum];
 		//nm_messagebox( "You're Dead!", 1, "Continue", "Not a real game, though." );
 		if (Game_wind)
 			window_set_visible(Game_wind, 1);
@@ -1753,7 +1753,7 @@ void InitPlayerPosition(int random_flag)
 //	-----------------------------------------------------------------------------------------------------
 //	Initialize default parameters for one robot, copying from Robot_info to *objp.
 //	What about setting size!?  Where does that come from?
-void copy_defaults_to_robot(object *objp)
+void copy_defaults_to_robot(dxxobject *objp)
 {
 	robot_info	*robptr;
 	int			objid;

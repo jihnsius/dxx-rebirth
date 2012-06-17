@@ -316,10 +316,10 @@ Restart: ;
 
 #define	ROBOT_GEN_TIME (i2f(5))
 
-object * create_morph_robot( segment *segp, vms_vector *object_pos, int object_id)
+dxxobject * create_morph_robot( segment *segp, vms_vector *object_pos, int object_id)
 {
 	short		objnum;
-	object	*obj;
+	dxxobject	*obj;
 	int		default_behavior;
 
 	Players[Player_num].num_robots_level++;
@@ -373,7 +373,7 @@ void robotmaker_proc( FuelCenter * robotcen )
 	fix		dist_to_player;
 	vms_vector	cur_object_loc; //, direction;
 	int		matcen_num, segnum, objnum;
-	object	*obj;
+	dxxobject	*obj;
 	fix		top_time;
 	vms_vector	direction;
 
@@ -445,7 +445,7 @@ void robotmaker_proc( FuelCenter * robotcen )
 		if (robotcen->Timer > top_time )	{
 			int	count=0;
 			int	i, my_station_num = robotcen-Station;
-			object *obj;
+			dxxobject *obj;
 
 			//	Make sure this robotmaker hasn't put out its max without having any of them killed.
 			for (i=0; i<=Highest_object_index; i++)

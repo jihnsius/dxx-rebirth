@@ -551,7 +551,7 @@ void save_screen_shot(int automap_flag)
 #endif
 
 //initialize flying
-void fly_init(object *obj)
+void fly_init(dxxobject *obj)
 {
 	obj->control_type = CT_FLYING;
 	obj->movement_type = MT_PHYSICS;
@@ -1259,20 +1259,20 @@ void close_game()
 
 
 #ifdef EDITOR
-extern void player_follow_path(object *objp);
+extern void player_follow_path(dxxobject *objp);
 extern void check_create_player_path(void);
 #endif
 
 extern	int Do_appearance_effect;
 
-object *Missile_viewer=NULL;
+dxxobject *Missile_viewer=NULL;
 int Missile_viewer_sig=-1;
 
 int Marker_viewer_num[2]={-1,-1};
 int Coop_view_player[2]={-1,-1};
 
 //returns ptr to escort robot, or NULL
-object *find_escort()
+dxxobject *find_escort()
 {
 	int i;
 
@@ -1778,7 +1778,7 @@ void FireLaser()
 //	-------------------------------------------------------------------------------------------------------
 //	If player is close enough to objnum, which ought to be a powerup, pick it up!
 //	This could easily be made difficulty level dependent.
-void powerup_grab_cheat(object *player, int objnum)
+void powerup_grab_cheat(dxxobject *player, int objnum)
 {
 	fix	powerup_size;
 	fix	player_size;
@@ -1831,7 +1831,7 @@ int	Last_level_path_created = -1;
 int mark_player_path_to_segment(int segnum)
 {
 	int		i;
-	object	*objp = ConsoleObject;
+	dxxobject	*objp = ConsoleObject;
 	short		player_path_length=0;
 	int		player_hide_index=-1;
 
@@ -1856,7 +1856,7 @@ int mark_player_path_to_segment(int segnum)
 	for (i=1; i<player_path_length; i++) {
 		int			segnum, objnum;
 		vms_vector	seg_center;
-		object		*obj;
+		dxxobject		*obj;
 
 		segnum = Point_segs[player_hide_index+i].segnum;
 		seg_center = Point_segs[player_hide_index+i].point;

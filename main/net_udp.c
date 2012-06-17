@@ -93,7 +93,7 @@ void net_udp_noloss_init_mdata_queue(void);
 void net_udp_noloss_clear_mdata_got(ubyte player_num);
 void net_udp_noloss_process_queue(fix64 time);
 void net_udp_send_extras ();
-void multi_reset_object_texture(object *objp);
+void multi_reset_object_texture(dxxobject *objp);
 
 static void net_udp_broadcast_game_info(ubyte info_upid);
 
@@ -1723,7 +1723,7 @@ int net_udp_verify_objects(int remote, int local)
 void net_udp_read_object_packet( ubyte *data )
 {
 	// Object from another net player we need to sync with
-	object *obj;
+	dxxobject *obj;
 	sbyte obj_owner;
 	static int mode = 0, object_count = 0, my_pnum = 0;
 	int i = 0, segnum = 0, objnum = 0, remote_objnum = 0, nobj = 0, loc = 5;
@@ -4723,7 +4723,7 @@ void net_udp_read_pdata_short_packet(UDP_frame_info *pd)
 {
 	int TheirPlayernum;
 	int TheirObjnum;
-	object * TheirObj = NULL;
+	dxxobject * TheirObj = NULL;
 
 	TheirPlayernum = pd->Player_num;
 	TheirObjnum = Players[pd->Player_num].objnum;

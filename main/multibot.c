@@ -585,7 +585,7 @@ multi_send_boss_actions(int bossobjnum, int action, int secondary, int objnum)
 #define MAX_ROBOT_POWERUPS 4
 
 void
-multi_send_create_robot_powerups(object *del_obj)
+multi_send_create_robot_powerups(dxxobject *del_obj)
 {
 	// Send create robot information
 
@@ -799,12 +799,12 @@ multi_do_robot_fire(char *buf)
 		Laser_create_new_easy( &fire, &gun_point, botnum, robptr->weapon_type, 1);
 }
 
-extern void drop_stolen_items (object *);
+extern void drop_stolen_items (dxxobject *);
 
 int
 multi_explode_robot_sub(int botnum, int killer,char isthief)
 {
-	object *robot;
+	dxxobject *robot;
 
 	killer = killer;
 
@@ -898,7 +898,7 @@ multi_do_robot_explode(char *buf)
 }
 
 extern fix EnergyToCreateOneRobot; // From fuelcen.c 
-extern object *create_morph_robot(segment *segp, vms_vector *object_pos, int object_id); // from fuelcen.c
+extern dxxobject *create_morph_robot(segment *segp, vms_vector *object_pos, int object_id); // from fuelcen.c
 
 void
 multi_do_create_robot(char *buf)
@@ -911,7 +911,7 @@ multi_do_create_robot(char *buf)
 
 	FuelCenter *robotcen;
 	vms_vector cur_object_loc, direction;
-	object *obj;
+	dxxobject *obj;
 
 	objnum = GET_INTEL_SHORT(buf + 3);
 
@@ -958,7 +958,7 @@ multi_do_boss_actions(char *buf)
 {
 	// Code to handle remote-controlled boss actions
 
-	object *boss_obj;
+	dxxobject *boss_obj;
 	int boss_objnum;
 	int pnum;
 	int action, secondary;
@@ -1063,10 +1063,10 @@ multi_do_create_robot_powerups(char *buf)
 	// Code to drop remote-controlled robot powerups
 
 	int loc = 1;
-	object del_obj;
+	dxxobject del_obj;
 	int pnum, egg_objnum, i;
 
-	memset( &del_obj, 0, sizeof(object) );
+	memset( &del_obj, 0, sizeof(dxxobject) );
 	del_obj.type = OBJ_ROBOT;
 
 	pnum = buf[loc];					loc += 1;
@@ -1114,7 +1114,7 @@ multi_drop_robot_powerups(int objnum)
 {
 	// Code to handle dropped robot powerups in network mode ONLY!
 
-	object *del_obj;
+	dxxobject *del_obj;
 	int egg_objnum = -1;
 	robot_info	*robptr; 
 
@@ -1187,7 +1187,7 @@ multi_drop_robot_powerups(int objnum)
 //	Note: This function will be called regardless of whether Game_mode is a multiplayer mode, so it
 //	should quick-out if not in a multiplayer mode.  On the other hand, it only gets called when a
 //	player or player weapon whacks a robot, so it happens rarely.
-void multi_robot_request_change(object *robot, int player_num)
+void multi_robot_request_change(dxxobject *robot, int player_num)
 {
 	int slot, remote_objnum;
 	sbyte dummy;

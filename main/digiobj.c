@@ -323,7 +323,7 @@ int digi_link_sound_to_object3( int org_soundnum, short objnum, int forever, fix
 {
 
 	int i,volume,pan;
-	object * objp;
+	dxxobject * objp;
 	int soundnum;
 
 	soundnum = digi_xlat_sound(org_soundnum);
@@ -598,7 +598,7 @@ void digi_sync_sounds()
                                 &SoundObjects[i].volume, &SoundObjects[i].pan, SoundObjects[i].max_distance );
 
 			} else if ( SoundObjects[i].flags & SOF_LINK_TO_OBJ )	{
-				object * objp;
+				dxxobject * objp;
 
 
 				if ( Newdemo_state == ND_STATE_PLAYBACK )	{

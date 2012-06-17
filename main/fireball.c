@@ -65,10 +65,10 @@ fix	Flash_effect=0;
 
 int	PK1=1, PK2=8;
 
-object *object_create_explosion_sub(object *objp, short segnum, vms_vector * position, fix size, int vclip_type, fix maxdamage, fix maxdistance, fix maxforce, int parent )
+dxxobject *object_create_explosion_sub(dxxobject *objp, short segnum, vms_vector * position, fix size, int vclip_type, fix maxdamage, fix maxdistance, fix maxforce, int parent )
 {
 	int objnum;
-	object *obj;
+	dxxobject *obj;
 
 	objnum = obj_create( OBJ_FIREBALL,vclip_type,segnum,position,&vmd_identity_matrix,size,
 					CT_EXPLOSION,MT_NONE,RT_FIREBALL);
@@ -91,7 +91,7 @@ object *object_create_explosion_sub(object *objp, short segnum, vms_vector * pos
 		vms_vector pos_hit, vforce;
 		fix damage;
 		int i;
-		object * obj0p = &Objects[0];
+		dxxobject * obj0p = &Objects[0];
 					 
 		// -- now legal for badass explosions on a wall. Assert(objp != NULL);
 
@@ -198,7 +198,7 @@ object *object_create_explosion_sub(object *objp, short segnum, vms_vector * pos
 								}
 								break;
 							case OBJ_PLAYER:	{
-								object * killer=NULL;
+								dxxobject * killer=NULL;
 								vms_vector	vforce2;
 
 								//	Hack! Warning! Test code!
@@ -254,19 +254,19 @@ object *object_create_explosion_sub(object *objp, short segnum, vms_vector * pos
 }
 
 
-object *object_create_muzzle_flash(short segnum, vms_vector * position, fix size, int vclip_type )
+dxxobject *object_create_muzzle_flash(short segnum, vms_vector * position, fix size, int vclip_type )
 {
 	return object_create_explosion_sub(NULL, segnum, position, size, vclip_type, 0, 0, 0, -1 );
 }
 
-object *object_create_explosion(short segnum, vms_vector * position, fix size, int vclip_type )
+dxxobject *object_create_explosion(short segnum, vms_vector * position, fix size, int vclip_type )
 {
 	return object_create_explosion_sub(NULL, segnum, position, size, vclip_type, 0, 0, 0, -1 );
 }
 
-object *object_create_badass_explosion(object *objp, short segnum, vms_vector * position, fix size, int vclip_type, fix maxdamage, fix maxdistance, fix maxforce, int parent )
+dxxobject *object_create_badass_explosion(dxxobject *objp, short segnum, vms_vector * position, fix size, int vclip_type, fix maxdamage, fix maxdistance, fix maxforce, int parent )
 {
-	object	*rval;
+	dxxobject	*rval;
 
 	rval = object_create_explosion_sub(objp, segnum, position, size, vclip_type, maxdamage, maxdistance, maxforce, parent );
 
@@ -282,7 +282,7 @@ object *object_create_badass_explosion(object *objp, short segnum, vms_vector * 
 
 //blows up a badass weapon, creating the badass explosion
 //return the explosion object
-object *explode_badass_weapon(object *obj,vms_vector *pos)
+dxxobject *explode_badass_weapon(dxxobject *obj,vms_vector *pos)
 {
 	weapon_info *wi = &Weapon_info[obj->id];
 
@@ -302,10 +302,10 @@ object *explode_badass_weapon(object *obj,vms_vector *pos)
 
 }
 
-object *explode_badass_object(object *objp, fix damage, fix distance, fix force)
+dxxobject *explode_badass_object(dxxobject *objp, fix damage, fix distance, fix force)
 {
 
-	object 	*rval;
+	dxxobject 	*rval;
 
 	rval = object_create_badass_explosion(objp, objp->segnum, &objp->pos, objp->size,
 					get_explosion_vclip(objp, 0),
@@ -320,7 +320,7 @@ object *explode_badass_object(object *objp, fix damage, fix distance, fix force)
 
 //blows up the player with a badass explosion
 //return the explosion object
-object *explode_badass_player(object *objp)
+dxxobject *explode_badass_player(dxxobject *objp)
 {
 	return explode_badass_object(objp, F1_0*50, F1_0*40, F1_0*150);
 }
@@ -328,10 +328,10 @@ object *explode_badass_player(object *objp)
 
 #define DEBRIS_LIFE (f1_0 * (PERSISTENT_DEBRIS?60:2))		//lifespan in seconds
 
-object *object_create_debris(object *parent, int subobj_num)
+dxxobject *object_create_debris(dxxobject *parent, int subobj_num)
 {
 	int objnum;
-	object *obj;
+	dxxobject *obj;
 
 	Assert((parent->type == OBJ_ROBOT) || (parent->type == OBJ_PLAYER)  );
 
@@ -384,7 +384,7 @@ object *object_create_debris(object *parent, int subobj_num)
 
 }
 
-void draw_fireball(object *obj)
+void draw_fireball(dxxobject *obj)
 {
 	if ( obj->lifeleft > 0 )
 		draw_vclip_object(obj,obj->lifeleft,0, obj->id);
@@ -417,7 +417,7 @@ int door_is_openable_by_player(segment *segp, int sidenum)
 // --------------------------------------------------------------------------------------------------------------------
 //	Return a segment %i segments away from initial segment.
 //	Returns -1 if can't find a segment that distance away.
-int pick_connected_segment(object *objp, int max_depth)
+int pick_connected_segment(dxxobject *objp, int max_depth)
 {
 	int		i;
 	int		cur_depth;
@@ -682,13 +682,13 @@ int object_nearby_aux(int segnum, int object_type, int object_id, int depth)
 
 //	------------------------------------------------------------------------------------------------------
 //	Return true if some powerup is nearby (within 3 segments).
-int weapon_nearby(object *objp, int weapon_id)
+int weapon_nearby(dxxobject *objp, int weapon_id)
 {
 	return object_nearby_aux(objp->segnum, OBJ_POWERUP, weapon_id, 3);
 }
 
 //	------------------------------------------------------------------------------------------------------
-void maybe_replace_powerup_with_energy(object *del_obj)
+void maybe_replace_powerup_with_energy(dxxobject *del_obj)
 {
 	int	weapon_index=-1;
 
@@ -762,7 +762,7 @@ void maybe_replace_powerup_with_energy(object *del_obj)
 int drop_powerup(int type, int id, int num, vms_vector *init_vel, vms_vector *pos, int segnum)
 {
 	int		objnum=-1;
-	object	*obj;
+	dxxobject	*obj;
 	vms_vector	new_velocity, new_pos;
 	fix		old_mag;
    int             count;
@@ -945,7 +945,7 @@ int drop_powerup(int type, int id, int num, vms_vector *init_vel, vms_vector *po
 // ----------------------------------------------------------------------------
 // Returns created object number.
 // If object dropped by player, set flag.
-int object_create_egg(object *objp)
+int object_create_egg(dxxobject *objp)
 {
 	int	rval;
 
@@ -1001,7 +1001,7 @@ int object_create_egg(object *objp)
 //	-------------------------------------------------------------------------------------------------------
 //	Put count objects of type type (eg, powerup), id = id (eg, energy) into *objp, then drop them!  Yippee!
 //	Returns created object number.
-int call_object_create_egg(object *objp, int count, int type, int id)
+int call_object_create_egg(dxxobject *objp, int count, int type, int id)
 {
 // -- 	if (!(Game_mode & GM_MULTI) && (objp == ConsoleObject))
 // -- 		if (d_rand() < 32767/6) {
@@ -1020,7 +1020,7 @@ int call_object_create_egg(object *objp, int count, int type, int id)
 }
 
 //what vclip does this explode with?
-int get_explosion_vclip(object *obj,int stage)
+int get_explosion_vclip(dxxobject *obj,int stage)
 {
 	if (obj->type==OBJ_ROBOT) {
 
@@ -1037,7 +1037,7 @@ int get_explosion_vclip(object *obj,int stage)
 }
 
 //blow up a polygon model
-void explode_model(object *obj)
+void explode_model(dxxobject *obj)
 {
 	Assert(obj->render_type == RT_POLYOBJ);
 
@@ -1057,7 +1057,7 @@ void explode_model(object *obj)
 }
 
 //if the object has a destroyed model, switch to it.  Otherwise, delete it.
-void maybe_delete_object(object *del_obj)
+void maybe_delete_object(dxxobject *del_obj)
 {
 	if (Dead_modelnums[del_obj->rtype.pobj_info.model_num] != -1) {
 		del_obj->rtype.pobj_info.model_num = Dead_modelnums[del_obj->rtype.pobj_info.model_num];
@@ -1073,13 +1073,13 @@ void maybe_delete_object(object *del_obj)
 
 //	-------------------------------------------------------------------------------------------------------
 //blow up an object.  Takes the object to destroy, and the point of impact
-void explode_object(object *hitobj,fix delay_time)
+void explode_object(dxxobject *hitobj,fix delay_time)
 {
 	if (hitobj->flags & OF_EXPLODING) return;
 
 	if (delay_time) {		//wait a little while before creating explosion
 		int objnum;
-		object *obj;
+		dxxobject *obj;
 
 		//create a placeholder object to do the delay, with id==-1
 
@@ -1107,7 +1107,7 @@ void explode_object(object *hitobj,fix delay_time)
 
 	}
 	else {
-		object *expl_obj;
+		dxxobject *expl_obj;
 		int vclip_num;
 
 		vclip_num = get_explosion_vclip(hitobj,0);
@@ -1140,7 +1140,7 @@ void explode_object(object *hitobj,fix delay_time)
 
 
 //do whatever needs to be done for this piece of debris for this frame
-void do_debris_frame(object *obj)
+void do_debris_frame(dxxobject *obj)
 {
 	Assert(obj->control_type == CT_DEBRIS);
 
@@ -1149,10 +1149,10 @@ void do_debris_frame(object *obj)
 
 }
 
-extern void drop_stolen_items(object *objp);
+extern void drop_stolen_items(dxxobject *objp);
 
 //do whatever needs to be done for this explosion for this frame
-void do_explosion_sequence(object *obj)
+void do_explosion_sequence(dxxobject *obj)
 {
 	Assert(obj->control_type == CT_EXPLOSION);
 
@@ -1164,7 +1164,7 @@ void do_explosion_sequence(object *obj)
 
 	//See if we should create a secondary explosion
 	if (obj->lifeleft <= obj->ctype.expl_info.spawn_time) {
-		object *expl_obj,*del_obj;
+		dxxobject *expl_obj,*del_obj;
 		int vclip_num;
 		vms_vector *spawn_pos;
 
@@ -1249,7 +1249,7 @@ void do_explosion_sequence(object *obj)
 
 	//See if we should delete an object
 	if (obj->lifeleft <= obj->ctype.expl_info.delete_time) {
-		object *del_obj = &Objects[obj->ctype.expl_info.delete_objnum];
+		dxxobject *del_obj = &Objects[obj->ctype.expl_info.delete_objnum];
 
 		obj->ctype.expl_info.delete_time = -1;
 
@@ -1402,7 +1402,7 @@ void do_exploding_wall_frame()
 
 
 //creates afterburner blobs behind the specified object
-void drop_afterburner_blobs(object *obj, int count, fix size_scale, fix lifetime)
+void drop_afterburner_blobs(dxxobject *obj, int count, fix size_scale, fix lifetime)
 {
 	vms_vector pos_left,pos_right;
 	int segnum;
@@ -1421,7 +1421,7 @@ void drop_afterburner_blobs(object *obj, int count, fix size_scale, fix lifetime
 	if (count > 1) {
 		segnum = find_point_seg(&pos_right, obj->segnum);
 		if (segnum != -1) {
-			object	*blob_obj;
+			dxxobject	*blob_obj;
 			blob_obj = object_create_explosion(segnum, &pos_right, size_scale, VCLIP_AFTERBURNER_BLOB );
 			if (lifetime != -1)
 				blob_obj->lifeleft = lifetime;

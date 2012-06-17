@@ -63,7 +63,7 @@ void do_countdown_frame();
 
 //	-----------------------------------------------------------------------------
 //return the position & orientation of a gun on the control center object
-void calc_controlcen_gun_point(vms_vector *gun_point,vms_vector *gun_dir,object *obj,int gun_num)
+void calc_controlcen_gun_point(vms_vector *gun_point,vms_vector *gun_dir,dxxobject *obj,int gun_num)
 {
 	reactor *reactor;
 	vms_matrix m;
@@ -233,7 +233,7 @@ void do_countdown_frame()
 //	This code is common to whether control center is implicitly imbedded in a boss,
 //	or is an object of its own.
 //	if objp == NULL that means the boss was the control center and don't set Dead_controlcen_object_num
-void do_controlcen_destroyed_stuff(object *objp)
+void do_controlcen_destroyed_stuff(dxxobject *objp)
 {
 	int i;
 
@@ -268,7 +268,7 @@ fix64	Last_time_cc_vis_check = 0;
 
 //	-----------------------------------------------------------------------------
 //do whatever this thing does in a frame
-void do_controlcen_frame(object *obj)
+void do_controlcen_frame(dxxobject *obj)
 {
 	int			best_gun_num;
 	static fix controlcen_death_silence = 0;
@@ -419,7 +419,7 @@ int Reactor_strength=-1;		//-1 mean not set by designer
 void init_controlcen_for_level(void)
 {
 	int		i;
-	object	*objp;
+	dxxobject	*objp;
 	int		cntrlcen_objnum=-1, boss_objnum=-1;
 
 	for (i=0; i<=Highest_object_index; i++) {

@@ -235,13 +235,13 @@ fix Obj_light_xlate[16] = { 0x1234, 0x3321, 0x2468, 0x1735,
 			    0x2123, 0x39af, 0x0f03, 0x132a,
 			    0x3123, 0x29af, 0x1f03, 0x032a };
 #define MAX_HEADLIGHTS	8
-object *Headlights[MAX_HEADLIGHTS];
+dxxobject *Headlights[MAX_HEADLIGHTS];
 int Num_headlights;
 
 // ---------------------------------------------------------
 g3s_lrgb compute_light_emission(int objnum)
 {
-	object *obj = &Objects[objnum];
+	dxxobject *obj = &Objects[objnum];
 	int compute_color = 0;
 	float cscale = 255.0;
 	fix hoardlight,s,light_intensity = 0;
@@ -509,7 +509,7 @@ void set_dynamic_light(void)
 
 	for (objnum=0; objnum<=Highest_object_index; objnum++)
 	{
-		object		*obj = &Objects[objnum];
+		dxxobject		*obj = &Objects[objnum];
 		vms_vector	*objpos = &obj->pos;
 		g3s_lrgb	obj_light_emission;
 
@@ -540,7 +540,7 @@ fix	Beam_brightness = (F1_0/2);	//global saying how bright the light beam is
 #define MAX_DIST_LOG	6							//log(MAX_DIST-expressed-as-integer)
 #define MAX_DIST		(f1_0<<MAX_DIST_LOG)	//no light beyond this dist
 
-fix compute_headlight_light_on_object(object *objp)
+fix compute_headlight_light_on_object(dxxobject *objp)
 {
 	int	i;
 	fix	light;
@@ -554,7 +554,7 @@ fix compute_headlight_light_on_object(object *objp)
 	for (i=0; i<Num_headlights; i++) {
 		fix			dot, dist;
 		vms_vector	vec_to_obj;
-		object		*light_objp;
+		dxxobject		*light_objp;
 
 		light_objp = Headlights[i];
 
@@ -619,11 +619,11 @@ g3s_lrgb compute_seg_dynamic_light(int segnum)
 
 g3s_lrgb object_light[MAX_OBJECTS];
 int object_sig[MAX_OBJECTS];
-object *old_viewer;
+dxxobject *old_viewer;
 int reset_lighting_hack;
 #define LIGHT_RATE i2f(4) //how fast the light ramps up
 
-void start_lighting_frame(object *viewer)
+void start_lighting_frame(dxxobject *viewer)
 {
 	reset_lighting_hack = (viewer != old_viewer);
 	old_viewer = viewer;
@@ -632,7 +632,7 @@ void start_lighting_frame(object *viewer)
 //compute the lighting for an object.  Takes a pointer to the object,
 //and possibly a rotated 3d point.  If the point isn't specified, the
 //object's center point is rotated.
-g3s_lrgb compute_object_light(object *obj,vms_vector *rotated_pnt)
+g3s_lrgb compute_object_light(dxxobject *obj,vms_vector *rotated_pnt)
 {
 	g3s_lrgb light, seg_dl;
 	fix mlight;

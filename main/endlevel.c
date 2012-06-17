@@ -71,7 +71,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #endif
 
 typedef struct flythrough_data {
-	object		*obj;
+	dxxobject		*obj;
 	vms_angvec	angles;			//orientation in angles
 	vms_vector	step;				//how far in a second
 	vms_vector	angstep;			//rotation per second
@@ -101,15 +101,15 @@ extern fix player_speed;
 
 int transition_segnum,exit_segnum;
 
-object *endlevel_camera;
+dxxobject *endlevel_camera;
 
 #define FLY_SPEED i2f(50)
 
 void do_endlevel_flythrough(int n);
 void draw_stars();
-int find_exit_side(object *obj);
+int find_exit_side(dxxobject *obj);
 void generate_starfield();
-void start_endlevel_flythrough(int n,object *obj,fix speed);
+void start_endlevel_flythrough(int n,dxxobject *obj,fix speed);
 void start_rendered_endlevel_sequence();
 
 #ifdef D2_OEM
@@ -274,7 +274,7 @@ void init_endlevel()
 	terrain_bm_instance.bm_data = satellite_bm_instance.bm_data = NULL;
 }
 
-object external_explosion;
+dxxobject external_explosion;
 int ext_expl_playing,mine_destroyed;
 
 extern fix flash_scale;
@@ -440,7 +440,7 @@ void start_rendered_endlevel_sequence()
 
 extern flythrough_data fly_objects[];
 
-extern object *slew_obj;
+extern dxxobject *slew_obj;
 
 vms_angvec player_angles,player_dest_angles;
 vms_angvec camera_desired_angles,camera_cur_angles;
@@ -584,7 +584,7 @@ void do_endlevel_frame()
 			vm_vec_sub(&tvec,&ConsoleObject->pos,&mine_side_exit_point);
 
 			if (vm_vec_dot(&tvec,&mine_exit_orient.fvec) > 0) {
-				object *tobj;
+				dxxobject *tobj;
 				vms_vector mov_vec;
 
 				outside_mine = 1;
@@ -908,7 +908,7 @@ void do_endlevel_frame()
 #define MIN_D 0x100
 
 //find which side to fly out of
-int find_exit_side(object *obj)
+int find_exit_side(dxxobject *obj)
 {
 	int i;
 	vms_vector prefvec,segcenter,sidevec;
@@ -1189,7 +1189,7 @@ fixang interp_angle(fixang dest,fixang src,fixang step);
 #define MIN_D 0x100
 
 //if speed is zero, use default speed
-void start_endlevel_flythrough(int n,object *obj,fix speed)
+void start_endlevel_flythrough(int n,dxxobject *obj,fix speed)
 {
 	flydata = &fly_objects[n];
 
@@ -1217,7 +1217,7 @@ static vms_angvec *angvec_add2_scale(vms_angvec *dest,vms_vector *src,fix s)
 
 void do_endlevel_flythrough(int n)
 {
-	object *obj;
+	dxxobject *obj;
 	segment *pseg;
 	int old_player_seg;
 
@@ -1363,7 +1363,7 @@ extern short old_joy_x,old_joy_y;	//position last time around
 #include "joy.h"
 
 #ifdef SLEW_ON		//this is a special routine for slewing around external scene
-int _do_slew_movement(object *obj, int check_keys )
+int _do_slew_movement(dxxobject *obj, int check_keys )
 {
 	int moved = 0;
 	vms_vector svel, movement;				//scaled velocity (per this frame)

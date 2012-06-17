@@ -578,7 +578,7 @@ int check_vector_to_sphere_1(vms_vector *intp,vms_vector *p0,vms_vector *p1,vms_
 
 //determine if a vector intersects with an object
 //if no intersects, returns 0, else fills in intp and returns dist
-fix check_vector_to_object(vms_vector *intp,vms_vector *p0,vms_vector *p1,fix rad,object *obj,object *otherobj)
+fix check_vector_to_object(vms_vector *intp,vms_vector *p0,vms_vector *p1,fix rad,dxxobject *obj,dxxobject *otherobj)
 {
 	fix size = obj->size;
 
@@ -1285,14 +1285,14 @@ int sphere_intersects_wall(vms_vector *pnt,int segnum,fix rad,int *hseg,int *hsi
 }
 
 //Returns true if the object is through any walls
-int object_intersects_wall(object *objp)
+int object_intersects_wall(dxxobject *objp)
 {
 	n_segs_visited = 0;
 
 	return sphere_intersects_wall(&objp->pos,objp->segnum,objp->size,NULL,NULL,NULL);
 }
 
-int object_intersects_wall_d(object *objp,int *hseg,int *hside,int *hface)
+int object_intersects_wall_d(dxxobject *objp,int *hseg,int *hside,int *hface)
 {
 	n_segs_visited = 0;
 

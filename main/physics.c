@@ -62,7 +62,7 @@ void check_and_fix_matrix(vms_matrix *m)
 }
 
 
-void do_physics_align_object( object * obj )
+void do_physics_align_object( dxxobject * obj )
 {
 	vms_vector desired_upvec;
 	fixang delta_ang,roll_ang;
@@ -153,7 +153,7 @@ void do_physics_align_object( object * obj )
 
 }
 
-void set_object_turnroll(object *obj)
+void set_object_turnroll(dxxobject *obj)
 {
 	fixang desired_bank;
 
@@ -188,7 +188,7 @@ int phys_seglist[MAX_FVI_SEGS],n_phys_segs;
 #endif
 
 #ifdef EXTRA_DEBUG
-object *debug_obj=NULL;
+dxxobject *debug_obj=NULL;
 #endif
 
 #define XYZ(v) (v)->x,(v)->y,(v)->z
@@ -202,7 +202,7 @@ int	Dont_move_ai_objects=0;
 
 //	-----------------------------------------------------------------------------------------------------------
 // add rotational velocity & acceleration
-void do_physics_sim_rot(object *obj)
+void do_physics_sim_rot(dxxobject *obj)
 {
 	vms_angvec	tangles;
 	vms_matrix	rotmat,new_orient;
@@ -298,7 +298,7 @@ void do_physics_sim_rot(object *obj)
 }
 
 // On joining edges fvi tends to get inaccurate as hell. Approach is to check if the object interects with the wall and if so, move away from it.
-void fix_illegal_wall_intersection(object *obj, vms_vector *origin)
+void fix_illegal_wall_intersection(dxxobject *obj, vms_vector *origin)
 {
 	int hseg = -1, hside = -1, hface = -1;
 
@@ -314,7 +314,7 @@ void fix_illegal_wall_intersection(object *obj, vms_vector *origin)
 
 //	-----------------------------------------------------------------------------------------------------------
 //Simulate a physics object for this frame
-void do_physics_sim(object *obj)
+void do_physics_sim(dxxobject *obj)
 {
 	int ignore_obj_list[MAX_IGNORE_OBJS],n_ignore_objs;
 	int iseg;
@@ -470,7 +470,7 @@ void do_physics_sim(object *obj)
 		fate = find_vector_intersection(&fq,&hit_info);
 		//	Matt: Mike's hack.
 		if (fate == HIT_OBJECT) {
-			object	*objp = &Objects[hit_info.hit_object];
+			dxxobject	*objp = &Objects[hit_info.hit_object];
 
 			if (((objp->type == OBJ_WEAPON) && ((objp->id == PROXIMITY_ID) || (objp->id == SUPERPROX_ID))) || objp->type == OBJ_POWERUP) // do not increase count for powerups since they *should* not change our movement
 				count--;
@@ -837,7 +837,7 @@ void do_physics_sim(object *obj)
 
 //Applies an instantaneous force on an object, resulting in an instantaneous
 //change in velocity.
-void phys_apply_force(object *obj,vms_vector *force_vec)
+void phys_apply_force(dxxobject *obj,vms_vector *force_vec)
 {
 
 	//	Put in by MK on 2/13/96 for force getting applied to Omega blobs, which have 0 mass,
@@ -873,7 +873,7 @@ void physics_set_rotvel_and_saturate(fix *dest, fix delta)
 //	------------------------------------------------------------------------------------------------------
 //	Note: This is the old ai_turn_towards_vector code.
 //	phys_apply_rot used to call ai_turn_towards_vector until I fixed it, which broke phys_apply_rot.
-void physics_turn_towards_vector(vms_vector *goal_vector, object *obj, fix rate)
+void physics_turn_towards_vector(vms_vector *goal_vector, dxxobject *obj, fix rate)
 {
 	vms_angvec	dest_angles, cur_angles;
 	fix			delta_p, delta_h;
@@ -933,7 +933,7 @@ void physics_turn_towards_vector(vms_vector *goal_vector, object *obj, fix rate)
 //	-----------------------------------------------------------------------------
 //	Applies an instantaneous whack on an object, resulting in an instantaneous
 //	change in orientation.
-void phys_apply_rot(object *obj,vms_vector *force_vec)
+void phys_apply_rot(dxxobject *obj,vms_vector *force_vec)
 {
 	fix	rate, vecmag;
 
@@ -978,7 +978,7 @@ void phys_apply_rot(object *obj,vms_vector *force_vec)
 
 //this routine will set the thrust for an object to a value that will
 //(hopefully) maintain the object's current velocity
-void set_thrust_from_velocity(object *obj)
+void set_thrust_from_velocity(dxxobject *obj)
 {
 	fix k;
 

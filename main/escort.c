@@ -560,7 +560,7 @@ int exists_in_mine_2(int segnum, int objtype, int objid, int special)
 		int		objnum = Segments[segnum].objects;
 
 		while (objnum != -1) {
-			object	*curobjp = &Objects[objnum];
+			dxxobject	*curobjp = &Objects[objnum];
 
 			if (special == ESCORT_GOAL_PLAYER_SPEW) {
 				if (curobjp->flags & OF_PLAYER_DROPPED)
@@ -703,7 +703,7 @@ void say_escort_goal(int goal_num)
 }
 
 //	-----------------------------------------------------------------------------
-void escort_create_path_to_goal(object *objp)
+void escort_create_path_to_goal(dxxobject *objp)
 {
 	int	goal_seg = -1;
 	int			objnum = objp-Objects;
@@ -864,7 +864,7 @@ int escort_set_goal_object(void)
 fix64	Buddy_last_seen_player = 0, Buddy_last_player_path_created;
 
 //	-----------------------------------------------------------------------------
-int time_to_visit_player(object *objp, ai_local *ailp, ai_static *aip)
+int time_to_visit_player(dxxobject *objp, ai_local *ailp, ai_static *aip)
 {
 	//	Note: This one has highest priority because, even if already going towards player,
 	//	might be necessary to create a new path, as player can move.
@@ -892,7 +892,7 @@ fix64	Buddy_last_missile_time;
 //	-----------------------------------------------------------------------------
 void bash_buddy_weapon_info(int weapon_objnum)
 {
-	object	*objp = &Objects[weapon_objnum];
+	dxxobject	*objp = &Objects[weapon_objnum];
 
 	objp->ctype.laser_info.parent_num = ConsoleObject-Objects;
 	objp->ctype.laser_info.parent_type = OBJ_PLAYER;
@@ -902,8 +902,8 @@ void bash_buddy_weapon_info(int weapon_objnum)
 //	-----------------------------------------------------------------------------
 int maybe_buddy_fire_mega(int objnum)
 {
-	object	*objp = &Objects[objnum];
-	object	*buddy_objp = &Objects[Buddy_objnum];
+	dxxobject	*objp = &Objects[objnum];
+	dxxobject	*buddy_objp = &Objects[Buddy_objnum];
 	fix		dist, dot;
 	vms_vector	vec_to_robot;
 	int		weapon_objnum;
@@ -941,8 +941,8 @@ int maybe_buddy_fire_mega(int objnum)
 //-----------------------------------------------------------------------------
 int maybe_buddy_fire_smart(int objnum)
 {
-	object	*objp = &Objects[objnum];
-	object	*buddy_objp = &Objects[Buddy_objnum];
+	dxxobject	*objp = &Objects[objnum];
+	dxxobject	*buddy_objp = &Objects[Buddy_objnum];
 	fix		dist;
 	int		weapon_objnum;
 
@@ -997,7 +997,7 @@ void do_buddy_dude_stuff(void)
 
 //	-----------------------------------------------------------------------------
 //	Called every frame (or something).
-void do_escort_frame(object *objp, fix dist_to_player, int player_visibility)
+void do_escort_frame(dxxobject *objp, fix dist_to_player, int player_visibility)
 {
 	int			objnum = objp-Objects;
 	ai_static	*aip = &objp->ctype.ai_info;
@@ -1107,7 +1107,7 @@ void invalidate_escort_goal(void)
 }
 
 //	-------------------------------------------------------------------------------------------------
-void do_snipe_frame(object *objp, fix dist_to_player, int player_visibility, vms_vector *vec_to_player)
+void do_snipe_frame(dxxobject *objp, fix dist_to_player, int player_visibility, vms_vector *vec_to_player)
 {
 	int			objnum = objp-Objects;
 	ai_local		*ailp = &Ai_local_info[objnum];
@@ -1184,7 +1184,7 @@ void do_snipe_frame(object *objp, fix dist_to_player, int player_visibility, vms
 
 #define	THIEF_DEPTH	20
 
-extern int pick_connected_segment(object *objp, int max_depth);
+extern int pick_connected_segment(dxxobject *objp, int max_depth);
 
 //	------------------------------------------------------------------------------------------------------
 //	Choose segment to recreate thief in.
@@ -1209,16 +1209,16 @@ int choose_thief_recreation_segment(void)
 
 }
 
-extern object * create_morph_robot( segment *segp, vms_vector *object_pos, int object_id);
+extern dxxobject * create_morph_robot( segment *segp, vms_vector *object_pos, int object_id);
 
 fix64	Re_init_thief_time = 0x3f000000;
 
 //	----------------------------------------------------------------------
-void recreate_thief(object *objp)
+void recreate_thief(dxxobject *objp)
 {
 	int			segnum;
 	vms_vector	center_point;
-	object		*new_obj;
+	dxxobject		*new_obj;
 
 	segnum = choose_thief_recreation_segment();
 	compute_segment_center(&center_point, &Segments[segnum]);
@@ -1234,7 +1234,7 @@ void recreate_thief(object *objp)
 fix	Thief_wait_times[NDL] = {F1_0*30, F1_0*25, F1_0*20, F1_0*15, F1_0*10};
 
 //	-------------------------------------------------------------------------------------------------
-void do_thief_frame(object *objp, fix dist_to_player, int player_visibility, vms_vector *vec_to_player)
+void do_thief_frame(dxxobject *objp, fix dist_to_player, int player_visibility, vms_vector *vec_to_player)
 {
 	int			objnum = objp-Objects;
 	ai_local		*ailp = &Ai_local_info[objnum];
@@ -1480,7 +1480,7 @@ int maybe_steal_primary_weapon(int player_num, int weapon_num)
 //	If a item successfully stolen, returns true, else returns false.
 //	If a wapon successfully stolen, do everything, removing it from player,
 //	updating Stolen_items information, deselecting, etc.
-int attempt_to_steal_item_3(object *objp, int player_num)
+int attempt_to_steal_item_3(dxxobject *objp, int player_num)
 {
 	int	i;
 
@@ -1535,7 +1535,7 @@ int attempt_to_steal_item_3(object *objp, int player_num)
 }
 
 //	----------------------------------------------------------------------------
-int attempt_to_steal_item_2(object *objp, int player_num)
+int attempt_to_steal_item_2(dxxobject *objp, int player_num)
 {
 	int	rval;
 
@@ -1555,7 +1555,7 @@ int attempt_to_steal_item_2(object *objp, int player_num)
 //	If a item successfully stolen, returns true, else returns false.
 //	If a wapon successfully stolen, do everything, removing it from player,
 //	updating Stolen_items information, deselecting, etc.
-int attempt_to_steal_item(object *objp, int player_num)
+int attempt_to_steal_item(dxxobject *objp, int player_num)
 {
 	int	i;
 	int	rval = 0;
@@ -1608,7 +1608,7 @@ void init_thief_for_level(void)
 }
 
 // --------------------------------------------------------------------------------------------------------------
-void drop_stolen_items(object *objp)
+void drop_stolen_items(dxxobject *objp)
 {
 	int	i;
 

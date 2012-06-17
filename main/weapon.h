@@ -29,7 +29,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 // weapon info flags
 #define WIF_PLACABLE        1   // can be placed by level designer
 
-struct object;
+struct dxxobject;
 
 typedef struct weapon_info {
 	sbyte   render_type;        // How to draw 0=laser, 1=blob, 2=object
@@ -221,10 +221,10 @@ int pick_up_primary(int weapon_index);
 //called when ammo (for the vulcan cannon) is picked up
 int pick_up_ammo(int class_flag,int weapon_index,int ammo_count);
 
-extern int attempt_to_steal_item(struct object *objp, int player_num);
+extern int attempt_to_steal_item(struct dxxobject *objp, int player_num);
 
 //this function is for when the player intentionally drops a powerup
-extern int spit_powerup(struct object *spitter, int id, int seed);
+extern int spit_powerup(struct dxxobject *spitter, int id, int seed);
 
 #define SMEGA_ID    40
 

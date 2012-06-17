@@ -82,7 +82,7 @@ short Rotated_last[MAX_VERTICES];
 
 // When any render function needs to know what's looking at it, it should 
 // access Viewer members.
-object * Viewer = NULL;
+dxxobject * Viewer = NULL;
 
 vms_vector Viewer_eye;  //valid during render
 
@@ -589,7 +589,7 @@ im_so_ashamed: ;
 }
 
 #ifdef EDITOR
-void render_object_search(object *obj)
+void render_object_search(dxxobject *obj)
 {
 	int changed=0;
 
@@ -636,7 +636,7 @@ void do_render_object(int objnum, int window_num)
 	#ifdef EDITOR
 	int save_3d_outline=0;
 	#endif
-	object *obj = &Objects[objnum];
+	dxxobject *obj = &Objects[objnum];
 	int count = 0;
 	int n;
 
@@ -1428,7 +1428,7 @@ int n_sort_items;
 int sort_func(const sort_item *a,const sort_item *b)
 {
 	fix delta_dist;
-	object *obj_a,*obj_b;
+	dxxobject *obj_a,*obj_b;
 
 	delta_dist = a->dist - b->dist;
 
@@ -1469,7 +1469,7 @@ void build_object_lists(int n_segs)
 
 		if (segnum != -1) {
 			int objnum;
-			object *obj;
+			dxxobject *obj;
 
 			for (objnum=Segments[segnum].objects;objnum!=-1;objnum = obj->next) {
 				int new_segnum,list_pos;
@@ -1571,7 +1571,7 @@ void build_object_lists(int n_segs)
 
 						for (ii=0;ii<SORT_LIST_SIZE;ii++) {
 							int objnum = sort_list[ii].objnum;
-							object *obj = &Objects[objnum];
+							dxxobject *obj = &Objects[objnum];
 							int type = obj->type;
 
 							//replace debris & fireballs
@@ -1626,7 +1626,7 @@ extern int Total_pixels;
 int Rear_view=0;
 extern ubyte RenderingType;
 
-void start_lighting_frame(object *viewer);
+void start_lighting_frame(dxxobject *viewer);
 
 #ifdef JOHN_ZOOM
 fix Zoom_factor=F1_0;
@@ -1718,7 +1718,7 @@ void render_frame(fix eye_offset, int window_num)
 
 int first_terminal_seg;
 
-void update_rendered_data(int window_num, object *viewer, int rear_view_flag, int user)
+void update_rendered_data(int window_num, dxxobject *viewer, int rear_view_flag, int user)
 {
 	Assert(window_num < MAX_RENDERED_WINDOWS);
 	Window_rendered_data[window_num].frame = FrameCount;

@@ -166,7 +166,7 @@ int Newdemo_show_percentage=1;
 sbyte Newdemo_do_interpolate = 1;
 int Newdemo_num_written;
 ubyte DemoDoRight=0,DemoDoLeft=0;
-object DemoRightExtra,DemoLeftExtra;
+dxxobject DemoRightExtra,DemoLeftExtra;
 
 // local var used for swapping endian demos
 static int swap_endian = 0;
@@ -221,7 +221,7 @@ int newdemo_get_percent_done()	{
 
 #define VEL_PRECISION 12
 
-void my_extract_shortpos(object *objp, shortpos *spp)
+void my_extract_shortpos(dxxobject *objp, shortpos *spp)
 {
 	int segnum;
 	sbyte *sp;
@@ -264,7 +264,7 @@ int newdemo_read( void *buffer, int elsize, int nelem )
 int newdemo_find_object( int signature )
 {
 	int i;
-	object * objp;
+	dxxobject * objp;
 	objp = Objects;
 	for (i=0; i<=Highest_object_index; i++, objp++ ) {
 		if ( (objp->type != OBJ_NONE) && (objp->signature == signature))
@@ -342,7 +342,7 @@ static void nd_write_angvec(vms_angvec *v)
 	nd_write_fixang(v->h);
 }
 
-void nd_write_shortpos(object *obj)
+void nd_write_shortpos(dxxobject *obj)
 {
 	int i;
 	shortpos sp;
@@ -427,7 +427,7 @@ static void nd_read_angvec(vms_angvec *v)
 	nd_read_fixang(&(v->h));
 }
 
-static void nd_read_shortpos(object *obj)
+static void nd_read_shortpos(dxxobject *obj)
 {
 	shortpos sp;
 	int i;
@@ -455,13 +455,13 @@ static void nd_read_shortpos(object *obj)
 
 }
 
-object *prev_obj=NULL;      //ptr to last object read in
+dxxobject *prev_obj=NULL;      //ptr to last object read in
 
-void nd_read_object(object *obj)
+void nd_read_object(dxxobject *obj)
 {
 	short shortsig = 0;
 
-	memset(obj, 0, sizeof(object));
+	memset(obj, 0, sizeof(dxxobject));
 
 	/*
 	 * Do render type first, since with render_type == RT_NONE, we
@@ -686,7 +686,7 @@ void nd_read_object(object *obj)
 	prev_obj = obj;
 }
 
-void nd_write_object(object *obj)
+void nd_write_object(dxxobject *obj)
 {
 	int life;
 	short shortsig = 0;
@@ -968,7 +968,7 @@ void newdemo_record_start_frame(fix frame_time )
 
 }
 
-void newdemo_record_render_object(object * obj)
+void newdemo_record_render_object(dxxobject * obj)
 {
 	if (!nd_record_v_recordframe)
 		return;
@@ -986,7 +986,7 @@ void newdemo_record_render_object(object * obj)
 
 extern ubyte RenderingType;
 
-void newdemo_record_viewer_object(object * obj)
+void newdemo_record_viewer_object(dxxobject * obj)
 {
 	if (!nd_record_v_recordframe)
 		return;
@@ -1717,15 +1717,15 @@ void newdemo_pop_ctrlcen_triggers()
 	}
 }
 
-void nd_render_extras (ubyte,object *);
+void nd_render_extras (ubyte,dxxobject *);
 extern void multi_apply_goal_textures ();
 
 int newdemo_read_frame_information(int rewrite)
 {
 	int done, segnum, side, objnum, soundno, angle, volume, i,shot;
-	object *obj;
+	dxxobject *obj;
 	sbyte c,WhichWindow;
-	object extraobj;
+	dxxobject extraobj;
 	segment *seg;
 
 	done = 0;
@@ -2270,7 +2270,7 @@ int newdemo_read_frame_information(int rewrite)
 			short segnum;
 			sbyte side;
 			vms_vector pnt;
-			object dummy;
+			dxxobject dummy;
 
 			//create a dummy object which will be the weapon that hits
 			//the monitor. the blowup code wants to know who the parent of the
@@ -3040,7 +3040,7 @@ void interpolate_frame(fix d_play, fix d_recorded)
 {
 	int i, j, num_cur_objs;
 	fix factor;
-	object *cur_objs;
+	dxxobject *cur_objs;
 	static fix InterpolStep = fl2f(.01);
 
 	if (nd_playback_v_framecount < 1)
@@ -3051,13 +3051,13 @@ void interpolate_frame(fix d_play, fix d_recorded)
 		factor = F1_0;
 
 	num_cur_objs = Highest_object_index;
-	cur_objs = (object *)d_malloc(sizeof(object) * (num_cur_objs + 1));
+	cur_objs = (dxxobject *)d_malloc(sizeof(dxxobject) * (num_cur_objs + 1));
 	if (cur_objs == NULL) {
 		Int3();
 		return;
 	}
 	for (i = 0; i <= num_cur_objs; i++)
-		memcpy(&(cur_objs[i]), &(Objects[i]), sizeof(object));
+		memcpy(&(cur_objs[i]), &(Objects[i]), sizeof(cur_objs[i]));
 
 	Newdemo_vcr_state = ND_STATE_PAUSED;
 	if (newdemo_read_frame_information(0) == -1) {
@@ -3134,7 +3134,7 @@ void interpolate_frame(fix d_play, fix d_recorded)
 	Newdemo_vcr_state = ND_STATE_PLAYBACK;
 
 	for (i = 0; i <= num_cur_objs; i++)
-		memcpy(&(Objects[i]), &(cur_objs[i]), sizeof(object));
+		memcpy(&(Objects[i]), &(cur_objs[i]), sizeof(Objects[i]));
 	Highest_object_index = num_cur_objs;
 	d_free(cur_objs);
 }
@@ -3255,17 +3255,17 @@ void newdemo_playback_one_frame()
 				d_recorded = nd_recorded_total - nd_playback_total;
 
 				while (nd_recorded_total - nd_playback_total < FrameTime) {
-					object *cur_objs;
+					dxxobject *cur_objs;
 					int i, j, num_objs, level;
 
 					num_objs = Highest_object_index;
-					cur_objs = (object *)d_malloc(sizeof(object) * (num_objs + 1));
+					cur_objs = (dxxobject *)d_malloc(sizeof(dxxobject) * (num_objs + 1));
 					if (cur_objs == NULL) {
-						Warning ("Couldn't get %d bytes for objects in interpolate playback\n", sizeof(object) * num_objs);
+						Warning ("Couldn't get %d bytes for objects in interpolate playback\n", sizeof(dxxobject) * num_objs);
 						break;
 					}
 					for (i = 0; i <= num_objs; i++)
-						memcpy(&(cur_objs[i]), &(Objects[i]), sizeof(object));
+						memcpy(&(cur_objs[i]), &(Objects[i]), sizeof(cur_objs[i]));
 
 					level = Current_level_num;
 					if (newdemo_read_frame_information(0) == -1) {
@@ -3752,7 +3752,7 @@ void newdemo_strip_frames(char *outname, int bytes_to_strip)
 
 #endif
 
-void nd_render_extras (ubyte which,object *obj)
+void nd_render_extras (ubyte which,dxxobject *obj)
 {
 	ubyte w=which>>4;
 	ubyte type=which&15;
@@ -3766,11 +3766,11 @@ void nd_render_extras (ubyte which,object *obj)
 
 	if (w)
 	{
-		memcpy (&DemoRightExtra,obj,sizeof(object));  DemoDoRight=type;
+		memcpy (&DemoRightExtra,obj,sizeof(dxxobject));  DemoDoRight=type;
 	}
 	else
 	{
-		memcpy (&DemoLeftExtra,obj,sizeof(object)); DemoDoLeft=type;
+		memcpy (&DemoLeftExtra,obj,sizeof(dxxobject)); DemoDoLeft=type;
 	}
 
 }

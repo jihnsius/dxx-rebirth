@@ -115,7 +115,7 @@ uint state_game_id;
 
 // Following functions convert object to object_rw and back to be written to/read from Savegames. Mostly object differs to object_rw in terms of timer values (fix/fix64). as we reset GameTime64 for writing so it can fit into fix it's not necessary to increment savegame version. But if we once store something else into object which might be useful after restoring, it might be handy to increment Savegame version and actually store these new infos.
 // turn object to object_rw to be saved to Savegame.
-void state_object_to_object_rw(object *obj, object_rw *obj_rw)
+void state_object_to_object_rw(dxxobject *obj, object_rw *obj_rw)
 {
 	obj_rw->signature     = obj->signature;
 	obj_rw->type          = obj->type;
@@ -276,7 +276,7 @@ void state_object_to_object_rw(object *obj, object_rw *obj_rw)
 }
 
 // turn object_rw to object after reading from Savegame
-void state_object_rw_to_object(object_rw *obj_rw, object *obj)
+void state_object_rw_to_object(object_rw *obj_rw, dxxobject *obj)
 {
 	obj->signature     = obj_rw->signature;
 	obj->type          = obj_rw->type;
@@ -1213,12 +1213,12 @@ extern void init_player_stats_new_ship(ubyte pnum);
 void ShowLevelIntro(int level_num);
 
 extern void do_cloak_invul_secret_stuff(fix64 old_gametime);
-extern void copy_defaults_to_robot(object *objp);
+extern void copy_defaults_to_robot(dxxobject *objp);
 
 int state_restore_all_sub(char *filename, int secret_restore)
 {
 	int version,i, j, segnum, coop_player_got[MAX_PLAYERS], coop_org_objnum;
-	object * obj;
+	dxxobject * obj;
 	PHYSFS_file *fp;
 	int swap = 0;	// if file is not endian native, have to swap all shorts and ints
 	int current_level;
@@ -1618,13 +1618,13 @@ int state_restore_all_sub(char *filename, int secret_restore)
 	if (Game_mode & GM_MULTI_COOP)
 	{
 		player restore_players[MAX_PLAYERS];
-		object restore_objects[MAX_PLAYERS];
+		dxxobject restore_objects[MAX_PLAYERS];
 		int coop_got_nplayers = 0;
 
 		for (i = 0; i < MAX_PLAYERS; i++) 
 		{
 			player_rw *pl_rw;
-			object *obj;
+			dxxobject *obj;
 
 			// prepare arrays for mapping our players below
 			coop_player_got[i] = 0;
@@ -1640,7 +1640,7 @@ int state_restore_all_sub(char *filename, int secret_restore)
 			obj = &Objects[restore_players[i].objnum];
 			if (restore_players[i].connected == CONNECT_PLAYING && obj->type == OBJ_PLAYER)
 			{
-				memcpy(&restore_objects[i], obj, sizeof(object));
+				memcpy(&restore_objects[i], obj, sizeof(dxxobject));
 				obj->type = OBJ_GHOST;
 				multi_reset_player_object(obj);
 			}
@@ -1652,7 +1652,7 @@ int state_restore_all_sub(char *filename, int secret_restore)
 				// map stored players to current players depending on their unique (which we made sure) callsign
 				if (Players[i].connected == CONNECT_PLAYING && restore_players[j].connected == CONNECT_PLAYING && !strcmp(Players[i].callsign, restore_players[j].callsign))
 				{
-					object *obj;
+					dxxobject *obj;
 					int sav_objnum = Players[i].objnum;
 					
 					memcpy(&Players[i], &restore_players[j], sizeof(player));

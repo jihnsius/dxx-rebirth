@@ -1086,7 +1086,7 @@ sbyte convert_to_byte(fix f)
 //	Extract the matrix into byte values.
 //	Create a position relative to vertex 0 with 1/256 normal "fix" precision.
 //	Stuff segment in a short.
-void create_shortpos(shortpos *spp, object *objp, int swap_bytes)
+void create_shortpos(shortpos *spp, dxxobject *objp, int swap_bytes)
 {
 	// int	segnum;
 	sbyte   *sp;
@@ -1126,7 +1126,7 @@ void create_shortpos(shortpos *spp, object *objp, int swap_bytes)
 	}
 }
 
-void extract_shortpos(object *objp, shortpos *spp, int swap_bytes)
+void extract_shortpos(dxxobject *objp, shortpos *spp, int swap_bytes)
 {
 	int	segnum;
 	sbyte   *sp;
@@ -1915,7 +1915,7 @@ void apply_light_to_segment(segment *segp,vms_vector *segment_center, fix light_
 }
 
 
-extern object *old_viewer;
+extern dxxobject *old_viewer;
 
 //update the static_light field in a segment, which is used for object lighting
 //this code is copied from the editor routine calim_process_all_lights()

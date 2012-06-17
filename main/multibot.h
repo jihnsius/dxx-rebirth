@@ -54,6 +54,6 @@ void multi_dump_robots(void);
 void multi_strip_robots(int playernum);
 void multi_check_robot_timeout(void);
 
-void multi_robot_request_change(object *robot, int playernum);
+void multi_robot_request_change(dxxobject *robot, int playernum);
 
 #endif /* _MULTIBOT_H */

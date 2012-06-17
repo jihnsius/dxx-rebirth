@@ -39,7 +39,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 morph_data morph_objects[MAX_MORPH_OBJECTS];
 
 //returns ptr to data for this object, or NULL if none
-morph_data *find_morph_data(object *obj)
+morph_data *find_morph_data(dxxobject *obj)
 {
 	int i;
 
@@ -205,7 +205,7 @@ void update_points(polymodel *pm,int submodel_num,morph_data *md)
 
 
 //process the morphing object for one frame
-void do_morph_frame(object *obj)
+void do_morph_frame(dxxobject *obj)
 {
 	int i;
 	polymodel *pm;
@@ -270,7 +270,7 @@ void init_morphs()
 
 
 //make the object morph
-void morph_start(object *obj)
+void morph_start(dxxobject *obj)
 {
 	polymodel *pm;
 	vms_vector pmmin,pmmax;
@@ -414,7 +414,7 @@ void draw_model(polymodel *pm,int submodel_num,vms_angvec *anim_angles,g3s_lrgb 
 
 }
 
-void draw_morph_object(object *obj)
+void draw_morph_object(dxxobject *obj)
 {
 //	int save_light;
 	polymodel *po;

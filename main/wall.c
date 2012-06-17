@@ -694,7 +694,7 @@ void wall_close_door_num(int door_num)
 
 int check_poke(int objnum,int segnum,int side)
 {
-	object *obj = &Objects[objnum];
+	dxxobject *obj = &Objects[objnum];
 
 	//note: don't let objects with zero size block door
 
@@ -1051,7 +1051,7 @@ int special_boss_opening_allowed(int segnum, int sidenum)
 //obj is the object that hit...either a weapon or the player himself
 //playernum is the number the player who hit the wall or fired the weapon,
 //or -1 if a robot fired the weapon
-int wall_hit_process(segment *seg, int side, fix damage, int playernum, object *obj )
+int wall_hit_process(segment *seg, int side, fix damage, int playernum, dxxobject *obj )
 {
 	wall	*w;
 	fix	show_message;
@@ -1386,7 +1386,7 @@ stuckobj	Stuck_objects[MAX_STUCK_OBJECTS];
 
 //	An object got stuck in a door (like a flare).
 //	Add global entry.
-void add_stuck_object(object *objp, int segnum, int sidenum)
+void add_stuck_object(dxxobject *objp, int segnum, int sidenum)
 {
 	int	i;
 	int	wallnum;
@@ -1523,7 +1523,7 @@ void clear_stuck_objects(void)
 // -----------------------------------------------------------------------------------
 #define	MAX_BLAST_GLASS_DEPTH	5
 
-void bng_process_segment(object *objp, fix damage, segment *segp, int depth, sbyte *visited)
+void bng_process_segment(dxxobject *objp, fix damage, segment *segp, int depth, sbyte *visited)
 {
 	int	i, sidenum;
 
@@ -1572,7 +1572,7 @@ void bng_process_segment(object *objp, fix damage, segment *segp, int depth, sby
 // -----------------------------------------------------------------------------------
 //	objp is going to detonate
 //	blast nearby monitors, lights, maybe other things
-void blast_nearby_glass(object *objp, fix damage)
+void blast_nearby_glass(dxxobject *objp, fix damage)
 {
 	int		i;
 	sbyte   visited[MAX_SEGMENTS];

@@ -762,7 +762,7 @@ void determine_used_textures_level(int load_level_flag, int shareware_flag, int 
 
 	//	Process robots.
 	for (objnum=0; objnum<=Highest_object_index; objnum++) {
-		object *objp = &Objects[objnum];
+		dxxobject *objp = &Objects[objnum];
 
 		if (objp->render_type == RT_POLYOBJ) {
 			polymodel *po = &Polygon_models[objp->rtype.pobj_info.model_num];

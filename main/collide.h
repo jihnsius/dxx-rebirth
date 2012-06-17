@@ -25,30 +25,30 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "playsave.h"
 
 void collide_init();
-void collide_two_objects(object * A, object * B, vms_vector *collision_point);
-void collide_object_with_wall(object * A, fix hitspeed, short hitseg, short hitwall, vms_vector * hitpt);
-extern void apply_damage_to_player(object *player, object *killer, fix damage, ubyte possibly_friendly);
+void collide_two_objects(dxxobject * A, dxxobject * B, vms_vector *collision_point);
+void collide_object_with_wall(dxxobject * A, fix hitspeed, short hitseg, short hitwall, vms_vector * hitpt);
+extern void apply_damage_to_player(dxxobject *player, dxxobject *killer, fix damage, ubyte possibly_friendly);
 
 // Returns 1 if robot died, else 0.
-extern int apply_damage_to_robot(object *robot, fix damage, int killer_objnum);
+extern int apply_damage_to_robot(dxxobject *robot, fix damage, int killer_objnum);
 
 extern int Immaterial;
 
 #define PERSISTENT_DEBRIS (PlayerCfg.PersistentDebris && !(Game_mode & GM_MULTI)) // no persistent debris in multi
 
-extern void collide_player_and_weapon(object * player, object * weapon, vms_vector *collision_point);
-extern void collide_player_and_materialization_center(object *objp);
-extern void collide_robot_and_materialization_center(object *objp);
+extern void collide_player_and_weapon(dxxobject * player, dxxobject * weapon, vms_vector *collision_point);
+extern void collide_player_and_materialization_center(dxxobject *objp);
+extern void collide_robot_and_materialization_center(dxxobject *objp);
 
-extern void scrape_player_on_wall(object *obj, short hitseg, short hitwall, vms_vector * hitpt);
-extern int maybe_detonate_weapon(object *obj0p, object *obj, vms_vector *pos);
+extern void scrape_player_on_wall(dxxobject *obj, short hitseg, short hitwall, vms_vector * hitpt);
+extern int maybe_detonate_weapon(dxxobject *obj0p, dxxobject *obj, vms_vector *pos);
 
-extern void collide_player_and_nasty_robot(object * player, object * robot, vms_vector *collision_point);
+extern void collide_player_and_nasty_robot(dxxobject * player, dxxobject * robot, vms_vector *collision_point);
 
-extern void net_destroy_controlcen(object *controlcen);
-extern void collide_player_and_powerup(object * player, object * powerup, vms_vector *collision_point);
-extern int check_effect_blowup(segment *seg,int side,vms_vector *pnt, object *blower, int force_blowup_flag);
-extern void apply_damage_to_controlcen(object *controlcen, fix damage, short who);
-extern void bump_one_object(object *obj0, vms_vector *hit_dir, fix damage);
+extern void net_destroy_controlcen(dxxobject *controlcen);
+extern void collide_player_and_powerup(dxxobject * player, dxxobject * powerup, vms_vector *collision_point);
+extern int check_effect_blowup(segment *seg,int side,vms_vector *pnt, dxxobject *blower, int force_blowup_flag);
+extern void apply_damage_to_controlcen(dxxobject *controlcen, fix damage, short who);
+extern void bump_one_object(dxxobject *obj0, vms_vector *hit_dir, fix damage);
 
 #endif /* _COLLIDE_H */

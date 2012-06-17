@@ -88,18 +88,18 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define MAX_TRACKABLE_DIST              (F1_0*250)
 #define HOMING_MISSILE_STRAIGHT_TIME    (F1_0/8)    //  Changed as per request of John, Adam, Yuan, but mostly John
 
-struct object;
+struct dxxobject;
 
 extern fix Min_trackable_dot;   //  MIN_TRACKABLE_DOT inversely scaled by FrameTime
 
-extern struct object *Guided_missile[];
+extern struct dxxobject *Guided_missile[];
 extern int Guided_missile_sig[];
 
-void Laser_render(struct object *obj);
-void Laser_player_fire(struct object * obj, int type, int gun_num, int make_sound, int harmless_flag);
-void Laser_player_fire_spread(struct object *obj, int laser_type, int gun_num, fix spreadr, fix spreadu, int make_sound, int harmless);
-void Laser_do_weapon_sequence(struct object *obj);
-void Flare_create(struct object *obj);
+void Laser_render(struct dxxobject *obj);
+void Laser_player_fire(struct dxxobject * obj, int type, int gun_num, int make_sound, int harmless_flag);
+void Laser_player_fire_spread(struct dxxobject *obj, int laser_type, int gun_num, fix spreadr, fix spreadu, int make_sound, int harmless);
+void Laser_do_weapon_sequence(struct dxxobject *obj);
+void Flare_create(struct dxxobject *obj);
 int laser_are_related(int o1, int o2);
 
 extern int do_laser_firing_player(void);
@@ -133,8 +133,8 @@ int create_weapon_object(int weapon_type,int segnum,vms_vector *position);
 // give up control of the guided missile
 void release_guided_missile(int player_num);
 
-extern void create_smart_children(struct object *objp, int count);
-extern int object_to_object_visibility(struct object *obj1, struct object *obj2, int trans_type);
+extern void create_smart_children(struct dxxobject *objp, int count);
+extern int object_to_object_visibility(struct dxxobject *obj1, struct dxxobject *obj2, int trans_type);
 
 extern int Muzzle_queue_index;
 
@@ -150,6 +150,6 @@ extern muzzle_info Muzzle_data[MUZZLE_QUEUE_MAX];
 #define MAX_OMEGA_CHARGE    (F1_0)  //  Maximum charge level for omega cannonw
 extern fix Omega_charge;
 // NOTE: OMEGA_CHARGE_SCALE moved to laser.c to avoid long rebuilds if changed
-extern int ok_to_do_omega_damage(struct object *weapon);
+extern int ok_to_do_omega_damage(struct dxxobject *weapon);
 
 #endif /* _LASER_H */

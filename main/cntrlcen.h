@@ -65,13 +65,13 @@ extern int Dead_controlcen_object_num;
 extern vms_vector Gun_pos[MAX_CONTROLCEN_GUNS];
 
 // do whatever this thing does in a frame
-extern void do_controlcen_frame(object *obj);
+extern void do_controlcen_frame(dxxobject *obj);
 
 // Initialize control center for a level.
 // Call when a new level is started.
 extern void init_controlcen_for_level(void);
 
-extern void do_controlcen_destroyed_stuff(object *objp);
+extern void do_controlcen_destroyed_stuff(dxxobject *objp);
 extern void do_controlcen_dead_frame(void);
 
 #define DEFAULT_CONTROL_CENTER_EXPLOSION_TIME 30    // Note: Usually uses Alan_pavlish_reactor_times, but can be overridden in editor.

@@ -70,8 +70,8 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "editor/editor.h"
 #endif
 
-void obj_detach_all(object *parent);
-void obj_detach_one(object *sub);
+void obj_detach_all(dxxobject *parent);
+void obj_detach_one(dxxobject *sub);
 int free_object_slots(int num_used);
 
 /*
@@ -80,7 +80,7 @@ int free_object_slots(int num_used);
 
 ubyte CollisionResult[MAX_OBJECT_TYPES][MAX_OBJECT_TYPES];
 
-object *ConsoleObject;					//the object that is the player
+dxxobject *ConsoleObject;					//the object that is the player
 
 static short free_obj_list[MAX_OBJECTS];
 
@@ -90,10 +90,10 @@ static short free_obj_list[MAX_OBJECTS];
 
 //info on the various types of objects
 #ifndef NDEBUG
-object	Object_minus_one;
+dxxobject	Object_minus_one;
 #endif
 
-object Objects[MAX_OBJECTS];
+dxxobject Objects[MAX_OBJECTS];
 int num_objects=0;
 int Highest_object_index=0;
 int Highest_ever_object_index=0;
@@ -183,14 +183,14 @@ void object_goto_prev_viewer()
 }
 #endif
 
-object *obj_find_first_of_type (int type)
+dxxobject *obj_find_first_of_type (int type)
  {
   int i;
 
   for (i=0;i<=Highest_object_index;i++)
 	if (Objects[i].type==type)
 	 return (&Objects[i]);
-  return ((object *)NULL);
+  return ((dxxobject *)NULL);
  }
 
 int obj_return_num_of_type (int type)
@@ -213,7 +213,7 @@ int obj_return_num_of_typeid (int type,int id)
  }
 
 //draw an object that has one bitmap & doesn't rotate
-void draw_object_blob(object *obj,bitmap_index bmi)
+void draw_object_blob(dxxobject *obj,bitmap_index bmi)
 {
 	grs_bitmap * bm = &GameBitmaps[bmi.index];
 	vms_vector pos = obj->pos;
@@ -235,7 +235,7 @@ void draw_object_blob(object *obj,bitmap_index bmi)
 }
 
 //draw an object that is a texture-mapped rod
-void draw_object_tmap_rod(object *obj,bitmap_index bitmapi,int lighted)
+void draw_object_tmap_rod(dxxobject *obj,bitmap_index bitmapi,int lighted)
 {
 	grs_bitmap * bitmap = &GameBitmaps[bitmapi.index];
 	g3s_lrgb light;
@@ -284,7 +284,7 @@ extern fix Max_thrust;
 #define	CLOAK_FADEOUT_DURATION_ROBOT	F1_0
 
 //do special cloaked render
-void draw_cloaked_object(object *obj,g3s_lrgb light,fix *glow,fix64 cloak_start_time,fix64 cloak_end_time)
+void draw_cloaked_object(dxxobject *obj,g3s_lrgb light,fix *glow,fix64 cloak_start_time,fix64 cloak_end_time)
 {
 	fix cloak_delta_time,total_cloaked_time;
 	fix light_scale=F1_0;
@@ -394,7 +394,7 @@ void draw_cloaked_object(object *obj,g3s_lrgb light,fix *glow,fix64 cloak_start_
 }
 
 //draw an object which renders as a polygon model
-void draw_polygon_object(object *obj)
+void draw_polygon_object(dxxobject *obj)
 {
 	g3s_lrgb light;
 	int	imsave;
@@ -622,7 +622,7 @@ int	Player_fired_laser_this_frame=-1;
 // -----------------------------------------------------------------------------
 //this routine checks to see if an robot rendered near the middle of
 //the screen, and if so and the player had fired, "warns" the robot
-void set_robot_location_info(object *objp)
+void set_robot_location_info(dxxobject *objp)
 {
 	if (Player_fired_laser_this_frame != -1) {
 		g3s_point temp;
@@ -645,7 +645,7 @@ void set_robot_location_info(object *objp)
 }
 
 //	------------------------------------------------------------------------------------------------------------------
-void create_small_fireball_on_object(object *objp, fix size_scale, int sound_flag)
+void create_small_fireball_on_object(dxxobject *objp, fix size_scale, int sound_flag)
 {
 	fix			size;
 	vms_vector	pos, rand_vec;
@@ -662,7 +662,7 @@ void create_small_fireball_on_object(object *objp, fix size_scale, int sound_fla
 
 	segnum = find_point_seg(&pos, objp->segnum);
 	if (segnum != -1) {
-		object *expl_obj;
+		dxxobject *expl_obj;
 		expl_obj = object_create_explosion(segnum, &pos, size, VCLIP_SMALL_EXPLOSION);
 		if (!expl_obj)
 			return;
@@ -678,7 +678,7 @@ void create_small_fireball_on_object(object *objp, fix size_scale, int sound_fla
 }
 
 //	------------------------------------------------------------------------------------------------------------------
-void create_vclip_on_object(object *objp, fix size_scale, int vclip_num)
+void create_vclip_on_object(dxxobject *objp, fix size_scale, int vclip_num)
 {
 	fix			size;
 	vms_vector	pos, rand_vec;
@@ -695,7 +695,7 @@ void create_vclip_on_object(object *objp, fix size_scale, int vclip_num)
 
 	segnum = find_point_seg(&pos, objp->segnum);
 	if (segnum != -1) {
-		object *expl_obj;
+		dxxobject *expl_obj;
 		expl_obj = object_create_explosion(segnum, &pos, size, vclip_num);
 		if (!expl_obj)
 			return;
@@ -719,7 +719,7 @@ void create_vclip_on_object(object *objp, fix size_scale, int vclip_num)
 
 // -----------------------------------------------------------------------------
 //	Render an object.  Calls one of several routines based on type
-void render_object(object *obj)
+void render_object(dxxobject *obj)
 {
 	int mld_save;
 
@@ -943,7 +943,7 @@ int search_all_segments_for_object( int objnum )
 
 void johns_obj_unlink(int segnum, int objnum)
 {
-	object  *obj = &Objects[objnum];
+	dxxobject  *obj = &Objects[objnum];
 	segment *seg = &Segments[segnum];
 
 	Assert(objnum != -1);
@@ -1030,7 +1030,7 @@ void list_seg_objects( int segnum )
 //link the object into the list for its segment
 void obj_link(int objnum,int segnum)
 {
-	object *obj = &Objects[objnum];
+	dxxobject *obj = &Objects[objnum];
 
 	Assert(objnum != -1);
 
@@ -1061,7 +1061,7 @@ void obj_link(int objnum,int segnum)
 
 void obj_unlink(int objnum)
 {
-	object  *obj = &Objects[objnum];
+	dxxobject  *obj = &Objects[objnum];
 	segment *seg = &Segments[obj->segnum];
 
 	Assert(objnum != -1);
@@ -1251,7 +1251,7 @@ int obj_create(enum object_type_t type,ubyte id,int segnum,vms_vector *pos,
 				vms_matrix *orient,fix size,ubyte ctype,ubyte mtype,ubyte rtype)
 {
 	int objnum;
-	object *obj;
+	dxxobject *obj;
 
 	// Some consistency checking. FIXME: Add more debug output here to probably trace all possible occurances back.
 	if (segnum < 0 || segnum > Highest_segment_index)
@@ -1281,7 +1281,7 @@ int obj_create(enum object_type_t type,ubyte id,int segnum,vms_vector *pos,
 
 	// Zero out object structure to keep weird bugs from happening
 	// in uninitialized fields.
-	memset( obj, 0, sizeof(object) );
+	memset( obj, 0, sizeof(dxxobject) );
 
 	obj->signature				= obj_get_signature();
 	obj->type 					= type;
@@ -1360,7 +1360,7 @@ int obj_create(enum object_type_t type,ubyte id,int segnum,vms_vector *pos,
 int obj_create_copy(int objnum, vms_vector *new_pos, int newsegnum)
 {
 	int newobjnum;
-	object *obj;
+	dxxobject *obj;
 
 	// Find next free object
 	newobjnum = obj_allocate();
@@ -1393,7 +1393,7 @@ void newdemo_record_guided_end();
 void obj_delete(int objnum)
 {
 	int pnum;
-	object *obj = &Objects[objnum];
+	dxxobject *obj = &Objects[objnum];
 
 	Assert(objnum != -1);
 	Assert(objnum != 0 );
@@ -1439,8 +1439,8 @@ void obj_delete(int objnum)
 #define	DEATH_SEQUENCE_EXPLODE_TIME	(F1_0*2)
 
 int		Player_is_dead = 0;			//	If !0, then player is dead, but game continues so he can watch.
-object	*Dead_player_camera = NULL;	//	Object index of object watching deader.
-object	*Viewer_save;
+dxxobject	*Dead_player_camera = NULL;	//	Object index of object watching deader.
+dxxobject	*Viewer_save;
 int		Player_flags_save;
 int		Player_exploded = 0;
 int		Death_sequence_aborted=0;
@@ -1477,7 +1477,7 @@ void dead_player_end(void)
 
 //	------------------------------------------------------------------------------------------------------------------
 //	Camera is less than size of player away from
-void set_camera_pos(vms_vector *camera_pos, object *objp)
+void set_camera_pos(vms_vector *camera_pos, dxxobject *objp)
 {
 	int	count = 0;
 	fix	camera_player_dist;
@@ -1527,8 +1527,8 @@ void set_camera_pos(vms_vector *camera_pos, object *objp)
 	}
 }
 
-void drop_player_eggs(object *objp);
-int get_explosion_vclip(object *obj,int stage);
+void drop_player_eggs(dxxobject *objp);
+int get_explosion_vclip(dxxobject *obj,int stage);
 void multi_cap_objects();
 
 //	------------------------------------------------------------------------------------------------------------------
@@ -1544,7 +1544,7 @@ void dead_player_frame(void)
 		//	If unable to create camera at time of death, create now.
 		if (Dead_player_camera == Viewer_save) {
 			int		objnum;
-			object	*player = &Objects[Players[Player_num].objnum];
+			dxxobject	*player = &Objects[Players[Player_num].objnum];
 
 			objnum = obj_create(OBJ_CAMERA, 0, player->segnum, &player->pos, &player->orient, 0, CT_NONE, MT_NONE, RT_NONE);
 
@@ -1662,7 +1662,7 @@ short Killed_objnum = -1;
 extern char Multi_killed_yourself;
 
 //	------------------------------------------------------------------------------------------------------------------
-void start_player_death_sequence(object *player)
+void start_player_death_sequence(dxxobject *player)
 {
 	int	objnum;
 
@@ -1736,7 +1736,7 @@ void start_player_death_sequence(object *player)
 void obj_delete_all_that_should_be_dead()
 {
 	int i;
-	object *objp;
+	dxxobject *objp;
 	int		local_dead_player_object=-1;
 
 	// Move all objects
@@ -1782,8 +1782,7 @@ void obj_relink_all(void)
 {
 	int segnum;
 	int objnum;
-	object *obj;
-
+	dxxobject *obj;
 	for (segnum=0; segnum <= Highest_segment_index; segnum++)
 		Segments[segnum].objects = -1;
 
@@ -1801,7 +1800,7 @@ void obj_relink_all(void)
 
 //process a continuously-spinning object
 void
-spin_object(object *obj)
+spin_object(dxxobject *obj)
 {
 	vms_angvec rotangs;
 	vms_matrix rotmat, new_pm;
@@ -1826,14 +1825,14 @@ void fuelcen_check_for_goal (segment *);
 
 //see if wall is volatile, and if so, cause damage to player
 //returns true if player is in lava
-int check_volatile_wall(object *obj,int segnum,int sidenum,vms_vector *hitpt);
+int check_volatile_wall(dxxobject *obj,int segnum,int sidenum,vms_vector *hitpt);
 
 //	Time at which this object last created afterburner blobs.
 fix64	Last_afterburner_time[MAX_OBJECTS];
 
 //--------------------------------------------------------------------
 //move an object for the current frame
-void object_move_one( object * obj )
+void object_move_one( dxxobject * obj )
 {
 
 	#ifndef DEMO_ONLY
@@ -2067,7 +2066,7 @@ void object_move_one( object * obj )
 void object_move_all()
 {
 	int i;
-	object *objp;
+	dxxobject *objp;
 
 	if (Highest_object_index > MAX_USED_OBJECTS)
 		free_object_slots(MAX_USED_OBJECTS);		//	Free all possible object slots.
@@ -2163,7 +2162,7 @@ void reset_objects(int n_objs)
 
 	for (i=num_objects;i<MAX_OBJECTS;i++) {
 		free_obj_list[i] = i;
-		memset( &Objects[i], 0, sizeof(object) );
+		memset( &Objects[i], 0, sizeof(dxxobject) );
 		Objects[i].type = OBJ_NONE;
 		Objects[i].segnum = -1;
 	}
@@ -2174,7 +2173,7 @@ void reset_objects(int n_objs)
 }
 
 //Tries to find a segment for an object, using find_point_seg()
-int find_object_seg(object * obj )
+int find_object_seg(dxxobject * obj )
 {
 	return find_point_seg(&obj->pos,obj->segnum);
 }
@@ -2183,7 +2182,7 @@ int find_object_seg(object * obj )
 //If an object is in a segment, set its segnum field and make sure it's
 //properly linked.  If not in any segment, returns 0, else 1.
 //callers should generally use find_vector_intersection()
-int update_object_seg(object * obj )
+int update_object_seg(dxxobject * obj )
 {
 	int newseg;
 
@@ -2253,7 +2252,7 @@ fix_object_segs()
 void clear_transient_objects(int clear_all)
 {
 	int objnum;
-	object *obj;
+	dxxobject *obj;
 
 	for (objnum=0,obj=&Objects[0];objnum<=Highest_object_index;objnum++,obj++)
 		if (((obj->type == OBJ_WEAPON) && !(Weapon_info[obj->id].flags&WIF_PLACABLE) && (clear_all || ((obj->id != PROXIMITY_ID) && (obj->id != SUPERPROX_ID)))) ||
@@ -2266,7 +2265,7 @@ void clear_transient_objects(int clear_all)
 }
 
 //attaches an object, such as a fireball, to another object, such as a robot
-void obj_attach(object *parent,object *sub)
+void obj_attach(dxxobject *parent,dxxobject *sub)
 {
 	Assert(sub->type == OBJ_FIREBALL);
 	Assert(sub->control_type == CT_EXPLOSION);
@@ -2291,7 +2290,7 @@ void obj_attach(object *parent,object *sub)
 }
 
 //dettaches one object
-void obj_detach_one(object *sub)
+void obj_detach_one(dxxobject *sub)
 {
 	Assert(sub->flags & OF_ATTACHED);
 	Assert(sub->ctype.expl_info.attach_parent != -1);
@@ -2322,7 +2321,7 @@ void obj_detach_one(object *sub)
 }
 
 //dettaches all objects from this object
-void obj_detach_all(object *parent)
+void obj_detach_all(dxxobject *parent)
 {
 	while (parent->attached_obj != -1)
 		obj_detach_one(&Objects[parent->attached_obj]);
@@ -2338,7 +2337,7 @@ int drop_marker_object(vms_vector *pos,int segnum,vms_matrix *orient, int marker
 	objnum = obj_create(OBJ_MARKER, marker_num, segnum, pos, orient, Polygon_models[Marker_model_num].rad, CT_NONE, MT_NONE, RT_POLYOBJ);
 
 	if (objnum >= 0) {
-		object *obj = &Objects[objnum];
+		dxxobject *obj = &Objects[objnum];
 
 		obj->rtype.pobj_info.model_num = Marker_model_num;
 
@@ -2355,7 +2354,7 @@ extern int Ai_last_missile_camera;
 
 //	*viewer is a viewer, probably a missile.
 //	wake up all robots that were rendered last frame subject to some constraints.
-void wake_up_rendered_objects(object *viewer, int window_num)
+void wake_up_rendered_objects(dxxobject *viewer, int window_num)
 {
 	int	i;
 
@@ -2368,7 +2367,7 @@ void wake_up_rendered_objects(object *viewer, int window_num)
 
 	for (i=0; i<Window_rendered_data[window_num].num_objects; i++) {
 		int	objnum;
-		object *objp;
+		dxxobject *objp;
 		int	fcval = FrameCount & 3;
 
 		objnum = Window_rendered_data[window_num].rendered_objects[i];

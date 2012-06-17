@@ -70,8 +70,8 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #endif
 #include "automap.h"
 
-void multi_reset_player_object(object *objp);
-void multi_reset_object_texture(object *objp);
+void multi_reset_player_object(dxxobject *objp);
+void multi_reset_object_texture(dxxobject *objp);
 void multi_add_lifetime_killed();
 void multi_add_lifetime_kills();
 void multi_send_play_by_play(int num,int spnum,int dpnum);
@@ -108,7 +108,7 @@ void multi_do_gmode_update(char *buf);
 
 #define vm_angvec_zero(v) (v)->p=(v)->b=(v)->h=0
 
-void drop_player_eggs(object *player); // from collide.c
+void drop_player_eggs(dxxobject *player); // from collide.c
 
 //
 // Global variables
@@ -526,7 +526,7 @@ multi_new_game(void)
 void
 multi_make_player_ghost(int playernum)
 {
-	object *obj;
+	dxxobject *obj;
 
 	if ((playernum == Player_num) || (playernum >= MAX_PLAYERS) || (playernum < 0))
 	{
@@ -548,7 +548,7 @@ multi_make_player_ghost(int playernum)
 void
 multi_make_ghost_player(int playernum)
 {
-	object *obj;
+	dxxobject *obj;
 
 	if ((playernum == Player_num) || (playernum >= MAX_PLAYERS))
 	{
@@ -625,7 +625,7 @@ multi_sort_kill_list(void)
 	}
 }
 
-extern object *obj_find_first_of_type (int);
+extern dxxobject *obj_find_first_of_type (int);
 char Multi_killed_yourself=0;
 
 void multi_compute_kill(int killer, int killed)
@@ -1714,7 +1714,7 @@ multi_do_player_explode(char *buf)
 	// Only call this for players, not robots.  pnum is player number, not
 	// Object number.
 
-	object *objp;
+	dxxobject *objp;
 	int count;
 	int pnum;
 	int i;
@@ -2375,7 +2375,7 @@ multi_reset_stuff(void)
 }
 
 void
-multi_reset_player_object(object *objp)
+multi_reset_player_object(dxxobject *objp)
 {
 	int i;
 
@@ -2418,7 +2418,7 @@ multi_reset_player_object(object *objp)
 
 }
 
-void multi_reset_object_texture (object *objp)
+void multi_reset_object_texture (dxxobject *objp)
 {
 	int id,i;
 
@@ -3648,7 +3648,7 @@ int multi_delete_extra_objects()
 {
 	int i;
 	int nnp=0;
-	object *objp;
+	dxxobject *objp;
 
 	// Go through the object list and remove any objects not used in
 	// 'Anarchy!' games.
@@ -3716,7 +3716,7 @@ int multi_all_players_alive()
 
 void multi_send_drop_weapon (int objnum,int seed)
 {
-	object *objp;
+	dxxobject *objp;
 	int count=0;
 	int ammo_count;
 
@@ -3759,7 +3759,7 @@ void multi_send_drop_weapon (int objnum,int seed)
 void multi_do_drop_weapon (char *buf)
 {
 	int pnum,ammo,objnum,remote_objnum,seed;
-	object *objp;
+	dxxobject *objp;
 	int powerup_id;
 
 	powerup_id=(int)(buf[1]);
@@ -3791,7 +3791,7 @@ void multi_do_drop_weapon (char *buf)
 
 }
 
-void multi_send_guided_info (object *miss,char done)
+void multi_send_guided_info (dxxobject *miss,char done)
 {
 #ifdef WORDS_BIGENDIAN
 	shortpos sp;
@@ -3988,7 +3988,7 @@ void multi_do_heartbeat (char *buf)
 void multi_check_for_killgoal_winner ()
 {
 	int i,best=0,bestnum=0;
-	object *objp;
+	dxxobject *objp;
 
 	if (Control_center_destroyed)
 		return;
@@ -4507,7 +4507,7 @@ void DropFlag ()
 
 void multi_send_drop_flag (int objnum,int seed)
 {
-	object *objp;
+	dxxobject *objp;
 	int count=0;
 
 	objp = &Objects[objnum];
@@ -4532,7 +4532,7 @@ void multi_send_drop_flag (int objnum,int seed)
 void multi_do_drop_flag (char *buf)
 {
 	int pnum,ammo,objnum,remote_objnum,seed;
-	object *objp;
+	dxxobject *objp;
 	int powerup_id;
 
 	powerup_id=buf[1];
@@ -4814,7 +4814,7 @@ void multi_do_play_by_play (char *buf)
 }
 
 // Decide if fire from "killer" is friendly. If yes return 1 (no harm to me) otherwise 0 (damage me)
-int multi_maybe_disable_friendly_fire(object *killer)
+int multi_maybe_disable_friendly_fire(dxxobject *killer)
 {
 	if (!(Game_mode & GM_NETWORK)) // no Multiplayer game -> always harm me!
 		return 0;
@@ -5503,7 +5503,7 @@ multi_process_data(char *buf, int len)
 
 // Following functions convert object to object_rw and back.
 // turn object to object_rw for sending
-void multi_object_to_object_rw(object *obj, object_rw *obj_rw)
+void multi_object_to_object_rw(dxxobject *obj, object_rw *obj_rw)
 {
 	obj_rw->signature     = obj->signature;
 	obj_rw->type          = obj->type;
@@ -5664,7 +5664,7 @@ void multi_object_to_object_rw(object *obj, object_rw *obj_rw)
 }
 
 // turn object_rw to object after receiving
-void multi_object_rw_to_object(object_rw *obj_rw, object *obj)
+void multi_object_rw_to_object(object_rw *obj_rw, dxxobject *obj)
 {
 	obj->signature     = obj_rw->signature;
 	obj->type          = obj_rw->type;

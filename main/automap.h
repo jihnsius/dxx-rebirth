@@ -28,7 +28,7 @@ extern int Automap_active;
 extern void do_automap(int key_code);
 extern void automap_clear_visited();
 extern ubyte Automap_visited[MAX_SEGMENTS];
-void DropBuddyMarker(object *objp);
+void DropBuddyMarker(dxxobject *objp);
 
 #define NUM_MARKERS         16
 #define MARKER_MESSAGE_LEN  40

@@ -30,7 +30,7 @@ int 					Num_vclips = 0;
 vclip 				Vclip[VCLIP_MAXNUM];		// General purpose vclips.
 
 //draw an object which renders as a vclip
-void draw_vclip_object(object *obj,fix timeleft,int lighted, int vclip_num)
+void draw_vclip_object(dxxobject *obj,fix timeleft,int lighted, int vclip_num)
 {
 	int nf,bitmapnum;
 
@@ -55,7 +55,7 @@ void draw_vclip_object(object *obj,fix timeleft,int lighted, int vclip_num)
 }
 
 
-void draw_weapon_vclip(object *obj)
+void draw_weapon_vclip(dxxobject *obj)
 {
 	int	vclip_num;
 	fix	modtime,play_time;

@@ -108,7 +108,7 @@ int get_next_object(segment *seg,int id)
 int place_object(segment *segp, vms_vector *object_pos, short object_type, short object_id)
 {
         short objnum=0;
-	object *obj;
+	dxxobject *obj;
 	vms_matrix seg_matrix;
 
 	med_extract_matrix_from_segment(segp,&seg_matrix);
@@ -464,7 +464,7 @@ int ObjectDelete(void)
 //	Object has moved to another segment, (or at least poked through).
 //	If still in mine, that is legal, so relink into new segment.
 //	Return value:	0 = in mine, 1 = not in mine
-int move_object_within_mine(object * obj, vms_vector *newpos )
+int move_object_within_mine(dxxobject * obj, vms_vector *newpos )
 {
 	int segnum;
 
@@ -502,7 +502,7 @@ int move_object_within_mine(object * obj, vms_vector *newpos )
 
 
 //	Return 0 if object is in expected segment, else return 1
-int verify_object_seg(object *objp, vms_vector *newpos)
+int verify_object_seg(dxxobject *objp, vms_vector *newpos)
 {
 	segmasks result = get_seg_masks(newpos, objp->segnum, objp->size, __FILE__, __LINE__);
 
@@ -516,7 +516,7 @@ int verify_object_seg(object *objp, vms_vector *newpos)
 //	------------------------------------------------------------------------------------------------------
 int	ObjectMoveForward(void)
 {
-	object *obj;
+	dxxobject *obj;
 	vms_vector	fvec;
 	vms_vector	newpos;
 
@@ -543,7 +543,7 @@ int	ObjectMoveForward(void)
 //	------------------------------------------------------------------------------------------------------
 int	ObjectMoveBack(void)
 {
-	object *obj;
+	dxxobject *obj;
 	vms_vector	fvec;
 	vms_vector	newpos;
 
@@ -570,7 +570,7 @@ int	ObjectMoveBack(void)
 //	------------------------------------------------------------------------------------------------------
 int	ObjectMoveLeft(void)
 {
-	object *obj;
+	dxxobject *obj;
 	vms_vector	rvec;
 	vms_vector	newpos;
 
@@ -597,7 +597,7 @@ int	ObjectMoveLeft(void)
 //	------------------------------------------------------------------------------------------------------
 int	ObjectMoveRight(void)
 {
-	object *obj;
+	dxxobject *obj;
 	vms_vector	rvec;
 	vms_vector	newpos;
 
@@ -642,7 +642,7 @@ int	ObjectSetDefault(void)
 //	------------------------------------------------------------------------------------------------------
 int	ObjectMoveUp(void)
 {
-	object *obj;
+	dxxobject *obj;
 	vms_vector	uvec;
 	vms_vector	newpos;
 
@@ -669,7 +669,7 @@ int	ObjectMoveUp(void)
 //	------------------------------------------------------------------------------------------------------
 int	ObjectMoveDown(void)
 {
-	object *obj;
+	dxxobject *obj;
 	vms_vector	uvec;
 	vms_vector	newpos;
 
@@ -735,7 +735,7 @@ int	ObjectMakeLarger(void)
 
 int rotate_object(short objnum, int p, int b, int h)
 {
-	object *obj = &Objects[objnum];
+	dxxobject *obj = &Objects[objnum];
 	vms_angvec ang;
 	vms_matrix rotmat,tempm;
 	
@@ -763,7 +763,7 @@ int rotate_object(short objnum, int p, int b, int h)
 
 void reset_object(short objnum)
 {
-	object *obj = &Objects[objnum];
+	dxxobject *obj = &Objects[objnum];
 
 	med_extract_matrix_from_segment(&Segments[obj->segnum],&obj->orient);
 
@@ -831,7 +831,7 @@ int ObjectIncreaseHeadingBig()	{return rotate_object(Cur_object_index, 0, 0, (RO
 
 void move_object_to_position(int objnum, vms_vector *newpos)
 {
-	object	*objp = &Objects[objnum];
+	dxxobject	*objp = &Objects[objnum];
 
 	segmasks result = get_seg_masks(newpos, objp->segnum, objp->size, __FILE__, __LINE__);
 
@@ -841,7 +841,7 @@ void move_object_to_position(int objnum, vms_vector *newpos)
 		if (verify_object_seg(&Objects[objnum], newpos)) {
 			int		fate, count;
 			int		viewer_segnum;
-			object	temp_viewer_obj;
+			dxxobject	temp_viewer_obj;
 			fvi_query fq;
 			fvi_info	hit_info;
 			vms_vector	last_outside_pos;

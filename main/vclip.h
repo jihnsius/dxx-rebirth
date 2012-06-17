@@ -59,8 +59,8 @@ extern int Num_vclips;
 extern vclip Vclip[VCLIP_MAXNUM];
 
 // draw an object which renders as a vclip.
-void draw_vclip_object(object *obj, fix timeleft, int lighted, int vclip_num);
-extern void draw_weapon_vclip(object *obj);
+void draw_vclip_object(dxxobject *obj, fix timeleft, int lighted, int vclip_num);
+extern void draw_weapon_vclip(dxxobject *obj);
 
 /*
  * reads n vclip structs from a PHYSFS_file

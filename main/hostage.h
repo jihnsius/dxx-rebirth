@@ -32,7 +32,7 @@ extern int N_hostage_types;
 
 extern int Hostage_vclip_num[MAX_HOSTAGE_TYPES];    // for each type of hostage
 
-void draw_hostage(object *obj);
+void draw_hostage(dxxobject *obj);
 void hostage_rescue(int hostage_num);
 
 #endif /* _HOSTAGE_H */

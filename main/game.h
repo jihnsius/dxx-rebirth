@@ -31,7 +31,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define MAXIMUM_FPS 1000
 #endif
 
-struct object;
+struct dxxobject;
 
 extern struct window *Game_wind;
 
@@ -51,7 +51,7 @@ extern fix Laser_delay_time;        // Delay between laser fires.
 #define EPS20	2
 #define EPS30	4
 
-extern struct object *Missile_viewer;
+extern struct dxxobject *Missile_viewer;
 extern int Missile_viewer_sig;
 
 #define CV_NONE     0
@@ -126,7 +126,7 @@ void close_game(void);
 void init_cockpit(void);
 void calc_frame_time(void);
 void FixedStepCalc();
-int do_flythrough(struct object *obj,int first_time);
+int do_flythrough(struct dxxobject *obj,int first_time);
 
 extern int Difficulty_level;    // Difficulty level in 0..NDL-1, 0 = easiest, NDL-1 = hardest
 extern int Global_laser_firing_count;
@@ -176,7 +176,7 @@ extern int Game_window_w,       // width and height of player's game window
 extern int Rear_view;           // if true, looking back.
 
 // initalize flying
-void fly_init(struct object *obj);
+void fly_init(struct dxxobject *obj);
 
 // selects a given cockpit (or lack of one).
 void select_cockpit(int mode);
@@ -202,7 +202,7 @@ void show_boxed_message(char *msg, int RenderFlag);
 void reset_rear_view(void);
 
 // returns ptr to escort robot, or NULL
-struct object *find_escort();
+struct dxxobject *find_escort();
 
 extern void apply_modified_palette(void);
 

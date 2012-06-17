@@ -66,54 +66,54 @@ extern ai_local Ai_local_info[MAX_OBJECTS];
 extern vms_vector Believed_player_pos;
 extern int Believed_player_seg;
 
-extern void move_towards_segment_center(object *objp);
+extern void move_towards_segment_center(dxxobject *objp);
 extern int gate_in_robot(int type, int segnum);
-extern void do_ai_movement(object *objp);
-extern void ai_move_to_new_segment( object * obj, short newseg, int first_time );
+extern void do_ai_movement(dxxobject *objp);
+extern void ai_move_to_new_segment( dxxobject * obj, short newseg, int first_time );
 // extern void ai_follow_path( object * obj, short newseg, int first_time );
-extern void ai_recover_from_wall_hit(object *obj, int segnum);
-extern void ai_move_one(object *objp);
-extern void do_ai_frame(object *objp);
+extern void ai_recover_from_wall_hit(dxxobject *obj, int segnum);
+extern void ai_move_one(dxxobject *objp);
+extern void do_ai_frame(dxxobject *objp);
 extern void init_ai_object(int objnum, int initial_mode, int hide_segment);
-extern void update_player_awareness(object *objp, fix new_awareness);
-extern void create_awareness_event(object *objp, int type);         // object *objp can create awareness of player, amount based on "type"
+extern void update_player_awareness(dxxobject *objp, fix new_awareness);
+extern void create_awareness_event(dxxobject *objp, int type);         // object *objp can create awareness of player, amount based on "type"
 extern void do_ai_frame_all(void);
-extern void reset_ai_states(object *objp);
-extern int create_path_points(object *objp, int start_seg, int end_seg, point_seg *point_segs, short *num_points, int max_depth, int random_flag, int safety_flag, int avoid_seg);
+extern void reset_ai_states(dxxobject *objp);
+extern int create_path_points(dxxobject *objp, int start_seg, int end_seg, point_seg *point_segs, short *num_points, int max_depth, int random_flag, int safety_flag, int avoid_seg);
 extern void create_all_paths(void);
-extern void create_path_to_station(object *objp, int max_length);
-extern void ai_follow_path(object *objp, int player_visibility, int previous_visibility, vms_vector *vec_to_player);
-extern void ai_turn_towards_vector(vms_vector *vec_to_player, object *obj, fix rate);
-extern void ai_turn_towards_vel_vec(object *objp, fix rate);
+extern void create_path_to_station(dxxobject *objp, int max_length);
+extern void ai_follow_path(dxxobject *objp, int player_visibility, int previous_visibility, vms_vector *vec_to_player);
+extern void ai_turn_towards_vector(vms_vector *vec_to_player, dxxobject *obj, fix rate);
+extern void ai_turn_towards_vel_vec(dxxobject *objp, fix rate);
 extern void init_ai_objects(void);
-extern void do_ai_robot_hit(object *robot, int type);
-extern void create_n_segment_path(object *objp, int path_length, int avoid_seg);
-extern void create_n_segment_path_to_door(object *objp, int path_length, int avoid_seg);
+extern void do_ai_robot_hit(dxxobject *robot, int type);
+extern void create_n_segment_path(dxxobject *objp, int path_length, int avoid_seg);
+extern void create_n_segment_path_to_door(dxxobject *objp, int path_length, int avoid_seg);
 extern void make_random_vector(vms_vector *vec);
 extern void init_robots_for_level(void);
 extern int ai_behavior_to_mode(int behavior);
-extern void create_path_to_segment(object *objp, int goalseg, int max_length, int safety_flag);
+extern void create_path_to_segment(dxxobject *objp, int goalseg, int max_length, int safety_flag);
 extern int ready_to_fire(robot_info *robptr, ai_local *ailp);
-extern int polish_path(object *objp, point_seg *psegs, int num_points);
-extern void move_towards_player(object *objp, vms_vector *vec_to_player);
+extern int polish_path(dxxobject *objp, point_seg *psegs, int num_points);
+extern void move_towards_player(dxxobject *objp, vms_vector *vec_to_player);
 
 // max_length is maximum depth of path to create.
 // If -1, use default: MAX_DEPTH_TO_SEARCH_FOR_PLAYER
-extern void create_path_to_player(object *objp, int max_length, int safety_flag);
-extern void attempt_to_resume_path(object *objp);
+extern void create_path_to_player(dxxobject *objp, int max_length, int safety_flag);
+extern void attempt_to_resume_path(dxxobject *objp);
 
 // When a robot and a player collide, some robots attack!
-extern void do_ai_robot_hit_attack(object *robot, object *player, vms_vector *collision_point);
-extern void ai_open_doors_in_segment(object *robot);
-extern int ai_door_is_openable(object *objp, segment *segp, int sidenum);
-extern int player_is_visible_from_object(object *objp, vms_vector *pos, fix field_of_view, vms_vector *vec_to_player);
+extern void do_ai_robot_hit_attack(dxxobject *robot, dxxobject *player, vms_vector *collision_point);
+extern void ai_open_doors_in_segment(dxxobject *robot);
+extern int ai_door_is_openable(dxxobject *objp, segment *segp, int sidenum);
+extern int player_is_visible_from_object(dxxobject *objp, vms_vector *pos, fix field_of_view, vms_vector *vec_to_player);
 extern void ai_reset_all_paths(void);   // Reset all paths.  Call at the start of a level.
-extern int ai_multiplayer_awareness(object *objp, int awareness_level);
+extern int ai_multiplayer_awareness(dxxobject *objp, int awareness_level);
 
 // In escort.c
-extern void do_escort_frame(object *objp, fix dist_to_player, int player_visibility);
-extern void do_snipe_frame(object *objp, fix dist_to_player, int player_visibility, vms_vector *vec_to_player);
-extern void do_thief_frame(object *objp, fix dist_to_player, int player_visibility, vms_vector *vec_to_player);
+extern void do_escort_frame(dxxobject *objp, fix dist_to_player, int player_visibility);
+extern void do_snipe_frame(dxxobject *objp, fix dist_to_player, int player_visibility, vms_vector *vec_to_player);
+extern void do_thief_frame(dxxobject *objp, fix dist_to_player, int player_visibility, vms_vector *vec_to_player);
 
 #ifndef NDEBUG
 extern void force_dump_ai_objects_all(char *msg);
@@ -121,7 +121,7 @@ extern void force_dump_ai_objects_all(char *msg);
 #define force_dump_ai_objects_all(msg)
 #endif
 
-extern void start_boss_death_sequence(object *objp);
+extern void start_boss_death_sequence(dxxobject *objp);
 extern void ai_init_boss_for_ship(void);
 extern int Boss_been_hit;
 extern fix AI_proc_time;
@@ -277,19 +277,19 @@ extern int Do_ai_flag, Break_on_object;
 
 extern int Stolen_item_index;   // Used in ai.c for controlling rate of Thief flare firing.
 
-extern void ai_frame_animation(object *objp);
-extern int do_silly_animation(object *objp);
+extern void ai_frame_animation(dxxobject *objp);
+extern int do_silly_animation(dxxobject *objp);
 extern int openable_doors_in_segment(int segnum);
-extern void compute_vis_and_vec(object *objp, vms_vector *pos, ai_local *ailp, vms_vector *vec_to_player, int *player_visibility, robot_info *robptr, int *flag);
-extern void do_firing_stuff(object *obj, int player_visibility, vms_vector *vec_to_player);
-extern int maybe_ai_do_actual_firing_stuff(object *obj, ai_static *aip);
-extern void ai_do_actual_firing_stuff(object *obj, ai_static *aip, ai_local *ailp, robot_info *robptr, vms_vector *vec_to_player, fix dist_to_player, vms_vector *gun_point, int player_visibility, int object_animates, int gun_num);
-extern void do_super_boss_stuff(object *objp, fix dist_to_player, int player_visibility);
-extern void do_boss_stuff(object *objp, int player_visibility);
+extern void compute_vis_and_vec(dxxobject *objp, vms_vector *pos, ai_local *ailp, vms_vector *vec_to_player, int *player_visibility, robot_info *robptr, int *flag);
+extern void do_firing_stuff(dxxobject *obj, int player_visibility, vms_vector *vec_to_player);
+extern int maybe_ai_do_actual_firing_stuff(dxxobject *obj, ai_static *aip);
+extern void ai_do_actual_firing_stuff(dxxobject *obj, ai_static *aip, ai_local *ailp, robot_info *robptr, vms_vector *vec_to_player, fix dist_to_player, vms_vector *gun_point, int player_visibility, int object_animates, int gun_num);
+extern void do_super_boss_stuff(dxxobject *objp, fix dist_to_player, int player_visibility);
+extern void do_boss_stuff(dxxobject *objp, int player_visibility);
 // -- unused, 08/07/95 -- extern void ai_turn_randomly(vms_vector *vec_to_player, object *obj, fix rate, int previous_visibility);
-extern void ai_move_relative_to_player(object *objp, ai_local *ailp, fix dist_to_player, vms_vector *vec_to_player, fix circle_distance, int evade_only, int player_visibility);
-extern void move_away_from_player(object *objp, vms_vector *vec_to_player, int attack_type);
-extern void move_towards_vector(object *objp, vms_vector *vec_goal, int dot_based);
+extern void ai_move_relative_to_player(dxxobject *objp, ai_local *ailp, fix dist_to_player, vms_vector *vec_to_player, fix circle_distance, int evade_only, int player_visibility);
+extern void move_away_from_player(dxxobject *objp, vms_vector *vec_to_player, int attack_type);
+extern void move_towards_vector(dxxobject *objp, vms_vector *vec_goal, int dot_based);
 extern void init_ai_frame(void);
 
 extern void create_bfs_list(int start_seg, short bfs_list[], int *length, int max_segs);
@@ -303,8 +303,8 @@ extern int ai_restore_state(PHYSFS_file *fp, int version, int swap);
 
 extern int Buddy_objnum, Buddy_allowed_to_talk;
 
-extern void start_robot_death_sequence(object *objp);
-extern int do_any_robot_dying_frame(object *objp);
+extern void start_robot_death_sequence(dxxobject *objp);
+extern int do_any_robot_dying_frame(dxxobject *objp);
 extern void buddy_message(char * format, ... );
 
 #define SPECIAL_REACTOR_ROBOT   65

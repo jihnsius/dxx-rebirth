@@ -71,7 +71,7 @@ void draw_seg_objects(segment *seg)
 	int objnum;
 
 	for (objnum=seg->objects;objnum!=-1;objnum=Objects[objnum].next) {
-		object *obj = &Objects[objnum];
+		dxxobject *obj = &Objects[objnum];
 		g3s_point sphere_point;
 
 		if ((obj->type==OBJ_PLAYER) && (objnum > 0 ))

@@ -276,7 +276,7 @@ void make_nearby_robot_snipe(void)
 		int objnum = Segments[bfs_list[i]].objects;
 
 		while (objnum != -1) {
-			object *objp = &Objects[objnum];
+			dxxobject *objp = &Objects[objnum];
 			robot_info *robptr = &Robot_info[objp->id];
 
 			if ((objp->type == OBJ_ROBOT) && (objp->id != ROBOT_BRAIN)) {
@@ -294,7 +294,7 @@ void make_nearby_robot_snipe(void)
 int Ai_last_missile_camera = -1;
 
 // --------------------------------------------------------------------------------------------------------------------
-void do_ai_frame(object *obj)
+void do_ai_frame(dxxobject *obj)
 {
 	int         objnum = obj-Objects;
 	ai_static   *aip = &obj->ctype.ai_info;
@@ -745,7 +745,7 @@ _exit_cheat:
 		do_escort_frame(obj, dist_to_player, player_visibility);
 
 		if (obj->ctype.ai_info.danger_laser_num != -1) {
-			object *dobjp = &Objects[obj->ctype.ai_info.danger_laser_num];
+			dxxobject *dobjp = &Objects[obj->ctype.ai_info.danger_laser_num];
 
 			if ((dobjp->type == OBJ_WEAPON) && (dobjp->signature == obj->ctype.ai_info.danger_laser_signature)) {
 				fix circle_distance;
@@ -1319,7 +1319,7 @@ void ai_do_cloak_stuff(void)
 
 // ----------------------------------------------------------------------------
 // Returns false if awareness is considered too puny to add, else returns true.
-int add_awareness_event(object *objp, int type)
+int add_awareness_event(dxxobject *objp, int type)
 {
 	// If player cloaked and hit a robot, then increase awareness
 	if ((type == PA_WEAPON_ROBOT_COLLISION) || (type == PA_WEAPON_WALL_COLLISION) || (type == PA_PLAYER_COLLISION))
@@ -1347,7 +1347,7 @@ int add_awareness_event(object *objp, int type)
 // ----------------------------------------------------------------------------------
 // Robots will become aware of the player based on something that occurred.
 // The object (probably player or weapon) which created the awareness is objp.
-void create_awareness_event(object *objp, int type)
+void create_awareness_event(dxxobject *objp, int type)
 {
 	// If not in multiplayer, or in multiplayer with robots, do this, else unnecessary!
 	if (!(Game_mode & GM_MULTI) || (Game_mode & GM_MULTI_ROBOTS)) {
@@ -1455,7 +1455,7 @@ void turn_off_ai_dump(void)
 
 #endif
 
-extern void do_boss_dying_frame(object *objp);
+extern void do_boss_dying_frame(dxxobject *objp);
 
 // ----------------------------------------------------------------------------------
 // Do things which need to get done for all AI objects each frame.

@@ -256,7 +256,7 @@ void multi_send_trigger(int trigger);
 void multi_send_hostage_door_status(int wallnum);
 void multi_send_drop_weapon (int objnum,int seed);
 void multi_send_drop_marker (int player,vms_vector position,char messagenum,char text[]);
-void multi_send_guided_info (object *miss,char);
+void multi_send_guided_info (dxxobject *miss,char);
 void multi_send_bounty( void );
 
 void multi_endlevel_score(void);
@@ -275,7 +275,7 @@ void multi_send_message_dialog(void);
 int multi_delete_extra_objects(void);
 void multi_make_ghost_player(int objnum);
 void multi_make_player_ghost(int objnum);
-void multi_reset_player_object(object *objp);
+void multi_reset_player_object(dxxobject *objp);
 void multi_define_macro(int key);
 void multi_send_macro(int key);
 int multi_get_kill_list(int *plist);
@@ -284,12 +284,12 @@ void multi_sort_kill_list(void);
 void multi_reset_stuff(void);
 void multi_send_data(char *buf, int len, int priority);
 int get_team(int pnum);
-int multi_maybe_disable_friendly_fire(object *killer);
+int multi_maybe_disable_friendly_fire(dxxobject *killer);
 void multi_initiate_save_game();
 void multi_initiate_restore_game();
 void multi_disconnect_player(int pnum);
-void multi_object_to_object_rw(object *obj, object_rw *obj_rw);
-void multi_object_rw_to_object(object_rw *obj_rw, object *obj);
+void multi_object_to_object_rw(dxxobject *obj, object_rw *obj_rw);
+void multi_object_rw_to_object(object_rw *obj_rw, dxxobject *obj);
 
 
 // Exported variables

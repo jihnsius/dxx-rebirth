@@ -26,7 +26,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define MAX_VECS 5000
 
 typedef struct morph_data {
-	object *obj;                                // object which is morphing
+	dxxobject *obj;                                // object which is morphing
 	vms_vector morph_vecs[MAX_VECS];
 	vms_vector morph_deltas[MAX_VECS];
 	fix morph_times[MAX_VECS];
@@ -44,15 +44,15 @@ typedef struct morph_data {
 
 extern morph_data morph_objects[];
 
-void morph_start(object *obj);
-void draw_morph_object(object *obj);
+void morph_start(dxxobject *obj);
+void draw_morph_object(dxxobject *obj);
 
 //process the morphing object for one frame
-void do_morph_frame(object *obj);
+void do_morph_frame(dxxobject *obj);
 
 //called at the start of a level
 void init_morphs();
 
-extern morph_data *find_morph_data(object *obj);
+extern morph_data *find_morph_data(dxxobject *obj);
 
 #endif /* _MORPH_H */

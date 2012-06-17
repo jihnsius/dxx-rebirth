@@ -42,7 +42,7 @@ static char rcsid[] = "$Id: slew.c,v 1.1.1.1 2006/03/17 19:43:42 zicodxx Exp $";
 
 //variables for slew system
 
-object *slew_obj=NULL;	//what object is slewing, or NULL if none
+dxxobject *slew_obj=NULL;	//what object is slewing, or NULL if none
 
 #define JOY_NULL 15
 #define ROT_SPEED 2		//rate of rotation while key held down
@@ -57,7 +57,7 @@ int slew_stop(void);
 
 // -------------------------------------------------------------------
 //say start slewing with this object
-void slew_init(object *obj)
+void slew_init(dxxobject *obj)
 {
 	slew_obj = obj;
 
@@ -87,7 +87,7 @@ void slew_reset_orient()
 
 }
 
-int do_slew_movement(object *obj, int check_keys )
+int do_slew_movement(dxxobject *obj, int check_keys )
 {
 	int moved = 0;
 	vms_vector svel, movement;				//scaled velocity (per this frame)

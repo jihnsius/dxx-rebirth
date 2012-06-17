@@ -230,7 +230,7 @@ extern void wall_close_door(segment *seg, int side);
 
 // Determines what happens when a wall is shot
 //obj is the object that hit...either a weapon or the player himself
-extern int wall_hit_process(segment *seg, int side, fix damage, int playernum, object *obj );
+extern int wall_hit_process(segment *seg, int side, fix damage, int playernum, dxxobject *obj );
 
 // Opens/destroys specified door.
 extern void wall_toggle(int segnum, int side);
@@ -245,7 +245,7 @@ extern stuckobj Stuck_objects[MAX_STUCK_OBJECTS];
 
 //  An object got stuck in a door (like a flare).
 //  Add global entry.
-extern void add_stuck_object(object *objp, int segnum, int sidenum);
+extern void add_stuck_object(dxxobject *objp, int segnum, int sidenum);
 extern void remove_obsolete_stuck_objects(void);
 
 //set the tmap_num or tmap_num2 field for a wall/door

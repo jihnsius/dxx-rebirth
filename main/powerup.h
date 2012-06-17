@@ -110,13 +110,13 @@ typedef struct powerup_type_info {
 extern int N_powerup_types;
 extern powerup_type_info Powerup_info[MAX_POWERUP_TYPES];
 
-void draw_powerup(object *obj);
+void draw_powerup(dxxobject *obj);
 
 //returns true if powerup consumed
-int do_powerup(object *obj);
+int do_powerup(dxxobject *obj);
 
 //process (animate) a powerup for one frame
-void do_powerup_frame(object *obj);
+void do_powerup_frame(dxxobject *obj);
 
 // Diminish shields and energy towards max in case they exceeded it.
 extern void diminish_towards_max(void);

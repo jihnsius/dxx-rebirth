@@ -179,7 +179,7 @@ typedef struct polyobj_info {
 	int     alt_textures;       // if not -1, use these textures instead
 } __pack__ polyobj_info;
 
-typedef struct object {
+typedef struct dxxobject {
 	int     signature;      // Every object ever has a unique signature...
 	ubyte   type;           // what type of object this is... robot, weapon, hostage, powerup, fireball
 	ubyte   id;             // which form of object...which powerup, robot, etc.
@@ -229,7 +229,7 @@ typedef struct object {
 #ifdef WORDS_NEED_ALIGNMENT
 	short   pad2;
 #endif
-} __pack__ object;
+} __pack__ dxxobject;
 
 // Same as above but structure Savegames/Multiplayer objects expect
 typedef struct object_rw {
@@ -292,7 +292,7 @@ typedef struct obj_position {
 
 typedef struct {
 	int     frame;
-	object  *viewer;
+	dxxobject  *viewer;
 	int     rear_view;
 	int     user;
 	int     num_objects;
@@ -312,7 +312,7 @@ extern int Object_next_signature;   // The next signature for the next newly cre
 extern ubyte CollisionResult[MAX_OBJECT_TYPES][MAX_OBJECT_TYPES];
 // ie CollisionResult[a][b]==  what happens to a when it collides with b
 
-extern object Objects[];
+extern dxxobject Objects[];
 extern int Highest_object_index;    // highest objnum
 extern int num_objects;
 
@@ -320,11 +320,11 @@ extern char *robot_names[];         // name of each robot
 
 extern int Num_robot_types;
 
-extern object *ConsoleObject;       // pointer to the object that is the player
-extern object *Viewer;              // which object we are seeing from
-extern object *Dead_player_camera;
+extern dxxobject *ConsoleObject;       // pointer to the object that is the player
+extern dxxobject *Viewer;              // which object we are seeing from
+extern dxxobject *Dead_player_camera;
 
-extern object Follow;
+extern dxxobject Follow;
 extern int Player_is_dead;          // !0 means player is dead!
 extern int Player_exploded;
 extern int Player_eggs_dropped;
@@ -344,7 +344,7 @@ void init_objects();
 
 // returns segment number object is in.  Searches out from object's current
 // seg, so this shouldn't be called if the object has "jumped" to a new seg
-int obj_get_new_seg(object *obj);
+int obj_get_new_seg(dxxobject *obj);
 
 // when an object has moved into a new segment, this function unlinks it
 // from its old segment, and links it into the new segment
@@ -383,13 +383,13 @@ void reset_objects(int n_objs);
 void compress_objects(void);
 
 // Render an object.  Calls one of several routines based on type
-void render_object(object *obj);
+void render_object(dxxobject *obj);
 
 // Draw a blob-type object, like a fireball
-void draw_object_blob(object *obj, bitmap_index bitmap);
+void draw_object_blob(dxxobject *obj, bitmap_index bitmap);
 
 // draw an object that is a texture-mapped rod
-void draw_object_tmap_rod(object *obj, bitmap_index bitmap, int lighted);
+void draw_object_tmap_rod(dxxobject *obj, bitmap_index bitmap, int lighted);
 
 // Deletes all objects that have been marked for death.
 void obj_delete_all_that_should_be_dead();
@@ -407,7 +407,7 @@ void object_goto_next_viewer();
 void object_render_targets(void);
 
 // move an object for the current frame
-void object_move_one(object * obj);
+void object_move_one(dxxobject * obj);
 
 // make object0 the player, setting all relevant fields
 void init_player_object();
@@ -416,36 +416,36 @@ void init_player_object();
 // segs.  if not any of these, returns false, else sets obj->segnum &
 // returns true callers should really use find_vector_intersection()
 // Note: this function is in gameseg.c
-extern int update_object_seg(struct object *obj);
+extern int update_object_seg(dxxobject *obj);
 
 
 // Finds what segment *obj is in, returns segment number.  If not in
 // any segment, returns -1.  Note: This function is defined in
 // gameseg.h, but object.h depends on gameseg.h, and object.h is where
 // object is defined...get it?
-extern int find_object_seg(object * obj );
+extern int find_object_seg(dxxobject * obj );
 
 // go through all objects and make sure they have the correct segment
 // numbers used when debugging is on
 void fix_object_segs();
 
 // Drops objects contained in objp.
-int object_create_egg(object *objp);
+int object_create_egg(dxxobject *objp);
 
 // Interface to object_create_egg, puts count objects of type type, id
 // = id in objp and then drops them.
-int call_object_create_egg(object *objp, int count, int type, int id);
+int call_object_create_egg(dxxobject *objp, int count, int type, int id);
 
 extern void dead_player_end(void);
 
 // Extract information from an object (objp->orient, objp->pos,
 // objp->segnum), stuff in a shortpos structure.  See typedef
 // shortpos.
-extern void create_shortpos(shortpos *spp, object *objp, int swap_bytes);
+extern void create_shortpos(shortpos *spp, dxxobject *objp, int swap_bytes);
 
 // Extract information from a shortpos, stuff in objp->orient
 // (matrix), objp->pos, objp->segnum
-extern void extract_shortpos(object *objp, shortpos *spp, int swap_bytes);
+extern void extract_shortpos(dxxobject *objp, shortpos *spp, int swap_bytes);
 
 // delete objects, such as weapons & explosions, that shouldn't stay
 // between levels if clear_all is set, clear even proximity bombs
@@ -473,14 +473,14 @@ void special_reset_objects(void);
 
 // attaches an object, such as a fireball, to another object, such as
 // a robot
-void obj_attach(object *parent,object *sub);
+void obj_attach(dxxobject *parent,dxxobject *sub);
 
-extern void create_small_fireball_on_object(object *objp, fix size_scale, int sound_flag);
+void create_small_fireball_on_object(dxxobject *objp, fix size_scale, int sound_flag);
 
 // returns object number
 int drop_marker_object(vms_vector *pos, int segnum, vms_matrix *orient, int marker_num);
 
-extern void wake_up_rendered_objects(object *gmissp, int window_num);
+void wake_up_rendered_objects(dxxobject *gmissp, int window_num);
 
 void reset_player_object(void);
 

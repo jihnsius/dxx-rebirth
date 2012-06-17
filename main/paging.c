@@ -175,7 +175,7 @@ void paging_touch_robot( int robot_index )
 }
 
 
-void paging_touch_object( object * obj )
+void paging_touch_object( dxxobject * obj )
 {
 	int v;
 

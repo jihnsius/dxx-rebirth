@@ -2918,11 +2918,11 @@ int SW_drawn[2], SW_x[2], SW_y[2], SW_w[2], SW_h[2];
 //user is one of the WBU_ constants.  If rear_view_flag is set, show a
 //rear view.  If label is non-NULL, print the label at the top of the
 //window.
-void do_cockpit_window_view(int win,object *viewer,int rear_view_flag,int user,const char *label)
+void do_cockpit_window_view(int win,dxxobject *viewer,int rear_view_flag,int user,const char *label)
 {
 	grs_canvas window_canv;
 	static grs_canvas overlap_canv;
-	object *viewer_save = Viewer;
+	dxxobject *viewer_save = Viewer;
 	static int overlap_dirty[2]={0,0};
 	int boxnum;
 	static int window_x,window_y;

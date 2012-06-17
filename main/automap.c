@@ -271,7 +271,7 @@ void DrawMarkerNumber (automap *am, int num)
 void DropMarker (int player_marker_num)
 {
 	int marker_num = (Player_num*2)+player_marker_num;
-	object *playerp = &Objects[Players[Player_num].objnum];
+	dxxobject *playerp = &Objects[Players[Player_num].objnum];
 
 	MarkerPoint[marker_num] = playerp->pos;
 
@@ -287,7 +287,7 @@ void DropMarker (int player_marker_num)
 
 }
 
-void DropBuddyMarker(object *objp)
+void DropBuddyMarker(dxxobject *objp)
 {
 	int marker_num;
 
@@ -375,7 +375,7 @@ void automap_clear_visited()
 		ClearMarkers();
 }
 
-void draw_player( object * obj )
+void draw_player( dxxobject * obj )
 {
 	vms_vector arrow_pos, head_pos;
 	g3s_point sphere_point, arrow_point, head_point;
@@ -444,7 +444,7 @@ void draw_automap(automap *am)
 {
 	int i;
 	int color;
-	object * objp;
+	dxxobject * objp;
 	g3s_point sphere_point;
 
 	if ( am->leave_mode==0 && am->controls.automap_state && (timer_query()-am->entry_time)>LEAVE_TIME)

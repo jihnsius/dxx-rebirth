@@ -717,7 +717,7 @@ int select_next_window_function(int w)
 #ifdef DOOR_DEBUGGING
 dump_door_debugging_info()
 {
-	object *obj;
+	dxxobject *obj;
 	vms_vector new_pos;
 	fvi_query fq;
 	fvi_info hit_info;

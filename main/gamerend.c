@@ -503,7 +503,7 @@ extern int SW_drawn[2], SW_x[2], SW_y[2], SW_w[2], SW_h[2];
 ubyte RenderingType=0;
 ubyte DemoDoingRight=0,DemoDoingLeft=0;
 extern ubyte DemoDoRight,DemoDoLeft;
-extern object DemoRightExtra,DemoLeftExtra;
+extern dxxobject DemoRightExtra,DemoLeftExtra;
 
 char DemoWBUType[]={0,WBU_GUIDED,WBU_MISSILE,WBU_REAR,WBU_ESCORT,WBU_MARKER,0};
 char DemoRearCheck[]={0,0,0,1,0,0,0};
@@ -611,7 +611,7 @@ void show_extra_views()
 				}
 			 	break;
 			case CV_ESCORT: {
-				object *buddy;
+				dxxobject *buddy;
 				buddy = find_escort();
 				if (buddy == NULL) {
 					do_cockpit_window_view(w,NULL,0,WBU_WEAPON,NULL);
@@ -669,7 +669,7 @@ void game_render_frame_mono(int flip)
 	gr_set_current_canvas(&Screen_3d_window);
 	
 	if (Guided_missile[Player_num] && Guided_missile[Player_num]->type==OBJ_WEAPON && Guided_missile[Player_num]->id==GUIDEDMISS_ID && Guided_missile[Player_num]->signature==Guided_missile_sig[Player_num] && PlayerCfg.GuidedInBigWindow) {
-		object *viewer_save = Viewer;
+		dxxobject *viewer_save = Viewer;
 
 		if (PlayerCfg.CockpitMode[1]==CM_FULL_COCKPIT || PlayerCfg.CockpitMode[1]==CM_REAR_VIEW)
 		{

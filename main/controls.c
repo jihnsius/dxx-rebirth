@@ -55,7 +55,7 @@ extern int Drop_afterburner_blob_flag;		//ugly hack
 
 extern fix	Seismic_tremor_magnitude;
 
-void read_flying_controls( object * obj )
+void read_flying_controls( dxxobject * obj )
 {
 	fix	forward_thrust_time;
 
