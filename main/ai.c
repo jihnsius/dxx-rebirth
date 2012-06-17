@@ -131,7 +131,7 @@ int             Believed_player_seg;
 
 #ifndef NDEBUG
 // Index into this array with ailp->mode
-char *mode_text[18] = {
+static const char mode_text[18][16] = {
 	"STILL",
 	"WANDER",
 	"FOL_PATH",
@@ -153,7 +153,7 @@ char *mode_text[18] = {
 };
 
 //	Index into this array with aip->behavior
-char behavior_text[6][9] = {
+static const char behavior_text[6][9] = {
 	"STILL   ",
 	"NORMAL  ",
 	"HIDE    ",
@@ -163,7 +163,7 @@ char behavior_text[6][9] = {
 };
 
 // Index into this array with aip->GOAL_STATE or aip->CURRENT_STATE
-char state_text[8][5] = {
+static const char state_text[8][5] = {
 	"NONE",
 	"REST",
 	"SRCH",

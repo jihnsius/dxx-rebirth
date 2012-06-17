@@ -213,7 +213,6 @@ extern void  create_buddy_bot(void);
 
 extern int   Max_escort_length;
 
-extern char  *Escort_goal_text[MAX_ESCORT_GOALS];
 
 extern void  ai_multi_send_robot_position(int objnum, int force);
 
@@ -267,13 +266,10 @@ extern vms_vector       Believed_player_pos;
 
 #ifndef NDEBUG
 // Index into this array with ailp->mode
-extern char *mode_text[18];
 
 // Index into this array with aip->behavior
-extern char behavior_text[6][9];
 
 // Index into this array with aip->GOAL_STATE or aip->CURRENT_STATE
-extern char state_text[8][5];
 
 extern int Do_ai_flag, Break_on_object;
 

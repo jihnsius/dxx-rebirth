@@ -990,7 +990,7 @@ static void grs_font_read(grs_font *gf, PHYSFS_file *fp)
 	gf->ft_kerndata = (ubyte *)((size_t)PHYSFSX_readInt(fp) - GRS_FONT_SIZE);
 }
 
-grs_font * gr_init_font( char * fontname )
+grs_font * gr_init_font( const char * fontname )
 {
 	grs_font *font;
 	char *font_data;
