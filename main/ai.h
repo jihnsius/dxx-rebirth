@@ -217,10 +217,6 @@ extern char  *Escort_goal_text[MAX_ESCORT_GOALS];
 
 extern void  ai_multi_send_robot_position(int objnum, int force);
 
-extern int   Flinch_scale;
-extern int   Attack_scale;
-extern sbyte Mike_to_matt_xlate[];
-
 // Amount of time since the current robot was last processed for things such as movement.
 // It is not valid to use FrameTime because robots do not get moved every frame.
 

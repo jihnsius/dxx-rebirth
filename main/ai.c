@@ -110,7 +110,7 @@ int ai_evaded=0;
 
 // -- sbyte Super_boss_gate_list[MAX_GATE_INDEX] = {0, 1, 8, 9, 10, 11, 12, 15, 16, 18, 19, 20, 22, 0, 8, 11, 19, 20, 8, 20, 8};
 
-int Animation_enabled = 1;
+static int Animation_enabled = 1;
 
 #ifndef NDEBUG
 int Ai_info_enabled=0;
@@ -184,7 +184,7 @@ char state_text[8][5] = {
 // Third dimension is goal state.
 // Result is new goal state.
 // ERR_ means something impossible has happened.
-sbyte Ai_transition_table[AI_MAX_EVENT][AI_MAX_STATE][AI_MAX_STATE] = {
+static const sbyte Ai_transition_table[AI_MAX_EVENT][AI_MAX_STATE][AI_MAX_STATE] = {
 	{
 		// Event = AIE_FIRE, a nearby object fired
 		// none     rest      srch      lock      flin      fire      reco        // CURRENT is rows, GOAL is columns
