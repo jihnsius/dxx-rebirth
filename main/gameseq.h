@@ -79,34 +79,33 @@ void load_level_robots(int level_num);
 // Secret levels are -1,-2,-3
 void LoadLevel(int level_num, int page_in_textures);
 
-extern void gameseq_remove_unused_players();
+void gameseq_remove_unused_players();
 
-extern void show_help();
-extern void update_player_stats();
+void update_player_stats();
 
 // from scores.c
 
-extern void show_high_scores(int place);
-extern void draw_high_scores(int place);
-extern int add_player_to_high_scores(player *pp);
-extern void input_name (int place);
-extern int reset_high_scores();
-extern void init_player_stats_level(int secret_flag);
+void show_high_scores(int place);
+void draw_high_scores(int place);
+int add_player_to_high_scores(player *pp);
+void input_name (int place);
+int reset_high_scores();
+void init_player_stats_level(int secret_flag);
 
 void open_message_window(void);
 void close_message_window(void);
 
 // create flash for player appearance
-extern void create_player_appearance_effect(dxxobject *player_obj);
+void create_player_appearance_effect(dxxobject *player_obj);
 
 // goto whatever secrect level is appropriate given the current level
-extern void goto_secret_level();
+void goto_secret_level();
 
 // reset stuff so game is semi-normal when playing from editor
 void editor_reset_stuff_on_level();
 
 // Show endlevel bonus scores
-extern void DoEndLevelScoreGlitz(int network);
+void DoEndLevelScoreGlitz(int network);
 
 // stuff for multiplayer
 extern int NumNetPlayerPositions;

@@ -29,8 +29,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 // weapon info flags
 #define WIF_PLACABLE        1   // can be placed by level designer
 
-struct dxxobject;
-
 typedef struct weapon_info {
 	sbyte   render_type;        // How to draw 0=laser, 1=blob, 2=object
 	sbyte   persistent;         // 0 = dies when it hits something, 1 = continues (eg, fusion cannon)
@@ -164,8 +162,8 @@ extern "C" {
 
 extern weapon_info Weapon_info[];
 extern int N_weapon_types;
-extern void do_weapon_select(int weapon_num, int secondary_flag);
-extern void show_weapon_status(void);
+void do_weapon_select(int weapon_num, int secondary_flag);
+void show_weapon_status(void);
 
 extern sbyte Primary_weapon, Secondary_weapon;
 
@@ -185,8 +183,8 @@ extern ubyte Secondary_weapon_to_powerup[MAX_SECONDARY_WEAPONS];
 extern ubyte Primary_last_was_super[MAX_PRIMARY_WEAPONS];
 extern ubyte Secondary_last_was_super[MAX_SECONDARY_WEAPONS];
 
-extern void auto_select_weapon(int weapon_type);        //parm is primary or secondary
-extern void select_weapon(int weapon_num, int secondary_flag, int print_message,int wait_for_rearm);
+void auto_select_weapon(int weapon_type);        //parm is primary or secondary
+void select_weapon(int weapon_num, int secondary_flag, int print_message,int wait_for_rearm);
 
 extern char *Primary_weapon_names_short[];
 extern char *Secondary_weapon_names_short[];
@@ -208,7 +206,7 @@ extern sbyte    Weapon_is_energy[MAX_WEAPON_TYPES];
 //      HAS_ENERGY_FLAG
 //      HAS_AMMO_FLAG
 //      HAS_SUPER_FLAG
-extern int player_has_weapon(int weapon_num, int secondary_flag);
+int player_has_weapon(int weapon_num, int secondary_flag);
 
 //called when one of these weapons is picked up
 //when you pick up a secondary, you always get the weapon & ammo for it
@@ -221,21 +219,21 @@ int pick_up_primary(int weapon_index);
 //called when ammo (for the vulcan cannon) is picked up
 int pick_up_ammo(int class_flag,int weapon_index,int ammo_count);
 
-extern int attempt_to_steal_item(struct dxxobject *objp, int player_num);
+int attempt_to_steal_item(struct dxxobject *objp, int player_num);
 
 //this function is for when the player intentionally drops a powerup
-extern int spit_powerup(struct dxxobject *spitter, int id, int seed);
+int spit_powerup(struct dxxobject *spitter, int id, int seed);
 
 #define SMEGA_ID    40
 
-extern void rock_the_mine_frame(void);
-extern void smega_rock_stuff(void);
-extern void init_smega_detonates(void);
+void rock_the_mine_frame(void);
+void smega_rock_stuff(void);
+void init_smega_detonates(void);
 
 /*
  * reads n weapon_info structs from a PHYSFS_file
  */
-extern int weapon_info_read_n(weapon_info *wi, int n, PHYSFS_file *fp, int file_version);
+int weapon_info_read_n(weapon_info *wi, int n, PHYSFS_file *fp, int file_version);
 
 #ifdef __cplusplus
 }
