@@ -25,6 +25,8 @@ if git rev-parse --git-dir >/dev/null 2>&1; then
 		"$(git describe --tags 2>/dev/null)" \
 		"$(git diff --name-status --quiet --exit-code --cached || echo '+')" \
 		"$(git diff --name-status --quiet --exit-code || echo '*')"
+	printf -v mysconsargs[${#mysconsargs[@]}] 'extra_version_build_time=%u' \
+		"$(git ls-files -z | xargs -0 -r stat -c '%Y' | sort -nr | head -n1)"
 fi
 
 exec /usr/bin/scons "${mysconsargs[@]}" "$@"

@@ -30,6 +30,7 @@ opengles = int(ARGUMENTS.get('opengles', 0))
 asm = int(ARGUMENTS.get('asm', 0))
 editor = int(ARGUMENTS.get('editor', 0))
 extra_version = str(ARGUMENTS.get('extra_version', ''))
+extra_version_build_time = str(ARGUMENTS.get('extra_version_build_time', ''))
 sdlmixer = int(ARGUMENTS.get('sdlmixer', 1))
 ipv6 = int(ARGUMENTS.get('ipv6', 0))
 use_udp = int(ARGUMENTS.get('use_udp', 1))
@@ -434,6 +435,7 @@ print '\n'
 env.Append(CPPDEFINES = [('SHAREPATH', '\\"' + str(sharepath) + '\\"')])
 versid_cppdefines=env['CPPDEFINES'][:]
 versid_cppdefines.append(('DESCENT_VERSION_EXTRA', '\\"%s\\"' % extra_version))
+versid_cppdefines.append(('DESCENT_VERSION_BUILD_TIME', '\\"%s\\"' % extra_version_build_time))
 env.Object(source = ['main/vers_id.c'], CPPDEFINES=versid_cppdefines)
 common_sources += ['main/vers_id.o']
 # finally building program...
