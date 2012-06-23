@@ -21,14 +21,7 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define _ERROR_H
 
 #include <stdio.h>
-
-#ifdef __GNUC__
-#define __noreturn __attribute__ ((noreturn))
-#define __attribute_gcc_format(X) __attribute__ ((format X))
-#else
-#define __noreturn
-#define __attribute_gcc_format(X)
-#endif
+#include "compiler.h"
 
 void warn_printf(char *s);
 int error_init(void (*func)(char *), char *fmt,...);    //init error system, set default message, returns 0=ok

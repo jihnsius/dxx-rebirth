@@ -82,22 +82,7 @@ defined(__LITTLE_ENDIAN__)	// from physfs_internal.h
 # define WORDS_BIGENDIAN 1
 #endif
 
-#ifdef __GNUC__
-# define __pack__ __attribute__((packed))
-#elif defined(_MSC_VER)
-# pragma pack(push, packing)
-# pragma pack(1)
-# define __pack__
-#elif defined(macintosh)
-# pragma options align=packed
-# define __pack__
-#else
-# error d2x will not work without packed structures
-#endif
-
-#ifdef _MSC_VER
-# define inline __inline
-#endif
+#include "compiler.h"
 
 #ifndef PACKAGE_STRING
 # define PACKAGE_STRING "d2x"
