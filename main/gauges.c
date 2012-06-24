@@ -2187,7 +2187,7 @@ void sb_draw_afterburner()
 		gr_set_fontcolor(BM_XRGB(12,12,12),-1 );
 
 	gr_get_string_size(ab_str, &w, &h, &aw );
-	gr_printf(HUD_SCALE_X(SB_AFTERBURNER_GAUGE_X+(SB_AFTERBURNER_GAUGE_W+1)/2)-(w/2), HUD_SCALE_Y(SB_AFTERBURNER_GAUGE_Y+(SB_AFTERBURNER_GAUGE_H - GAME_FONT->ft_h - (GAME_FONT->ft_h / 4))), "AB");
+	gr_string(HUD_SCALE_X(SB_AFTERBURNER_GAUGE_X+(SB_AFTERBURNER_GAUGE_W+1)/2)-(w/2), HUD_SCALE_Y(SB_AFTERBURNER_GAUGE_Y+(SB_AFTERBURNER_GAUGE_H - GAME_FONT->ft_h - (GAME_FONT->ft_h / 4))), "AB");
 	gr_set_current_canvas(NULL);
 }
 
@@ -2589,7 +2589,7 @@ void hud_show_kill_list()
 		if (Show_kill_list==2)
 		{
 			if (Players[player_num].net_killed_total+Players[player_num].net_kills_total==0)
-				gr_printf (x1,y,"NA");
+				gr_string (x1,y,"NA");
 		else
 			gr_printf (x1,y,"%d%%",(int)((float)((float)Players[player_num].net_kills_total/((float)Players[player_num].net_killed_total+(float)Players[player_num].net_kills_total))*100.0));
 		}

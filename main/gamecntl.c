@@ -594,7 +594,7 @@ int HandleDemoKey(int key)
 				gr_set_current_canvas(NULL);
 				render_frame(0, 0);
 				gr_set_curfont(MEDIUM2_FONT);
-				gr_printf(SWIDTH-FSPACX(92),SHEIGHT-LINE_SPACING,"DXX-Rebirth\n");
+				gr_string(SWIDTH-FSPACX(92),SHEIGHT-LINE_SPACING,"DXX-Rebirth\n");
 				gr_flip();
 				save_screen_shot(0);
 			}
@@ -848,7 +848,7 @@ int HandleSystemKey(int key)
 				gr_set_current_canvas(NULL);
 				render_frame(0, 0);
 				gr_set_curfont(MEDIUM2_FONT);
-				gr_printf(SWIDTH-FSPACX(92),SHEIGHT-LINE_SPACING,"DXX-Rebirth\n");
+				gr_string(SWIDTH-FSPACX(92),SHEIGHT-LINE_SPACING,"DXX-Rebirth\n");
 				gr_flip();
 				save_screen_shot(0);
 			}
