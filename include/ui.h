@@ -219,7 +219,6 @@ extern UI_GADGET * selected_gadget;
 
 extern void Hline(short x1, short x2, short y );
 extern void Vline(short y1, short y2, short x );
-extern void ui_string_centered( short x, short y, char * s );
 extern void ui_draw_box_out( short x1, short y1, short x2, short y2 );
 extern void ui_draw_box_in( short x1, short y1, short x2, short y2 );
 extern void ui_draw_line_in( short x1, short y1, short x2, short y2 );
@@ -228,8 +227,8 @@ void ui_draw_shad( short x1, short y1, short x2, short y2, short c1, short c2 );
 
 void ui_init();
 void ui_close();
-int ui_messagebox( short x, short y, int NumButtons, char * text, ... );
-void ui_string_centered( short x, short y, char * s );
+int ui_messagebox( short x, short y, int NumButtons, const char * text, ... );
+void ui_string_centered( short x, short y, const char * s );
 int PopupMenu( int NumItems, char * text[] );
 
 extern UI_DIALOG * ui_create_dialog( short x, short y, short w, short h, enum dialog_flags flags, int (*callback)(UI_DIALOG *, struct d_event *, void *), void *userdata );
@@ -327,7 +326,7 @@ extern unsigned int ui_event_counter;
 
 int ui_get_file( char * filename, char * Filespec  );
 
-int ui_messagebox_n( short xc, short yc, int NumButtons, char * text, char * Button[] );
+int ui_messagebox_n( short xc, short yc, int NumButtons, const char * text, char * Button[] );
 
 void ui_draw_icon( UI_GADGET_ICON * icon );
 int ui_icon_do( UI_DIALOG *dlg, UI_GADGET_ICON * icon, struct d_event *event );
