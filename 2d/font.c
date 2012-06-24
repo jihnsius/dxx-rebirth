@@ -896,7 +896,7 @@ void gr_get_string_size(const char *s, int *string_width, int *string_height, in
 	*string_height = string_height_f;
 }
 
-
+#ifndef DXX_GR_ENABLE_PRINTF_CHECKS
 int gr_uprintf( int x, int y, const char * format, ... )
 {
 	char buffer[1000];
@@ -916,6 +916,7 @@ int gr_printf( int x, int y, const char * format, ... )
 	vsprintf(buffer,format,args);
 	return gr_string( x, y, buffer );
 }
+#endif
 
 void gr_close_font( grs_font * font )
 {

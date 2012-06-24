@@ -336,8 +336,38 @@ void gr_set_curfont( grs_font * );
 void gr_set_fontcolor( int fg_color, int bg_color );
 int gr_string(int x, int y, const char *s );
 int gr_ustring(int x, int y, const char *s );
+
+#if defined(__GNUC__) && defined(__OPTIMIZE__) && !defined(__NO_INLINE__)
+#define DXX_GR_ENABLE_PRINTF_CHECKS
+#endif
+
+#ifdef DXX_GR_ENABLE_PRINTF_CHECKS
+#include <stdio.h>
+#define dxx_gr_check_printf_function_body(F,S,X,Y,FMT,...)	({	\
+		if (dxx_gr_check_printf_arguments_used((FMT),##__VA_ARGS__) == 0)	{ \
+			void dxx_gr_trap_no_arguments_##F(void) __attribute__((__error__("no arguments to " #F "; use non-varargs form directly")));	\
+			dxx_gr_trap_no_arguments_##F();	\
+		}	\
+		if (__builtin_constant_p((FMT)) && (FMT)[0] == '%' && (FMT)[1] == 's' && (FMT)[2] == 0) { \
+			void dxx_gr_trap_bare_string_specifier_argument_##F(void) __attribute__((__error__("bare %s argument to " #F "; use non-varargs form directly")));	\
+			dxx_gr_trap_bare_string_specifier_argument_##F(); \
+		}	\
+		char check_printf_buffer[1000];	\
+		snprintf(check_printf_buffer,sizeof(check_printf_buffer),(FMT),##__VA_ARGS__);	\
+		(S)((X),(Y),check_printf_buffer);	\
+	})
+
+__extern_always_inline unsigned dxx_gr_check_printf_arguments_used(const char *fmt, ...);
+__extern_always_inline unsigned dxx_gr_check_printf_arguments_used(const char *fmt, ...) {
+	(void)fmt;
+	return (__builtin_va_arg_pack_len());
+}
+#define gr_printf(X,Y,FMT,...)	dxx_gr_check_printf_function_body(gr_printf, gr_string, (X), (Y), (FMT), ##__VA_ARGS__)
+#define gr_uprintf(X,Y,FMT,...)	dxx_gr_check_printf_function_body(gr_uprintf, gr_ustring, (X), (Y), (FMT), ##__VA_ARGS__)
+#else
 int gr_printf( int x, int y, const char * format, ... ) __attribute_gcc_format((printf, 3, 4));
 int gr_uprintf( int x, int y, const char * format, ... ) __attribute_gcc_format((printf, 3, 4));
+#endif
 void gr_get_string_size(const char *s, int *string_width, int *string_height, int *average_width );
 
 
