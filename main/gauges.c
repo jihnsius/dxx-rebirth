@@ -1371,7 +1371,7 @@ void hud_show_cloak_invuln(void)
 
 		if (Players[Player_num].cloak_time+CLOAK_TIME_MAX-GameTime64 > F1_0*3 || GameTime64 & 0x8000)
 		{
-			gr_printf(FSPACX(1), y, "%s", TXT_CLOAKED);
+			gr_string(FSPACX(1), y,  TXT_CLOAKED);
 		}
 	}
 
@@ -1385,7 +1385,7 @@ void hud_show_cloak_invuln(void)
 
 		if (Players[Player_num].invulnerable_time+INVULNERABLE_TIME_MAX-GameTime64 > F1_0*4 || GameTime64 & 0x8000)
 		{
-			gr_printf(FSPACX(1), y, "%s", TXT_INVULNERABLE);
+			gr_string(FSPACX(1), y,  TXT_INVULNERABLE);
 		}
 	}
 
@@ -2584,7 +2584,7 @@ void hud_show_kill_list()
 			name[strlen(name)-1]=0;
 			gr_get_string_size(name,&sw,&sh,&aw);
 		}
-		gr_printf(x0,y,"%s",name);
+		gr_string(x0,y,name);
 
 		if (Show_kill_list==2)
 		{
