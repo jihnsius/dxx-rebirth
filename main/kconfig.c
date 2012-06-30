@@ -1570,8 +1570,3 @@ void kc_set_controls()
 	for (i=0; i<NUM_D2X_CONTROLS; i++ )
 		kc_d2x[i].value = PlayerCfg.KeySettingsD2X[i];
 }
-
-char GetKeyValue (char key)
-{
-	return (kc_keyboard[(int)key].value);
-}
