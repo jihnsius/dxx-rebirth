@@ -114,8 +114,7 @@ void HUD_render_message_frame()
 
 // Call to flash a message on the HUD.  Returns true if message drawn.
 // (message might not be drawn if previous message was same)
-static int HUD_init_message_va(int class_flag, const char * format, va_list args) __attribute_gcc_format((printf, 2, 0));
-static int HUD_init_message_va(int class_flag, const char * format, va_list args)
+int HUD_init_message_va(int class_flag, const char * format, va_list args)
 {
 	int i, j;
 #ifndef macintosh
