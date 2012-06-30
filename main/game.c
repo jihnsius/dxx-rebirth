@@ -1895,28 +1895,6 @@ int create_special_path(void)
 #endif
 
 
-#ifndef RELEASE
-int	Max_obj_count_mike = 0;
-
-//	Shows current number of used objects.
-void show_free_objects(void)
-{
-	if (!(FrameCount & 8)) {
-		int	i;
-		int	count=0;
-
-		for (i=0; i<=Highest_object_index; i++)
-			if (Objects[i].type != OBJ_NONE)
-				count++;
-
-		if (count > Max_obj_count_mike) {
-			Max_obj_count_mike = count;
-		}
-	}
-}
-
-#endif
-
 /*
  * reads a flickering_light structure from a PHYSFS_file
  */
