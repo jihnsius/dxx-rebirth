@@ -130,6 +130,7 @@ int HUD_init_message_va(int class_flag, const char * format, va_list args)
 	char message[1024] = "";
 #endif
 
+	const int len =
 #ifndef macintosh
 	vsnprintf(message, sizeof(char)*HUD_MESSAGE_LENGTH, format, args);
 #else
@@ -172,10 +173,10 @@ int HUD_init_message_va(int class_flag, const char * format, va_list args)
 	struct tm *lt=localtime(&t);
 	snprintf(HUD_messages[HUD_nmessages-1].umessage, sizeof(HUD_messages[HUD_nmessages-1].umessage), "%02u:%02u:%02u %s", lt->tm_hour,lt->tm_min,lt->tm_sec,message);
 	if (HUD_nmessages-HUD_MAX_NUM_DISP < 0)
-		HUD_messages[HUD_nmessages-1].time = F1_0*3; // one message - display 3 secs
+		HUD_messages[HUD_nmessages-1].time = (len < 38) ? (F1_0 * 12) : (F1_0*3); // one message - display 3 secs
 	else
 		for (i = HUD_nmessages-HUD_MAX_NUM_DISP, j = 1; i < HUD_nmessages; i++, j++) // multiple messages - display 2 seconds each
-			HUD_messages[i].time = F1_0*(j*2);
+			HUD_messages[i].time = F1_0*(j* ((len < 38) ? (10) : 2));
 	
 
 	if (HUD_color == -1)
