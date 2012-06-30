@@ -160,28 +160,6 @@ void object_goto_next_viewer()
 	Error( "Couldn't find a viewer object!" );
 
 }
-
-//set viewer object to next object in array
-void object_goto_prev_viewer()
-{
-	int i, start_obj = 0;
-
-	start_obj = Viewer - Objects;		//get viewer object number
-
-	for (i=0; i<=Highest_object_index; i++) {
-
-		start_obj--;
-		if (start_obj < 0 ) start_obj = Highest_object_index;
-
-		if (Objects[start_obj].type != OBJ_NONE )	{
-			Viewer = &Objects[start_obj];
-			return;
-		}
-	}
-
-	Error( "Couldn't find a viewer object!" );
-
-}
 #endif
 
 dxxobject *obj_find_first_of_type (int type)
