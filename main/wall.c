@@ -210,28 +210,6 @@ void wall_init()
 	Num_cloaking_walls = 0;
 
 }
-
-//-----------------------------------------------------------------
-// Initializes one wall.
-void wall_reset(segment *seg, int side)
-{
-	int i;
-	
-	i = seg->sides[side].wall_num;
-
-	if (i==-1) {
-		return;
-	}
-
-	Walls[i].segnum = seg-Segments;
-	Walls[i].sidenum = side;
-	Walls[i].type = WALL_NORMAL;
-	Walls[i].flags = 0;
-	Walls[i].hps = 0;
-	Walls[i].trigger = -1;
-	Walls[i].clip_num = -1;
-	Walls[i].linked_wall = -1;
-}
 #endif
 
 //set the tmap_num or tmap_num2 field for a wall/door
