@@ -1626,8 +1626,7 @@ int nm_messagebox1( char *title, int (*subfunction)(newmenu *menu, d_event *even
 		nm_message_items[i].type = NM_TYPE_MENU; nm_message_items[i].text = s;
 	}
 	format = va_arg( args, char * );
-	strcpy( nm_text, "" );
-	vsprintf(nm_text,format,args);
+	vsnprintf(nm_text,sizeof(nm_text),format,args);
 	va_end(args);
 
 	Assert(strlen(nm_text) < MESSAGEBOX_TEXT_SIZE);
@@ -1653,8 +1652,7 @@ int nm_messagebox( char *title, int nchoices, ... )
 		nm_message_items[i].type = NM_TYPE_MENU; nm_message_items[i].text = s;
 	}
 	format = va_arg( args, char * );
-	strcpy( nm_text, "" );
-	vsprintf(nm_text,format,args);
+	vsnprintf(nm_text,sizeof(nm_text),format,args);
 	va_end(args);
 
 	Assert(strlen(nm_text) < MESSAGEBOX_TEXT_SIZE );
@@ -2190,7 +2188,7 @@ newmenu *nm_messagebox_fixedfont( char *title, int nchoices, ... )
 	}
 	format = va_arg( args, char * );
 	//sprintf(	  nm_text, "" ); // adb: ?
-	vsprintf(nm_text,format,args);
+	vsnprintf(nm_text,sizeof(nm_text),format,args);
 	va_end(args);
 
 	Assert(strlen(nm_text) < MESSAGEBOX_TEXT_SIZE );

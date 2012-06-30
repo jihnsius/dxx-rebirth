@@ -63,7 +63,7 @@ void set_exit_message(const char *fmt,...)
 	int len;
 
 	va_start(arglist,fmt);
-	len = vsprintf(exit_message,fmt,arglist);
+	len = vsnprintf(exit_message,sizeof(exit_message),fmt,arglist);
 	va_end(arglist);
 
 	if (len==-1 || len>MAX_MSG_LEN) Error("Message too long in set_exit_message (len=%d, max=%d)",len,MAX_MSG_LEN);
@@ -95,7 +95,7 @@ void Error(const char *fmt,...)
 
 	strcpy(exit_message,"Error: "); // don't put the new line in for dialog output
 	va_start(arglist,fmt);
-	vsprintf(exit_message+strlen(exit_message),fmt,arglist);
+	vsnprintf(exit_message+strlen(exit_message),sizeof(exit_message)-7,fmt,arglist);
 	va_end(arglist);
 
 	Int3();
@@ -116,7 +116,7 @@ void Warning(const char *fmt,...)
 	strcpy(warn_message,"Warning: ");
 
 	va_start(arglist,fmt);
-	vsprintf(warn_message+strlen(warn_message),fmt,arglist);
+	vsnprintf(warn_message+strlen(warn_message),sizeof(warn_message)-9,fmt,arglist);
 	va_end(arglist);
 
 	(*warn_func)(warn_message);
@@ -135,7 +135,7 @@ int error_init(void (*func)(const char *), const char *fmt, ...)
 
 	if (fmt != NULL) {
 		va_start(arglist,fmt);
-		len = vsprintf(exit_message,fmt,arglist);
+		len = vsnprintf(exit_message,sizeof(exit_message),fmt,arglist);
 		va_end(arglist);
 		if (len==-1 || len>MAX_MSG_LEN) Error("Message too long in error_init (len=%d, max=%d)",len,MAX_MSG_LEN);
 	}
