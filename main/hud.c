@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "hudmsg.h"
 #include "pstypes.h"
@@ -35,7 +36,13 @@
 typedef struct hudmsg
 {
 	fix time;
-	char message[HUD_MESSAGE_LENGTH+1];
+	union {
+		struct {
+			char timestamp[9];
+			char message[HUD_MESSAGE_LENGTH+1];
+		};
+		char umessage[HUD_MESSAGE_LENGTH+1 + 9];
+	};
 } hudmsg;
 
 hudmsg HUD_messages[HUD_MAX_NUM_STOR];
@@ -102,9 +109,9 @@ void HUD_render_message_frame()
 		for (i=startmsg; i<HUD_nmessages; i++ )	{
 			gr_set_fontcolor( HUD_color, -1);
 
-			if (i == startmsg && strlen(HUD_messages[i].message) > 38)
+			if (i == startmsg && strlen(HUD_messages[i].umessage) > 38)
 				HUD_toolong = 1;
-			gr_string(0x8000,y, &HUD_messages[i].message[0] );
+			gr_string(0x8000,y, &HUD_messages[i].umessage[0] );
 			y += LINE_SPACING;
 		}
 	}
@@ -161,7 +168,9 @@ int HUD_init_message_va(int class_flag, const char * format, va_list args)
 	{
 		HUD_nmessages++;
 	}
-	snprintf(HUD_messages[HUD_nmessages-1].message, sizeof(char)*HUD_MESSAGE_LENGTH, "%s", message);
+	time_t t=time(NULL);
+	struct tm *lt=localtime(&t);
+	snprintf(HUD_messages[HUD_nmessages-1].umessage, sizeof(HUD_messages[HUD_nmessages-1].umessage), "%02u:%02u:%02u %s", lt->tm_hour,lt->tm_min,lt->tm_sec,message);
 	if (HUD_nmessages-HUD_MAX_NUM_DISP < 0)
 		HUD_messages[HUD_nmessages-1].time = F1_0*3; // one message - display 3 secs
 	else
