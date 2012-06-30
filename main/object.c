@@ -172,15 +172,6 @@ dxxobject *obj_find_first_of_type (int type)
   return ((dxxobject *)NULL);
  }
 
-int obj_return_num_of_type (int type)
- {
-  int i,count=0;
-
-  for (i=0;i<=Highest_object_index;i++)
-	if (Objects[i].type==type)
-	 count++;
-  return (count);
- }
 int obj_return_num_of_typeid (int type,int id)
  {
   int i,count=0;
