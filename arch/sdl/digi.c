@@ -98,8 +98,6 @@ void digi_set_volume(int dvolume) {
 	if (fptr_set_digi_volume) digi_set_digi_volume(dvolume);
 }
 
-void digi_set_sample_rate(int r) { GameArg.SndDigiSampleRate = r; }
-
 /* Stub functions */
 
 int  digi_init()
