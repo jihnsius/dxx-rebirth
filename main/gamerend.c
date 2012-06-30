@@ -416,37 +416,6 @@ void game_draw_hud_stuff()
 extern int gr_bitblt_dest_step_shift;
 extern int gr_bitblt_double;
 
-#if 0
-void expand_row(ubyte * dest, ubyte * src, int num_src_pixels );
-#pragma aux expand_row parm [edi] [esi] [ecx] modify exact [ecx esi edi eax ebx] = \
-	"add	esi, ecx"			\
-	"dec	esi"					\
-	"add	edi, ecx"			\
-	"add	edi, ecx"			\
-	"dec	edi"					\
-	"dec	edi"					\
-"nextpixel:"					\
-	"mov	al,[esi]"			\
-	"mov	ah, al"				\
-	"dec	esi"					\
-	"mov	[edi], ax"			\
-	"dec	edi"					\
-	"dec	edi"					\
-	"dec	ecx"					\
-	"jnz	nextpixel"			\
-"done:"
-#else
-void expand_row(ubyte * dest, ubyte * src, int num_src_pixels )
-{
-	int i;
-	
-	for (i = 0; i < num_src_pixels; i++) {
-		*dest++ = *src;
-		*dest++ = *src++;
-	}
-}
-#endif
-
 extern int SW_drawn[2], SW_x[2], SW_y[2], SW_w[2], SW_h[2];
 ubyte RenderingType=0;
 ubyte DemoDoingRight=0,DemoDoingLeft=0;
