@@ -333,7 +333,7 @@ void kc_change_mouseaxis( kc_menu *menu, d_event *event, kc_item * item );
 void kc_change_invert( kc_menu *menu, kc_item * item );
 
 #ifdef TABLE_CREATION
-int find_item_at( kc_item * items, int nitems, int x, int y )
+static int find_item_at( kc_item * items, int nitems, int x, int y )
 {
 	int i;
 	
@@ -344,7 +344,7 @@ int find_item_at( kc_item * items, int nitems, int x, int y )
 	return -1;
 }
 
-int find_next_item_up( kc_item * items, int nitems, int citem )
+static int find_next_item_up( kc_item * items, int nitems, int citem )
 {
 	int x, y, i;
 
@@ -366,7 +366,7 @@ int find_next_item_up( kc_item * items, int nitems, int citem )
 	return i;
 }
 
-int find_next_item_down( kc_item * items, int nitems, int citem )
+static int find_next_item_down( kc_item * items, int nitems, int citem )
 {
 	int x, y, i;
 
@@ -388,7 +388,7 @@ int find_next_item_down( kc_item * items, int nitems, int citem )
 	return i;
 }
 
-int find_next_item_right( kc_item * items, int nitems, int citem )
+static int find_next_item_right( kc_item * items, int nitems, int citem )
 {
 	int x, y, i;
 
@@ -410,7 +410,7 @@ int find_next_item_right( kc_item * items, int nitems, int citem )
 	return i;
 }
 
-int find_next_item_left( kc_item * items, int nitems, int citem )
+static int find_next_item_left( kc_item * items, int nitems, int citem )
 {
 	int x, y, i;
 
@@ -433,7 +433,7 @@ int find_next_item_left( kc_item * items, int nitems, int citem )
 }
 #endif
 
-int get_item_height(kc_item *item)
+static int get_item_height(kc_item *item)
 {
 	int w, h, aw;
 	char btext[10];
@@ -471,7 +471,7 @@ int get_item_height(kc_item *item)
 
 void kc_drawquestion( kc_menu *menu, kc_item *item );
 
-void kconfig_draw(kc_menu *menu)
+static void kconfig_draw(kc_menu *menu)
 {
 	grs_canvas * save_canvas = grd_curcanv;
 	grs_font * save_font;
@@ -589,7 +589,7 @@ void kconfig_draw(kc_menu *menu)
 	gr_set_current_canvas( save_canvas );
 }
 
-void kconfig_start_changing(kc_menu *menu)
+static void kconfig_start_changing(kc_menu *menu)
 {
 	if (menu->items[menu->citem].type == BT_INVERT)
 	{
@@ -601,7 +601,7 @@ void kconfig_start_changing(kc_menu *menu)
 	menu->changing = 1;
 }
 
-int kconfig_mouse(window *wind, d_event *event, kc_menu *menu)
+static int kconfig_mouse(window *wind, d_event *event, kc_menu *menu)
 {
 	grs_canvas * save_canvas = grd_curcanv;
 	int mx, my, mz, x1, x2, y1, y2;
@@ -655,7 +655,7 @@ int kconfig_mouse(window *wind, d_event *event, kc_menu *menu)
 	return rval;
 }
 
-int kconfig_key_command(window *wind, d_event *event, kc_menu *menu)
+static int kconfig_key_command(window *wind, d_event *event, kc_menu *menu)
 {
 	int i,k;
 
@@ -825,7 +825,7 @@ int kconfig_key_command(window *wind, d_event *event, kc_menu *menu)
 	return 0;
 }
 
-int kconfig_handler(window *wind, d_event *event, kc_menu *menu)
+static int kconfig_handler(window *wind, d_event *event, kc_menu *menu)
 {
 	int i;
 	
@@ -928,7 +928,7 @@ int kconfig_handler(window *wind, d_event *event, kc_menu *menu)
 	return 1;
 }
 
-void kconfig_sub(kc_item * items,int nitems, char *title)
+static void kconfig_sub(kc_item * items,int nitems, char *title)
 {
 	kc_menu *menu;
 

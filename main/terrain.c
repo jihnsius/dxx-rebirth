@@ -75,7 +75,7 @@ void build_light_table(void);
 void free_light_table(void);
 
 // ------------------------------------------------------------------------
-void draw_cell(int i,int j,g3s_point *p0,g3s_point *p1,g3s_point *p2,g3s_point *p3)
+static void draw_cell(int i,int j,g3s_point *p0,g3s_point *p1,g3s_point *p2,g3s_point *p3)
 {
 	g3s_point *pointlist[3];
 
@@ -145,7 +145,7 @@ ubyte yc_flags[256];
 
 extern vms_matrix surface_orient;
 
-vms_vector *get_dy_vec(int h)
+static vms_vector *get_dy_vec(int h)
 {
 	vms_vector *dyp;
 
@@ -384,7 +384,7 @@ void load_terrain(char *filename)
 }
 
 
-void get_pnt(vms_vector *p,int i,int j)
+static void get_pnt(vms_vector *p,int i,int j)
 {
 	// added on 02/20/99 by adb to prevent overflow
 	if (i >= grid_h) i = grid_h - 1;
@@ -397,7 +397,7 @@ void get_pnt(vms_vector *p,int i,int j)
 
 vms_vector light = {0x2e14,0xe8f5,0x5eb8};
 
-fix get_face_light(vms_vector *p0,vms_vector *p1,vms_vector *p2)
+static fix get_face_light(vms_vector *p0,vms_vector *p1,vms_vector *p2)
 {
 	vms_vector norm;
 
@@ -408,7 +408,7 @@ fix get_face_light(vms_vector *p0,vms_vector *p1,vms_vector *p2)
 }
 
 
-fix get_avg_light(int i,int j)
+static fix get_avg_light(int i,int j)
 {
 	vms_vector pp,p[6];
 	fix sum;

@@ -222,8 +222,8 @@ void create_buddy_bot(void)
 //	Boss is allowed to teleport to segments he fits in (calls object_intersects_wall) and
 //	he can reach from his initial position (calls find_connected_distance).
 //	If size_check is set, then only add segment if boss can fit in it, else any segment is legal.
-//	one_wall_hack added by MK, 10/13/95: A mega-hack!  Set to !0 to ignore the
-void init_boss_segments(short segptr[], int *num_segs, int size_check, int one_wall_hack)
+//	one_wall_hack added by MK, 10/13/95: A mega-hack!  Set to !0 to ignore the 
+static void init_boss_segments(short segptr[], int *num_segs, int size_check, int one_wall_hack)
 {
 	int			boss_objnum=-1;
 	int			i;
@@ -696,7 +696,7 @@ void ai_frame_animation(dxxobject *objp)
 }
 
 // ----------------------------------------------------------------------------------
-void set_next_fire_time(dxxobject *objp, ai_local *ailp, robot_info *robptr, int gun_num)
+static void set_next_fire_time(dxxobject *objp, ai_local *ailp, robot_info *robptr, int gun_num)
 {
 	//	For guys in snipe mode, they have a 50% shot of getting this shot in free.
 	if ((gun_num != 0) || (robptr->weapon_type2 == -1))
@@ -777,7 +777,7 @@ extern int Player_exploded;
 
 // --------------------------------------------------------------------------------------------------------------------
 //	Computes point at which projectile fired by robot can hit player given positions, player vel, elapsed time
-fix compute_lead_component(fix player_pos, fix robot_pos, fix player_vel, fix elapsed_time)
+static fix compute_lead_component(fix player_pos, fix robot_pos, fix player_vel, fix elapsed_time)
 {
 	return fixdiv(player_pos - robot_pos, elapsed_time) + player_vel;
 }
@@ -790,7 +790,7 @@ fix compute_lead_component(fix player_pos, fix robot_pos, fix player_vel, fix el
 //		Player not farther away than MAX_LEAD_DISTANCE
 //		dot(vector_to_player, player_direction) must be in -LEAD_RANGE..LEAD_RANGE
 //		if firing a matter weapon, less leading, based on skill level.
-int lead_player(dxxobject *objp, vms_vector *fire_point, vms_vector *believed_player_pos, int gun_num, vms_vector *fire_vec)
+static int lead_player(dxxobject *objp, vms_vector *fire_point, vms_vector *believed_player_pos, int gun_num, vms_vector *fire_vec)
 {
 	fix			dot, player_speed, dist_to_player, max_weapon_speed, projected_time;
 	vms_vector	player_movement_dir, vec_to_player;
@@ -866,7 +866,7 @@ int lead_player(dxxobject *objp, vms_vector *fire_point, vms_vector *believed_pl
 //	Note: Parameter vec_to_player is only passed now because guns which aren't on the forward vector from the
 //	center of the robot will not fire right at the player.  We need to aim the guns at the player.  Barring that, we cheat.
 //	When this routine is complete, the parameter vec_to_player should not be necessary.
-void ai_fire_laser_at_player(dxxobject *obj, vms_vector *fire_point, int gun_num, vms_vector *believed_player_pos)
+static void ai_fire_laser_at_player(dxxobject *obj, vms_vector *fire_point, int gun_num, vms_vector *believed_player_pos)
 {
 	int			objnum = obj-Objects;
 	ai_local		*ailp = &Ai_local_info[objnum];
@@ -1064,7 +1064,7 @@ void move_towards_player(dxxobject *objp, vms_vector *vec_to_player)
 
 // --------------------------------------------------------------------------------------------------------------------
 //	I am ashamed of this: fast_flag == -1 means normal slide about.  fast_flag = 0 means no evasion.
-void move_around_player(dxxobject *objp, vms_vector *vec_to_player, int fast_flag)
+static void move_around_player(dxxobject *objp, vms_vector *vec_to_player, int fast_flag)
 {
 	physics_info	*pptr = &objp->mtype.phys_info;
 	fix				speed;
@@ -1661,7 +1661,7 @@ int openable_doors_in_segment(int segnum)
 
 // --------------------------------------------------------------------------------------------------------------------
 //	Return true if placing an object of size size at pos *pos intersects a (player or robot or control center) in segment *segp.
-int check_object_object_intersection(vms_vector *pos, fix size, segment *segp)
+static int check_object_object_intersection(vms_vector *pos, fix size, segment *segp)
 {
 	int		curobjnum;
 
@@ -1683,7 +1683,7 @@ int check_object_object_intersection(vms_vector *pos, fix size, segment *segp)
 // --------------------------------------------------------------------------------------------------------------------
 //	Return objnum if object created, else return -1.
 //	If pos == NULL, pick random spot in segment.
-int create_gated_robot( int segnum, int object_id, vms_vector *pos)
+static int create_gated_robot( int segnum, int object_id, vms_vector *pos)
 {
 	int		objnum;
 	dxxobject	*objp;
@@ -1927,7 +1927,7 @@ void start_boss_death_sequence(dxxobject *objp)
 //	General purpose robot-dies-with-death-roll-and-groan code.
 //	Return true if object just died.
 //	scale: F1_0*4 for boss, much smaller for much smaller guys
-int do_robot_dying_frame(dxxobject *objp, fix64 start_time, fix roll_duration, sbyte *dying_sound_playing, int death_sound, fix expl_scale, fix sound_scale)
+static int do_robot_dying_frame(dxxobject *objp, fix64 start_time, fix roll_duration, sbyte *dying_sound_playing, int death_sound, fix expl_scale, fix sound_scale)
 {
 	fix	roll_val, temp;
 	fix	sound_duration;

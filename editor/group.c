@@ -1415,7 +1415,7 @@ int med_load_group( char *filename, int *vertex_ids, short *segment_ids, int *nu
 	return 0;
 }
 
-char group_filename[PATH_MAX] = "*.GRP";
+static char group_filename[PATH_MAX] = "*.GRP";
 
 void checkforgrpext( char * f )
 {

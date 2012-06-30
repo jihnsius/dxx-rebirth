@@ -133,7 +133,7 @@ int new_player_config()
 	return 1;
 }
 
-int read_player_d2x(char *filename)
+static int read_player_d2x(char *filename)
 {
 	PHYSFS_file *f;
 	int rc = 0;
@@ -367,7 +367,7 @@ int read_player_d2x(char *filename)
 	return rc;
 }
 
-int write_player_d2x(char *filename)
+static int write_player_d2x(char *filename)
 {
 	PHYSFS_file *fout;
 	int rc=0;
@@ -668,7 +668,7 @@ int read_player_file()
 
 //finds entry for this level in table.  if not found, returns ptr to 
 //empty entry.  If no empty entries, takes over last one 
-int find_hli_entry()
+static int find_hli_entry()
 {
 	int i;
 

@@ -87,7 +87,7 @@ void slew_reset_orient()
 
 }
 
-int do_slew_movement(dxxobject *obj, int check_keys )
+static int do_slew_movement(dxxobject *obj, int check_keys )
 {
 	int moved = 0;
 	vms_vector svel, movement;				//scaled velocity (per this frame)

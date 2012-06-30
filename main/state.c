@@ -115,7 +115,7 @@ uint state_game_id;
 
 // Following functions convert object to object_rw and back to be written to/read from Savegames. Mostly object differs to object_rw in terms of timer values (fix/fix64). as we reset GameTime64 for writing so it can fit into fix it's not necessary to increment savegame version. But if we once store something else into object which might be useful after restoring, it might be handy to increment Savegame version and actually store these new infos.
 // turn object to object_rw to be saved to Savegame.
-void state_object_to_object_rw(dxxobject *obj, object_rw *obj_rw)
+static void state_object_to_object_rw(dxxobject *obj, object_rw *obj_rw)
 {
 	obj_rw->signature     = obj->signature;
 	obj_rw->type          = obj->type;
@@ -276,7 +276,7 @@ void state_object_to_object_rw(dxxobject *obj, object_rw *obj_rw)
 }
 
 // turn object_rw to object after reading from Savegame
-void state_object_rw_to_object(object_rw *obj_rw, dxxobject *obj)
+static void state_object_rw_to_object(object_rw *obj_rw, dxxobject *obj)
 {
 	obj->signature     = obj_rw->signature;
 	obj->type          = obj_rw->type;
@@ -430,7 +430,7 @@ void state_object_rw_to_object(object_rw *obj_rw, dxxobject *obj)
 
 // Following functions convert player to player_rw and back to be written to/read from Savegames. player only differ to player_rw in terms of timer values (fix/fix64). as we reset GameTime64 for writing so it can fit into fix it's not necessary to increment savegame version. But if we once store something else into object which might be useful after restoring, it might be handy to increment Savegame version and actually store these new infos.
 // turn player to player_rw to be saved to Savegame.
-void state_player_to_player_rw(player *pl, player_rw *pl_rw)
+static void state_player_to_player_rw(player *pl, player_rw *pl_rw)
 {
 	int i=0;
 	memcpy(pl_rw->callsign, pl->callsign, CALLSIGN_LEN+1);
@@ -482,7 +482,7 @@ void state_player_to_player_rw(player *pl, player_rw *pl_rw)
 }
 
 // turn player_rw to player after reading from Savegame
-void state_player_rw_to_player(player_rw *pl_rw, player *pl)
+static void state_player_rw_to_player(player_rw *pl_rw, player *pl)
 {
 	int i=0;
 	memcpy(pl->callsign, pl_rw->callsign, CALLSIGN_LEN+1);
@@ -529,7 +529,7 @@ void state_player_rw_to_player(player_rw *pl_rw, player *pl)
 
 
 //-------------------------------------------------------------------
-int state_callback(newmenu *menu, d_event *event, grs_bitmap *sc_bmp[])
+static int state_callback(newmenu *menu, d_event *event, grs_bitmap *sc_bmp[])
 {
 	newmenu_item *items = newmenu_get_items(menu);
 	int citem = newmenu_get_citem(menu);
@@ -584,7 +584,7 @@ int state_quick_item = -1;
  * For restoring, dsc should be NULL, in which case empty slots will not be
  * selectable and savagames descriptions will not be editable.
  */
-int state_get_savegame_filename(char * fname, char * dsc, char * caption, int blind_save)
+static int state_get_savegame_filename(char * fname, char * dsc, char * caption, int blind_save)
 {
 	PHYSFS_file * fp;
 	int i, choice, version, nsaves;
@@ -688,7 +688,7 @@ int state_get_restore_file(char * fname)
 
 //	-----------------------------------------------------------------------------------
 //	Imagine if C had a function to copy a file...
-int copy_file(char *old_file, char *new_file)
+static int copy_file(char *old_file, char *new_file)
 {
 	sbyte	*buf;
 	int		buf_size;

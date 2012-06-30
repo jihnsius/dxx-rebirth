@@ -59,7 +59,7 @@ void jukebox_unload()
 
 const char *const jukebox_exts[] = { ".mp3", ".ogg", ".wav", ".aif", ".mid", ".flac", NULL };
 
-int read_m3u(void)
+static int read_m3u(void)
 {
 	FILE *fp;
 	int length;
@@ -220,7 +220,7 @@ void jukebox_load()
 }
 
 // To proceed tru our playlist. Usually used for continous play, but can loop as well.
-void jukebox_hook_next()
+static void jukebox_hook_next()
 {
 	if (!JukeboxSongs.list || GameCfg.CMLevelMusicTrack[0] == -1) return;
 

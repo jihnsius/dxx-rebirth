@@ -62,7 +62,7 @@ void songs_set_volume(int volume)
 
 // Set up everything for our music
 // NOTE: you might think this is done once per runtime but it's not! It's done for EACH song so that each mission can have it's own descent.sng structure. We COULD optimize that by only doing this once per mission.
-void songs_init()
+static void songs_init()
 {
 	int i = 0;
 	char inputline[80+1];
@@ -249,7 +249,7 @@ void songs_pause_resume(void)
 
 // songs_haved2_cd returns 1 if the descent 2 CD is in the drive and
 // 0 otherwise
-int songs_haved2_cd()
+static int songs_haved2_cd()
 {
 	int discid;
 
@@ -279,7 +279,7 @@ int songs_haved2_cd()
 	}
 }
 
-void play_credits_track()
+static void play_credits_track()
 {
 	stop_time();
 	songs_play_song(SONG_CREDITS, 1);
@@ -372,7 +372,7 @@ int songs_play_song( int songnum, int repeat )
 	return Song_playing;
 }
 
-void redbook_first_song_func()
+static void redbook_first_song_func()
 {
 	stop_time();
 	Song_playing = -1; // Playing Redbook tracks will not modify Song_playing. To repeat we must reset this so songs_play_level_song does not think we want to re-play the same song again.

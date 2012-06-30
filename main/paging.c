@@ -51,7 +51,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "mission.h"
 
 
-void paging_touch_vclip( vclip * vc )
+static void paging_touch_vclip( vclip * vc )
 {
 	int i;
 
@@ -61,7 +61,7 @@ void paging_touch_vclip( vclip * vc )
 }
 
 
-void paging_touch_wall_effects( int tmap_num )
+static void paging_touch_wall_effects( int tmap_num )
 {
 	int i;
 
@@ -84,7 +84,7 @@ void paging_touch_wall_effects( int tmap_num )
 	}
 }
 
-void paging_touch_object_effects( int tmap_num )
+static void paging_touch_object_effects( int tmap_num )
 {
 	int i;
 
@@ -96,7 +96,7 @@ void paging_touch_object_effects( int tmap_num )
 }
 
 
-void paging_touch_model( int modelnum )
+static void paging_touch_model( int modelnum )
 {
 	int i;
 	polymodel *pm = &Polygon_models[modelnum];
@@ -111,7 +111,7 @@ void paging_touch_model( int modelnum )
 	}
 }
 
-void paging_touch_weapon( int weapon_type )
+static void paging_touch_weapon( int weapon_type )
 {
 	// Page in the robot's weapons.
 	
@@ -151,7 +151,7 @@ void paging_touch_weapon( int weapon_type )
 
 sbyte super_boss_gate_type_list[13] = {0, 1, 8, 9, 10, 11, 12, 15, 16, 18, 19, 20, 22 };
 
-void paging_touch_robot( int robot_index )
+static void paging_touch_robot( int robot_index )
 {
 	int i;
 
@@ -175,7 +175,7 @@ void paging_touch_robot( int robot_index )
 }
 
 
-void paging_touch_object( dxxobject * obj )
+static void paging_touch_object( dxxobject * obj )
 {
 	int v;
 
@@ -229,7 +229,7 @@ void paging_touch_object( dxxobject * obj )
 
 	
 
-void paging_touch_side( segment * segp, int sidenum )
+static void paging_touch_side( segment * segp, int sidenum )
 {
 	int tmap1, tmap2;
 
@@ -266,7 +266,7 @@ void paging_touch_side( segment * segp, int sidenum )
 
 }
 
-void paging_touch_robot_maker( segment * segp )
+static void paging_touch_robot_maker( segment * segp )
 {
 	segment2	*seg2p = &Segment2s[segp-Segments];
 
@@ -294,7 +294,7 @@ void paging_touch_robot_maker( segment * segp )
 }
 
 
-void paging_touch_segment(segment * segp)
+static void paging_touch_segment(segment * segp)
 {
 	int sn;
 	int objnum;
@@ -317,7 +317,7 @@ void paging_touch_segment(segment * segp)
 
 
 
-void paging_touch_walls()
+static void paging_touch_walls()
 {
 	int i,j;
 	wclip *anim;

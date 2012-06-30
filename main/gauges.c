@@ -685,7 +685,7 @@ const span weapon_window_right_hires[] = {
 	{424,518},
 };
 
-inline void hud_bitblt_free (int x, int y, int w, int h, grs_bitmap *bm)
+static inline void hud_bitblt_free (int x, int y, int w, int h, grs_bitmap *bm)
 {
 #ifdef OGL
 	ogl_ubitmapm_cs (x,y,w,h,bm,-1,F1_0);
@@ -694,7 +694,7 @@ inline void hud_bitblt_free (int x, int y, int w, int h, grs_bitmap *bm)
 #endif
 }
 
-inline void hud_bitblt (int x, int y, grs_bitmap *bm)
+static inline void hud_bitblt (int x, int y, grs_bitmap *bm)
 {
 #ifdef OGL
 	ogl_ubitmapm_cs (x,y,HUD_SCALE_X (bm->bm_w),HUD_SCALE_Y (bm->bm_h),bm,-1,F1_0);
@@ -703,7 +703,7 @@ inline void hud_bitblt (int x, int y, grs_bitmap *bm)
 #endif
 }
 
-void hud_show_score()
+static void hud_show_score()
 {
 	char	score_str[20];
 	int	w, h, aw;
@@ -728,7 +728,7 @@ void hud_show_score()
 	gr_string(grd_curcanv->cv_bitmap.bm_w-w-FSPACX(1), FSPACY(1), score_str);
 }
 
-void hud_show_timer_count()
+static void hud_show_timer_count()
 {
 #ifdef NETWORK
 	char	score_str[20];
@@ -760,7 +760,7 @@ void hud_show_timer_count()
 #endif
 }
 
-void hud_show_score_added()
+static void hud_show_score_added()
 {
 	int	color;
 	int	w, h, aw;
@@ -797,7 +797,7 @@ void hud_show_score_added()
 	}
 }
 
-void sb_show_score()
+static void sb_show_score()
 {
 	char	score_str[20];
 	int x,y;
@@ -833,7 +833,7 @@ void sb_show_score()
 	gr_string(x,y,score_str);
 }
 
-void sb_show_score_added()
+static void sb_show_score_added()
 {
 	int	color;
 	int w, h, aw;
@@ -901,7 +901,7 @@ void play_homing_warning(void)
 }
 
 //	-----------------------------------------------------------------------------
-void show_homing_warning(void)
+static void show_homing_warning(void)
 {
 	if (Endlevel_sequence)
 	{
@@ -932,7 +932,7 @@ void show_homing_warning(void)
 	}
 }
 
-void hud_show_homing_warning(void)
+static void hud_show_homing_warning(void)
 {
 	if (Players[Player_num].homing_object_dist >= 0) {
 		if (GameTime64 & 0x4000) {
@@ -943,7 +943,7 @@ void hud_show_homing_warning(void)
 	}
 }
 
-void hud_show_keys(void)
+static void hud_show_keys(void)
 {
 	grs_bitmap *blue,*yellow,*red;
 	int y=HUD_SCALE_Y_AR(GameBitmaps[ GET_GAUGE_INDEX(GAUGE_LIVES) ].bm_h+2)+FSPACY(1);
@@ -970,7 +970,7 @@ void hud_show_keys(void)
 #ifdef NETWORK
 extern grs_bitmap Orb_icons[2];
 
-void hud_show_orbs (void)
+static void hud_show_orbs (void)
 {
 	if (Game_mode & GM_HOARD) {
 		int x=0,y=LINE_SPACING+FSPACY(1);
@@ -998,7 +998,7 @@ void hud_show_orbs (void)
 	}
 }
 
-void hud_show_flag(void)
+static void hud_show_flag(void)
 {
 	if ((Game_mode & GM_CAPTURE) && (Players[Player_num].flags & PLAYER_FLAGS_FLAG)) {
 		int x=0,y=0,icon;
@@ -1030,7 +1030,7 @@ void hud_show_flag(void)
 }
 #endif
 
-void hud_show_energy(void)
+static void hud_show_energy(void)
 {
 	if (PlayerCfg.HudMode<2) {
 		gr_set_curfont( GAME_FONT );
@@ -1045,7 +1045,7 @@ void hud_show_energy(void)
 		newdemo_record_player_energy(f2ir(Players[Player_num].energy));
 }
 
-void hud_show_afterburner(void)
+static void hud_show_afterburner(void)
 {
 	int y;
 
@@ -1084,7 +1084,7 @@ static inline const char *SECONDARY_WEAPON_NAMES_VERY_SHORT(const unsigned u)
 //return which bomb will be dropped next time the bomb key is pressed
 int which_bomb();
 
-void show_bomb_count(int x,int y,int bg_color,int always_show,int right_align)
+static void show_bomb_count(int x,int y,int bg_color,int always_show,int right_align)
 {
 	int bomb,count,w=0,h=0,aw=0;
 	char txt[5],*t;
@@ -1113,7 +1113,7 @@ void show_bomb_count(int x,int y,int bg_color,int always_show,int right_align)
 	gr_string(x-w,y,txt);
 }
 
-void draw_primary_ammo_info(int ammo_count)
+static void draw_primary_ammo_info(int ammo_count)
 {
 	if (PlayerCfg.CockpitMode[1] == CM_STATUS_BAR)
 		draw_ammo_info(SB_PRIMARY_AMMO_X,SB_PRIMARY_AMMO_Y,ammo_count,1);
@@ -1121,7 +1121,7 @@ void draw_primary_ammo_info(int ammo_count)
 		draw_ammo_info(PRIMARY_AMMO_X,PRIMARY_AMMO_Y,ammo_count,1);
 }
 
-void hud_show_weapons_mode(int type,int vertical,int x,int y){
+static void hud_show_weapons_mode(int type,int vertical,int x,int y){
 	int i,w,h,aw,orig_x,orig_y;
 	char weapon_str[10];
 
@@ -1263,7 +1263,7 @@ void hud_show_weapons_mode(int type,int vertical,int x,int y){
 //convert '1' characters to special wide ones
 #define convert_1s(s) do {char *p=s; while ((p=strchr(p,'1')) != NULL) *p=132;} while(0)
 
-void hud_show_weapons(void)
+static void hud_show_weapons(void)
 {
 	int	w, h, aw;
 	int	y;
@@ -1356,7 +1356,7 @@ void hud_show_weapons(void)
 	}
 }
 
-void hud_show_cloak_invuln(void)
+static void hud_show_cloak_invuln(void)
 {
 	gr_set_fontcolor(BM_XRGB(0,31,0),-1 );
 
@@ -1392,7 +1392,7 @@ void hud_show_cloak_invuln(void)
 
 }
 
-void hud_show_shield(void)
+static void hud_show_shield(void)
 {
 //	gr_set_current_canvas(&VR_render_sub_buffer[0]);	//render off-screen
 	if (PlayerCfg.HudMode<2) {
@@ -1417,7 +1417,7 @@ void hud_show_shield(void)
 }
 
 //draw the icons for number of lives
-void hud_show_lives()
+static void hud_show_lives()
 {
 	int x;
 
@@ -1445,7 +1445,7 @@ void hud_show_lives()
 
 }
 
-void sb_show_lives()
+static void sb_show_lives()
 {
 	int x,y;
 	grs_bitmap * bm = &GameBitmaps[ GET_GAUGE_INDEX(GAUGE_LIVES) ];
@@ -1494,7 +1494,7 @@ void sb_show_lives()
 
 extern int Piggy_bitmap_cache_next;
 
-void show_time()
+static void show_time()
 {
 	int secs = f2i(Players[Player_num].time_level) % 60;
 	int mins = f2i(Players[Player_num].time_level) / 60;
@@ -1647,7 +1647,7 @@ void cockpit_decode_alpha(grs_bitmap *bm)
 	cur_h = bm->bm_h;
 }
 
-void draw_wbu_overlay()
+static void draw_wbu_overlay()
 {
 	grs_bitmap *bm = &GameBitmaps[cockpit_bitmap[PlayerCfg.CockpitMode[1]+(HIRESMODE?(Num_cockpits/2):0)].index];
 
@@ -1679,7 +1679,7 @@ void init_gauges()
 	weapon_box_user[0] = weapon_box_user[1] = WBU_WEAPON;
 }
 
-void draw_energy_bar(int energy)
+static void draw_energy_bar(int energy)
 {
 	int x1, x2, y;
 	int not_energy = (HIRESMODE?(HUD_SCALE_X(125 - (energy*125)/100)):(HUD_SCALE_X(63 - (energy*63)/100)));
@@ -1722,7 +1722,7 @@ void draw_energy_bar(int energy)
 	gr_set_current_canvas( NULL );
 }
 
-void draw_afterburner_bar(int afterburner)
+static void draw_afterburner_bar(int afterburner)
 {
 	int not_afterburner;
 	int i, j, y;
@@ -1748,7 +1748,7 @@ void draw_afterburner_bar(int afterburner)
 	gr_set_current_canvas( NULL );
 }
 
-void draw_shield_bar(int shield)
+static void draw_shield_bar(int shield)
 {
 	int bm_num = shield>=100?9:(shield / 10);
 
@@ -1758,7 +1758,7 @@ void draw_shield_bar(int shield)
 
 #define CLOAK_FADE_WAIT_TIME  0x400
 
-void draw_player_ship(int cloak_state,int x, int y)
+static void draw_player_ship(int cloak_state,int x, int y)
 {
 	static fix cloak_fade_timer=0;
 	static int cloak_fade_value=GR_FADE_LEVELS-1;
@@ -1831,7 +1831,7 @@ void draw_player_ship(int cloak_state,int x, int y)
 
 #define INV_FRAME_TIME	(f1_0/10)		//how long for each frame
 
-void draw_numerical_display(int shield, int energy)
+static void draw_numerical_display(int shield, int energy)
 {
 	int sw,sh,saw,ew,eh,eaw;
 
@@ -1856,7 +1856,7 @@ void draw_numerical_display(int shield, int energy)
 }
 
 
-void draw_keys()
+static void draw_keys()
 {
 	gr_set_current_canvas( NULL );
 
@@ -1886,7 +1886,7 @@ void draw_keys()
 }
 
 
-void draw_weapon_info_sub(int info_index,const gauge_box *box,int pic_x,int pic_y,const char *name,int text_x,int text_y)
+static void draw_weapon_info_sub(int info_index,const gauge_box *box,int pic_x,int pic_y,const char *name,int text_x,int text_y)
 {
 	grs_bitmap *bm;
 
@@ -1927,7 +1927,7 @@ void draw_weapon_info_sub(int info_index,const gauge_box *box,int pic_x,int pic_
 }
 
 
-void draw_weapon_info(int weapon_type,int weapon_num,int laser_level)
+static void draw_weapon_info(int weapon_type,int weapon_num,int laser_level)
 {
 	int info_index;
 
@@ -1988,7 +1988,7 @@ void draw_ammo_info(int x,int y,int ammo_count,int primary)
 	}
 }
 
-void draw_secondary_ammo_info(int ammo_count)
+static void draw_secondary_ammo_info(int ammo_count)
 {
 	if (PlayerCfg.CockpitMode[1] == CM_STATUS_BAR)
 		draw_ammo_info(SB_SECONDARY_AMMO_X,SB_SECONDARY_AMMO_Y,ammo_count,0);
@@ -1996,7 +1996,7 @@ void draw_secondary_ammo_info(int ammo_count)
 		draw_ammo_info(SECONDARY_AMMO_X,SECONDARY_AMMO_Y,ammo_count,0);
 }
 
-void draw_weapon_box(int weapon_type,int weapon_num)
+static void draw_weapon_box(int weapon_type,int weapon_num)
 {
 	int laser_level_changed;
 
@@ -2064,7 +2064,7 @@ void draw_weapon_box(int weapon_type,int weapon_num)
 
 fix static_time[2];
 
-void draw_static(int win)
+static void draw_static(int win)
 {
 	vclip *vc = &Vclip[VCLIP_MONITOR_STATIC];
 	grs_bitmap *bmp;
@@ -2105,7 +2105,7 @@ void draw_static(int win)
 	gr_set_current_canvas(NULL);
 }
 
-void draw_weapon_boxes()
+static void draw_weapon_boxes()
 {
 	if (weapon_box_user[0] == WBU_WEAPON) {
 		draw_weapon_box(0,Primary_weapon);
@@ -2144,7 +2144,7 @@ void draw_weapon_boxes()
 }
 
 
-void sb_draw_energy_bar(energy)
+static void sb_draw_energy_bar(int energy)
 {
 	int erase_height, w, h, aw, i;
 	int ew, eh, eaw;
@@ -2168,7 +2168,7 @@ void sb_draw_energy_bar(energy)
 	gr_set_current_canvas(NULL);
 }
 
-void sb_draw_afterburner()
+static void sb_draw_afterburner()
 {
 	int erase_height, w, h, aw, i;
 	char ab_str[3] = "AB";
@@ -2192,7 +2192,7 @@ void sb_draw_afterburner()
 	gr_set_current_canvas(NULL);
 }
 
-void sb_draw_shield_num(int shield)
+static void sb_draw_shield_num(int shield)
 {
 	//draw numbers
 	int sw, sh, saw;
@@ -2204,7 +2204,7 @@ void sb_draw_shield_num(int shield)
 	gr_printf((grd_curscreen->sc_w/2.266)-(sw/2),HUD_SCALE_Y(SB_SHIELD_NUM_Y),"%d",shield);
 }
 
-void sb_draw_shield_bar(int shield)
+static void sb_draw_shield_bar(int shield)
 {
 	int bm_num = shield>=100?9:(shield / 10);
 
@@ -2213,7 +2213,7 @@ void sb_draw_shield_bar(int shield)
 	hud_bitblt( HUD_SCALE_X(SB_SHIELD_GAUGE_X), HUD_SCALE_Y(SB_SHIELD_GAUGE_Y), &GameBitmaps[GET_GAUGE_INDEX(GAUGE_SHIELDS+9-bm_num) ]);
 }
 
-void sb_draw_keys()
+static void sb_draw_keys()
 {
 	grs_bitmap * bm;
 	int flags = Players[Player_num].flags;
@@ -2231,7 +2231,7 @@ void sb_draw_keys()
 }
 
 //	Draws invulnerable ship, or maybe the flashing ship, depending on invulnerability time left.
-void draw_invulnerable_ship()
+static void draw_invulnerable_ship()
 {
 	static fix time=0;
 
@@ -2484,7 +2484,7 @@ static unsigned show_player_score_with_position(const unsigned player_num, const
 	return 1;
 }
 
-void hud_show_kill_list()
+static void hud_show_kill_list()
 {
 	int n_players,player_list[MAX_PLAYERS];
 	int n_left,i,x0,x1,y,save_y;
@@ -2617,7 +2617,7 @@ void hud_show_kill_list()
 #endif
 
 //returns true if viewer can see object
-int see_object(int objnum)
+static int see_object(int objnum)
 {
 	fvi_query fq;
 	int hit_type;

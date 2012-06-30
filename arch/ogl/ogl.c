@@ -126,7 +126,7 @@ void perspective(double fovy, double aspect, double zNear, double zFar)
 }
 #endif
 
-void ogl_init_texture_stats(ogl_texture* t){
+static void ogl_init_texture_stats(ogl_texture* t){
 	t->prio=0.3;//default prio
 	t->numrend=0;
 }
@@ -190,12 +190,12 @@ void ogl_init_texture(ogl_texture* t, int w, int h, int flags)
 	ogl_init_texture_stats(t);
 }
 
-void ogl_reset_texture(ogl_texture* t)
+static void ogl_reset_texture(ogl_texture* t)
 {
 	ogl_init_texture(t, 0, 0, 0);
 }
 
-void ogl_reset_texture_stats_internal(void){
+static void ogl_reset_texture_stats_internal(void){
 	int i;
 	for (i=0;i<OGL_TEXTURE_LIST_SIZE;i++)
 		if (ogl_texture_list[i].handle>0){
@@ -254,7 +254,7 @@ ogl_texture* ogl_get_free_texture(void){
 	Error("OGL: texture list full!\n");
 }
 
-void ogl_texture_stats(void)
+static void ogl_texture_stats(void)
 {
 	int used = 0, usedother = 0, usedidx = 0, usedrgb = 0, usedrgba = 0;
 	int databytes = 0, truebytes = 0, datatexel = 0, truetexel = 0, i;
@@ -313,7 +313,7 @@ void ogl_texture_stats(void)
 	gr_printf(FSPACX(2), FSPACY(1)+(LINE_SPACING*3), "total=%iK", (colorsize + depthsize + truebytes) / 1024);
 }
 
-void ogl_bindbmtex(grs_bitmap *bm){
+static void ogl_bindbmtex(grs_bitmap *bm){
 	if (bm->gltexture==NULL || bm->gltexture->handle<=0)
 		ogl_loadbmtexture(bm);
 	OGL_BINDTEXTURE(bm->gltexture->handle);
@@ -321,7 +321,7 @@ void ogl_bindbmtex(grs_bitmap *bm){
 }
 
 //gltexture MUST be bound first
-void ogl_texwrap(ogl_texture *gltexture,int state)
+static void ogl_texwrap(ogl_texture *gltexture,int state)
 {
 	if (gltexture->wrapstate != state || gltexture->numrend < 1)
 	{
@@ -350,7 +350,7 @@ void ogl_cache_polymodel_textures(int model_num)
 	}
 }
 
-void ogl_cache_vclip_textures(vclip *vc){
+static void ogl_cache_vclip_textures(vclip *vc){
 	int i;
 	for (i=0;i<vc->num_frames;i++){
 		PIGGY_PAGE_IN(vc->frames[i]);
@@ -358,13 +358,13 @@ void ogl_cache_vclip_textures(vclip *vc){
 	}
 }
 
-void ogl_cache_vclipn_textures(int i)
+static void ogl_cache_vclipn_textures(int i)
 {
 	if (i >= 0 && i < VCLIP_MAXNUM)
 		ogl_cache_vclip_textures(&Vclip[i]);
 }
 
-void ogl_cache_weapon_textures(int weapon_type)
+static void ogl_cache_weapon_textures(int weapon_type)
 {
 	weapon_info *w;
 
@@ -524,7 +524,7 @@ bool g3_draw_line(g3s_point *p0,g3s_point *p1)
 	return 1;
 }
 
-void ogl_drawcircle(int nsides, int type, GLfloat *vertex_array)
+static void ogl_drawcircle(int nsides, int type, GLfloat *vertex_array)
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(2, GL_FLOAT, 0, vertex_array);
@@ -532,7 +532,7 @@ void ogl_drawcircle(int nsides, int type, GLfloat *vertex_array)
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-GLfloat *circle_array_init(int nsides)
+static GLfloat *circle_array_init(int nsides)
 {
 	int i;
 	float ang;
@@ -547,7 +547,7 @@ GLfloat *circle_array_init(int nsides)
 	return vertex_array;
 }
  
-GLfloat *circle_array_init_2(int nsides, float xsc, float xo, float ysc, float yo)
+static GLfloat *circle_array_init_2(int nsides, float xsc, float xo, float ysc, float yo)
 {
  	int i;
  	float ang;
@@ -1417,7 +1417,7 @@ void ogl_filltexbuf(unsigned char *data, GLubyte *texp, int truewidth, int width
 	}
 }
 
-void tex_set_size1(ogl_texture *tex,int dbits,int bits,int w, int h){
+static void tex_set_size1(ogl_texture *tex,int dbits,int bits,int w, int h){
 	int u;
 	if (tex->tw!=w || tex->th!=h){
 		u=(tex->w/(float)tex->tw*w) * (tex->h/(float)tex->th*h);
@@ -1434,7 +1434,7 @@ void tex_set_size1(ogl_texture *tex,int dbits,int bits,int w, int h){
 	glmprintf((0,"tex_set_size1: %ix%i, %ib(%i) %iB\n",w,h,bits,dbits,tex->bytes));
 }
 
-void tex_set_size(ogl_texture *tex){
+static void tex_set_size(ogl_texture *tex){
 	GLint w,h;
 	int bi=16,a=0;
 #ifndef OGLES

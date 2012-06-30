@@ -42,7 +42,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 //new_pnt is the found point on the plane
 //plane_pnt & plane_norm describe the plane
 //p0 & p1 are the ends of the line
-static int find_plane_line_intersection(vms_vector *new_pnt,vms_vector *plane_pnt,vms_vector *plane_norm,const vms_vector *p0,const vms_vector *p1,fix rad)
+static int find_plane_line_intersection(vms_vector *new_pnt,const vms_vector *plane_pnt,const vms_vector *plane_norm,const vms_vector *p0,const vms_vector *p1,fix rad)
 {
 	vms_vector d,w;
 	fix num,den;
@@ -159,7 +159,7 @@ static uint check_point_to_face(const vms_vector *checkp, side *s,int facenum,in
 
 
 //check if a sphere intersects a face
-int check_sphere_to_face(vms_vector *pnt, side *s,int facenum,int nv,fix rad,int *vertex_list)
+static int check_sphere_to_face(vms_vector *pnt, side *s,int facenum,int nv,fix rad,int *vertex_list)
 {
 	vms_vector checkp=*pnt;
 	uint edgemask;
@@ -279,7 +279,7 @@ static int check_line_to_face(vms_vector *newp,const vms_vector *p0,const vms_ve
 }
 
 //returns the value of a determinant
-fix calc_det_value(vms_matrix *det)
+static fix calc_det_value(vms_matrix *det)
 {
 	return 	fixmul(det->rvec.x,fixmul(det->uvec.y,det->fvec.z)) -
 			 	fixmul(det->rvec.x,fixmul(det->uvec.z,det->fvec.y)) -
@@ -767,7 +767,7 @@ if (hit_seg!=-1 && fq->flags&FQ_GET_SEGLIST)
 //--unused-- 	return vm_vec_dist(v0,v1);
 //--unused-- }
 
-int obj_in_list(int objnum,int *obj_list)
+static int obj_in_list(int objnum,int *obj_list)
 {
 	int t;
 
@@ -1216,7 +1216,7 @@ int check_trans_wall(vms_vector *pnt,segment *seg,int sidenum,int facenum)
 
 //new function for Mike
 //note: n_segs_visited must be set to zero before this is called
-int sphere_intersects_wall(vms_vector *pnt,int segnum,fix rad,int *hseg,int *hside,int *hface)
+static int sphere_intersects_wall(vms_vector *pnt,int segnum,fix rad,int *hseg,int *hside,int *hface)
 {
 	int facemask;
 	segment *seg;

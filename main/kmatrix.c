@@ -60,7 +60,7 @@ void kmatrix_phallic ();
 void kmatrix_redraw_coop();
 fix64 StartAbortMenuTime;
 
-void kmatrix_draw_item( int  i, int *sorted )
+static void kmatrix_draw_item( int  i, int *sorted )
 {
 	int j, x, y;
 	char temp[10];
@@ -110,7 +110,7 @@ void kmatrix_draw_item( int  i, int *sorted )
 	gr_printf( x ,y,"%4d/%s",Players[sorted[i]].net_kills_total,temp);
 }
 
-void kmatrix_draw_coop_item( int  i, int *sorted )
+static void kmatrix_draw_coop_item( int  i, int *sorted )
 {
 	int  x, y;
 
@@ -124,7 +124,7 @@ void kmatrix_draw_coop_item( int  i, int *sorted )
 	gr_printf( x, y, "%d", Players[sorted[i]].net_killed_total);
 }
 
-void kmatrix_draw_names(int *sorted)
+static void kmatrix_draw_names(int *sorted)
 {
 	int j, x, color;
 
@@ -150,7 +150,7 @@ void kmatrix_draw_names(int *sorted)
 	gr_string( x, FSPACY(40), "K/E");
 }
 
-void kmatrix_draw_coop_names(int *sorted)
+static void kmatrix_draw_coop_names(int *sorted)
 {
 	sorted=sorted;
 
@@ -178,7 +178,7 @@ void kmatrix_phallic ()
 	gr_string( CENTERSCREEN-(sw/2), FSPACY(55+72+3), message);
 }
 
-void kmatrix_status_msg (fix time, int reactor, int paused)
+static void kmatrix_status_msg (fix time, int reactor, int paused)
 {
 	grd_curcanv->cv_font = GAME_FONT;
 	gr_set_fontcolor(gr_find_closest_color(255,255,255),-1);
@@ -196,7 +196,7 @@ typedef struct kmatrix_screen
 	int playing;
 } kmatrix_screen;
 
-void kmatrix_redraw(kmatrix_screen *km)
+static void kmatrix_redraw(kmatrix_screen *km)
 {
 	int i, color;
 	int sorted[MAX_PLAYERS];
@@ -270,7 +270,7 @@ void kmatrix_redraw_coop()
 	gr_palette_load(gr_palette);
 }
 
-int kmatrix_handler(window *wind, d_event *event, kmatrix_screen *km)
+static int kmatrix_handler(window *wind, d_event *event, kmatrix_screen *km)
 {
 	int i = 0, k = 0, choice = 0;
 	

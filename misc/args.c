@@ -84,13 +84,13 @@ void AppendIniArgs(void)
 }
 
 // Utility function to get an integer provided as argument
-int get_int_arg(char *arg_name, int default_value) {
+static int get_int_arg(char *arg_name, int default_value) {
 	int t;
 	return ((t = FindArg(arg_name)) ? atoi(Args[t+1]) : default_value);
 
 }
 // Utility function to get a string provided as argument
-char *get_str_arg(char *arg_name, char *default_value) {
+static char *get_str_arg(char *arg_name, char *default_value) {
 	int t;
 	return ((t = FindArg(arg_name)) ? Args[t+1] : default_value);
 }

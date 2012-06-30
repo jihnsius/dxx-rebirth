@@ -61,7 +61,7 @@ void dump_used_textures_level(PHYSFS_file *my_file, int level_num);
 static void say_totals(PHYSFS_file *my_file, const char *level_name);
 
 // ----------------------------------------------------------------------------
-char	*object_types(int objnum)
+static char	*object_types(int objnum)
 {
 	int	type = Objects[objnum].type;
 
@@ -70,7 +70,7 @@ char	*object_types(int objnum)
 }
 
 // ----------------------------------------------------------------------------
-char	*object_ids(int objnum)
+static char	*object_ids(int objnum)
 {
 	int	type = Objects[objnum].type;
 	int	id = Objects[objnum].id;
@@ -87,7 +87,7 @@ char	*object_ids(int objnum)
 	return	NULL;
 }
 
-void err_printf(PHYSFS_file *my_file, char * format, ... )
+static void err_printf(PHYSFS_file *my_file, char * format, ... )
 {
 	va_list	args;
 	char		message[256];
@@ -101,7 +101,7 @@ void err_printf(PHYSFS_file *my_file, char * format, ... )
 	Errors_in_mine++;
 }
 
-void warning_printf(PHYSFS_file *my_file, char * format, ... )
+static void warning_printf(PHYSFS_file *my_file, char * format, ... )
 {
 	va_list	args;
 	char		message[256];
@@ -115,7 +115,7 @@ void warning_printf(PHYSFS_file *my_file, char * format, ... )
 }
 
 // ----------------------------------------------------------------------------
-void write_exit_text(PHYSFS_file *my_file)
+static void write_exit_text(PHYSFS_file *my_file)
 {
 	int	i, j, count;
 
@@ -173,7 +173,7 @@ void write_exit_text(PHYSFS_file *my_file)
 }
 
 // ----------------------------------------------------------------------------
-void write_key_text(PHYSFS_file *my_file)
+static void write_key_text(PHYSFS_file *my_file)
 {
 	int	i;
 	int	red_count, blue_count, gold_count;
@@ -308,7 +308,7 @@ void write_key_text(PHYSFS_file *my_file)
 }
 
 // ----------------------------------------------------------------------------
-void write_control_center_text(PHYSFS_file *my_file)
+static void write_control_center_text(PHYSFS_file *my_file)
 {
 	int	i, count, objnum, count2;
 
@@ -340,7 +340,7 @@ void write_control_center_text(PHYSFS_file *my_file)
 }
 
 // ----------------------------------------------------------------------------
-void write_fuelcen_text(PHYSFS_file *my_file)
+static void write_fuelcen_text(PHYSFS_file *my_file)
 {
 	int	i;
 
@@ -355,7 +355,7 @@ void write_fuelcen_text(PHYSFS_file *my_file)
 }
 
 // ----------------------------------------------------------------------------
-void write_segment_text(PHYSFS_file *my_file)
+static void write_segment_text(PHYSFS_file *my_file)
 {
 	int	i, objnum;
 
@@ -398,7 +398,7 @@ void write_segment_text(PHYSFS_file *my_file)
 // ----------------------------------------------------------------------------
 // This routine is bogus.  It assumes that all centers are matcens,
 // which is not true.  The setting of segnum is bogus.
-void write_matcen_text(PHYSFS_file *my_file)
+static void write_matcen_text(PHYSFS_file *my_file)
 {
 	int	i, j, k;
 
@@ -435,7 +435,7 @@ void write_matcen_text(PHYSFS_file *my_file)
 }
 
 // ----------------------------------------------------------------------------
-void write_wall_text(PHYSFS_file *my_file)
+static void write_wall_text(PHYSFS_file *my_file)
 {
 	int	i, j;
 	sbyte wall_flags[MAX_WALLS];
@@ -489,7 +489,7 @@ void write_wall_text(PHYSFS_file *my_file)
 //	} trigger;
 
 // ----------------------------------------------------------------------------
-void write_player_text(PHYSFS_file *my_file)
+static void write_player_text(PHYSFS_file *my_file)
 {
 	int	i, num_players=0;
 
@@ -509,7 +509,7 @@ void write_player_text(PHYSFS_file *my_file)
 }
 
 // ----------------------------------------------------------------------------
-void write_trigger_text(PHYSFS_file *my_file)
+static void write_trigger_text(PHYSFS_file *my_file)
 {
 	int	i, j, w;
 
@@ -745,7 +745,7 @@ extern BitmapFile AllBitmaps[ MAX_BITMAP_FILES ];
 int	Ignore_tmap_num2_error;
 
 // ----------------------------------------------------------------------------
-void determine_used_textures_level(int load_level_flag, int shareware_flag, int level_num, int *tmap_buf, int *wall_buf, sbyte *level_tmap_buf, int max_tmap)
+static void determine_used_textures_level(int load_level_flag, int shareware_flag, int level_num, int *tmap_buf, int *wall_buf, sbyte *level_tmap_buf, int max_tmap)
 {
 	int	segnum, sidenum, objnum=max_tmap;
 	int	i, j;
@@ -843,7 +843,7 @@ void determine_used_textures_level(int load_level_flag, int shareware_flag, int 
 }
 
 // ----------------------------------------------------------------------------
-void merge_buffers(int *dest, int *src, int num)
+static void merge_buffers(int *dest, int *src, int num)
 {
 	int	i;
 
@@ -853,7 +853,7 @@ void merge_buffers(int *dest, int *src, int num)
 }
 
 // ----------------------------------------------------------------------------
-void say_used_tmaps(PHYSFS_file *my_file, int *tb)
+static void say_used_tmaps(PHYSFS_file *my_file, int *tb)
 {
 	int	i;
 // -- mk, 08/14/95 -- 	int	count = 0;
@@ -890,7 +890,7 @@ void say_used_tmaps(PHYSFS_file *my_file, int *tb)
 // --05/17/95--}
 
 // ----------------------------------------------------------------------------
-void say_unused_tmaps(PHYSFS_file *my_file, int *tb)
+static void say_unused_tmaps(PHYSFS_file *my_file, int *tb)
 {
 	int	i;
 	int	count = 0;
@@ -977,7 +977,7 @@ int	First_dump_level = 0;
 int	Last_dump_level = NUM_ADAM_LEVELS-1;
 
 // ----------------------------------------------------------------------------
-void say_totals_all(void)
+static void say_totals_all(void)
 {
 	int	i;
 	PHYSFS_file	*my_file;

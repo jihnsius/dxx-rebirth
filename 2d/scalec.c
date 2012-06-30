@@ -37,7 +37,7 @@ void rls_stretch_scanline_setup( int XDelta, int YDelta );
 void rls_stretch_scanline(void);
 
 
-void decode_row( grs_bitmap * bmp, int y )
+static void decode_row( grs_bitmap * bmp, int y )
 {
 	int i, offset=4+bmp->bm_h;
 
@@ -218,7 +218,7 @@ void rls_stretch_scanline( )
 
 // old stuff here...
 
-void scale_bitmap_c(grs_bitmap *source_bmp, grs_bitmap *dest_bmp, int x0, int y0, int x1, int y1, fix u0, fix v0,  fix u1, fix v1, int orientation  )
+static void scale_bitmap_c(grs_bitmap *source_bmp, grs_bitmap *dest_bmp, int x0, int y0, int x1, int y1, fix u0, fix v0,  fix u1, fix v1, int orientation  )
 {
 	fix u, v, du, dv;
 	int x, y;
@@ -256,7 +256,7 @@ void scale_bitmap_c(grs_bitmap *source_bmp, grs_bitmap *dest_bmp, int x0, int y0
 	}
 }
 
-void scale_row_transparent( ubyte * sbits, ubyte * dbits, int width, fix u, fix du )
+static void scale_row_transparent( ubyte * sbits, ubyte * dbits, int width, fix u, fix du )
 {
 	int i;
 	ubyte c;
@@ -315,7 +315,7 @@ NonTransparent:
 	}
 }
 
-void scale_bitmap_c_rle(grs_bitmap *source_bmp, grs_bitmap *dest_bmp, int x0, int y0, int x1, int y1, fix u0, fix v0,  fix u1, fix v1, int orientation  )
+static void scale_bitmap_c_rle(grs_bitmap *source_bmp, grs_bitmap *dest_bmp, int x0, int y0, int x1, int y1, fix u0, fix v0,  fix u1, fix v1, int orientation  )
 {
 	fix du, dv, v;
 	int y, last_row=-1;

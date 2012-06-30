@@ -79,7 +79,7 @@ typedef struct all_scores {
 #define COOL_SAYING "Get all 30 levels of D2 from 1-800-INTERPLAY"
 #endif
 
-void scores_read(all_scores *scores)
+static void scores_read(all_scores *scores)
 {
 	PHYSFS_file *fp;
 	int fsize;
@@ -125,7 +125,7 @@ void scores_read(all_scores *scores)
 	}
 }
 
-void scores_write(all_scores *scores)
+static void scores_write(all_scores *scores)
 {
 	PHYSFS_file *fp;
 
@@ -143,7 +143,7 @@ void scores_write(all_scores *scores)
 	PHYSFS_close(fp);
 }
 
-void int_to_string( int number, char *dest )
+static void int_to_string( int number, char *dest )
 {
 	int i,l,c;
 	char buffer[20],*p;
@@ -171,7 +171,7 @@ void int_to_string( int number, char *dest )
 	strrev(dest);
 }
 
-void scores_fill_struct(stats_info * stats)
+static void scores_fill_struct(stats_info * stats)
 {
 	strcpy( stats->name, Players[Player_num].callsign );
 	stats->score = Players[Player_num].score;
@@ -264,7 +264,7 @@ void scores_maybe_add_player(int abort_flag)
 		window_close(Game_wind);	// prevent the next game from doing funny things
 }
 
-void scores_rprintf(int x, int y, char * format, ... )
+static void scores_rprintf(int x, int y, char * format, ... )
 {
 	va_list args;
 	char buffer[128];
@@ -285,7 +285,7 @@ void scores_rprintf(int x, int y, char * format, ... )
 }
 
 
-void scores_draw_item( int i, stats_info * stats )
+static void scores_draw_item( int i, stats_info * stats )
 {
 	char buffer[20];
 
@@ -341,7 +341,7 @@ typedef struct scores_menu
 	stats_info	last_game;
 } scores_menu;
 
-int scores_handler(window *wind, d_event *event, scores_menu *menu)
+static int scores_handler(window *wind, d_event *event, scores_menu *menu)
 {
 	int i;
 	int k;

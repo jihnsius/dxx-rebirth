@@ -109,7 +109,7 @@ bool g3_check_normal_facing(const vms_vector *v,const vms_vector *norm)
 	return (vm_vec_dot(&tempv,norm) > 0);
 }
 
-bool do_facing_check(vms_vector *norm,g3s_point **vertlist,vms_vector *p)
+static bool do_facing_check(vms_vector *norm,g3s_point **vertlist,vms_vector *p)
 {
 	if (norm) {		//have normal
 

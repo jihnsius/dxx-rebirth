@@ -63,7 +63,7 @@ void do_countdown_frame();
 
 //	-----------------------------------------------------------------------------
 //return the position & orientation of a gun on the control center object
-void calc_controlcen_gun_point(vms_vector *gun_point,vms_vector *gun_dir,dxxobject *obj,int gun_num)
+static void calc_controlcen_gun_point(vms_vector *gun_point,vms_vector *gun_dir,dxxobject *obj,int gun_num)
 {
 	reactor *reactor;
 	vms_matrix m;
@@ -88,7 +88,7 @@ void calc_controlcen_gun_point(vms_vector *gun_point,vms_vector *gun_dir,dxxobje
 //	Look at control center guns, find best one to fire at *objp.
 //	Return best gun number (one whose direction dotted with vector to player is largest).
 //	If best gun has negative dot, return -1, meaning no gun is good.
-int calc_best_gun(int num_guns, vms_vector *gun_pos, vms_vector *gun_dir, vms_vector *objpos)
+static int calc_best_gun(int num_guns, vms_vector *gun_pos, vms_vector *gun_dir, vms_vector *objpos)
 {
 	int	i;
 	fix	best_dot;
@@ -526,7 +526,7 @@ extern int control_center_triggers_read_n(control_center_triggers *cct, int n, P
 	return i;
 }
 
-void control_center_triggers_swap(control_center_triggers *cct, int swap)
+static void control_center_triggers_swap(control_center_triggers *cct, int swap)
 {
 	int i;
 	

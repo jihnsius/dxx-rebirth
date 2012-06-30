@@ -47,7 +47,7 @@ void free_text()
 
 // rotates a byte left one bit, preserving the bit falling off the right
 void
-encode_rotate_left(char *c)
+static encode_rotate_left(char *c)
 {
 	int found;
 

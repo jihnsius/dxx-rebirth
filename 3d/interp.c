@@ -63,7 +63,7 @@ void g3_set_interp_points(g3s_point *pointlist)
 #define fp(p)  ((fix *) (p))
 #define vp(p)  ((vms_vector *) (p))
 
-void rotate_point_list(g3s_point *dest,vms_vector *src,int n)
+static void rotate_point_list(g3s_point *dest,vms_vector *src,int n)
 {
 	while (n--)
 		g3_rotate_point(dest++,src++);
@@ -751,7 +751,7 @@ bool g3_draw_morphing_model(void *model_ptr,grs_bitmap **model_bitmaps,vms_angve
 	return 1;
 }
 
-void init_model_sub(ubyte *p)
+static void init_model_sub(ubyte *p)
 {
 	Assert(++nest_count < 1000);
 

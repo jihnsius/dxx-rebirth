@@ -76,7 +76,7 @@ void _Assert(int expr,const char *expr_text,const char *filename,int linenum)
 	if (!(expr)) Error("Assertion failed: %s, file %s, line %d",expr_text,filename,linenum);
 }
 
-void print_exit_message(void)
+static void print_exit_message(void)
 {
 	if (*exit_message)
 	{

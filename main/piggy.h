@@ -62,7 +62,6 @@ int piggy_register_sound( digi_sound * snd, char * name, int in_file );
 bitmap_index piggy_find_bitmap( char * name );
 int piggy_find_sound( char * name );
 
-extern int Pigfile_initialized;
 
 void piggy_read_bitmap_data(grs_bitmap * bmp);
 void piggy_read_sound_data(digi_sound *snd);

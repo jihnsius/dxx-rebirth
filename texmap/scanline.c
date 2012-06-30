@@ -246,7 +246,7 @@ void c_tmap_scanline_lin()
 #endif
 
 // Used for energy centers. See comments for c_tmap_scanline_per().
-void c_fp_tmap_scanline_per_nolight()
+static void c_fp_tmap_scanline_per_nolight()
 {
 	ubyte	       *dest;
 	uint		c;
@@ -539,7 +539,7 @@ void c_tmap_scanline_per_nolight()
 // Unfortunately, it won't compile the whole source, so simply compile everything, change the
 // compiler to ccc, remove scanline.o and compile again.
 // Please send comments/suggestions to falk.hueffner@student.uni-tuebingen.de.
-void c_fp_tmap_scanline_per()
+static void c_fp_tmap_scanline_per()
 {
 	ubyte          *dest;
 	uint            c;
@@ -967,7 +967,7 @@ void c_tmap_scanline_per()
 
 #endif
 
-void c_tmap_scanline_quad()
+static void c_tmap_scanline_quad()
 {
 	ubyte *dest;
 	uint c;

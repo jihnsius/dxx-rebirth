@@ -80,7 +80,7 @@ void trigger_init()
 // Executes a link, attached to a trigger.
 // Toggles all walls linked to the switch.
 // Opens doors, Blasts blast walls, turns off illusions.
-void do_link(sbyte trigger_num)
+static void do_link(sbyte trigger_num)
 {
 	int i;
 
@@ -92,7 +92,7 @@ void do_link(sbyte trigger_num)
 }
 
 //close a door
-void do_close_door(sbyte trigger_num)
+static void do_close_door(sbyte trigger_num)
 {
 	int i;
 
@@ -104,7 +104,7 @@ void do_close_door(sbyte trigger_num)
 
 //turns lighting on.  returns true if lights were actually turned on. (they
 //would not be if they had previously been shot out).
-int do_light_on(sbyte trigger_num)
+static int do_light_on(sbyte trigger_num)
 {
 	int i,ret=0;
 
@@ -128,7 +128,7 @@ int do_light_on(sbyte trigger_num)
 
 //turns lighting off.  returns true if lights were actually turned off. (they
 //would not be if they had previously been shot out).
-int do_light_off(sbyte trigger_num)
+static int do_light_off(sbyte trigger_num)
 {
 	int i,ret=0;
 
@@ -151,7 +151,7 @@ int do_light_off(sbyte trigger_num)
 }
 
 // Unlocks all doors linked to the switch.
-void do_unlock_doors(sbyte trigger_num)
+static void do_unlock_doors(sbyte trigger_num)
 {
 	int i;
 
@@ -164,7 +164,7 @@ void do_unlock_doors(sbyte trigger_num)
 }
 
 // Locks all doors linked to the switch.
-void do_lock_doors(sbyte trigger_num)
+static void do_lock_doors(sbyte trigger_num)
 {
 	int i;
 
@@ -176,7 +176,7 @@ void do_lock_doors(sbyte trigger_num)
 }
 
 // Changes walls pointed to by a trigger. returns true if any walls changed
-int do_change_walls(sbyte trigger_num)
+static int do_change_walls(sbyte trigger_num)
 {
 	int i,ret=0;
 
@@ -286,7 +286,7 @@ static int __print_trigger_message(int pnum,int trig,int shot)
  }
 
 
-void do_matcen(sbyte trigger_num)
+static void do_matcen(sbyte trigger_num)
 {
 	int i;
 
@@ -298,7 +298,7 @@ void do_matcen(sbyte trigger_num)
 }
 
 
-void do_il_on(sbyte trigger_num)
+static void do_il_on(sbyte trigger_num)
 {
 	int i;
 
@@ -309,7 +309,7 @@ void do_il_on(sbyte trigger_num)
   	}
 }
 
-void do_il_off(sbyte trigger_num)
+static void do_il_off(sbyte trigger_num)
 {
 	int i;
 
@@ -332,7 +332,7 @@ extern void EnterSecretLevel(void);
 extern void ExitSecretLevel(void);
 extern int p_secret_level_destroyed(void);
 
-int wall_is_forcefield(trigger *trig)
+static int wall_is_forcefield(trigger *trig)
 {
 	int i;
 
@@ -609,7 +609,7 @@ extern void trigger_read(trigger *t, PHYSFS_file *fp)
 		t->side[i] = PHYSFSX_readShort(fp);
 }
 
-void trigger_swap(trigger *t, int swap)
+static void trigger_swap(trigger *t, int swap)
 {
 	int i;
 

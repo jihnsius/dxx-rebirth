@@ -145,7 +145,7 @@ int Gamesave_num_org_robots = 0;
 #ifdef EDITOR
 // Return true if this level has a name of the form "level??"
 // Note that a pathspec can appear at the beginning of the filename.
-int is_real_level(char *filename)
+static int is_real_level(char *filename)
 {
 	int len = strlen(filename);
 
@@ -168,7 +168,7 @@ char Save_pof_names[MAX_POLYGON_MODELS][FILENAME_LEN];
 
 void check_and_fix_matrix(vms_matrix *m);
 
-void verify_object( dxxobject * obj )	{
+static void verify_object( dxxobject * obj )	{
 
 	obj->lifeleft = IMMORTAL_TIME;		//all loaded object are immortal, for now
 
@@ -724,7 +724,7 @@ extern int remove_trigger_num(int trigger_num);
 // If level != -1, it loads the filename with extension changed to .min
 // Otherwise it loads the appropriate level mine.
 // returns 0=everything ok, 1=old version, -1=error
-int load_game_data(PHYSFS_file *LoadFile)
+static int load_game_data(PHYSFS_file *LoadFile)
 {
 	int i,j;
 
@@ -1506,7 +1506,7 @@ int create_new_mine(void)
 int	Errors_in_mine;
 
 // -----------------------------------------------------------------------------
-int compute_num_delta_light_records(void)
+static int compute_num_delta_light_records(void)
 {
 	int	i;
 	int	total = 0;
@@ -1521,7 +1521,7 @@ int compute_num_delta_light_records(void)
 
 // -----------------------------------------------------------------------------
 // Save game
-int save_game_data(PHYSFS_file *SaveFile)
+static int save_game_data(PHYSFS_file *SaveFile)
 {
 	short game_top_fileinfo_version = Gamesave_current_version >= 5 ? 31 : 25;
 	int  player_offset=0, object_offset=0, walls_offset=0, doors_offset=0, triggers_offset=0, control_offset=0, matcen_offset=0; //, links_offset;
@@ -1658,7 +1658,7 @@ int save_mine_data(PHYSFS_file * SaveFile);
 
 // -----------------------------------------------------------------------------
 // Save game
-int save_level_sub(char * filename, int compiled_version)
+static int save_level_sub(char * filename, int compiled_version)
 {
 	PHYSFS_file * SaveFile;
 	char temp_filename[PATH_MAX];

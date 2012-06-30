@@ -62,7 +62,7 @@ void check_and_fix_matrix(vms_matrix *m)
 }
 
 
-void do_physics_align_object( dxxobject * obj )
+static void do_physics_align_object( dxxobject * obj )
 {
 	vms_vector desired_upvec;
 	fixang delta_ang,roll_ang;
@@ -153,7 +153,7 @@ void do_physics_align_object( dxxobject * obj )
 
 }
 
-void set_object_turnroll(dxxobject *obj)
+static void set_object_turnroll(dxxobject *obj)
 {
 	fixang desired_bank;
 
@@ -202,7 +202,7 @@ int	Dont_move_ai_objects=0;
 
 //	-----------------------------------------------------------------------------------------------------------
 // add rotational velocity & acceleration
-void do_physics_sim_rot(dxxobject *obj)
+static void do_physics_sim_rot(dxxobject *obj)
 {
 	vms_angvec	tangles;
 	vms_matrix	rotmat,new_orient;
@@ -298,7 +298,7 @@ void do_physics_sim_rot(dxxobject *obj)
 }
 
 // On joining edges fvi tends to get inaccurate as hell. Approach is to check if the object interects with the wall and if so, move away from it.
-void fix_illegal_wall_intersection(dxxobject *obj, vms_vector *origin)
+static void fix_illegal_wall_intersection(dxxobject *obj, vms_vector *origin)
 {
 	int hseg = -1, hside = -1, hface = -1;
 
@@ -858,7 +858,7 @@ void phys_apply_force(dxxobject *obj,vms_vector *force_vec)
 //	Do *dest = *delta unless:
 //				*delta is pretty small
 //		and	they are of different signs.
-void physics_set_rotvel_and_saturate(fix *dest, fix delta)
+static void physics_set_rotvel_and_saturate(fix *dest, fix delta)
 {
 	if ((delta ^ *dest) < 0) {
 		if (abs(delta) < F1_0/8) {

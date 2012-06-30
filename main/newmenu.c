@@ -114,7 +114,7 @@ void newmenu_free_background()	{
 extern char last_palette_loaded[];
 
 // Draws the custom menu background pcx, if available
-void nm_draw_background1(char * filename)
+static void nm_draw_background1(char * filename)
 {
 	int pcx_error;
 
@@ -334,7 +334,7 @@ static void nm_string_inputbox( int w, int x, int y, const char * text, int curr
 		gr_string( x+w1, y, CURSOR_STRING );
 }
 
-void draw_item( newmenu_item *item, int is_current, int tiny, int tabs_flag, int scroll_offset )
+static void draw_item( newmenu_item *item, int is_current, int tiny, int tabs_flag, int scroll_offset )
 {
 	if (tiny)
 	{
@@ -413,7 +413,7 @@ void draw_item( newmenu_item *item, int is_current, int tiny, int tabs_flag, int
 const char *Newmenu_allowed_chars=NULL;
 
 //returns true if char is allowed
-int char_allowed(char c)
+static int char_allowed(char c)
 {
 	const char *p = Newmenu_allowed_chars;
 
@@ -432,7 +432,7 @@ int char_allowed(char c)
 	return 0;
 }
 
-void strip_end_whitespace( char * text )
+static void strip_end_whitespace( char * text )
 {
 	int i,l;
 	l = strlen( text );
@@ -510,7 +510,7 @@ newmenu *newmenu_do3( char * title, char * subtitle, int nitems, newmenu_item * 
 	return newmenu_do4( title, subtitle, nitems, item, subfunction, userdata, citem, filename, 0, 0 );
 }
 
-newmenu *newmenu_do_fixedfont( char * title, char * subtitle, int nitems, newmenu_item * item, int (*subfunction)(newmenu *menu, d_event *event, void *userdata), void *userdata, int citem, char * filename){
+static newmenu *newmenu_do_fixedfont( char * title, char * subtitle, int nitems, newmenu_item * item, int (*subfunction)(newmenu *menu, d_event *event, void *userdata), void *userdata, int citem, char * filename){
 	return newmenu_do4( title, subtitle, nitems, item, subfunction, userdata, citem, filename, 0, 0);
 }
 
@@ -539,7 +539,7 @@ window *newmenu_get_window(newmenu *menu)
 	return menu->wind;
 }
 
-void newmenu_scroll(newmenu *menu, int amount)
+static void newmenu_scroll(newmenu *menu, int amount)
 {
 	int i = 0, first = 0, last = 0;
 
@@ -622,7 +622,7 @@ void newmenu_scroll(newmenu *menu, int amount)
 	}
 }
 
-int newmenu_mouse(window *wind, d_event *event, newmenu *menu, int button)
+static int newmenu_mouse(window *wind, d_event *event, newmenu *menu, int button)
 {
 	int old_choice, i, mx=0, my=0, mz=0, x1 = 0, x2, y1, y2, changed = 0;
 	grs_canvas *menu_canvas = window_get_canvas(wind), *save_canvas = grd_curcanv;
@@ -868,7 +868,7 @@ int newmenu_mouse(window *wind, d_event *event, newmenu *menu, int button)
 	return 0;
 }
 
-int newmenu_key_command(window *wind, d_event *event, newmenu *menu)
+static int newmenu_key_command(window *wind, d_event *event, newmenu *menu)
 {
 	newmenu_item *item = &menu->items[menu->citem];
 	int k = event_key_get(event);
@@ -1170,7 +1170,7 @@ int newmenu_key_command(window *wind, d_event *event, newmenu *menu)
 	return rval;
 }
 
-void newmenu_create_structure( newmenu *menu )
+static void newmenu_create_structure( newmenu *menu )
 {
 	int i,j,aw, tw, th, twidth,fm,right_offset;
 	int nmenus, nothers;
@@ -1392,7 +1392,7 @@ void newmenu_create_structure( newmenu *menu )
 	gr_set_current_canvas(save_canvas);
 }
 
-int newmenu_draw(window *wind, newmenu *menu)
+static int newmenu_draw(window *wind, newmenu *menu)
 {
 	grs_canvas *menu_canvas = window_get_canvas(wind), *save_canvas = grd_curcanv;
 	int th = 0, ty, sx, sy;
@@ -1477,7 +1477,7 @@ int newmenu_draw(window *wind, newmenu *menu)
 	return 1;
 }
 
-int newmenu_handler(window *wind, d_event *event, newmenu *menu)
+static int newmenu_handler(window *wind, d_event *event, newmenu *menu)
 {
 	if (event->type == EVENT_WINDOW_CLOSED)
 		return 0;
@@ -1740,7 +1740,7 @@ void listbox_delete_item(listbox *lb, int item)
 	}
 }
 
-void update_scroll_position(listbox *lb)
+static void update_scroll_position(listbox *lb)
 {
 	if (lb->citem<0)
 		lb->citem = 0;
@@ -1762,7 +1762,7 @@ void update_scroll_position(listbox *lb)
 	if (lb->first_item < 0 ) lb->first_item = 0;
 }
 
-int listbox_mouse(window *wind, d_event *event, listbox *lb, int button)
+static int listbox_mouse(window *wind, d_event *event, listbox *lb, int button)
 {
 	int i, mx, my, mz, x1, x2, y1, y2;
 
@@ -1849,7 +1849,7 @@ int listbox_mouse(window *wind, d_event *event, listbox *lb, int button)
 	return 0;
 }
 
-int listbox_key_command(window *wind, d_event *event, listbox *lb)
+static int listbox_key_command(window *wind, d_event *event, listbox *lb)
 {
 	int key = event_key_get(event);
 	int rval = 1;
@@ -1926,7 +1926,7 @@ int listbox_key_command(window *wind, d_event *event, listbox *lb)
 	return rval;
 }
 
-void listbox_create_structure( listbox *lb)
+static void listbox_create_structure( listbox *lb)
 {
 	int i = 0;
 
@@ -1981,7 +1981,7 @@ void listbox_create_structure( listbox *lb)
 	lb->fntscaley = FNTScaleY;
 }
 
-int listbox_draw(window *wind, listbox *lb)
+static int listbox_draw(window *wind, listbox *lb)
 {
 	int i;
 
@@ -2070,7 +2070,7 @@ int listbox_draw(window *wind, listbox *lb)
 	return 1;
 }
 
-int listbox_handler(window *wind, d_event *event, listbox *lb)
+static int listbox_handler(window *wind, d_event *event, listbox *lb)
 {
 	if (event->type == EVENT_WINDOW_CLOSED)
 		return 0;

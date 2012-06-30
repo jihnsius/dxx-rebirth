@@ -140,7 +140,7 @@ int toggle_show_only_curside(void)
 	return Show_only_curside = !Show_only_curside;
 }
 
-void draw_outline(int nverts,g3s_point **pointlist)
+static void draw_outline(int nverts,g3s_point **pointlist)
 {
 	int i;
 
@@ -204,7 +204,7 @@ void flash_frame()
 //	they are used for our hideously hacked in headlight system.
 //	vp is a pointer to vertex ids.
 //	tmap1, tmap2 are texture map ids.  tmap2 is the pasty one.
-void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2, uvl *uvlp, int wid_flags)
+static void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2, uvl *uvlp, int wid_flags)
 {
 	grs_bitmap  *bm;
 #ifdef OGL
@@ -348,7 +348,7 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
 // ----------------------------------------------------------------------------
 //	Only called if editor active.
 //	Used to determine which face was clicked on.
-void check_face(int segnum, int sidenum, int facenum, int nv, int *vp, int tmap1, int tmap2, uvl *uvlp)
+static void check_face(int segnum, int sidenum, int facenum, int nv, int *vp, int tmap1, int tmap2, uvl *uvlp)
 {
 	int	i;
 
@@ -412,7 +412,7 @@ extern fix	Obj_light_xlate[16];
 // -----------------------------------------------------------------------------------
 //	Render a side.
 //	Check for normal facing.  If so, render faces on side dictated by sidep->type.
-void render_side(segment *segp, int sidenum)
+static void render_side(segment *segp, int sidenum)
 {
 	int		vertnum_list[4];
 	side		*sidep = &segp->sides[sidenum];
@@ -589,7 +589,7 @@ im_so_ashamed: ;
 }
 
 #ifdef EDITOR
-void render_object_search(dxxobject *obj)
+static void render_object_search(dxxobject *obj)
 {
 	int changed=0;
 
@@ -631,7 +631,7 @@ void render_object_search(dxxobject *obj)
 
 extern ubyte DemoDoingRight,DemoDoingLeft;
 
-void do_render_object(int objnum, int window_num)
+static void do_render_object(int objnum, int window_num)
 {
 	#ifdef EDITOR
 	int save_3d_outline=0;
@@ -807,7 +807,7 @@ void project_list(int nv,int *pointnumlist)
 
 
 // -----------------------------------------------------------------------------------
-void render_segment(int segnum, int window_num)
+static void render_segment(int segnum, int window_num)
 {
 	segment		*seg = &Segments[segnum];
 	g3s_codes 	cc;
@@ -886,7 +886,7 @@ void render_segment(int segnum, int window_num)
 #ifndef NDEBUG
 
 //draw outline for curside
-void outline_seg_side(segment *seg,int _side,int edge,int vert)
+static void outline_seg_side(segment *seg,int _side,int edge,int vert)
 {
 	g3s_codes cc;
 
@@ -948,7 +948,7 @@ typedef struct rect {
 	short left,top,right,bot;
 } rect;
 
-ubyte code_window_point(fix x,fix y,rect *w)
+static ubyte code_window_point(fix x,fix y,rect *w)
 {
 	ubyte code=0;
 
@@ -962,7 +962,7 @@ ubyte code_window_point(fix x,fix y,rect *w)
 }
 
 #ifndef NDEBUG
-void draw_window_box(int color,short left,short top,short right,short bot)
+static void draw_window_box(int color,short left,short top,short right,short bot)
 {
 	short l,t,r,b;
 
@@ -1054,7 +1054,7 @@ int Edge_to_sides[8][8][2] = {
 
 
 //given an edge, tell what side is on that edge
-int find_seg_side(segment *seg,int *verts,int notside)
+static int find_seg_side(segment *seg,int *verts,int notside)
 {
 	int i;
 	int vv0=-1,vv1=-1;
@@ -1108,7 +1108,7 @@ int find_seg_side(segment *seg,int *verts,int notside)
 
 //find the two segments that join a given seg though two sides, and
 //the sides of those segments the abut. 
-int find_joining_side_norms(vms_vector *norm0_0,vms_vector *norm0_1,vms_vector *norm1_0,vms_vector *norm1_1,vms_vector **pnt0,vms_vector **pnt1,segment *seg,int s0,int s1)
+static int find_joining_side_norms(vms_vector *norm0_0,vms_vector *norm0_1,vms_vector *norm1_0,vms_vector *norm1_1,vms_vector **pnt0,vms_vector **pnt1,segment *seg,int s0,int s1)
 {
 	segment *seg0,*seg1;
 	int edge_verts[2];
@@ -1191,7 +1191,7 @@ int find_joining_side_norms(vms_vector *norm0_0,vms_vector *norm0_1,vms_vector *
 
 //see if the order matters for these two children.
 //returns 0 if order doesn't matter, 1 if c0 before c1, -1 if c1 before c0
-int compare_children(segment *seg,short c0,short c1)
+static int compare_children(segment *seg,short c0,short c1)
 {
 	vms_vector norm0_0,norm0_1,*pnt0,temp;
 	vms_vector norm1_0,norm1_1,*pnt1;
@@ -1236,7 +1236,7 @@ int ssc_total=0,ssc_swaps=0;
 
 //short the children of segment to render in the correct order
 //returns non-zero if swaps were made
-int sort_seg_children(segment *seg,int n_children,short *child_list)
+static int sort_seg_children(segment *seg,int n_children,short *child_list)
 {
 	int i,j;
 	int r;
@@ -1275,7 +1275,7 @@ int sort_seg_children(segment *seg,int n_children,short *child_list)
 	return count;
 }
 
-void add_obj_to_seglist(int objnum,int listnum)
+static void add_obj_to_seglist(int objnum,int listnum)
 {
 	int i,checkn,marker;
 
@@ -1425,7 +1425,7 @@ sort_item sort_list[SORT_LIST_SIZE];
 int n_sort_items;
 
 //compare function for object sort. 
-int sort_func(const sort_item *a,const sort_item *b)
+static int sort_func(const sort_item *a,const sort_item *b)
 {
 	fix delta_dist;
 	dxxobject *obj_a,*obj_b;
@@ -1455,7 +1455,7 @@ int sort_func(const sort_item *a,const sort_item *b)
 	return delta_dist;	//return distance
 }
 
-void build_object_lists(int n_segs)
+static void build_object_lists(int n_segs)
 {
 	int nn;
 
@@ -1729,7 +1729,7 @@ void update_rendered_data(int window_num, dxxobject *viewer, int rear_view_flag,
 
 //build a list of segments to be rendered
 //fills in Render_list & N_render_segs
-void build_segment_list(int start_seg_num, int window_num)
+static void build_segment_list(int start_seg_num, int window_num)
 {
 	int	lcnt,scnt,ecnt;
 	int	l,c;

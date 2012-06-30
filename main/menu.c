@@ -167,7 +167,7 @@ void show_menus(void)
 //pairs of chars describing ranges
 static const char playername_allowed_chars[] = " ~";
 
-int MakeNewPlayerFile(int allow_abort)
+static int MakeNewPlayerFile(int allow_abort)
 {
 	int x;
 	char filename[PATH_MAX];
@@ -215,7 +215,7 @@ try_again:
 
 void delete_player_saved_games(char * name);
 
-int player_menu_keycommand( listbox *lb, d_event *event )
+static int player_menu_keycommand( listbox *lb, d_event *event )
 {
 	char **items = listbox_get_items(lb);
 	int citem = listbox_get_citem(lb);
@@ -273,7 +273,7 @@ int player_menu_keycommand( listbox *lb, d_event *event )
 	return 0;
 }
 
-int player_menu_handler( listbox *lb, d_event *event, char **list )
+static int player_menu_handler( listbox *lb, d_event *event, char **list )
 {
 	char **items = listbox_get_items(lb);
 	int citem = listbox_get_citem(lb);
@@ -399,7 +399,7 @@ int RegisterPlayer()
 }
 
 // Draw Copyright and Version strings
-void draw_copyright()
+static void draw_copyright()
 {
 	gr_set_current_canvas(NULL);
 	gr_set_curfont(GAME_FONT);
@@ -413,7 +413,7 @@ void draw_copyright()
 int newdemo_count_demos();
 
 // ------------------------------------------------------------------------
-int main_menu_handler(newmenu *menu, d_event *event, int *menu_choice )
+static int main_menu_handler(newmenu *menu, d_event *event, int *menu_choice )
 {
 	newmenu_item *items = newmenu_get_items(menu);
 
@@ -514,7 +514,7 @@ int main_menu_handler(newmenu *menu, d_event *event, int *menu_choice )
 
 //	-----------------------------------------------------------------------------
 //	Create the main menu.
-void create_main_menu(newmenu_item *m, int *menu_choice, int *callers_num_options)
+static void create_main_menu(newmenu_item *m, int *menu_choice, int *callers_num_options)
 {
 	int	num_options;
 
@@ -679,7 +679,7 @@ void delete_player_saved_games(char * name)
 	}
 }
 
-int demo_menu_keycommand( listbox *lb, d_event *event )
+static int demo_menu_keycommand( listbox *lb, d_event *event )
 {
 	char **items = listbox_get_items(lb);
 	int citem = listbox_get_citem(lb);
@@ -735,7 +735,7 @@ int demo_menu_keycommand( listbox *lb, d_event *event )
 	return 0;
 }
 
-int demo_menu_handler( listbox *lb, d_event *event, void *userdata )
+static int demo_menu_handler( listbox *lb, d_event *event, void *userdata )
 {
 	char **items = listbox_get_items(lb);
 	int citem = listbox_get_citem(lb);
@@ -792,7 +792,7 @@ int select_demo(void)
 	return 1;
 }
 
-int do_difficulty_menu()
+static int do_difficulty_menu()
 {
 	int s;
 	newmenu_item m[5];
@@ -879,7 +879,7 @@ void change_res();
 void graphics_config();
 void do_misc_menu();
 
-int options_menuset(newmenu *menu, d_event *event, void *userdata)
+static int options_menuset(newmenu *menu, d_event *event, void *userdata)
 {
 	switch (event->type)
 	{
@@ -917,7 +917,7 @@ int options_menuset(newmenu *menu, d_event *event, void *userdata)
 	return 0;
 }
 
-int gcd(int a, int b)
+static int gcd(int a, int b)
 {
 	if (!b)
 		return a;
@@ -1025,7 +1025,7 @@ void change_res()
 	}
 }
 
-void input_config_sensitivity()
+static void input_config_sensitivity()
 {
 	newmenu_item m[26];
 	int i = 0, nitems = 0, joysens = 0, joydead = 0, mousesens = 0, mousefsdead;
@@ -1073,7 +1073,7 @@ void input_config_sensitivity()
 }
 
 static int opt_ic_usejoy = 0, opt_ic_usemouse = 0, opt_ic_confkey = 0, opt_ic_confjoy = 0, opt_ic_confmouse = 0, opt_ic_confweap = 0, opt_ic_mouseflightsim = 0, opt_ic_joymousesens = 0, opt_ic_grabinput = 0, opt_ic_mousefsgauge = 0, opt_ic_help0 = 0, opt_ic_help1 = 0, opt_ic_help2 = 0;
-int input_config_menuset(newmenu *menu, d_event *event, void *userdata)
+static int input_config_menuset(newmenu *menu, d_event *event, void *userdata)
 {
 	newmenu_item *items = newmenu_get_items(menu);
 	int citem = newmenu_get_citem(menu);
@@ -1166,7 +1166,7 @@ void input_config()
 	newmenu_do1(NULL, TXT_CONTROLS, nitems, m, input_config_menuset, NULL, 3);
 }
 
-void reticle_config()
+static void reticle_config()
 {
 #ifdef OGL
 	newmenu_item m[18];
@@ -1223,7 +1223,7 @@ void reticle_config()
 }
 
 int opt_gr_texfilt, opt_gr_movietexfilt, opt_gr_brightness, opt_gr_reticlemenu, opt_gr_alphafx, opt_gr_dynlightcolor, opt_gr_vsync, opt_gr_multisample, opt_gr_fpsindi;
-int graphics_config_menuset(newmenu *menu, d_event *event, void *userdata)
+static int graphics_config_menuset(newmenu *menu, d_event *event, void *userdata)
 {
 	newmenu_item *items = newmenu_get_items(menu);
 	int citem = newmenu_get_citem(menu);
@@ -1341,7 +1341,7 @@ typedef struct browser
 	int		new_path;		// Whether the view_path is a new searchpath, if so, remove it when finished
 } browser;
 
-void list_dir_el(browser *b, const char *origdir, const char *fname)
+static void list_dir_el(browser *b, const char *origdir, const char *fname)
 {
 	char *ext;
 	const char *const *i = NULL;
@@ -1358,7 +1358,7 @@ void list_dir_el(browser *b, const char *origdir, const char *fname)
 		string_array_add(&b->list, &b->list_buf, &b->num_files, &b->max_files, &b->max_buf, fname);
 }
 
-int list_directory(browser *b)
+static int list_directory(browser *b)
 {
 	if (!string_array_new(&b->list, &b->list_buf, &b->num_files, &b->max_files, &b->max_buf))
 		return 0;
@@ -1388,7 +1388,7 @@ int list_directory(browser *b)
 
 static int select_file_recursive(char *title, const char *orig_path, const char *const *ext_list, int select_dir, int (*when_selected)(void *userdata, const char *filename), void *userdata);
 
-int select_file_handler(listbox *menu, d_event *event, browser *b)
+static int select_file_handler(listbox *menu, d_event *event, browser *b)
 {
 	char newpath[PATH_MAX];
 	char **list = listbox_get_items(menu);
@@ -1614,7 +1614,7 @@ int opt_sm_digivol = -1, opt_sm_musicvol = -1, opt_sm_revstereo = -1, opt_sm_mty
 
 void set_extmusic_volume(int volume);
 
-int get_absolute_path(char *full_path, const char *rel_path)
+static int get_absolute_path(char *full_path, const char *rel_path)
 {
 	PHYSFSX_getRealPath(rel_path, full_path);
 	return 1;
@@ -1624,7 +1624,7 @@ int get_absolute_path(char *full_path, const char *rel_path)
 #define SELECT_SONG(t, s)	select_file_recursive(t, GameCfg.CMMiscMusic[s], jukebox_exts, 0, (int (*)(void *, const char *))get_absolute_path, GameCfg.CMMiscMusic[s])
 #endif
 
-int sound_menuset(newmenu *menu, d_event *event, void *userdata)
+static int sound_menuset(newmenu *menu, d_event *event, void *userdata)
 {
 	newmenu_item *items = newmenu_get_items(menu);
 	int citem = newmenu_get_citem(menu);
@@ -2028,7 +2028,7 @@ void do_options_menu()
 }
 
 #ifndef RELEASE
-int polygon_models_viewer_handler(window *wind, d_event *event)
+static int polygon_models_viewer_handler(window *wind, d_event *event)
 {
 	static int view_idx = 0;
 	int key = 0;
@@ -2102,7 +2102,7 @@ int polygon_models_viewer_handler(window *wind, d_event *event)
 	return 0;
 }
 
-void polygon_models_viewer()
+static void polygon_models_viewer()
 {
 	window *wind = window_create(&grd_curscreen->sc_canvas, 0, 0, SWIDTH, SHEIGHT, (int (*)(window *, d_event *, void *))polygon_models_viewer_handler, NULL);
 	if (!wind)
@@ -2116,7 +2116,7 @@ void polygon_models_viewer()
 		event_process();
 }
 
-int gamebitmaps_viewer_handler(window *wind, d_event *event)
+static int gamebitmaps_viewer_handler(window *wind, d_event *event)
 {
 	static int view_idx = 0;
 	int key = 0;
@@ -2180,7 +2180,7 @@ int gamebitmaps_viewer_handler(window *wind, d_event *event)
 	return 0;
 }
 
-void gamebitmaps_viewer()
+static void gamebitmaps_viewer()
 {
 	window *wind = window_create(&grd_curscreen->sc_canvas, 0, 0, SWIDTH, SHEIGHT, (int (*)(window *, d_event *, void *))gamebitmaps_viewer_handler, NULL);
 	if (!wind)
@@ -2194,7 +2194,7 @@ void gamebitmaps_viewer()
 		event_process();
 }
 
-int sandbox_menuset(newmenu *menu, d_event *event, void *userdata)
+static int sandbox_menuset(newmenu *menu, d_event *event, void *userdata)
 {
 	switch (event->type)
 	{

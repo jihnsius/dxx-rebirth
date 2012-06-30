@@ -23,7 +23,7 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "grdef.h"
 #include "error.h"
 
-void gr_linear_darken(ubyte * dest, int darkening_level, int count, ubyte * fade_table) {
+static void gr_linear_darken(ubyte * dest, int darkening_level, int count, ubyte * fade_table) {
 	register int i;
 
 	for (i=0;i<count;i++)

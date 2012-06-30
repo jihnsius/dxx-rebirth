@@ -43,7 +43,7 @@ void gr_linear_movsd( ubyte * source, ubyte * dest, unsigned int nbytes) {
 	memcpy(dest,source,nbytes);
 }
 
-void gr_linear_rep_movsdm(ubyte *src, ubyte *dest, int num_pixels) {
+static void gr_linear_rep_movsdm(ubyte *src, ubyte *dest, int num_pixels) {
 	register ubyte c;
 	while (num_pixels--)
 		if ((c=*src++)!=255)
@@ -51,7 +51,7 @@ void gr_linear_rep_movsdm(ubyte *src, ubyte *dest, int num_pixels) {
 		else	dest++;
 }
 
-void gr_linear_rep_movsdm_faded(ubyte * src, ubyte * dest, int num_pixels, ubyte fade_value ) {
+static void gr_linear_rep_movsdm_faded(ubyte * src, ubyte * dest, int num_pixels, ubyte fade_value ) {
 	register ubyte c;
 	while (num_pixels--)
 		if ((c=*src++)!=255)
@@ -73,7 +73,7 @@ void gr_linear_rep_movsd_2x(ubyte * source, ubyte * dest, uint nbytes ) {
 	}
 }
 
-void gr_ubitmap00( int x, int y, grs_bitmap *bm )
+static void gr_ubitmap00( int x, int y, grs_bitmap *bm )
 {
 	register int y1;
 	int dest_rowsize;
@@ -96,7 +96,7 @@ void gr_ubitmap00( int x, int y, grs_bitmap *bm )
 	}
 }
 
-void gr_ubitmap00m( int x, int y, grs_bitmap *bm )
+static void gr_ubitmap00m( int x, int y, grs_bitmap *bm )
 {
 	register int y1;
 	int dest_rowsize;
@@ -124,7 +124,7 @@ void gr_ubitmap00m( int x, int y, grs_bitmap *bm )
 	}
 }
 
-void gr_ubitmap012( int x, int y, grs_bitmap *bm )
+static void gr_ubitmap012( int x, int y, grs_bitmap *bm )
 {
 	register int x1, y1;
 	unsigned char * src;
@@ -139,7 +139,7 @@ void gr_ubitmap012( int x, int y, grs_bitmap *bm )
 	}
 }
 
-void gr_ubitmap012m( int x, int y, grs_bitmap *bm )
+static void gr_ubitmap012m( int x, int y, grs_bitmap *bm )
 {
 	register int x1, y1;
 	unsigned char * src;
@@ -157,7 +157,7 @@ void gr_ubitmap012m( int x, int y, grs_bitmap *bm )
 	}
 }
 
-void gr_ubitmapGENERIC(int x, int y, grs_bitmap * bm)
+static void gr_ubitmapGENERIC(int x, int y, grs_bitmap * bm)
 {
 	register int x1, y1;
 
@@ -169,7 +169,7 @@ void gr_ubitmapGENERIC(int x, int y, grs_bitmap * bm)
 	}
 }
 
-void gr_ubitmapGENERICm(int x, int y, grs_bitmap * bm)
+static void gr_ubitmapGENERICm(int x, int y, grs_bitmap * bm)
 {
 	register int x1, y1;
 	ubyte c;
@@ -245,7 +245,7 @@ void gr_ubitmapm( int x, int y, grs_bitmap *bm )
 }
 
 // From Linear to Linear
-void gr_bm_ubitblt00(int w, int h, int dx, int dy, int sx, int sy, grs_bitmap * src, grs_bitmap * dest)
+static void gr_bm_ubitblt00(int w, int h, int dx, int dy, int sx, int sy, grs_bitmap * src, grs_bitmap * dest)
 {
 	unsigned char * dbits;
 	unsigned char * sbits;
@@ -276,7 +276,7 @@ void gr_bm_ubitblt00(int w, int h, int dx, int dy, int sx, int sy, grs_bitmap * 
 }
 
 // From Linear to Linear Masked
-void gr_bm_ubitblt00m(int w, int h, int dx, int dy, int sx, int sy, grs_bitmap * src, grs_bitmap * dest)
+static void gr_bm_ubitblt00m(int w, int h, int dx, int dy, int sx, int sy, grs_bitmap * src, grs_bitmap * dest)
 {
 	unsigned char * dbits;
 	unsigned char * sbits;

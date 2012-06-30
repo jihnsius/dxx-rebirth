@@ -12,7 +12,7 @@
 #include "args.h"
 #include "config.h"
 
-void arch_close(void)
+static void arch_close(void)
 {
 	songs_uninit();
 

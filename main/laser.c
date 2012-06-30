@@ -210,7 +210,7 @@ int laser_are_related( int o1, int o2 )
 //--unused-- int Muzzle_scale=2;
 int Laser_offset=0;
 
-void do_muzzle_stuff(int segnum, vms_vector *pos)
+static void do_muzzle_stuff(int segnum, vms_vector *pos)
 {
 	Muzzle_data[Muzzle_queue_index].create_time = timer_query();
 	Muzzle_data[Muzzle_queue_index].segnum = segnum;
@@ -313,7 +313,7 @@ extern int Doing_lighting_hack_flag;
 
 // Delete omega blobs further away than MAX_OMEGA_DIST
 // Since last omega blob has VERY high velocity it's impossible to ensure a constant travel distance on varying FPS. So delete if they exceed their maximum distance.
-int omega_cleanup(dxxobject *weapon)
+static int omega_cleanup(dxxobject *weapon)
 {
 	int parent_sig = weapon->ctype.laser_info.parent_signature, parent_num = weapon->ctype.laser_info.parent_num;
 
@@ -348,7 +348,7 @@ int ok_to_do_omega_damage(dxxobject *weapon)
 }
 
 // ---------------------------------------------------------------------------------
-void create_omega_blobs(int firing_segnum, vms_vector *firing_pos, vms_vector *goal_pos, dxxobject *parent_objp)
+static void create_omega_blobs(int firing_segnum, vms_vector *firing_pos, vms_vector *goal_pos, dxxobject *parent_objp)
 {
 	int		i = 0, last_segnum = 0, last_created_objnum = -1, num_omega_blobs = 0;
 	vms_vector	vec_to_goal = { 0, 0, 0 }, omega_delta_vector = { 0, 0, 0 }, blob_pos = { 0, 0, 0 }, perturb_vec = { 0, 0, 0 };
@@ -518,7 +518,7 @@ void omega_charge_frame(void)
 // ---------------------------------------------------------------------------------
 //	*objp is the object firing the omega cannon
 //	*pos is the location from which the omega bolt starts
-void do_omega_stuff(dxxobject *parent_objp, vms_vector *firing_pos, dxxobject *weapon_objp)
+static void do_omega_stuff(dxxobject *parent_objp, vms_vector *firing_pos, dxxobject *weapon_objp)
 {
 	int			lock_objnum, firing_segnum;
 	vms_vector	goal_pos;
@@ -600,7 +600,7 @@ void do_omega_stuff(dxxobject *parent_objp, vms_vector *firing_pos, dxxobject *w
  * In effort to reduce weapon fire traffic in Multiplayer games artificially decrease the fire rate down to 100ms between shots.
  * This will work for all weapons, even if game is modded. Exception being Omega which is hardcoded.
  */
-float weapon_rate_scale(int wp_id)
+static float weapon_rate_scale(int wp_id)
 {
 	if ( !(Game_mode & GM_MULTI) )
 		return 1.0;
@@ -878,7 +878,7 @@ fix	Min_trackable_dot = 3*(F1_0 - MIN_TRACKABLE_DOT)/4 + MIN_TRACKABLE_DOT; //MI
 //	Return true if weapon *tracker is able to track object Objects[track_goal], else return false.
 //	In order for the object to be trackable, it must be within a reasonable turning radius for the missile
 //	and it must not be obstructed by a wall.
-int object_is_trackable(int track_goal, dxxobject *tracker, fix *dot)
+static int object_is_trackable(int track_goal, dxxobject *tracker, fix *dot)
 {
 	vms_vector	vector_to_goal;
 	dxxobject		*objp;
@@ -924,7 +924,7 @@ int object_is_trackable(int track_goal, dxxobject *tracker, fix *dot)
 }
 
 //	--------------------------------------------------------------------------------------------
-int call_find_homing_object_complete(dxxobject *tracker, vms_vector *curpos)
+static int call_find_homing_object_complete(dxxobject *tracker, vms_vector *curpos)
 {
 	if (Game_mode & GM_MULTI) {
 		if (tracker->ctype.laser_info.parent_type == OBJ_PLAYER) {
@@ -1149,7 +1149,7 @@ int find_homing_object_complete(vms_vector *curpos, dxxobject *tracker, int trac
 //	See if legal to keep tracking currently tracked object.  If not, see if another object is trackable.  If not, return -1,
 //	else return object number of tracking object.
 //	Computes and returns a fairly precise dot product.
-int track_track_goal(int track_goal, dxxobject *tracker, fix *dot)
+static int track_track_goal(int track_goal, dxxobject *tracker, fix *dot)
 {
 #ifdef NEWHOMER
 	if (object_is_trackable(track_goal, tracker, dot) && (tracker-Objects)) {
@@ -1214,7 +1214,7 @@ int track_track_goal(int track_goal, dxxobject *tracker, fix *dot)
 
 //-------------- Initializes a laser after Fire is pressed -----------------
 
-void Laser_player_fire_spread_delay(dxxobject *obj, int laser_type, int gun_num, fix spreadr, fix spreadu, fix delay_time, int make_sound, int harmless)
+static void Laser_player_fire_spread_delay(dxxobject *obj, int laser_type, int gun_num, fix spreadr, fix spreadu, fix delay_time, int make_sound, int harmless)
 {
 	int			LaserSeg, Fate;
 	vms_vector	LaserPos, LaserDir;
@@ -1386,7 +1386,7 @@ void Flare_create(dxxobject *obj)
 
 //--------------------------------------------------------------------
 //	Set object *objp's orientation to (or towards if I'm ambitious) its velocity.
-void homing_missile_turn_towards_velocity(dxxobject *objp, vms_vector *norm_vel)
+static void homing_missile_turn_towards_velocity(dxxobject *objp, vms_vector *norm_vel)
 {
 	vms_vector	new_fvec;
 
@@ -1849,7 +1849,7 @@ int do_laser_firing(int objnum, int weapon_num, int level, int flags, int nfires
 
 //	-------------------------------------------------------------------------------------------
 //	if goal_obj == -1, then create random vector
-int create_homing_missile(dxxobject *objp, int goal_obj, int objtype, int make_sound)
+static int create_homing_missile(dxxobject *objp, int goal_obj, int objtype, int make_sound)
 {
 	int			objnum;
 	vms_vector	vector_to_goal;

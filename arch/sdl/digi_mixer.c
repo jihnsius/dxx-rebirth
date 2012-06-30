@@ -47,7 +47,7 @@
 
 static int digi_initialised = 0;
 static int digi_max_channels = MAX_SOUND_SLOTS;
-inline int fix2byte(fix f) { return (f / 256) % 256; }
+static inline int fix2byte(fix f) { return (f / 256) % 256; }
 Mix_Chunk SoundChunks[MAX_SOUNDS];
 ubyte channels[MAX_SOUND_SLOTS];
 
@@ -85,7 +85,7 @@ void digi_mixer_close() {
 }
 
 /* channel management */
-int digi_mixer_find_channel()
+static int digi_mixer_find_channel()
 {
 	int i;
 	for (i = 0; i < digi_max_channels; i++)
@@ -94,7 +94,7 @@ int digi_mixer_find_channel()
 	return -1;
 }
 
-void digi_mixer_free_channel(int channel_num)
+static void digi_mixer_free_channel(int channel_num)
 {
 	channels[channel_num] = 0;
 }
@@ -103,7 +103,7 @@ void digi_mixer_free_channel(int channel_num)
  * Play-time conversion. Performs output conversion only once per sound effect used.
  * Once the sound sample has been converted, it is cached in SoundChunks[]
  */
-void mixdigi_convert_sound(int i)
+static void mixdigi_convert_sound(int i)
 {
 	SDL_AudioCVT cvt;
 	Uint8 *data = GameSounds[i].data;

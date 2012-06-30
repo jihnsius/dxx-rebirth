@@ -221,7 +221,7 @@ int newdemo_get_percent_done()	{
 
 #define VEL_PRECISION 12
 
-void my_extract_shortpos(dxxobject *objp, shortpos *spp)
+static void my_extract_shortpos(dxxobject *objp, shortpos *spp)
 {
 	int segnum;
 	sbyte *sp;
@@ -251,7 +251,7 @@ void my_extract_shortpos(dxxobject *objp, shortpos *spp)
 	objp->mtype.phys_info.velocity.z = (spp->velz << VEL_PRECISION);
 }
 
-int newdemo_read( void *buffer, int elsize, int nelem )
+static int newdemo_read( void *buffer, int elsize, int nelem )
 {
 	int num_read;
 	num_read = PHYSFS_read(infile, buffer, elsize, nelem);
@@ -273,7 +273,7 @@ int newdemo_find_object( int signature )
 	return -1;
 }
 
-int newdemo_write( void *buffer, int elsize, int nelem )
+static int newdemo_write( void *buffer, int elsize, int nelem )
 {
 	int num_written, total_size;
 
@@ -342,7 +342,7 @@ static void nd_write_angvec(vms_angvec *v)
 	nd_write_fixang(v->h);
 }
 
-void nd_write_shortpos(dxxobject *obj)
+static void nd_write_shortpos(dxxobject *obj)
 {
 	int i;
 	shortpos sp;
@@ -457,7 +457,7 @@ static void nd_read_shortpos(dxxobject *obj)
 
 dxxobject *prev_obj=NULL;      //ptr to last object read in
 
-void nd_read_object(dxxobject *obj)
+static void nd_read_object(dxxobject *obj)
 {
 	short shortsig = 0;
 
@@ -686,7 +686,7 @@ void nd_read_object(dxxobject *obj)
 	prev_obj = obj;
 }
 
-void nd_write_object(dxxobject *obj)
+static void nd_write_object(dxxobject *obj)
 {
 	int life;
 	short shortsig = 0;
@@ -1507,7 +1507,7 @@ enum purpose_type
 	PURPOSE_REWRITE
 };
 
-int newdemo_read_demo_start(enum purpose_type purpose)
+static int newdemo_read_demo_start(enum purpose_type purpose)
 {
 	sbyte i=0, version=0, game_type=0, laser_level=0, c=0;
 	ubyte energy=0, shield=0;
@@ -1688,7 +1688,7 @@ int newdemo_read_demo_start(enum purpose_type purpose)
 	return 0;
 }
 
-void newdemo_pop_ctrlcen_triggers()
+static void newdemo_pop_ctrlcen_triggers()
 {
 	int anim_num, n, i;
 	int side, cside;
@@ -1712,7 +1712,7 @@ void newdemo_pop_ctrlcen_triggers()
 void nd_render_extras (ubyte,dxxobject *);
 extern void multi_apply_goal_textures ();
 
-int newdemo_read_frame_information(int rewrite)
+static int newdemo_read_frame_information(int rewrite)
 {
 	int done, segnum, side, objnum, soundno, angle, volume, i,shot;
 	dxxobject *obj;
@@ -2993,7 +2993,7 @@ void newdemo_goto_end(int to_rewrite)
 	return;
 }
 
-void newdemo_back_frames(int frames)
+static void newdemo_back_frames(int frames)
 {
 	short last_frame_length;
 	int i;
@@ -3028,7 +3028,7 @@ void newdemo_back_frames(int frames)
  *  at.
 */
 
-void interpolate_frame(fix d_play, fix d_recorded)
+static void interpolate_frame(fix d_play, fix d_recorded)
 {
 	int i, j, num_cur_objs;
 	fix factor;
@@ -3332,7 +3332,7 @@ void newdemo_start_recording()
 		newdemo_record_start_demo();
 }
 
-void newdemo_write_end()
+static void newdemo_write_end()
 {
 	sbyte cloaked = 0;
 	unsigned short byte_count = 0;

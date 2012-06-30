@@ -164,7 +164,7 @@ void fuelcen_create( segment *segp)
 //------------------------------------------------------------
 // Adds a matcen that already is a special type into the Station array.
 // This function is separate from other fuelcens because we don't want values reset.
-void matcen_create( segment *segp)
+static void matcen_create( segment *segp)
 {
 	segment2	*seg2p = &Segment2s[segp-Segments];
 
@@ -368,7 +368,7 @@ int	FrameCount_last_msg = 0;
 #endif
 
 //	----------------------------------------------------------------------------------------------------------
-void robotmaker_proc( FuelCenter * robotcen )
+static void robotmaker_proc( FuelCenter * robotcen )
 {
 	fix		dist_to_player;
 	vms_vector	cur_object_loc; //, direction;
@@ -828,7 +828,7 @@ void matcen_info_read(matcen_info *mi, PHYSFS_file *fp)
 	mi->fuelcen_num = PHYSFSX_readShort(fp);
 }
 
-void matcen_info_swap(matcen_info *mi, int swap)
+static void matcen_info_swap(matcen_info *mi, int swap)
 {
 	if (!swap)
 		return;
@@ -866,7 +866,7 @@ void matcen_info_write(matcen_info *mi, short version, PHYSFS_file *fp)
 	PHYSFS_writeSLE16(fp, mi->fuelcen_num);
 }
 
-void fuelcen_swap(FuelCenter *fc, int swap)
+static void fuelcen_swap(FuelCenter *fc, int swap)
 {
 	if (!swap)
 		return;

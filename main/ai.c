@@ -265,7 +265,7 @@ int ready_to_fire(robot_info *robptr, ai_local *ailp)
 // ----------------------------------------------------------------------------
 // Make a robot near the player snipe.
 #define	MNRS_SEG_MAX	70
-void make_nearby_robot_snipe(void)
+static void make_nearby_robot_snipe(void)
 {
 	int bfs_length, i;
 	short bfs_list[MNRS_SEG_MAX];
@@ -1319,7 +1319,7 @@ void ai_do_cloak_stuff(void)
 
 // ----------------------------------------------------------------------------
 // Returns false if awareness is considered too puny to add, else returns true.
-int add_awareness_event(dxxobject *objp, int type)
+static int add_awareness_event(dxxobject *objp, int type)
 {
 	// If player cloaked and hit a robot, then increase awareness
 	if ((type == PA_WEAPON_ROBOT_COLLISION) || (type == PA_WEAPON_WALL_COLLISION) || (type == PA_PLAYER_COLLISION))
@@ -1363,7 +1363,7 @@ void create_awareness_event(dxxobject *objp, int type)
 sbyte New_awareness[MAX_SEGMENTS];
 
 // ----------------------------------------------------------------------------------
-void pae_aux(int segnum, int type, int level)
+static void pae_aux(int segnum, int type, int level)
 {
 	int j;
 
@@ -1386,7 +1386,7 @@ void pae_aux(int segnum, int type, int level)
 
 
 // ----------------------------------------------------------------------------------
-void process_awareness_events(void)
+static void process_awareness_events(void)
 {
 	int i;
 
@@ -1402,7 +1402,7 @@ void process_awareness_events(void)
 }
 
 // ----------------------------------------------------------------------------------
-void set_player_awareness_all(void)
+static void set_player_awareness_all(void)
 {
 	int i;
 
@@ -1504,7 +1504,7 @@ void init_robots_for_level(void)
 }
 
 // Following functions convert ai_local/ai_cloak_info to ai_local/ai_cloak_info_rw to be written to/read from Savegames. Convertin back is not done here - reading is done specifically together with swapping (if necessary). These structs differ in terms of timer values (fix/fix64). as we reset GameTime64 for writing so it can fit into fix it's not necessary to increment savegame version. But if we once store something else into object which might be useful after restoring, it might be handy to increment Savegame version and actually store these new infos.
-void state_ai_local_to_ai_local_rw(ai_local *ail, ai_local_rw *ail_rw)
+static void state_ai_local_to_ai_local_rw(ai_local *ail, ai_local_rw *ail_rw)
 {
 	int i = 0;
 
@@ -1543,7 +1543,7 @@ void state_ai_local_to_ai_local_rw(ai_local *ail, ai_local_rw *ail_rw)
 	}
 }
 
-void state_ai_cloak_info_to_ai_cloak_info_rw(ai_cloak_info *aic, ai_cloak_info_rw *aic_rw)
+static void state_ai_cloak_info_to_ai_cloak_info_rw(ai_cloak_info *aic, ai_cloak_info_rw *aic_rw)
 {
 	if (aic->last_time - GameTime64 < F1_0*(-18000))
 		aic_rw->last_time = F1_0*(-18000);
@@ -1657,7 +1657,7 @@ int ai_save_state(PHYSFS_file *fp)
 	return 1;
 }
 
-void ai_local_read_n_swap(ai_local *ail, int n, int swap, PHYSFS_file *fp)
+static void ai_local_read_n_swap(ai_local *ail, int n, int swap, PHYSFS_file *fp)
 {
 	int i;
 	
@@ -1696,7 +1696,7 @@ void ai_local_read_n_swap(ai_local *ail, int n, int swap, PHYSFS_file *fp)
 	}
 }
 
-void point_seg_read_n_swap(point_seg *ps, int n, int swap, PHYSFS_file *fp)
+static void point_seg_read_n_swap(point_seg *ps, int n, int swap, PHYSFS_file *fp)
 {
 	int i;
 	
@@ -1707,7 +1707,7 @@ void point_seg_read_n_swap(point_seg *ps, int n, int swap, PHYSFS_file *fp)
 	}
 }
 
-void ai_cloak_info_read_n_swap(ai_cloak_info *ci, int n, int swap, PHYSFS_file *fp)
+static void ai_cloak_info_read_n_swap(ai_cloak_info *ci, int n, int swap, PHYSFS_file *fp)
 {
 	int i;
 	fix tmptime32 = 0;

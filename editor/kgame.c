@@ -32,7 +32,7 @@ static char rcsid[] = "$Id: kgame.c,v 1.1.1.1 2006/03/17 19:58:13 zicodxx Exp $"
 #include "gamesave.h"
 #include "gameseq.h"
 
-char game_filename[PATH_MAX] = "*.RL2";
+static char game_filename[PATH_MAX] = "*.RL2";
 
 extern void checkforext( char * f, char *ext );
 

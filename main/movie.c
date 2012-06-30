@@ -93,12 +93,12 @@ void decode_text_line(char *p);
 void draw_subtitles(int frame_num);
 
 // ----------------------------------------------------------------------
-void* MPlayAlloc(unsigned size)
+static void* MPlayAlloc(unsigned size)
 {
     return d_malloc(size);
 }
 
-void MPlayFree(void *p)
+static void MPlayFree(void *p)
 {
     d_free(p);
 }
@@ -106,7 +106,7 @@ void MPlayFree(void *p)
 
 //-----------------------------------------------------------------------
 
-unsigned int FileRead(void *handle, void *buf, unsigned int count)
+static unsigned int FileRead(void *handle, void *buf, unsigned int count)
 {
     unsigned numread;
     numread = SDL_RWread((SDL_RWops *)handle, buf, 1, count);
@@ -162,7 +162,7 @@ int PlayMovie(const char *filename, int must_have)
 	return ret;
 }
 
-void MovieShowFrame(ubyte *buf, int dstx, int dsty, int bufw, int bufh, int sw, int sh)
+static void MovieShowFrame(ubyte *buf, int dstx, int dsty, int bufw, int bufh, int sw, int sh)
 {
 	grs_bitmap source_bm;
 	static ubyte old_pal[768];
@@ -217,7 +217,7 @@ void MovieShowFrame(ubyte *buf, int dstx, int dsty, int bufw, int bufh, int sw, 
 }
 
 //our routine to set the pallete, called from the movie code
-void MovieSetPalette(unsigned char *p, unsigned start, unsigned count)
+static void MovieSetPalette(unsigned char *p, unsigned start, unsigned count)
 {
 	if (count == 0)
 		return;
@@ -243,7 +243,7 @@ typedef struct movie
 	int paused;
 } movie;
 
-int show_pause_message(window *wind, d_event *event, void *userdata)
+static int show_pause_message(window *wind, d_event *event, void *userdata)
 {
 	userdata = userdata;
 
@@ -285,7 +285,7 @@ int show_pause_message(window *wind, d_event *event, void *userdata)
 	return 0;
 }
 
-int MovieHandler(window *wind, d_event *event, movie *m)
+static int MovieHandler(window *wind, d_event *event, movie *m)
 {
 	int key;
 
@@ -525,7 +525,7 @@ char *subtitle_raw_data;
 
 
 //search for next field following whitespace
-char *next_field (char *p)
+static char *next_field (char *p)
 {
 	while (*p && !isspace(*p))
 		p++;
@@ -678,7 +678,7 @@ void draw_subtitles(int frame_num)
 		}
 }
 
-void init_movie(char *movielib, int required)
+static void init_movie(char *movielib, int required)
 {
 	char filename[FILENAME_LEN];
 
@@ -705,7 +705,7 @@ void init_movies()
 }
 
 
-void close_extra_robot_movie(void)
+static void close_extra_robot_movie(void)
 {
 	char filename[FILENAME_LEN];
 

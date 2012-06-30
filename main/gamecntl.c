@@ -162,7 +162,7 @@ void play_test_sound(void);
 
 #define CONVERTER_SOUND_DELAY (f1_0/2)		//play every half second
 
-void transfer_energy_to_shield()
+static void transfer_energy_to_shield()
 {
 	fix e;		//how much energy gets transfered
 	static fix64 last_play_time=0;
@@ -385,7 +385,7 @@ void apply_modified_palette(void)
 //@@    }
 }
 
-void format_time(char *str, int secs_int)
+static void format_time(char *str, int secs_int)
 {
 	int h, m, s;
 
@@ -399,7 +399,7 @@ void format_time(char *str, int secs_int)
 extern int netplayerinfo_on;
 
 //Process selected keys until game unpaused
-int pause_handler(window *wind, d_event *event, char *msg)
+static int pause_handler(window *wind, d_event *event, char *msg)
 {
 	int key;
 
@@ -450,7 +450,7 @@ int pause_handler(window *wind, d_event *event, char *msg)
 	return 0;
 }
 
-int do_game_pause()
+static int do_game_pause()
 {
 	char *msg;
 	char total_time[9],level_time[9];
@@ -482,7 +482,7 @@ int do_game_pause()
 
 extern int PhallicLimit,PhallicMan;
 
-int HandleEndlevelKey(int key)
+static int HandleEndlevelKey(int key)
 {
 	switch (key)
 	{
@@ -500,7 +500,7 @@ int HandleEndlevelKey(int key)
 	return 0;
 }
 
-int HandleDeathInput(d_event *event)
+static int HandleDeathInput(d_event *event)
 {
 	if (event->type == EVENT_KEY_COMMAND)
 	{
@@ -525,7 +525,7 @@ int HandleDeathInput(d_event *event)
 	return 0;
 }
 
-int HandleDemoKey(int key)
+static int HandleDemoKey(int key)
 {
 	switch (key) {
 		KEY_MAC(case KEY_COMMAND+KEY_1:)
@@ -650,7 +650,7 @@ int HandleDemoKey(int key)
 }
 
 //switch a cockpit window to the next function
-int select_next_window_function(int w)
+static int select_next_window_function(int w)
 {
 	Assert(w==0 || w==1);
 
@@ -1165,7 +1165,7 @@ int HandleGameKey(int key)
 	return 1;
 }
 
-void kill_all_robots(void)
+static void kill_all_robots(void)
 {
 	int	i, dead_count=0;
 	//int	boss_index = -1;
@@ -1205,7 +1205,7 @@ void kill_all_robots(void)
 //	Place player just outside exit.
 //	Kill all bots in mine.
 //	Yippee!!
-void kill_and_so_forth(void)
+static void kill_and_so_forth(void)
 {
 	int     i, j;
 

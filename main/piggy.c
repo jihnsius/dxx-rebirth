@@ -139,13 +139,13 @@ typedef struct DiskSoundHeader {
 	int offset;
 } __pack__ DiskSoundHeader;
 
-void free_bitmap_replacements();
-void free_d1_tmap_nums();
+static void free_bitmap_replacements();
+static void free_d1_tmap_nums();
 
 /*
  * reads a DiskBitmapHeader structure from a PHYSFS_file
  */
-void DiskBitmapHeader_read(DiskBitmapHeader *dbh, PHYSFS_file *fp)
+static void DiskBitmapHeader_read(DiskBitmapHeader *dbh, PHYSFS_file *fp)
 {
 	PHYSFS_read(fp, dbh->name, 8, 1);
 	dbh->dflags = PHYSFSX_readByte(fp);
@@ -160,7 +160,7 @@ void DiskBitmapHeader_read(DiskBitmapHeader *dbh, PHYSFS_file *fp)
 /*
  * reads a DiskSoundHeader structure from a PHYSFS_file
  */
-void DiskSoundHeader_read(DiskSoundHeader *dsh, PHYSFS_file *fp)
+static void DiskSoundHeader_read(DiskSoundHeader *dsh, PHYSFS_file *fp)
 {
 	PHYSFS_read(fp, dsh->name, 8, 1);
 	dsh->length = PHYSFSX_readInt(fp);
@@ -171,7 +171,7 @@ void DiskSoundHeader_read(DiskSoundHeader *dsh, PHYSFS_file *fp)
 /*
  * reads a descent 1 DiskBitmapHeader structure from a PHYSFS_file
  */
-void DiskBitmapHeader_d1_read(DiskBitmapHeader *dbh, PHYSFS_file *fp)
+static void DiskBitmapHeader_d1_read(DiskBitmapHeader *dbh, PHYSFS_file *fp)
 {
 	PHYSFS_read(fp, dbh->name, 8, 1);
 	dbh->dflags = PHYSFSX_readByte(fp);
@@ -183,14 +183,14 @@ void DiskBitmapHeader_d1_read(DiskBitmapHeader *dbh, PHYSFS_file *fp)
 	dbh->offset = PHYSFSX_readInt(fp);
 }
 
-int piggy_is_substitutable_bitmap( char * name, char * subst_name );
+static int piggy_is_substitutable_bitmap( char * name, char * subst_name );
 
 #ifdef EDITOR
 void piggy_write_pigfile(char *filename);
 static void write_int(int i,PHYSFS_file *file);
 #endif
 
-void swap_0_255(grs_bitmap *bmp)
+static void swap_0_255(grs_bitmap *bmp)
 {
 	int i;
 
@@ -314,11 +314,11 @@ int piggy_find_sound( char * name )
 	return i;
 }
 
-PHYSFS_file * Piggy_fp = NULL;
+static PHYSFS_file * Piggy_fp = NULL;
 
-char Current_pigfile[FILENAME_LEN] = "";
+static char Current_pigfile[FILENAME_LEN] = "";
 
-void piggy_close_file()
+static void piggy_close_file()
 {
 	if ( Piggy_fp ) {
 		PHYSFS_close( Piggy_fp );
@@ -327,7 +327,7 @@ void piggy_close_file()
 	}
 }
 
-int Pigfile_initialized=0;
+static int Pigfile_initialized=0;
 
 #define PIGFILE_ID              MAKE_SIG('G','I','P','P') //PPIG
 #define PIGFILE_VERSION         2
@@ -435,7 +435,7 @@ void piggy_init_pigfile(char *filename)
 
 int compute_average_pixel(grs_bitmap *new);
 
-ubyte *Bitmap_replacement_data = NULL;
+static ubyte *Bitmap_replacement_data = NULL;
 
 //reads in a new pigfile (for new palette)
 //returns the size of all the bitmap data
@@ -692,7 +692,7 @@ digi_sound bogus_sound;
 #define SNDFILE_ID              MAKE_SIG('D','N','S','D') //DSND
 #define SNDFILE_VERSION 1
 
-int piggy_is_needed(int soundnum);
+static int piggy_is_needed(int soundnum);
 
 int read_hamfile()
 {
@@ -808,7 +808,7 @@ int read_hamfile()
 
 }
 
-int read_sndfile()
+static int read_sndfile()
 {
 	PHYSFS_file * snd_fp = NULL;
 	int snd_id,snd_version;
@@ -911,7 +911,7 @@ int properties_init(void)
 	return (ham_ok && snd_ok);               //read ok
 }
 
-int piggy_is_needed(int soundnum)
+static int piggy_is_needed(int soundnum)
 {
 	int i;
 
@@ -970,7 +970,7 @@ char * crit_errors[13] = { "Write Protected", "Unknown Unit", "Drive Not Ready",
 "Bad struct length", "Seek Error", "Unknown media type", "Sector not found", "Printer out of paper", "Write Fault", \
 "Read fault", "General Failure" };
 
-void piggy_critical_error()
+static void piggy_critical_error()
 {
 	grs_canvas * save_canv;
 	grs_font * save_font;
@@ -1406,7 +1406,7 @@ void piggy_close()
 	free_d1_tmap_nums();
 }
 
-int piggy_does_bitmap_exist_slow( char * name )
+static int piggy_does_bitmap_exist_slow( char * name )
 {
 	int i;
 
@@ -1435,7 +1435,7 @@ char * gauge_bitmap_names[NUM_GAUGE_BITMAPS] = {
 };
 
 
-int piggy_is_gauge_bitmap( char * base_name )
+static int piggy_is_gauge_bitmap( char * base_name )
 {
 	int i;
 	for (i=0; i<NUM_GAUGE_BITMAPS; i++ )    {
@@ -1446,7 +1446,7 @@ int piggy_is_gauge_bitmap( char * base_name )
 	return 0;
 }
 
-int piggy_is_substitutable_bitmap( char * name, char * subst_name )
+static int piggy_is_substitutable_bitmap( char * name, char * subst_name )
 {
 	int frame;
 	char * p;
@@ -1482,7 +1482,7 @@ int piggy_is_substitutable_bitmap( char * name, char * subst_name )
 
 extern char last_palette_loaded_pig[];
 
-void free_bitmap_replacements()
+static void free_bitmap_replacements()
 {
 	if (Bitmap_replacement_data) {
 		d_free(Bitmap_replacement_data);
@@ -1565,7 +1565,7 @@ void load_bitmap_replacements(char *level_name)
 /* calculate table to translate d1 bitmaps to current palette,
  * return -1 on error
  */
-int get_d1_colormap( ubyte *d1_palette, ubyte *colormap )
+static int get_d1_colormap( ubyte *d1_palette, ubyte *colormap )
 {
 	int freq[256];
 	PHYSFS_file * palette_file = PHYSFSX_openReadBuffered(D1_PALETTE);
@@ -1581,7 +1581,7 @@ int get_d1_colormap( ubyte *d1_palette, ubyte *colormap )
 }
 
 #define JUST_IN_CASE 132 /* is enough for d1 pc registered */
-void bitmap_read_d1( grs_bitmap *bitmap, /* read into this bitmap */
+static void bitmap_read_d1( grs_bitmap *bitmap, /* read into this bitmap */
                      PHYSFS_file *d1_Piggy_fp, /* read from this file */
                      int bitmap_data_start, /* specific to file */
                      DiskBitmapHeader *bmh, /* header info for bitmap */
@@ -1648,16 +1648,16 @@ void bitmap_read_d1( grs_bitmap *bitmap, /* read into this bitmap */
  * "Textures" looks up a d2 bitmap index given a d2 tmap_num.
  * "d1_tmap_nums" looks up a d1 tmap_num given a d1 bitmap. "-1" means "None".
  */
-short *d1_tmap_nums = NULL;
+static short *d1_tmap_nums = NULL;
 
-void free_d1_tmap_nums() {
+static void free_d1_tmap_nums() {
 	if (d1_tmap_nums) {
 		d_free(d1_tmap_nums);
 		d1_tmap_nums = NULL;
 	}
 }
 
-void bm_read_d1_tmap_nums(PHYSFS_file *d1pig)
+static void bm_read_d1_tmap_nums(PHYSFS_file *d1pig)
 {
 	int i, d1_index;
 
@@ -1687,7 +1687,7 @@ char *equal_space = { " \t=" };
 
 // this function is at the same position in the d1 shareware piggy loading
 // algorithm as bm_load_sub in main/bmread.c
-int get_d1_bm_index(char *filename, PHYSFS_file *d1_pig) {
+static int get_d1_bm_index(char *filename, PHYSFS_file *d1_pig) {
 	int i, N_bitmaps;
 	DiskBitmapHeader bmh;
 	if (strchr (filename, '.'))
@@ -1704,7 +1704,7 @@ int get_d1_bm_index(char *filename, PHYSFS_file *d1_pig) {
 }
 
 // imitate the algorithm of gamedata_read_tbl in main/bmread.c
-void read_d1_tmap_nums_from_hog(PHYSFS_file *d1_pig)
+static void read_d1_tmap_nums_from_hog(PHYSFS_file *d1_pig)
 {
 #define LINEBUF_SIZE 600
 	int reading_textures = 0;
@@ -1786,7 +1786,7 @@ void read_d1_tmap_nums_from_hog(PHYSFS_file *d1_pig)
  * the given d1_index replaces.
  * Returns -1 if the given d1_index is not unique to descent 1.
  */
-short d2_index_for_d1_index(short d1_index)
+static short d2_index_for_d1_index(short d1_index)
 {
 	Assert(d1_index >= 0 && d1_index < D1_MAX_TMAP_NUM);
 	if (! d1_tmap_nums || d1_tmap_nums[d1_index] == -1
