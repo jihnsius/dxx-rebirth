@@ -262,6 +262,7 @@ int get_chunks(ubyte *data, ubyte *new_data, chunk *list, int *no)
 }
 #endif //def WORDS_NEED_ALIGNMENT
 
+#if 0
 void verify(ubyte *data)
 {
 	short n;
@@ -305,6 +306,7 @@ void verify(ubyte *data)
 		}
 	}
 }
+#endif
 
 // check a polymodel for it's color and return it
 int g3_poly_get_color(void *model_ptr)
