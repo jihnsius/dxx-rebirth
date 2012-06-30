@@ -264,7 +264,8 @@ void scores_maybe_add_player(int abort_flag)
 		window_close(Game_wind);	// prevent the next game from doing funny things
 }
 
-static void scores_rprintf(int x, int y, char * format, ... )
+static void scores_rprintf(int x, int y, const char * format, ... ) __attribute_gcc_format((printf, 3, 4));
+static void scores_rprintf(int x, int y, const char * format, ... )
 {
 	va_list args;
 	char buffer[128];

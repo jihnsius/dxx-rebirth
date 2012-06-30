@@ -416,6 +416,7 @@ void buddy_message(const char * format, ... )
 }
 
 //	-----------------------------------------------------------------------------
+static void thief_message(const char * format, ... ) __attribute_gcc_format((printf, 1, 2));
 static void thief_message(const char * format, ... )
 {
 
