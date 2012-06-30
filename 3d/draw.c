@@ -254,43 +254,6 @@ bool g3_draw_tmap(int nv,g3s_point **pointlist,g3s_uvl *uvl_list,g3s_lrgb *light
 }
 #endif
 
-bool must_clip_tmap_face(int nv,g3s_codes cc,grs_bitmap *bm)
-{
-	g3s_point **bufptr;
-	int i;
-
-	bufptr = clip_polygon(Vbuf0,Vbuf1,&nv,&cc);
-
-	if (nv && !(cc.uor&CC_BEHIND) && !cc.uand) {
-
-		for (i=0;i<nv;i++) {
-			g3s_point *p = bufptr[i];
-
-			if (!(p->p3_flags&PF_PROJECTED))
-				g3_project_point(p);
-	
-			if (p->p3_flags&PF_OVERFLOW) {
-				Int3();		//should not overflow after clip
-				goto free_points;
-			}
-		}
-
-		(*tmap_drawer_ptr)(bm,nv,bufptr);
-	}
-
-free_points:
-	;
-
-	for (i=0;i<nv;i++)
-		if (bufptr[i]->p3_flags & PF_TEMP_POINT)
-			free_temp_point(bufptr[i]);
-
-//	Assert(free_point_num==0);
-	
-	return 0;
-
-}
-
 #ifndef __powerc
 int checkmuldiv(fix *r,fix a,fix b,fix c);
 #endif
