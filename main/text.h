@@ -21,8 +21,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #ifndef _TEXT_H
 #define _TEXT_H
 
+#ifdef SUPPORT_MULTIPLE_LANGUAGES
 //Array of pointers to text
-extern char *Text_string[];
+extern char *Text_string[N_TEXT_STRINGS];
+#endif
 
 //Symbolic constants for all the strings
 
@@ -780,8 +782,13 @@ __extern_always_inline char * dxx_gettext(unsigned idx, const char *fmt) __attri
 
 __extern_always_inline char * dxx_gettext(unsigned idx, const char *fmt)
 {
+#ifdef SUPPORT_MULTIPLE_LANGUAGES
 	(void)fmt;
 	return Text_string[idx];
+#else
+	(void)idx;
+	return (char *)fmt;
+#endif
 }
 #else
 
@@ -800,7 +807,12 @@ __extern_always_inline char * dxx_gettext(unsigned idx, const char *fmt)
 
 void decode_text_line(char *text_line); // decryption for bitmaps.tbl
 void decode_text(char *text, int len);  // decryption for briefings, etc.
+#ifdef SUPPORT_MULTIPLE_LANGUAGES
 void load_text(void);
 void free_text();
+#else
+static inline void load_text(void) {}
+static inline void free_text(void) {}
+#endif
 
 #endif /* _TEXT_H */

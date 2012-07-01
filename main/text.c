@@ -35,6 +35,7 @@ static char rcsid[] = "$Id: text.c,v 1.1.1.1 2006/03/17 19:56:37 zicodxx Exp $";
 
 #define SHAREWARE_TEXTSIZE  14677
 
+#ifdef SUPPORT_MULTIPLE_LANGUAGES
 char *text;
 
 char *Text_string[N_TEXT_STRINGS];
@@ -44,6 +45,7 @@ void free_text()
 	d_free(Text_string[350]);
 	d_free(text);
 }
+#endif
 
 // rotates a byte left one bit, preserving the bit falling off the right
 void
@@ -89,6 +91,7 @@ void decode_text(char *buf, int len)
 }
 
 //load all the text strings for Descent
+#ifdef SUPPORT_MULTIPLE_LANGUAGES
 void load_text()
 {
 	PHYSFS_file  *tfile;
@@ -218,5 +221,6 @@ void load_text()
 	//Assert(tptr==text+len || tptr==text+len-2);
 
 }
+#endif
 
 
