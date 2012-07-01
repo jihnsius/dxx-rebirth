@@ -31,4 +31,22 @@
 # define inline __inline
 #endif
 
+#ifdef __cplusplus
+#define __apply_c_linkage	extern "C"
+#else
+#define __apply_c_linkage
+#endif
+
+#if defined(__GNUC__) && defined(__OPTIMIZE__)
+#define define_interposition_check(A,C,B)	\
+	__errordecl(__trap_bad_argument_##A##_##B, #A #C #B);	\
+	if (__builtin_constant_p(A C B) && A C B) __trap_bad_argument_##A##_##B()
+#define CHK_REDIRECT(R,N,A,B)	\
+	__apply_c_linkage R (unchecked_##N) A;	\
+	__extern_always_inline R (N) A	\
+	{ B; }
+#else
+#define CHK_REDIRECT(R,N,A,B)	__apply_c_linkage R unchecked_##N A
+#endif
+
 #endif

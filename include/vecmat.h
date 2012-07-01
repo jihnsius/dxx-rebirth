@@ -346,20 +346,34 @@ fix vm_vec_dotprod (const vms_vector * v0, const vms_vector * v1);
 
 //computes cross product of two vectors. returns ptr to dest
 //dest CANNOT equal either source
-vms_vector * vm_vec_crossprod (vms_vector * dest, const vms_vector * src0, const vms_vector * src1);
+CHK_REDIRECT(vms_vector *, vm_vec_crossprod, (vms_vector * dest, const vms_vector * src0, const vms_vector * src1), ({
+	define_interposition_check(dest, ==, src0);
+	define_interposition_check(dest, ==, src1);
+	return (unchecked_vm_vec_crossprod)(dest, src0, src1);
+}));
 
 #define vm_vec_cross(dest,src0,src1) vm_vec_crossprod((dest),(src0),(src1))
 
 //computes surface normal from three points. result is normalized
 //returns ptr to dest
 //dest CANNOT equal either source
-vms_vector * vm_vec_normal (vms_vector * dest, const vms_vector * p0, const vms_vector * p1, const vms_vector * p2);
+CHK_REDIRECT(vms_vector *, vm_vec_normal, (vms_vector * dest, const vms_vector * p0, const vms_vector * p1, const vms_vector * p2), ({
+	define_interposition_check(dest, ==, p0);
+	define_interposition_check(dest, ==, p1);
+	define_interposition_check(dest, ==, p2);
+	return (unchecked_vm_vec_normal)(dest, p0, p1, p2);
+}));
 
 
 //computes non-normalized surface normal from three points.
 //returns ptr to dest
 //dest CANNOT equal either source
-vms_vector * vm_vec_perp (vms_vector * dest, const vms_vector * p0, const vms_vector * p1, const vms_vector * p2);
+CHK_REDIRECT(vms_vector *, vm_vec_perp, (vms_vector * dest, const vms_vector * p0, const vms_vector * p1, const vms_vector * p2), ({
+	define_interposition_check(dest, ==, p0);
+	define_interposition_check(dest, ==, p1);
+	define_interposition_check(dest, ==, p2);
+	return (unchecked_vm_vec_perp)(dest, p0, p1, p2);
+}));
 
 
 //computes the delta angle between two vectors.
@@ -397,7 +411,10 @@ vms_matrix * vm_vector_2_matrix_norm (vms_matrix * m, vms_vector * fvec, vms_vec
 
 //rotates a vector through a matrix. returns ptr to dest vector
 //dest CANNOT equal either source
-vms_vector * vm_vec_rotate (vms_vector * dest, const vms_vector * src, const vms_matrix * m);
+CHK_REDIRECT(vms_vector *, vm_vec_rotate, (vms_vector * dest, const vms_vector * src, const vms_matrix * m), ({
+	define_interposition_check(dest, ==, src);
+	return (unchecked_vm_vec_rotate)(dest, src, m);
+}));
 
 
 //transpose a matrix in place. returns ptr to matrix
@@ -407,13 +424,20 @@ vms_matrix * vm_transpose_matrix (vms_matrix * m);
 
 //copy and transpose a matrix. returns ptr to matrix
 //dest CANNOT equal source. use vm_transpose_matrix() if this is the case
-vms_matrix * vm_copy_transpose_matrix (vms_matrix * dest, const vms_matrix * src);
+CHK_REDIRECT(vms_matrix *, vm_copy_transpose_matrix, (vms_matrix * dest, const vms_matrix * src), ({
+	define_interposition_check(dest, ==, src);
+	return (unchecked_vm_copy_transpose_matrix)(dest, src);
+}));
 
 #define vm_copy_transpose(dest,src) vm_copy_transpose_matrix((dest),(src))
 
 //mulitply 2 matrices, fill in dest.  returns ptr to dest
 //dest CANNOT equal either source
-vms_matrix * vm_matrix_x_matrix (vms_matrix * dest, const vms_matrix * src0, const vms_matrix * src1);
+CHK_REDIRECT(vms_matrix *, vm_matrix_x_matrix, (vms_matrix *dest,const vms_matrix *src0,const vms_matrix *src1), ({
+	define_interposition_check(dest, ==, src0);
+	define_interposition_check(dest, ==, src1);
+	return (unchecked_vm_matrix_x_matrix)(dest, src0, src1);
+}));
 
 vms_angvec *vm_extract_angles_vector_normalized(vms_angvec *a,vms_vector *v);
 

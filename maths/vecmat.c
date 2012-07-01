@@ -383,7 +383,7 @@ fix vm_vec_normalized_dir(vms_vector *dest,const vms_vector *end,const vms_vecto
 //computes surface normal from three points. result is normalized
 //returns ptr to dest
 //dest CANNOT equal either source
-vms_vector *vm_vec_normal(vms_vector *dest,const vms_vector *p0,const vms_vector *p1,const vms_vector *p2)
+vms_vector *unchecked_vm_vec_normal(vms_vector *dest,const vms_vector *p0,const vms_vector *p1,const vms_vector *p2)
 {
 	vm_vec_perp(dest,p0,p1,p2);
 
@@ -475,7 +475,7 @@ vms_vector *vm_vec_crossprod(vms_vector *dest,vms_vector *src0,vms_vector *src1)
 }
 #else
 
-vms_vector *vm_vec_crossprod(vms_vector *dest,const vms_vector *src0,const vms_vector *src1)
+vms_vector *unchecked_vm_vec_crossprod(vms_vector *dest,const vms_vector *src0,const vms_vector *src1)
 {
 	quadint q;
 
@@ -505,7 +505,7 @@ vms_vector *vm_vec_crossprod(vms_vector *dest,const vms_vector *src0,const vms_v
 //computes non-normalized surface normal from three points. 
 //returns ptr to dest
 //dest CANNOT equal either source
-vms_vector *vm_vec_perp(vms_vector *dest,const vms_vector *p0,const vms_vector *p1,const vms_vector *p2)
+vms_vector *unchecked_vm_vec_perp(vms_vector *dest,const vms_vector *p0,const vms_vector *p1,const vms_vector *p2)
 {
 	vms_vector t0,t1;
 
@@ -754,7 +754,7 @@ bad_vector2:
 
 //rotates a vector through a matrix. returns ptr to dest vector
 //dest CANNOT equal source
-vms_vector *vm_vec_rotate(vms_vector *dest,const vms_vector *src,const vms_matrix *m)
+vms_vector *unchecked_vm_vec_rotate(vms_vector *dest,const vms_vector *src,const vms_matrix *m)
 {
 	Assert(dest != src);
 
@@ -780,7 +780,7 @@ vms_matrix *vm_transpose_matrix(vms_matrix *m)
 
 //copy and transpose a matrix. returns ptr to matrix
 //dest CANNOT equal source. use vm_transpose_matrix() if this is the case
-vms_matrix *vm_copy_transpose_matrix(vms_matrix *dest,const vms_matrix *src)
+vms_matrix *unchecked_vm_copy_transpose_matrix(vms_matrix *dest,const vms_matrix *src)
 {
 	Assert(dest != src);
 
@@ -801,7 +801,7 @@ vms_matrix *vm_copy_transpose_matrix(vms_matrix *dest,const vms_matrix *src)
 
 //mulitply 2 matrices, fill in dest.  returns ptr to dest
 //dest CANNOT equal either source
-vms_matrix *vm_matrix_x_matrix(vms_matrix *dest,const vms_matrix *src0,const vms_matrix *src1)
+vms_matrix *unchecked_vm_matrix_x_matrix(vms_matrix *dest,const vms_matrix *src0,const vms_matrix *src1)
 {
 	Assert(dest!=src0 && dest!=src1);
 
