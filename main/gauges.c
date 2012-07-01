@@ -1257,7 +1257,7 @@ void hud_show_weapons(void)
 {
 	int	w, h, aw;
 	int	y;
-	char	*weapon_name;
+	const char	*weapon_name;
 	char	weapon_str[32];
 
 	gr_set_curfont( GAME_FONT );
