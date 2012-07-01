@@ -23,7 +23,7 @@ static char rcsid[] = "$Id: rod.c,v 1.1.1.1 2006/03/17 19:52:09 zicodxx Exp $";
 
 #include "3d.h"
 #include "globvars.h"
-#include "fix.h"
+#include "maths.h"
 
 grs_point blob_vertices[4];
 g3s_point rod_points[4];

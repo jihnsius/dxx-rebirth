@@ -20,7 +20,7 @@ static char rcsid[] = "$Id: checkbox.c,v 1.1.1.1 2006/03/17 19:52:20 zicodxx Exp
 #include <string.h>
 
 #include "u_mem.h"
-#include "fix.h"
+#include "maths.h"
 #include "pstypes.h"
 #include "event.h"
 #include "gr.h"

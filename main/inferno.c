@@ -41,7 +41,7 @@ char copyright[] = "DESCENT II  COPYRIGHT (C) 1994-1996 PARALLAX SOFTWARE CORPOR
 #include "strutil.h"
 #include "console.h"
 #include "gr.h"
-#include "fix.h"
+#include "maths.h"
 #include "vecmat.h"
 #include "key.h"
 #include "3d.h"

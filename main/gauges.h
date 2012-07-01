@@ -22,7 +22,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #ifndef _GAUGES_H
 #define _GAUGES_H
 
-#include "fix.h"
+#include "maths.h"
 #include "gr.h"
 #include "piggy.h"
 #include "object.h"

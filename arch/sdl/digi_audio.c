@@ -13,7 +13,7 @@
 #include <digi_audio.h>
 #include "pstypes.h"
 #include "error.h"
-#include "fix.h"
+#include "maths.h"
 #include "vecmat.h"
 #include "gr.h"
 #include "piggy.h"

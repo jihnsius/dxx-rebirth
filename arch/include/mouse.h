@@ -8,7 +8,7 @@
 #define MOUSE_H
 
 #include "pstypes.h"
-#include "fix.h"
+#include "maths.h"
 
 struct d_event;
 struct window;

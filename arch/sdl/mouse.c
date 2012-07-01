@@ -7,7 +7,7 @@
 #include <string.h>
 #include <SDL/SDL.h>
 
-#include "fix.h"
+#include "maths.h"
 #include "timer.h"
 #include "event.h"
 #include "window.h"

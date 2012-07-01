@@ -28,7 +28,7 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "editor.h"
 #include "timer.h"
 #include "objpage.h"
-#include "fix.h"
+#include "maths.h"
 #include "error.h"
 #include "kdefs.h"
 #include	"object.h"

@@ -10,7 +10,7 @@
 #include <alsa/asoundlib.h>
 #include <pthread.h>
 #include "error.h"
-#include "fix.h"
+#include "maths.h"
 #include "vecmat.h"
 #include "gr.h" // needed for piggy.h
 #include "piggy.h"

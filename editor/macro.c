@@ -28,7 +28,7 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "gr.h"
 #include "ui.h"
 #include "key.h"
-#include "fix.h"
+#include "maths.h"
 #include "3d.h"
 #include "mouse.h"
 #include "bm.h"

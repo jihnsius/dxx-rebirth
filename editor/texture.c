@@ -26,7 +26,7 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "segment.h"
 #include "seguvs.h"
 #include "editor.h"
-#include "fix.h"
+#include "maths.h"
 #include "error.h"
 #include "kdefs.h"
 

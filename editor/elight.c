@@ -24,7 +24,7 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "seguvs.h"
 #include "wall.h"
 #include "textures.h"
-#include "fix.h"
+#include "maths.h"
 #include "error.h"
 #include "kdefs.h"
 #include "gameseg.h"

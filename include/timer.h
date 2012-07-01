@@ -22,7 +22,7 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define _TIMER_H
 
 #include "pstypes.h"
-#include "fix.h"
+#include "maths.h"
 
 void timer_update();
 fix64 timer_query();
