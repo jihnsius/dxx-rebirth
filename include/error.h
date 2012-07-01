@@ -23,13 +23,13 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include <stdio.h>
 #include "compiler.h"
 
-void warn_printf(char *s);
-int error_init(void (*func)(char *), char *fmt,...);    //init error system, set default message, returns 0=ok
-void set_exit_message(char *fmt,...);	//specify message to print at exit
-void Warning(char *fmt,...);				//print out warning message to user
-void set_warn_func(void (*f)(char *s));//specifies the function to call with warning messages
-void clear_warn_func(void (*f)(char *s));//say this function no longer valid
-void _Assert(int expr,char *expr_text,char *filename,int linenum);	//assert func
+void warn_printf(const char *s);
+int error_init(void (*func)(const char *), const char *fmt,...);    //init error system, set default message, returns 0=ok
+void set_exit_message(const char *fmt,...) __attribute_gcc_format((printf, 1, 2));	//specify message to print at exit
+void Warning(const char *fmt,...) __attribute_gcc_format((printf, 1, 2));				//print out warning message to user
+void set_warn_func(void (*f)(const char *s));//specifies the function to call with warning messages
+void clear_warn_func(void (*f)(const char *s));//say this function no longer valid
+void _Assert(int expr,const char *expr_text,const char *filename,int linenum);	//assert func
 void Error(const char *fmt,...) __noreturn __attribute_gcc_format((printf, 1, 2));				//exit with error code=1, print message
 void Assert(int expr);
 void Int3();

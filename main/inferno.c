@@ -333,7 +333,7 @@ int main(int argc, char *argv[])
 
 	if (GameArg.SysShowCmdHelp) {
 		print_commandline_help();
-		set_exit_message("");
+		set_exit_message("\n");
 
 		return(0);
 	}

@@ -32,32 +32,32 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 int err_initialized=0;
 //end edit -MM
 
-static void (*ErrorPrintFunc)(char *);
+static void (*ErrorPrintFunc)(const char *);
 
 char exit_message[MAX_MSG_LEN]="";
 char warn_message[MAX_MSG_LEN];
 
 //takes string in register, calls printf with string on stack
-void warn_printf(char *s)
+void warn_printf(const char *s)
 {
 	con_printf(CON_URGENT, "%s\n",s);
 }
 
-void (*warn_func)(char *s)=warn_printf;
+void (*warn_func)(const char *s)=warn_printf;
 
 //provides a function to call with warning messages
-void set_warn_func(void (*f)(char *s))
+void set_warn_func(void (*f)(const char *s))
 {
 	warn_func = f;
 }
 
 //uninstall warning function - install default printf
-void clear_warn_func(void (*f)(char *s))
+void clear_warn_func(void (*f)(const char *s))
 {
 	warn_func = warn_printf;
 }
 
-void set_exit_message(char *fmt,...)
+void set_exit_message(const char *fmt,...)
 {
 	va_list arglist;
 	int len;
@@ -70,7 +70,7 @@ void set_exit_message(char *fmt,...)
 
 }
 
-void _Assert(int expr,char *expr_text,char *filename,int linenum)
+void _Assert(int expr,const char *expr_text,const char *filename,int linenum)
 {
 	Int3();
 	if (!(expr)) Error("Assertion failed: %s, file %s, line %d",expr_text,filename,linenum);
@@ -106,7 +106,7 @@ void Error(const char *fmt,...)
 }
 
 //print out warning message to user
-void Warning(char *fmt,...)
+void Warning(const char *fmt,...)
 {
 	va_list arglist;
 
@@ -124,7 +124,7 @@ void Warning(char *fmt,...)
 }
 
 //initialize error handling system, and set default message. returns 0=ok
-int error_init(void (*func)(char *), char *fmt, ...)
+int error_init(void (*func)(const char *), const char *fmt, ...)
 {
 	va_list arglist;
 	int len;

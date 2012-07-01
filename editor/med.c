@@ -346,10 +346,10 @@ static int padnum=0;
 
 void init_editor_screen();
 void gamestate_restore_check();
+static void med_show_warning(const char *s);
 
 void init_editor()
 {
-	void med_show_warning(char *s);
 
 	// first, make sure we can find the files we need
 	PHYSFSX_addRelToSearchPath("editor/data", 1);	// look in source directory first (for work in progress)
@@ -892,7 +892,7 @@ void close_editor_screen()
 
 }
 
-void med_show_warning(char *s)
+static void med_show_warning(const char *s)
 {
 	grs_canvas *save_canv=grd_curcanv;
 
