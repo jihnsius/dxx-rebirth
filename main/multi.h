@@ -208,7 +208,7 @@ extern int multi_protocol; // set and determinate used protocol
 #define NETFLAG_DOPOWERUP		67108863  // mask for all powerup flags
 
 #define MULTI_ALLOW_POWERUP_MAX 26
-extern char *multi_allow_powerup_text[MULTI_ALLOW_POWERUP_MAX];
+extern const char *const multi_allow_powerup_text[MULTI_ALLOW_POWERUP_MAX];
 
 #ifdef __cplusplus
 extern "C" {
@@ -318,8 +318,8 @@ extern short team_kills[2];
 
 extern int multi_goto_secret;
 
-extern char *GMNames[9];
-extern char *GMNamesShrt[9];
+extern const char *const GMNames[9];
+extern const char *const GMNamesShrt[9];
 
 extern ushort my_segments_checksum;
 
@@ -352,7 +352,7 @@ extern int Bounty_target;
 
 extern bitmap_index multi_player_textures[MAX_PLAYERS][N_PLAYER_SHIP_TEXTURES];
 
-extern char *RankStrings[];
+extern const char *const RankStrings[];
 
 // Globals for protocol-bound Refuse-functions
 extern char RefuseThisPlayer,WaitForRefuseAnswer,RefuseTeam,RefusePlayerName[12];

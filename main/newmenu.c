@@ -200,7 +200,7 @@ void nm_draw_background(int x1, int y1, int x2, int y2 )
 }
 
 // Draw a left justfied string
-void nm_string( int w1,int x, int y, char * s, int tabs_flag)
+static void nm_string( int w1,int x, int y, const char * s, int tabs_flag)
 {
 	int w,h,aw,tx=0,t=0,i;
 	char *p,*s1,*s2,measure[2];
@@ -256,7 +256,7 @@ void nm_string( int w1,int x, int y, char * s, int tabs_flag)
 }
 
 // Draw a slider and it's string
-void nm_string_slider( int w1,int x, int y, char * s )
+static void nm_string_slider( int w1,int x, int y, const char * s )
 {
 	int w,h,aw;
 	char *p,*s1;
@@ -282,7 +282,7 @@ void nm_string_slider( int w1,int x, int y, char * s )
 
 
 // Draw a left justfied string with black background.
-void nm_string_black( int w1,int x, int y, char * s )
+static void nm_string_black( int w1,int x, int y, const char * s )
 {
 	int w,h,aw;
 	gr_get_string_size(s, &w, &h, &aw  );
@@ -301,7 +301,7 @@ void nm_string_black( int w1,int x, int y, char * s )
 
 
 // Draw a right justfied string
-void nm_rstring( int w1,int x, int y, char * s )
+static void nm_rstring( int w1,int x, int y, const char * s )
 {
 	int w,h,aw;
 	gr_get_string_size(s, &w, &h, &aw  );
@@ -311,7 +311,7 @@ void nm_rstring( int w1,int x, int y, char * s )
 	gr_string( x-w, y, s );
 }
 
-void nm_string_inputbox( int w, int x, int y, char * text, int current )
+static void nm_string_inputbox( int w, int x, int y, const char * text, int current )
 {
 	int w1,h1,aw;
 

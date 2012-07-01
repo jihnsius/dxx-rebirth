@@ -151,8 +151,8 @@ short kill_matrix[MAX_PLAYERS][MAX_PLAYERS];
 int   multi_goto_secret = 0;
 short team_kills[2];
 int   multi_quit_game = 0;
-char *GMNames[9]={"Anarchy","Team Anarchy","Robo Anarchy","Cooperative","Capture the Flag","Hoard","Team Hoard","Bounty","Unknown"};
-char *GMNamesShrt[9]={"ANRCHY","TEAM","ROBO","COOP","FLAG","HOARD","TMHOARD","BOUNTY","UNKNOWN"};
+const char *const GMNames[9]={"Anarchy","Team Anarchy","Robo Anarchy","Cooperative","Capture the Flag","Hoard","Team Hoard","Bounty","Unknown"};
+const char *const GMNamesShrt[9]={"ANRCHY","TEAM","ROBO","COOP","FLAG","HOARD","TMHOARD","BOUNTY","UNKNOWN"};
 
 // For rejoin object syncing (used here and all protocols - globally)
 
@@ -250,10 +250,10 @@ static const int message_length[MULTI_MAX_TYPE+1] = {
 
 char PowerupsInMine[MAX_POWERUP_TYPES],MaxPowerupsAllowed[MAX_POWERUP_TYPES];
 
-char *RankStrings[]={"(unpatched) ","Cadet ","Ensign ","Lieutenant ","Lt.Commander ",
+const char *const RankStrings[]={"(unpatched) ","Cadet ","Ensign ","Lieutenant ","Lt.Commander ",
                      "Commander ","Captain ","Vice Admiral ","Admiral ","Demigod "};
 
-char *multi_allow_powerup_text[MULTI_ALLOW_POWERUP_MAX] =
+const char *const multi_allow_powerup_text[MULTI_ALLOW_POWERUP_MAX] =
 { "Laser upgrade", "Super lasers", "Quad Lasers", "Vulcan cannon", "Gauss cannon", "Spreadfire cannon",
 "Helix cannon", "Plasma cannon", "Phoenix cannon", "Fusion cannon", "Omega cannon",
 "Flash Missiles", "Homing Missiles", "Guided Missiles", "Proximity Bombs", "Smart Mines",
@@ -4673,8 +4673,6 @@ void multi_do_start_trigger (char *buf)
 {
 	Triggers[(int)buf[1]].flags |=TF_DISABLED;
 }
-
-extern char *RankStrings[];
 
 void multi_add_lifetime_kills ()
 {
