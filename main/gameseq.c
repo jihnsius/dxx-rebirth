@@ -949,7 +949,8 @@ static int draw_stars_bg(newmenu *menu, d_event *event, grs_bitmap *background)
 	return 0;
 }
 
-static void do_screen_message(char *fmt, ...)
+static void do_screen_message(const char *fmt, ...) __attribute_gcc_format((printf, 1, 2));
+static void do_screen_message(const char *fmt, ...)
 {
 	va_list arglist;
 	grs_bitmap background;
