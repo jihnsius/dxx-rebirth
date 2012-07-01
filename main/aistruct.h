@@ -235,10 +235,6 @@ typedef struct {
 
 #define MAX_POINT_SEGS  2500
 
-extern point_seg    Point_segs[MAX_POINT_SEGS];
-extern point_seg    *Point_segs_free_ptr;
-extern int          Overall_agitation;
-
 // These are the information for a robot describing the location of
 // the player last time he wasn't cloaked, and the time at which he
 // was uncloaked.  We should store this for each robot, but that's
@@ -246,6 +242,6 @@ extern int          Overall_agitation;
 //extern fix        Last_uncloaked_time;
 //extern vms_vector Last_uncloaked_position;
 
-extern void ai_do_cloak_stuff(void);
+void ai_do_cloak_stuff(void);
 
 #endif /* _AISTRUCT_H */

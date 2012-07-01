@@ -341,7 +341,6 @@ int weapon_box_user[2]={WBU_WEAPON,WBU_WEAPON};		//see WBU_ constants in gauges.
 int weapon_box_states[2] = {WS_SET, WS_SET};
 fix weapon_box_fade_values[2];
 int	Color_0_31_0 = -1;
-extern fix ThisLevelTime;
 extern fix Omega_charge;
 
 typedef struct gauge_box {
@@ -1083,7 +1082,7 @@ static inline const char *SECONDARY_WEAPON_NAMES_VERY_SHORT(const unsigned u)
 }
 
 //return which bomb will be dropped next time the bomb key is pressed
-extern int which_bomb();
+int which_bomb();
 
 void show_bomb_count(int x,int y,int bg_color,int always_show,int right_align)
 {
@@ -2263,8 +2262,8 @@ void draw_invulnerable_ship()
 }
 
 extern int Missile_gun;
-extern int allowed_to_fire_laser(void);
-extern int allowed_to_fire_missile(void);
+int allowed_to_fire_laser(void);
+int allowed_to_fire_missile(void);
 
 rgb player_rgb[] = {
 							{15,15,23},
@@ -2644,7 +2643,7 @@ int see_object(int objnum)
 void show_HUD_names()
 {
 	int is_friend = 0, show_friend_name = 0, show_enemy_name = 0, show_name = 0, show_typing = 0, show_indi = 0, pnum = 0, objnum = 0;
-	
+
 	for (pnum=0;pnum<N_players;pnum++)
 	{
 		if (pnum == Player_num || Players[pnum].connected != CONNECT_PLAYING)
@@ -2798,7 +2797,7 @@ void draw_hud()
 			hud_show_flag();
 			hud_show_orbs();
 		}
-		
+
 		HUD_render_message_frame();
 
 		if (PlayerCfg.CockpitMode[1]!=CM_STATUS_BAR)

@@ -159,9 +159,6 @@ int gr_check_mode(u_int32_t mode);
 int gr_set_mode(u_int32_t mode);
 void gr_set_attributes(void);
 
-extern void gr_pal_setblock( int start, int number, unsigned char * pal );
-extern void gr_pal_getblock( int start, int number, unsigned char * pal );
-
 //shut down the 2d.  Restore the screen mode.
 void gr_close(void);
 
@@ -204,10 +201,8 @@ void gr_clear_canvas(int color);
 // Bitmap functions:
 
 // these are the two workhorses, the others just use these
-extern void gr_init_bitmap( grs_bitmap *bm, int mode, int x, int y, int w, int h, int bytesperline, unsigned char * data );
-extern void gr_init_sub_bitmap (grs_bitmap *bm, grs_bitmap *bmParent, int x, int y, int w, int h );
-
-extern void gr_init_bitmap_alloc( grs_bitmap *bm, int mode, int x, int y, int w, int h, int bytesperline);
+void gr_init_bitmap( grs_bitmap *bm, int mode, int x, int y, int w, int h, int bytesperline, unsigned char * data );
+void gr_init_sub_bitmap (grs_bitmap *bm, grs_bitmap *bmParent, int x, int y, int w, int h );
 
 // Allocate a bitmap and its pixel data buffer.
 grs_bitmap *gr_create_bitmap(int w,int h);
@@ -383,9 +378,9 @@ extern grs_canvas *grd_curcanv;             //active canvas
 extern grs_screen *grd_curscreen;           //active screen
 extern unsigned char Test_bitmap_data[64*64];
 
-extern unsigned int FixDivide( unsigned int x, unsigned int y );
+unsigned int FixDivide( unsigned int x, unsigned int y );
 
-extern void gr_set_current_canvas( grs_canvas *canv );
+void gr_set_current_canvas( grs_canvas *canv );
 
 //flags for fonts
 #define FT_COLOR        1
@@ -393,10 +388,9 @@ extern void gr_set_current_canvas( grs_canvas *canv );
 #define FT_KERNED       4
 
 // Special effects
-extern void gr_snow_out(int num_dots);
+void gr_snow_out(int num_dots);
 
-extern void test_rotate_bitmap(void);
-extern void rotate_bitmap(grs_bitmap *bp, grs_point *vertbuf, int light_value);
+void test_rotate_bitmap(void);
 
 extern ubyte gr_palette[256*3];
 extern ubyte gr_fade_table[256*GR_FADE_LEVELS];
@@ -416,27 +410,27 @@ extern ushort gr_fade_table_selector;
 //			gr_remap_bitmap( new, newpal, iff_transparent_color );
 //		else
 //			gr_remap_bitmap( new, newpal, -1 );
-extern void gr_remap_bitmap( grs_bitmap * bmp, ubyte * palette, int transparent_color, int super_transparent_color );
+void gr_remap_bitmap( grs_bitmap * bmp, ubyte * palette, int transparent_color, int super_transparent_color );
 
 // Same as above, but searches using gr_find_closest_color which uses
 // 18-bit accurracy instead of 15bit when translating colors.
-extern void gr_remap_bitmap_good( grs_bitmap * bmp, ubyte * palette, int transparent_color, int super_transparent_color );
+void gr_remap_bitmap_good( grs_bitmap * bmp, ubyte * palette, int transparent_color, int super_transparent_color );
 
-extern void build_colormap_good( ubyte * palette, ubyte * colormap, int * freq );
+void build_colormap_good( ubyte * palette, ubyte * colormap, int * freq );
 
-extern void gr_palette_step_up( int r, int g, int b );
+void gr_palette_step_up( int r, int g, int b );
 
-extern void gr_bitmap_check_transparency( grs_bitmap * bmp );
+void gr_bitmap_check_transparency( grs_bitmap * bmp );
 
 #ifdef BITMAP_SELECTOR
 // Allocates a selector that has a base address at 'address' and length 'size'.
 // Returns 0 if successful... BE SURE TO CHECK the return value since there
 // is a limited number of selectors available!!!
-extern int get_selector( void * address, int size, unsigned int * selector );
+int get_selector( void * address, int size, unsigned int * selector );
 
 // Assigns a selector to a bitmap. Returns 0 if successful.  BE SURE TO CHECK
 // this return value since there is a limited number of selectors!!!!!!!
-extern int gr_bitmap_assign_selector( grs_bitmap * bmp );
+int gr_bitmap_assign_selector( grs_bitmap * bmp );
 #endif
 
 #define BM_RGB(r,g,b) ( (((r)&31)<<10) | (((g)&31)<<5) | ((b)&31) )
@@ -447,13 +441,13 @@ extern int gr_bitmap_assign_selector( grs_bitmap * bmp );
 int gr_find_closest_color( int r, int g, int b );
 int gr_find_closest_color_15bpp( int rgb );
 
-extern void gr_merge_textures( ubyte * lower, ubyte * upper, ubyte * dest );
-extern void gr_merge_textures_1( ubyte * lower, ubyte * upper, ubyte * dest );
-extern void gr_merge_textures_2( ubyte * lower, ubyte * upper, ubyte * dest );
-extern void gr_merge_textures_3( ubyte * lower, ubyte * upper, ubyte * dest );
+void gr_merge_textures( ubyte * lower, ubyte * upper, ubyte * dest );
+void gr_merge_textures_1( ubyte * lower, ubyte * upper, ubyte * dest );
+void gr_merge_textures_2( ubyte * lower, ubyte * upper, ubyte * dest );
+void gr_merge_textures_3( ubyte * lower, ubyte * upper, ubyte * dest );
 
-extern void gr_flip(void);
-extern void gr_set_draw_buffer(int buf);
+void gr_flip(void);
+void gr_set_draw_buffer(int buf);
 
 /*
  * must return 0 if windowed, 1 if fullscreen

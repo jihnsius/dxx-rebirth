@@ -140,8 +140,8 @@ typedef struct segment2 {
 #define MAX_CENTER_TYPES        7
 
 #ifdef COMPACT_SEGS
-extern void get_side_normal(segment *sp, int sidenum, int normal_num, vms_vector * vm );
-extern void get_side_normals(segment *sp, int sidenum, vms_vector * vm1, vms_vector *vm2 );
+void get_side_normal(segment *sp, int sidenum, int normal_num, vms_vector * vm );
+void get_side_normals(segment *sp, int sidenum, vms_vector * vm1, vms_vector *vm2 );
 #endif
 
 // Local segment data.
@@ -205,10 +205,10 @@ extern dl_index     Dl_indices[MAX_DL_INDICES];
 extern delta_light  Delta_lights[MAX_DELTA_LIGHTS];
 extern int          Num_static_lights;
 
-extern int subtract_light(int segnum, int sidenum);
-extern int add_light(int segnum, int sidenum);
-extern void restore_all_lights_in_mine(void);
-extern void clear_light_subtracted(void);
+int subtract_light(int segnum, int sidenum);
+int add_light(int segnum, int sidenum);
+void restore_all_lights_in_mine(void);
+void clear_light_subtracted(void);
 
 extern ubyte Light_subtracted[MAX_SEGMENTS];
 
@@ -221,28 +221,25 @@ extern ubyte Light_subtracted[MAX_SEGMENTS];
 
 // Return a pointer to the list of vertex indices for the current
 // segment in vp and the number of vertices in *nv.
-extern void med_get_vertex_list(segment *s,int *nv,int **vp);
+void med_get_vertex_list(segment *s,int *nv,int **vp);
 
 // Return a pointer to the list of vertex indices for face facenum in
 // vp and the number of vertices in *nv.
-extern void med_get_face_vertex_list(segment *s,int side, int facenum,int *nv,int **vp);
+void med_get_face_vertex_list(segment *s,int side, int facenum,int *nv,int **vp);
 
 // Set *nf = number of faces in segment s.
-extern void med_get_num_faces(segment *s,int *nf);
+void med_get_num_faces(segment *s,int *nf);
 
 void med_validate_segment_side(segment *sp,int side);
 
-// Delete segment function added for curves.c
-extern int med_delete_segment(segment *sp);
-
 // Delete segment from group
-extern void delete_segment_from_group(int segment_num, int group_num);
+void delete_segment_from_group(int segment_num, int group_num);
 
 // Add segment to group
-extern void add_segment_to_group(int segment_num, int group_num);
+void add_segment_to_group(int segment_num, int group_num);
 
 // Verify that all vertices are legal.
-extern void med_check_all_vertices();
+void med_check_all_vertices();
 
 /*
  * reads a segment2 structure from a PHYSFS_file

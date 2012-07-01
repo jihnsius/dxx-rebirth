@@ -193,7 +193,7 @@ grs_canvas *window_get_canvas(window *wind)
 	return &wind->w_canv;
 }
 
-extern void window_update_canvases(void)
+void window_update_canvases(void)
 {
 	window *wind;
 	

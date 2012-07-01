@@ -31,12 +31,8 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define SCREEN_EDITOR		2	// viewing the editor screen
 #define SCREEN_MOVIE		3	// viewing a movie
 
-//from editor.c
-extern grs_canvas *Canv_editor;		// the full on-scrren editor canvas
-extern grs_canvas *Canv_editor_game;	// the game window on the editor screen
-
 //from game.c
-extern int set_screen_mode(int sm);	// True = editor screen
+int set_screen_mode(int sm);	// True = editor screen
 
 //About the screen
 extern fix			VR_eye_width;
@@ -49,7 +45,7 @@ extern int 			VR_eye_switch;
 #define VR_BLACK_INDEX		0
 extern int			VR_eye_offset;
 extern int			VR_eye_offset_changed;
-extern void			VR_reset_params();
+void			VR_reset_params();
 extern int			VR_use_reg_code;
 
 

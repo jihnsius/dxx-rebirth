@@ -117,7 +117,6 @@ void drop_player_eggs(dxxobject *player); // from collide.c
 int multi_protocol=0; // set and determinate used protocol
 int imulti_new_game=0; // to prep stuff for level only when starting new game
 
-extern vms_vector MarkerPoint[];
 extern int MarkerObject[];
 
 int who_killed_controlcen = -1;  // -1 = noone
@@ -175,7 +174,7 @@ bitmap_index multi_player_textures[MAX_PLAYERS][N_PLAYER_SHIP_TEXTURES];
 // Globals for protocol-bound Refuse-functions
 char RefuseThisPlayer=0,WaitForRefuseAnswer=0,RefuseTeam,RefusePlayerName[12];
 fix64 RefuseTimeLimit=0;
-extern void init_player_stats_new_ship(ubyte pnum);
+void init_player_stats_new_ship(ubyte pnum);
 
 static const int message_length[MULTI_MAX_TYPE+1] = {
 	25, // POSITION
@@ -250,16 +249,15 @@ static const int message_length[MULTI_MAX_TYPE+1] = {
 };
 
 char PowerupsInMine[MAX_POWERUP_TYPES],MaxPowerupsAllowed[MAX_POWERUP_TYPES];
-extern fix ThisLevelTime;
 
 char *RankStrings[]={"(unpatched) ","Cadet ","Ensign ","Lieutenant ","Lt.Commander ",
                      "Commander ","Captain ","Vice Admiral ","Admiral ","Demigod "};
 
 char *multi_allow_powerup_text[MULTI_ALLOW_POWERUP_MAX] =
-{ "Laser upgrade", "Super lasers", "Quad Lasers", "Vulcan cannon", "Gauss cannon", "Spreadfire cannon", 
+{ "Laser upgrade", "Super lasers", "Quad Lasers", "Vulcan cannon", "Gauss cannon", "Spreadfire cannon",
 "Helix cannon", "Plasma cannon", "Phoenix cannon", "Fusion cannon", "Omega cannon",
 "Flash Missiles", "Homing Missiles", "Guided Missiles", "Proximity Bombs", "Smart Mines",
-"Smart Missiles", "Mercury Missiles", "Mega Missiles", "EarthShaker Missiles", 
+"Smart Missiles", "Mercury Missiles", "Mega Missiles", "EarthShaker Missiles",
 "Cloaking", "Invulnerability", "Afterburners", "Ammo rack", "Energy Converter", "Headlight" };
 
 int GetMyNetRanking()
@@ -625,7 +623,7 @@ multi_sort_kill_list(void)
 	}
 }
 
-extern dxxobject *obj_find_first_of_type (int);
+dxxobject *obj_find_first_of_type (int);
 char Multi_killed_yourself=0;
 
 void multi_compute_kill(int killer, int killed)
@@ -754,18 +752,18 @@ void multi_compute_kill(int killer, int killed)
 		}
 		else
 			HUD_init_message(HM_MULTI, "%s %s", killed_name, TXT_SUICIDE);
-		
+
 		/* Bounty mode needs some lovin' */
 		if( Game_mode & GM_BOUNTY && killed_pnum == Bounty_target && multi_i_am_master() )
 		{
 			/* Select a random number */
 			int new = d_rand() % MAX_PLAYERS;
-			
+
 			/* Make sure they're valid: Don't check against kill flags,
 			* just in case everyone's dead! */
 			while( !Players[new].connected )
 				new = d_rand() % MAX_PLAYERS;
-			
+
 			/* Select new target  - it will be sent later when we're done with this function */
 			multi_new_bounty_target( new );
 		}
@@ -782,7 +780,7 @@ void multi_compute_kill(int killer, int killed)
 				else
 					team_kills[get_team(killer_pnum)] += 1;
 			}
-			
+
 			if( Game_mode & GM_BOUNTY )
 			{
 				/* Did the target die?  Did the target get a kill? */
@@ -791,11 +789,11 @@ void multi_compute_kill(int killer, int killed)
 					/* Increment kill counts */
 					Players[killer_pnum].net_kills_total++;
 					Players[killer_pnum].KillGoalCount++;
-					
+
 					/* Record the kill in a demo */
 					if( Newdemo_state == ND_STATE_RECORDING )
 						newdemo_record_multi_kill( killer_pnum, 1 );
-					
+
 					/* If the target died, the new one is set! */
 					if( killed_pnum == Bounty_target )
 						multi_new_bounty_target( killer_pnum );
@@ -806,7 +804,7 @@ void multi_compute_kill(int killer, int killed)
 				Players[killer_pnum].net_kills_total += 1;
 				Players[killer_pnum].KillGoalCount+=1;
 			}
-			
+
 			if (Newdemo_state == ND_STATE_RECORDING && !( Game_mode & GM_BOUNTY ) )
 				newdemo_record_multi_kill(killer_pnum, 1);
 		}
@@ -1062,7 +1060,7 @@ int multi_endlevel_poll1( newmenu *menu, d_event *event, void *userdata )
 			Error("Protocol handling missing in multi_endlevel_poll1\n");
 			break;
 	}
-	
+
 	return 0;	// kill warning
 }
 
@@ -1079,7 +1077,7 @@ int multi_endlevel_poll2( newmenu *menu, d_event *event, void *userdata )
 			Error("Protocol handling missing in multi_endlevel_poll2\n");
 			break;
 	}
-	
+
 	return 0;
 }
 
@@ -1241,7 +1239,7 @@ multi_send_message_start()
 
 extern fix StartingShields;
 
-extern int multi_who_is_master();
+int multi_who_is_master();
 extern char NameReturning;
 extern int force_cockpit_redraw;
 
@@ -1397,7 +1395,7 @@ void multi_send_message_end()
 				return;
 			}
 	}
-	
+
 	else if (!strnicmp (Network_message,"/killreactor",12) && (Game_mode & GM_NETWORK) && !Control_center_destroyed)
 	{
 		if (!multi_i_am_master())
@@ -1502,7 +1500,7 @@ int multi_message_input_sub(int key)
 			}
 		}
 	}
-	
+
 	return 0;
 }
 
@@ -1846,7 +1844,7 @@ multi_do_kill(char *buf)
 		multibuf[0] = MULTI_KILL_HOST;
 		multibuf[5] = Netgame.team_vector;
 		multibuf[6] = Bounty_target;
-		
+
 		multi_send_data(multibuf, 7, 2);
 	}
 
@@ -2020,15 +2018,15 @@ void multi_disconnect_player(int pnum)
 		{
 			/* Select a random number */
 			int new = d_rand() % MAX_PLAYERS;
-			
+
 			/* Make sure they're valid: Don't check against kill flags,
 				* just in case everyone's dead! */
 			while( !Players[new].connected )
 				new = d_rand() % MAX_PLAYERS;
-			
+
 			/* Select new target */
 			multi_new_bounty_target( new );
-			
+
 			/* Send this new data */
 			multi_send_bounty();
 		}
@@ -2640,7 +2638,7 @@ extern int Proximity_dropped, Smartmines_dropped;
 
 /*
  * Powerup capping: Keep track of how many powerups are in level and kill these which would exceed initial limit.
- * NOTE: code encapsuled by OLDPOWCAP define is original and buggy Descent2 code. 
+ * NOTE: code encapsuled by OLDPOWCAP define is original and buggy Descent2 code.
  */
 
 // Count the initial amount of Powerups in the level
@@ -2650,8 +2648,8 @@ void multi_powcap_count_powerups_in_mine(void)
 
 	for (i=0;i<MAX_POWERUP_TYPES;i++)
 		PowerupsInMine[i]=0;
-		
-	for (i=0;i<=Highest_object_index;i++) 
+
+	for (i=0;i<=Highest_object_index;i++)
 	{
 		if (Objects[i].type==OBJ_POWERUP)
 		{
@@ -2895,7 +2893,7 @@ void
 multi_send_reappear()
 {
 	multi_send_position(Players[Player_num].objnum);
-	
+
 	multibuf[0] = (char)MULTI_REAPPEAR;
 	multibuf[1] = (char)Player_num;
 	PUT_INTEL_SHORT(multibuf+2, Players[Player_num].objnum);
@@ -2929,7 +2927,7 @@ multi_send_position(int objnum)
 	multi_send_data(multibuf, count, 0);
 }
 
-/* 
+/*
  * I was killed. If I am host, send this info to everyone and compute kill. If I am just a Client I'll only send the kill but not compute it for me. I (Client) will wait for Host to send me my kill back together with updated game_mode related variables which are important for me to compute consistent kill.
  */
 void
@@ -4101,7 +4099,7 @@ void multi_send_flags (char pnum)
 	multibuf[0]=MULTI_FLAGS;
 	multibuf[1]=pnum;
 	PUT_INTEL_INT(multibuf+2, Players[(int)pnum].flags);
- 
+
 	multi_send_data(multibuf, 6, 2);
 }
 
@@ -4652,7 +4650,7 @@ void multi_send_finish_game ()
 }
 
 
-extern void do_final_boss_hacks();
+void do_final_boss_hacks();
 void multi_do_finish_game (char *buf)
 {
 	if (buf[0]!=MULTI_FINISH_GAME)
@@ -4844,11 +4842,11 @@ void multi_send_bounty( void )
 		return;
 	if ( !multi_i_am_master() )
 		return;
-	
+
 	/* Add opcode, target ID and how often we re-assigned */
 	multibuf[0] = MULTI_DO_BOUNTY;
 	multibuf[1] = (char)Bounty_target;
-	
+
 	/* Send data */
 	multi_send_data( multibuf, 2, 2 );
 }
@@ -4857,7 +4855,7 @@ void multi_do_bounty( char *buf )
 {
 	if ( multi_i_am_master() )
 		return;
-	
+
 	multi_new_bounty_target( buf[1] );
 }
 
@@ -4866,10 +4864,10 @@ void multi_new_bounty_target( int pnum )
 	/* If it's already the same, don't do it */
 	if( Bounty_target == pnum )
 		return;
-	
+
 	/* Set the target */
 	Bounty_target = pnum;
-	
+
 	/* Send a message */
 	HUD_init_message( HM_MULTI, "%c%c%s is the new target!", CC_COLOR,
 		BM_XRGB( player_rgb[Bounty_target].r, player_rgb[Bounty_target].g, player_rgb[Bounty_target].b ),
@@ -4907,7 +4905,7 @@ void multi_do_restore_game(char *buf)
 void multi_send_save_game(ubyte slot, uint id, char * desc)
 {
 	int count = 0;
-	
+
 	multibuf[count] = MULTI_SAVE_GAME;		count += 1;
 	multibuf[count] = slot;				count += 1; // Save slot=0
 	PUT_INTEL_INT( multibuf+count, id );		count += 4; // Save id
@@ -4919,7 +4917,7 @@ void multi_send_save_game(ubyte slot, uint id, char * desc)
 void multi_send_restore_game(ubyte slot, uint id)
 {
 	int count = 0;
-	
+
 	multibuf[count] = MULTI_RESTORE_GAME;		count += 1;
 	multibuf[count] = slot;				count += 1; // Save slot=0
 	PUT_INTEL_INT( multibuf+count, id );		count += 4; // Save id
@@ -4983,7 +4981,7 @@ void multi_initiate_save_game()
 	multi_save_game( slot,game_id, desc );
 }
 
-extern int state_get_game_id(char *);
+int state_get_game_id(char *);
 
 void multi_initiate_restore_game()
 {
@@ -5050,21 +5048,21 @@ void multi_restore_game(ubyte slot, uint id)
 		return;
 
 	snprintf(filename, PATH_MAX, GameArg.SysUsePlayersDir? "Players/%s.mg%d" : "%s.mg%d", Players[Player_num].callsign, slot);
-   
+
 	for (i = 0; i < N_players; i++)
 		multi_strip_robots(i);
 	if (multi_i_am_master()) // put all players to wait-state again so we can sync up properly
 		for (i = 0; i < MAX_PLAYERS; i++)
 			if (Players[i].connected == CONNECT_PLAYING && i != Player_num)
 				Players[i].connected = CONNECT_WAITING;
-   
+
 	thisid=state_get_game_id(filename);
 	if (thisid!=id)
 	{
 		nm_messagebox(NULL, 1, TXT_OK, "A multi-save game was restored\nthat you are missing or does not\nmatch that of the others.\nYou must rejoin if you wish to\ncontinue.");
 		return;
 	}
-  
+
 	state_restore_all_sub( filename, 0 );
 	multi_send_score(); // send my restored scores. I sent 0 when I loaded the level anyways...
 }
@@ -5079,7 +5077,7 @@ void multi_send_msgsend_state(int state)
 	multibuf[0] = (char)MULTI_TYPING_STATE;
 	multibuf[1] = Player_num;
 	multibuf[2] = (char)state;
-	
+
 	multi_send_data(multibuf, 3, 2);
 }
 
@@ -5093,7 +5091,7 @@ void multi_send_gmode_update()
 	multibuf[0] = (char)MULTI_GMODE_UPDATE;
 	multibuf[1] = Netgame.team_vector;
 	multibuf[2] = Bounty_target;
-	
+
 	multi_send_data(multibuf, 3, 0);
 }
 
@@ -5303,7 +5301,7 @@ void save_hoard_data(void)
 				"teamorb.raw","teamorb.r22",    //SOUND_FRIEND_GOT_ORB
 				"enemyorb.raw","enemyorb.r22",  //SOUND_OPPONENT_GOT_ORB
 				"OPSCORE1.raw","OPSCORE1.r22"}; //SOUND_OPPONENT_HAS_SCORED
-		
+
 	ofile = PHYSFSX_openWriteBuffered("hoard.ham");
 
 	iff_error = iff_read_animbrush("orb.abm",bm,MAX_BITMAPS_PER_BRUSH,&nframes,palette);
@@ -5333,7 +5331,7 @@ void save_hoard_data(void)
 		PHYSFS_write(ofile, icon.bm_data, icon.bm_w*icon.bm_h, 1);
 	}
 	(void)iff_error;
-		
+
 	for (i=0;i<sizeof(sounds)/sizeof(*sounds);i++) {
 		PHYSFS_file *ifile;
 		int size;
@@ -5538,7 +5536,7 @@ void multi_object_to_object_rw(dxxobject *obj, object_rw *obj_rw)
 	obj_rw->contains_count= obj->contains_count;
 	obj_rw->matcen_creator= obj->matcen_creator;
 	obj_rw->lifeleft      = obj->lifeleft;
-	
+
 	switch (obj_rw->movement_type)
 	{
 		case MT_PHYSICS:
@@ -5560,14 +5558,14 @@ void multi_object_to_object_rw(dxxobject *obj, object_rw *obj_rw)
 			obj_rw->mtype.phys_info.turnroll    = obj->mtype.phys_info.turnroll;
 			obj_rw->mtype.phys_info.flags       = obj->mtype.phys_info.flags;
 			break;
-			
+
 		case MT_SPINNING:
 			obj_rw->mtype.spin_rate.x = obj->mtype.spin_rate.x;
 			obj_rw->mtype.spin_rate.y = obj->mtype.spin_rate.y;
 			obj_rw->mtype.spin_rate.z = obj->mtype.spin_rate.z;
 			break;
 	}
-	
+
 	switch (obj_rw->control_type)
 	{
 		case CT_WEAPON:
@@ -5582,7 +5580,7 @@ void multi_object_to_object_rw(dxxobject *obj, object_rw *obj_rw)
 			obj_rw->ctype.laser_info.track_goal       = obj->ctype.laser_info.track_goal;
 			obj_rw->ctype.laser_info.multiplier       = obj->ctype.laser_info.multiplier;
 			break;
-			
+
 		case CT_EXPLOSION:
 			obj_rw->ctype.expl_info.spawn_time    = obj->ctype.expl_info.spawn_time;
 			obj_rw->ctype.expl_info.delete_time   = obj->ctype.expl_info.delete_time;
@@ -5591,13 +5589,13 @@ void multi_object_to_object_rw(dxxobject *obj, object_rw *obj_rw)
 			obj_rw->ctype.expl_info.prev_attach   = obj->ctype.expl_info.prev_attach;
 			obj_rw->ctype.expl_info.next_attach   = obj->ctype.expl_info.next_attach;
 			break;
-			
+
 		case CT_AI:
 		{
 			int i;
-			obj_rw->ctype.ai_info.behavior               = obj->ctype.ai_info.behavior; 
+			obj_rw->ctype.ai_info.behavior               = obj->ctype.ai_info.behavior;
 			for (i = 0; i < MAX_AI_FLAGS; i++)
-				obj_rw->ctype.ai_info.flags[i]       = obj->ctype.ai_info.flags[i]; 
+				obj_rw->ctype.ai_info.flags[i]       = obj->ctype.ai_info.flags[i];
 			obj_rw->ctype.ai_info.hide_segment           = obj->ctype.ai_info.hide_segment;
 			obj_rw->ctype.ai_info.hide_index             = obj->ctype.ai_info.hide_index;
 			obj_rw->ctype.ai_info.path_length            = obj->ctype.ai_info.path_length;
@@ -5611,11 +5609,11 @@ void multi_object_to_object_rw(dxxobject *obj, object_rw *obj_rw)
 				obj_rw->ctype.ai_info.dying_start_time = obj->ctype.ai_info.dying_start_time - GameTime64;
 			break;
 		}
-			
+
 		case CT_LIGHT:
 			obj_rw->ctype.light_info.intensity = obj->ctype.light_info.intensity;
 			break;
-			
+
 		case CT_POWERUP:
 			obj_rw->ctype.powerup_info.count         = obj->ctype.powerup_info.count;
 			if (obj->ctype.powerup_info.creation_time - GameTime64 < F1_0*(-18000))
@@ -5625,7 +5623,7 @@ void multi_object_to_object_rw(dxxobject *obj, object_rw *obj_rw)
 			obj_rw->ctype.powerup_info.flags         = obj->ctype.powerup_info.flags;
 			break;
 	}
-	
+
 	switch (obj_rw->render_type)
 	{
 		case RT_MORPH:
@@ -5647,7 +5645,7 @@ void multi_object_to_object_rw(dxxobject *obj, object_rw *obj_rw)
 			obj_rw->rtype.pobj_info.alt_textures             = obj->rtype.pobj_info.alt_textures;
 			break;
 		}
-			
+
 		case RT_WEAPON_VCLIP:
 		case RT_HOSTAGE:
 		case RT_POWERUP:
@@ -5656,10 +5654,10 @@ void multi_object_to_object_rw(dxxobject *obj, object_rw *obj_rw)
 			obj_rw->rtype.vclip_info.frametime = obj->rtype.vclip_info.frametime;
 			obj_rw->rtype.vclip_info.framenum  = obj->rtype.vclip_info.framenum;
 			break;
-			
+
 		case RT_LASER:
 			break;
-			
+
 	}
 }
 
@@ -5699,7 +5697,7 @@ void multi_object_rw_to_object(object_rw *obj_rw, dxxobject *obj)
 	obj->contains_count= obj_rw->contains_count;
 	obj->matcen_creator= obj_rw->matcen_creator;
 	obj->lifeleft      = obj_rw->lifeleft;
-	
+
 	switch (obj->movement_type)
 	{
 		case MT_PHYSICS:
@@ -5721,14 +5719,14 @@ void multi_object_rw_to_object(object_rw *obj_rw, dxxobject *obj)
 			obj->mtype.phys_info.turnroll    = obj_rw->mtype.phys_info.turnroll;
 			obj->mtype.phys_info.flags       = obj_rw->mtype.phys_info.flags;
 			break;
-			
+
 		case MT_SPINNING:
 			obj->mtype.spin_rate.x = obj_rw->mtype.spin_rate.x;
 			obj->mtype.spin_rate.y = obj_rw->mtype.spin_rate.y;
 			obj->mtype.spin_rate.z = obj_rw->mtype.spin_rate.z;
 			break;
 	}
-	
+
 	switch (obj->control_type)
 	{
 		case CT_WEAPON:
@@ -5740,7 +5738,7 @@ void multi_object_rw_to_object(object_rw *obj_rw, dxxobject *obj)
 			obj->ctype.laser_info.track_goal       = obj_rw->ctype.laser_info.track_goal;
 			obj->ctype.laser_info.multiplier       = obj_rw->ctype.laser_info.multiplier;
 			break;
-			
+
 		case CT_EXPLOSION:
 			obj->ctype.expl_info.spawn_time    = obj_rw->ctype.expl_info.spawn_time;
 			obj->ctype.expl_info.delete_time   = obj_rw->ctype.expl_info.delete_time;
@@ -5749,13 +5747,13 @@ void multi_object_rw_to_object(object_rw *obj_rw, dxxobject *obj)
 			obj->ctype.expl_info.prev_attach   = obj_rw->ctype.expl_info.prev_attach;
 			obj->ctype.expl_info.next_attach   = obj_rw->ctype.expl_info.next_attach;
 			break;
-			
+
 		case CT_AI:
 		{
 			int i;
-			obj->ctype.ai_info.behavior               = obj_rw->ctype.ai_info.behavior; 
+			obj->ctype.ai_info.behavior               = obj_rw->ctype.ai_info.behavior;
 			for (i = 0; i < MAX_AI_FLAGS; i++)
-				obj->ctype.ai_info.flags[i]       = obj_rw->ctype.ai_info.flags[i]; 
+				obj->ctype.ai_info.flags[i]       = obj_rw->ctype.ai_info.flags[i];
 			obj->ctype.ai_info.hide_segment           = obj_rw->ctype.ai_info.hide_segment;
 			obj->ctype.ai_info.hide_index             = obj_rw->ctype.ai_info.hide_index;
 			obj->ctype.ai_info.path_length            = obj_rw->ctype.ai_info.path_length;
@@ -5766,18 +5764,18 @@ void multi_object_rw_to_object(object_rw *obj_rw, dxxobject *obj)
 			obj->ctype.ai_info.dying_start_time       = obj_rw->ctype.ai_info.dying_start_time;
 			break;
 		}
-			
+
 		case CT_LIGHT:
 			obj->ctype.light_info.intensity = obj_rw->ctype.light_info.intensity;
 			break;
-			
+
 		case CT_POWERUP:
 			obj->ctype.powerup_info.count         = obj_rw->ctype.powerup_info.count;
 			obj->ctype.powerup_info.creation_time = obj_rw->ctype.powerup_info.creation_time;
 			obj->ctype.powerup_info.flags         = obj_rw->ctype.powerup_info.flags;
 			break;
 	}
-	
+
 	switch (obj->render_type)
 	{
 		case RT_MORPH:
@@ -5799,7 +5797,7 @@ void multi_object_rw_to_object(object_rw *obj_rw, dxxobject *obj)
 			obj->rtype.pobj_info.alt_textures             = obj_rw->rtype.pobj_info.alt_textures;
 			break;
 		}
-			
+
 		case RT_WEAPON_VCLIP:
 		case RT_HOSTAGE:
 		case RT_POWERUP:
@@ -5808,10 +5806,10 @@ void multi_object_rw_to_object(object_rw *obj_rw, dxxobject *obj)
 			obj->rtype.vclip_info.frametime = obj_rw->rtype.vclip_info.frametime;
 			obj->rtype.vclip_info.framenum  = obj_rw->rtype.vclip_info.framenum;
 			break;
-			
+
 		case RT_LASER:
 			break;
-			
+
 	}
 }
 

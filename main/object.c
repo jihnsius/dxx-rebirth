@@ -66,6 +66,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "switch.h"
 #include "gameseq.h"
 #include "playsave.h"
+#include "controls.h"
 #ifdef EDITOR
 #include "editor/editor.h"
 #endif

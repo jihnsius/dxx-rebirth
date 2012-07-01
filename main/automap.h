@@ -33,6 +33,8 @@ void DropBuddyMarker(dxxobject *objp);
 #define NUM_MARKERS         16
 #define MARKER_MESSAGE_LEN  40
 
+extern vms_vector MarkerPoint[NUM_MARKERS];
+
 extern char MarkerMessage[NUM_MARKERS][MARKER_MESSAGE_LEN];
 extern char MarkerOwner[NUM_MARKERS][CALLSIGN_LEN+1];
 extern int  MarkerObject[NUM_MARKERS];

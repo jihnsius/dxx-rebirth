@@ -93,7 +93,6 @@ void net_udp_noloss_init_mdata_queue(void);
 void net_udp_noloss_clear_mdata_got(ubyte player_num);
 void net_udp_noloss_process_queue(fix64 time);
 void net_udp_send_extras ();
-void multi_reset_object_texture(dxxobject *objp);
 
 static void net_udp_broadcast_game_info(ubyte info_upid);
 
@@ -117,8 +116,6 @@ struct _sockaddr GMcast_v6; // same for IPv6-only
 struct _sockaddr TrackerSocket;
 int iTrackerVerified = 0;
 #endif
-extern obj_position Player_init[MAX_PLAYERS];
-extern vms_vector MarkerPoint[];
 
 /* General UDP functions - START */
 ssize_t dxx_sendto(int sockfd, const void *msg, int len, unsigned int flags, const struct sockaddr *to, socklen_t tolen)
@@ -1102,7 +1099,6 @@ int net_udp_kmatrix_poll1( newmenu *menu, d_event *event, void *userdata )
 }
 
 // Same as above but used when player pressed ESC during kmatrix (host also does the packets for playing clients)
-extern fix64 StartAbortMenuTime;
 int net_udp_kmatrix_poll2( newmenu *menu, d_event *event, void *userdata )
 {
 	int rval = 0;
@@ -2146,8 +2142,6 @@ int net_udp_check_game_info_request(ubyte *data, int lite)
 
 	return 1;
 }
-
-extern fix ThisLevelTime;
 
 void net_udp_send_game_info(struct _sockaddr sender_addr, ubyte info_upid)
 {

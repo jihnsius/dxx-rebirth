@@ -145,7 +145,7 @@ static const char movie_table_secret[] = {'a','d','g','j','m','p'};
 
 fix cur_fly_speed,desired_fly_speed;
 
-extern int matt_find_connect_side(int seg0,int seg1);
+int matt_find_connect_side(int seg0,int seg1);
 
 grs_bitmap *satellite_bitmap,*station_bitmap,*terrain_bitmap;	//!!*exit_bitmap,
 vms_vector satellite_pos,satellite_upvec;
@@ -290,7 +290,7 @@ int endlevel_movie_played = MOVIE_NOT_PLAYED;
 void start_endlevel_sequence()
 {
 	int	i;
-	
+
 
 	reset_rear_view(); //turn off rear view if set - NOTE: make sure this happens before we pause demo recording!!
 
@@ -329,11 +329,11 @@ void start_endlevel_sequence()
 #endif
 
 	window_set_visible(Game_wind, 0);	// suspend the game, including drawing
-	
+
 	if (PLAYING_BUILTIN_MISSION) // only play movie for built-in mission
 		if (!(Game_mode & GM_MULTI))
 			endlevel_movie_played = start_endlevel_movie();
-	
+
 	window_set_visible(Game_wind, 1);
 
 	if (!(Game_mode & GM_MULTI) && (endlevel_movie_played == MOVIE_NOT_PLAYED) && endlevel_data_loaded)
@@ -667,7 +667,7 @@ void do_endlevel_frame()
 			find_vector_intersection(&fq,&hit_data);
 
 			if (hit_data.hit_type==HIT_WALL && hit_data.hit_seg!=-1)
-				object_create_explosion(hit_data.hit_seg,&hit_data.hit_pnt,i2f(3)+d_rand()*6,VCLIP_SMALL_EXPLOSION);		
+				object_create_explosion(hit_data.hit_seg,&hit_data.hit_pnt,i2f(3)+d_rand()*6,VCLIP_SMALL_EXPLOSION);
 
 			explosion_wait2 = (0xa00 + d_rand()/8)/2;
 		}
@@ -944,8 +944,6 @@ int find_exit_side(dxxobject *obj)
 	return best_side;
 }
 
-extern fix Render_zoom;							//the player's zoom factor
-
 extern vms_vector Viewer_eye;	//valid during render
 
 void draw_exit_model()
@@ -1177,11 +1175,6 @@ flythrough_data fly_objects[MAX_FLY_OBJECTS];
 
 flythrough_data *flydata;
 
-int matt_find_connect_side(int seg0,int seg1);
-
-void compute_segment_center(vms_vector *vp,segment *sp);
-
-fixang delta_ang(fixang a,fixang b);
 fixang interp_angle(fixang dest,fixang src,fixang step);
 
 #define DEFAULT_SPEED i2f(16)
@@ -1223,7 +1216,7 @@ void do_endlevel_flythrough(int n)
 
 	flydata = &fly_objects[n];
 	obj = flydata->obj;
-	
+
 	old_player_seg = obj->segnum;
 
 	//move the player for this frame
@@ -1425,9 +1418,9 @@ int convert_ext( char *dest, char *ext )
 	t = strchr(dest,'.');
 
 	if (t && (t-dest <= 8)) {
-		t[1] = ext[0];			
-		t[2] = ext[1];			
-		t[3] = ext[2];	
+		t[1] = ext[0];
+		t[2] = ext[1];
+		t[3] = ext[2];
 		return 1;
 	}
 	else
@@ -1462,7 +1455,7 @@ try_again:
 	if (!ifile) {
 
 		convert_ext(filename,"txb");
-                if (!strcmp(filename, Briefing_text_filename) || 
+                if (!strcmp(filename, Briefing_text_filename) ||
                 !strcmp(filename, Ending_text_filename))
                     return;	// Don't want to interpret the briefing as an end level sequence!
 

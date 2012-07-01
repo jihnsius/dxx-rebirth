@@ -62,7 +62,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "editor/editor.h"
 #endif
 
-extern void multi_send_stolen_items();
 void say_escort_goal(int goal_num);
 void show_escort_menu(char *msg);
 
@@ -152,11 +151,11 @@ int segment_is_reachable(int curseg, int sidenum)
 
 	return rval;
 
-// -- MK, 10/17/95 -- 
+// -- MK, 10/17/95 --
 // -- MK, 10/17/95 -- 	//	Hmm, a closed wall.  I think this mean not reachable.
 // -- MK, 10/17/95 -- 	if (Walls[wall_num].type == WALL_CLOSED)
 // -- MK, 10/17/95 -- 		return 0;
-// -- MK, 10/17/95 -- 
+// -- MK, 10/17/95 --
 // -- MK, 10/17/95 -- 	if (Walls[wall_num].type == WALL_DOOR) {
 // -- MK, 10/17/95 -- 		if (Walls[wall_num].keys == KEY_NONE) {
 // -- MK, 10/17/95 -- 			return 1;		//	@MK, 10/17/95: Be consistent with ai_door_is_openable
@@ -174,7 +173,7 @@ int segment_is_reachable(int curseg, int sidenum)
 // -- MK, 10/17/95 -- 			Int3();	//	Impossible!  Doesn't have no key, but doesn't have any key!
 // -- MK, 10/17/95 -- 	} else
 // -- MK, 10/17/95 -- 		return 1;
-// -- MK, 10/17/95 -- 
+// -- MK, 10/17/95 --
 // -- MK, 10/17/95 -- 	Int3();	//	Hmm, thought 'if' above had to return!
 // -- MK, 10/17/95 -- 	return 0;
 
@@ -230,7 +229,7 @@ void create_bfs_list(int start_seg, short bfs_list[], int *length, int max_segs)
 	}
 
 	*length = head;
-	
+
 }
 
 //	-----------------------------------------------------------------------------
@@ -471,7 +470,7 @@ void set_escort_special_goal(int special_key)
 	special_key = special_key & (~KEY_SHIFTED);
 
 	marker_key = special_key;
-	
+
 	if (Last_buddy_key == special_key)
 	{
 		if ((Looking_for_marker == -1) && (special_key != KEY_0)) {
@@ -491,7 +490,7 @@ void set_escort_special_goal(int special_key)
 
 	if (special_key == KEY_0)
 		Looking_for_marker = -1;
-		
+
 	if ( Looking_for_marker != -1 ) {
 		Escort_special_goal = ESCORT_GOAL_MARKER1 + marker_key - KEY_1;
 	} else {
@@ -759,7 +758,7 @@ void escort_create_path_to_goal(dxxobject *objp)
 				break;
 			case ESCORT_GOAL_BOSS: {
 				int	boss_id;
-	
+
 				boss_id = get_boss_id();
 				Assert(boss_id != -1);
 				Escort_goal_index = exists_in_mine(objp->segnum, OBJ_ROBOT, boss_id, -1);
@@ -838,7 +837,7 @@ int escort_set_goal_object(void)
 			return ESCORT_GOAL_CONTROLCEN;
 	} else
 		return ESCORT_GOAL_EXIT;
-	
+
 }
 
 #define	MAX_ESCORT_TIME_AWAY		(F1_0*4)
@@ -862,11 +861,10 @@ int time_to_visit_player(dxxobject *objp, ai_local *ailp, ai_static *aip)
 
 	if (aip->cur_path_index < aip->path_length/2)
 		return 0;
-	
+
 	return 1;
 }
 
-int	Buddy_objnum;
 fix64	Last_come_back_message_time = 0;
 
 fix64	Buddy_last_missile_time;
@@ -1166,7 +1164,7 @@ void do_snipe_frame(dxxobject *objp, fix dist_to_player, int player_visibility, 
 
 #define	THIEF_DEPTH	20
 
-extern int pick_connected_segment(dxxobject *objp, int max_depth);
+int pick_connected_segment(dxxobject *objp, int max_depth);
 
 //	------------------------------------------------------------------------------------------------------
 //	Choose segment to recreate thief in.
@@ -1190,8 +1188,6 @@ int choose_thief_recreation_segment(void)
 		return segnum;
 
 }
-
-extern dxxobject * create_morph_robot( segment *segp, vms_vector *object_pos, int object_id);
 
 fix64	Re_init_thief_time = 0x3f000000;
 
@@ -1320,7 +1316,7 @@ void do_thief_frame(dxxobject *objp, fix dist_to_player, int player_visibility, 
 							Ai_local_info[objp-Objects].next_action_time = Thief_wait_times[Difficulty_level]/2;
 							Ai_local_info[objp-Objects].mode = AIM_THIEF_RETREAT;
 						}
-					} 
+					}
 					ai_turn_towards_vector(vec_to_player, objp, F1_0/4);
 					move_towards_player(objp, vec_to_player);
 				} else {
@@ -1579,8 +1575,8 @@ void init_thief_for_level(void)
 		Stolen_items[i] = 255;
 
 	Assert (MAX_STOLEN_ITEMS >= 3*2);	//	Oops!  Loop below will overwrite memory!
-  
-   if (!(Game_mode & GM_MULTI))    
+
+   if (!(Game_mode & GM_MULTI))
 		for (i=0; i<3; i++) {
 			Stolen_items[2*i] = POW_SHIELD_BOOST;
 			Stolen_items[2*i+1] = POW_ENERGY;
@@ -1611,9 +1607,9 @@ typedef struct escort_menu
 int escort_menu_keycommand(window *wind, d_event *event, escort_menu *menu)
 {
 	int	key;
-	
+
 	key = event_key_get(event);
-	
+
 	switch (key) {
 		case KEY_0:
 		case KEY_1:
@@ -1631,36 +1627,36 @@ int escort_menu_keycommand(window *wind, d_event *event, escort_menu *menu)
 			Last_buddy_key = -1;
 			window_close(wind);
 			return 1;
-			
+
 		case KEY_ESC:
 		case KEY_ENTER:
 			window_close(wind);
 			return 1;
-			
+
 		case KEY_T: {
 			char	msg[32];
 			int	temp;
-			
+
 			temp = !Buddy_messages_suppressed;
-			
+
 			if (temp)
 				strcpy(msg, "suppressed");
 			else
 				strcpy(msg, "enabled");
-			
+
 			Buddy_messages_suppressed = 1;
 			buddy_message("Messages %s.", msg);
-			
+
 			Buddy_messages_suppressed = temp;
-			
+
 			window_close(wind);
 			return 1;
 		}
-			
+
 		default:
 			break;
 	}
-	
+
 	return 0;
 }
 
@@ -1671,22 +1667,22 @@ int escort_menu_handler(window *wind, d_event *event, escort_menu *menu)
 		case EVENT_WINDOW_ACTIVATED:
 			game_flush_inputs();
 			break;
-			
+
 		case EVENT_KEY_COMMAND:
 			return escort_menu_keycommand(wind, event, menu);
-			
+
 		case EVENT_IDLE:
 			timer_delay2(50);
 			break;
-			
+
 		case EVENT_WINDOW_DRAW:
 			show_escort_menu(menu->msg);		//TXT_PAUSE);
 			break;
-			
+
 		case EVENT_WINDOW_CLOSE:
 			return 0;	// continue closing
 			break;
-			
+
 		default:
 			return 0;
 			break;
@@ -1738,7 +1734,7 @@ void do_escort_menu(void)
 	MALLOC(menu, escort_menu, 1);
 	if (!menu)
 		return;
-	
+
 	// Just make it the full screen size and let show_escort_menu figure it out
 	wind = window_create(&grd_curscreen->sc_canvas, 0, 0, SWIDTH, SHEIGHT, (int (*)(window *, d_event *, void *))escort_menu_handler, menu);
 	if (!wind)
@@ -1746,7 +1742,7 @@ void do_escort_menu(void)
 		d_free(menu);
 		return;
 	}
-	
+
 	//	This prevents the buddy from coming back if you've told him to scram.
 	//	If we don't set next_goal, we get garbage there.
 	if (Escort_special_goal == ESCORT_GOAL_SCRAM) {
@@ -1765,7 +1761,7 @@ void do_escort_menu(void)
 			sprintf(goal_str, "ERROR");
 			break;
 	#endif
-			
+
 		case ESCORT_GOAL_BLUE_KEY:
 			sprintf(goal_str, "blue key");
 			break;
@@ -1797,7 +1793,7 @@ void do_escort_menu(void)
 			break;
 
 	}
-			
+
 	if (!Buddy_messages_suppressed)
 		sprintf(tstr, "Suppress");
 	else
@@ -1822,7 +1818,7 @@ void do_escort_menu(void)
 //	-------------------------------------------------------------------------------
 //	Show the Buddy menu!
 void show_escort_menu(char *msg)
-{	
+{
 	int	w,h,aw;
 	int	x,y;
 

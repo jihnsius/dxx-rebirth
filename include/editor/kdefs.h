@@ -150,7 +150,6 @@ int PropagateTexturesSelected();
 //--//int MacroLoad();
 
 // In editor.c
-int medlisp_update_screen();
 int medlisp_delete_segment(void);
 int medlisp_scale_segment(void);
 int medlisp_rotate_segment(void);
@@ -214,8 +213,8 @@ int	ObjectMoveNearer();
 int	ObjectMoveFurther();
 int	ObjectSelectNextinSegment();
 int	ObjectSelectNextType();
-int	ObjectDecreaseBank(); 
-int	ObjectIncreaseBank(); 
+int	ObjectDecreaseBank();
+int	ObjectIncreaseBank();
 int	ObjectDecreasePitch();
 int	ObjectIncreasePitch();
 int	ObjectDecreaseHeading();
@@ -262,7 +261,6 @@ int SetPlayerFromCursegAndRotate();
 int SetPlayerFromCursegMinusOne();
 int FindConcaveSegs();
 int SelectNextFoundSeg();
-int SelectPreviousFoundSeg(void);
 int do_reset_orient();
 int GameZoomOut();
 int GameZoomIn();
@@ -274,38 +272,36 @@ int medtmp_set_page();
 int objpage_goto_next_object();
 
 // In medsel.c
-extern int SortSelectedList(void);
-extern int SelectNextFoundSeg(void);
-extern int SelectPreviousFoundSeg(void);
+int SelectPreviousFoundSeg(void);
 
 // In wall.c
-extern int wall_add_blastable(void);
-extern int wall_add_door(void);
-extern int wall_add_closed_wall(void);
-extern int wall_add_external_wall(void);
-extern int wall_lock_door(void);
-extern int wall_unlock_door(void);
-extern int wall_automate_door(void);
-extern int wall_deautomate_door(void);
-extern int wall_add_illusion(void);
-extern int wall_remove(void);
-extern int wall_restore_all(void);
-extern int wall_assign_door_1(void);
-extern int wall_assign_door_2(void);
-extern int wall_assign_door_3(void);
-extern int wall_assign_door_4(void);
-extern int wall_assign_door_5(void);
-extern int wall_assign_door_6(void);
-extern int wall_assign_door_7(void);
-extern int wall_assign_door_8(void);
-extern int do_wall_dialog(void);
-extern int do_trigger_dialog(void);
-extern int check_walls(void);
-extern int delete_all_walls(void);
-extern int delete_all_controlcen_triggers(void);
+int wall_add_blastable(void);
+int wall_add_door(void);
+int wall_add_closed_wall(void);
+int wall_add_external_wall(void);
+int wall_lock_door(void);
+int wall_unlock_door(void);
+int wall_automate_door(void);
+int wall_deautomate_door(void);
+int wall_add_illusion(void);
+int wall_remove(void);
+int wall_restore_all(void);
+int wall_assign_door_1(void);
+int wall_assign_door_2(void);
+int wall_assign_door_3(void);
+int wall_assign_door_4(void);
+int wall_assign_door_5(void);
+int wall_assign_door_6(void);
+int wall_assign_door_7(void);
+int wall_assign_door_8(void);
+int do_wall_dialog(void);
+int do_trigger_dialog(void);
+int check_walls(void);
+int delete_all_walls(void);
+int delete_all_controlcen_triggers(void);
 
 // In centers.c
-extern int do_centers_dialog(void);
+int do_centers_dialog(void);
 
 // In switch.c
 //extern int trigger_add_damage(void);
@@ -315,23 +311,23 @@ extern int do_centers_dialog(void);
 //extern int trigger_control(void);
 //extern int trigger_remove(void);
 //extern int trigger_add_if_control_center_dead(void);
-extern int bind_wall_to_control_trigger(void);
+int bind_wall_to_control_trigger(void);
 
 // In med.c
-extern int fuelcen_create_from_curseg();
-extern int repaircen_create_from_curseg();
-extern int controlcen_create_from_curseg();
-extern int robotmaker_create_from_curseg();
-extern int fuelcen_reset_all();
-extern int RestoreGameState();
-extern int fuelcen_delete_from_curseg();
-extern int goal_blue_create_from_curseg();
-extern int goal_red_create_from_curseg();
+int fuelcen_create_from_curseg();
+int repaircen_create_from_curseg();
+int controlcen_create_from_curseg();
+int robotmaker_create_from_curseg();
+int fuelcen_reset_all();
+int RestoreGameState();
+int fuelcen_delete_from_curseg();
+int goal_blue_create_from_curseg();
+int goal_red_create_from_curseg();
 
 // In editor\robot.c
-extern int do_robot_dialog();
-extern int do_object_dialog();
+int do_robot_dialog();
+int do_object_dialog();
 
 // In editor\hostage.c
-extern int do_hostage_dialog();
+int do_hostage_dialog();
 

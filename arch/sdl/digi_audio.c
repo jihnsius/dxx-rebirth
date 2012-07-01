@@ -109,9 +109,6 @@ int digi_max_channels = 16;
 
 static int next_channel = 0;
 
-void digi_stop_sound(int channel);
-int digi_xlat_sound(int soundno);
-
 /* Audio mixing callback */
 //changed on 980905 by adb to cleanup, add pan support and optimize mixer
 static void audio_mixcallback(void *userdata, Uint8 *stream, int len)
@@ -218,9 +215,9 @@ void digi_audio_stop_all_channels()
 }
 
 
-extern void digi_end_soundobj(int channel);
+void digi_end_soundobj(int channel);
 extern int SoundQ_channel;
-extern void SoundQ_end();
+void SoundQ_end();
 int verify_sound_channel_free(int channel);
 
 // Volume 0-F1_0

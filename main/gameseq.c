@@ -128,15 +128,13 @@ obj_position	Player_init[MAX_PLAYERS];
 // Global variables telling what sort of game we have
 int NumNetPlayerPositions = -1;
 
-extern fix ThisLevelTime;
-
 // Extern from game.c to fix a bug in the cockpit!
 
 extern int Last_level_path_created;
 
 //	HUD_clear_messages external, declared in gauges.h
 #ifndef _GAUGES_H
-extern void HUD_clear_messages(); // From hud.c
+void HUD_clear_messages(); // From hud.c
 #endif
 
 //	Extra prototypes declared for the sake of LINT
@@ -371,7 +369,7 @@ void init_player_stats_level(int secret_flag)
 	Missile_viewer = NULL;
 }
 
-extern	void init_ai_for_ship(void);
+void init_ai_for_ship(void);
 
 // Setup player for a brand-new ship
 void init_player_stats_new_ship(ubyte pnum)
@@ -425,13 +423,13 @@ void init_player_stats_new_ship(ubyte pnum)
 	digi_kill_sound_linked_to_object(Players[pnum].objnum);
 }
 
-extern void init_stuck_objects(void);
+void init_stuck_objects(void);
 
 #ifdef EDITOR
 
 extern int Slide_segs_computed;
 
-extern int game_handler(window *wind, d_event *event, void *data);
+int game_handler(window *wind, d_event *event, void *data);
 
 //reset stuff so game is semi-normal when playing from editor
 void editor_reset_stuff_on_level()
@@ -665,7 +663,7 @@ void load_level_robots(int level_num)
 		if (Current_mission->enhanced) {
 			// load extra data
 			char t[50];
-			extern void bm_read_extra_robots();
+void bm_read_extra_robots();
 			sprintf(t,"%s.ham",Current_mission_filename);
 			bm_read_extra_robots(t, Current_mission->enhanced);
 		}
@@ -757,7 +755,7 @@ void InitPlayerObject()
 	ConsoleObject->movement_type	= MT_PHYSICS;
 }
 
-extern void init_seismic_disturbances(void);
+void init_seismic_disturbances(void);
 
 //starts a new game on the given level
 void StartNewGame(int start_level)
@@ -912,7 +910,7 @@ void StartSecretLevel()
 	Fusion_charge = 0;
 }
 
-extern void set_pos_from_return_segment(void);
+void set_pos_from_return_segment(void);
 
 //	Returns true if secret level has been destroyed.
 int p_secret_level_destroyed(void)
@@ -936,18 +934,18 @@ int p_secret_level_destroyed(void)
 int draw_stars_bg(newmenu *menu, d_event *event, grs_bitmap *background)
 {
 	menu = menu;
-	
+
 	switch (event->type)
 	{
 		case EVENT_WINDOW_DRAW:
 			gr_set_current_canvas(NULL);
 			show_fullscr(background);
 			break;
-			
+
 		default:
 			break;
 	}
-	
+
 	return 0;
 }
 
@@ -956,20 +954,20 @@ void do_screen_message(char *fmt, ...)
 	va_list arglist;
 	grs_bitmap background;
 	char msg[1024];
-	
+
 	if (Game_mode & GM_MULTI)
 		return;
-	
+
 	gr_init_bitmap_data(&background);
 	if (pcx_read_bitmap(STARS_BACKGROUND, &background, BM_LINEAR, gr_palette) != PCX_ERROR_NONE)
 		return;
-	
+
 	gr_palette_load(gr_palette);
-	
+
 	va_start(arglist, fmt);
 	vsprintf(msg, fmt, arglist);
 	va_end(arglist);
-	
+
 	nm_messagebox1(NULL, (int (*)(newmenu *, d_event *, void *))draw_stars_bg, &background, 1, TXT_OK, msg);
 	gr_free_bitmap_data(&background);
 }
@@ -1142,7 +1140,7 @@ void EnterSecretLevel(void)
 		window_set_visible(Game_wind, 0);
 
 	digi_play_sample( SOUND_SECRET_EXIT, F1_0 );	// after above call which stops all sounds
-	
+
 	Entered_from_level = Current_level_num;
 
 	if (Control_center_destroyed)
@@ -1801,7 +1799,7 @@ void copy_defaults_to_robot_all()
 
 }
 
-extern void clear_stuck_objects(void);
+void clear_stuck_objects(void);
 
 //	-----------------------------------------------------------------------------------------------------
 //called when the player is starting a level (new game or new ship)
