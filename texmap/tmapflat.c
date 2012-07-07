@@ -185,7 +185,7 @@ void gr_upoly_tmap(int nverts, int *vert )
 }
 
 #include "3d.h"
-#include "error.h"
+#include "dxxerror.h"
 
 typedef struct pnt2d {
 	fix x,y;

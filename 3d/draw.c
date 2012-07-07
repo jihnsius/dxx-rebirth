@@ -21,7 +21,7 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 static char rcsid[] = "$Id: draw.c,v 1.1.1.1 2006/03/17 19:52:10 zicodxx Exp $";
 #endif
 
-#include "error.h"
+#include "dxxerror.h"
 
 #include "3d.h"
 #include "globvars.h"

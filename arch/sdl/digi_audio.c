@@ -12,7 +12,7 @@
 #include <SDL/SDL.h>
 #include <digi_audio.h>
 #include "pstypes.h"
-#include "error.h"
+#include "dxxerror.h"
 #include "maths.h"
 #include "vecmat.h"
 #include "gr.h"

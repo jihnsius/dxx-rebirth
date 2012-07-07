@@ -18,7 +18,7 @@
 #include "hudmsg.h"
 #include "digi_mixer_music.h"
 #include "jukebox.h"
-#include "error.h"
+#include "dxxerror.h"
 #include "console.h"
 #include "config.h"
 

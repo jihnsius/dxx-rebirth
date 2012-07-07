@@ -38,7 +38,7 @@ static char rcsid[] = "$Id: titles.c,v 1.2 2006/03/18 23:08:13 michaelstather Ex
 #include "u_mem.h"
 #include "joy.h"
 #include "gamefont.h"
-#include "error.h"
+#include "dxxerror.h"
 #include "polyobj.h"
 #include "textures.h"
 #include "screens.h"

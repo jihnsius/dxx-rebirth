@@ -27,7 +27,7 @@ static char rcsid[] = "$Id: gadget.c,v 1.1.1.1 2006/03/17 19:52:21 zicodxx Exp $
 #include "event.h"
 #include "mouse.h"
 #include "window.h"
-#include "error.h"
+#include "dxxerror.h"
 
 #include "key.h"
 

@@ -12,7 +12,7 @@
 #include <SDL/SDL.h>
 
 #include "event.h"
-#include "error.h"
+#include "dxxerror.h"
 #include "key.h"
 #include "timer.h"
 #include "window.h"

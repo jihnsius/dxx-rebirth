@@ -28,7 +28,7 @@ static char rcsid[] = "$Id: text.c,v 1.1.1.1 2006/03/17 19:56:37 zicodxx Exp $";
 #include "physfsx.h"
 #include "pstypes.h"
 #include "u_mem.h"
-#include "error.h"
+#include "dxxerror.h"
 #include "inferno.h"
 #include "text.h"
 #include "args.h"

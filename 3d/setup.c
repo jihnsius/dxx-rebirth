@@ -23,7 +23,7 @@ static char rcsid[] = "$Id: setup.c,v 1.1.1.1 2006/03/17 19:52:10 zicodxx Exp $"
 
 #include <stdlib.h>
 
-#include "error.h"
+#include "dxxerror.h"
 
 #include "3d.h"
 #include "globvars.h"

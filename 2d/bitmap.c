@@ -23,7 +23,7 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "gr.h"
 #include "grdef.h"
 #include "u_dpmi.h"
-#include "error.h"
+#include "dxxerror.h"
 #ifdef OGL
 #include "ogl_init.h"
 #endif

@@ -22,7 +22,7 @@ static char rcsid[] = "$Id: hash.c,v 1.1.1.1 2006/03/17 19:58:52 zicodxx Exp $";
 
 #include "u_mem.h"
 #include "strutil.h"
-#include "error.h"
+#include "dxxerror.h"
 #include "hash.h"
 	
 int hashtable_init( hashtable *ht, int size )	{
