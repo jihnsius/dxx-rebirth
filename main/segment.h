@@ -21,7 +21,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #ifndef _SEGMENT_H
 #define _SEGMENT_H
 
-#include "physfsx.h"
+#include <physfs.h>
 #include "pstypes.h"
 #include "maths.h"
 #include "vecmat.h"

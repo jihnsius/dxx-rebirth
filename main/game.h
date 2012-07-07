@@ -20,7 +20,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #ifndef _GAME_H
 #define _GAME_H
 
-#include "physfsx.h"
+#include <physfs.h>
 #include "pstypes.h"
 #include "window.h"
 #include "vecmat.h"

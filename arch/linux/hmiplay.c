@@ -20,7 +20,6 @@
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
-#include "physfsx.h"
 #include "music.h"
 #include "args.h"
 
