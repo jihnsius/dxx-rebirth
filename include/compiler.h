@@ -4,6 +4,9 @@
 #ifdef __GNUC__
 #define __noreturn __attribute__ ((noreturn))
 #define __attribute_gcc_format(X) __attribute__ ((format X))
+#define __attribute_nonnull __attribute__((nonnull))
+#define __attribute_malloc __attribute__((malloc))
+#define __attribute_warn_unused_result __attribute__((warn_unused_result))
 #define __pack__ __attribute__((packed))
 /*
  * The unaligned forms violate strict aliasing, which triggers a warning
@@ -15,6 +18,9 @@
 #else
 #define __noreturn
 #define __attribute_gcc_format(X)
+#define __attribute_nonnull
+#define __attribute_malloc
+#define __attribute_warn_unused_result
 #if defined(_MSC_VER)
 # pragma pack(push, packing)
 # pragma pack(1)
