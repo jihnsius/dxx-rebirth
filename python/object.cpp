@@ -18,7 +18,7 @@ struct object_container : public wrap_container_tmpl<dxxobject, container_lookup
 	}
 	size_type size() const
 	{
-		return Highest_object_index;
+		return Highest_object_index + 1;
 	}
 };
 template <>
@@ -86,12 +86,20 @@ void define_object_base_class(scope& s)
 	c.add_property("objtype", &get_contained_value<dxxobject, object_type_t, ubyte, &dxxobject::type>)
 		.add_property("raw_address", &get_raw_dxxobject_address)
 		.add_property("raw_index", &get_raw_dxxobject_index)
+		.add_property("signature", &dxxobject::signature)
+		.add_property("control_type", &dxxobject::control_type)
+		.add_property("movement_type", &dxxobject::movement_type)
+		.add_property("render_type", &dxxobject::render_type)
 		.add_property("segnum", &dxxobject::segnum)
 		.add_property("pos", &dxxobject::pos)
+		.add_property("orient", &dxxobject::orient)
+		.add_property("size", &dxxobject::size)
+		.add_property("shields", &dxxobject::shields)
 		.add_property("last_pos", &dxxobject::last_pos)
 		.add_property("contains_type", &get_contained_value<dxxobject, object_type_t, sbyte, &dxxobject::contains_type>)
 		.add_property("contains_id", &dxxobject::contains_id)
 		.add_property("contains_count", &dxxobject::contains_count)
+		.add_property("lifeleft", &dxxobject::lifeleft)
 		.def("passable_direct_path", &check_exists_passable_direct_path, return_internal_reference<>())
 		;
 	define_common_container_exports<object_container>(s, "object_container_base", "object_container", "objects");

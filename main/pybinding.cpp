@@ -4,6 +4,10 @@
 #include <boost/python/exec.hpp>
 #include <boost/python/import.hpp>
 #include <boost/python/scope.hpp>
+
+#include <boost/graph/adjacency_list.hpp>
+#include <boost/graph/dijkstra_shortest_paths.hpp>
+
 #include "../python/exception.hpp"
 #include "../python/wrap-object.hpp"
 #include "../python/pretty.hpp"
@@ -25,6 +29,16 @@ str pretty<vms_vector>(const vms_vector& v)
 	return (boost::format("{x: %i, y: %i, z: %i} <dxx.vms_vector at %p>") % (v.x >> 16) % (v.y >> 16) % (v.z >> 16) % &v).str().c_str();
 }
 
+template <>
+str pretty<vms_matrix>(const vms_matrix& m)
+{
+	return (boost::format("{r: {x: %i, y: %i, z: %i}, u: {x: %i, y: %i, z: %i}, f: {x: %i, y: %i, z: %i}} <dxx.vms_matrix at %p>") %
+		(m.rvec.x) % (m.rvec.y) % (m.rvec.z) %
+		(m.uvec.x) % (m.uvec.y) % (m.uvec.z) %
+		(m.fvec.x) % (m.fvec.y) % (m.fvec.z) %
+		&m).str().c_str();
+}
+
 #if 0
 namespace pretty
 {
@@ -40,6 +54,7 @@ static str dxxpowerup(const dxxpowerup& v)
 #endif
 
 void define_object_base_class(scope& scope_dxx);
+void define_reactor_module(object& __main__, scope& scope_dxx);
 void define_robot_module(object& __main__, scope& scope_dxx);
 void define_weapon_module(object& __main__, scope& scope_dxx);
 void define_player_module(object& __main__, scope& scope_dxx);
@@ -58,6 +73,12 @@ static void define_dxx_modules(object& __main__)
 		.add_property("y", &vms_vector::y)
 		.add_property("z", &vms_vector::z)
 		);
+	defstr(class_<vms_matrix>("vms_matrix", no_init)
+		.add_property("r", &vms_matrix::rvec)
+		.add_property("u", &vms_matrix::uvec)
+		.add_property("f", &vms_matrix::fvec)
+		);
+	define_reactor_module(__main__, scope_dxx);
 	define_robot_module(__main__, scope_dxx);
 	define_weapon_module(__main__, scope_dxx);
 	define_player_module(__main__, scope_dxx);
@@ -113,9 +134,10 @@ void scripting_init()
 
 void cxx_script_hook_controls()
 {
-	ScriptControls.enable_ship_orientation = false;
-	ScriptControls.enable_guided_orientation = false;
-	ScriptControls.enable_destination = false;
+	ScriptControls.ship_orientation.enable = false;
+	ScriptControls.guided_destination.enable = false;
+	ScriptControls.ship_destination.enable = false;
+	ScriptControls.ship_destination.segment = -1;
 	guarded_py_call([]() {
 		object& __main__ = gpy__main__;
 		object nsmain{getattr(__main__, "__dict__")};
@@ -171,10 +193,10 @@ void cxx_script_get_guided_missile_rotang(vms_angvec *const gmav)
 
 void cxx_script_get_player_ship_rotthrust(dxxobject *const obj)
 {
-	if (!ScriptControls.enable_ship_orientation)
+	if (!ScriptControls.ship_orientation.enable)
 		return;
 	vms_vector tv;
-	vms_vector& sop = ScriptControls.ship_orientation_position;
+	const vms_vector& sop = ScriptControls.ship_orientation.pos;
 	vm_vec_sub(&tv, &sop, &obj->pos);
 	vm_vec_copy_normalize(&tv, &tv);
 	vms_angvec dest_angles;
@@ -190,9 +212,121 @@ void cxx_script_get_player_ship_rotthrust(dxxobject *const obj)
 	psr->z = 0; // dest_angles.b; // always zero anyway
 }
 
+static int djverbose;
+
+static vms_vector get_player_thrust(const dxxobject& plr)
+{
+	static int s_target_segnum = -1;
+	const int scdestseg = ScriptControls.ship_destination.segment;
+	const int segnum = (static_cast<unsigned>(scdestseg) <= static_cast<unsigned>(Highest_segment_index)) ? scdestseg : find_point_seg(&ScriptControls.ship_destination.pos,
+		(static_cast<unsigned>(s_target_segnum) > static_cast<unsigned>(Highest_segment_index)
+		 ? -1
+		 : s_target_segnum));
+	s_target_segnum = segnum;
+	vms_vector vs;
+	if (segnum == -1 || static_cast<unsigned>(segnum) > static_cast<unsigned>(Highest_segment_index))
+	{
+		vm_vec_zero(&vs);
+		return vs;
+	}
+	if (segnum == plr.segnum)
+	{
+		/*
+		 * TODO: Do not assume that the path is clear just because the
+		 * path does not cross segments.  A player or robot could be in
+		 * the path.
+		 */
+		vm_vec_sub(&vs, &ScriptControls.ship_destination.pos, &plr.pos);
+		return vs;
+	}
+	typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, boost::no_property, boost::property<boost::edge_weight_t, int> > Graph;
+	typedef Graph::vertex_descriptor vertex_descriptor;
+	Graph g(Highest_segment_index + 1);
+	boost::property_map<Graph, boost::edge_weight_t>::type wmap = get(boost::edge_weight, g);
+	unsigned i = 0;
+	const unsigned hsi = static_cast<unsigned>(Highest_segment_index);
+	for (; i <= hsi; ++i)
+	{
+		const segment& s = Segments[i];
+		for (unsigned j = 0; j != MAX_SIDES_PER_SEGMENT; ++j)
+		{
+			const int ichild = s.children[j];
+			if (ichild == -1 || ichild == -2)
+				continue;
+			if (ichild > Highest_segment_index)
+				continue;
+			// TODO: account for walls, doors, etc.
+			const std::pair<Graph::edge_descriptor, bool> r = add_edge(i, ichild, g);
+			vms_vector s1;
+			compute_segment_center(&s1, &Segments[i]);
+			vms_vector s2;
+			compute_segment_center(&s2, &Segments[ichild]);
+			vms_vector v;
+			vm_vec_sub(&v, &s1, &s2);
+			wmap[r.first] = vm_vec_mag(&v);
+		}
+	}
+	const unsigned vertexes = num_vertices(g);
+	std::vector<vertex_descriptor> vpred(vertexes);
+	std::vector<int> vdist(vertexes);
+	const vertex_descriptor vd_segnum = vertex(plr.segnum, g);
+	boost::dijkstra_shortest_paths(g, vd_segnum, &vpred[0], &vdist[0], get(boost::edge_weight, g), get(boost::vertex_index, g), std::less<int>(), boost::closed_plus<int>(), std::numeric_limits<int>::max(), 0, boost::default_dijkstra_visitor());
+	unsigned steps = 0;
+	unsigned idx_predecessor = segnum;
+	const int verbose = djverbose;
+	djverbose = 0;
+	if (idx_predecessor >= vpred.size())
+	{
+		vm_vec_zero(&vs);
+		if (verbose)
+			con_printf(CON_NORMAL, "idx_predecessor=%u vpred.size()=%zu\n", idx_predecessor, vpred.size());
+		return vs;
+	}
+	for (;;)
+	{
+		const unsigned n = vpred[idx_predecessor];
+		if (verbose)
+		{
+			con_printf(CON_NORMAL, "vpred[%u]=%u\n", idx_predecessor, n);
+		}
+		if (n == static_cast<unsigned>(plr.segnum))
+		{
+			/*
+			 * Found idx_predecessor to be an immediate successor of segnum.
+			 */
+			vms_vector segcen;
+			compute_segment_center(&segcen, &Segments[idx_predecessor]);
+			vm_vec_sub(&vs, &segcen, &plr.pos);
+			return vs;
+		}
+		if (n == idx_predecessor)
+		{
+			vm_vec_zero(&vs);
+			if (verbose)
+				con_printf(CON_NORMAL, "n=%u idx_predecessor=%u\n", n, idx_predecessor);
+			return vs;
+		}
+		if (n >= vpred.size())
+		{
+			vm_vec_zero(&vs);
+			if (verbose)
+				con_printf(CON_NORMAL, "n=%u vpred.size()=%zu\n", n, vpred.size());
+			return vs;
+		}
+		idx_predecessor = n;
+		if (++ steps > 16000)
+		{
+			vm_vec_zero(&vs);
+			if (verbose)
+				con_printf(CON_NORMAL, "steps=%u idx_predecessor=%u\n", steps, idx_predecessor);
+			return vs;
+		}
+	}
+}
+
 unsigned cxx_script_get_player_ship_vecthrust(dxxobject *const obj, const fix script_max_forward_thrust)
 {
-	if (!ScriptControls.enable_destination)
+	if (!ScriptControls.ship_destination.enable)
 		return 0;
 	const fix frametime = FrameTime;
 	const int afterburner = (script_max_forward_thrust != frametime);
@@ -205,8 +339,7 @@ unsigned cxx_script_get_player_ship_vecthrust(dxxobject *const obj, const fix sc
 	}
 	else
 		vm_vec_zero(&vec_afterburner);
-	vms_vector tempv;
-	vm_vec_sub(&tempv, &ScriptControls.destination_position, &obj->pos);
+	const vms_vector tempv = get_player_thrust(*obj);
 	const fix afx = abs(tempv.x);
 	const fix afy = abs(tempv.y);
 	const fix afz = abs(tempv.z);

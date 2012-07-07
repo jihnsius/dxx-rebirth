@@ -27,6 +27,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "vecmat.h"
 #include "segment.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 //figure out what seg the given point is in, tracing through segments
 int get_new_seg(vms_vector *p0,int startseg);
 
@@ -132,6 +136,8 @@ extern void create_walls_on_side(segment *sp, int sidenum);
 extern void pick_random_point_in_seg(vms_vector *new_pos, int segnum);
 void validate_segment_side(segment *sp, int sidenum);
 
+#ifdef __cplusplus
+}
 #endif
 
-
+#endif

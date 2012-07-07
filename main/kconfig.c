@@ -53,6 +53,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "collide.h"
 #include "playsave.h"
 #include "physfsx.h"
+#include "pybinding.h"
 
 #ifdef OGL
 #include "ogl_init.h"

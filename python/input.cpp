@@ -59,39 +59,43 @@ static void define_user_input_class(class_<tag_user_input>& ui)
 	ui.add_static_property("forward_thrust", &read_user_attitude_control<&control_info::forward_thrust_time>, &write_user_attitude_control<&control_info::forward_thrust_time>);
 }
 
-template <vms_vector script_control_info::*V, fix vms_vector::*M>
+template <const script_control_info::location script_control_info::*L, fix vms_vector::*M>
 static fix read_script_attitude_control()
 {
-	return ScriptControls.*V.*M;
+	const script_control_info::location& l = ScriptControls.*L;
+	return l.pos.*M;
 }
 
-template <vms_vector script_control_info::*V>
+template <const script_control_info::location script_control_info::*L>
 static vms_vector read_script_attitude_vector()
 {
-	return ScriptControls.*V;
+	const script_control_info::location& l = ScriptControls.*L;
+	return l.pos;
 }
 
-template <vms_vector script_control_info::*V, bool script_control_info::*B, fix vms_vector::*M>
+template <script_control_info::location script_control_info::*L, fix vms_vector::*M>
 static void write_script_attitude_control(const fix f)
 {
-	ScriptControls.*B = true;
-	ScriptControls.*V.*M = f;
+	script_control_info::location& l = ScriptControls.*L;
+	l.enable = true;
+	l.pos.*M = f;
 }
 
-template <vms_vector script_control_info::*V, bool script_control_info::*B>
+template <script_control_info::location script_control_info::*L>
 static void write_script_attitude_vector(const vms_vector& v)
 {
-	ScriptControls.*B = true;
-	ScriptControls.*V = v;
+	script_control_info::location& l = ScriptControls.*L;
+	l.enable = true;
+	l.pos = v;
 }
 
-template <vms_vector script_control_info::*V, bool script_control_info::*B, typename T>
+template <script_control_info::location script_control_info::*L, typename T>
 static void define_script_input_xyz(class_<T>& so)
 {
-	so.add_static_property("x", &read_script_attitude_control<V, &vms_vector::x>, &write_script_attitude_control<V, B, &vms_vector::x>);
-	so.add_static_property("y", &read_script_attitude_control<V, &vms_vector::y>, &write_script_attitude_control<V, B, &vms_vector::y>);
-	so.add_static_property("z", &read_script_attitude_control<V, &vms_vector::z>, &write_script_attitude_control<V, B, &vms_vector::z>);
-	so.add_static_property("v", &read_script_attitude_vector<V>, &write_script_attitude_vector<V, B>);
+	so.add_static_property("x", &read_script_attitude_control<L, &vms_vector::x>, &write_script_attitude_control<L, &vms_vector::x>);
+	so.add_static_property("y", &read_script_attitude_control<L, &vms_vector::y>, &write_script_attitude_control<L, &vms_vector::y>);
+	so.add_static_property("z", &read_script_attitude_control<L, &vms_vector::z>, &write_script_attitude_control<L, &vms_vector::z>);
+	so.add_static_property("v", &read_script_attitude_vector<L>, &write_script_attitude_vector<L>);
 }
 
 static void define_script_input_class(class_<tag_script_input>& si)
@@ -99,13 +103,13 @@ static void define_script_input_class(class_<tag_script_input>& si)
 	scope s(si);
 	struct tag_script_ship_orientation : public tag_script_input {};
 	class_<tag_script_ship_orientation> sso("ship_orientation");
-	define_script_input_xyz<&script_control_info::ship_orientation_position, &script_control_info::enable_ship_orientation>(sso);
-	struct tag_script_guided_orientation : public tag_script_input {};
-	class_<tag_script_guided_orientation> sgo("guided_orientation");
-	define_script_input_xyz<&script_control_info::guided_orientation_position, &script_control_info::enable_guided_orientation>(sgo);
-	struct tag_script_destination : public tag_script_input {};
-	class_<tag_script_destination> sd("destination");
-	define_script_input_xyz<&script_control_info::destination_position, &script_control_info::enable_destination>(sd);
+	define_script_input_xyz<&script_control_info::ship_orientation>(sso);
+	struct tag_script_guided_destination : public tag_script_input {};
+	class_<tag_script_guided_destination> sgd("guided_destination");
+	define_script_input_xyz<&script_control_info::guided_destination>(sgd);
+	struct tag_script_ship_destination : public tag_script_input {};
+	class_<tag_script_ship_destination> ssd("ship_destination");
+	define_script_input_xyz<&script_control_info::ship_destination>(ssd);
 }
 
 void define_input_class()

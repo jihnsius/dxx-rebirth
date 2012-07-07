@@ -108,13 +108,6 @@ common_sources = [
 'main/console.c',
 'main/cxxconsole.cpp',
 'main/pybinding.cpp',
-'python/input.cpp',
-'python/object.cpp',
-'python/player.cpp',
-'python/powerup.cpp',
-'python/robot.cpp',
-'python/traceback.cpp',
-'python/weapon.cpp',
 'main/controls.c',
 'main/credits.c',
 'main/digiobj.c',
@@ -306,6 +299,15 @@ if use_python != '':
 	env.Append(CPPDEFINES = [ ('USE_PYTHON', use_python) ])
 	env.Append(CPPPATH = ['/usr/include/python%s' % use_python])
 	env.Append(LIBS = ['-lboost_python-%s' % use_python, '-lpython%s' % use_python])
+	common_sources.extend(['python/input.cpp',
+		'python/object.cpp',
+		'python/player.cpp',
+		'python/powerup.cpp',
+		'python/reactor.cpp',
+		'python/robot.cpp',
+		'python/traceback.cpp',
+		'python/weapon.cpp',
+		])
 libs = ['physfs', 'm']
 env['CXXFLAGS'] += ['-Wextra', '-std=gnu++0x']
 

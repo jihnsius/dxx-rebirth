@@ -1,20 +1,24 @@
 #pragma once
 #include "vecmat.h"
+#include <stdint.h>
 
 struct script_control_info {
+	struct location
+	{
+		vms_vector pos;
+		uint16_t segment;
+		bool enable;
+	};
 	/*
 	 * Turn the ship to focus on this spot.
 	 */
-	vms_vector ship_orientation_position;
+	location ship_orientation;
 	/*
-	 * Turn the guided missile to focus on this spot.
+	 * Fly the guided missile to this spot.
 	 */
-	vms_vector guided_orientation_position;
+	location guided_destination;
 	/*
-	 * Fly the ship to reach this spot.
+	 * Fly the ship to this spot.
 	 */
-	vms_vector destination_position;
-	bool enable_ship_orientation;
-	bool enable_guided_orientation;
-	bool enable_destination;
+	location ship_destination;
 };

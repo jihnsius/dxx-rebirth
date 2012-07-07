@@ -59,7 +59,7 @@ DEFINE_DXX_OBJECT_TYPESAFE_SUBTYPE(player_object, OBJ_PLAYER);
 template <typename T>
 static const T& get_range_checked_object(const unsigned objnum, const char *const errmsg)
 {
-	if (objnum >= sizeof(Objects) / sizeof(Objects[0]) || objnum >= static_cast<unsigned>(Highest_object_index))
+	if (objnum >= sizeof(Objects) / sizeof(Objects[0]) || objnum > static_cast<unsigned>(Highest_object_index))
 	{
 		PyErr_SetString(PyExc_IndexError, errmsg);
 		throw_error_already_set();
