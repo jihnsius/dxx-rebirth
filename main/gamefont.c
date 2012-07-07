@@ -27,6 +27,7 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "args.h"
 #include "gamefont.h"
 #include "config.h"
+#include "physfsx.h"
 
 static const char Gamefont_filenames_l[][16] = {
 	"font1-1.fnt", // Font 0

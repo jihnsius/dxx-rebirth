@@ -65,6 +65,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #ifdef OGL
 #include "ogl_init.h"
 #endif
+#include "physfsx.h"
 
 #ifdef EDITOR
 #include "editor/editor.h"

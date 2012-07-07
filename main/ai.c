@@ -60,6 +60,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "fuelcen.h"
 #include "controls.h"
 #include "kconfig.h"
+#include "physfsx.h"
 
 #ifdef EDITOR
 #include "editor/editor.h"

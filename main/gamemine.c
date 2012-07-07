@@ -44,6 +44,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "piggy.h"
 #include "byteswap.h"
 #include "gamesave.h"
+#include "physfsx.h"
 
 #define REMOVE_EXT(s)  (*(strchr( (s), '.' ))='\0')
 

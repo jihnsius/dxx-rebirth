@@ -33,6 +33,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "textures.h"
 #include "cntrlcen.h"
 #include "dxxerror.h"
+#include "physfsx.h"
 
 int Num_effects;
 eclip Effects[MAX_EFFECTS];

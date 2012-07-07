@@ -56,6 +56,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "byteswap.h"
 #include "multi.h"
 #include "makesig.h"
+#include "physfsx.h"
 
 char Gamesave_current_filename[PATH_MAX];
 

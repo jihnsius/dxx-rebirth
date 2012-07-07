@@ -52,6 +52,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "interp.h"
 #include "console.h"
 #include "rle.h"
+#include "physfsx.h"
 
 ubyte Sounds[MAX_SOUNDS];
 ubyte AltSounds[MAX_SOUNDS];

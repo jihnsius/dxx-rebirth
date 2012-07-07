@@ -20,6 +20,7 @@
 #include "digi_mixer_music.h"
 #include "u_mem.h"
 #include "console.h"
+#include "physfsx.h"
 
 #ifdef _WIN32
 extern int digi_win32_play_midi_song( char * filename, int loop );

@@ -50,6 +50,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "multibot.h"
 #include "escort.h"
 #include "byteswap.h"
+#include "physfsx.h"
 
 // The max number of fuel stations per mine.
 

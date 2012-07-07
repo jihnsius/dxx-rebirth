@@ -51,6 +51,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "gameseq.h"
 #include "polyobj.h"
 #include "gamesave.h"
+#include "physfsx.h"
 
 
 #ifdef EDITOR

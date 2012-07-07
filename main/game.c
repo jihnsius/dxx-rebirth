@@ -97,6 +97,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "movie.h"
 #include "event.h"
 #include "window.h"
+#include "physfsx.h"
 
 #ifdef EDITOR
 #include "editor/editor.h"
