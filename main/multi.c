@@ -69,6 +69,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "net_udp.h"
 #endif
 #include "automap.h"
+#include "physfsx.h"
 
 void multi_reset_player_object(dxxobject *objp);
 void multi_reset_object_texture(dxxobject *objp);

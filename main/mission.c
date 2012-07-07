@@ -37,6 +37,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "text.h"
 #include "u_mem.h"
 #include "ignorecase.h"
+#include "physfsx.h"
 
 //mission list entry
 typedef struct mle {

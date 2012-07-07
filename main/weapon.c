@@ -37,6 +37,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "ai.h"
 #include "args.h"
 #include "playsave.h"
+#include "physfsx.h"
 
 int POrderList (int num);
 int SOrderList (int num);

@@ -13,6 +13,7 @@
 #include "u_mem.h"
 #include "console.h"
 #include "timer.h"
+#include "physfsx.h"
 
 #ifdef WORDS_BIGENDIAN
 #define MIDIINT(x) (x)

@@ -50,6 +50,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "byteswap.h"
 #include "makesig.h"
 #include "console.h"
+#include "physfsx.h"
 
 //#define NO_DUMP_SOUNDS        1   //if set, dump bitmaps but not sounds
 

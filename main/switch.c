@@ -43,6 +43,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "robot.h"
 #include "bm.h"
 #include "byteswap.h"
+#include "physfsx.h"
 
 #ifdef EDITOR
 #include "editor/editor.h"

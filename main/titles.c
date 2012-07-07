@@ -55,6 +55,7 @@ static char rcsid[] = "$Id: titles.c,v 1.2 2006/03/18 23:08:13 michaelstather Ex
 #include "menu.h"
 #include "mouse.h"
 #include "console.h"
+#include "physfsx.h"
 
 extern unsigned RobSX,RobSY,RobDX,RobDY; // Robot movie coords
 

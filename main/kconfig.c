@@ -52,7 +52,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "cntrlcen.h"
 #include "collide.h"
 #include "playsave.h"
-#include "key.h"
+#include "physfsx.h"
 
 #ifdef OGL
 #include "ogl_init.h"

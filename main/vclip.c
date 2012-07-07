@@ -24,6 +24,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "vclip.h"
 #include "weapon.h"
 #include "laser.h"
+#include "physfsx.h"
 
 //----------------- Variables for video clips -------------------
 int 					Num_vclips = 0;

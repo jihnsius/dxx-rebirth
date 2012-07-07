@@ -105,6 +105,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "byteswap.h"
 #include "segment.h"
 #include "gameseg.h"
+#include "physfsx.h"
 
 
 void StartNewLevelSecret(int level_num, int page_in_textures);

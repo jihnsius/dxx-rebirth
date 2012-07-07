@@ -34,6 +34,7 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "fuelcen.h"
 
 #include "medwall.h"
+#include "physfsx.h"
 
 void validate_selected_segments(void);
 

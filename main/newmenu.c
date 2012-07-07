@@ -57,6 +57,8 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "playsave.h"
 #include "automap.h"
 #include "rbaudio.h"
+#include "args.h"
+#include "physfsx.h"
 
 #ifdef OGL
 #include "ogl_init.h"

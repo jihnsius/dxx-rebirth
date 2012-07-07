@@ -11,6 +11,7 @@
 #include "pybinding.h"
 #include "kconfig.h"
 #include "gr.h"
+#include "args.h"
 
 using namespace boost::python;
 

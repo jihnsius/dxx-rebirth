@@ -78,6 +78,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "playsave.h"
 #include "movie.h"
 #include "scores.h"
+#include "strutil.h"
 
 #include "multi.h"
 #include "desc_id.h"

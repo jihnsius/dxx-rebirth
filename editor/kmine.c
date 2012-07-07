@@ -32,6 +32,7 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "game.h"
 #include "gameseq.h"
 #include "object.h"
+#include "physfsx.h"
 
 #define MINESAVE_CRIPPLED	0
 

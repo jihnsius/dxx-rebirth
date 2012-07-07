@@ -52,6 +52,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "editor/editor.h"
 #endif
 #include "playsave.h"
+#include "physfsx.h"
 
 int N_powerup_types = 0;
 powerup_type_info Powerup_info[MAX_POWERUP_TYPES];

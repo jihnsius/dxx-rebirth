@@ -57,6 +57,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "automap.h"
 #include "laser.h"
 #include "escort.h"
+#include "u_mem.h"
 
 #ifdef EDITOR
 #include "editor/editor.h"

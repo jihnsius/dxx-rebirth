@@ -58,6 +58,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #ifdef NETWORK
 #include "multi.h"
 #endif
+#include "physfsx.h"
 #include "kconfig.h"
 #include "endlevel.h"
 #include "text.h"
@@ -72,6 +73,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "rbaudio.h"
 #include "window.h"
 #include "playsave.h"
+#include "args.h"
 
 #define LEAVE_TIME 0x4000
 

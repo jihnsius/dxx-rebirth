@@ -98,6 +98,7 @@ char copyright[] = "DESCENT II  COPYRIGHT (C) 1994-1996 PARALLAX SOFTWARE CORPOR
 #ifdef USE_UDP
 #include "net_udp.h"
 #endif
+#include "physfsx.h"
 
 //Current version number
 

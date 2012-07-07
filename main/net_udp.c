@@ -55,6 +55,7 @@
 #include "rbaudio.h"
 #include "config.h"
 #include "vers_id.h"
+#include "u_mem.h"
 
 // Prototypes
 void net_udp_init();
