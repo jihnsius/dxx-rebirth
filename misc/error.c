@@ -101,8 +101,7 @@ void Error(const char *fmt,...)
 	Int3();
 
 	/*if (!err_initialized)*/ print_exit_message();
-
-	exit(1);
+	abort();
 }
 
 //print out warning message to user
