@@ -30,7 +30,8 @@ void Warning(const char *fmt,...) __attribute_gcc_format((printf, 1, 2));				//p
 void set_warn_func(void (*f)(const char *s));//specifies the function to call with warning messages
 void clear_warn_func(void (*f)(const char *s));//say this function no longer valid
 void _Assert(int expr,const char *expr_text,const char *filename,int linenum);	//assert func
-void Error(const char *fmt,...) __noreturn __attribute_gcc_format((printf, 1, 2));				//exit with error code=1, print message
+void Error(const char *func, unsigned line, const char *fmt,...) __noreturn __attribute_gcc_format((printf, 3, 4));				//exit with error code=1, print message
+#define Error(F,...)	((Error)(__func__, __LINE__, (F), ## __VA_ARGS__))
 void Assert(int expr);
 void Int3();
 #ifndef NDEBUG		//macros for debugging

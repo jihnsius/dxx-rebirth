@@ -89,13 +89,13 @@ static void print_exit_message(void)
 }
 
 //terminates with error code 1, printing message
-void Error(const char *fmt,...)
+void (Error)(const char *func, const unsigned line, const char *fmt,...)
 {
 	va_list arglist;
 
-	strcpy(exit_message,"Error: "); // don't put the new line in for dialog output
+	int leader = snprintf(exit_message, sizeof(exit_message), "%s:%u: error: ", func, line);
 	va_start(arglist,fmt);
-	vsnprintf(exit_message+strlen(exit_message),sizeof(exit_message)-7,fmt,arglist);
+	vsnprintf(exit_message+leader,sizeof(exit_message)-leader,fmt,arglist);
 	va_end(arglist);
 
 	Int3();
