@@ -11,6 +11,7 @@
 
 #include <string.h>
 #include <stdarg.h>
+#include <stdio.h>
 
 // When PhysicsFS can *easily* be built as a framework on Mac OS X,
 // the framework form will be supported again -kreatordxx
@@ -18,6 +19,26 @@
 #include <physfs.h>
 #else
 #include <physfs/physfs.h>
+#endif
+
+#ifdef DEBUG_PHYSFSX_CHATTY
+#include <ctype.h>
+
+#define PHYSFSX_CHATTY_PRE_TELL(A)	PHYSFS_sint64 t = g_physfsx_chatty ? PHYSFS_tell((A)) : 0
+#define PHYSFSX_CHATTY_PRINTF(F,...)	if (g_physfsx_chatty) fprintf(stderr, "%s:%u:" F, func, line, __VA_ARGS__)
+extern unsigned char g_physfsx_chatty;
+
+static inline PHYSFS_sint64 PHYSFSX_read_chatty(const char *func,unsigned line,PHYSFS_File *handle, void *buffer, PHYSFS_uint32 objSize, PHYSFS_uint32 objCount)
+{
+	PHYSFSX_CHATTY_PRE_TELL(handle);
+	PHYSFS_sint64 r = (PHYSFS_read)(handle, buffer, objSize, objCount);
+	PHYSFSX_CHATTY_PRINTF("PHYSFS_read(%p [o=%#4lx -> %#4lx], %p, %u, %u) = %li\n", handle, (unsigned long) t, (unsigned long) PHYSFS_tell(handle), buffer, objSize, objCount, (unsigned long) r);
+	return r;
+}
+#define PHYSFS_read(A,B,C,D)	((PHYSFSX_read_chatty)(__func__, __LINE__,(A),(B),(C),(D)))
+#else
+#define PHYSFSX_CHATTY_PRE_TELL(A)
+#define PHYSFSX_CHATTY_PRINTF(F,...)
 #endif
 
 #include "pstypes.h"
@@ -89,19 +110,34 @@ static inline int PHYSFSX_putc(PHYSFS_file *file, int c)
 		return (int)c;
 }
 
+#ifdef DEBUG_PHYSFSX_CHATTY
+static inline int PHYSFSX_fgetc(const char *func,unsigned line,PHYSFS_file *const fp)
+#define PHYSFSX_fgetc(A)	((PHYSFSX_fgetc)(__func__, __LINE__, (A)))
+#else
 static inline int PHYSFSX_fgetc(PHYSFS_file *const fp)
+#endif
 {
 	unsigned char c;
+	PHYSFSX_CHATTY_PRE_TELL(fp);
 
-	if (PHYSFS_read(fp, &c, 1, 1) != 1)
+	if ((PHYSFS_read)(fp, &c, 1, 1) != 1)
+	{
+		PHYSFSX_CHATTY_PRINTF("PHYSFS_fgetc(%p [o=%#4lx -> %#4lx]) = EOF\n", fp, (unsigned long) t, (unsigned long) PHYSFS_tell(fp));
 		return EOF;
-
+	}
+	PHYSFSX_CHATTY_PRINTF("PHYSFS_fgetc(%p [o=%#4lx -> %#4lx]) = %#2x '%c'\n", fp, (unsigned long) t, (unsigned long) PHYSFS_tell(fp), c, isprint((unsigned)c) ? c : '.');
 	return c;
 }
 
+#ifdef DEBUG_PHYSFSX_CHATTY
+static inline int PHYSFSX_fseek(const char *func,unsigned line,PHYSFS_file *fp, long int offset, int where)
+#define PHYSFSX_fseek(A,B,C)	((PHYSFSX_fseek)(__func__,__LINE__,(A),(B),(C)))
+#else
 static inline int PHYSFSX_fseek(PHYSFS_file *fp, long int offset, int where)
+#endif
 {
 	int c, goal_position;
+	PHYSFSX_CHATTY_PRE_TELL(fp);
 
 	switch(where)
 	{
@@ -118,6 +154,7 @@ static inline int PHYSFSX_fseek(PHYSFS_file *fp, long int offset, int where)
 		return 1;
 	}
 	c = PHYSFS_seek(fp, goal_position);
+	PHYSFSX_CHATTY_PRINTF("PHYSFSX_fseek(%p [o=%#4lx -> %#4lx], %li, %i) = %i\n", fp, (unsigned long) t, (unsigned long) PHYSFS_tell(fp), offset, where, !c);
 	return !c;
 }
 
@@ -225,14 +262,16 @@ static inline int PHYSFSX_writeMatrix(PHYSFS_file *file, vms_matrix *m)
 	static inline T N(const char *func, const unsigned line, PHYSFS_file *file)	\
 	{	\
 		T i;	\
-		if (!(F)(file, &i))	\
+		PHYSFSX_CHATTY_PRE_TELL(file);	\
+		if (!((F)(file, &i)))	\
 		{	\
-			(Error)(func, line, "reading " #T " in " #N "() at %lu", (unsigned long)((PHYSFS_tell)(file)));	\
+			(Error)(func, line, "reading " #T " in " #N "() at %#lx", (unsigned long)((PHYSFS_tell)(file)));	\
 		}	\
+		PHYSFSX_CHATTY_PRINTF("%s(%p [o=%#4lx -> %#4lx], %p): i=%#lx\n", (#N), (file), (unsigned long) t, (unsigned long) PHYSFS_tell((file)), (&i), (unsigned long) (i));	\
 		return i;	\
 	}
 
-static inline sbyte PHYSFSX_readS8(PHYSFS_file *file, sbyte *b)
+static inline bool PHYSFSX_readS8(PHYSFS_file *file, sbyte *b)
 {
 	return (PHYSFS_read(file, b, sizeof(*b), 1) == 1);
 }

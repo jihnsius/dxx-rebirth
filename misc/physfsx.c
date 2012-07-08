@@ -18,6 +18,10 @@
 #include "object.h"
 #include "newdemo.h"
 
+#ifdef DEBUG_PHYSFSX_CHATTY
+unsigned char g_physfsx_chatty;
+#endif
+
 // Initialise PhysicsFS, set up basic search paths and add arguments from .ini file.
 // The .ini file can be in either the user directory or the same directory as the program.
 // The user directory is searched first.
