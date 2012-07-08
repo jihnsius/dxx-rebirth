@@ -595,15 +595,29 @@ static ubyte get_side_dists(const vms_vector *checkp,int segnum,fix *side_dists)
 #ifndef NDEBUG
 #ifndef COMPACT_SEGS
 //returns true if errors detected
-static int check_norms(int segnum,int sidenum,int facenum,int csegnum,int csidenum,int cfacenum)
+static int check_norms(const unsigned line, int segnum,int sidenum,int facenum,int csegnum,int csidenum,int cfacenum)
+#define check_norms(A,B,C,D,E,F)	check_norms(__LINE__,(A),(B),(C),(D),(E),(F))
 {
 	vms_vector *n0,*n1;
 
 	n0 = &Segments[segnum].sides[sidenum].normals[facenum];
 	n1 = &Segments[csegnum].sides[csidenum].normals[cfacenum];
-
-	if (n0->x != -n1->x  ||  n0->y != -n1->y  ||  n0->z != -n1->z)
+	if (n0->x != -n1->x)
+	{
+		con_printf(CON_URGENT, "%s:%u.%u: segnum=%i sidenum=%i facenum=%i csegnum=%i csidenum=%i cfacenum=%i: bad x: n0={%u, %u, %u} n1={%u, %u, %u}\n", __func__, line, __LINE__, segnum,sidenum,facenum,csegnum,csidenum,cfacenum, n0->x, n0->y, n0->z, n1->x, n1->y, n1->z);
 		return 1;
+	}
+	if (n0->y != -n1->y)
+	{
+		con_printf(CON_URGENT, "%s:%u.%u: segnum=%i sidenum=%i facenum=%i csegnum=%i csidenum=%i cfacenum=%i: bad y: n0={%u, %u, %u} n1={%u, %u, %u}\n", __func__, line, __LINE__, segnum,sidenum,facenum,csegnum,csidenum,cfacenum, n0->x, n0->y, n0->z, n1->x, n1->y, n1->z);
+		return 1;
+	}
+
+	if (n0->z != -n1->z)
+	{
+		con_printf(CON_URGENT, "%s:%u.%u: segnum=%i sidenum=%i facenum=%i csegnum=%i csidenum=%i cfacenum=%i: bad z: n0={%u, %u, %u} n1={%u, %u, %u}\n", __func__, line, __LINE__, segnum,sidenum,facenum,csegnum,csidenum,cfacenum, n0->x, n0->y, n0->z, n1->x, n1->y, n1->z);
+		return 1;
+	}
 	else
 		return 0;
 }
@@ -633,6 +647,7 @@ int check_segment_connections(void)
 				csidenum = find_connect_side(seg,cseg);
 
 				if (csidenum == -1) {
+					con_printf(CON_URGENT, "%s:%u: segnum=%i sidenum=%i: csidenum=-1\n", __func__, __LINE__, segnum, sidenum);
 					errors = 1;
 					continue;
 				}
@@ -640,6 +655,7 @@ int check_segment_connections(void)
 				create_abs_vertex_lists(&con_num_faces, con_vertex_list, csegnum, csidenum, __FILE__, __LINE__);
 
 				if (con_num_faces != num_faces) {
+					con_printf(CON_URGENT, "%s:%u: segnum=%i sidenum=%i: con_num_faces=%i num_faces=%i\n", __func__, __LINE__, segnum, sidenum, con_num_faces, num_faces);
 					errors = 1;
 				}
 				else
@@ -648,11 +664,21 @@ int check_segment_connections(void)
 
 						for (t=0;t<4 && con_vertex_list[t]!=vertex_list[0];t++);
 
-						if (t==4 ||
+						if (t==4)
+						{
+							con_printf(CON_URGENT, "%s:%u: segnum=%i sidenum=%i: t=%i\n", __func__, __LINE__, segnum, sidenum, t);
+							errors = 1;
+						}
+						else if(
 							 vertex_list[0] != con_vertex_list[t] ||
 							 vertex_list[1] != con_vertex_list[(t+3)%4] ||
 							 vertex_list[2] != con_vertex_list[(t+2)%4] ||
 							 vertex_list[3] != con_vertex_list[(t+1)%4]) {
+							con_printf(CON_URGENT, "%s:%u: segnum=%i sidenum=%i: t=%i vl={%u, %u, %u, %u} cvl={%u, %u, %u, %u}\n", __func__, __LINE__, segnum, sidenum, t,
+							 vertex_list[0], con_vertex_list[t],
+							 vertex_list[1], con_vertex_list[(t+3)%4],
+							 vertex_list[2], con_vertex_list[(t+2)%4],
+							 vertex_list[3], con_vertex_list[(t+1)%4]);
 							errors = 1;
 						}
 						else
