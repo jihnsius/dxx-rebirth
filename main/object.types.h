@@ -26,33 +26,42 @@ OBJ_MARKER      = 15,  // a map marker
 // in object.c
 #define MAX_OBJECT_TYPES    16
 
+enum control_type_t
+{
 // Control types - what tells this object what do do
-#define CT_NONE         0   // doesn't move (or change movement)
-#define CT_AI           1   // driven by AI
-#define CT_EXPLOSION    2   // explosion sequencer
-#define CT_FLYING       4   // the player is flying
-#define CT_SLEW         5   // slewing
-#define CT_FLYTHROUGH   6   // the flythrough system
-#define CT_WEAPON       9   // laser, etc.
-#define CT_REPAIRCEN    10  // under the control of the repair center
-#define CT_MORPH        11  // this object is being morphed
-#define CT_DEBRIS       12  // this is a piece of debris
-#define CT_POWERUP      13  // animating powerup blob
-#define CT_LIGHT        14  // doesn't actually do anything
-#define CT_REMOTE       15  // controlled by another net player
-#define CT_CNTRLCEN     16  // the control center/main reactor
+CT_NONE       = 0,   // doesn't move (or change movement)
+CT_AI         = 1,   // driven by AI
+CT_EXPLOSION  = 2,   // explosion sequencer
+CT_FLYING     = 4,   // the player is flying
+CT_SLEW       = 5,   // slewing
+CT_FLYTHROUGH = 6,   // the flythrough system
+CT_WEAPON     = 9,   // laser, etc.
+CT_REPAIRCEN  = 10,  // under the control of the repair center
+CT_MORPH      = 11,  // this object is being morphed
+CT_DEBRIS     = 12,  // this is a piece of debris
+CT_POWERUP    = 13,  // animating powerup blob
+CT_LIGHT      = 14,  // doesn't actually do anything
+CT_REMOTE     = 15,  // controlled by another net player
+CT_CNTRLCEN   = 16,  // the control center/main reactor
+};
 
+enum movement_type_t
+{
 // Movement types
-#define MT_NONE         0   // doesn't move
-#define MT_PHYSICS      1   // moves by physics
-#define MT_SPINNING     3   // this object doesn't move, just sits and spins
+MT_NONE       = 0,  // doesn't move
+MT_PHYSICS    = 1,  // moves by physics
+MT_SPINNING   = 3,  // this object doesn't move, just sits and spins
+};
 
+enum render_type_t
+{
 // Render types
-#define RT_NONE         0   // does not render
-#define RT_POLYOBJ      1   // a polygon model
-#define RT_FIREBALL     2   // a fireball
-#define RT_LASER        3   // a laser
-#define RT_HOSTAGE      4   // a hostage
-#define RT_POWERUP      5   // a powerup
-#define RT_MORPH        6   // a robot being morphed
-#define RT_WEAPON_VCLIP 7   // a weapon that renders as a vclip
+RT_NONE        =0,  // does not render
+RT_POLYOBJ     =1,  // a polygon model
+RT_FIREBALL    =2,  // a fireball
+RT_LASER       =3,  // a laser
+RT_HOSTAGE     =4,  // a hostage
+RT_POWERUP     =5,  // a powerup
+RT_MORPH       =6,  // a robot being morphed
+RT_WEAPON_VCLIP=7,  // a weapon that renders as a vclip
+};
