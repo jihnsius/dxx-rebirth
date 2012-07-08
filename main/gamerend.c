@@ -427,6 +427,29 @@ char DemoWBUType[]={0,WBU_GUIDED,WBU_MISSILE,WBU_REAR,WBU_ESCORT,WBU_MARKER,0};
 char DemoRearCheck[]={0,0,0,1,0,0,0};
 static const char *const DemoExtraMessage[]={"PLAYER","GUIDED","MISSILE","REAR","GUIDE-BOT","MARKER","SHIP"};
 
+static const char *get_missile_name(const unsigned laser_type)
+{
+	switch(laser_type)
+	{
+		case CONCUSSION_ID:
+			return "CONCUSSION";
+		case HOMING_ID:
+			return "HOMING";
+		case SMART_ID:
+			return "SMART";
+		case MEGA_ID:
+			return "MEGA";
+		case FLASH_ID:
+			return "FLASH";
+		case MERCURY_ID:
+			return "MERCURY";
+		case EARTHSHAKER_ID:
+			return "SHAKER";
+		default:
+			return "MISSILE";	// Bad!
+	}
+}
+
 static void show_extra_views()
 {
 	int did_missile_view=0;
@@ -519,7 +542,7 @@ static void show_extra_views()
 				Missile_viewer_sig = Missile_viewer->signature;
 			if (PlayerCfg.MissileViewEnabled && Missile_viewer->type!=OBJ_NONE && Missile_viewer->signature == Missile_viewer_sig) {
   				RenderingType=2+(1<<4);
-				do_cockpit_window_view(1,Missile_viewer,0,WBU_MISSILE,"MISSILE");
+				do_cockpit_window_view(1,Missile_viewer,0,WBU_MISSILE,get_missile_name(Missile_viewer->id));
 				did_missile_view=1;
 			}
 			else {
