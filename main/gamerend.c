@@ -489,6 +489,30 @@ static void show_extra_views()
 			Guided_missile[Player_num] = NULL;
 		}
 
+		if (!Missile_viewer)
+		{
+			unsigned i;
+			for (i=0; i<=Highest_object_index; i++)
+			{
+				dxxobject *o = &Objects[i];
+				if (o->type != OBJ_WEAPON)
+					continue;
+				if (o->ctype.laser_info.parent_num != Players[Player_num].objnum)
+					continue;
+				const unsigned laser_type = o->id;
+				if (!(laser_type == CONCUSSION_ID ||
+					laser_type == HOMING_ID ||
+					laser_type == SMART_ID ||
+					laser_type == MEGA_ID ||
+					laser_type == FLASH_ID ||
+					laser_type == MERCURY_ID ||
+					laser_type == EARTHSHAKER_ID))
+					continue;
+				Missile_viewer = o;
+				break;
+			}
+		}
+
 		if (Missile_viewer) //do missile view
 		{
 			if (Missile_viewer_sig == -1)
