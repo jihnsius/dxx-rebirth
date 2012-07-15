@@ -122,12 +122,12 @@ int ReadConfigFile()
 		return 1;
 	}
 
+	const int max_len = PHYSFS_fileLength(infile); // to be fully safe, assume the whole cfg consists of one big line
+	MALLOC(line, char, max_len);
 	while (!PHYSFS_eof(infile))
 	{
-		int max_len = PHYSFS_fileLength(infile); // to be fully safe, assume the whole cfg consists of one big line
-		MALLOC(line, char, max_len);
 		memset(line, 0, max_len);
-		PHYSFSX_gets(infile, line);
+		PHYSFSX_fgets(line,max_len,infile);
 		ptr = &(line[0]);
 		while (isspace(*ptr))
 			ptr++;
@@ -229,8 +229,8 @@ int ReadConfigFile()
 			else if (!strcmp(token, GrabinputStr))
 				GameCfg.Grabinput = strtol(value, NULL, 10);
 		}
-		d_free(line);
 	}
+	d_free(line);
 
 	PHYSFS_close(infile);
 
