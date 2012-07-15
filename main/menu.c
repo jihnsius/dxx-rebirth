@@ -2120,6 +2120,7 @@ static void polygon_models_viewer()
 static int gamebitmaps_viewer_handler(window *wind, d_event *event)
 {
 	static int view_idx = 0;
+	static char input[8];
 	int key = 0;
 #ifdef OGL
 	float scale = 1.0;
@@ -2141,16 +2142,37 @@ static int gamebitmaps_viewer_handler(window *wind, d_event *event)
 			{
 				case KEY_ESC:
 					window_close(wind);
+					input[0] = 0;
 					break;
 				case KEY_SPACEBAR:
-					view_idx ++;
+					if (input[0])
+					{
+						view_idx += strtoul(input, 0, 0);
+						input[0] = 0;
+					}
+					else
+						view_idx ++;
 					if (view_idx >= Num_bitmap_files) view_idx = 0;
 					break;
 				case KEY_BACKSP:
-					view_idx --;
+					if (input[0])
+					{
+						view_idx -= strtoul(input, 0, 0);
+						input[0] = 0;
+					}
+					else
+						view_idx --;
 					if (view_idx < 0 ) view_idx = Num_bitmap_files - 1;
 					break;
 				default:
+					{
+						const unsigned av = key_properties[key].ascii_value;
+						if (av == 255)
+							break;
+						if (input[0] || input[1])
+							memmove(input + 1, input, sizeof(input) - 2);
+						input[0] = (char)av;
+					}
 					break;
 			}
 			return 1;
@@ -2168,7 +2190,7 @@ static int gamebitmaps_viewer_handler(window *wind, d_event *event)
 #endif
 			gr_set_curfont(GAME_FONT);
 			gr_set_fontcolor(BM_XRGB(255,255,255), -1);
-			gr_printf(FSPACX(1), FSPACY(1), "ESC: leave\nSPACE/BACKSP: next/prev bitmap (%i/%i)",view_idx,Num_bitmap_files-1);
+			gr_printf(FSPACX(1), FSPACY(1), "ESC: leave\nSPACE/BACKSP: next/prev bitmap (%i/%i)\n%s",view_idx,Num_bitmap_files-1, input);
 			break;
 		case EVENT_WINDOW_CLOSE:
 			load_palette(MENU_PALETTE,0,1);
