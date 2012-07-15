@@ -335,12 +335,15 @@ void draw_ammo_info(int x,int y,int ammo_count,int primary);
 
 static int score_display;
 static fix score_time;
-static int old_weapon[2]		= {-1,-1};
+static int old_weapon__iwi_adjust[iwiv_count];
 static int old_laser_level		= -1;
 static int invulnerable_frame = 0;
-enum weapon_box_user_t weapon_box_user[2]={WBU_WEAPON,WBU_WEAPON};		//see WBU_ constants in gauges.h
-int weapon_box_states[2] = {WS_SET, WS_SET};
-fix weapon_box_fade_values[2];
+static enum weapon_box_user_t weapon_box_user__iwi_adjust[iwiv_count];		//see WBU_ constants in gauges.h
+#if 0
+static int weapon_box_state_0;
+static int weapon_box_state_1;
+static fix weapon_box_fade_values[2];
+#endif
 int	Color_0_31_0 = -1;
 extern fix Omega_charge;
 
@@ -1114,6 +1117,7 @@ static void show_bomb_count(int x,int y,int bg_color,int always_show,int right_a
 	gr_string(x-w,y,txt);
 }
 
+#if 0
 static void draw_primary_ammo_info(int ammo_count)
 {
 	if (PlayerCfg.CockpitMode[1] == CM_STATUS_BAR)
@@ -1121,6 +1125,7 @@ static void draw_primary_ammo_info(int ammo_count)
 	else
 		draw_ammo_info(PRIMARY_AMMO_X,PRIMARY_AMMO_Y,ammo_count,1);
 }
+#endif
 
 static void hud_show_weapons_mode(int type,int vertical,int x,int y){
 	int i,w,h,aw,orig_x,orig_y;
@@ -1673,11 +1678,13 @@ void close_gauges()
 
 void init_gauges()
 {
+	unsigned u;
+	for (u=0; u < iwiv_count; u++) {
+		old_weapon__iwi_adjust[u] = -1;
+		weapon_box_user__iwi_adjust[u] = WBU_WEAPON;
+	}
 	old_laser_level	= 0;
 
-	old_weapon[0] = old_weapon[1] = -1;
-
-	weapon_box_user[0] = weapon_box_user[1] = WBU_WEAPON;
 }
 
 static void draw_energy_bar(int energy)
@@ -1886,7 +1893,7 @@ static void draw_keys()
 	}
 }
 
-
+#if 0
 static void draw_weapon_info_sub(int info_index,const gauge_box *box,int pic_x,int pic_y,const char *name,int text_x,int text_y)
 {
 	grs_bitmap *bm;
@@ -1970,14 +1977,15 @@ static void draw_weapon_info(int weapon_type,int weapon_num,int laser_level)
 	}
 	if (PlayerCfg.HudMode!=0)
 	{
-		if (weapon_box_user[0] == WBU_WEAPON) {
+		if (weapon_box_user__iwi_adjust[iwi_0] == WBU_WEAPON) {
 			hud_show_weapons_mode(0,1,(PlayerCfg.CockpitMode[1]==CM_STATUS_BAR?SB_PRIMARY_AMMO_X:PRIMARY_AMMO_X),(PlayerCfg.CockpitMode[1]==CM_STATUS_BAR?SB_SECONDARY_AMMO_Y:SECONDARY_AMMO_Y));
 		}
-		if (weapon_box_user[1] == WBU_WEAPON) {
+		if (weapon_box_user__iwi_adjust[iwi_1] == WBU_WEAPON) {
 			hud_show_weapons_mode(1,1,(PlayerCfg.CockpitMode[1]==CM_STATUS_BAR?SB_SECONDARY_AMMO_X:SECONDARY_AMMO_X),(PlayerCfg.CockpitMode[1]==CM_STATUS_BAR?SB_SECONDARY_AMMO_Y:SECONDARY_AMMO_Y));
 		}
 	}
 }
+#endif
 
 void draw_ammo_info(int x,int y,int ammo_count,int primary)
 {
@@ -1989,6 +1997,7 @@ void draw_ammo_info(int x,int y,int ammo_count,int primary)
 	}
 }
 
+#if 0
 static void draw_secondary_ammo_info(int ammo_count)
 {
 	if (PlayerCfg.CockpitMode[1] == CM_STATUS_BAR)
@@ -2062,10 +2071,12 @@ static void draw_weapon_box(int weapon_type,int weapon_num)
 
 	gr_set_current_canvas(NULL);
 }
+#endif
 
-fix static_time[2];
+static fix static_time__iwi_adjust[iwiv_count];
 
-static void draw_static(int win)
+#if 0
+static void draw_static(InsetWindowIndex win)
 {
 	vclip *vc = &Vclip[VCLIP_MONITOR_STATIC];
 	grs_bitmap *bmp;
@@ -2075,13 +2086,13 @@ static void draw_static(int win)
 	int x,y;
 #endif
 
-	static_time[win] += FrameTime;
-	if (static_time[win] >= vc->play_time) {
-		weapon_box_user[win] = WBU_WEAPON;
+	static_time__iwi_adjust[iwi_value(win)] += FrameTime;
+	if (static_time__iwi_adjust[iwi_value(win)] >= vc->play_time) {
+		weapon_box_user__iwi_adjust[iwi_value(win)] = WBU_WEAPON;
 		return;
 	}
 
-	framenum = static_time[win] * vc->num_frames / vc->play_time;
+	framenum = static_time__iwi_adjust[iwi_value(win)] * vc->num_frames / vc->play_time;
 
 	PIGGY_PAGE_IN(vc->frames[framenum]);
 
@@ -2105,13 +2116,22 @@ static void draw_static(int win)
 
 	gr_set_current_canvas(NULL);
 }
+#endif
 
+/*
+ * This is only hit in cockpit modes:
+ * - full ship
+ * - rectangular status bar
+ * It is not hit in cockpit modes:
+ * - overlays only
+ */
 static void draw_weapon_boxes()
 {
-	if (weapon_box_user[0] == WBU_WEAPON) {
+#if 0
+	if (weapon_box_user__iwi_adjust[iwi_0] == WBU_WEAPON) {
 		draw_weapon_box(0,Primary_weapon);
 
-		if (weapon_box_states[0] == WS_SET) {
+		if (weapon_box_state_0 == WS_SET) {
 			if ((Primary_weapon == VULCAN_INDEX) || (Primary_weapon == GAUSS_INDEX))
 			{
 				if (Newdemo_state == ND_STATE_RECORDING)
@@ -2127,21 +2147,22 @@ static void draw_weapon_boxes()
 			}
 		}
 	}
-	else if (weapon_box_user[0] == WBU_STATIC)
+	else if (weapon_box_user__iwi_adjust[iwi_0] == WBU_STATIC)
 		draw_static(0);
 
-	if (weapon_box_user[1] == WBU_WEAPON) {
+	if (weapon_box_user__iwi_adjust[iwi_1] == WBU_WEAPON) {
 		draw_weapon_box(1,Secondary_weapon);
 
-		if (weapon_box_states[1] == WS_SET)
+		if (weapon_box_state_1 == WS_SET)
 		{
 			if (Newdemo_state == ND_STATE_RECORDING)
 				newdemo_record_secondary_ammo(Players[Player_num].secondary_ammo[Secondary_weapon]);
 			draw_secondary_ammo_info(Players[Player_num].secondary_ammo[Secondary_weapon]);
 		}
 	}
-	else if (weapon_box_user[1] == WBU_STATIC)
+	else if (weapon_box_user__iwi_adjust[iwi_1] == WBU_STATIC)
 		draw_static(1);
+#endif
 }
 
 
@@ -2873,7 +2894,7 @@ void render_gauges()
 		if (Newdemo_state == ND_STATE_RECORDING)
 			newdemo_record_player_energy(energy);
 		sb_draw_energy_bar(energy);
-		if (!PlayerCfg.HudMode && weapon_box_user[1] == WBU_WEAPON)
+		if (!PlayerCfg.HudMode && weapon_box_user__iwi_adjust[iwi_value(iwi_1)] == WBU_WEAPON)
 			show_bomb_count(HUD_SCALE_X(SB_BOMB_COUNT_X), HUD_SCALE_Y(SB_BOMB_COUNT_Y), gr_find_closest_color(0, 0, 0), 0, 0);
 
 		if (Newdemo_state==ND_STATE_RECORDING )
@@ -2914,24 +2935,26 @@ void render_gauges()
 //	If laser is active, set old_weapon[0] to -1 to force redraw.
 void update_laser_weapon_info(void)
 {
+#if 0
 	if (old_weapon[0] == 0)
 		if (! (Players[Player_num].laser_level > MAX_LASER_LEVEL && old_laser_level <= MAX_LASER_LEVEL))
 			old_weapon[0] = -1;
+#endif
 }
 
-int SW_drawn[2], SW_x[2], SW_y[2], SW_w[2], SW_h[2];
+int SW_drawn__iwi_adjust[iwiv_count], SW_x__iwi_adjust[iwiv_count], SW_y__iwi_adjust[iwiv_count], SW_w__iwi_adjust[iwiv_count], SW_h__iwi_adjust[iwiv_count];
 
 //draws a 3d view into one of the cockpit windows.  win is 0 for left,
 //1 for right.  viewer is object.  NULL object means give up window
 //user is one of the WBU_ constants.  If rear_view_flag is set, show a
 //rear view.  If label is non-NULL, print the label at the top of the
 //window.
-void do_cockpit_window_view(int win,dxxobject *viewer,int rear_view_flag,enum weapon_box_user_t user,const char *label)
+void do_cockpit_window_view(const InsetWindowIndex iwi,dxxobject *viewer,int rear_view_flag,enum weapon_box_user_t user,const char *label)
 {
 	grs_canvas window_canv;
 	static grs_canvas overlap_canv;
 	dxxobject *viewer_save = Viewer;
-	static int overlap_dirty[2]={0,0};
+	static int overlap_dirty__iwi_adjust[iwiv_count];
 	int boxnum;
 	static int window_x,window_y;
 	const gauge_box *box;
@@ -2944,50 +2967,62 @@ void do_cockpit_window_view(int win,dxxobject *viewer,int rear_view_flag,enum we
 
 		Assert(user == WBU_WEAPON || user == WBU_STATIC);
 
-		if (user == WBU_STATIC && weapon_box_user[win] != WBU_STATIC)
-			static_time[win] = 0;
+		if (user == WBU_STATIC && weapon_box_user__iwi_adjust[iwi_value(iwi)] != WBU_STATIC)
+			static_time__iwi_adjust[iwi_value(iwi)] = 0;
 
-		if (weapon_box_user[win] == WBU_WEAPON || weapon_box_user[win] == WBU_STATIC)
+		if (weapon_box_user__iwi_adjust[iwi_value(iwi)] == WBU_WEAPON || weapon_box_user__iwi_adjust[iwi_value(iwi)] == WBU_STATIC)
 			return;		//already set
 
-		weapon_box_user[win] = user;
+		weapon_box_user__iwi_adjust[iwi_value(iwi)] = user;
 
-		if (overlap_dirty[win]) {
+		if (overlap_dirty__iwi_adjust[iwi_value(iwi)]) {
 			gr_set_current_canvas(NULL);
-			overlap_dirty[win] = 0;
+			overlap_dirty__iwi_adjust[iwi_value(iwi)] = 0;
 		}
 
 		return;
 	}
 
-	update_rendered_data(win+1, viewer, rear_view_flag, user);
+	update_rendered_data(iwi_value(iwi)+1, viewer, rear_view_flag, user);
 
-	weapon_box_user[win] = user;						//say who's using window
+	weapon_box_user__iwi_adjust[iwi_value(iwi)] = user;						//say who's using window
 
 	Viewer = viewer;
 	Rear_view = rear_view_flag;
 
 	if (PlayerCfg.CockpitMode[1] == CM_FULL_SCREEN)
 	{
+		const unsigned half_screen_x = grd_curscreen->sc_w/2;
 		w = HUD_SCALE_X_AR(HIRESMODE?106:44);
 		h = HUD_SCALE_Y_AR(HIRESMODE?106:44);
 
-		dx = (win==0)?-(w+(w/10)):(w/10);
+		if (iwi_value(iwi) < iwiv_count / 2)
+		{
+			dx = -(w+(w/20)) * ((iwiv_count / 2) - iwi_value(iwi));
+			if (half_screen_x < (unsigned)-dx)
+				dx = 0;
+		}
+		else
+		{
+			dx = (w/20) + ((w + (w/20)) * ((iwiv_count / 2) - iwi_value(iwi)));
+		}
 
-		window_x = grd_curscreen->sc_w/2+dx;
+		window_x = half_screen_x+dx;
 		window_y = grd_curscreen->sc_h-h-(SHEIGHT/15);
 
 		//copy these vars so stereo code can get at them
-		SW_drawn[win]=1; SW_x[win] = window_x; SW_y[win] = window_y; SW_w[win] = w; SW_h[win] = h;
+		SW_drawn__iwi_adjust[iwi_value(iwi)]=1; SW_x__iwi_adjust[iwi_value(iwi)] = window_x; SW_y__iwi_adjust[iwi_value(iwi)] = window_y; SW_w__iwi_adjust[iwi_value(iwi)] = w; SW_h__iwi_adjust[iwi_value(iwi)] = h;
 
 		gr_init_sub_canvas(&window_canv,&grd_curscreen->sc_canvas,window_x,window_y,w,h);
 	}
 	else {
+#if 0
 		if (PlayerCfg.CockpitMode[1] == CM_FULL_COCKPIT)
-			boxnum = (COCKPIT_PRIMARY_BOX)+win;
+			boxnum = (COCKPIT_PRIMARY_BOX)+iwi;
 		else if (PlayerCfg.CockpitMode[1] == CM_STATUS_BAR)
-			boxnum = (SB_PRIMARY_BOX)+win;
+			boxnum = (SB_PRIMARY_BOX)+iwi;
 		else
+#endif
 			goto abort;
 
 		box = &gauge_boxes[boxnum];
@@ -2996,12 +3031,12 @@ void do_cockpit_window_view(int win,dxxobject *viewer,int rear_view_flag,enum we
 
 	gr_set_current_canvas(&window_canv);
 
-	render_frame(0, win+1);
+	render_frame(0, iwi_value(iwi)+1);
 
 	//	HACK! If guided missile, wake up robots as necessary.
 	if (viewer->type == OBJ_WEAPON) {
 		// -- Used to require to be GUIDED -- if (viewer->id == GUIDEDMISS_ID)
-		wake_up_rendered_objects(viewer, win+1);
+		wake_up_rendered_objects(viewer, iwi_value(iwi)+1);
 	}
 
 	if (label) {
@@ -3037,7 +3072,7 @@ void do_cockpit_window_view(int win,dxxobject *viewer,int rear_view_flag,enum we
 
 			gr_bitmap(window_x,window_y,&window_canv.cv_bitmap);
 
-			overlap_dirty[win] = 1;
+			overlap_dirty__iwi_adjust[iwi_value(iwi)] = 1;
 		}
 		else {
 
@@ -3053,7 +3088,7 @@ void do_cockpit_window_view(int win,dxxobject *viewer,int rear_view_flag,enum we
 
 				gr_bitmap(window_x,big_window_bottom+1,&overlap_canv.cv_bitmap);
 
-				overlap_dirty[win] = 1;
+				overlap_dirty__iwi_adjust[iwi_value(iwi)] = 1;
 			}
 		}
 	}
@@ -3063,7 +3098,7 @@ void do_cockpit_window_view(int win,dxxobject *viewer,int rear_view_flag,enum we
 	}
 
 	//force redraw when done
-	old_weapon[win] = -1;
+	old_weapon__iwi_adjust[iwi_value(iwi)] = -1;
 
 	if (PlayerCfg.CockpitMode[1] == CM_FULL_COCKPIT)
 		draw_wbu_overlay();

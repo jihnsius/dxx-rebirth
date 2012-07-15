@@ -66,9 +66,6 @@ CV_COOP,
 CV_MARKER,
 };
 
-extern int Coop_view_player[2];     // left & right
-extern int Marker_viewer_num[2];    // left & right
-
 // constants for ft_preference
 #define FP_RIGHT        0
 #define FP_UP           1

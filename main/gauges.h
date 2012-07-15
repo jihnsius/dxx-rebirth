@@ -84,12 +84,36 @@ WBU_STATIC,       // playing static after missile hits
 };
 
 typedef enum weapon_box_user_t weapon_box_user_t;
+
+struct InsetWindowIndex
+{
+	unsigned _value;
+};
+
+#define iwi_instance(V)	({ const struct InsetWindowIndex __iwi_inst = {(V)}; __iwi_inst; })
+#define iwi_value(V)	({	(V)._value; })
+
+enum InsetWindowIndexValue
+{
+	iwiv_0,
+#define iwi_0 iwi_instance(iwiv_0)
+	iwiv_1,
+#define iwi_1 iwi_instance(iwiv_1)
+#define iwi_rightmost iwi_1
+	iwiv_count
+};
+typedef struct InsetWindowIndex InsetWindowIndex;
+typedef char __iwi_consistency_check[(MAX_RENDERED_WINDOWS) == (iwiv_count + 1) ? 1 : -1];
+
+extern int Coop_view_player[MAX_RENDERED_WINDOWS - 1];     // left & right
+extern int Marker_viewer_num[MAX_RENDERED_WINDOWS - 1];    // left & right
+
 // draws a 3d view into one of the cockpit windows.  win is 0 for
 // left, 1 for right.  viewer is object.  NULL object means give up
 // window user is one of the WBU_ constants.  If rear_view_flag is
 // set, show a rear view.  If label is non-NULL, print the label at
 // the top of the window.
-void do_cockpit_window_view(int win, dxxobject *viewer, int rear_view_flag, enum weapon_box_user_t user, const char *label);
+void do_cockpit_window_view(InsetWindowIndex iwi, dxxobject *viewer, int rear_view_flag, enum weapon_box_user_t user, const char *label);
 
 #define GAUGE_HUD_NUMMODES 3
 

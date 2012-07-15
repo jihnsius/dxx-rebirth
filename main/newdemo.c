@@ -3752,7 +3752,9 @@ void nd_render_extras (ubyte which,dxxobject *obj)
 	if (which==255)
 	{
 		Int3(); // how'd we get here?
+#if 0
 		do_cockpit_window_view(w,NULL,0,WBU_WEAPON,NULL);
+#endif
 		return;
 	}
 

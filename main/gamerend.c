@@ -450,12 +450,12 @@ static const char *get_missile_name(const unsigned laser_type)
 	}
 }
 
-static void show_one_extra_view(const int w);
+static void show_one_extra_view(const InsetWindowIndex w);
 static void show_extra_views()
 {
 	int did_missile_view=0;
 	int save_newdemo_state = Newdemo_state;
-	int w;
+	unsigned w;
 
 	if (Newdemo_state==ND_STATE_PLAYBACK)
 	{
@@ -464,26 +464,26 @@ static void show_extra_views()
 			DemoDoingLeft=DemoDoLeft;
 
 			if (DemoDoLeft==3)
-				do_cockpit_window_view(0,ConsoleObject,1,WBU_REAR,"REAR");
+				do_cockpit_window_view(iwi_0,ConsoleObject,1,WBU_REAR,"REAR");
 			else
-				do_cockpit_window_view(0,&DemoLeftExtra,DemoRearCheck[DemoDoLeft],DemoWBUType[DemoDoLeft],DemoExtraMessage[DemoDoLeft]);
+				do_cockpit_window_view(iwi_0,&DemoLeftExtra,DemoRearCheck[DemoDoLeft],DemoWBUType[DemoDoLeft],DemoExtraMessage[DemoDoLeft]);
 		}
 		else
-			do_cockpit_window_view(0,NULL,0,WBU_WEAPON,NULL);
+			do_cockpit_window_view(iwi_0,NULL,0,WBU_WEAPON,NULL);
 	
 		if (DemoDoRight)
 		{
 			DemoDoingRight=DemoDoRight;
 			
 			if (DemoDoRight==3)
-				do_cockpit_window_view(1,ConsoleObject,1,WBU_REAR,"REAR");
+				do_cockpit_window_view(iwi_1,ConsoleObject,1,WBU_REAR,"REAR");
 			else
 			{
-				do_cockpit_window_view(1,&DemoRightExtra,DemoRearCheck[DemoDoRight],DemoWBUType[DemoDoRight],DemoExtraMessage[DemoDoRight]);
+				do_cockpit_window_view(iwi_1,&DemoRightExtra,DemoRearCheck[DemoDoRight],DemoWBUType[DemoDoRight],DemoExtraMessage[DemoDoRight]);
 			}
 		}
 		else
-			do_cockpit_window_view(1,NULL,0,WBU_WEAPON,NULL);
+			do_cockpit_window_view(iwi_1,NULL,0,WBU_WEAPON,NULL);
 		
 		DemoDoLeft=DemoDoRight=0;
 		DemoDoingLeft=DemoDoingRight=0;
@@ -495,12 +495,12 @@ static void show_extra_views()
 		if (PlayerCfg.GuidedInBigWindow)
 		{
 			RenderingType=6+(1<<4);
-			do_cockpit_window_view(1,Viewer,0,WBU_MISSILE,"SHIP");
+			do_cockpit_window_view(iwi_rightmost,Viewer,0,WBU_MISSILE,"SHIP");
 		}
 		else
 		{
 			RenderingType=1+(1<<4);
-			do_cockpit_window_view(1,Guided_missile[Player_num],0,WBU_GUIDED,"GUIDED");
+			do_cockpit_window_view(iwi_rightmost,Guided_missile[Player_num],0,WBU_GUIDED,"GUIDED");
 		}
 			
 		did_missile_view=1;
@@ -509,7 +509,7 @@ static void show_extra_views()
 
 		if (Guided_missile[Player_num]) {		//used to be active
 			if (!PlayerCfg.GuidedInBigWindow)
-				do_cockpit_window_view(1,NULL,0,WBU_STATIC,NULL);
+				do_cockpit_window_view(iwi_rightmost,NULL,0,WBU_STATIC,NULL);
 			Guided_missile[Player_num] = NULL;
 		}
 
@@ -543,44 +543,44 @@ static void show_extra_views()
 				Missile_viewer_sig = Missile_viewer->signature;
 			if (PlayerCfg.MissileViewEnabled && Missile_viewer->type!=OBJ_NONE && Missile_viewer->signature == Missile_viewer_sig) {
   				RenderingType=2+(1<<4);
-				do_cockpit_window_view(1,Missile_viewer,0,WBU_MISSILE,get_missile_name(Missile_viewer->id));
+				do_cockpit_window_view(iwi_rightmost,Missile_viewer,0,WBU_MISSILE,get_missile_name(Missile_viewer->id));
 				did_missile_view=1;
 			}
 			else {
 				Missile_viewer = NULL;
 				Missile_viewer_sig = -1;
 				RenderingType=255;
-				do_cockpit_window_view(1,NULL,0,WBU_STATIC,NULL);
+				do_cockpit_window_view(iwi_rightmost,NULL,0,WBU_STATIC,NULL);
 			}
 		}
 	}
 
-	for (w=0;w<2;w++) {
+	for (w=iwiv_0;w<iwiv_count;w++) {
+		const struct InsetWindowIndex iw = iwi_instance(w);
 
-		if (w==1 && did_missile_view)
+		if (iwi_value(iw)==iwi_value(iwi_rightmost) && did_missile_view)
 			continue;		//if showing missile view in right window, can't show anything else
 
-		show_one_extra_view(w);
+		show_one_extra_view(iw);
 	}
 	RenderingType=0;
 	Newdemo_state = save_newdemo_state;
 }
 
-static void show_one_extra_view(const int w)
+static void show_one_extra_view(const InsetWindowIndex w)
 {
 		//show special views if selected
-		switch (PlayerCfg.Cockpit3DView[w]) {
+		switch (PlayerCfg.Cockpit3DView[iwi_value(w)]) {
 			case CV_NONE:
 				RenderingType=255;
 				do_cockpit_window_view(w,NULL,0,WBU_WEAPON,NULL);
 				break;
 			case CV_REAR:
+				RenderingType=(iwi_value(w) <= 1) ? 3+(iwi_value(w)<<4) : 255;
 				if (Rear_view) {		//if big window is rear view, show front here
-					RenderingType=3+(w<<4);				
 					do_cockpit_window_view(w,ConsoleObject,0,WBU_REAR,"FRONT");
 				}
 				else {					//show normal rear view
-					RenderingType=3+(w<<4);				
 					do_cockpit_window_view(w,ConsoleObject,1,WBU_REAR,"REAR");
 				}
 			 	break;
@@ -589,38 +589,38 @@ static void show_one_extra_view(const int w)
 				buddy = find_escort();
 				if (buddy == NULL) {
 					do_cockpit_window_view(w,NULL,0,WBU_WEAPON,NULL);
-					PlayerCfg.Cockpit3DView[w] = CV_NONE;
+					PlayerCfg.Cockpit3DView[iwi_value(w)] = CV_NONE;
 				}
 				else {
-					RenderingType=4+(w<<4);
+					RenderingType=(iwi_value(w) <= 1) ? 4+(iwi_value(w)<<4) : 255;
 					do_cockpit_window_view(w,buddy,0,WBU_ESCORT,PlayerCfg.GuidebotName);
 				}
 				break;
 			}
 #ifdef NETWORK
 			case CV_COOP: {
-				int player = Coop_view_player[w];
+				int player = Coop_view_player[iwi_value(w)];
 
 	         RenderingType=255; // don't handle coop stuff			
 				
 				if (player!=-1 && Players[player].connected && ((Game_mode & GM_MULTI_COOP) || ((Game_mode & GM_TEAM) && (get_team(player) == get_team(Player_num)))))
-					do_cockpit_window_view(w,&Objects[Players[Coop_view_player[w]].objnum],0,WBU_COOP,Players[Coop_view_player[w]].callsign);
+					do_cockpit_window_view(w,&Objects[Players[Coop_view_player[iwi_value(w)]].objnum],0,WBU_COOP,Players[Coop_view_player[iwi_value(w)]].callsign);
 				else {
 					do_cockpit_window_view(w,NULL,0,WBU_WEAPON,NULL);
-					PlayerCfg.Cockpit3DView[w] = CV_NONE;
+					PlayerCfg.Cockpit3DView[iwi_value(w)] = CV_NONE;
 				}
 				break;
 			}
 #endif
 			case CV_MARKER: {
 				char label[10];
-				RenderingType=5+(w<<4);
-				if (Marker_viewer_num[w] == -1 || MarkerObject[Marker_viewer_num[w]] == -1) {
-					PlayerCfg.Cockpit3DView[w] = CV_NONE;
+				RenderingType=(iwi_value(w) <= 1) ? 5+(iwi_value(w)<<4) : 255;
+				if (Marker_viewer_num[iwi_value(w)] == -1 || MarkerObject[Marker_viewer_num[iwi_value(w)]] == -1) {
+					PlayerCfg.Cockpit3DView[iwi_value(w)] = CV_NONE;
 					break;
 				}
-				sprintf(label,"Marker %d",Marker_viewer_num[w]+1);
-				do_cockpit_window_view(w,&Objects[MarkerObject[Marker_viewer_num[w]]],0,WBU_MARKER,label);
+				sprintf(label,"Marker %d",Marker_viewer_num[iwi_value(w)]+1);
+				do_cockpit_window_view(w,&Objects[MarkerObject[Marker_viewer_num[iwi_value(w)]]],0,WBU_MARKER,label);
 				break;
 			}
 			default:

@@ -63,7 +63,7 @@ typedef struct player_config
 	int MouseFSDead;
 	int MouseFSIndicator;
 	enum cockpit_mode_t CockpitMode[2]; // 0 saves the "real" cockpit, 1 also saves letterbox and rear. Used to properly switch between modes and restore the real one.
-	enum cockpit_view_t Cockpit3DView[2];
+	enum cockpit_view_t Cockpit3DView[MAX_RENDERED_WINDOWS - 1];
 	char NetworkMessageMacro[4][MAX_MESSAGE_LEN];
 	int NetlifeKills;
 	int NetlifeKilled;

@@ -1269,8 +1269,8 @@ extern	int Do_appearance_effect;
 dxxobject *Missile_viewer=NULL;
 int Missile_viewer_sig=-1;
 
-int Marker_viewer_num[2]={-1,-1};
-int Coop_view_player[2]={-1,-1};
+int Marker_viewer_num[iwiv_count];
+int Coop_view_player[iwiv_count];
 
 //returns ptr to escort robot, or NULL
 dxxobject *find_escort()

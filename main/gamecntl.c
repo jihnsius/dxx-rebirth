@@ -651,40 +651,38 @@ static int HandleDemoKey(int key)
 }
 
 //switch a cockpit window to the next function
-static int select_next_window_function(int w)
+static int select_next_window_function(const InsetWindowIndex w)
 {
-	Assert(w==0 || w==1);
-
-	switch (PlayerCfg.Cockpit3DView[w]) {
+	switch (PlayerCfg.Cockpit3DView[iwi_value(w)]) {
 		case CV_NONE:
-			PlayerCfg.Cockpit3DView[w] = CV_REAR;
+			PlayerCfg.Cockpit3DView[iwi_value(w)] = CV_REAR;
 			break;
 		case CV_REAR:
 			if (find_escort()) {
-				PlayerCfg.Cockpit3DView[w] = CV_ESCORT;
+				PlayerCfg.Cockpit3DView[iwi_value(w)] = CV_ESCORT;
 				break;
 			}
 			//if no ecort, fall through
 		case CV_ESCORT:
-			Coop_view_player[w] = -1;		//force first player
+			Coop_view_player[iwi_value(w)] = -1;		//force first player
 #ifdef NETWORK
 			//fall through
 		case CV_COOP:
-			Marker_viewer_num[w] = -1;
+			Marker_viewer_num[iwi_value(w)] = -1;
 			if ((Game_mode & GM_MULTI_COOP) || (Game_mode & GM_TEAM)) {
-				PlayerCfg.Cockpit3DView[w] = CV_COOP;
+				PlayerCfg.Cockpit3DView[iwi_value(w)] = CV_COOP;
 				while (1) {
-					Coop_view_player[w]++;
-					if (Coop_view_player[w] == N_players) {
-						PlayerCfg.Cockpit3DView[w] = CV_MARKER;
+					Coop_view_player[iwi_value(w)]++;
+					if (Coop_view_player[iwi_value(w)] == N_players) {
+						PlayerCfg.Cockpit3DView[iwi_value(w)] = CV_MARKER;
 						goto case_marker;
 					}
-					if (Coop_view_player[w]==Player_num)
+					if (Coop_view_player[iwi_value(w)]==Player_num)
 						continue;
 
 					if (Game_mode & GM_MULTI_COOP)
 						break;
-					else if (get_team(Coop_view_player[w]) == get_team(Player_num))
+					else if (get_team(Coop_view_player[iwi_value(w)]) == get_team(Player_num))
 						break;
 				}
 				break;
@@ -693,17 +691,17 @@ static int select_next_window_function(int w)
 		case CV_MARKER:
 		case_marker:;
 			if ((Game_mode & GM_MULTI) && !(Game_mode & GM_MULTI_COOP) && Netgame.Allow_marker_view) {	//anarchy only
-				PlayerCfg.Cockpit3DView[w] = CV_MARKER;
-				if (Marker_viewer_num[w] == -1)
-					Marker_viewer_num[w] = Player_num * 2;
-				else if (Marker_viewer_num[w] == Player_num * 2)
-					Marker_viewer_num[w]++;
+				PlayerCfg.Cockpit3DView[iwi_value(w)] = CV_MARKER;
+				if (Marker_viewer_num[iwi_value(w)] == -1)
+					Marker_viewer_num[iwi_value(w)] = Player_num * 2;
+				else if (Marker_viewer_num[iwi_value(w)] == Player_num * 2)
+					Marker_viewer_num[iwi_value(w)]++;
 				else
-					PlayerCfg.Cockpit3DView[w] = CV_NONE;
+					PlayerCfg.Cockpit3DView[iwi_value(w)] = CV_NONE;
 			}
 			else
 #endif
-				PlayerCfg.Cockpit3DView[w] = CV_NONE;
+				PlayerCfg.Cockpit3DView[iwi_value(w)] = CV_NONE;
 			break;
 	}
 	write_player_file();
@@ -823,11 +821,11 @@ static int HandleSystemKey(int key)
 
 			KEY_MAC(case KEY_COMMAND+KEY_SHIFTED+KEY_1:)
 			case KEY_SHIFTED+KEY_F1:
-				select_next_window_function(0);
+				select_next_window_function(iwi_0);
 				return 1;
 			KEY_MAC(case KEY_COMMAND+KEY_SHIFTED+KEY_2:)
 			case KEY_SHIFTED+KEY_F2:
-				select_next_window_function(1);
+				select_next_window_function(iwi_1);
 				return 1;
 		}
 
