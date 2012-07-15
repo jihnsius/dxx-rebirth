@@ -223,13 +223,21 @@ static int load_mission_oem(void)
 	return 1;
 }
 
-
 //compare a string for a token. returns true if match
-static int istok(char *buf,char *tok)
+static int istok(const char *buf,const char *tok)
 {
 	return strnicmp(buf,tok,strlen(tok)) == 0;
 
 }
+
+#ifdef __GNUC__
+#define istok(B,T)	({	\
+	const char *const __istok_T = (T); \
+	__builtin_constant_p((T)) \
+		? strnicmp((B), __istok_T, __builtin_strlen(__istok_T)) == 0 \
+		: (istok((B), __istok_T)) \
+	;})
+#endif
 
 //adds a terminating 0 after a string at the first white space
 static void add_term(char *s)
