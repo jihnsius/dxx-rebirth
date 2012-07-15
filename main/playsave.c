@@ -580,8 +580,11 @@ int read_player_file()
 
 		if (player_file_version>=16)
 		{
-			PHYSFS_readSLE32(file, &PlayerCfg.Cockpit3DView[0]);
-			PHYSFS_readSLE32(file, &PlayerCfg.Cockpit3DView[1]);
+			PHYSFS_sint32 si;
+			PHYSFS_readSLE32(file, &si);
+			PlayerCfg.Cockpit3DView[0] = si;
+			PHYSFS_readSLE32(file, &si);
+			PlayerCfg.Cockpit3DView[1] = si;
 			if (swap)
 			{
 				PlayerCfg.Cockpit3DView[0] = SWAPINT(PlayerCfg.Cockpit3DView[0]);

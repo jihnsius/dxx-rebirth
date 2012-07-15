@@ -58,11 +58,13 @@ extern fix Laser_delay_time;        // Delay between laser fires.
 extern struct dxxobject *Missile_viewer;
 extern int Missile_viewer_sig;
 
-#define CV_NONE     0
-#define CV_ESCORT   1
-#define CV_REAR     2
-#define CV_COOP     3
-#define CV_MARKER   4
+enum cockpit_view_t {
+CV_NONE,
+CV_ESCORT,
+CV_REAR,
+CV_COOP,
+CV_MARKER,
+};
 
 extern int Coop_view_player[2];     // left & right
 extern int Marker_viewer_num[2];    // left & right
