@@ -357,11 +357,16 @@ static int read_mission_file(mle *mission, char *filename, int location)
 			return 0;
 		}
 
-		p = get_parm_value("type",mfile);
-
+		if (PHYSFSX_fgets(temp,sizeof(temp),mfile))
+		{
+			if (istok(temp,"type"))
+			{
+				p = get_value(temp);
 		//get mission type
 		if (p)
 			mission->anarchy_only_flag = istok(p,"anarchy");
+			}
+		}
 
 		PHYSFS_close(mfile);
 
