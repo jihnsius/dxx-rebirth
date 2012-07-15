@@ -338,7 +338,7 @@ static fix score_time;
 static int old_weapon[2]		= {-1,-1};
 static int old_laser_level		= -1;
 static int invulnerable_frame = 0;
-int weapon_box_user[2]={WBU_WEAPON,WBU_WEAPON};		//see WBU_ constants in gauges.h
+enum weapon_box_user_t weapon_box_user[2]={WBU_WEAPON,WBU_WEAPON};		//see WBU_ constants in gauges.h
 int weapon_box_states[2] = {WS_SET, WS_SET};
 fix weapon_box_fade_values[2];
 int	Color_0_31_0 = -1;
@@ -2926,7 +2926,7 @@ int SW_drawn[2], SW_x[2], SW_y[2], SW_w[2], SW_h[2];
 //user is one of the WBU_ constants.  If rear_view_flag is set, show a
 //rear view.  If label is non-NULL, print the label at the top of the
 //window.
-void do_cockpit_window_view(int win,dxxobject *viewer,int rear_view_flag,int user,const char *label)
+void do_cockpit_window_view(int win,dxxobject *viewer,int rear_view_flag,enum weapon_box_user_t user,const char *label)
 {
 	grs_canvas window_canv;
 	static grs_canvas overlap_canv;

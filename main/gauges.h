@@ -71,21 +71,25 @@ typedef struct {
 
 extern rgb player_rgb[];
 
-#define WBU_WEAPON      0       // the weapons display
-#define WBU_MISSILE     1       // the missile view
-#define WBU_ESCORT      2       // the "buddy bot"
-#define WBU_REAR        3       // the rear view
-#define WBU_COOP        4       // coop or team member view
-#define WBU_GUIDED      5       // the guided missile
-#define WBU_MARKER      6       // a dropped marker
-#define WBU_STATIC      7       // playing static after missile hits
+enum weapon_box_user_t
+{
+WBU_WEAPON,       // the weapons display
+WBU_MISSILE,       // the missile view
+WBU_ESCORT,       // the "buddy bot"
+WBU_REAR,       // the rear view
+WBU_COOP,       // coop or team member view
+WBU_GUIDED,       // the guided missile
+WBU_MARKER,       // a dropped marker
+WBU_STATIC,       // playing static after missile hits
+};
 
+typedef enum weapon_box_user_t weapon_box_user_t;
 // draws a 3d view into one of the cockpit windows.  win is 0 for
 // left, 1 for right.  viewer is object.  NULL object means give up
 // window user is one of the WBU_ constants.  If rear_view_flag is
 // set, show a rear view.  If label is non-NULL, print the label at
 // the top of the window.
-void do_cockpit_window_view(int win, dxxobject *viewer, int rear_view_flag, int user, const char *label);
+void do_cockpit_window_view(int win, dxxobject *viewer, int rear_view_flag, enum weapon_box_user_t user, const char *label);
 
 #define GAUGE_HUD_NUMMODES 3
 

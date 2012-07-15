@@ -423,7 +423,7 @@ ubyte DemoDoingRight=0,DemoDoingLeft=0;
 extern ubyte DemoDoRight,DemoDoLeft;
 extern dxxobject DemoRightExtra,DemoLeftExtra;
 
-char DemoWBUType[]={0,WBU_GUIDED,WBU_MISSILE,WBU_REAR,WBU_ESCORT,WBU_MARKER,0};
+static const weapon_box_user_t DemoWBUType[]={WBU_WEAPON,WBU_GUIDED,WBU_MISSILE,WBU_REAR,WBU_ESCORT,WBU_MARKER,WBU_WEAPON};
 char DemoRearCheck[]={0,0,0,1,0,0,0};
 static const char *const DemoExtraMessage[]={"PLAYER","GUIDED","MISSILE","REAR","GUIDE-BOT","MARKER","SHIP"};
 
