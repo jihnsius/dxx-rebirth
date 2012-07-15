@@ -167,13 +167,6 @@ extern void reset_time(void);       // called when starting level
 // If automap_flag == 1, then call automap routine to write message.
 extern void save_screen_shot(int automap_flag);
 
-//valid modes for cockpit
-#define CM_FULL_COCKPIT     0   // normal screen with cockput
-#define CM_REAR_VIEW        1   // looking back with bitmap
-#define CM_STATUS_BAR       2   // small status bar, w/ reticle
-#define CM_FULL_SCREEN      3   // full screen, no cockpit (w/ reticle)
-#define CM_LETTERBOX        4   // half-height window (for cutscenes)
-
 extern int Game_window_w,       // width and height of player's game window
            Game_window_h;
 

@@ -707,7 +707,7 @@ void game_render_frame_mono(int flip)
 
 void toggle_cockpit()
 {
-	int new_mode=CM_FULL_SCREEN;
+	enum cockpit_mode_t new_mode=CM_FULL_SCREEN;
 
 	if (Rear_view || Player_is_dead)
 		return;
@@ -722,6 +722,9 @@ void toggle_cockpit()
 			break;
 		case CM_FULL_SCREEN:
 			new_mode = CM_FULL_COCKPIT;
+			break;
+		case CM_REAR_VIEW:
+		case CM_LETTERBOX:
 			break;
 	}
 

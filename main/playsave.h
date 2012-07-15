@@ -35,6 +35,16 @@ typedef struct hli {
 	ubyte	LevelNum;
 } hli;
 
+enum cockpit_mode_t
+{
+//valid modes for cockpit
+	CM_FULL_COCKPIT,   // normal screen with cockpit
+	CM_REAR_VIEW,   // looking back with bitmap
+	CM_STATUS_BAR,   // small status bar, w/ reticle
+	CM_FULL_SCREEN,   // full screen, no cockpit (w/ reticle)
+	CM_LETTERBOX   // half-height window (for cutscenes)
+};
+
 typedef struct player_config
 {
 	ubyte ControlType;
@@ -52,7 +62,7 @@ typedef struct player_config
 	int MouseSens[6];
 	int MouseFSDead;
 	int MouseFSIndicator;
-	int CockpitMode[2]; // 0 saves the "real" cockpit, 1 also saves letterbox and rear. Used to properly switch between modes and restore the real one.
+	enum cockpit_mode_t CockpitMode[2]; // 0 saves the "real" cockpit, 1 also saves letterbox and rear. Used to properly switch between modes and restore the real one.
 	int Cockpit3DView[2];
 	char NetworkMessageMacro[4][MAX_MESSAGE_LEN];
 	int NetlifeKills;
