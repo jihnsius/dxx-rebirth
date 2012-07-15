@@ -265,18 +265,12 @@ static char *get_value(char *buf)
 	return NULL;		//error!
 }
 
-//reads a line, returns ptr to value of passed parm.  returns NULL if none
-static char *get_parm_value(char *parm,PHYSFS_file *f)
+static char *get_mission_name(char *buf)
 {
-	static char buf[80];
-
-	if (!PHYSFSX_fgets(buf,80,f))
-		return NULL;
-
-	if (istok(buf,parm))
-		return get_value(buf);
-	else
-		return NULL;
+	char *p = get_value(buf);
+	if (p && (istok(buf,"name") || istok(buf,"xname") || istok(buf,"zname")))
+		return p;
+	return NULL;
 }
 
 static int ml_sort_func(mle *e0,mle *e1)
@@ -328,19 +322,8 @@ static int read_mission_file(mle *mission, char *filename, int location)
 		mission->filename = mission->path + (p - temp);
 		mission->location = location;
 
-		p = get_parm_value("name",mfile);
-
-		if (!p) {		//try enhanced mission
-			PHYSFSX_fseek(mfile,0,SEEK_SET);
-			p = get_parm_value("xname",mfile);
-		}
-
-		if (!p) {       //try super-enhanced mission!
-			PHYSFSX_fseek(mfile,0,SEEK_SET);
-			p = get_parm_value("zname",mfile);
-		}
-
-		if (p) {
+		if (PHYSFSX_fgets(temp,sizeof(temp),mfile) && (p = get_mission_name(temp)))
+		{
 			char *t;
 			if ((t=strchr(p,';'))!=NULL)
 				*t=0;
