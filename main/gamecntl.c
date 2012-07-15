@@ -148,8 +148,8 @@ int FinalCheats(int key);
 void do_cheat_menu(void);
 #endif
 
-int HandleGameKey(int key);
-int HandleSystemKey(int key);
+static int HandleGameKey(int key);
+static int HandleSystemKey(int key);
 int HandleTestKey(int key);
 void advance_sound(void);
 void play_test_sound(void);
@@ -797,7 +797,7 @@ dump_door_debugging_info()
 
 //this is for system-level keys, such as help, etc.
 //returns 1 if screen changed
-int HandleSystemKey(int key)
+static int HandleSystemKey(int key)
 {
 	if (!Player_is_dead)
 		switch (key)
@@ -1026,7 +1026,7 @@ int HandleSystemKey(int key)
 
 extern void DropFlag();
 
-int HandleGameKey(int key)
+static int HandleGameKey(int key)
 {
 	switch (key) {
 
