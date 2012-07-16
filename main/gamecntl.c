@@ -651,18 +651,30 @@ static int HandleDemoKey(int key)
 }
 
 //switch a cockpit window to the next function
-static int select_next_window_function(const InsetWindowIndex w)
+static void select_next_window_function(const InsetWindowIndex w, unsigned value)
 {
-	switch (PlayerCfg.Cockpit3DView[iwi_value(w)]) {
-		case CV_NONE:
+	switch(value)
+	{
+		case 0:
+			PlayerCfg.Cockpit3DView[iwi_value(w)] = CV_NONE;
+			return;
+		case 1:
 			PlayerCfg.Cockpit3DView[iwi_value(w)] = CV_REAR;
-			break;
-		case CV_REAR:
+			return;
+		case 2:
 			if (find_escort()) {
 				PlayerCfg.Cockpit3DView[iwi_value(w)] = CV_ESCORT;
-				break;
+				return;
 			}
 			//if no ecort, fall through
+	}
+	unsigned step = value - 2;
+	PlayerCfg.Cockpit3DView[iwi_value(w)] = CV_ESCORT;
+	for (; step --;) {
+	switch (PlayerCfg.Cockpit3DView[iwi_value(w)]) {
+		case CV_NONE:
+		case CV_REAR:
+			return;
 		case CV_ESCORT:
 			Coop_view_player[iwi_value(w)] = -1;		//force first player
 #ifdef NETWORK
@@ -704,9 +716,68 @@ static int select_next_window_function(const InsetWindowIndex w)
 				PlayerCfg.Cockpit3DView[iwi_value(w)] = CV_NONE;
 			break;
 	}
-	write_player_file();
+	}
+}
 
-	return 1;	 //screen_changed
+enum inset_select_mode_t g_inset_selector_mode;
+InsetWindowIndex g_iwi_focus;
+static int HandleInsetWindowManagementKey(const int key)
+{
+	const enum inset_select_mode_t selector_mode = g_inset_selector_mode;
+	g_inset_selector_mode = ism_none;
+	switch(selector_mode)
+	{
+		case ism_window:
+		case ism_view:
+			break;
+		default:
+			return 0;
+	}
+	unsigned value;
+	switch(key)
+	{
+		case KEY_0:
+			value = 0;
+			break;
+		case KEY_1:
+		case KEY_2:
+		case KEY_3:
+		case KEY_4:
+		case KEY_5:
+		case KEY_6:
+		case KEY_7:
+		case KEY_8:
+		case KEY_9:
+			value = 1 + (key - KEY_1);
+			break;
+		default:
+			return 1;
+	}
+	if (value >= iwiv_count)
+		return 1;
+	switch(selector_mode)
+	{
+		case ism_window:
+			g_iwi_focus = iwi_instance(value);
+			break;
+		case ism_view:
+			select_next_window_function(g_iwi_focus, value);
+	write_player_file();
+			break;
+		default:
+			return 1;
+	}
+	return 1;
+}
+
+static void set_inset_mode_select_window()
+{
+	g_inset_selector_mode = ism_window;
+}
+
+static void set_inset_mode_select_view()
+{
+	g_inset_selector_mode = ism_view;
 }
 
 #ifdef DOOR_DEBUGGING
@@ -821,13 +892,15 @@ static int HandleSystemKey(int key)
 
 			KEY_MAC(case KEY_COMMAND+KEY_SHIFTED+KEY_1:)
 			case KEY_SHIFTED+KEY_F1:
-				select_next_window_function(iwi_0);
+				set_inset_mode_select_window();
 				return 1;
 			KEY_MAC(case KEY_COMMAND+KEY_SHIFTED+KEY_2:)
 			case KEY_SHIFTED+KEY_F2:
-				select_next_window_function(iwi_1);
+				set_inset_mode_select_view();
 				return 1;
 		}
+	if (HandleInsetWindowManagementKey(key))
+		return 1;
 
 	switch (key)
 	{

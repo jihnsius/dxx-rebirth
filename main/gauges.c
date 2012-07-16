@@ -1422,6 +1422,26 @@ static void hud_show_shield(void)
 		newdemo_record_player_shields(f2ir(Players[Player_num].shields));
 }
 
+static void show_inset_selector_text()
+{
+	const enum inset_select_mode_t selector_mode = g_inset_selector_mode;
+	const char *mode;
+	switch(selector_mode)
+	{
+		case ism_window:
+			mode = "window";
+			break;
+		case ism_view:
+			mode = "view";
+			break;
+		default:
+			return;
+	}
+	const unsigned line_spacing = LINE_SPACING;
+	const unsigned base_y = FSPACY(1) + line_spacing;
+	gr_printf(FSPACX(1), base_y + ((Game_mode & GM_MULTI) ? 0 : 2 * line_spacing), "Selector: %s%c%u", mode, selector_mode == ism_view ? ' ' : 0, iwi_value(g_iwi_focus));
+}
+
 //draw the icons for number of lives
 static void hud_show_lives()
 {
@@ -2822,6 +2842,7 @@ void draw_hud()
 
 		HUD_render_message_frame();
 
+		show_inset_selector_text();
 		if (PlayerCfg.CockpitMode[1]!=CM_STATUS_BAR)
 			hud_show_lives();
 		if (Game_mode&GM_MULTI && Show_kill_list)

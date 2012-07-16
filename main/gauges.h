@@ -105,8 +105,17 @@ enum InsetWindowIndexValue
 typedef struct InsetWindowIndex InsetWindowIndex;
 typedef char __iwi_consistency_check[(MAX_RENDERED_WINDOWS) == (iwiv_count + 1) ? 1 : -1];
 
+enum inset_select_mode_t
+{
+	ism_none,
+	ism_window,
+	ism_view,
+};
+
 extern int Coop_view_player[MAX_RENDERED_WINDOWS - 1];     // left & right
 extern int Marker_viewer_num[MAX_RENDERED_WINDOWS - 1];    // left & right
+extern enum inset_select_mode_t g_inset_selector_mode;
+extern InsetWindowIndex g_iwi_focus;
 
 // draws a 3d view into one of the cockpit windows.  win is 0 for
 // left, 1 for right.  viewer is object.  NULL object means give up
