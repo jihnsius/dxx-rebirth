@@ -69,7 +69,7 @@ typedef struct {
 	ubyte r,g,b;
 } rgb;
 
-extern rgb player_rgb[];
+extern const rgb player_rgb[];
 
 enum weapon_box_user_t
 {
