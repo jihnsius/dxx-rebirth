@@ -199,6 +199,11 @@ static void print_commandline_help()
 	printf( "  -asyncblit                    Use queued blits over SDL. Can speed up rendering\n");
 #endif // OGL
 
+#ifdef USE_PYTHON
+	printf("\n Python enabled\n"
+			"  -python-load                  Load Python script at startup\n"
+            "  -no-python                    Do not initialize Python\n");
+#endif
 	printf( "\n Help:\n\n");
 	printf( "  -help, -h, -?, ?             View this help screen\n");
 	printf( "\n\n");

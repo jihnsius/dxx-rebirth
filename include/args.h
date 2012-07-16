@@ -64,6 +64,9 @@ typedef struct Arg
 	int SysNoBorders;
 	int SysAutoDemo;
 	int SysNoMovies;
+#ifdef USE_PYTHON
+	int SysNoPython;
+#endif
 	int CtlNoMouse;
 	int CtlNoJoystick;
 	int CtlNoStickyKeys;

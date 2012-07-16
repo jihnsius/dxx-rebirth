@@ -196,6 +196,7 @@ void ReadCmdArgs(void)
 	GameArg.DbgBpp 			= (FindArg("-16bpp") ? 16 : 32);
 #ifdef USE_PYTHON
 	GameArg.SysPythonSrc = get_str_arg("-python-load", NULL);
+	GameArg.SysNoPython = FindArg("-no-python");
 #endif
 
 #ifdef OGL

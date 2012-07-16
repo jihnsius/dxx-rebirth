@@ -109,6 +109,8 @@ static void con_pyerr_print()
 template <typename F>
 static inline void guarded_py_call(const F& f)
 {
+	if (GameArg.SysNoPython)
+		return;
 	try {
 		f();
 	} catch (const error_already_set &) {
@@ -118,6 +120,8 @@ static inline void guarded_py_call(const F& f)
 
 void scripting_init()
 {
+	if (GameArg.SysNoPython)
+		return;
 	Py_Initialize();
 	try {
 		object __main__(import("__main__"));
