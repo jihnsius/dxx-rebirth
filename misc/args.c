@@ -180,9 +180,9 @@ void ReadCmdArgs(void)
 
 	// Debug Options
 
-	if (FindArg("-debug"))		GameArg.DbgVerbose = CON_DEBUG;
-	else if (FindArg("-verbose"))	GameArg.DbgVerbose = CON_VERBOSE;
-	else				GameArg.DbgVerbose = CON_NORMAL;
+	if (FindArg("-debug"))		g_DbgVerbose = CON_DEBUG;
+	else if (FindArg("-verbose"))	g_DbgVerbose = CON_VERBOSE;
+	else				g_DbgVerbose = CON_NORMAL;
 
 	GameArg.DbgSafelog 		= FindArg("-safelog");
 	GameArg.DbgNoRun 		= FindArg("-norun");

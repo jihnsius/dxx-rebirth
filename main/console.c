@@ -25,6 +25,8 @@ static struct console_buffer con_buffer[CON_LINES_MAX];
 static int con_state = CON_STATE_CLOSED, con_scroll_offset = 0, con_size = 0;
 extern void game_flush_inputs();
 
+int g_DbgVerbose;
+
 //cxxconsole.cpp
 void cxx_con_init();
 void cxx_handle_misc_con_key(const unsigned key);
@@ -52,14 +54,13 @@ static void con_add_buffer_line(int priority, char *buffer)
 	}
 }
 
-void con_printf(int priority, const char *fmt, ...)
+void (con_printf)(int priority, const char *fmt, ...)
 {
 	va_list arglist;
 	char buffer[CON_LINE_LENGTH];
 
 	memset(buffer,'\0',CON_LINE_LENGTH);
 
-	if (priority <= ((int)GameArg.DbgVerbose))
 	{
 		char *p1, *p2;
 		struct tm *lt;

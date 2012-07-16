@@ -373,8 +373,8 @@ int main(int argc, char *argv[])
 	con_printf(CON_NORMAL, "%s\n%s\n",TXT_COPYRIGHT,TXT_TRADEMARK);
 	con_printf(CON_NORMAL, "Copyright (C) 1999 Peter Hawkins, 2002 Bradley Bell, 2005-2011 Christian Beckhaeuser\n\n");
 
-	if (GameArg.DbgVerbose)
-		con_printf(CON_VERBOSE,"%s%s", TXT_VERBOSE_1, "\n");
+	if (g_DbgVerbose)
+		con_printf(CON_VERBOSE,"%s\n", TXT_VERBOSE_1);
 	
 	ReadConfigFile();
 
