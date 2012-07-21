@@ -655,7 +655,7 @@ int check_segment_connections(void)
 				create_abs_vertex_lists(&con_num_faces, con_vertex_list, csegnum, csidenum, __FILE__, __LINE__);
 
 				if (con_num_faces != num_faces) {
-					con_printf(CON_URGENT, "%s:%u: segnum=%i sidenum=%i: con_num_faces=%i num_faces=%i\n", __func__, __LINE__, segnum, sidenum, con_num_faces, num_faces);
+					con_printf(CON_URGENT, "%s:%u: segnum=%i sidenum=%i: num_faces=%i; csegnum=%i csidenum=%i: con_num_faces=%i\n", __func__, __LINE__, segnum, sidenum, num_faces, csegnum, csidenum, con_num_faces);
 					errors = 1;
 				}
 				else
@@ -666,7 +666,9 @@ int check_segment_connections(void)
 
 						if (t==4)
 						{
-							con_printf(CON_URGENT, "%s:%u: segnum=%i sidenum=%i: t=%i\n", __func__, __LINE__, segnum, sidenum, t);
+							con_printf(CON_URGENT, "%s:%u: segnum=%i sidenum=%i csegnum=%i csidenum=%i: t=%i vl={%u, %u, %u, %u} cvl={%u, %u, %u, %u}\n", __func__, __LINE__, segnum, sidenum, csegnum, csidenum, t,
+							 vertex_list[0], vertex_list[1], vertex_list[2], vertex_list[3],
+							 con_vertex_list[t % 4], con_vertex_list[(t+3)%4], con_vertex_list[(t+2)%4], con_vertex_list[(t+1)%4]);
 							errors = 1;
 						}
 						else if(
@@ -674,11 +676,9 @@ int check_segment_connections(void)
 							 vertex_list[1] != con_vertex_list[(t+3)%4] ||
 							 vertex_list[2] != con_vertex_list[(t+2)%4] ||
 							 vertex_list[3] != con_vertex_list[(t+1)%4]) {
-							con_printf(CON_URGENT, "%s:%u: segnum=%i sidenum=%i: t=%i vl={%u, %u, %u, %u} cvl={%u, %u, %u, %u}\n", __func__, __LINE__, segnum, sidenum, t,
-							 vertex_list[0], con_vertex_list[t],
-							 vertex_list[1], con_vertex_list[(t+3)%4],
-							 vertex_list[2], con_vertex_list[(t+2)%4],
-							 vertex_list[3], con_vertex_list[(t+1)%4]);
+							con_printf(CON_URGENT, "%s:%u: segnum=%i sidenum=%i csegnum=%i csidenum=%i: t=%i vl={%u, %u, %u, %u} cvl={%u, %u, %u, %u}\n", __func__, __LINE__, segnum, sidenum, csegnum, csidenum, t,
+							 vertex_list[0], vertex_list[1], vertex_list[2], vertex_list[3],
+							 con_vertex_list[t], con_vertex_list[(t+3)%4], con_vertex_list[(t+2)%4], con_vertex_list[(t+1)%4]);
 							errors = 1;
 						}
 						else
