@@ -73,7 +73,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #define IMMORTAL_TIME   0x3fffffff  // Time assigned to immortal objects, about 32768 seconds, or about 9 hours.
 
-extern char Object_type_names[MAX_OBJECT_TYPES][9];
+extern const char Object_type_names[MAX_OBJECT_TYPES][9];
 
 // List of objects rendered last frame in order.  Created at render
 // time, used by homing missiles in laser.c

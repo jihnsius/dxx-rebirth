@@ -30,7 +30,7 @@ static char rcsid[] = "$Id: func.c,v 1.1.1.1 2006/03/17 19:58:25 zicodxx Exp $";
 
 #define MAX_PARAMS 10
 
-static FUNCTION * func_table = NULL;
+static const FUNCTION * func_table = NULL;
 static int func_size = 0;
 static int initialized = 0;
 static int func_params[MAX_PARAMS];
@@ -40,7 +40,7 @@ int func_howmany()
 	return func_size;
 }
 
-void func_init( FUNCTION * funtable, int size )
+void func_init( const FUNCTION * funtable, int size )
 {
 	if (!initialized)
 	{
@@ -76,7 +76,7 @@ int (*func_get( char * name, int * numparams ))(void)
 	return NULL;
 }
 
-int func_get_index( char * name )
+int func_get_index( const char * name )
 {
 	int i;
 

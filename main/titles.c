@@ -318,7 +318,7 @@ typedef struct {
 briefing_screen Briefing_screens[MAX_BRIEFING_SCREENS]=
  {{"brief03.pcx",0,3,8,8,257,177}}; // default=0!!!
 
-briefing_screen D1_Briefing_screens_full[] = {
+static const briefing_screen D1_Briefing_screens_full[] = {
 	{ "brief01.pcx",   0,  1,  13, 140, 290,  59 },
 	{ "brief02.pcx",   0,  2,  27,  34, 257, 177 },
 	{ "brief03.pcx",   0,  3,  20,  22, 257, 177 },
@@ -365,7 +365,7 @@ briefing_screen D1_Briefing_screens_full[] = {
 	{ "end03.pcx",   ENDING_LEVEL_NUM_REGISTER,  3,  5, 5, 300, 200 },    // registered end
 };
 
-briefing_screen D1_Briefing_screens_share[] = {
+static const briefing_screen D1_Briefing_screens_share[] = {
 	{ "brief01.pcx",   0,  1,  13, 140, 290,  59 },
 	{ "brief02.pcx",   0,  2,  27,  34, 257, 177 },
 	{ "brief03.pcx",   0,  3,  20,  22, 257, 177 },

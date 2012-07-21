@@ -68,11 +68,7 @@ int Render_depth = MAX_RENDER_SEGS; //how many segments deep to render
 #else
 int Render_depth = 20; //how many segments deep to render
 #endif
-int Max_perspective_depth = 8; // Deepest segment at which perspective interpolation will be used.
 int Max_linear_depth = 50; // Deepest segment at which linear interpolation will be used.
-int Max_linear_depth_objects = 20;
-int Simple_model_threshhold_scale = 50; // switch to simpler model when the object has depth greater than this value times its radius.
-int Max_debris_objects = 15; // How many debris objects to create
 
 //used for checking if points have been rotated
 int	Clear_window_color=-1;
@@ -1014,7 +1010,7 @@ short render_obj_list[MAX_RENDER_SEGS+N_EXTRA_OBJ_LISTS][OBJS_PER_SEG];
 
 //Given two sides of segment, tell the two verts which form the 
 //edge between them
-short Two_sides_to_edge[6][6][2] = {
+static const short Two_sides_to_edge[6][6][2] = {
 	{ {-1,-1}, {3,7}, {-1,-1}, {2,6}, {6,7}, {2,3} },
 	{ {3,7}, {-1,-1}, {0,4}, {-1,-1}, {4,7}, {0,3} },
 	{ {-1,-1}, {0,4}, {-1,-1}, {1,5}, {4,5}, {0,1} },
@@ -1024,7 +1020,7 @@ short Two_sides_to_edge[6][6][2] = {
 };
 
 //given an edge specified by two verts, give the two sides on that edge
-int Edge_to_sides[8][8][2] = {
+static const int Edge_to_sides[8][8][2] = {
 	{ {-1,-1}, {2,5}, {-1,-1}, {1,5}, {1,2}, {-1,-1}, {-1,-1}, {-1,-1} },
 	{ {2,5}, {-1,-1}, {3,5}, {-1,-1}, {-1,-1}, {2,3}, {-1,-1}, {-1,-1} },
 	{ {-1,-1}, {3,5}, {-1,-1}, {0,5}, {-1,-1}, {-1,-1}, {0,3}, {-1,-1} },
@@ -1060,7 +1056,7 @@ static int find_seg_side(segment *seg,int *verts,int notside)
 	int i;
 	int vv0=-1,vv1=-1;
 	int side0,side1;
-	int *eptr;
+	const int *eptr;
 	int	v0,v1;
 	int	*vp;
 
