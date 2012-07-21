@@ -26,9 +26,9 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #include "object.h"
 
-#define MAX_RENDER_SEGS     500
-#define OBJS_PER_SEG          5
-#define N_EXTRA_OBJ_LISTS    50
+enum {	MAX_RENDER_SEGS		=	500	};
+enum {	OBJS_PER_SEG		=	5	};
+enum {	N_EXTRA_OBJ_LISTS	=	50	};
 
 extern int Render_depth; //how many segments deep to render
 enum {
