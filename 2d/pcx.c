@@ -101,26 +101,41 @@ int pcx_get_dimensions( char *filename, int *width, int *height)
 	return PCX_ERROR_NONE;
 }
 
+struct PCX_PHYSFS_file
+{
+	PHYSFS_file *PCXfile;
+};
+
+static int pcx_read_bitmap_file(struct PCX_PHYSFS_file *const pcxphysfs, grs_bitmap * bmp,int bitmap_type ,ubyte * palette);
+
 int pcx_read_bitmap( char * filename, grs_bitmap * bmp,int bitmap_type ,ubyte * palette )
 {
+	struct PCX_PHYSFS_file pcxphysfs;
+	int result;
+	pcxphysfs.PCXfile = PHYSFSX_openReadBuffered( filename );
+	if (!pcxphysfs.PCXfile)
+		return PCX_ERROR_OPENING;
+	result = pcx_read_bitmap_file(&pcxphysfs, bmp, bitmap_type, palette);
+	PHYSFS_close(pcxphysfs.PCXfile);
+	return result;
+}
+
+static int pcx_read_bitmap_file(struct PCX_PHYSFS_file *const pcxphysfs, grs_bitmap * bmp,int bitmap_type ,ubyte * palette)
+{
 	PCXHeader header;
-	PHYSFS_file * PCXfile;
 	int i, row, col, count, xsize, ysize;
+	PHYSFS_file *PCXfile;
 	ubyte data, *pixdata;
 
-	PCXfile = PHYSFSX_openReadBuffered( filename );
-	if ( !PCXfile )
-		return PCX_ERROR_OPENING;
+	PCXfile = pcxphysfs->PCXfile;
 
 	// read 128 char PCX header
 	if (PCXHeader_read_n( &header, 1, PCXfile )!=1) {
-		PHYSFS_close( PCXfile );
 		return PCX_ERROR_NO_HEADER;
 	}
 
 	// Is it a 256 color PCX file?
 	if ((header.Manufacturer != 10)||(header.Encoding != 1)||(header.Nplanes != 1)||(header.BitsPerPixel != 8)||(header.Version != 5))	{
-		PHYSFS_close( PCXfile );
 		return PCX_ERROR_WRONG_VERSION;
 	}
 
@@ -139,13 +154,11 @@ int pcx_read_bitmap( char * filename, grs_bitmap * bmp,int bitmap_type ,ubyte * 
 			pixdata = &bmp->bm_data[bmp->bm_rowsize*row];
 			for (col=0; col< xsize ; )      {
 				if (PHYSFS_read( PCXfile, &data, 1, 1 )!=1 )	{
-					PHYSFS_close( PCXfile );
 					return PCX_ERROR_READING;
 				}
 				if ((data & 0xC0) == 0xC0)     {
 					count =  data & 0x3F;
 					if (PHYSFS_read( PCXfile, &data, 1, 1 )!=1 )	{
-						PHYSFS_close( PCXfile );
 						return PCX_ERROR_READING;
 					}
 					memset( pixdata, data, count );
@@ -161,13 +174,11 @@ int pcx_read_bitmap( char * filename, grs_bitmap * bmp,int bitmap_type ,ubyte * 
 		for (row=0; row< ysize ; row++)      {
 			for (col=0; col< xsize ; )      {
 				if (PHYSFS_read( PCXfile, &data, 1, 1 )!=1 )	{
-					PHYSFS_close( PCXfile );
 					return PCX_ERROR_READING;
 				}
 				if ((data & 0xC0) == 0xC0)     {
 					count =  data & 0x3F;
 					if (PHYSFS_read( PCXfile, &data, 1, 1 )!=1 )	{
-						PHYSFS_close( PCXfile );
 						return PCX_ERROR_READING;
 					}
 					for (i=0;i<count;i++)
@@ -187,18 +198,15 @@ int pcx_read_bitmap( char * filename, grs_bitmap * bmp,int bitmap_type ,ubyte * 
 		if (PHYSFS_read( PCXfile, &data, 1, 1 )==1)	{
 			if ( data == 12 )	{
 				if (PHYSFS_read(PCXfile, palette,768, 1)!=1)	{
-					PHYSFS_close( PCXfile );
 					return PCX_ERROR_READING;
 				}
 				for (i=0; i<768; i++ )
 					palette[i] >>= 2;
 			}
 		} else {
-			PHYSFS_close( PCXfile );
 			return PCX_ERROR_NO_PALETTE;
 		}
 	}
-	PHYSFS_close(PCXfile);
 	return PCX_ERROR_NONE;
 }
 
