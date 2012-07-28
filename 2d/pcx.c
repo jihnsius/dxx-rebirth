@@ -104,6 +104,9 @@ int pcx_get_dimensions( char *filename, int *width, int *height)
 struct PCX_PHYSFS_file
 {
 	PHYSFS_file *PCXfile;
+	unsigned offset;
+	unsigned len;
+	ubyte buffer[4096];
 };
 
 static int pcx_read_bitmap_file(struct PCX_PHYSFS_file *const pcxphysfs, grs_bitmap * bmp,int bitmap_type ,ubyte * palette);
@@ -115,14 +118,40 @@ int pcx_read_bitmap( char * filename, grs_bitmap * bmp,int bitmap_type ,ubyte * 
 	pcxphysfs.PCXfile = PHYSFSX_openReadBuffered( filename );
 	if (!pcxphysfs.PCXfile)
 		return PCX_ERROR_OPENING;
+	pcxphysfs.offset = 0;
+	pcxphysfs.len = 0;
 	result = pcx_read_bitmap_file(&pcxphysfs, bmp, bitmap_type, palette);
 	PHYSFS_close(pcxphysfs.PCXfile);
 	return result;
 }
 
-static int PCX_PHYSFS_read(struct PCX_PHYSFS_file *pcxphysfs, ubyte *data, unsigned size)
+#define PCX_PHYSFS_read(F,B,S)	((PCX_PHYSFS_read)(__func__, __LINE__, (F), (B), (S)))
+static int (PCX_PHYSFS_read)(const char *func, const unsigned line, struct PCX_PHYSFS_file *pcxphysfs, ubyte *data, const unsigned size)
 {
-	return PHYSFS_read(pcxphysfs->PCXfile, data, size, sizeof(*data));
+	const unsigned pcxlen = pcxphysfs->len;
+	if (pcxlen < size)
+	{
+		if (pcxphysfs->offset)
+		{
+			memmove(pcxphysfs->buffer, pcxphysfs->buffer + pcxphysfs->offset, pcxlen);
+			pcxphysfs->offset = 0;
+		}
+		if (pcxlen >= (sizeof(pcxphysfs->buffer) / sizeof(pcxphysfs->buffer[0])))
+		{
+			return 0;
+		}
+		int result = PHYSFS_read(pcxphysfs->PCXfile, pcxphysfs->buffer + pcxlen, sizeof(pcxphysfs->buffer[0]), (sizeof(pcxphysfs->buffer) / sizeof(pcxphysfs->buffer[0])) - pcxlen);
+		if (result <= 0)
+		{
+			fprintf(stderr, "%s:%u:%u: size=%u len=%u result=%i\n", func, line, __LINE__, size, pcxlen, result);
+			return result;
+		}
+		pcxphysfs->len += result;
+	}
+	memcpy(data, pcxphysfs->buffer + pcxphysfs->offset, size);
+	pcxphysfs->len -= size;
+	pcxphysfs->offset += size;
+	return 1;
 }
 
 static int pcx_read_bitmap_file(struct PCX_PHYSFS_file *const pcxphysfs, grs_bitmap * bmp,int bitmap_type ,ubyte * palette)
