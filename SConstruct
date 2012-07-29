@@ -37,6 +37,7 @@ use_python = str(ARGUMENTS.get('use_python', ''))
 use_udp = int(ARGUMENTS.get('use_udp', 1))
 use_tracker = int(ARGUMENTS.get('use_tracker', 1))
 verbosebuild = int(ARGUMENTS.get('verbosebuild', 0))
+builddir = str(ARGUMENTS.get('builddir', ''))
 
 # endianess-checker
 def checkEndian():
@@ -282,6 +283,10 @@ asm_sources = [
 
 # Acquire environment object...
 env = Environment(ENV = os.environ)
+if (builddir != '' and builddir[-1:] != '/'):
+	builddir += '/'
+if builddir != '':
+	env.VariantDir(builddir, '.', duplicate=0)
  
 # Prettier build messages......
 if (verbosebuild == 0):
@@ -449,10 +454,10 @@ env.Append(CPPDEFINES = [('SHAREPATH', '\\"' + str(sharepath) + '\\"')])
 versid_cppdefines=env['CPPDEFINES'][:]
 versid_cppdefines.append(('DESCENT_VERSION_EXTRA', '\\"%s\\"' % extra_version))
 versid_cppdefines.append(('DESCENT_VERSION_BUILD_TIME', '\\"%s\\"' % extra_version_build_time))
-env.Object(source = ['main/vers_id.c'], CPPDEFINES=versid_cppdefines)
+env.Object(source = ['%s%s' % (builddir, 'main/vers_id.c')], CPPDEFINES=versid_cppdefines)
 common_sources += ['main/vers_id.o']
 # finally building program...
-env.Program(target=str(target), source = common_sources, LIBS = libs, LINKFLAGS = str(lflags))
+env.Program(target='%s%s' % (builddir, str(target)), source = [('%s%s' % (builddir, s)) for s in common_sources], LIBS = libs, LINKFLAGS = str(lflags))
 if (sys.platform != 'darwin'):
 	env.Install(BIN_DIR, str(target))
 	env.Alias('install', BIN_DIR)
