@@ -10,4 +10,4 @@ printf -v extra_version '%s%s%s' \
 	"$(git describe --tags 2>/dev/null)" \
 	"$(git diff --name-status --quiet --exit-code --cached || echo '+')" \
 	"$(git diff --name-status --quiet --exit-code || echo '*')"
-git diff "$tag.." | sed -e '/^\+extra_version =/s|'"''|'$extra_version'|"
+git diff --no-renames "$tag.." | sed -e '/^\+extra_version =/s|'"''|'$extra_version'|"
