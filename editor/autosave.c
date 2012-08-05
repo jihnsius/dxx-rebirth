@@ -43,7 +43,6 @@ int		original;
 
 int		Timer_save_flag=0;
 int		Autosave_flag;
-int		save_second=-1;
 
 char		undo_status[10][100];
 
@@ -132,19 +131,6 @@ void print_clock( int seconds, char message[10] ) {
 	gr_set_fontcolor( CBLACK, CWHITE );
 }
 
-static char the_time[14];	// changed from 10, I don't think that was long enough
-
-void clock_message( int seconds, char *format, ... ) {
-	va_list ap;
-
-	va_start(ap, format);
-  	vsprintf(the_time, format, ap);
-	va_end(ap);
-
-  	print_clock(seconds, the_time);
-}
-
-
 struct tm Editor_time_of_day;
 
 void set_editor_time_of_day()
@@ -157,20 +143,12 @@ void set_editor_time_of_day()
 
 void TimedAutosave(char *name) 
 {
-	int 		 month,day,hour,minute,second;
+	int 		 minute;
 
-	month = (Editor_time_of_day.tm_mon) + 1;
-	day =	Editor_time_of_day.tm_mday;
 	minute = Editor_time_of_day.tm_min;
-	hour = Editor_time_of_day.tm_hour;
-	second = Editor_time_of_day.tm_sec;
-
-	if (hour > 12) hour-=12;
 
 	//if (second!=save_second)
 	{
-		save_second = second;
-		clock_message(second, "%d/%d %d:%02d", month, day, hour, minute);
 	}
 	
 
