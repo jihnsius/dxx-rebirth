@@ -164,8 +164,8 @@ typedef struct {
 } group;
 
 // Globals from mglobal.c
-extern vms_vector   Vertices[];
-extern segment      Segments[];
+extern vms_vector   Vertices[MAX_VERTICES];
+extern segment      Segments[MAX_SEGMENTS];
 extern segment2     Segment2s[];
 extern int          Num_segments;
 extern int          Num_vertices;

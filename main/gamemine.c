@@ -952,12 +952,20 @@ int load_mine_data_compiled(PHYSFS_file *LoadFile)
 		Num_vertices = PHYSFSX_readShort(LoadFile);
 	else
 		Num_vertices = PHYSFSX_readInt(LoadFile);
+	if (((unsigned)Num_vertices) >= sizeof(Vertices) / sizeof(Vertices[0]))
+	{
+		return -1;
+	}
 	Assert( Num_vertices <= MAX_VERTICES );
 
 	if (New_file_format_load)
 		Num_segments = PHYSFSX_readShort(LoadFile);
 	else
 		Num_segments = PHYSFSX_readInt(LoadFile);
+	if (((unsigned)Num_segments) >= sizeof(Segments) / sizeof(Segments[0]))
+	{
+		return -1;
+	}
 	Assert( Num_segments <= MAX_SEGMENTS );
 
 	for (i = 0; i < Num_vertices; i++)

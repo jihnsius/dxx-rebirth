@@ -764,6 +764,8 @@ static int load_game_data(PHYSFS_file *LoadFile)
 	PHYSFSX_fseek(LoadFile, 24, SEEK_CUR);
 
 	trig_size = PHYSFSX_readInt(LoadFile);
+	if (trig_size != sizeof(ControlCenterTriggers))
+		return -1;
 	Assert(trig_size == sizeof(ControlCenterTriggers));
 	(void)trig_size;
 	PHYSFSX_fseek(LoadFile, 4, SEEK_CUR);
@@ -789,7 +791,17 @@ static int load_game_data(PHYSFS_file *LoadFile)
 		// read null-terminated string
 		char *p=Current_level_name;
 		//must do read one char at a time, since no PHYSFSX_fgets()
-		do *p = PHYSFSX_fgetc(LoadFile); while (*p++!=0);
+		for (;; ++p) {
+			*p = PHYSFSX_fgetc(LoadFile);
+			if (!*p)
+				break;
+			if (p == Current_level_name + (sizeof(Current_level_name) / sizeof(Current_level_name[0])))
+			{
+				while (PHYSFSX_fgetc(LoadFile))
+					;
+				break;
+			}
+		}
 	}
 	else
 		Current_level_name[0]=0;
@@ -1262,8 +1274,11 @@ int load_level(const char * filename_passed)
 	minedata_offset          = PHYSFSX_readInt(LoadFile);
 	gamedata_offset          = PHYSFSX_readInt(LoadFile);
 
-	Assert(sig == MAKE_SIG('P','L','V','L'));
-	(void)sig;
+	if (!(sig == MAKE_SIG('P','L','V','L')))
+	{
+		PHYSFS_close(LoadFile);
+		return 100;
+	}
 
 	if (Gamesave_current_version >= 8) {    //read dummy data
 		PHYSFSX_readInt(LoadFile);
@@ -1293,6 +1308,12 @@ int load_level(const char * filename_passed)
 		int i;
 
 		Num_flickering_lights = PHYSFSX_readInt(LoadFile);
+		const unsigned nfl = Num_flickering_lights;
+		if (nfl >= (sizeof(Flickering_lights) / sizeof(Flickering_lights[0])))
+		{
+			PHYSFS_close(LoadFile);
+			return 101;
+		}
 		Assert((Num_flickering_lights >= 0) && (Num_flickering_lights < MAX_FLICKERING_LIGHTS));
 		for (i = 0; i < Num_flickering_lights; i++)
 			flickering_light_read(&Flickering_lights[i], LoadFile);
