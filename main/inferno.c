@@ -111,6 +111,7 @@ unsigned int descent_critical_errcode = 0;
 extern int Network_allow_socket_changes;
 extern void piggy_init_pigfile(char *filename);
 extern void arch_init(void);
+void cxx_con_handle_idle();
 
 #define LINE_LEN	100
 
@@ -286,6 +287,7 @@ int standard_handler(d_event *event)
 
 		case EVENT_WINDOW_DRAW:
 		case EVENT_IDLE:
+			cxx_con_handle_idle();
 			//see if redbook song needs to be restarted
 			RBACheckFinishedHook();
 			return 1;

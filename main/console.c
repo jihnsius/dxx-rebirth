@@ -29,6 +29,7 @@ int g_DbgVerbose;
 
 //cxxconsole.cpp
 void cxx_con_init();
+void cxx_con_add_buffer_line(const char *buffer);
 void cxx_handle_misc_con_key(const unsigned key);
 void cxx_con_interactive_print(int *const py);
 
@@ -90,6 +91,7 @@ void (con_printf)(int priority, const char *fmt, ...)
 		while (*p1);
 		*p2 = 0;
 
+		cxx_con_add_buffer_line(buffer);
 		/* add given string to con_buffer */
 		con_add_buffer_line(priority, buffer);
 

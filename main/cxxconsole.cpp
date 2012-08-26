@@ -4,6 +4,16 @@
 #include <vector>
 
 #include <boost/iterator/reverse_iterator.hpp>
+#ifdef unix
+#define USE_UNIX_SOCKET_CONSOLE
+#endif
+
+#ifdef USE_UNIX_SOCKET_CONSOLE
+#include <cstring>
+#include <sys/socket.h>
+#include <sys/un.h>
+#include "console.h"
+#endif
 #include "key.h"
 #include "gamefont.h"
 
@@ -12,7 +22,9 @@ using std::swap;
 extern "C"
 {
 	void cxx_con_init();
+	void cxx_con_add_buffer_line(const char *buffer);
 	void cxx_handle_misc_con_key(const unsigned key);
+	void cxx_con_handle_idle();
 	void cxx_con_interactive_print(int *const py);
 }
 
@@ -58,9 +70,114 @@ static bool history_index_out_of_range(const unsigned history_pos)
 	return false;
 }
 
+#ifdef USE_UNIX_SOCKET_CONSOLE
+struct close_socket_t
+{
+	close_socket_t(int _) : s(_) {}
+	close_socket_t& operator=(int _)
+	{
+		reset();
+		s = _;
+		return *this;
+	}
+	~close_socket_t()
+	{
+		reset();
+	}
+	void reset()
+	{
+		if (s < 0)
+			return;
+		close(s);
+	}
+	operator int()
+	{
+		return s;
+	}
+	int steal()
+	{
+		const int r = s;
+		s = -1;
+		return r;
+	}
+private:
+	close_socket_t(const close_socket_t&);
+	void operator=(const close_socket_t&);
+	int s;
+};
+
+static int s_listen_socket = -1;
+struct console_socket_t
+{
+	int fd;
+	void reset()
+	{
+		const int s = fd;
+		fd = -1;
+		close(s);
+	}
+};
+
+static console_socket_t s_console_socket[3] = {{-1}, {-1}, {-1}};
+
+static void socket_init()
+{
+	const char *sockname = getenv("DXX_SOCKET_NAME");
+	size_t lensockname;
+	if (sockname)
+	{
+		if (!*sockname)
+			return;
+		lensockname = strlen(sockname);
+	}
+	else
+	{
+		static const char s_std_sockname[] = "dxx.f02311ce-edb5-40e3-9821-8fbbb61d6f24";
+		sockname = s_std_sockname;
+		lensockname = sizeof(s_std_sockname) - 1;
+	}
+	sockaddr_un sun;
+	if (lensockname >= sizeof(sun.sun_path))
+	{
+		con_printf(CON_URGENT, "Path name too long (first is: \"%.110s\").\n", sockname);
+		return;
+	}
+	close_socket_t s(socket(AF_UNIX, SOCK_STREAM | SOCK_NONBLOCK | SOCK_CLOEXEC, 0));
+	if (s < 0)
+	{
+		const int e = errno;
+		con_printf(CON_URGENT, "Failed to create local socket: %s\n", strerror(e));
+		return;
+	}
+	sun.sun_family = AF_UNIX;
+	sun.sun_path[0] = 0;
+	std::copy(sockname, sockname + lensockname, sun.sun_path + 1);
+	const int rcbind = bind(s, reinterpret_cast<const sockaddr *>(&sun), sizeof(sun.sun_family) + sizeof(sun.sun_path[0]) + lensockname);
+	if (rcbind < 0)
+	{
+		const int e = errno;
+		con_printf(CON_URGENT, "Failed to bind local socket: %s\n", strerror(e));
+		return;
+	}
+	const int rclisten = listen(s, 2);
+	if (rclisten < 0)
+	{
+		const int e = errno;
+		con_printf(CON_URGENT, "Failed to listen local socket: %s\n", strerror(e));
+		return;
+	}
+	s_listen_socket = s.steal();
+}
+#else
+static void socket_init()
+{
+}
+#endif
+
 void cxx_con_init()
 {
 	scripting_init();
+	socket_init();
 }
 
 template <typename T>
@@ -506,6 +623,155 @@ void cxx_handle_misc_con_key(const unsigned key)
 		}
 	}
 }
+
+#ifdef USE_UNIX_SOCKET_CONSOLE
+enum
+{
+	rpcs_clean_disconnect,
+	rpcs_killed,
+	rpcs_continue,
+};
+
+static int read_pending_console_socket(const int s)
+{
+	uint8_t buf[2048];
+	for (;;)
+	{
+		iovec iov[1] = {{buf, sizeof(buf)}};
+		msghdr mh = {NULL, 0, iov, sizeof(iov) / sizeof(iov[0]), NULL, 0, 0};
+		const int r = recvmsg(s, &mh, MSG_NOSIGNAL);
+		if (r < 0)
+		{
+			const int e = errno;
+			if (e == EAGAIN || e == EWOULDBLOCK)
+				return rpcs_continue;
+			return -e;
+		}
+		if (r == 0)
+			return rpcs_clean_disconnect;
+		history_sync();
+		for (int i = 0; i < r; ++i)
+		{
+			const unsigned c = buf[i];
+			if (c == '\n')
+				con_input_enter();
+			else if (isprint(c))
+				con_input_printable_key(c);
+		}
+	}
+}
+
+static unsigned read_pending_console_socket()
+{
+	unsigned connected = 0;
+	for (unsigned u = 0; u != sizeof(s_console_socket) / sizeof(s_console_socket[0]); ++u)
+	{
+		console_socket_t& cs = s_console_socket[u];
+		const int s = cs.fd;
+		if (s < 0)
+			continue;
+		++ connected;
+		const int r = read_pending_console_socket(s);
+		if (r >= rpcs_continue)
+			continue;
+		cs.reset();
+		if (r >= rpcs_killed)
+			continue;
+		if (r < 0)
+			con_printf(CON_URGENT, "Failed to read console socket %i: %s\n", s, strerror(-r));
+		else
+			con_printf(CON_NORMAL, "Console socket %i disconnected normally.\n", s);
+	}
+	return connected;
+}
+
+void cxx_con_handle_idle()
+{
+	const unsigned handled = read_pending_console_socket();
+	if (handled >= sizeof(s_console_socket) / sizeof(s_console_socket[0]))
+		/* All circuits are busy now */
+		return;
+	const int sl = s_listen_socket;
+	if (sl < 0)
+		return;
+	sockaddr_un sun;
+	memset(&sun, 0, sizeof(sun));
+	socklen_t addrlen = sizeof(sun);
+	close_socket_t a(accept4(sl, reinterpret_cast<sockaddr *>(&sun), &addrlen, SOCK_NONBLOCK | SOCK_CLOEXEC));
+	if (a < 0)
+	{
+		const int e = errno;
+		if (e == EAGAIN || e == EWOULDBLOCK)
+			return;
+		con_printf(CON_URGENT, "Failed to accept local socket: %s\n", strerror(e));
+		static unsigned s_errors;
+		if (++ s_errors > 50)
+			s_listen_socket = -1;
+		return;
+	}
+	for (unsigned u = 0; u != sizeof(s_console_socket) / sizeof(s_console_socket[0]); ++u)
+	{
+		console_socket_t& cs = s_console_socket[u];
+		if (!(cs.fd < 0))
+			continue;
+		const int s = cs.fd = a.steal();
+		{
+			ucred creds;
+			socklen_t slcred = sizeof(creds);
+			const int rcgso = getsockopt(s, SOL_SOCKET, SO_PEERCRED, &creds, &slcred);
+			if (rcgso < 0)
+			{
+				const int e = errno;
+				con_printf(CON_URGENT, "Failed to getsockopt socket %i: %s\n", s, strerror(e));
+				return;
+			}
+			if (creds.uid != getuid())
+			{
+				con_printf(CON_NORMAL, "Console socket %i disconnected due to uid %u.\n", s, creds.uid);
+				return;
+			}
+			con_printf(CON_NORMAL, "Console socket %i accepted for peer pid %u.\n", s, creds.pid);
+		}
+		break;
+	}
+}
+
+void cxx_con_add_buffer_line(const char *buffer)
+{
+	const unsigned len = strlen(buffer);
+	if (!(len > 0))
+		return;
+	for (unsigned u = 0; u != sizeof(s_console_socket) / sizeof(s_console_socket[0]); ++u)
+	{
+		console_socket_t& cs = s_console_socket[u];
+		const int s = cs.fd;
+		if (s < 0)
+			continue;
+		const int r = send(s, buffer, len, MSG_NOSIGNAL | MSG_DONTWAIT);
+		if (r > 0)
+			continue;
+		const int e = errno;
+		if (r < 0)
+		{
+			if (e == EAGAIN || e == EWOULDBLOCK)
+				continue;
+		}
+		cs.reset();
+		if (r == 0)
+			con_printf(CON_NORMAL, "Console socket %i disconnected normally.\n", s);
+		else
+			con_printf(CON_URGENT, "Failed to write console socket %i: %s\n", s, strerror(e));
+	}
+}
+#else
+void cxx_con_handle_idle()
+{
+}
+
+void cxx_con_add_buffer_line(const char *)
+{
+}
+#endif
 
 void cxx_con_interactive_print(int *const py)
 {
