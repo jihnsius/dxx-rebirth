@@ -2,6 +2,7 @@
 #include <boost/python/scope.hpp>
 #include "kconfig.h"
 #include "script-controls.hpp"
+#include "args.h"
 
 using namespace boost::python;
 
@@ -115,6 +116,7 @@ static void define_script_input_class(class_<tag_script_input>& si)
 void define_input_class()
 {
 	class_<tag_input, boost::noncopyable> i("input", no_init);
+	i.add_static_property("forbid_grab", make_getter(&GameArg.DbgForbidConsoleGrab), make_setter(&GameArg.DbgForbidConsoleGrab));
 	scope s(i);
 	class_<tag_user_input> ui("user", no_init);
 	class_<tag_script_input> si("script", no_init);
