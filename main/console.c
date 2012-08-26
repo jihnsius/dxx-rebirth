@@ -32,7 +32,7 @@ void cxx_con_init();
 void cxx_handle_misc_con_key(const unsigned key);
 void cxx_con_interactive_print(int *const py);
 
-static void con_add_buffer_line(int priority, char *buffer)
+static void con_add_buffer_line(int priority, const char *buffer)
 {
 	int i=0;
 
@@ -45,13 +45,13 @@ static void con_add_buffer_line(int priority, char *buffer)
 	memset(con_buffer[CON_LINES_MAX-1].line,'\0',sizeof(CON_LINE_LENGTH));
 	con_buffer[CON_LINES_MAX-1].priority=priority;
 
-	memcpy(&con_buffer[CON_LINES_MAX-1].line,buffer,CON_LINE_LENGTH);
-	for (i=0; i<CON_LINE_LENGTH; i++)
-	{
-		con_buffer[CON_LINES_MAX-1].line[i]=buffer[i];
-		if (buffer[strlen(buffer)-1] == '\n')
-			con_buffer[CON_LINES_MAX-1].line[strlen(buffer)-1]='\0';
-	}
+	unsigned len = strlen(buffer);
+	if (len > CON_LINE_LENGTH - 1)
+		len = CON_LINE_LENGTH - 1;
+	while(len && buffer[len - 1] == '\n')
+		-- len;
+	memcpy(&con_buffer[CON_LINES_MAX-1].line, buffer, len);
+	con_buffer[CON_LINES_MAX-1].line[len] = 0;
 }
 
 void (con_printf)(int priority, const char *fmt, ...)
