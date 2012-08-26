@@ -3,6 +3,7 @@
 #include <boost/python/iterator.hpp>
 #include <boost/python/errors.hpp>
 #include <boost/python/scope.hpp>
+#include "setattr.hpp"
 
 using boost::python::scope;
 
@@ -16,6 +17,7 @@ static void define_common_container_exports(scope& s, const char *N_container_ba
 	using namespace boost::python;
 	class_<typename CT::base_container>(N_container_base, no_init);
 	class_<CT, bases<typename CT::base_container>>(N_container, no_init)
+		.def("__setattr__", &refuse_setattr<CT>)
 		.def("__getitem__", &CT::container_getitem, return_internal_reference<>())
 		.def("__iter__", range<return_internal_reference<>>(&CT::begin, &CT::end))
 		.def("__len__", &CT::size);

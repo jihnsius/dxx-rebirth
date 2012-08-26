@@ -2,6 +2,7 @@
 #include <boost/python/scope.hpp>
 #include "kconfig.h"
 #include "script-controls.hpp"
+#include "setattr.hpp"
 #include "args.h"
 
 using namespace boost::python;
@@ -101,6 +102,7 @@ static void define_script_input_xyz(class_<T>& so)
 
 static void define_script_input_class(class_<tag_script_input>& si)
 {
+	si.def("__setattr__", &refuse_setattr<tag_script_input>);
 	scope s(si);
 	struct tag_script_ship_orientation : public tag_script_input {};
 	class_<tag_script_ship_orientation> sso("ship_orientation");
