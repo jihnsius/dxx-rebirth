@@ -38,6 +38,7 @@ use_udp = int(ARGUMENTS.get('use_udp', 1))
 use_tracker = int(ARGUMENTS.get('use_tracker', 1))
 verbosebuild = int(ARGUMENTS.get('verbosebuild', 0))
 builddir = str(ARGUMENTS.get('builddir', ''))
+target_platform = str(ARGUMENTS.get('target_platform', sys.platform))
 
 # endianess-checker
 def checkEndian():
@@ -324,7 +325,7 @@ if os.environ.has_key('LDFLAGS'):
 	env['LINKFLAGS'] += SCons.Util.CLVar(os.environ['LDFLAGS'])
 
 # windows or *nix?
-if sys.platform == 'win32':
+if target_platform == 'win32':
 	print "compiling on Windows"
 	osdef = '_WIN32'
 	osasmdef = 'win32'
@@ -336,7 +337,7 @@ if sys.platform == 'win32':
 	ogllibs = ''
 	libs += ['glu32', 'wsock32', 'ws2_32', 'winmm', 'mingw32', 'SDLmain', 'SDL']
 	lflags = '-mwindows  arch/win32/d2xr.res'
-elif sys.platform == 'darwin':
+elif target_platform == 'darwin':
 	print "compiling on Mac OS X"
 	osdef = '__APPLE__'
 	sharepath = ''
@@ -415,7 +416,7 @@ if (sdlmixer == 1):
 	print "including SDL_mixer"
 	env.Append(CPPDEFINES = ['USE_SDLMIXER'])
 	common_sources += arch_sdlmixer
-	if (sys.platform != 'darwin'):
+	if (target_platform != 'darwin'):
 		libs += ['SDL_mixer']
 
 # debug?
