@@ -721,6 +721,7 @@ static void select_next_window_function(const InsetWindowIndex w, unsigned value
 
 enum inset_select_mode_t g_inset_selector_mode;
 InsetWindowIndex g_iwi_focus;
+unsigned char g_inset_selector_view[iwiv_count];
 static int HandleInsetWindowManagementKey(const int key)
 {
 	const enum inset_select_mode_t selector_mode = g_inset_selector_mode;
@@ -753,14 +754,15 @@ static int HandleInsetWindowManagementKey(const int key)
 		default:
 			return 1;
 	}
-	if (value >= iwiv_count)
-		return 1;
 	switch(selector_mode)
 	{
 		case ism_window:
+			if (value >= iwiv_count)
+				return 1;
 			g_iwi_focus = iwi_instance(value);
 			break;
 		case ism_view:
+			g_inset_selector_view[iwi_value(g_iwi_focus)] = value;
 			select_next_window_function(g_iwi_focus, value);
 	write_player_file();
 			break;

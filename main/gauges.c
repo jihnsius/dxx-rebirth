@@ -1425,21 +1425,23 @@ static void hud_show_shield(void)
 static void show_inset_selector_text()
 {
 	const enum inset_select_mode_t selector_mode = g_inset_selector_mode;
-	const char *mode;
+	char buf[80];
 	switch(selector_mode)
 	{
 		case ism_window:
-			mode = "window";
+#define ism_views_format	"%u, %u, %u, %u, %u"
+#define ism_views_values	g_inset_selector_view[0], g_inset_selector_view[1], g_inset_selector_view[2], g_inset_selector_view[3], g_inset_selector_view[4]
+			snprintf(buf, sizeof(buf), "Selector: window ?; [" ism_views_format "]", ism_views_values);
 			break;
 		case ism_view:
-			mode = "view";
+			snprintf(buf, sizeof(buf), "Selector: view %u=?; [" ism_views_format "]", iwi_value(g_iwi_focus), ism_views_values);
 			break;
 		default:
 			return;
 	}
 	const unsigned line_spacing = LINE_SPACING;
 	const unsigned base_y = FSPACY(1) + line_spacing;
-	gr_printf(FSPACX(1), base_y + ((Game_mode & GM_MULTI) ? 0 : 2 * line_spacing), "Selector: %s%c%u", mode, selector_mode == ism_view ? ' ' : 0, iwi_value(g_iwi_focus));
+	gr_string(FSPACX(1), base_y + ((Game_mode & GM_MULTI) ? 0 : 2 * line_spacing), buf);
 }
 
 //draw the icons for number of lives
@@ -2963,8 +2965,6 @@ void update_laser_weapon_info(void)
 #endif
 }
 
-int SW_drawn__iwi_adjust[iwiv_count], SW_x__iwi_adjust[iwiv_count], SW_y__iwi_adjust[iwiv_count], SW_w__iwi_adjust[iwiv_count], SW_h__iwi_adjust[iwiv_count];
-
 //draws a 3d view into one of the cockpit windows.  win is 0 for left,
 //1 for right.  viewer is object.  NULL object means give up window
 //user is one of the WBU_ constants.  If rear_view_flag is set, show a
@@ -2977,10 +2977,10 @@ void do_cockpit_window_view(const InsetWindowIndex iwi,dxxobject *viewer,int rea
 	dxxobject *viewer_save = Viewer;
 	static int overlap_dirty__iwi_adjust[iwiv_count];
 	int boxnum;
-	static int window_x,window_y;
+	int window_x,window_y;
 	const gauge_box *box;
 	int rear_view_save = Rear_view;
-	int w,h,dx;
+	int w,h;
 
 	box = NULL;
 
@@ -3014,27 +3014,17 @@ void do_cockpit_window_view(const InsetWindowIndex iwi,dxxobject *viewer,int rea
 	if (PlayerCfg.CockpitMode[1] == CM_FULL_SCREEN)
 	{
 		const unsigned half_screen_x = grd_curscreen->sc_w/2;
+		unsigned w2;
 		w = HUD_SCALE_X_AR(HIRESMODE?106:44);
+		w2 = w + (w / 20);
 		h = HUD_SCALE_Y_AR(HIRESMODE?106:44);
 
-		if (iwi_value(iwi) < iwiv_count / 2)
-		{
-			dx = -(w+(w/20)) * ((iwiv_count / 2) - iwi_value(iwi));
-			if (half_screen_x < (unsigned)-dx)
-				dx = 0;
-		}
-		else
-		{
-			dx = (w/20) + ((w + (w/20)) * ((iwiv_count / 2) - iwi_value(iwi)));
-		}
-
-		window_x = half_screen_x+dx;
+		window_x = half_screen_x - ((w2 * iwiv_count) / 2) + (w2 * iwi_value(iwi));
 		window_y = grd_curscreen->sc_h-h-(SHEIGHT/15);
 
-		//copy these vars so stereo code can get at them
-		SW_drawn__iwi_adjust[iwi_value(iwi)]=1; SW_x__iwi_adjust[iwi_value(iwi)] = window_x; SW_y__iwi_adjust[iwi_value(iwi)] = window_y; SW_w__iwi_adjust[iwi_value(iwi)] = w; SW_h__iwi_adjust[iwi_value(iwi)] = h;
-
 		gr_init_sub_canvas(&window_canv,&grd_curscreen->sc_canvas,window_x,window_y,w,h);
+		window_canv.cv_font_fg_color ++;
+		window_canv.cv_font_bg_color ++;
 	}
 	else {
 #if 0

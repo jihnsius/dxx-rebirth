@@ -99,7 +99,13 @@ enum InsetWindowIndexValue
 #define iwi_0 iwi_instance(iwiv_0)
 	iwiv_1,
 #define iwi_1 iwi_instance(iwiv_1)
-#define iwi_rightmost iwi_1
+	iwiv_2,
+#define iwi_2 iwi_instance(iwiv_2)
+	iwiv_3,
+#define iwi_3 iwi_instance(iwiv_3)
+	iwiv_4,
+#define iwi_4 iwi_instance(iwiv_4)
+#define iwi_rightmost iwi_4
 	iwiv_count
 };
 typedef struct InsetWindowIndex InsetWindowIndex;
@@ -116,6 +122,7 @@ extern int Coop_view_player[MAX_RENDERED_WINDOWS - 1];     // left & right
 extern int Marker_viewer_num[MAX_RENDERED_WINDOWS - 1];    // left & right
 extern enum inset_select_mode_t g_inset_selector_mode;
 extern InsetWindowIndex g_iwi_focus;
+extern unsigned char g_inset_selector_view[iwiv_count];
 
 // draws a 3d view into one of the cockpit windows.  win is 0 for
 // left, 1 for right.  viewer is object.  NULL object means give up

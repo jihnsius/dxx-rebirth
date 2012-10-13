@@ -299,7 +299,7 @@ typedef struct {
 	short   rendered_objects[MAX_RENDERED_OBJECTS];
 } window_rendered_data;
 
-#define MAX_RENDERED_WINDOWS    3
+#define MAX_RENDERED_WINDOWS    6
 
 extern window_rendered_data Window_rendered_data[MAX_RENDERED_WINDOWS];
 
