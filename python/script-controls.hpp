@@ -7,7 +7,7 @@ struct script_control_info {
 	{
 		vms_vector pos;
 		uint16_t segment;
-		bool enable;
+		bool enable_position, enable_segment;
 	};
 	/*
 	 * Turn the ship to focus on this spot.

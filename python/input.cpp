@@ -75,20 +75,35 @@ static vms_vector read_script_attitude_vector()
 	return l.pos;
 }
 
+template <const script_control_info::location script_control_info::*L>
+static int read_script_attitude_segment()
+{
+	const script_control_info::location& l = ScriptControls.*L;
+	return l.segment;
+}
+
 template <script_control_info::location script_control_info::*L, fix vms_vector::*M>
 static void write_script_attitude_control(const fix f)
 {
 	script_control_info::location& l = ScriptControls.*L;
-	l.enable = true;
 	l.pos.*M = f;
+	l.enable_position = true;
 }
 
 template <script_control_info::location script_control_info::*L>
 static void write_script_attitude_vector(const vms_vector& v)
 {
 	script_control_info::location& l = ScriptControls.*L;
-	l.enable = true;
 	l.pos = v;
+	l.enable_position = true;
+}
+
+template <script_control_info::location script_control_info::*L>
+static void write_script_attitude_segment(const int s)
+{
+	script_control_info::location& l = ScriptControls.*L;
+	l.segment = s;
+	l.enable_segment = true;
 }
 
 template <script_control_info::location script_control_info::*L, typename T>
@@ -98,6 +113,7 @@ static void define_script_input_xyz(class_<T>& so)
 	so.add_static_property("y", &read_script_attitude_control<L, &vms_vector::y>, &write_script_attitude_control<L, &vms_vector::y>);
 	so.add_static_property("z", &read_script_attitude_control<L, &vms_vector::z>, &write_script_attitude_control<L, &vms_vector::z>);
 	so.add_static_property("v", &read_script_attitude_vector<L>, &write_script_attitude_vector<L>);
+	so.add_static_property("s", &read_script_attitude_segment<L>, &write_script_attitude_segment<L>);
 }
 
 static void define_script_input_class(class_<tag_script_input>& si)

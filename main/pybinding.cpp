@@ -106,16 +106,23 @@ static void con_pyerr_print()
 	}
 }
 
-template <typename F>
-static inline void guarded_py_call(const F& f)
+template <typename F, typename E>
+static inline void guarded_py_call(const F& f, const E& e)
 {
 	if (GameArg.SysNoPython)
 		return;
 	try {
 		f();
 	} catch (const error_already_set &) {
+		e();
 		con_pyerr_print();
 	}
+}
+
+template <typename F>
+static inline void guarded_py_call(const F& f)
+{
+	guarded_py_call(f, [](){});
 }
 
 void scripting_init()
@@ -138,10 +145,11 @@ void scripting_init()
 
 void cxx_script_hook_controls()
 {
-	ScriptControls.ship_orientation.enable = false;
-	ScriptControls.guided_destination.enable = false;
-	ScriptControls.ship_destination.enable = false;
-	ScriptControls.ship_destination.segment = -1;
+	ScriptControls.ship_orientation.enable_position = false;
+	ScriptControls.guided_destination.enable_position = false;
+	ScriptControls.ship_destination.enable_position = false;
+	ScriptControls.guided_destination.enable_segment = false;
+	ScriptControls.ship_destination.enable_segment = false;
 	guarded_py_call([]() {
 		object& __main__ = gpy__main__;
 		object nsmain{getattr(__main__, "__dict__")};
@@ -168,6 +176,8 @@ void scripting_input_enter(const char *const input)
 	guarded_py_call([input]() {
 		object e(dispatch_input(input));
 		con_printf(CON_URGENT, "%s -> %s\n", e.is_none() ? "" : extract<std::string>(str(e))().c_str(), input);
+	}, [input]() {
+		con_printf(CON_URGENT, "!: %s\n", input);
 	});
 }
 
@@ -197,7 +207,7 @@ void cxx_script_get_guided_missile_rotang(vms_angvec *const gmav)
 
 void cxx_script_get_player_ship_rotthrust(dxxobject *const obj)
 {
-	if (!ScriptControls.ship_orientation.enable)
+	if (!ScriptControls.ship_orientation.enable_position)
 		return;
 	vms_vector tv;
 	const vms_vector& sop = ScriptControls.ship_orientation.pos;
@@ -218,15 +228,25 @@ void cxx_script_get_player_ship_rotthrust(dxxobject *const obj)
 
 static int djverbose;
 
+static int16_t get_desired_segment(int16_t& cached_segnum, const script_control_info::location& loc)
+{
+	if (loc.enable_segment)
+	{
+		const int requested_segment = loc.segment;
+		if (static_cast<unsigned>(requested_segment) <= static_cast<unsigned>(Highest_segment_index))
+			return requested_segment;
+		return -1;
+	}
+	const int cseg = cached_segnum;
+	const int segnum = find_point_seg(&loc.pos, (static_cast<unsigned>(cseg) > static_cast<unsigned>(Highest_segment_index) ? -1 : cseg));
+	cached_segnum = segnum;
+	return segnum;
+}
+
 static vms_vector get_player_thrust(const dxxobject& plr)
 {
-	static int s_target_segnum = -1;
-	const int scdestseg = ScriptControls.ship_destination.segment;
-	const int segnum = (static_cast<unsigned>(scdestseg) <= static_cast<unsigned>(Highest_segment_index)) ? scdestseg : find_point_seg(&ScriptControls.ship_destination.pos,
-		(static_cast<unsigned>(s_target_segnum) > static_cast<unsigned>(Highest_segment_index)
-		 ? -1
-		 : s_target_segnum));
-	s_target_segnum = segnum;
+	static int16_t s_target_segnum = -1;
+	const int16_t segnum = get_desired_segment(s_target_segnum, ScriptControls.ship_destination);
 	vms_vector vs;
 	if (segnum == -1 || static_cast<unsigned>(segnum) > static_cast<unsigned>(Highest_segment_index))
 	{
@@ -235,6 +255,11 @@ static vms_vector get_player_thrust(const dxxobject& plr)
 	}
 	if (segnum == plr.segnum)
 	{
+		if (!ScriptControls.ship_destination.enable_position)
+		{
+			vm_vec_zero(&vs);
+			return vs;
+		}
 		/*
 		 * TODO: Do not assume that the path is clear just because the
 		 * path does not cross segments.  A player or robot could be in
@@ -330,7 +355,7 @@ static vms_vector get_player_thrust(const dxxobject& plr)
 
 unsigned cxx_script_get_player_ship_vecthrust(dxxobject *const obj, const fix script_max_forward_thrust)
 {
-	if (!ScriptControls.ship_destination.enable)
+	if (!ScriptControls.ship_destination.enable_position && !ScriptControls.ship_destination.enable_segment)
 		return 0;
 	const fix frametime = FrameTime;
 	const int afterburner = (script_max_forward_thrust != frametime);
