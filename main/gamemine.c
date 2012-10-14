@@ -875,7 +875,10 @@ static void read_children(int segnum,ubyte bit_mask,PHYSFS_file *LoadFile)
 
 	for (bit=0; bit<MAX_SIDES_PER_SEGMENT; bit++) {
 		if (bit_mask & (1 << bit)) {
-			Segments[segnum].children[bit] = PHYSFSX_readShort(LoadFile);
+			const short s = PHYSFSX_readShort(LoadFile);
+			if (!((s < Num_segments)))
+				Error("Segment %i side %i has s=%hi at lf=%lx, but Num_segments=%i", segnum, bit, s, (unsigned long)PHYSFS_tell(LoadFile), Num_segments);
+			Segments[segnum].children[bit] = s;
 		} else
 			Segments[segnum].children[bit] = -1;
 	}
@@ -886,7 +889,12 @@ static void read_verts(int segnum,PHYSFS_file *LoadFile)
 	int i;
 	// Read short Segments[segnum].verts[MAX_VERTICES_PER_SEGMENT]
 	for (i = 0; i < MAX_VERTICES_PER_SEGMENT; i++)
-		Segments[segnum].verts[i] = PHYSFSX_readShort(LoadFile);
+	{
+		const short v = PHYSFSX_readShort(LoadFile);
+		if (!((v < Num_vertices)))
+			Error("Segment %i vert %i has v=%hi at lf=%lx, but Num_vertices=%i", segnum, i, v, (unsigned long)PHYSFS_tell(LoadFile), Num_vertices);
+		Segments[segnum].verts[i] = v;
+	}
 }
 
 static void read_special(int segnum,ubyte bit_mask,PHYSFS_file *LoadFile)
