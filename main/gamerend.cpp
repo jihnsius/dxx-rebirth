@@ -668,7 +668,6 @@ static void show_one_extra_view(const InsetWindowIndex w)
 				}
 				else {
 					do_cockpit_window_view(w,NULL,0,WBU_WEAPON,NULL);
-					PlayerCfg.Cockpit3DView[iwi_value(w)] = CV_NONE;
 				}
 				break;
 			}
