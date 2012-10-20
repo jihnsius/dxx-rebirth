@@ -5,6 +5,7 @@
 #include <boost/python/class.hpp>
 #include <boost/python/scope.hpp>
 #include <boost/python/str.hpp>
+#include <boost/format.hpp>
 
 #include "lighting.h"
 
@@ -125,8 +126,6 @@ static void set_player_headlight(const player& player, const unsigned value)
 	toggle_headlight_active();
 }
 
-typedef const char teststr[10];
-
 template <unsigned N, char (player::*M)[N]>
 static str get_string(const player& p)
 {
@@ -136,7 +135,6 @@ static str get_string(const player& p)
 void define_player_module(object& __main__, scope& scope_dxx)
 {
 	(void)__main__;
-	(void)scope_dxx;
 	class_<player, boost::noncopyable>("player", no_init)
 		.add_property("callsign", &get_string<sizeof(player::callsign), &player::callsign>)
 		.add_property("object", make_function(&get_player_object, return_internal_reference<>()))
@@ -171,4 +169,33 @@ void define_player_module(object& __main__, scope& scope_dxx)
 		;
 	DEFINE_COMMON_CONTAINER_EXPORTS(player_object);
 	define_common_container_exports<player_container>(scope_dxx, "player_container_base", "player_container", "players");
+}
+
+static player& get_local_player()
+{
+	return Players[Player_num];
+}
+
+static player& get_named_player(player_container&, str name)
+{
+	const std::string ns = extract<std::string>(name)();
+	const char *const n = ns.c_str();
+	for (unsigned u = N_players; u -- > 0;)
+	{
+		player& p = Players[u];
+		if (!strcasecmp(p.callsign, n))
+			return p;
+	}
+	PyErr_SetString(PyExc_KeyError, (boost::format("No such callsign: \"%s\"") % n).str().c_str());
+	throw_error_already_set();
+	// Unreached
+	return Players[0];
+}
+
+template <class X1, class X2, class X3>
+void define_specific_container_exports(scope&, const char *, class_<player_container, X1, X2, X3>& c)
+{
+	c.add_static_property("self", make_function(&get_local_player, return_value_policy<reference_existing_object>()))
+		.def("__getitem__", make_function(&get_named_player, return_value_policy<reference_existing_object>()))
+		;
 }
