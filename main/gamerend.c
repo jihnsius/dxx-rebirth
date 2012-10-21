@@ -445,6 +445,8 @@ static const char *get_missile_name(const unsigned laser_type)
 			return "MERCURY";
 		case EARTHSHAKER_ID:
 			return "SHAKER";
+		case GUIDEDMISS_ID:
+			return "GUIDED";
 		default:
 			return "MISSILE";	// Bad!
 	}
@@ -513,15 +515,16 @@ static void show_extra_views()
 			Guided_missile[Player_num] = NULL;
 		}
 
-		if (!Missile_viewer)
+		unsigned other_player_missile_player_idx = ~0;
+		if (!Missile_viewer || Missile_viewer->type != OBJ_WEAPON || Missile_viewer->ctype.laser_info.parent_num != Players[Player_num].objnum)
 		{
+			dxxobject *local_player_missile = NULL;
+			dxxobject *other_player_missile = NULL;
 			unsigned i;
 			for (i=0; i<=Highest_object_index; i++)
 			{
 				dxxobject *o = &Objects[i];
 				if (o->type != OBJ_WEAPON)
-					continue;
-				if (o->ctype.laser_info.parent_num != Players[Player_num].objnum)
 					continue;
 				const unsigned laser_type = o->id;
 				if (!(laser_type == CONCUSSION_ID ||
@@ -529,12 +532,36 @@ static void show_extra_views()
 					laser_type == SMART_ID ||
 					laser_type == MEGA_ID ||
 					laser_type == FLASH_ID ||
+					laser_type == GUIDEDMISS_ID ||
 					laser_type == MERCURY_ID ||
 					laser_type == EARTHSHAKER_ID))
 					continue;
-				Missile_viewer = o;
-				break;
+				if (o->ctype.laser_info.parent_num == Players[Player_num].objnum)
+				{
+					if (laser_type == GUIDEDMISS_ID)
+						continue;
+					local_player_missile = o;
+					break;
+				}
+				if (other_player_missile)
+					continue;
+				unsigned iplr = 0;
+				for (; iplr < N_players; ++iplr)
+				{
+					if (iplr == Player_num)
+						continue;
+					if (o->ctype.laser_info.parent_num == Players[iplr].objnum)
+					{
+						other_player_missile = o;
+						other_player_missile_player_idx = iplr;
+						break;
+					}
+				}
 			}
+			if (local_player_missile)
+				Missile_viewer = local_player_missile;
+			else if (other_player_missile)
+				Missile_viewer = other_player_missile;
 		}
 
 		if (Missile_viewer) //do missile view
@@ -543,7 +570,14 @@ static void show_extra_views()
 				Missile_viewer_sig = Missile_viewer->signature;
 			if (PlayerCfg.MissileViewEnabled && Missile_viewer->type!=OBJ_NONE && Missile_viewer->signature == Missile_viewer_sig) {
   				RenderingType=2+(1<<4);
-				do_cockpit_window_view(iwi_rightmost,Missile_viewer,0,WBU_MISSILE,get_missile_name(Missile_viewer->id));
+				char buf[24];
+				const char *label = get_missile_name(Missile_viewer->id);
+				if (Missile_viewer->ctype.laser_info.parent_num != Players[Player_num].objnum)
+				{
+					snprintf(buf, sizeof(buf), "%.8s %s", (other_player_missile_player_idx < sizeof(Players) / sizeof(Players[0])) ? Players[other_player_missile_player_idx].callsign : "!!", label);
+					label = buf;
+				}
+				do_cockpit_window_view(iwi_rightmost,Missile_viewer,0,WBU_MISSILE,label);
 				did_missile_view=1;
 			}
 			else {
