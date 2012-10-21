@@ -21,4 +21,5 @@ struct script_control_info {
 	 * Fly the ship to this spot.
 	 */
 	location ship_destination;
+	location glow_destination;
 };

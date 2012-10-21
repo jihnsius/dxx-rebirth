@@ -138,6 +138,8 @@ static void define_script_input_class(class_<tag_script_input>& si)
 	struct tag_script_ship_destination : public tag_script_input {};
 	class_<tag_script_ship_destination> ssd("ship_destination");
 	define_script_input_xyz<&script_control_info::ship_destination>(ssd);
+	class_<tag_script_ship_destination> glow("glow_destination");
+	define_script_input_xyz<&script_control_info::glow_destination>(glow);
 }
 
 void define_input_class()

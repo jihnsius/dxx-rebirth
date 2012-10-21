@@ -26,6 +26,10 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "vecmat.h" //the vector/matrix library
 #include "gr.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 extern int g3d_interp_outline;      //if on, polygon models outlined in white
 
 extern vms_vector Matrix_scale;     //how the matrix is currently scaled
@@ -207,5 +211,9 @@ bool g3_draw_bitmap(vms_vector *pos,fix width,fix height,grs_bitmap *bm);
 //specifies 2d drawing routines to use instead of defaults.  Passing
 //NULL for either or both restores defaults
 void g3_set_special_render(void (*tmap_drawer)(),void (*flat_drawer)(),int (*line_drawer)(fix, fix, fix, fix));
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

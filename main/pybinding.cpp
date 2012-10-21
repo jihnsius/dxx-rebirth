@@ -8,6 +8,8 @@
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/dijkstra_shortest_paths.hpp>
 
+#include <array>
+
 #include "../python/exception.hpp"
 #include "../python/wrap-object.hpp"
 #include "../python/pretty.hpp"
@@ -402,5 +404,110 @@ unsigned cxx_script_get_player_ship_vecthrust(dxxobject *const obj, const fix sc
 		obj->mtype.phys_info.thrust.z = (negz ? - sfz : sfz);
 	}
 	return 1;
+}
+
+
+extern "C" unsigned py_get_glow_point(g3s_point (*)[3]);
+
+unsigned py_get_glow_point(g3s_point (*const gp)[3])
+{
+	if (!ScriptControls.glow_destination.enable_position && !ScriptControls.glow_destination.enable_segment)
+		return 0;
+	g3s_point (&p)[3] = *gp;
+	static int16_t s_target_segnum = -1;
+	const int16_t segnum = get_desired_segment(s_target_segnum, ScriptControls.glow_destination);
+	if (segnum == -1 || static_cast<unsigned>(segnum) > static_cast<unsigned>(Highest_segment_index))
+		return 0;
+	const player& player = Players[Player_num];
+	if (player.objnum > Highest_object_index)
+		return 0;
+	const dxxobject& objplayer = Objects[player.objnum];
+	if (segnum == objplayer.segnum)
+		return 0;
+	typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, boost::no_property, boost::property<boost::edge_weight_t, int> > Graph;
+	typedef Graph::vertex_descriptor vertex_descriptor;
+	Graph g(Highest_segment_index + 1);
+	boost::property_map<Graph, boost::edge_weight_t>::type wmap = get(boost::edge_weight, g);
+	unsigned i = 0;
+	const unsigned hsi = static_cast<unsigned>(Highest_segment_index);
+	for (; i <= hsi; ++i)
+	{
+		const segment& s = Segments[i];
+		for (unsigned j = 0; j != MAX_SIDES_PER_SEGMENT; ++j)
+		{
+			const int ichild = s.children[j];
+			if (ichild == -1 || ichild == -2)
+				continue;
+			if (ichild > Highest_segment_index)
+				continue;
+			// TODO: account for walls, doors, etc.
+			const std::pair<Graph::edge_descriptor, bool> r = add_edge(i, ichild, g);
+			vms_vector s1;
+			compute_segment_center(&s1, &Segments[i]);
+			vms_vector s2;
+			compute_segment_center(&s2, &Segments[ichild]);
+			vms_vector v;
+			vm_vec_sub(&v, &s1, &s2);
+			wmap[r.first] = vm_vec_mag(&v);
+		}
+	}
+	const unsigned vertexes = num_vertices(g);
+	std::vector<vertex_descriptor> vpred(vertexes);
+	std::vector<int> vdist(vertexes);
+	const vertex_descriptor vd_segnum = vertex(objplayer.segnum, g);
+	boost::dijkstra_shortest_paths(g, vd_segnum, &vpred[0], &vdist[0], get(boost::edge_weight, g), get(boost::vertex_index, g), std::less<int>(), boost::closed_plus<int>(), std::numeric_limits<int>::max(), 0, boost::default_dijkstra_visitor());
+	typedef std::array<unsigned, sizeof(p) / sizeof(*p)> predecessor_circular_buffer;
+	predecessor_circular_buffer idx_predecessor;
+	idx_predecessor.fill(~0u);
+	const predecessor_circular_buffer::iterator ib_predecessor = idx_predecessor.begin();
+	const predecessor_circular_buffer::iterator ie_predecessor = idx_predecessor.end();
+	predecessor_circular_buffer::iterator ii_predecessor = ib_predecessor;
+	*ii_predecessor = segnum;
+	if (idx_predecessor.front() >= vpred.size())
+		return 0;
+	unsigned steps = 0;
+	unsigned lookup_predecessor = segnum;
+	unsigned skipped = 0;
+	for (;;)
+	{
+		const unsigned n = vpred[lookup_predecessor];
+		if (n == static_cast<unsigned>(objplayer.segnum))
+		{
+			/*
+			 * Found idx_predecessor to be an immediate successor of segnum.
+			 */
+			vms_vector segcen;
+			unsigned count = 0;
+			for (; count < (sizeof(p) / sizeof(*p)); ++count)
+			{
+				const unsigned i = *ii_predecessor;
+				if (i >= vertexes)
+					break;
+				if (ii_predecessor == ib_predecessor)
+					ii_predecessor = ie_predecessor;
+				-- ii_predecessor;
+				compute_segment_center(&segcen, &Segments[i]);
+				g3_rotate_point(&p[count], &segcen);
+			}
+			return count;
+		}
+		if (n == lookup_predecessor)
+			return 0;
+		if (n >= vpred.size())
+			return 0;
+		if (skipped || static_cast<unsigned>(Segments[n].children[WBACK]) != lookup_predecessor)
+		{
+			++ ii_predecessor;
+			if (ii_predecessor == ie_predecessor)
+				ii_predecessor = ib_predecessor;
+			*ii_predecessor = n;
+			skipped = 0;
+		}
+		else
+			skipped = 1;
+		lookup_predecessor = n;
+		if (++ steps > 16000)
+			return 0;
+	}
 }
 #endif
