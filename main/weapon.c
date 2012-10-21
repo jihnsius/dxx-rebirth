@@ -343,10 +343,15 @@ void select_weapon(int weapon_num, int secondary_flag, int print_message, int wa
 
 	if (print_message)
 	{
+		const player *const plr = &Players[Player_num];
 		if (weapon_num == LASER_INDEX && !secondary_flag)
-			HUD_init_message(HM_DEFAULT, "%s Level %d %s", weapon_name, Players[Player_num].laser_level+1, TXT_SELECTED);
+			HUD_init_message(HM_DEFAULT, "%s Level %d selected (energy=%i)!", weapon_name, plr->laser_level+1, f2i(plr->energy));
+		else if (!secondary_flag && (weapon_num == 1 || weapon_num == 6))
+			HUD_init_message(HM_DEFAULT, "%s selected (ammo=%i)!", weapon_name, f2i((unsigned int)plr->primary_ammo[1] * VULCAN_AMMO_SCALE));
+		else if (!secondary_flag)
+			HUD_init_message(HM_DEFAULT, "%s selected (energy=%i)!", weapon_name, f2i(plr->energy));
 		else
-			HUD_init_message(HM_DEFAULT, "%s %s", weapon_name, TXT_SELECTED);
+			HUD_init_message(HM_DEFAULT, "%s selected (count=%i)!", weapon_name, plr->secondary_ammo[weapon_num]);
 	}
 
 }
