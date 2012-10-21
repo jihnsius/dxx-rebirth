@@ -114,9 +114,11 @@ static void clear_script_attitude()
 	l.enable_segment = false;
 }
 
-template <script_control_info::location script_control_info::*L, typename T>
-static void define_script_input_xyz(class_<T>& so)
+template <script_control_info::location script_control_info::*L>
+static void define_script_input_xyz(const char *N)
 {
+	struct T : tag_script_input {};
+	class_<T> so(N);
 	so.add_static_property("x", &read_script_attitude_control<L, &vms_vector::x>, &write_script_attitude_control<L, &vms_vector::x>);
 	so.add_static_property("y", &read_script_attitude_control<L, &vms_vector::y>, &write_script_attitude_control<L, &vms_vector::y>);
 	so.add_static_property("z", &read_script_attitude_control<L, &vms_vector::z>, &write_script_attitude_control<L, &vms_vector::z>);
@@ -129,17 +131,10 @@ static void define_script_input_class(class_<tag_script_input>& si)
 {
 	si.def("__setattr__", &refuse_setattr<tag_script_input>);
 	scope s(si);
-	struct tag_script_ship_orientation : public tag_script_input {};
-	class_<tag_script_ship_orientation> sso("ship_orientation");
-	define_script_input_xyz<&script_control_info::ship_orientation>(sso);
-	struct tag_script_guided_destination : public tag_script_input {};
-	class_<tag_script_guided_destination> sgd("guided_destination");
-	define_script_input_xyz<&script_control_info::guided_destination>(sgd);
-	struct tag_script_ship_destination : public tag_script_input {};
-	class_<tag_script_ship_destination> ssd("ship_destination");
-	define_script_input_xyz<&script_control_info::ship_destination>(ssd);
-	class_<tag_script_ship_destination> glow("glow_destination");
-	define_script_input_xyz<&script_control_info::glow_destination>(glow);
+	define_script_input_xyz<&script_control_info::ship_orientation>("ship_orientation");
+	define_script_input_xyz<&script_control_info::guided_destination>("guided_destination");
+	define_script_input_xyz<&script_control_info::ship_destination>("ship_destination");
+	define_script_input_xyz<&script_control_info::glow_destination>("glow_destination");
 }
 
 void define_input_class()
