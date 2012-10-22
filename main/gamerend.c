@@ -638,7 +638,16 @@ static void show_one_extra_view(const InsetWindowIndex w)
 	         RenderingType=255; // don't handle coop stuff			
 				
 				if (player!=-1 && Players[player].connected && ((Game_mode & GM_MULTI_COOP) || ((Game_mode & GM_TEAM) && (get_team(player) == get_team(Player_num)))))
-					do_cockpit_window_view(w,&Objects[Players[Coop_view_player[iwi_value(w)]].objnum],0,WBU_COOP,Players[Coop_view_player[iwi_value(w)]].callsign);
+				{
+					dxxobject *inset_viewer = &Objects[Players[Coop_view_player[iwi_value(w)]].objnum];
+					const char *callsign = Players[Coop_view_player[iwi_value(w)]].callsign;
+					if (Viewer == inset_viewer)
+					{
+						inset_viewer = &Objects[Players[Player_num].objnum];
+						callsign = "SHIP";
+					}
+					do_cockpit_window_view(w,inset_viewer,0,WBU_COOP,callsign);
+				}
 				else {
 					do_cockpit_window_view(w,NULL,0,WBU_WEAPON,NULL);
 					PlayerCfg.Cockpit3DView[iwi_value(w)] = CV_NONE;

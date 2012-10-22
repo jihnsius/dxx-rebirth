@@ -668,7 +668,7 @@ static void select_next_window_function(const InsetWindowIndex w, unsigned value
 			}
 			//if no ecort, fall through
 	}
-	unsigned step = value - 2;
+	unsigned step = value - 1;
 	PlayerCfg.Cockpit3DView[iwi_value(w)] = CV_ESCORT;
 	for (; step --;) {
 	switch (PlayerCfg.Cockpit3DView[iwi_value(w)]) {
@@ -719,6 +719,17 @@ static void select_next_window_function(const InsetWindowIndex w, unsigned value
 	}
 }
 
+static void select_big_window_function(unsigned which)
+{
+	if (which >= N_players)
+		which = Player_num;
+	const unsigned objnum = Players[which].objnum;
+	if (objnum > Highest_object_index)
+		return;
+	HUD_init_message(HM_DEFAULT, "Viewer changed to '%s'(%u)", Players[which].callsign, which);
+	Viewer = &Objects[objnum];
+}
+
 enum inset_select_mode_t g_inset_selector_mode;
 InsetWindowIndex g_iwi_focus;
 unsigned char g_inset_selector_view[iwiv_count];
@@ -738,7 +749,7 @@ static int HandleInsetWindowManagementKey(const int key)
 	switch(key)
 	{
 		case KEY_0:
-			value = 0;
+			value = 9;
 			break;
 		case KEY_1:
 		case KEY_2:
@@ -749,7 +760,7 @@ static int HandleInsetWindowManagementKey(const int key)
 		case KEY_7:
 		case KEY_8:
 		case KEY_9:
-			value = 1 + (key - KEY_1);
+			value = (key - KEY_1);
 			break;
 		default:
 			return 1;
@@ -757,14 +768,20 @@ static int HandleInsetWindowManagementKey(const int key)
 	switch(selector_mode)
 	{
 		case ism_window:
+			if (value == 9)
+				g_iwi_focus = iwi_instance(iwiv_count);
 			if (value >= iwiv_count)
 				return 1;
 			g_iwi_focus = iwi_instance(value);
 			break;
 		case ism_view:
+			if (iwi_value(g_iwi_focus) == iwiv_count)
+			{
+				select_big_window_function(value);
+				break;
+			}
 			g_inset_selector_view[iwi_value(g_iwi_focus)] = value;
 			select_next_window_function(g_iwi_focus, value);
-	write_player_file();
 			break;
 		default:
 			return 1;

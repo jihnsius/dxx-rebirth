@@ -418,10 +418,9 @@ unsigned py_get_glow_point(g3s_point (*const gp)[3])
 	const int16_t segnum = get_desired_segment(s_target_segnum, ScriptControls.glow_destination);
 	if (segnum == -1 || static_cast<unsigned>(segnum) > static_cast<unsigned>(Highest_segment_index))
 		return 0;
-	const player& player = Players[Player_num];
-	if (player.objnum > Highest_object_index)
+	if (!Viewer)
 		return 0;
-	const dxxobject& objplayer = Objects[player.objnum];
+	const dxxobject& objplayer = *Viewer;
 	if (segnum == objplayer.segnum)
 		return 0;
 	typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, boost::no_property, boost::property<boost::edge_weight_t, int> > Graph;
