@@ -19,9 +19,18 @@
 #include "gr.h"
 #include "args.h"
 
+#include "graphadapt.hpp"
+
 using namespace boost::python;
 
 extern script_control_info ScriptControls;
+
+extern "C"
+{
+	int py_get_glow_point(g3s_point (*)[3]);
+}
+
+boost::scoped_ptr<dxx_segment_adaptor::weight_map> g_wmap;
 
 object gpy__main__;
 
@@ -183,6 +192,119 @@ void scripting_input_enter(const char *const input)
 		con_printf(CON_URGENT, "!: %s\n", input);
 	});
 }
+
+struct pathfinder_types_t
+{
+	typedef dxx_segment_adaptor Graph;
+	typedef Graph::segment_descriptor segment_descriptor;
+	typedef Graph::vertex_descriptor vertex_descriptor;
+	typedef Graph::weight_map weight_map;
+};
+
+class pathfinder_t : public pathfinder_types_t
+{
+public:
+	enum
+	{
+		dsp_ok,
+		dsp_invalid_viewer,
+		dsp_at_destination,
+		dsp_max = dsp_at_destination,
+	};
+	enum
+	{
+		v_ok,
+		v_invalid_predecessor,
+		v_self_predecessor,
+		v_excessive_steps,
+	};
+	pathfinder_t() :
+		g(get_create_weight_map())
+	{
+	}
+	const Graph& graph()
+	{
+		return g;
+	}
+	int dijkstra_shortest_paths(const dxxobject *viewer, const int segnum)
+	{
+		if (!viewer)
+			return -dsp_invalid_viewer;
+		if (segnum == viewer->segnum)
+			return -dsp_at_destination;
+		const vertex_descriptor vd_segnum = vertex_descriptor(Graph::segment_descriptor(viewer->segnum), Graph::side_descriptor(0));
+		boost::dijkstra_shortest_paths(g, vd_segnum, boost::predecessor_map(&g.m_pred[0]).distance_map(&g.m_dist[0]));
+		return dsp_ok;
+	}
+	template <typename T>
+		int visit(const vertex_descriptor& vd_start, T& t)
+		{
+			vertex_descriptor lookup_predecessor = vd_start;
+			t.visit_first_vertex(lookup_predecessor);
+			const Graph::PredecessorMap& pred = g.m_pred;
+			unsigned steps = 0;
+			for (;;)
+			{
+				const unsigned ulp = static_cast<unsigned>(lookup_predecessor);
+				if (ulp >= pred.size())
+					return -v_invalid_predecessor;
+				const vertex_descriptor& n = pred[ulp];
+				if (t.at_destination(n, lookup_predecessor, g))
+					return t.finalize(n, lookup_predecessor, g);
+				if (n == lookup_predecessor)
+					return -v_self_predecessor;
+				t.visit_step_vertex(n, lookup_predecessor);
+				if (++ steps > MAX_SEGMENTS * 36)
+					return -v_excessive_steps;
+				lookup_predecessor = n;
+			}
+		}
+	struct null_vertex_visitor_t
+	{
+		void visit_first_vertex(const vertex_descriptor&) {}
+		void visit_step_vertex(const vertex_descriptor&, const vertex_descriptor&) {}
+		bool at_destination(const vertex_descriptor&, const vertex_descriptor&, const Graph&) { return true; }
+		int finalize(const vertex_descriptor&, const vertex_descriptor&, const Graph&) { return 0; }
+	};
+	template <unsigned N>
+	struct nearest_vertex_visitor_t : pathfinder_types_t
+	{
+		typedef std::array<vertex_descriptor, N> predecessor_circular_buffer;
+		predecessor_circular_buffer idx_predecessor;
+		typename predecessor_circular_buffer::iterator ii_predecessor;
+		const segment_descriptor sd_destination;
+		nearest_vertex_visitor_t(const segment_descriptor& destination) :
+			ii_predecessor(idx_predecessor.begin()),
+			sd_destination(destination)
+		{
+			idx_predecessor.fill(typename predecessor_circular_buffer::value_type(~0u));
+		}
+		void visit_first_vertex(const vertex_descriptor& vd)
+		{
+			*ii_predecessor = vd;
+			++ ii_predecessor;
+		}
+		void visit_step_vertex(const vertex_descriptor& vd, const vertex_descriptor&)
+		{
+			*ii_predecessor = vd;
+			++ ii_predecessor;
+			if (ii_predecessor == idx_predecessor.end())
+				ii_predecessor = idx_predecessor.begin();
+		}
+		bool at_destination(const vertex_descriptor& vd, const vertex_descriptor&, const Graph&)
+		{
+			return vd.extract_segment() == sd_destination;
+		}
+	};
+private:
+	Graph g;
+	static weight_map& get_create_weight_map()
+	{
+		if (!g_wmap.get())
+			g_wmap.reset(new weight_map);
+		return *g_wmap.get();
+	}
+};
 
 static fixang bound_angle(const fix v, const fix b)
 {
@@ -406,107 +528,89 @@ unsigned cxx_script_get_player_ship_vecthrust(dxxobject *const obj, const fix sc
 	return 1;
 }
 
+struct rotated_nearest_vertex_visitor_t : pathfinder_t::nearest_vertex_visitor_t<3>
+{
+	typedef nearest_vertex_visitor_t<3> base_t;
+	unsigned m_skipped_previous;
+	g3s_point (*pg3_point)[3];
+	rotated_nearest_vertex_visitor_t(g3s_point (*p)[3], const segment_descriptor& destination) :
+		base_t(destination),
+		m_skipped_previous(0),
+		pg3_point(p)
+	{
+	}
+	void visit_step_vertex(const vertex_descriptor& vd, const vertex_descriptor& vdp)
+	{
+		if (skip_vertex(vd, vdp))
+			return;
+		base_t::visit_step_vertex(vd, vdp);
+	}
+	int finalize(const vertex_descriptor&, const vertex_descriptor&, const Graph& g)
+	{
+		const unsigned vertexes = num_vertices(g);
+		unsigned count = 0;
+		typename predecessor_circular_buffer::iterator ip = ii_predecessor;
+		g3s_point (&p)[3] = *pg3_point;
+		for (; count < (sizeof(p) / sizeof(*p)); ++count)
+		{
+			if (ip == idx_predecessor.begin())
+				ip = idx_predecessor.end();
+			-- ip;
+			const vertex_descriptor& i = *ip;
+			if (i >= vertexes)
+				break;
+			const weight_map& wmap = *g.get_wmap();
+			const weight_map::per_srcside_t& pss = wmap.get_srcside(i.extract_segment(), i.extract_side());
+			const vms_vector& segcen = pss.center;
+			g3_rotate_point(&p[count], &segcen);
+		}
+		return count;
+	}
+protected:
+	bool skip_vertex(const vertex_descriptor& vd, const vertex_descriptor& vdp)
+	{
+		const segment_descriptor& sdvd = vd.extract_segment();
+		const segment_descriptor& sdvdp = vdp.extract_segment();
+		if (sdvd == sdvdp)
+		{
+			if (m_skipped_previous || static_cast<unsigned>(Segments[sdvd].children[WBACK]) != sdvdp)
+			{
+				m_skipped_previous = 0;
+				return false;
+			}
+			++ m_skipped_previous;
+			return true;
+		}
+		else
+			return true;
+	}
+};
 
-extern "C" unsigned py_get_glow_point(g3s_point (*)[3]);
-
-unsigned py_get_glow_point(g3s_point (*const gp)[3])
+int py_get_glow_point(g3s_point (*const gp)[3])
 {
 	if (!ScriptControls.glow_destination.enable_position && !ScriptControls.glow_destination.enable_segment)
-		return 0;
-	g3s_point (&p)[3] = *gp;
+		return -1;
 	static int16_t s_target_segnum = -1;
 	const int16_t segnum = get_desired_segment(s_target_segnum, ScriptControls.glow_destination);
 	if (segnum == -1 || static_cast<unsigned>(segnum) > static_cast<unsigned>(Highest_segment_index))
-		return 0;
-	if (!Viewer)
-		return 0;
-	const dxxobject& objplayer = *Viewer;
-	if (segnum == objplayer.segnum)
-		return 0;
-	typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, boost::no_property, boost::property<boost::edge_weight_t, int> > Graph;
+		return -2;
+	pathfinder_t path;
+	const dxxobject *const viewer = Viewer;
+	const int rcpath = path.dijkstra_shortest_paths(viewer, segnum);
+	if (rcpath < 0)
+		return rcpath - 2;
+	typedef dxx_segment_adaptor Graph;
 	typedef Graph::vertex_descriptor vertex_descriptor;
-	Graph g(Highest_segment_index + 1);
-	boost::property_map<Graph, boost::edge_weight_t>::type wmap = get(boost::edge_weight, g);
-	unsigned i = 0;
-	const unsigned hsi = static_cast<unsigned>(Highest_segment_index);
-	for (; i <= hsi; ++i)
-	{
-		const segment& s = Segments[i];
-		for (unsigned j = 0; j != MAX_SIDES_PER_SEGMENT; ++j)
-		{
-			const int ichild = s.children[j];
-			if (ichild == -1 || ichild == -2)
-				continue;
-			if (ichild > Highest_segment_index)
-				continue;
-			// TODO: account for walls, doors, etc.
-			const std::pair<Graph::edge_descriptor, bool> r = add_edge(i, ichild, g);
-			vms_vector s1;
-			compute_segment_center(&s1, &Segments[i]);
-			vms_vector s2;
-			compute_segment_center(&s2, &Segments[ichild]);
-			vms_vector v;
-			vm_vec_sub(&v, &s1, &s2);
-			wmap[r.first] = vm_vec_mag(&v);
-		}
-	}
-	const unsigned vertexes = num_vertices(g);
-	std::vector<vertex_descriptor> vpred(vertexes);
-	std::vector<int> vdist(vertexes);
-	const vertex_descriptor vd_segnum = vertex(objplayer.segnum, g);
-	boost::dijkstra_shortest_paths(g, vd_segnum, &vpred[0], &vdist[0], get(boost::edge_weight, g), get(boost::vertex_index, g), std::less<int>(), boost::closed_plus<int>(), std::numeric_limits<int>::max(), 0, boost::default_dijkstra_visitor());
-	typedef std::array<unsigned, sizeof(p) / sizeof(*p)> predecessor_circular_buffer;
-	predecessor_circular_buffer idx_predecessor;
-	idx_predecessor.fill(~0u);
-	const predecessor_circular_buffer::iterator ib_predecessor = idx_predecessor.begin();
-	const predecessor_circular_buffer::iterator ie_predecessor = idx_predecessor.end();
-	predecessor_circular_buffer::iterator ii_predecessor = ib_predecessor;
-	*ii_predecessor = segnum;
-	if (idx_predecessor.front() >= vpred.size())
-		return 0;
-	unsigned steps = 0;
-	unsigned lookup_predecessor = segnum;
-	unsigned skipped = 0;
-	for (;;)
-	{
-		const unsigned n = vpred[lookup_predecessor];
-		if (n == static_cast<unsigned>(objplayer.segnum))
-		{
-			/*
-			 * Found idx_predecessor to be an immediate successor of segnum.
-			 */
-			vms_vector segcen;
-			unsigned count = 0;
-			for (; count < (sizeof(p) / sizeof(*p)); ++count)
-			{
-				const unsigned i = *ii_predecessor;
-				if (i >= vertexes)
-					break;
-				if (ii_predecessor == ib_predecessor)
-					ii_predecessor = ie_predecessor;
-				-- ii_predecessor;
-				compute_segment_center(&segcen, &Segments[i]);
-				g3_rotate_point(&p[count], &segcen);
-			}
-			return count;
-		}
-		if (n == lookup_predecessor)
-			return 0;
-		if (n >= vpred.size())
-			return 0;
-		if (skipped || static_cast<unsigned>(Segments[n].children[WBACK]) != lookup_predecessor)
-		{
-			++ ii_predecessor;
-			if (ii_predecessor == ie_predecessor)
-				ii_predecessor = ib_predecessor;
-			*ii_predecessor = n;
-			skipped = 0;
-		}
-		else
-			skipped = 1;
-		lookup_predecessor = n;
-		if (++ steps > 16000)
-			return 0;
-	}
+	rotated_nearest_vertex_visitor_t rnvv(gp, Graph::segment_descriptor(viewer->segnum));
+	const int rcvisit = path.visit(vertex_descriptor(Graph::segment_descriptor(segnum), Graph::side_descriptor(0)), rnvv);
+	return rcvisit;
+}
+
+void py_load_level_hit()
+{
+	guarded_py_call([](){
+		g_wmap.reset();
+		py_call_maybe_null_object(gpy__main__, "notify_load_level");
+	});
 }
 #endif

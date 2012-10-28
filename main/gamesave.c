@@ -57,6 +57,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "multi.h"
 #include "makesig.h"
 #include "physfsx.h"
+#include "pybinding.h"
 
 char Gamesave_current_filename[PATH_MAX];
 
@@ -1200,6 +1201,7 @@ int no_old_level_file_error=0;
 //returns 0 if success, else error code
 int load_level(const char * filename_passed)
 {
+	py_load_level_hit();
 #ifdef EDITOR
 	int use_compiled_level=1;
 #endif

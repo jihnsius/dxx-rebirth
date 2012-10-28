@@ -3041,8 +3041,8 @@ static void show_glow_path()
 		return;
 	g3s_point glow_point[glow_segment_count];
 	extern unsigned py_get_glow_point(g3s_point (*)[glow_segment_count]);
-	const unsigned count = py_get_glow_point(&glow_point);
-	if (!count)
+	const int count = py_get_glow_point(&glow_point);
+	if (count <= 0)
 		return;
 	unsigned which = count;
 	for (; which -- > 0;)
