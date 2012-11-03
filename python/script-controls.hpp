@@ -1,9 +1,10 @@
 #pragma once
 #include "vecmat.h"
 #include <stdint.h>
+#include <boost/noncopyable.hpp>
 
-struct script_control_info {
-	struct location
+struct script_control_info : boost::noncopyable {
+	struct location : boost::noncopyable
 	{
 		vms_vector pos;
 		uint16_t segment;

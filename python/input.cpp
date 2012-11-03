@@ -15,8 +15,6 @@ enum
 };
 
 struct tag_input {};
-struct tag_user_input : public tag_input {};
-struct tag_script_input : public tag_input {};
 
 template <typename T, T control_info::*M, T mask = static_cast<T>(~0)>
 static T read_flag_control()
@@ -51,7 +49,7 @@ static void write_user_attitude_control(const fix f)
 	Controls.*M = f;
 }
 
-static void define_user_input_class(class_<tag_user_input>& ui)
+static void define_user_input_class(class_<control_info, boost::noncopyable>& ui)
 {
 	freeze_attributes(ui);
 	ui.add_static_property("pitch", &read_user_attitude_control<&control_info::pitch_time>, &write_user_attitude_control<&control_info::pitch_time>);
@@ -62,80 +60,61 @@ static void define_user_input_class(class_<tag_user_input>& ui)
 	ui.add_static_property("forward_thrust", &read_user_attitude_control<&control_info::forward_thrust_time>, &write_user_attitude_control<&control_info::forward_thrust_time>);
 }
 
-template <const script_control_info::location script_control_info::*L, fix vms_vector::*M>
-static fix read_script_attitude_control()
+template <fix vms_vector::*M>
+static fix read_script_attitude_control(const script_control_info::location& l)
 {
-	const script_control_info::location& l = ScriptControls.*L;
 	return l.pos.*M;
 }
 
-template <const script_control_info::location script_control_info::*L>
-static vms_vector read_script_attitude_vector()
+template <fix vms_vector::*M>
+static void write_script_attitude_control(script_control_info::location& l, const fix f)
 {
-	const script_control_info::location& l = ScriptControls.*L;
-	return l.pos;
-}
-
-template <const script_control_info::location script_control_info::*L>
-static int read_script_attitude_segment()
-{
-	const script_control_info::location& l = ScriptControls.*L;
-	return l.segment;
-}
-
-template <script_control_info::location script_control_info::*L, fix vms_vector::*M>
-static void write_script_attitude_control(const fix f)
-{
-	script_control_info::location& l = ScriptControls.*L;
 	l.pos.*M = f;
 	l.enable_position = true;
 }
 
-template <script_control_info::location script_control_info::*L>
-static void write_script_attitude_vector(const vms_vector& v)
+static void write_script_attitude_vector(script_control_info::location& l, const vms_vector& v)
 {
-	script_control_info::location& l = ScriptControls.*L;
 	l.pos = v;
 	l.enable_position = true;
 }
 
-template <script_control_info::location script_control_info::*L>
-static void write_script_attitude_segment(const int s)
+static void write_script_attitude_segment(script_control_info::location& l, const int s)
 {
-	script_control_info::location& l = ScriptControls.*L;
 	l.segment = s;
 	l.enable_segment = true;
 }
 
-template <script_control_info::location script_control_info::*L>
-static void clear_script_attitude()
+static void clear_script_attitude(script_control_info::location& l)
 {
-	script_control_info::location& l = ScriptControls.*L;
 	l.enable_position = false;
 	l.enable_segment = false;
 }
 
 template <script_control_info::location script_control_info::*L>
-static void define_script_input_xyz(const char *N)
+static void define_script_input_xyz(scope& s, const char *N)
 {
-	struct T : tag_script_input {};
-	class_<T> so(N);
-	so.add_static_property("x", &read_script_attitude_control<L, &vms_vector::x>, &write_script_attitude_control<L, &vms_vector::x>);
-	so.add_static_property("y", &read_script_attitude_control<L, &vms_vector::y>, &write_script_attitude_control<L, &vms_vector::y>);
-	so.add_static_property("z", &read_script_attitude_control<L, &vms_vector::z>, &write_script_attitude_control<L, &vms_vector::z>);
-	so.add_static_property("v", &read_script_attitude_vector<L>, &write_script_attitude_vector<L>);
-	so.add_static_property("s", &read_script_attitude_segment<L>, &write_script_attitude_segment<L>);
-	so.def("clear", &clear_script_attitude<L>);
+	script_control_info::location& l = ScriptControls.*L;
+	setattr(s, N, object(boost::ref(l)));
 }
 
-static void define_script_input_class(class_<tag_script_input>& si)
+static void define_script_input_class(class_<script_control_info, boost::noncopyable>& si)
 {
-	si.def("__setattr__", &refuse_setattr<tag_script_input>);
+	class_<script_control_info::location, boost::noncopyable> cl("location", no_init);
+	cl
+		.add_property("s", &script_control_info::location::segment, &write_script_attitude_segment)
+		.add_property("v", &script_control_info::location::pos, &write_script_attitude_vector)
+		.add_property("x", &read_script_attitude_control<&vms_vector::x>, &write_script_attitude_control<&vms_vector::x>)
+		.add_property("y", &read_script_attitude_control<&vms_vector::y>, &write_script_attitude_control<&vms_vector::y>)
+		.add_property("z", &read_script_attitude_control<&vms_vector::z>, &write_script_attitude_control<&vms_vector::z>)
+		.def("clear", &clear_script_attitude)
+		;
 	scope s(si);
-	define_script_input_xyz<&script_control_info::ship_orientation>("ship_orientation");
-	define_script_input_xyz<&script_control_info::guided_destination>("guided_destination");
-	define_script_input_xyz<&script_control_info::ship_destination>("ship_destination");
-	define_script_input_xyz<&script_control_info::glow_destination>("glow_destination");
+	define_script_input_xyz<&script_control_info::ship_orientation>(s, "ship_orientation");
+	define_script_input_xyz<&script_control_info::guided_destination>(s, "guided_destination");
+	define_script_input_xyz<&script_control_info::ship_destination>(s, "ship_destination");
+	define_script_input_xyz<&script_control_info::glow_destination>(s, "glow_destination");
+	freeze_attributes(si);
 }
 
 void define_input_class()
@@ -143,8 +122,8 @@ void define_input_class()
 	class_<tag_input, boost::noncopyable> i("input", no_init);
 	i.add_static_property("forbid_grab", make_getter(&GameArg.DbgForbidConsoleGrab), make_setter(&GameArg.DbgForbidConsoleGrab));
 	scope s(i);
-	class_<tag_user_input> ui("user", no_init);
-	class_<tag_script_input> si("script", no_init);
+	class_<control_info, boost::noncopyable> ui("user", no_init);
+	class_<script_control_info, boost::noncopyable> si("script", no_init);
 	define_input_flag_property<ubyte, e_script_fire, &control_info::fire_primary_state>(ui, si, "fire_primary");
 	define_input_flag_property<ubyte, e_script_fire, &control_info::fire_secondary_state>(ui, si, "fire_secondary");
 	define_user_input_class(ui);
