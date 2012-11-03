@@ -354,7 +354,7 @@ void select_weapon(int weapon_num, int secondary_flag, int print_message, int wa
 		if (weapon_num == LASER_INDEX && !secondary_flag)
 			HUD_init_message(HM_DEFAULT, "%s Level %d selected (energy=%i)!", weapon_name, plr->laser_level+1, f2i(plr->energy));
 		else if (!secondary_flag && (weapon_num == 1 || weapon_num == 6))
-			HUD_init_message(HM_DEFAULT, "%s selected (ammo=%i)!", weapon_name, f2i((unsigned int)plr->primary_ammo[1] * VULCAN_AMMO_SCALE));
+			HUD_init_message(HM_DEFAULT, "%s selected (ammo=%i/%i)!", weapon_name, PRINTABLE_VULCAN_AMMO(plr->primary_ammo[1]), PRINTABLE_VULCAN_AMMO(CURRENT_VULCAN_AMMO_CAPACITY(Player_num)));
 		else if (!secondary_flag)
 			HUD_init_message(HM_DEFAULT, "%s selected (energy=%i)!", weapon_name, f2i(plr->energy));
 		else

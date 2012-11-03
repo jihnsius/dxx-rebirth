@@ -153,6 +153,10 @@ typedef struct weapon_info {
 #define SUPER_WEAPON        5
 
 #define VULCAN_AMMO_SCALE   0xcc163 //(0x198300/2)      //multiply ammo by this before displaying
+#define CURRENT_VULCAN_AMMO_CAPACITY(P)	\
+	(Primary_ammo_max[VULCAN_INDEX] * ((Players[P].flags & PLAYER_FLAGS_AMMO_RACK) ? 2 : 1))
+#define PRINTABLE_VULCAN_AMMO(N)	\
+	f2i(((unsigned) VULCAN_AMMO_SCALE) * ((unsigned) (N)))
 
 #define NUM_SMART_CHILDREN  6   // Number of smart children created by default.
 

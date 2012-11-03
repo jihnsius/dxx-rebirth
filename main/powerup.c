@@ -204,14 +204,12 @@ static int pick_up_vulcan_ammo(void)
 	int	used=0,max;
 
 	int	pwsave = Primary_weapon;		// Ugh, save selected primary weapon around the picking up of the ammo.  I apologize for this code.  Matthew A. Toschlog
+	max = CURRENT_VULCAN_AMMO_CAPACITY(Player_num);
 	if (pick_up_ammo(CLASS_PRIMARY, VULCAN_INDEX, VULCAN_AMMO_AMOUNT)) {
-		powerup_basic(7, 14, 21, VULCAN_AMMO_SCORE, "%s (ammo=%i)!", TXT_VULCAN_AMMO, f2i((unsigned int)Players[Player_num].primary_ammo[1] * VULCAN_AMMO_SCALE));
+		powerup_basic(7, 14, 21, VULCAN_AMMO_SCORE, "%s (ammo=%i/%i)!", TXT_VULCAN_AMMO, PRINTABLE_VULCAN_AMMO(Players[Player_num].primary_ammo[1]), PRINTABLE_VULCAN_AMMO(max));
 		used = 1;
 	} else {
-		max = Primary_ammo_max[VULCAN_INDEX];
-		if (Players[Player_num].flags & PLAYER_FLAGS_AMMO_RACK)
-			max *= 2;
-		HUD_init_message(HM_DEFAULT|HM_REDUNDANT|HM_MAYDUPL, "%s %d %s!",TXT_ALREADY_HAVE,f2i((unsigned) VULCAN_AMMO_SCALE * (unsigned) max),TXT_VULCAN_ROUNDS);
+		HUD_init_message(HM_DEFAULT|HM_REDUNDANT|HM_MAYDUPL, "%s %d %s!",TXT_ALREADY_HAVE,PRINTABLE_VULCAN_AMMO(max),TXT_VULCAN_ROUNDS);
 		used = 0;
 	}
 	Primary_weapon = pwsave;
@@ -380,7 +378,7 @@ int do_powerup(dxxobject *obj)
 				ammo_used = pick_up_ammo(CLASS_PRIMARY, VULCAN_INDEX, ammo);
 				obj->ctype.powerup_info.count -= ammo_used;
 				if (!used && ammo_used) {
-					powerup_basic(7, 14, 21, VULCAN_AMMO_SCORE, "%s (now ammo=%i)!", TXT_VULCAN_AMMO, f2i((unsigned int)Players[Player_num].primary_ammo[1] * VULCAN_AMMO_SCALE));
+					powerup_basic(7, 14, 21, VULCAN_AMMO_SCORE, "%s (now ammo=%i/%i)!", TXT_VULCAN_AMMO, PRINTABLE_VULCAN_AMMO(Players[Player_num].primary_ammo[1]), PRINTABLE_VULCAN_AMMO(CURRENT_VULCAN_AMMO_CAPACITY(Player_num)));
 					special_used = 1;
 					id = POW_VULCAN_AMMO;		//set new id for making sound at end of this function
 					if (obj->ctype.powerup_info.count == 0)

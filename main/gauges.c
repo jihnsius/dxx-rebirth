@@ -1225,7 +1225,7 @@ static void hud_printf_vulcan_ammo(const int x, const int y)
 	else
 		hud_set_fontcolor_green();
 	const int using_gauss = (Primary_last_was_super[VULCAN_INDEX] || !(primary_weapon_flags & vulcan_mask)) && (primary_weapon_flags & gauss_mask);
-	gr_printf(x,y,"%c:%i", using_gauss ? 'G' : 'V', f2i((unsigned int)Players[Player_num].primary_ammo[1] * VULCAN_AMMO_SCALE));
+	gr_printf(x,y,"%c:%i", using_gauss ? 'G' : 'V', PRINTABLE_VULCAN_AMMO(Players[Player_num].primary_ammo[1]));
 }
 
 static void hud_show_weapons_mode(int type,int vertical,int x,int y){
@@ -1403,7 +1403,7 @@ static void hud_show_weapons(void)
 
 			case VULCAN_INDEX:
 			case GAUSS_INDEX:
-				sprintf(weapon_str, "%s: %i", weapon_name, f2i((unsigned) Players[Player_num].primary_ammo[VULCAN_INDEX] * (unsigned) VULCAN_AMMO_SCALE));
+				snprintf(weapon_str, sizeof(weapon_str), "%s: %i", weapon_name, PRINTABLE_VULCAN_AMMO(Players[Player_num].primary_ammo[VULCAN_INDEX]));
 				convert_1s(weapon_str);
 				break;
 
