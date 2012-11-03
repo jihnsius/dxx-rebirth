@@ -266,6 +266,8 @@ void CyclePrimary ()
 void CycleSecondary ()
 {
 	int cur_order_slot = SOrderList(Secondary_weapon), desired_weapon = Secondary_weapon, loop=0;
+	const int autoselect_order_slot = SOrderList(255);
+	const int use_restricted_autoselect = (cur_order_slot < autoselect_order_slot) && (1 < autoselect_order_slot);
 	
 	while (loop<(MAX_SECONDARY_WEAPONS+1))
 	{
@@ -273,8 +275,13 @@ void CycleSecondary ()
 		cur_order_slot++; // next slot
 		if (cur_order_slot >= MAX_SECONDARY_WEAPONS+1) // loop if necessary
 			cur_order_slot = 0;
-		if (cur_order_slot == SOrderList(255)) // ignore "do not autoselect"
+		if (cur_order_slot == autoselect_order_slot) // ignore "do not autoselect"
+		{
+			if (use_restricted_autoselect)
+				cur_order_slot = 0;
+			else
 			continue;
+		}
 		desired_weapon = PlayerCfg.SecondaryOrder[cur_order_slot]; // now that is the weapon next to our current one
 		// select the weapon if we have it
 		if (player_has_weapon(desired_weapon, 1) == HAS_ALL)
