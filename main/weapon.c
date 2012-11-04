@@ -1157,7 +1157,7 @@ void DropSecondaryWeapon ()
 		case POW_SMISSILE1_1:
 		case POW_GUIDED_MISSILE_1:
 		case POW_MERCURY_MISSILE_1:
-			if (Players[Player_num].secondary_ammo[Secondary_weapon]<4)
+			if (Players[Player_num].secondary_ammo[Secondary_weapon]%4)
 			{
 				sub_ammo = 1;
 			}
