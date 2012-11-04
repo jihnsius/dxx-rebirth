@@ -575,11 +575,11 @@ int pick_up_secondary(int weapon_index,int count)
 	//note: flash for all but concussion was 7,14,21
 	if (num_picked_up>1) {
 		PALETTE_FLASH_ADD(15,15,15);
-		HUD_init_message(HM_DEFAULT, "%d %s%s",num_picked_up,SECONDARY_WEAPON_NAMES(weapon_index), TXT_SX);
+		HUD_init_message(HM_DEFAULT, "%d %ss (count=%i)!",num_picked_up,SECONDARY_WEAPON_NAMES(weapon_index), Players[Player_num].secondary_ammo[weapon_index]);
 	}
 	else {
 		PALETTE_FLASH_ADD(10,10,10);
-		HUD_init_message(HM_DEFAULT, "%s!",SECONDARY_WEAPON_NAMES(weapon_index));
+		HUD_init_message(HM_DEFAULT, "%s (count=%i)!",SECONDARY_WEAPON_NAMES(weapon_index), Players[Player_num].secondary_ammo[weapon_index]);
 	}
 
 	return 1;
