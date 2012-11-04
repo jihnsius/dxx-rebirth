@@ -27,7 +27,7 @@ extern script_control_info ScriptControls;
 
 extern "C"
 {
-	int py_get_glow_point(g3s_point (*)[3]);
+	int py_get_glow_path(g3s_point (*)[3], unsigned);
 }
 
 boost::scoped_ptr<dxx_segment_adaptor::weight_map> g_wmap;
@@ -269,6 +269,10 @@ public:
 	template <unsigned N>
 	struct nearest_vertex_visitor_t : pathfinder_types_t
 	{
+		enum
+		{
+			vertex_count = N,
+		};
 		typedef std::array<vertex_descriptor, N> predecessor_circular_buffer;
 		predecessor_circular_buffer idx_predecessor;
 		typename predecessor_circular_buffer::iterator ii_predecessor;
@@ -359,7 +363,10 @@ static int16_t get_desired_segment(int16_t& cached_segnum, const script_control_
 	{
 		const int requested_segment = loc.segment;
 		if (static_cast<unsigned>(requested_segment) <= static_cast<unsigned>(Highest_segment_index))
+		{
+			cached_segnum = requested_segment;
 			return requested_segment;
+		}
 		return -1;
 	}
 	const int cseg = cached_segnum;
@@ -528,15 +535,14 @@ unsigned cxx_script_get_player_ship_vecthrust(dxxobject *const obj, const fix sc
 	return 1;
 }
 
-struct rotated_nearest_vertex_visitor_t : pathfinder_t::nearest_vertex_visitor_t<3>
+struct glow_nearest_vertex_visitor_t : pathfinder_t::nearest_vertex_visitor_t<3>
 {
 	typedef nearest_vertex_visitor_t<3> base_t;
 	unsigned m_skipped_previous;
-	g3s_point (*pg3_point)[3];
-	rotated_nearest_vertex_visitor_t(g3s_point (*p)[3], const segment_descriptor& destination) :
+	std::array<vms_vector, base_t::vertex_count> m_nodes;
+	glow_nearest_vertex_visitor_t(const segment_descriptor& destination) :
 		base_t(destination),
-		m_skipped_previous(0),
-		pg3_point(p)
+		m_skipped_previous(0)
 	{
 	}
 	void visit_step_vertex(const vertex_descriptor& vd, const vertex_descriptor& vdp)
@@ -550,8 +556,7 @@ struct rotated_nearest_vertex_visitor_t : pathfinder_t::nearest_vertex_visitor_t
 		const unsigned vertexes = num_vertices(g);
 		unsigned count = 0;
 		typename predecessor_circular_buffer::iterator ip = ii_predecessor;
-		g3s_point (&p)[3] = *pg3_point;
-		for (; count < (sizeof(p) / sizeof(*p)); ++count)
+		for (; count != m_nodes.size(); ++count)
 		{
 			if (ip == idx_predecessor.begin())
 				ip = idx_predecessor.end();
@@ -562,7 +567,7 @@ struct rotated_nearest_vertex_visitor_t : pathfinder_t::nearest_vertex_visitor_t
 			const weight_map& wmap = *g.get_wmap();
 			const weight_map::per_srcside_t& pss = wmap.get_srcside(i.extract_segment(), i.extract_side());
 			const vms_vector& segcen = pss.center;
-			g3_rotate_point(&p[count], &segcen);
+			m_nodes[count] = segcen;
 		}
 		return count;
 	}
@@ -586,24 +591,78 @@ protected:
 	}
 };
 
-int py_get_glow_point(g3s_point (*const gp)[3])
+struct glow_path_cache_t
 {
-	if (!ScriptControls.glow_destination.enable_position && !ScriptControls.glow_destination.enable_segment)
+	int16_t dstseg, srcseg;
+	uint16_t count_nodes;
+	std::array<vms_vector, glow_nearest_vertex_visitor_t::vertex_count> nodes;
+};
+
+static int py_rotate_glow_path(g3s_point (&gp)[3], const glow_path_cache_t& cache)
+{
+	const unsigned count_nodes = cache.count_nodes;
+	for (unsigned u = 0; u != count_nodes && u != cache.nodes.size(); ++u)
+		g3_rotate_point(&gp[u], &cache.nodes[u]);
+	return count_nodes;
+}
+
+static int py_get_internal_glow_path(const script_control_info::location& l, const unsigned window_num, g3s_point (&gp)[3])
+{
+	static glow_path_cache_t s_cache[MAX_RENDERED_WINDOWS] = {
+#define BOOST_PP_LOCAL_LIMITS (0,MAX_RENDERED_WINDOWS-1)
+#define BOOST_PP_LOCAL_MACRO(N)	{-1, -1, 0, {{{0, 0, 0}, {0, 0, 0}, {0, 0, 0}}}},
+#include BOOST_PP_LOCAL_ITERATE()
+	};
+	if (!l.enable_position && !l.enable_segment)
 		return -1;
-	static int16_t s_target_segnum = -1;
-	const int16_t segnum = get_desired_segment(s_target_segnum, ScriptControls.glow_destination);
+	glow_path_cache_t& cache = s_cache[window_num];
+	const int16_t cseg = cache.dstseg;
+	const int16_t segnum = get_desired_segment(cache.dstseg, l);
 	if (segnum == -1 || static_cast<unsigned>(segnum) > static_cast<unsigned>(Highest_segment_index))
+	{
+		cache.srcseg = -1;
 		return -2;
-	pathfinder_t path;
+	}
 	const dxxobject *const viewer = Viewer;
+	if (!viewer)
+	{
+		cache.srcseg = -1;
+		return -3;
+	}
+	if (cseg == segnum && viewer->segnum == cache.srcseg)
+		return py_rotate_glow_path(gp, cache);
+	pathfinder_t path;
 	const int rcpath = path.dijkstra_shortest_paths(viewer, segnum);
 	if (rcpath < 0)
+	{
+		cache.srcseg = -1;
 		return rcpath - 2;
+	}
 	typedef dxx_segment_adaptor Graph;
 	typedef Graph::vertex_descriptor vertex_descriptor;
-	rotated_nearest_vertex_visitor_t rnvv(gp, Graph::segment_descriptor(viewer->segnum));
+	glow_nearest_vertex_visitor_t rnvv(Graph::segment_descriptor(viewer->segnum));
 	const int rcvisit = path.visit(vertex_descriptor(Graph::segment_descriptor(segnum), Graph::side_descriptor(0)), rnvv);
-	return rcvisit;
+	if (rcvisit < 0)
+	{
+		cache.srcseg = -1;
+		return rcvisit - 10;
+	}
+	cache.srcseg = viewer->segnum;
+	cache.count_nodes = rcvisit;
+	cache.nodes = rnvv.m_nodes;
+	return py_rotate_glow_path(gp, cache);
+}
+
+int py_get_glow_path(g3s_point (*const gp)[3], unsigned window_num)
+{
+	const script_control_info::location *l;
+	if (window_num == 0)
+		l = &ScriptControls.glow_main;
+	else if (window_num - 1 < sizeof(ScriptControls.inset) / sizeof(ScriptControls.inset[0]))
+		l = &ScriptControls.inset[window_num - 1].glow;
+	else
+		return -1;
+	return py_get_internal_glow_path(*l, window_num, *gp);
 }
 
 void py_load_level_hit()

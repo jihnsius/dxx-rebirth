@@ -1,13 +1,12 @@
-#include "player.h"
-#include "filter.hpp"
-#include "wrap-filter-container.hpp"
-#include "wrap-object.hpp"
+#include "player.hpp"
 #include <boost/python/class.hpp>
 #include <boost/python/scope.hpp>
 #include <boost/python/str.hpp>
 #include <boost/format.hpp>
 
 #include "lighting.h"
+
+DEFINE_DXX_OBJECT_SUBTYPE_STATIC(player_object);
 
 using namespace boost::python;
 
@@ -33,29 +32,10 @@ struct player_container : public wrap_container_tmpl<player, container_lookup_pl
 template <>
 const char player_container::base_container::s_index_range_error[] = "index out of range for player";
 
-enum player_object_type_t
-{
-	player_0,
-	player_1,
-	player_2,
-	player_3,
-	player_4,
-	player_5,
-	player_6,
-	player_7,
-	player_8,
-	player_9,
-	player_10,
-	player_11,
-	player_12
-};
-
 template <>
 void define_enum_values<player_object_type_t>(enum_<player_object_type_t>&)
 {
 }
-
-DEFINE_DXX_OBJECT_TYPESAFE_SUBTYPE(player_object, OBJ_PLAYER);
 
 template <typename T>
 static const T& get_range_checked_object(const unsigned objnum, const char *const errmsg)
@@ -86,7 +66,7 @@ static fix scale_value(const player& player)
 	return player.*M >> scale;
 }
 
-static const dxxplayer_object& get_player_object(const player& player)
+const dxxplayer_object& get_player_object(const player& player)
 {
 	static const char idxerrmsg[] = "index out of range for player object";
 	static const char typeerrmsg[] = "unexpected type for player object";

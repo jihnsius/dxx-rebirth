@@ -2,12 +2,49 @@
 #include <boost/python/scope.hpp>
 #include "kconfig.h"
 #include "script-controls.hpp"
+#include "wrap-container.hpp"
+#include "wrap-object.hpp"
 #include "setattr.hpp"
 #include "args.h"
+#include "player.hpp"
 
 using namespace boost::python;
 
 script_control_info ScriptControls;
+
+struct container_lookup_inset_window
+{
+	enum
+	{
+		array_size = script_control_info::count_inset_windows,
+	};
+	typedef script_control_info::per_inset_window value_type;
+	typedef script_control_info::per_inset_window_container array_type;
+	static const array_type& container()
+	{
+		return ScriptControls.inset;
+	}
+};
+
+struct inset_window_container : public wrap_container_tmpl<script_control_info::per_inset_window, container_lookup_inset_window, inset_window_container, false>
+{
+	typedef wrap_container_tmpl<script_control_info::per_inset_window, container_lookup_inset_window, inset_window_container, false> base_container;
+	const_iterator begin() const
+	{
+		return base_container::begin();
+	}
+	const_iterator end() const
+	{
+		return begin() + size();
+	}
+	size_type size() const
+	{
+		return ScriptControls.inset.size();
+	}
+};
+
+template <>
+const char inset_window_container::base_container::s_index_range_error[] = "index out of range for inset window";
 
 enum
 {
@@ -85,6 +122,20 @@ static void write_script_attitude_segment(script_control_info::location& l, cons
 	l.enable_segment = true;
 }
 
+static void write_script_attitude_object_segment(script_control_info::location& l, const dxxobject& o)
+{
+	l.segment = o.segnum;
+	l.enable_segment = true;
+}
+
+const dxxplayer_object& get_player_object(const player& player);
+static void write_script_attitude_player_segment(script_control_info::location& l, const player& o)
+{
+	const dxxplayer_object& po = get_player_object(o);
+	l.segment = po.segnum;
+	l.enable_segment = true;
+}
+
 static void clear_script_attitude(script_control_info::location& l)
 {
 	l.enable_position = false;
@@ -107,20 +158,40 @@ static void define_script_input_class(class_<script_control_info, boost::noncopy
 		.add_property("x", &read_script_attitude_control<&vms_vector::x>, &write_script_attitude_control<&vms_vector::x>)
 		.add_property("y", &read_script_attitude_control<&vms_vector::y>, &write_script_attitude_control<&vms_vector::y>)
 		.add_property("z", &read_script_attitude_control<&vms_vector::z>, &write_script_attitude_control<&vms_vector::z>)
+		.def("set", &write_script_attitude_object_segment)
+		.def("set", &write_script_attitude_player_segment)
 		.def("clear", &clear_script_attitude)
 		;
 	scope s(si);
 	define_script_input_xyz<&script_control_info::ship_orientation>(s, "ship_orientation");
 	define_script_input_xyz<&script_control_info::guided_destination>(s, "guided_destination");
 	define_script_input_xyz<&script_control_info::ship_destination>(s, "ship_destination");
-	define_script_input_xyz<&script_control_info::glow_destination>(s, "glow_destination");
 	freeze_attributes(si);
+}
+
+static void define_output_class()
+{
+	struct tag_output {};
+	scope s(class_<tag_output, boost::noncopyable>("output", no_init));
+	{
+		struct tag_main_window {};
+		scope mw(class_<tag_main_window, boost::noncopyable>("main", no_init));
+		define_script_input_xyz<&script_control_info::glow_main>(mw, "glow");
+	}
+	class_<script_control_info::per_inset_window, boost::noncopyable> piw("_per_inset_window", no_init);
+	piw
+		.add_property("glow", &script_control_info::per_inset_window::glow)
+		;
+	freeze_attributes(piw);
+	class_<inset_window_container> iwc("inset", no_init);
+	define_common_container_exports(s, iwc, "inset");
 }
 
 void define_input_class()
 {
 	class_<tag_input, boost::noncopyable> i("input", no_init);
 	i.add_static_property("forbid_grab", make_getter(&GameArg.DbgForbidConsoleGrab), make_setter(&GameArg.DbgForbidConsoleGrab));
+	{
 	scope s(i);
 	class_<control_info, boost::noncopyable> ui("user", no_init);
 	class_<script_control_info, boost::noncopyable> si("script", no_init);
@@ -128,4 +199,6 @@ void define_input_class()
 	define_input_flag_property<ubyte, e_script_fire, &control_info::fire_secondary_state>(ui, si, "fire_secondary");
 	define_user_input_class(ui);
 	define_script_input_class(si);
+	}
+	define_output_class();
 }

@@ -1625,6 +1625,176 @@ extern ubyte RenderingType;
 
 void start_lighting_frame(dxxobject *viewer);
 
+#ifdef USE_PYTHON
+enum
+{
+	glow_divisor_far = 8,
+	glow_divisor_near = 10,
+	glow_segment_count = 3,
+};
+
+static void set_vertical_angle_bracket(const fix w, const fix h, fix (*x)[3], fix (*y)[3], const fix caller_bias, const fix angle_bonus, const int sub)
+{
+	const fix wcenter = (w / 2);
+	const fix hcenter = (h / 2);
+	const fix wfar = (w / glow_divisor_far) + caller_bias + angle_bonus;
+	const fix wnear = (w / glow_divisor_near) + caller_bias;
+	const fix hbias = (h / glow_divisor_near);
+	(*x)[0] = (*x)[2] = wcenter + (sub ? - wnear : wnear);
+	(*x)[1] = wcenter + (sub ? - wfar : wfar);
+	(*y)[0] = hcenter - hbias;
+	(*y)[1] = hcenter;
+	(*y)[2] = hcenter + hbias;
+}
+
+static void set_horizontal_angle_bracket(const fix w, const fix h, fix (*x)[3], fix (*y)[3], const fix caller_bias, const fix angle_bonus, const int sub)
+{
+	const fix wcenter = (w / 2);
+	const fix hcenter = (h / 2);
+	const fix hfar = (h / glow_divisor_far) + caller_bias + angle_bonus;
+	const fix hnear = (h / glow_divisor_near) + caller_bias;
+	const fix wbias = (w / glow_divisor_near);
+	(*y)[0] = (*y)[2] = hcenter + (sub ? - hnear : hnear);
+	(*y)[1] = hcenter + (sub ? - hfar : hfar);
+	(*x)[0] = wcenter - wbias;
+	(*x)[1] = wcenter;
+	(*x)[2] = wcenter + wbias;
+}
+
+static void show_glow_arrow(const fix w, const fix h, const g3s_point *p, const unsigned dir, const unsigned which)
+{
+	fix x[3], y[3];
+	const fix caller_bias = i2f(which << 4),
+			angle_bonus = i2f(0);
+	switch(dir)
+	{
+		case CC_OFF_LEFT:
+			set_vertical_angle_bracket(w, h, &x, &y, caller_bias, angle_bonus, 1);
+			break;
+		case CC_OFF_RIGHT:
+			set_vertical_angle_bracket(w, h, &x, &y, caller_bias, angle_bonus, 0);
+			break;
+		case CC_OFF_BOT:
+			set_horizontal_angle_bracket(w, h, &x, &y, caller_bias, angle_bonus, 0);
+			break;
+		case CC_OFF_TOP:
+			set_horizontal_angle_bracket(w, h, &x, &y, caller_bias, angle_bonus, 1);
+			break;
+		default:
+			return;
+	}
+	gr_line(x[0], y[0], x[1], y[1]);
+	gr_line(x[1], y[1], x[2], y[2]);
+}
+
+static void show_glow_turn_arrow(const fix w, const fix h, const g3s_point *p, const unsigned which)
+{
+	const int codes = p->p3_codes;
+	if (codes & CC_BEHIND)
+	{
+		const int lr = (CC_OFF_LEFT | CC_OFF_RIGHT);
+		const int tb = (CC_OFF_TOP | CC_OFF_BOT);
+		if ((codes & tb) == tb)
+		{
+			if (codes & lr)
+			{
+				show_glow_arrow(w, h, p, codes & CC_OFF_LEFT, which);
+				show_glow_arrow(w, h, p, codes & CC_OFF_RIGHT, which);
+			}
+			else
+			{
+				show_glow_arrow(w, h, p, CC_OFF_TOP, which);
+				show_glow_arrow(w, h, p, CC_OFF_BOT, which);
+			}
+			return;
+		}
+		else if ((codes & lr) == lr)
+		{
+			if (codes & tb)
+			{
+				show_glow_arrow(w, h, p, codes & CC_OFF_TOP, which);
+				show_glow_arrow(w, h, p, codes & CC_OFF_BOT, which);
+			}
+			else
+			{
+				show_glow_arrow(w, h, p, CC_OFF_LEFT, which);
+				show_glow_arrow(w, h, p, CC_OFF_RIGHT, which);
+			}
+			return;
+		}
+	}
+	show_glow_arrow(w, h, p, codes & CC_OFF_LEFT, which);
+	show_glow_arrow(w, h, p, codes & CC_OFF_RIGHT, which);
+	show_glow_arrow(w, h, p, codes & CC_OFF_TOP, which);
+	show_glow_arrow(w, h, p, codes & CC_OFF_BOT, which);
+}
+
+static void set_glow_color(const unsigned which)
+{
+	switch(which)
+	{
+		case 0:
+			gr_setcolor(BM_XRGB(31, 0, 31));
+			break;
+		case 1:
+			gr_setcolor(BM_XRGB(0, 31, 31));
+			break;
+		case 2:
+			gr_setcolor(BM_XRGB(31, 31, 0));
+			break;
+		default:
+			return;
+	}
+}
+
+static void show_glow_point(g3s_point *p, const unsigned which)
+{
+	if (p->p3_codes != 0)
+	{
+		const fix w = i2f(grd_curcanv->cv_bitmap.bm_w);
+		const fix h = i2f(grd_curcanv->cv_bitmap.bm_h);
+		set_glow_color(which);
+		show_glow_turn_arrow(w, h, p, which);
+		return;
+	}
+	g3_project_point(p);
+	if (p->p3_flags & PF_OVERFLOW)
+		return;
+	const fix x = p->p3_sx;
+	const fix y = p->p3_sy;
+	const int dx = (5 * (glow_segment_count - which)) << 16;
+	const int dy = (5 * (glow_segment_count - which)) << 16;
+	const int w = dx * 2;
+	const int h = dy * 2;
+	set_glow_color(which);
+	gr_line(x+dx-w,y-dy,x+dx,y-dy);
+	gr_line(x+dx,y-dy,x+dx,y-dy+h);
+	gr_line(x-dx,y-dy,x-dx+w,y-dy);
+	gr_line(x-dx,y-dy,x-dx,y-dy+h);
+	gr_line(x+dx-w,y+dy,x+dx,y+dy);
+	gr_line(x+dx,y+dy,x+dx,y+dy-h);
+	gr_line(x-dx,y+dy,x-dx+w,y+dy);
+	gr_line(x-dx,y+dy,x-dx,y+dy-h);
+}
+#endif
+
+static void show_glow_path(const int window_num)
+{
+#ifdef USE_PYTHON
+	if (!grd_curcanv)
+		return;
+	g3s_point glow_point[glow_segment_count];
+unsigned py_get_glow_path(g3s_point (*)[glow_segment_count], int);
+	const int count = py_get_glow_path(&glow_point, window_num);
+	if (count <= 0)
+		return;
+	unsigned which = count;
+	for (; which -- > 0;)
+		show_glow_point(&glow_point[which], which);
+#endif
+}
+
+
 #ifdef JOHN_ZOOM
 fix Zoom_factor=F1_0;
 #endif
@@ -1707,6 +1877,7 @@ void render_frame(fix eye_offset, int window_num)
 	render_mine(start_seg_num, eye_offset, window_num);
 
 	g3_end_frame();
+	show_glow_path(window_num);
 
    //RenderingType=0;
 
