@@ -21,12 +21,12 @@ static void define_common_container_exports(scope& s, const char *N_container_ba
 	class_<typename CT::base_container>(N_container_base, no_init);
 	class_<CT, bases<typename CT::base_container>> c(N_container, no_init);
 	c
-		.def("__setattr__", &refuse_setattr<CT>)
 		.def("__getitem__", &CT::container_getitem, return_internal_reference<>())
 		.def("__iter__", range<return_internal_reference<>>(&CT::begin, &CT::end))
 		.def("__len__", &CT::size);
 	define_specific_container_exports(s, Ns, c);
 	setattr(s, Ns, CT());
+	freeze_attributes(c);
 }
 
 template <typename iterator>

@@ -53,6 +53,7 @@ static void write_user_attitude_control(const fix f)
 
 static void define_user_input_class(class_<tag_user_input>& ui)
 {
+	freeze_attributes(ui);
 	ui.add_static_property("pitch", &read_user_attitude_control<&control_info::pitch_time>, &write_user_attitude_control<&control_info::pitch_time>);
 	ui.add_static_property("vertical_thrust", &read_user_attitude_control<&control_info::vertical_thrust_time>, &write_user_attitude_control<&control_info::vertical_thrust_time>);
 	ui.add_static_property("heading", &read_user_attitude_control<&control_info::heading_time>, &write_user_attitude_control<&control_info::heading_time>);
