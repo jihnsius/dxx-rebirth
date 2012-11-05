@@ -1641,10 +1641,6 @@ int Drop_afterburner_blob_flag;		//ugly hack
 void multi_send_drop_blobs(char);
 void fuelcen_check_for_goal (segment *);
 
-//see if wall is volatile, and if so, cause damage to player
-//returns true if player is in lava
-int check_volatile_wall(dxxobject *obj,int segnum,int sidenum,vms_vector *hitpt);
-
 //	Time at which this object last created afterburner blobs.
 fix64	Last_afterburner_time[MAX_OBJECTS];
 

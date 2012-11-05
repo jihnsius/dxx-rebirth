@@ -4627,7 +4627,6 @@ void multi_send_finish_game ()
 }
 
 
-void do_final_boss_hacks();
 static void multi_do_finish_game (char *buf)
 {
 	if (buf[0]!=MULTI_FINISH_GAME)

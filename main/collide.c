@@ -385,9 +385,6 @@ static void collide_player_and_wall( dxxobject * playerobj, fix hitspeed, short 
 
 fix64	Last_volatile_scrape_sound_time = 0;
 
-void collide_weapon_and_wall( dxxobject * weapon, fix hitspeed, short hitseg, short hitwall, vms_vector * hitpt);
-void collide_debris_and_wall( dxxobject * debris, fix hitspeed, short hitseg, short hitwall, vms_vector * hitpt);
-
 //see if wall is volatile or water
 //if volatile, cause damage to player
 //returns 1=lava, 2=water
@@ -612,7 +609,7 @@ int check_effect_blowup(segment *seg,int side,vms_vector *pnt, dxxobject *blower
 
 // int Show_seg_and_side = 0;
 
-void collide_weapon_and_wall( dxxobject * weapon, fix hitspeed, short hitseg, short hitwall, vms_vector * hitpt)
+static void collide_weapon_and_wall( dxxobject * weapon, fix hitspeed, short hitseg, short hitwall, vms_vector * hitpt)
 {
 	segment *seg = &Segments[hitseg];
 	int blew_up;
@@ -862,7 +859,7 @@ void collide_weapon_and_wall( dxxobject * weapon, fix hitspeed, short hitseg, sh
 //##	return;
 //##}
 
-void collide_debris_and_wall( dxxobject * debris, fix hitspeed, short hitseg, short hitwall, vms_vector * hitpt)	{
+static void collide_debris_and_wall( dxxobject * debris, fix hitspeed, short hitseg, short hitwall, vms_vector * hitpt)	{
 	if (!PERSISTENT_DEBRIS || TmapInfo[Segments[hitseg].sides[hitwall].tmap_num].damage)
 		explode_object(debris,0);
 	return;
@@ -1389,7 +1386,7 @@ extern int boss_spew_robot(dxxobject *objp, vms_vector *pos);
 //--ubyte	Boss_invulnerable_spot[NUM_D2_BOSSES] = 	{0,0,0,0,1,1};		//	Set byte if boss is invulnerable in all but a certain spot.  (Dot product fvec|vec_to_collision < BOSS_INVULNERABLE_DOT)
 
 //#define	BOSS_INVULNERABLE_DOT	0		//	If a boss is invulnerable over most of his body, fvec(dot)vec_to_collision must be less than this for damage to occur.
-int	Boss_invulnerable_dot = 0;
+fix	Boss_invulnerable_dot = 0;
 
 int	Buddy_gave_hint_count = 5;
 fix64	Last_time_buddy_gave_hint = 0;
@@ -2063,7 +2060,7 @@ void apply_damage_to_player(dxxobject *playerobj, dxxobject *killer, fix damage,
 	}
 }
 
-void collide_player_and_weapon( dxxobject * playerobj, dxxobject * weapon, vms_vector *collision_point )
+static void collide_player_and_weapon( dxxobject * playerobj, dxxobject * weapon, vms_vector *collision_point )
 {
 	fix		damage = weapon->shields;
 	dxxobject * killer=NULL;
@@ -2292,7 +2289,7 @@ static void collide_player_and_clutter( dxxobject * playerobj, dxxobject * clutt
 
 //	See if weapon1 creates a badass explosion.  If so, create the explosion
 //	Return true if weapon does proximity (as opposed to only contact) damage when it explodes.
-int maybe_detonate_weapon(dxxobject *weapon1, dxxobject *weapon2, vms_vector *collision_point)
+static int maybe_detonate_weapon(dxxobject *weapon1, dxxobject *weapon2, vms_vector *collision_point)
 {
 	if ( Weapon_info[weapon1->id].damage_radius ) {
 		fix	dist;

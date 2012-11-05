@@ -440,7 +440,7 @@ _exit_cheat:
 		vm_vec_zero(&gun_point);
 	}
 
-	// - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - 
+	// - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  - -  -
 	// Occasionally make non-still robots make a path to the player.  Based on agitation and distance from player.
 	if ((aip->behavior != AIB_SNIPE) && (aip->behavior != AIB_RUN_FROM) && (aip->behavior != AIB_STILL) && !(Game_mode & GM_MULTI) && (robptr->companion != 1) && (robptr->thief != 1))
 		if (Overall_agitation > 70) {
@@ -1448,7 +1448,7 @@ void force_dump_ai_objects_all(char *msg)
 // ----------------------------------------------------------------------------------
 #endif
 
-extern void do_boss_dying_frame(dxxobject *objp);
+void do_boss_dying_frame(dxxobject *objp);
 
 // ----------------------------------------------------------------------------------
 // Do things which need to get done for all AI objects each frame.
@@ -1487,7 +1487,6 @@ void do_ai_frame_all(void)
 
 
 extern int Final_boss_is_dead;
-extern fix Boss_invulnerable_dot;
 
 // Initializations to be performed for all robots for a new level.
 void init_robots_for_level(void)
@@ -1500,7 +1499,7 @@ void init_robots_for_level(void)
 
 	Boss_invulnerable_dot = F1_0/4 - i2f(Difficulty_level)/8;
 	Boss_dying_start_time = 0;
-	
+
 	Ai_last_missile_camera = -1;
 }
 
@@ -1661,12 +1660,12 @@ int ai_save_state(PHYSFS_file *fp)
 static void ai_local_read_n_swap(ai_local *ail, int n, int swap, PHYSFS_file *fp)
 {
 	int i;
-	
+
 	for (i = 0; i < n; i++, ail++)
 	{
 		int j;
 		fix tmptime32 = 0;
-		
+
 		ail->player_awareness_type = PHYSFSX_readSXE32(fp, swap);
 		ail->retry_count = PHYSFSX_readSXE32(fp, swap);
 		ail->consecutive_retries = PHYSFSX_readSXE32(fp, swap);
@@ -1685,7 +1684,7 @@ static void ai_local_read_n_swap(ai_local *ail, int n, int swap, PHYSFS_file *fp
 		tmptime32 = PHYSFSX_readSXE32(fp, swap);
 		ail->next_misc_sound_time = (fix64)tmptime32;
 		ail->time_since_processed = PHYSFSX_readSXE32(fp, swap);
-		
+
 		for (j = 0; j < MAX_SUBMODELS; j++)
 			PHYSFSX_readAngleVecX(fp, &ail->goal_angles[j], swap);
 		for (j = 0; j < MAX_SUBMODELS; j++)
@@ -1700,7 +1699,7 @@ static void ai_local_read_n_swap(ai_local *ail, int n, int swap, PHYSFS_file *fp
 static void point_seg_read_n_swap(point_seg *ps, int n, int swap, PHYSFS_file *fp)
 {
 	int i;
-	
+
 	for (i = 0; i < n; i++, ps++)
 	{
 		ps->segnum = PHYSFSX_readSXE32(fp, swap);
@@ -1712,7 +1711,7 @@ static void ai_cloak_info_read_n_swap(ai_cloak_info *ci, int n, int swap, PHYSFS
 {
 	int i;
 	fix tmptime32 = 0;
-	
+
 	for (i = 0; i < n; i++, ci++)
 	{
 		tmptime32 = PHYSFSX_readSXE32(fp, swap);
@@ -1783,7 +1782,7 @@ int ai_restore_state(PHYSFS_file *fp, int version, int swap)
 
 	if (version >= 21) {
 		int i;
-												
+
 		Num_boss_teleport_segs = PHYSFSX_readSXE32(fp, swap);
 		Num_boss_gate_segs = PHYSFSX_readSXE32(fp, swap);
 
