@@ -355,8 +355,6 @@ void cxx_script_get_player_ship_rotthrust(dxxobject *const obj)
 	psr->z = 0; // dest_angles.b; // always zero anyway
 }
 
-static int djverbose;
-
 static int16_t get_desired_segment(int16_t& cached_segnum, const script_control_info::location& loc)
 {
 	if (loc.enable_segment)
@@ -374,6 +372,34 @@ static int16_t get_desired_segment(int16_t& cached_segnum, const script_control_
 	cached_segnum = segnum;
 	return segnum;
 }
+
+struct thrust_nearest_vertex_visitor_t : pathfinder_t::nearest_vertex_visitor_t<2>
+{
+	typedef nearest_vertex_visitor_t<2> base_t;
+	const dxxobject& player;
+	vms_vector& vs;
+	thrust_nearest_vertex_visitor_t(const segment_descriptor& destination, const dxxobject& p, vms_vector& v) :
+		base_t(destination), player(p), vs(v)
+	{
+		vm_vec_zero(&vs);
+	}
+	int finalize(const vertex_descriptor&, const vertex_descriptor&, const Graph& g)
+	{
+		const unsigned vertexes = num_vertices(g);
+		typename predecessor_circular_buffer::iterator ip = ii_predecessor;
+		if (ip == idx_predecessor.begin())
+			ip = idx_predecessor.end();
+		-- ip;
+		const vertex_descriptor& i = *ip;
+		if (i >= vertexes)
+			return -1;
+		const weight_map& wmap = *g.get_wmap();
+		const weight_map::per_srcside_t& pss = wmap.get_srcside(i.extract_segment(), i.extract_side());
+		const vms_vector& segcen = pss.center;
+		vs = segcen - player.pos;
+		return 1;
+	}
+};
 
 static vms_vector get_player_thrust(const dxxobject& plr)
 {
@@ -399,89 +425,20 @@ static vms_vector get_player_thrust(const dxxobject& plr)
 		 */
 		return ScriptControls.ship_destination.pos - plr.pos;
 	}
-	typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, boost::no_property, boost::property<boost::edge_weight_t, int> > Graph;
-	typedef Graph::vertex_descriptor vertex_descriptor;
-	Graph g(Highest_segment_index + 1);
-	boost::property_map<Graph, boost::edge_weight_t>::type wmap = get(boost::edge_weight, g);
-	unsigned i = 0;
-	const unsigned hsi = static_cast<unsigned>(Highest_segment_index);
-	for (; i <= hsi; ++i)
-	{
-		const segment& s = Segments[i];
-		for (unsigned j = 0; j != MAX_SIDES_PER_SEGMENT; ++j)
-		{
-			const int ichild = s.children[j];
-			if (ichild == -1 || ichild == -2)
-				continue;
-			if (ichild > Highest_segment_index)
-				continue;
-			// TODO: account for walls, doors, etc.
-			const std::pair<Graph::edge_descriptor, bool> r = add_edge(i, ichild, g);
-			vms_vector s1;
-			compute_segment_center(&s1, &Segments[i]);
-			vms_vector s2;
-			compute_segment_center(&s2, &Segments[ichild]);
-			vms_vector v;
-			vm_vec_sub(&v, &s1, &s2);
-			wmap[r.first] = vm_vec_mag(&v);
-		}
-	}
-	const unsigned vertexes = num_vertices(g);
-	std::vector<vertex_descriptor> vpred(vertexes);
-	std::vector<int> vdist(vertexes);
-	const vertex_descriptor vd_segnum = vertex(plr.segnum, g);
-	boost::dijkstra_shortest_paths(g, vd_segnum, &vpred[0], &vdist[0], get(boost::edge_weight, g), get(boost::vertex_index, g), std::less<int>(), boost::closed_plus<int>(), std::numeric_limits<int>::max(), 0, boost::default_dijkstra_visitor());
-	unsigned steps = 0;
-	unsigned idx_predecessor = segnum;
-	const int verbose = djverbose;
-	djverbose = 0;
-	if (idx_predecessor >= vpred.size())
+	pathfinder_t path;
+	const int rcpath = path.dijkstra_shortest_paths(&plr, segnum);
+	if (rcpath < 0)
 	{
 		vm_vec_zero(&vs);
-		if (verbose)
-			con_printf(CON_NORMAL, "idx_predecessor=%u vpred.size()=%zu\n", idx_predecessor, vpred.size());
 		return vs;
 	}
-	for (;;)
-	{
-		const unsigned n = vpred[idx_predecessor];
-		if (verbose)
-		{
-			con_printf(CON_NORMAL, "vpred[%u]=%u\n", idx_predecessor, n);
-		}
-		if (n == static_cast<unsigned>(plr.segnum))
-		{
-			/*
-			 * Found idx_predecessor to be an immediate successor of segnum.
-			 */
-			vms_vector segcen;
-			compute_segment_center(&segcen, &Segments[idx_predecessor]);
-			vm_vec_sub(&vs, &segcen, &plr.pos);
-			return vs;
-		}
-		if (n == idx_predecessor)
-		{
-			vm_vec_zero(&vs);
-			if (verbose)
-				con_printf(CON_NORMAL, "n=%u idx_predecessor=%u\n", n, idx_predecessor);
-			return vs;
-		}
-		if (n >= vpred.size())
-		{
-			vm_vec_zero(&vs);
-			if (verbose)
-				con_printf(CON_NORMAL, "n=%u vpred.size()=%zu\n", n, vpred.size());
-			return vs;
-		}
-		idx_predecessor = n;
-		if (++ steps > 16000)
-		{
-			vm_vec_zero(&vs);
-			if (verbose)
-				con_printf(CON_NORMAL, "steps=%u idx_predecessor=%u\n", steps, idx_predecessor);
-			return vs;
-		}
-	}
+	typedef dxx_segment_adaptor Graph;
+	typedef Graph::vertex_descriptor vertex_descriptor;
+	thrust_nearest_vertex_visitor_t tnvv(Graph::segment_descriptor(plr.segnum), plr, vs);
+	const int rcvisit = path.visit(vertex_descriptor(Graph::segment_descriptor(segnum), Graph::side_descriptor(0)), tnvv);
+	if (rcvisit < 0)
+		vm_vec_zero(&vs);
+	return vs;
 }
 
 unsigned cxx_script_get_player_ship_vecthrust(dxxobject *const obj, const fix script_max_forward_thrust)
