@@ -18,6 +18,7 @@
 #include "kconfig.h"
 #include "gr.h"
 #include "args.h"
+#include "vecmat.hpp"
 
 #include "graphadapt.hpp"
 
@@ -338,9 +339,8 @@ void cxx_script_get_player_ship_rotthrust(dxxobject *const obj)
 {
 	if (!ScriptControls.ship_orientation.enable_position)
 		return;
-	vms_vector tv;
 	const vms_vector& sop = ScriptControls.ship_orientation.pos;
-	vm_vec_sub(&tv, &sop, &obj->pos);
+	vms_vector tv = sop - obj->pos;
 	vm_vec_copy_normalize(&tv, &tv);
 	vms_angvec dest_angles;
 	vms_angvec cur_angles;
@@ -397,8 +397,7 @@ static vms_vector get_player_thrust(const dxxobject& plr)
 		 * path does not cross segments.  A player or robot could be in
 		 * the path.
 		 */
-		vm_vec_sub(&vs, &ScriptControls.ship_destination.pos, &plr.pos);
-		return vs;
+		return ScriptControls.ship_destination.pos - plr.pos;
 	}
 	typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, boost::no_property, boost::property<boost::edge_weight_t, int> > Graph;
 	typedef Graph::vertex_descriptor vertex_descriptor;
