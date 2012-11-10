@@ -44,11 +44,16 @@
 #endif
 
 #if defined(__GNUC__) && defined(__OPTIMIZE__)
+#ifdef __INLINE__
 #define define_interposition_check(A,C,B)	\
 	__errordecl(__trap_bad_argument_##A##_##B, #A #C #B);	\
 	if (__builtin_constant_p(A C B) && A C B) __trap_bad_argument_##A##_##B()
+#else
+#define define_interposition_check(A,C,B)
+#endif
 #define CHK_REDIRECT(R,N,A,B)	\
 	__apply_c_linkage R (unchecked_##N) A;	\
+	__extern_always_inline R (N) A;	\
 	__extern_always_inline R (N) A	\
 	{ B; }
 #else
