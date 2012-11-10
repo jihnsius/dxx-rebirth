@@ -22,6 +22,7 @@ using std::swap;
 extern "C"
 {
 	void cxx_con_init();
+	void cxx_con_close();
 	void cxx_con_add_buffer_line(const char *buffer);
 	void cxx_handle_misc_con_key(const unsigned key);
 	void cxx_con_handle_idle();
@@ -50,9 +51,14 @@ static bool g_con_history_browse;
 
 #ifdef USE_PYTHON
 void scripting_init();
+void scripting_close();
 void scripting_input_enter(const char *);
 #else
 static void scripting_init()
+{
+}
+
+static void scripting_close()
 {
 }
 
@@ -178,6 +184,11 @@ void cxx_con_init()
 {
 	scripting_init();
 	socket_init();
+}
+
+void cxx_con_close()
+{
+	scripting_close();
 }
 
 template <typename T>

@@ -28,6 +28,7 @@ extern void game_flush_inputs();
 int g_DbgVerbose;
 
 //cxxconsole.cpp
+void cxx_con_close();
 void cxx_con_init();
 void cxx_con_add_buffer_line(const char *buffer);
 void cxx_handle_misc_con_key(const unsigned key);
@@ -276,6 +277,7 @@ void con_showup(void)
 
 static void con_close(void)
 {
+	cxx_con_close();
 	if (gamelog_fp)
 		PHYSFS_close(gamelog_fp);
 	

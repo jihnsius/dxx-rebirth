@@ -163,6 +163,14 @@ void scripting_init()
 	}
 }
 
+void scripting_close()
+{
+	guarded_py_call([]() {
+		g_wmap.reset();
+		gpy__main__ = object();
+	});
+}
+
 void cxx_script_hook_controls()
 {
 	guarded_py_call([]() {
