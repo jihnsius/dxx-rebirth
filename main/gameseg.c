@@ -140,6 +140,7 @@ void create_all_vertex_lists(int *num_faces, int *vertices, int segnum, int side
 	side	*sidep = &Segments[segnum].sides[sidenum];
 	const int  *sv = Side_to_verts_int[sidenum];
 
+	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
 	Assert((segnum <= Highest_segment_index) && (segnum >= 0));
 	Assert((sidenum >= 0) && (sidenum < 6));
 
@@ -199,6 +200,7 @@ void create_all_vertnum_lists(int *num_faces, int *vertnums, int segnum, int sid
 {
 	side	*sidep = &Segments[segnum].sides[sidenum];
 
+	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
 	Assert((segnum <= Highest_segment_index) && (segnum >= 0));
 
 	switch (sidep->type) {
@@ -254,6 +256,7 @@ void create_abs_vertex_lists(int *num_faces, int *vertices, int segnum, int side
 	side	*sidep = &Segments[segnum].sides[sidenum];
 	const int  *sv = Side_to_verts_int[sidenum];
 
+	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
 	Assert((segnum <= Highest_segment_index) && (segnum >= 0));
 	
 	switch (sidep->type) {
@@ -316,6 +319,7 @@ segmasks get_seg_masks(const vms_vector *checkp, int segnum, fix rad, const char
 	if (segnum < 0 || segnum > Highest_segment_index)
 		Error("segnum == %i (%i) in get_seg_masks() \ncheckp: %i,%i,%i, rad: %i \nfrom file: %s, line: %i \nMission: %s (%i) \nPlease report this bug.\n",segnum,Highest_segment_index,checkp->x,checkp->y,checkp->z,rad,calling_file,calling_linenum, Current_mission_filename, Current_level_num);
 
+	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
 	Assert((segnum <= Highest_segment_index) && (segnum >= 0));
 
 	seg = &Segments[segnum];
@@ -459,6 +463,7 @@ static ubyte get_side_dists(const vms_vector *checkp,int segnum,fix *side_dists)
 	int			vertex_list[6];
 	segment		*seg;
 
+	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
 	Assert((segnum <= Highest_segment_index) && (segnum >= 0));
 
 	if (segnum==-1)
@@ -627,6 +632,7 @@ int check_segment_connections(void)
 {
 	int segnum,sidenum;
 	int errors=0;
+	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
 
 	for (segnum=0;segnum<=Highest_segment_index;segnum++) {
 		segment *seg;
@@ -741,6 +747,7 @@ static int trace_segs(const vms_vector *p0, int oldsegnum, int recursion_count)
 	int sidenum, bit, check, biggest_side;
 	static ubyte visited [MAX_SEGMENTS];
 
+	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
 	Assert((oldsegnum <= Highest_segment_index) && (oldsegnum >= 0));
 
 	if (recursion_count >= Num_segments) {
@@ -793,6 +800,7 @@ int find_point_seg(const vms_vector *p,int segnum)
 	int newseg;
 
 	//allow segnum==-1, meaning we have no idea what segment point is in
+	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
 	Assert((segnum <= Highest_segment_index) && (segnum >= -1));
 
 	if (segnum != -1) {
@@ -959,6 +967,7 @@ fix find_connected_distance(vms_vector *p0, int seg0, vms_vector *p1, int seg1, 
 	int		num_points;
 	point_seg	point_segs[MAX_LOC_POINT_SEGS];
 	fix		dist;
+	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
 
 	//	If > this, will overrun point_segs buffer
 #ifdef WINDOWS
@@ -1181,6 +1190,7 @@ void extract_shortpos(dxxobject *objp, shortpos *spp, int swap_bytes)
 
 	segnum = spp->segment;
 
+	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
 	Assert((segnum >= 0) && (segnum <= Highest_segment_index));
 
 	objp->pos.x = (spp->xo << RELPOS_PRECISION) + Vertices[Segments[segnum].verts[0]].x;
@@ -1799,6 +1809,7 @@ void validate_segment(segment *sp)
 void validate_segment_all(void)
 {
 	int	s;
+	Assert(Highest_segment_index < (sizeof(Segments) / sizeof(Segments[0])));
 
 	for (s=0; s<=Highest_segment_index; s++)
 		#ifdef EDITOR
@@ -1849,6 +1860,7 @@ int set_segment_depths(int start_seg, ubyte *segbuf)
 	head = 0;
 	tail = 0;
 
+	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
 	for (i=0; i<=Highest_segment_index; i++)
 		visited[i] = 0;
 
@@ -1993,12 +2005,17 @@ static void change_segment_light(int segnum,int sidenum,int dir)
 //	dir =  0 -> you are dumb
 static void change_light(int segnum, int sidenum, int dir)
 {
-	int	i, j, k;
-
-	for (i=0; i<Num_static_lights; i++) {
+	int	j, k;
+	unsigned i;
+	const unsigned num_static_lights = Num_static_lights;
+	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
+	Assert(num_static_lights < sizeof(Dl_indices) / sizeof(Dl_indices[0]));
+	for (i=0; i<num_static_lights; i++) {
 		if ((Dl_indices[i].segnum == segnum) && (Dl_indices[i].sidenum == sidenum)) {
 			delta_light	*dlp;
-			dlp = &Delta_lights[Dl_indices[i].index];
+			const unsigned dlidx = Dl_indices[i].index;
+			Assert(dlidx < sizeof(Delta_lights) / sizeof(Delta_lights[0]));
+			dlp = &Delta_lights[dlidx];
 
 			for (j=0; j<Dl_indices[i].count; j++) {
 				for (k=0; k<4; k++) {
@@ -2024,6 +2041,10 @@ static void change_light(int segnum, int sidenum, int dir)
 // returns 1 if lights actually subtracted, else 0
 int subtract_light(int segnum, int sidenum)
 {
+	Assert(segnum < sizeof(Light_subtracted) / sizeof(Light_subtracted[0]));
+	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
+	Assert(segnum <= Highest_segment_index);
+	Assert(sidenum < MAX_SIDES_PER_SEGMENT);
 	if (Light_subtracted[segnum] & (1 << sidenum)) {
 		return 0;
 	}
@@ -2039,6 +2060,10 @@ int subtract_light(int segnum, int sidenum)
 // returns 1 if lights actually added, else 0
 int add_light(int segnum, int sidenum)
 {
+	Assert(segnum < sizeof(Light_subtracted) / sizeof(Light_subtracted[0]));
+	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
+	Assert(segnum <= Highest_segment_index);
+	Assert(sidenum < MAX_SIDES_PER_SEGMENT);
 	if (!(Light_subtracted[segnum] & (1 << sidenum))) {
 		return 0;
 	}
@@ -2056,6 +2081,7 @@ ubyte	Light_subtracted[MAX_SEGMENTS];
 void apply_all_changed_light(void)
 {
 	int	i,j;
+	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
 
 	for (i=0; i<=Highest_segment_index; i++) {
 		for (j=0; j<MAX_SIDES_PER_SEGMENT; j++)
@@ -2100,6 +2126,7 @@ void apply_all_changed_light(void)
 void clear_light_subtracted(void)
 {
 	int	i;
+	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
 
 	for (i=0; i<=Highest_segment_index; i++)
 		Light_subtracted[i] = 0;
@@ -2146,6 +2173,7 @@ static void set_ambient_sound_flags_common(int tmi_bit, int s2f_bit)
 {
 	int	i, j;
 	sbyte   marked_segs[MAX_SEGMENTS];
+	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
 
 	//	Now, all segments containing ambient lava or water sound makers are flagged.
 	//	Additionally flag all segments which are within range of them.
