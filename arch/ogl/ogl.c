@@ -69,7 +69,7 @@
 #define sinf(a) sin(a)
 #endif
 
-unsigned char *ogl_pal=gr_palette;
+ubyte (*ogl_pal)[256*3]=&gr_palette;
 
 int last_width=-1,last_height=-1;
 int GL_TEXTURE_2D_enabled=-1;
@@ -1121,9 +1121,9 @@ bool ogl_ubitblt_i(int dw,int dh,int dx,int dy, int sw, int sh, int sx, int sy, 
 	
 	OGL_ENABLE(TEXTURE_2D);
 	
-	ogl_pal=gr_current_pal;
+	ogl_pal=&gr_current_pal;
 	ogl_loadtexture(src->bm_data, sx, sy, &tex, src->bm_flags, 0, texfilt);
-	ogl_pal=gr_palette;
+	ogl_pal=&gr_palette;
 	OGL_BINDTEXTURE(tex.handle);
 	
 	ogl_texwrap(&tex,GL_CLAMP_TO_EDGE);
@@ -1394,14 +1394,14 @@ void ogl_filltexbuf(unsigned char *data, GLubyte *texp, int truewidth, int width
 						(*(texp++))=255;
 						break;
 					case GL_RGB:
-						(*(texp++)) = ogl_pal[c * 3] * 4;
-						(*(texp++)) = ogl_pal[c * 3 + 1] * 4;
-						(*(texp++)) = ogl_pal[c * 3 + 2] * 4;
+						(*(texp++)) = (*ogl_pal)[c * 3] * 4;
+						(*(texp++)) = (*ogl_pal)[c * 3 + 1] * 4;
+						(*(texp++)) = (*ogl_pal)[c * 3 + 2] * 4;
 						break;
 					case GL_RGBA:
-						(*(texp++))=ogl_pal[c*3]*4;
-						(*(texp++))=ogl_pal[c*3+1]*4;
-						(*(texp++))=ogl_pal[c*3+2]*4;
+						(*(texp++))=(*ogl_pal)[c*3]*4;
+						(*(texp++))=(*ogl_pal)[c*3+1]*4;
+						(*(texp++))=(*ogl_pal)[c*3+2]*4;
 						(*(texp++))=255;//not transparent
 						break;
 #ifndef OGLES

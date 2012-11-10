@@ -43,7 +43,7 @@ inline
 #endif
 void ogl_swap_buffers_internal(void);
 
-extern unsigned char *ogl_pal;
+extern ubyte (*ogl_pal)[256*3];
 
 //whee
 //#define PAL2Tr(c) ((gr_palette[c*3]+gr_palette_gamma)/63.0)
@@ -55,9 +55,9 @@ extern unsigned char *ogl_pal;
 #define CPAL2Tr(c) ((gr_current_pal[c*3])/63.0)
 #define CPAL2Tg(c) ((gr_current_pal[c*3+1])/63.0)
 #define CPAL2Tb(c) ((gr_current_pal[c*3+2])/63.0)
-#define PAL2Tr(c) ((ogl_pal[c*3])/63.0)
-#define PAL2Tg(c) ((ogl_pal[c*3+1])/63.0)
-#define PAL2Tb(c) ((ogl_pal[c*3+2])/63.0)
+#define PAL2Tr(c) (((*ogl_pal)[c*3])/63.0)
+#define PAL2Tg(c) (((*ogl_pal)[c*3+1])/63.0)
+#define PAL2Tb(c) (((*ogl_pal)[c*3+2])/63.0)
 //inline GLfloat PAL2Tr(int c);
 //inline GLfloat PAL2Tg(int c);
 //inline GLfloat PAL2Tb(int c);
