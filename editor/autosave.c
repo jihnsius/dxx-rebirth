@@ -141,9 +141,10 @@ void set_editor_time_of_day()
 	Editor_time_of_day = *localtime( &ltime );
 }
 
-void TimedAutosave(char *name) 
+#if 0
+void TimedAutosave(char *) 
 {
-	int 		 minute;
+	int 		 month,day,hour,minute,second;
 
 	minute = Editor_time_of_day.tm_min;
 
@@ -167,6 +168,7 @@ void TimedAutosave(char *name)
 #endif
 
 }
+#endif
 
 
 int undo( void ) {

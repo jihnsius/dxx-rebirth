@@ -1089,7 +1089,6 @@ int editor_handler(UI_DIALOG *dlg, d_event *event, void *data)
 		ui_pad_draw(EditorWindow, PAD_X, PAD_Y);
 
 		print_status_bar(status_line);
-		TimedAutosave(mine_filename);	// shows the time, hence here
 		set_editor_time_of_day();
 		return 1;
 	}
