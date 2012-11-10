@@ -1888,22 +1888,28 @@ int set_segment_depths(int start_seg, ubyte *segbuf)
 #define	Magical_light_constant  (F1_0*16)
 
 #define MAX_CHANGED_SEGS 30
-short changed_segs[MAX_CHANGED_SEGS];
-int n_changed_segs;
 
 //	------------------------------------------------------------------------------------------
 //cast static light from a segment to nearby segments
-static void apply_light_to_segment(segment *segp,vms_vector *segment_center, fix light_intensity,int recursion_depth)
+static void inner_apply_light_to_segment(segment *segp,vms_vector *segment_center, fix light_intensity,int recursion_depth, short(*const pchanged_segs)[MAX_CHANGED_SEGS], int *const pn_changed_segs)
 {
 	vms_vector	r_segment_center;
 	fix			dist_to_rseg;
 	int 			i,segnum=segp-Segments,sidenum;
-
-	for (i=0;i<n_changed_segs;i++)
-		if (changed_segs[i] == segnum)
+	enum
+	{
+		size_changed_segs_array = sizeof((*pchanged_segs)) / sizeof((*pchanged_segs)[0])
+	};
+	typedef char sanity_check[size_changed_segs_array == MAX_CHANGED_SEGS ? 1 : -1];
+	const int count_changed_segs = (*pn_changed_segs);
+	Assert(!(count_changed_segs > size_changed_segs_array));
+	if (count_changed_segs == size_changed_segs_array)
+		return;
+	for (i=0;i<count_changed_segs;i++)
+		if ((*pchanged_segs)[i] == segnum)
 			break;
 
-	if (i == n_changed_segs) {
+	if (i == count_changed_segs) {
 		compute_segment_center(&r_segment_center, segp);
 		dist_to_rseg = vm_vec_dist_quick(&r_segment_center, segment_center);
 	
@@ -1929,15 +1935,25 @@ static void apply_light_to_segment(segment *segp,vms_vector *segment_center, fix
 			}	//	end if (light_at_point...
 		}	//	end if (dist_to_rseg...
 
-		changed_segs[n_changed_segs++] = segnum;
+		(*pchanged_segs)[(*pn_changed_segs)++] = segnum;
 	}
 
 	if (recursion_depth < 2)
 		for (sidenum=0; sidenum<6; sidenum++) {
 			if (WALL_IS_DOORWAY(segp,sidenum) & WID_RENDPAST_FLAG)
-				apply_light_to_segment(&Segments[segp->children[sidenum]],segment_center,light_intensity,recursion_depth+1);
+				inner_apply_light_to_segment(&Segments[segp->children[sidenum]],segment_center,light_intensity,recursion_depth+1,pchanged_segs,pn_changed_segs);
 		}
+}
 
+static void apply_light_to_segment(segment *segp,vms_vector *segment_center, fix light_intensity,int recursion_depth)
+{
+	short changed_segs[MAX_CHANGED_SEGS];
+	/* poison the memory */
+	unsigned u = 0;
+	for (; u != sizeof(changed_segs) / sizeof(changed_segs[0]); ++u)
+		changed_segs[u] = 0x7fff;
+	int n_changed_segs = 0;
+	inner_apply_light_to_segment(segp, segment_center, light_intensity, recursion_depth, &changed_segs, &n_changed_segs);
 }
 
 
@@ -1956,8 +1972,6 @@ static void change_segment_light(int segnum,int sidenum,int dir)
 		light_intensity = TmapInfo[sidep->tmap_num].lighting + TmapInfo[sidep->tmap_num2 & 0x3fff].lighting;
 
 		light_intensity *= dir;
-
-		n_changed_segs = 0;
 
 		if (light_intensity) {
 			vms_vector	segment_center;
