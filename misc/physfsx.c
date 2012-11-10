@@ -22,6 +22,11 @@
 unsigned char g_physfsx_chatty;
 #endif
 
+static void PHYSFSX_deinit()
+{
+	PHYSFS_deinit();
+}
+
 // Initialise PhysicsFS, set up basic search paths and add arguments from .ini file.
 // The .ini file can be in either the user directory or the same directory as the program.
 // The user directory is searched first.
@@ -39,6 +44,7 @@ void PHYSFSX_init(int argc, char *argv[])
 #endif
 	
 	PHYSFS_init(argv[0]);
+	atexit(PHYSFSX_deinit);
 	PHYSFS_permitSymbolicLinks(1);
 	
 #ifdef macintosh
