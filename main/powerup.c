@@ -92,41 +92,9 @@ void do_powerup_frame(dxxobject *obj)
 	}
 }
 
-#ifdef EDITOR
-extern fix blob_vertices[];
-
-//	blob_vertices has 3 vertices in it, 4th must be computed
-static void draw_blob_outline(void)
-{
-	fix	v3x, v3y;
-
-	v3x = blob_vertices[4] - blob_vertices[2] + blob_vertices[0];
-	v3y = blob_vertices[5] - blob_vertices[3] + blob_vertices[1];
-
-	gr_setcolor(BM_XRGB(63, 63, 63));
-
-	gr_line(blob_vertices[0], blob_vertices[1], blob_vertices[2], blob_vertices[3]);
-	gr_line(blob_vertices[2], blob_vertices[3], blob_vertices[4], blob_vertices[5]);
-	gr_line(blob_vertices[4], blob_vertices[5], v3x, v3y);
-
-	gr_line(v3x, v3y, blob_vertices[0], blob_vertices[1]);
-}
-#endif
-
 void draw_powerup(dxxobject *obj)
 {
-	#ifdef EDITOR
-	blob_vertices[0] = 0x80000;
-	#endif
-
 	draw_object_blob(obj, Vclip[obj->rtype.vclip_info.vclip_num].frames[obj->rtype.vclip_info.framenum] );
-
-	#ifdef EDITOR
-	if (EditorWindow && (Cur_object_index == obj-Objects))
-		if (blob_vertices[0] != 0x80000)
-			draw_blob_outline();
-	#endif
-
 }
 
 void powerup_basic(int redadd, int greenadd, int blueadd, int score, const char *format, ...)
