@@ -64,7 +64,7 @@ typedef struct fvi_query {
 	int startseg;
 	fix rad;
 	short thisobjnum;
-	int *ignore_obj_list;
+	const int *ignore_obj_list;
 	int flags;
 } fvi_query;
 

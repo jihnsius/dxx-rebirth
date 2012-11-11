@@ -610,7 +610,7 @@ int fvi_hit_side_seg;// what seg the hitside is in
 vms_vector wall_norm;	//ptr to surface normal of hit wall
 int fvi_hit_seg2;		// what segment the hit point is in
 
-static int fvi_sub(vms_vector *intp,int *ints,const vms_vector *p0,int startseg,const vms_vector *p1,fix rad,short thisobjnum,int *ignore_obj_list,int flags,int *seglist,int *n_segs,int entry_seg);
+static int fvi_sub(vms_vector *intp,int *ints,const vms_vector *p0,int startseg,const vms_vector *p1,fix rad,short thisobjnum,const int *ignore_obj_list,int flags,int *seglist,int *n_segs,int entry_seg);
 
 //What the hell is fvi_hit_seg for???
 
@@ -767,7 +767,7 @@ if (hit_seg!=-1 && fq->flags&FQ_GET_SEGLIST)
 //--unused-- 	return vm_vec_dist(v0,v1);
 //--unused-- }
 
-static int obj_in_list(int objnum,int *obj_list)
+static int obj_in_list(int objnum,const int *obj_list)
 {
 	int t;
 
@@ -779,7 +779,7 @@ static int obj_in_list(int objnum,int *obj_list)
 
 int check_trans_wall(vms_vector *pnt,segment *seg,int sidenum,int facenum);
 
-static int fvi_sub(vms_vector *intp,int *ints,const vms_vector *p0,int startseg,const vms_vector *p1,fix rad,short thisobjnum,int *ignore_obj_list,int flags,int *seglist,int *n_segs,int entry_seg)
+static int fvi_sub(vms_vector *intp,int *ints,const vms_vector *p0,int startseg,const vms_vector *p1,fix rad,short thisobjnum,const int *ignore_obj_list,int flags,int *seglist,int *n_segs,int entry_seg)
 {
 	segment *seg;				//the segment we're looking at
 	int startmask,endmask;	//mask of faces
