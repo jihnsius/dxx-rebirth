@@ -284,10 +284,10 @@ static int do_change_walls(sbyte trigger_num)
 }
 
 #define print_trigger_message(pnum,trig,shot,message)	\
-	((void)((__print_trigger_message(pnum,trig,shot)) &&		\
+	((void)((__print_trigger_message(trig,shot)) &&		\
 		(HUD_init_message(HM_DEFAULT, "%s: " message, Players[pnum].callsign, "s" + ((Triggers[trig].num_links>1)?0:1)))))
 
-static int __print_trigger_message(int pnum,int trig,int shot)
+static int __print_trigger_message(int trig,int shot)
  {
     if (!(Triggers[trig].flags & TF_NO_MESSAGE) && shot)
 		return 1;
