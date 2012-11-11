@@ -744,7 +744,7 @@ static const char *const Adam_level_names[NUM_ADAM_LEVELS] = {
 int	Ignore_tmap_num2_error;
 
 // ----------------------------------------------------------------------------
-static void determine_used_textures_level(int load_level_flag, int shareware_flag, int level_num, int *tmap_buf, int *wall_buf, sbyte *level_tmap_buf, int max_tmap)
+static void determine_used_textures_level(int load_level_flag, int shareware_flag, int level_num, int *tmap_buf, int *wall_buf, sbyte *level_tmap_buf, int)
 {
 	segnum_t	segnum;
 	int sidenum;

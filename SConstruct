@@ -113,7 +113,7 @@ common_sources = [
 'main/controls.cpp',
 'main/credits.c',
 'main/digiobj.cpp',
-'main/dumpmine.c',
+'main/dumpmine.cpp',
 'main/effects.c',
 'main/endlevel.c',
 'main/escort.c',
