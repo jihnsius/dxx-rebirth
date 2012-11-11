@@ -166,7 +166,7 @@ common_sources = [
 'main/texmerge.cpp',
 'main/text.cpp',
 'main/titles.cpp',
-'main/vclip.c',
+'main/vclip.cpp',
 'main/wall.cpp',
 'main/weapon.cpp',
 'maths/fixc.c',
