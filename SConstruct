@@ -346,7 +346,7 @@ elif target_platform == 'darwin':
 	asm = 0
 	env.Append(CPPPATH = ['arch/linux/include'])
 	ogldefines = ['OGL']
-	common_sources += ['arch/cocoa/SDLMain.m', 'arch/carbon/messagebox.c']
+	common_sources += ['arch/cocoa/SDLMain.m', 'arch/carbon/messagebox.cpp']
 	ogllibs = ''
 	libs = ''
 	# Ugly way of linking to frameworks, but kreator has seen uglier
