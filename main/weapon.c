@@ -1256,7 +1256,7 @@ void do_seismic_stuff(void)
 /*
  * reads n weapon_info structs from a PHYSFS_file
  */
-extern int weapon_info_read_n(weapon_info *wi, int n, PHYSFS_file *fp, int file_version)
+int weapon_info_read_n(weapon_info *wi, int n, PHYSFS_file *fp, int file_version)
 {
 	int i, j;
 

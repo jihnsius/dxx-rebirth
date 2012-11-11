@@ -763,7 +763,7 @@ void draw_model_picture(int mn,vms_angvec *orient_angles)
 /*
  * reads a polymodel structure from a PHYSFS_file
  */
-extern void polymodel_read(polymodel *pm, PHYSFS_file *fp)
+void polymodel_read(polymodel *pm, PHYSFS_file *fp)
 {
 	int i;
 
@@ -796,7 +796,7 @@ extern void polymodel_read(polymodel *pm, PHYSFS_file *fp)
 /*
  * reads n polymodel structs from a PHYSFS_file
  */
-extern int polymodel_read_n(polymodel *pm, int n, PHYSFS_file *fp)
+int polymodel_read_n(polymodel *pm, int n, PHYSFS_file *fp)
 {
 	int i, j;
 

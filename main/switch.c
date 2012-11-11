@@ -557,7 +557,7 @@ void triggers_frame_process()
 /*
  * reads a v29_trigger structure from a PHYSFS_file
  */
-extern void v29_trigger_read(v29_trigger *t, PHYSFS_file *fp)
+void v29_trigger_read(v29_trigger *t, PHYSFS_file *fp)
 {
 	int i;
 
@@ -576,7 +576,7 @@ extern void v29_trigger_read(v29_trigger *t, PHYSFS_file *fp)
 /*
  * reads a v30_trigger structure from a PHYSFS_file
  */
-extern void v30_trigger_read(v30_trigger *t, PHYSFS_file *fp)
+void v30_trigger_read(v30_trigger *t, PHYSFS_file *fp)
 {
 	int i;
 
@@ -594,7 +594,7 @@ extern void v30_trigger_read(v30_trigger *t, PHYSFS_file *fp)
 /*
  * reads a trigger structure from a PHYSFS_file
  */
-extern void trigger_read(trigger *t, PHYSFS_file *fp)
+void trigger_read(trigger *t, PHYSFS_file *fp)
 {
 	int i;
 
