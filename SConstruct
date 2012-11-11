@@ -95,7 +95,7 @@ common_sources = [
 'arch/sdl/digi_audio.cpp',
 'iff/iff.cpp',
 'libmve/decoder8.c',
-'libmve/decoder16.c',
+'libmve/decoder16.cpp',
 'libmve/mve_audio.c',
 'libmve/mvelib.c',
 'libmve/mveplay.c',
