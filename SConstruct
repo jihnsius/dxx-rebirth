@@ -150,7 +150,7 @@ common_sources = [
 'main/paging.cpp',
 'main/physics.cpp',
 'main/piggy.cpp',
-'main/player.c',
+'main/player.cpp',
 'main/playsave.c',
 'main/polyobj.c',
 'main/powerup.c',
