@@ -334,7 +334,7 @@ if target_platform == 'win32':
 	env.Append(CPPDEFINES = ['_WIN32', 'HAVE_STRUCT_TIMEVAL'])
 	env.Append(CPPPATH = ['arch/win32/include'])
 	ogldefines = ['OGL']
-	common_sources += ['arch/win32/messagebox.c']
+	common_sources += ['arch/win32/messagebox.cpp']
 	ogllibs = ''
 	libs += ['glu32', 'wsock32', 'ws2_32', 'winmm', 'mingw32', 'SDLmain', 'SDL']
 	lflags = '-mwindows  arch/win32/d2xr.res'
