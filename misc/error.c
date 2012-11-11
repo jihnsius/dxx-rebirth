@@ -29,13 +29,13 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define MAX_MSG_LEN 256
 
 //edited 05/17/99 Matt Mueller added err_ prefix to prevent conflicts with statically linking SDL
-int err_initialized=0;
+static int err_initialized=0;
 //end edit -MM
 
 static void (*ErrorPrintFunc)(const char *);
 
-char exit_message[MAX_MSG_LEN]="";
-char warn_message[MAX_MSG_LEN];
+static char exit_message[MAX_MSG_LEN]="";
+static char warn_message[MAX_MSG_LEN];
 
 //takes string in register, calls printf with string on stack
 static void warn_printf(const char *s)
