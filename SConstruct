@@ -183,7 +183,7 @@ common_sources = [
 'misc/physfsrwops.cpp',
 'misc/physfsx.cpp',
 'misc/strio.cpp',
-'misc/strutil.c',
+'misc/strutil.cpp',
 'texmap/ntmap.c',
 'texmap/scanline.c'
 ]
