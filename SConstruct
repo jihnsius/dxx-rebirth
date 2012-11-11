@@ -463,7 +463,7 @@ env.Append(CPPDEFINES = [('SHAREPATH', '\\"' + str(sharepath) + '\\"')])
 versid_cppdefines=env['CPPDEFINES'][:]
 versid_cppdefines.append(('DESCENT_VERSION_EXTRA', '\\"%s\\"' % extra_version))
 versid_cppdefines.append(('DESCENT_VERSION_BUILD_TIME', '\\"%s\\"' % extra_version_build_time))
-env.Object(source = ['%s%s' % (builddir, 'main/vers_id.c')], CPPDEFINES=versid_cppdefines)
+env.Object(source = ['%s%s' % (builddir, 'main/vers_id.cpp')], CPPDEFINES=versid_cppdefines)
 common_sources += ['main/vers_id.o']
 # finally building program...
 env.Program(target='%s%s' % (builddir, str(target)), source = [('%s%s' % (builddir, s)) for s in common_sources], LIBS = libs, LINKFLAGS = str(lflags))
