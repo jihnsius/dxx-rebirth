@@ -123,7 +123,7 @@ common_sources = [
 'main/game.cpp',
 'main/gamecntl.cpp',
 'main/gamefont.c',
-'main/gamemine.c',
+'main/gamemine.cpp',
 'main/gamepal.c',
 'main/gamerend.c',
 'main/gamesave.c',
