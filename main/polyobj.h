@@ -25,9 +25,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "gr.h"
 #include "3d.h"
 
-#ifndef DRIVE
-#include "robot.h"
-#endif
 #include "piggy.h"
 
 #define MAX_POLYGON_MODELS 200
@@ -71,7 +68,8 @@ void free_polygon_models();
 void init_polygon_models();
 
 #ifndef DRIVE
-int load_polygon_model(char *filename,int n_textures,int first_texture,robot_info *r);
+struct robot_info;
+int load_polygon_model(char *filename,int n_textures,int first_texture,struct robot_info *r);
 #else
 int load_polygon_model(char *filename,int n_textures,grs_bitmap ***textures);
 #endif

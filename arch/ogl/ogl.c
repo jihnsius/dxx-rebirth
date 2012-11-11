@@ -52,6 +52,7 @@
 #include "gauges.h"
 #include "playsave.h"
 #include "args.h"
+#include "robot.h"
 
 //change to 1 for lots of spew.
 #if 0

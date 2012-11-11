@@ -17,6 +17,7 @@
 #include "physfsx.h"
 #include "object.h"
 #include "newdemo.h"
+#include "console.h"
 
 #ifdef DEBUG_PHYSFSX_CHATTY
 unsigned char g_physfsx_chatty;

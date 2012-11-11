@@ -43,6 +43,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "ogl_init.h"
 #endif
 #include "physfsx.h"
+#include "robot.h"
 
 polymodel Polygon_models[MAX_POLYGON_MODELS];	// = {&bot11,&bot17,&robot_s2,&robot_b2,&bot11,&bot17,&robot_s2,&robot_b2};
 
@@ -175,9 +176,6 @@ static void pof_read_angs(vms_angvec *angs,int n,ubyte *bufp)
 #else
 vms_angvec anim_angs[N_ANIM_STATES][MAX_SUBMODELS];
 
-//set the animation angles for this robot.  Gun fields of robot info must
-//be filled in.
-void robot_set_angles(robot_info *r,polymodel *pm,vms_angvec angs[N_ANIM_STATES][MAX_SUBMODELS]);
 #endif
 
 #define DEBUG_LEVEL CON_NORMAL

@@ -22,6 +22,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #include "vecmat.h"
 #include "game.h"
+#include "polyobj.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -188,6 +189,10 @@ extern int robot_info_read_n(robot_info *ri, int n, PHYSFS_file *fp);
  * reads n jointpos structs from a PHYSFS_file
  */
 extern int jointpos_read_n(jointpos *jp, int n, PHYSFS_file *fp);
+//set the animation angles for this robot.  Gun fields of robot info must
+//be filled in.
+struct polymodel;
+void robot_set_angles(robot_info *r,struct polymodel *pm,vms_angvec angs[N_ANIM_STATES][MAX_SUBMODELS]);
 
 #ifdef __cplusplus
 }
