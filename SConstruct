@@ -90,7 +90,7 @@ common_sources = [
 'arch/sdl/mouse.cpp',
 'arch/sdl/rbaudio.cpp',
 'arch/sdl/timer.cpp',
-'arch/sdl/window.c',
+'arch/sdl/window.cpp',
 'arch/sdl/digi.cpp',
 'arch/sdl/digi_audio.cpp',
 'iff/iff.c',
