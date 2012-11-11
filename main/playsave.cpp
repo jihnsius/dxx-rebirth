@@ -513,7 +513,7 @@ int read_player_file()
 	PlayerCfg.DefaultDifficulty = PHYSFSX_readByte(file);
 	PlayerCfg.AutoLeveling       = PHYSFSX_readByte(file);
 	PHYSFS_seek(file,PHYSFS_tell(file)+sizeof(sbyte)); // skip ReticleOn
-	PlayerCfg.CockpitMode[0] = PlayerCfg.CockpitMode[1] = PHYSFSX_readByte(file);
+	PlayerCfg.CockpitMode[0] = PlayerCfg.CockpitMode[1] = static_cast<cockpit_mode_t>(PHYSFSX_readByte(file));
 	PHYSFS_seek(file,PHYSFS_tell(file)+sizeof(sbyte)); //skip Default_display_mode
 	PlayerCfg.MissileViewEnabled      = PHYSFSX_readByte(file);
 	PlayerCfg.HeadlightActiveDefault  = PHYSFSX_readByte(file);
@@ -581,13 +581,13 @@ int read_player_file()
 		{
 			PHYSFS_sint32 si;
 			PHYSFS_readSLE32(file, &si);
-			PlayerCfg.Cockpit3DView[0] = si;
+			PlayerCfg.Cockpit3DView[0] = static_cast<cockpit_view_t>(si);
 			PHYSFS_readSLE32(file, &si);
-			PlayerCfg.Cockpit3DView[1] = si;
+			PlayerCfg.Cockpit3DView[1] = static_cast<cockpit_view_t>(si);
 			if (swap)
 			{
-				PlayerCfg.Cockpit3DView[0] = SWAPINT(PlayerCfg.Cockpit3DView[0]);
-				PlayerCfg.Cockpit3DView[1] = SWAPINT(PlayerCfg.Cockpit3DView[1]);
+				PlayerCfg.Cockpit3DView[0] = static_cast<cockpit_view_t>(SWAPINT(PlayerCfg.Cockpit3DView[0]));
+				PlayerCfg.Cockpit3DView[1] = static_cast<cockpit_view_t>(SWAPINT(PlayerCfg.Cockpit3DView[1]));
 			}
 		}
 	}

@@ -151,7 +151,7 @@ common_sources = [
 'main/physics.cpp',
 'main/piggy.cpp',
 'main/player.cpp',
-'main/playsave.c',
+'main/playsave.cpp',
 'main/polyobj.c',
 'main/powerup.c',
 'main/render.cpp',
