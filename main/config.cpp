@@ -69,7 +69,8 @@ static const char GrabinputStr[] ="GrabInput";
 int ReadConfigFile()
 {
 	PHYSFS_file *infile;
-	char *line, *token, *value, *ptr;
+	char *line, *token, *ptr;
+	const char *value;
 
 	// set defaults
 	GameCfg.DigiVolume = 8;
