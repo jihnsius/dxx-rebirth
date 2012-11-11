@@ -33,6 +33,7 @@ extra_version = str(ARGUMENTS.get('extra_version', ''))
 extra_version_build_time = str(ARGUMENTS.get('extra_version_build_time', ''))
 sdlmixer = int(ARGUMENTS.get('sdlmixer', 1))
 ipv6 = int(ARGUMENTS.get('ipv6', 0))
+use_mudflap = int(ARGUMENTS.get('use_mudflap', 0))
 use_python = str(ARGUMENTS.get('use_python', ''))
 use_udp = int(ARGUMENTS.get('use_udp', 1))
 use_tracker = int(ARGUMENTS.get('use_tracker', 1))
@@ -379,6 +380,11 @@ else:
 	else:
 		ogllibs = ['GL', 'GLU']
 	lflags = os.environ["LDFLAGS"] if os.environ.has_key('LDFLAGS') else ''
+	if use_mudflap:
+		env['CFLAGS'][0:0] += ['-fmudflapth']
+		env['CXXFLAGS'][0:0] += ['-fmudflapth']
+		lflags += ' -fmudflapth'
+		libs[0:0] += ['mudflapth']
 
 # set endianess
 if (checkEndian() == "big"):
