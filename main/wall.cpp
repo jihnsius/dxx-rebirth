@@ -52,6 +52,8 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "editor/editor.h"
 #endif
 
+#include <array>
+
 //	Special door on boss level which is locked if not in multiplayer...sorry for this awful solution --MK.
 #define	BOSS_LOCKED_DOOR_LEVEL	7
 #define	BOSS_LOCKED_DOOR_SEG		595
@@ -1489,7 +1491,7 @@ void clear_stuck_objects(void)
 // -----------------------------------------------------------------------------------
 #define	MAX_BLAST_GLASS_DEPTH	5
 
-static void bng_process_segment(dxxobject *objp, fix damage, segment *segp, int depth, sbyte *visited)
+static void bng_process_segment(dxxobject *objp, fix damage, segment *segp, int depth, std::array<sbyte, MAX_SEGMENTS> &visited)
 {
 	int	i, sidenum;
 
@@ -1540,13 +1542,11 @@ static void bng_process_segment(dxxobject *objp, fix damage, segment *segp, int 
 //	blast nearby monitors, lights, maybe other things
 void blast_nearby_glass(dxxobject *objp, fix damage)
 {
-	int		i;
-	sbyte   visited[MAX_SEGMENTS];
+	std::array<sbyte, MAX_SEGMENTS>   visited;
 	segment	*cursegp;
 
 	cursegp = &Segments[objp->segnum];
-	for (i=0; i<=Highest_segment_index; i++)
-		visited[i] = 0;
+	visited.fill(0);
 
 	visited[objp->segnum] = 1;
 	bng_process_segment(objp, damage, cursegp, 0, visited);

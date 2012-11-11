@@ -167,7 +167,7 @@ common_sources = [
 'main/text.c',
 'main/titles.c',
 'main/vclip.c',
-'main/wall.c',
+'main/wall.cpp',
 'main/weapon.cpp',
 'maths/fixc.c',
 'maths/rand.c',
