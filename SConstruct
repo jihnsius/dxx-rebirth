@@ -73,7 +73,7 @@ common_sources = [
 '2d/poly.cpp',
 '2d/rect.cpp',
 '2d/rle.cpp',
-'2d/scalec.c',
+'2d/scalec.cpp',
 '3d/clipper.c',
 '3d/draw.c',
 '3d/globvars.c',
