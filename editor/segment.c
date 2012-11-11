@@ -961,32 +961,6 @@ int med_attach_segment_rotated(segment *destseg, segment *newseg, int destside, 
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 // ------------------------------------------------------------------------------------------
-void scale_free_vertices(segment *sp,vms_vector *vp,fix scale_factor,int min_side,int max_side)
-{
-	int	i;
-	const sbyte	*verts;
-
-	verts = Side_to_verts[min_side];
-
-	for (i=0; i<4; i++)
-                if (is_free_vertex(sp->verts[(int) verts[i]])) {
-                        Vertices[sp->verts[(int) verts[i]]].x = fixmul(vp->x,scale_factor)/2;
-                        Vertices[sp->verts[(int) verts[i]]].y = fixmul(vp->y,scale_factor)/2;
-                        Vertices[sp->verts[(int) verts[i]]].z = fixmul(vp->z,scale_factor)/2;
-		}
-
-	verts = Side_to_verts[max_side];
-
-	for (i=0; i<4; i++)
-                if (is_free_vertex(sp->verts[(int) verts[i]])) {
-                        Vertices[sp->verts[(int) verts[i]]].x = fixmul(vp->x,scale_factor)/2;
-                        Vertices[sp->verts[(int) verts[i]]].y = fixmul(vp->y,scale_factor)/2;
-                        Vertices[sp->verts[(int) verts[i]]].z = fixmul(vp->z,scale_factor)/2;
-		}
-}
-
-
-// ------------------------------------------------------------------------------------------
 // Attach side newside of newseg to side destside of destseg.
 // Copies *newseg into global array Segments, increments Num_segments.
 // Forms a weld between the two segments by making the new segment fit to the old segment.
