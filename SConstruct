@@ -171,7 +171,7 @@ common_sources = [
 'main/weapon.cpp',
 'maths/fixc.cpp',
 'maths/rand.cpp',
-'maths/tables.c',
+'maths/tables.cpp',
 'maths/vecmat.c',
 'mem/mem.c',
 'misc/args.c',
