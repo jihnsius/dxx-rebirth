@@ -128,8 +128,6 @@ extern ubyte DefiningMarkerMessage;
 void	kconfig_center_headset(void);
 void DropMarker();
 
-int FinalCheats(int key);
-
 #ifndef RELEASE
 void do_cheat_menu(void);
 #endif
@@ -1608,7 +1606,7 @@ cheat_code cheat_codes[NUM_CHEATS] = {
 	{ "bittersweet", &cheats.acid },
 };
 
-int FinalCheats(int key)
+static int FinalCheats()
 {
 	static char cheat_buffer[CHEAT_MAX_LEN] = "AAAAAAAAAAAAAAA";
 	int i = 0, gotcha = 0;
@@ -1962,7 +1960,7 @@ int ReadControls(d_event *event)
 		}
 		else
 		{
-			if (FinalCheats(key)) return 1;
+			if (FinalCheats()) return 1;
 			if (HandleSystemKey(key)) return 1;
 			if (HandleGameKey(key)) return 1;
 		}

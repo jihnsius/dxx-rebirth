@@ -170,7 +170,7 @@ int compute_average_pixel(grs_bitmap *new)
 // Loads a bitmap from either the piggy file, a r64 file, or a
 // whatever extension is passed.
 
-bitmap_index bm_load_sub(int skip, char * filename )
+static bitmap_index bm_load_sub(int skip, char * filename )
 {
 	bitmap_index bitmap_num;
 	grs_bitmap * new;
@@ -210,7 +210,7 @@ bitmap_index bm_load_sub(int skip, char * filename )
 	return bitmap_num;
 }
 
-void ab_load(int skip, char * filename, bitmap_index bmp[], int *nframes )
+static void ab_load(int skip, char * filename, bitmap_index bmp[], int *nframes )
 {
 	grs_bitmap * bm[MAX_BITMAPS_PER_BRUSH];
 	bitmap_index bi;
@@ -268,7 +268,7 @@ void ab_load(int skip, char * filename, bitmap_index bmp[], int *nframes )
 	}
 }
 
-int ds_load(int skip, char * filename )	{
+static int ds_load(int skip, char * filename )	{
 	int i;
 	PHYSFS_file * cfp;
 	digi_sound new;
@@ -306,7 +306,7 @@ int ds_load(int skip, char * filename )	{
 }
 
 //parse a float
-float get_float()
+static float get_float()
 {
 	char *xarg;
 
@@ -315,7 +315,7 @@ float get_float()
 }
 
 //parse an int
-int get_int()
+static int get_int()
 {
 	char *xarg;
 
@@ -338,7 +338,7 @@ int get_int()
 //}
 
 //loads a texture and returns the texture num
-int get_texture(char *name)
+static int get_texture(char *name)
 {
 	char short_name[FILENAME_LEN];
 	int i;
@@ -659,7 +659,7 @@ void bm_read_alias()
 	Num_aliases++;
 }
 
-void set_lighting_flag(sbyte *bp)
+static void set_lighting_flag(sbyte *bp)
 {
 	if (vlighting < 0)
 		*bp |= BM_FLAG_NO_LIGHTING;
@@ -667,13 +667,13 @@ void set_lighting_flag(sbyte *bp)
 		*bp &= (0xff ^ BM_FLAG_NO_LIGHTING);
 }
 
-void set_texture_name(char *name)
+static void set_texture_name(char *name)
 {
 	strcpy ( TmapInfo[texture_count].filename, name );
 	REMOVE_DOTS(TmapInfo[texture_count].filename);
 }
 
-void bm_read_eclip(int skip)
+static void bm_read_eclip(int skip)
 {
 	bitmap_index bitmap;
 	int dest_bm_num = 0;
@@ -807,7 +807,7 @@ void bm_read_eclip(int skip)
 }
 
 
-void bm_read_gauges(int skip)
+static void bm_read_gauges(int skip)
 {
 	bitmap_index bitmap;
 	int i, num_abm_frames;
@@ -829,7 +829,7 @@ void bm_read_gauges(int skip)
 	}
 }
 
-void bm_read_gauges_hires()
+static void bm_read_gauges_hires()
 {
 	bitmap_index bitmap;
 	int i, num_abm_frames;
@@ -851,7 +851,7 @@ void bm_read_gauges_hires()
 	}
 }
 
-void bm_read_wclip(int skip)
+static void bm_read_wclip(int skip)
 {
 	bitmap_index bitmap;
 	Assert(clip_num < MAX_WALL_ANIMS);
@@ -915,7 +915,7 @@ void bm_read_wclip(int skip)
 	}
 }
 
-void bm_read_vclip(int skip)
+static void bm_read_vclip(int skip)
 {
 	bitmap_index bi;
 	Assert(clip_num < VCLIP_MAXNUM);
@@ -966,7 +966,7 @@ void bm_read_vclip(int skip)
 }
 
 // ------------------------------------------------------------------------------
-void get4fix(fix *fixp)
+static void get4fix(fix *fixp)
 {
 	char	*curtext;
 	int	i;
@@ -978,7 +978,7 @@ void get4fix(fix *fixp)
 }
 
 // ------------------------------------------------------------------------------
-void get4byte(sbyte *bytep)
+static void get4byte(sbyte *bytep)
 {
 	char	*curtext;
 	int	i;
@@ -991,7 +991,7 @@ void get4byte(sbyte *bytep)
 
 // ------------------------------------------------------------------------------
 //	Convert field of view from an angle in 0..360 to cosine.
-void adjust_field_of_view(fix *fovp)
+static void adjust_field_of_view(fix *fovp)
 {
 	int		i;
 	fixang	tt;
@@ -1091,7 +1091,7 @@ void bm_read_robot_ai(int skip)
 //this will load a bitmap for a polygon models.  it puts the bitmap into
 //the array ObjBitmaps[], and also deals with animating bitmaps
 //returns a pointer to the bitmap
-grs_bitmap *load_polymodel_bitmap(int skip, char *name)
+static grs_bitmap *load_polymodel_bitmap(int skip, char *name)
 {
 	Assert(N_ObjBitmaps < MAX_OBJ_BITMAPS);
 

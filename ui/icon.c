@@ -30,7 +30,7 @@ static char rcsid[] = "$Id: icon.c,v 1.1.1.1 2006/03/17 19:52:19 zicodxx Exp $";
 
 #define Middle(x) ((2*(x)+1)/4)
 
-void ui_draw_box_in1( short x1, short y1, short x2, short y2 )
+static void ui_draw_box_in1( short x1, short y1, short x2, short y2 )
 {
 
 	gr_setcolor( CWHITE );

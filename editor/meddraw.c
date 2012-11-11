@@ -67,7 +67,7 @@ int     Search_mode=0;                      //if true, searching for segments at
 int Search_x,Search_y;
 int	Automap_test=0;		//	Set to 1 to show wireframe in automap mode.
 
-void draw_seg_objects(segment *seg)
+static void draw_seg_objects(segment *seg)
 {
 	int objnum;
 
@@ -87,13 +87,13 @@ void draw_seg_objects(segment *seg)
 
 }
 
-void draw_line(int pnum0,int pnum1)
+static void draw_line(int pnum0,int pnum1)
 {
 	g3_draw_line(&Segment_points[pnum0],&Segment_points[pnum1]);
 }
 
 // ----------------------------------------------------------------------------
-void draw_segment(segment *seg)
+static void draw_segment(segment *seg)
 {
 	int	*svp;
 	int	nv;
@@ -123,7 +123,7 @@ void draw_segment(segment *seg)
 }
 
 //for looking for segment under a mouse click
-void check_segment(segment *seg)
+static void check_segment(segment *seg)
 {
 	int	*svp;
 	int	nv;
@@ -170,7 +170,7 @@ void check_segment(segment *seg)
 }
 
 // ----------------------------------------------------------------------------
-void draw_seg_side(segment *seg,int side)
+static void draw_seg_side(segment *seg,int side)
 {
 	int	*svp;
 	int	nv;
@@ -190,7 +190,7 @@ void draw_seg_side(segment *seg,int side)
 	}
 }
 
-void draw_side_edge(segment *seg,int side,int edge)
+static void draw_side_edge(segment *seg,int side,int edge)
 {
 	int	*svp;
 	int	nv;
@@ -280,7 +280,7 @@ int edges[] = {
 #define swap(a,b) do {int t; t=(a); (a)=(b); (b)=t;} while (0)
 
 //given two vertex numbers on a segment (range 0..7), tell what edge number it is
-int find_edge_num(int v0,int v1)
+static int find_edge_num(int v0,int v1)
 {
 	int		i;
 	int		vv;
@@ -304,7 +304,7 @@ int find_edge_num(int v0,int v1)
 
 
 //finds edge, filling in edge_ptr. if found old edge, returns index, else return -1
-int find_edge(int v0,int v1,seg_edge **edge_ptr)
+static int find_edge(int v0,int v1,seg_edge **edge_ptr)
 {
 	long vv;
 	int hash,oldhash;
@@ -336,7 +336,7 @@ int find_edge(int v0,int v1,seg_edge **edge_ptr)
 }
 
 //adds an edge to the edge list
-void add_edge(int v0,int v1,ubyte type)
+static void add_edge(int v0,int v1,ubyte type)
 {
 	int found;
 
@@ -367,7 +367,7 @@ void add_edge(int v0,int v1,ubyte type)
 }
 
 //adds a segment's edges to the edge list
-void add_edges(segment *seg)
+static void add_edges(segment *seg)
 {
 	int	*svp;
 	int	nv;
@@ -432,7 +432,7 @@ void add_edges(segment *seg)
 }
 
 // ----------------------------------------------------------------------------
-void draw_trigger_side(segment *seg,int side)
+static void draw_trigger_side(segment *seg,int side)
 {
 	int	*svp;
 	int	nv;
@@ -449,7 +449,7 @@ void draw_trigger_side(segment *seg,int side)
 }
 
 // ----------------------------------------------------------------------------
-void draw_wall_side(segment *seg,int side)
+static void draw_wall_side(segment *seg,int side)
 {
 	int	*svp;
 	int	nv;
@@ -478,7 +478,7 @@ void draw_wall_side(segment *seg,int side)
 
 // ----------------------------------------------------------------------------------------------------------------
 // Draws special walls (for now these are just removable walls.)
-void draw_special_wall( segment *seg, int side )
+static void draw_special_wall( segment *seg, int side )
 {
 	gr_setcolor(PLAINSEG_COLOR);
 
@@ -511,7 +511,7 @@ void draw_special_wall( segment *seg, int side )
 
 // ----------------------------------------------------------------------------------------------------------------
 // Recursively parse mine structure, drawing segments.
-void draw_mine_sub(int segnum,int depth)
+static void draw_mine_sub(int segnum,int depth)
 {
 	segment *mine_ptr;
 
@@ -541,7 +541,7 @@ void draw_mine_sub(int segnum,int depth)
 	}
 }
 
-void draw_mine_edges(int automap_flag)
+static void draw_mine_edges(int automap_flag)
 {
 	int i,type;
 	seg_edge *e;
@@ -558,7 +558,7 @@ void draw_mine_edges(int automap_flag)
 }
 
 //draws an entire mine
-void draw_mine(segment *mine_ptr,int depth)
+static void draw_mine(segment *mine_ptr,int depth)
 {
 	int	i;
 
@@ -623,7 +623,7 @@ void draw_mine_all(segment *sp, int automap_flag)
 
 }
 
-void draw_selected_segments(void)
+static void draw_selected_segments(void)
 {
 	int	s;
 
@@ -633,7 +633,7 @@ void draw_selected_segments(void)
 			draw_segment(&Segments[Selected_segs[s]]);
 }
 
-void draw_found_segments(void)
+static void draw_found_segments(void)
 {
 	int	s;
 
@@ -643,7 +643,7 @@ void draw_found_segments(void)
 			draw_segment(&Segments[Found_segs[s]]);
 }
 
-void draw_warning_segments(void)
+static void draw_warning_segments(void)
 {
 	int	s;
 
@@ -653,7 +653,7 @@ void draw_warning_segments(void)
 			draw_segment(&Segments[Warning_segs[s]]);
 }
 
-void draw_group_segments(void)
+static void draw_group_segments(void)
 {
 	int	s;
 
@@ -666,7 +666,7 @@ void draw_group_segments(void)
 }
 
 
-void draw_special_segments(void)
+static void draw_special_segments(void)
 {
 	short seg;
 	ubyte color;
@@ -719,7 +719,7 @@ void free_vert(int vert_num)
 }
 
 // -----------------------------------------------------------------------------
-void draw_coordinate_axes(void)
+static void draw_coordinate_axes(void)
 {
 	int			i;
 	int			Axes_verts[16];

@@ -41,7 +41,7 @@ static char rcsid[] = "$Id: ksegmove.c,v 1.1.1.1 2006/03/17 19:58:39 zicodxx Exp
 // -- old -- 	return 1;
 // -- old -- }
 
-int SegOrientCommon(fixang *ang, fix val)
+static int SegOrientCommon(fixang *ang, fix val)
 {
 	Seg_orientation.p = 0;
 	Seg_orientation.b = 0;

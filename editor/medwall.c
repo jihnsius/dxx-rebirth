@@ -69,11 +69,8 @@ typedef struct count_wall {
 	short	segnum,sidenum;
 } count_wall;
 
-//---------------------------------------------------------------------
-void create_removable_wall(segment *sp, int sidenum, int tmap_num);
-
 // Add a wall (removable 2 sided)
-int add_wall(segment *seg, short side)
+static int add_wall(segment *seg, short side)
 {
 	int Connectside;
 	segment *csegp;
@@ -102,7 +99,7 @@ int add_wall(segment *seg, short side)
 	return 0;
 }
 
-int wall_assign_door(int door_type)
+static int wall_assign_door(int door_type)
 {
 	int Connectside;
 	segment *csegp;
@@ -197,7 +194,7 @@ int wall_deautomate_door()
 	return wall_remove_door_flag(WALL_DOOR_AUTO);
 }
 
-int GotoPrevWall() {
+static int GotoPrevWall() {
 	int current_wall;
 
 	if (Cursegp->sides[Curside].wall_num < 0)
@@ -224,7 +221,7 @@ int GotoPrevWall() {
 }
 
 
-int GotoNextWall() {
+static int GotoNextWall() {
 	int current_wall;
 
 	current_wall = Cursegp->sides[Curside].wall_num; // It's ok to be -1 because it will immediately become 0
@@ -249,7 +246,7 @@ int GotoNextWall() {
 }
 
 
-int PrevWall() {
+static int PrevWall() {
 	int wall_type;
 
 	if (Cursegp->sides[Curside].wall_num == -1) {
@@ -297,7 +294,7 @@ int PrevWall() {
 	return 1;
 }
 
-int NextWall() {
+static int NextWall() {
 	int wall_type;
 
 	if (Cursegp->sides[Curside].wall_num == -1) {
@@ -1086,110 +1083,8 @@ int delete_all_walls()
 	return 0;
 }
 
-int delete_all_triggers()
-{
-	char Message[DIAGNOSTIC_MESSAGE_MAX];
-	int w;
-
-	sprintf( Message, "Are you sure that triggers are hosed so\n badly that you want them ALL GONE!?\n");
-	if (ui_messagebox( -2, -2, 2, Message, "YES!", "No" )==1) {
-
-		for (w=0; w<Num_walls; w++)
-			Walls[w].trigger=-1;
-		Num_triggers=0;
-
-		return 1;
-	}
-
-	return 0;
-}
-
-int dump_walls_info()
-{
-	int w;
-	PHYSFS_file *fp;
-
-	fp = PHYSFSX_openWriteBuffered("WALL.OUT");
-
-	PHYSFSX_printf(fp, "Num_walls %d\n", Num_walls);
-
-	for (w=0; w<Num_walls; w++) {
-
-		PHYSFSX_printf(fp, "WALL #%d\n", w);
-		PHYSFSX_printf(fp, "  seg: %d\n", Walls[w].segnum);
-		PHYSFSX_printf(fp, "  sidenum: %d\n", Walls[w].sidenum);
-
-		switch (Walls[w].type) {
-			case WALL_NORMAL:
-				PHYSFSX_printf(fp, "  type: NORMAL\n");
-				break;
-			case WALL_BLASTABLE:
-				PHYSFSX_printf(fp, "  type: BLASTABLE\n");
-				break;
-			case WALL_DOOR:
-				PHYSFSX_printf(fp, "  type: DOOR\n");
-				break;
-			case WALL_ILLUSION:
-				PHYSFSX_printf(fp, "  type: ILLUSION\n");
-				break;
-			case WALL_OPEN:
-				PHYSFSX_printf(fp, "  type: OPEN\n");
-				break;
-			case WALL_CLOSED:
-				PHYSFSX_printf(fp, "  type: CLOSED\n");
-				break;
-			default:
-				PHYSFSX_printf(fp, "  type: ILLEGAL!!!!! <-----------------\n");
-				break;
-		}
-
-		PHYSFSX_printf(fp, "  flags:\n");
-
-		if (Walls[w].flags & WALL_BLASTED)
-			PHYSFSX_printf(fp, "   BLASTED\n");
-		if (Walls[w].flags & WALL_DOOR_OPENED)
-			PHYSFSX_printf(fp, "   DOOR_OPENED <----------------- BAD!!!\n");
-		if (Walls[w].flags & WALL_DOOR_OPENING)
-			PHYSFSX_printf(fp, "   DOOR_OPENING <---------------- BAD!!!\n");
-		if (Walls[w].flags & WALL_DOOR_LOCKED)
-			PHYSFSX_printf(fp, "   DOOR_LOCKED\n");
-		if (Walls[w].flags & WALL_DOOR_AUTO)
-			PHYSFSX_printf(fp, "   DOOR_AUTO\n");
-		if (Walls[w].flags & WALL_ILLUSION_OFF)
-			PHYSFSX_printf(fp, "   ILLUSION_OFF <---------------- OUTDATED\n");
-		//if (Walls[w].flags & WALL_FUELCEN)
-		//	PHYSFSX_printf(fp, "   FUELCEN <--------------------- OUTDATED\n");
-
-		PHYSFSX_printf(fp, "  trigger: %d\n", Walls[w].trigger);
-		PHYSFSX_printf(fp, "  clip_num: %d\n", Walls[w].clip_num);
-
-		switch (Walls[w].keys) {
-			case KEY_NONE:
-				PHYSFSX_printf(fp, "	key: NONE\n");
-				break;
-			case KEY_BLUE:
-				PHYSFSX_printf(fp, "	key: BLUE\n");
-				break;
-			case KEY_RED:
-				PHYSFSX_printf(fp, "	key: RED\n");
-				break;
-			case KEY_GOLD:
-				PHYSFSX_printf(fp, "	key: NONE\n");
-				break;
-			default:
-				PHYSFSX_printf(fp, "  key: ILLEGAL!!!!!! <-----------------\n");
-				break;
-		}
-
-		PHYSFSX_printf(fp, "  linked_wall %d\n", Walls[w].linked_wall);
-	}
-
-	PHYSFS_close(fp);
-	return 1;
-}
-
 // ------------------------------------------------------------------------------------------------
-void copy_old_wall_data_to_new(int owall, int nwall)
+static void copy_old_wall_data_to_new(int owall, int nwall)
 {
 	Walls[nwall].flags = Walls[owall].flags;
 	Walls[nwall].type = Walls[owall].type;
