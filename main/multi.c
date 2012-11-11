@@ -39,7 +39,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "console.h"
 #include "wall.h"
 #include "cntrlcen.h"
-#include "powerup.h"
 #include "polyobj.h"
 #include "bm.h"
 #include "endlevel.h"
@@ -251,7 +250,7 @@ static const int message_length[MULTI_MAX_TYPE+1] = {
 
 char PowerupsInMine[MAX_POWERUP_TYPES],MaxPowerupsAllowed[MAX_POWERUP_TYPES];
 
-const char *const RankStrings[]={"(unpatched) ","Cadet ","Ensign ","Lieutenant ","Lt.Commander ",
+const char *const RankStrings[10]={"(unpatched) ","Cadet ","Ensign ","Lieutenant ","Lt.Commander ",
                      "Commander ","Captain ","Vice Admiral ","Admiral ","Demigod "};
 
 const char *const multi_allow_powerup_text[MULTI_ALLOW_POWERUP_MAX] =

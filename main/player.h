@@ -192,11 +192,18 @@ typedef struct player_ship {
 	vms_vector gun_points[N_PLAYER_GUNS];
 } player_ship;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 extern int N_players;   // Number of players ( >1 means a net game, eh?)
 extern int Player_num;  // The player number who is on the console.
 
 extern player Players[MAX_PLAYERS+4];   // Misc player info
 extern player_ship *Player_ship;
+
+extern struct dxxobject *Guided_missile[MAX_PLAYERS];
+extern int Guided_missile_sig[MAX_PLAYERS];
 
 /*
  * reads a player_ship structure from a PHYSFS_file
@@ -204,5 +211,9 @@ extern player_ship *Player_ship;
 void player_ship_read(player_ship *ps, PHYSFS_file *fp);
 
 void player_rw_swap(player_rw *p, int swap);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

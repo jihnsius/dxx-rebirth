@@ -33,6 +33,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "mouse.h"
 #include "palette.h"
 #include "game.h"
+#include "gamepal.h"
 #include "text.h"
 #include "menu.h"
 #include "newmenu.h"
@@ -112,8 +113,6 @@ void newmenu_free_background()	{
 	if (nm_background1.bm_data)
 		gr_free_bitmap_data (&nm_background1);
 }
-
-extern char last_palette_loaded[];
 
 // Draws the custom menu background pcx, if available
 static void nm_draw_background1(char * filename)

@@ -2393,7 +2393,7 @@ extern int Missile_gun;
 int allowed_to_fire_laser(void);
 int allowed_to_fire_missile(void);
 
-const rgb player_rgb[] = {
+const rgb player_rgb[MAX_PLAYERS] = {
 							{15,15,23},
 							{27,0,0},
 							{0,23,0},

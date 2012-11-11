@@ -164,7 +164,7 @@ typedef struct weapon_info {
 extern "C" {
 #endif
 
-extern weapon_info Weapon_info[];
+extern weapon_info Weapon_info[MAX_WEAPON_TYPES];
 extern int N_weapon_types;
 void do_weapon_select(int weapon_num, int secondary_flag);
 void show_weapon_status(void);

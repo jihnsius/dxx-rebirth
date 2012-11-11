@@ -212,6 +212,8 @@ bool g3_draw_bitmap(vms_vector *pos,fix width,fix height,grs_bitmap *bm);
 //NULL for either or both restores defaults
 void g3_set_special_render(void (*tmap_drawer)(),void (*flat_drawer)(),int (*line_drawer)(fix, fix, fix, fix));
 
+extern grs_point blob_vertices[4];
+
 #ifdef __cplusplus
 }
 #endif

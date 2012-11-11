@@ -27,6 +27,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "piggy.h"
 #include "object.h"
 #include "hudmsg.h"
+#include "player.h"
 
 //from gauges.c
 
@@ -69,7 +70,7 @@ typedef struct {
 	ubyte r,g,b;
 } rgb;
 
-extern const rgb player_rgb[];
+extern const rgb player_rgb[MAX_PLAYERS];
 
 enum weapon_box_user_t
 {

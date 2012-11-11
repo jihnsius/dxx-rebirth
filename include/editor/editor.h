@@ -154,7 +154,7 @@ typedef struct editor_view {
  *
  */
 
-extern editor_view *Views[];
+extern editor_view *Views[ORTHO_VIEWS ? 4 : 1];
 extern int N_views;
 extern int Large_view_index;
 extern UI_GADGET_USERBOX * LargeViewBox;
@@ -190,14 +190,14 @@ extern	int 		current_group;
 extern	int 		num_groups;
 extern	int		Current_group;
 
-extern	short		Found_segs[];			// List of segment numbers "found" under cursor click
+extern	short		Found_segs[MAX_FOUND_SEGS];			// List of segment numbers "found" under cursor click
 extern	int		N_found_segs;			// Number of segments found at Found_segs
 
 extern	int		N_selected_segs;		// Number of segments found at Selected_segs
-extern	short		Selected_segs[];		// List of segment numbers currently selected
+extern	short		Selected_segs[MAX_SELECTED_SEGS];		// List of segment numbers currently selected
 
 extern	int		N_warning_segs;		// Number of segments warning-worthy, such as a concave segment
-extern	short		Warning_segs[];		// List of warning-worthy segments
+extern	short		Warning_segs[MAX_WARNING_SEGS];		// List of warning-worthy segments
 
 extern	int		Show_axes_flag;		// 0 = don't show, !0 = do show coordinate axes in *Cursegp orientation
 
@@ -567,7 +567,7 @@ extern	int	Lock_view_to_cursegp;			// !0 means whenever cursegp changes, view it
 extern	int	Num_tilings;						// number of tilings/wall
 extern	int	Degenerate_segment_found;
 
-extern  sbyte Been_visited[];                   // List of segments visited in a recursive search, if element n set, segment n done been visited
+extern  sbyte Been_visited[MAX_SEGMENTS];                   // List of segments visited in a recursive search, if element n set, segment n done been visited
 
 // Initializes autosave system.
 // Sets global Autosave_count to 0.

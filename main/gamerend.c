@@ -62,7 +62,6 @@ extern void newmenu_free_background();
 int netplayerinfo_on=0;
 
 extern ubyte DefiningMarkerMessage;
-extern char Marker_input[];
 
 #define MAX_MARKER_MESSAGE_LEN 120
 static void game_draw_marker_message()

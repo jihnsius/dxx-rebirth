@@ -45,6 +45,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "endlevel.h"
 #include "object.h"
 #include "game.h"
+#include "gamepal.h"
 #include "screens.h"
 #include "gauges.h"
 #include "wall.h"
@@ -285,7 +286,6 @@ vms_angvec exit_angles={-0xa00,0,0};
 vms_matrix surface_orient;
 
 int endlevel_data_loaded=0;
-extern char last_palette_loaded[];
 int endlevel_movie_played = MOVIE_NOT_PLAYED;
 
 void start_endlevel_sequence()

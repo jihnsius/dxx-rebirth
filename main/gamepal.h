@@ -27,6 +27,8 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define MENU_PALETTE    "default.256"
 
 extern char Current_level_palette[FILENAME_LEN];
+extern char last_palette_loaded[FILENAME_LEN];
+extern char last_palette_loaded_pig[FILENAME_LEN];
 
 // load a palette by name. returns 1 if new palette loaded, else 0
 // if used_for_level is set, load pig, etc.

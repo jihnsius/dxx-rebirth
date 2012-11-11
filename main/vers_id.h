@@ -14,6 +14,6 @@
 #define VERSION D2XMAJOR "." D2XMINOR "." D2XMICRO
 #define DESCENT_VERSION g_descent_version
 
-extern const char g_descent_version[];
+extern const char g_descent_version[56];
 
 #endif /* _VERS_ID */

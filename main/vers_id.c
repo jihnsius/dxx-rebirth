@@ -4,4 +4,4 @@
 #define DESCENT_VERSION_EXTRA	"v" VERSION
 #endif
 
-const char g_descent_version[] = "D2X-Rebirth " DESCENT_VERSION_EXTRA " " __DATE__ " " __TIME__;
+const char g_descent_version[56] = "D2X-Rebirth " DESCENT_VERSION_EXTRA " " __DATE__ " " __TIME__;
