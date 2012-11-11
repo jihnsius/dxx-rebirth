@@ -1320,7 +1320,7 @@ typedef struct browser
 	int		new_path;		// Whether the view_path is a new searchpath, if so, remove it when finished
 } browser;
 
-static void list_dir_el(browser *b, const char *origdir, const char *fname)
+static void list_dir_el(browser *b, const char *, const char *fname)
 {
 	const char *ext;
 	const char *const *i = NULL;
