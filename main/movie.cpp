@@ -353,7 +353,7 @@ static int MovieHandler(window *wind, d_event *event, movie *m)
 }
 
 //returns status.  see movie.h
-static int RunMovie(char *filename, int hires_flag, int must_have,int dx,int dy)
+static int RunMovie(char *filename, int , int must_have,int dx,int dy)
 {
 	window *wind;
 	movie *m;
