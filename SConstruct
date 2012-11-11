@@ -169,7 +169,7 @@ common_sources = [
 'main/vclip.cpp',
 'main/wall.cpp',
 'main/weapon.cpp',
-'maths/fixc.c',
+'maths/fixc.cpp',
 'maths/rand.c',
 'maths/tables.c',
 'maths/vecmat.c',
