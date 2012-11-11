@@ -34,6 +34,7 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include	"effects.h"     //      Needed for effects_bm_num
 #include "fvi.h"
 #include "seguvs.h"
+#include "compiler.h"
 
 void cast_all_light_in_mine(int quick_flag);
 //--rotate_uvs-- vms_vector Rightvec;
@@ -214,7 +215,8 @@ int set_average_light_on_curside(void)
 }
 
 //	-----------------------------------------------------------------------------------------
-void set_average_light_on_all_fast(void)
+static void set_average_light_on_all_fast(void) __attribute_unused;
+static void set_average_light_on_all_fast(void)
 {
 	int	s,v,relvnum;
 	fix	al;
@@ -328,7 +330,8 @@ int set_average_light_on_all_quick(void)
 }
 
 //	---------------------------------------------------------------------------------------------
-fix compute_uv_dist(uvl *uv0, uvl *uv1)
+static fix compute_uv_dist(uvl *uv0, uvl *uv1) __attribute_unused;
+static fix compute_uv_dist(uvl *uv0, uvl *uv1)
 {
 	vms_vector	v0,v1;
 
@@ -405,7 +408,8 @@ void compress_uv_coordinates_in_segment(segment *segp)
 		compress_uv_coordinates_on_side(&segp->sides[side]);
 }
 
-void compress_uv_coordinates_all(void)
+static void compress_uv_coordinates_all(void) __attribute_unused;
+static void compress_uv_coordinates_all(void)
 {
 	int	seg;
 
@@ -433,7 +437,8 @@ void check_lighting_segment(segment *segp)
 }
 
 //	Flag bogus lighting values.
-void check_lighting_all(void)
+static void check_lighting_all(void) __attribute_unused;
+static void check_lighting_all(void)
 {
 	int	seg;
 
@@ -1482,7 +1487,8 @@ int normal_near(vms_vector *v1, vms_vector *v2)
 int	Total_normals=0;
 int	Diff_normals=0;
 
-void print_normals(void)
+static void print_normals(void) __attribute_unused;
+static void print_normals(void)
 {
 	int			i,j,s,n,nn;
 	// vms_vector	*normal;

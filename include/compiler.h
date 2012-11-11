@@ -1,5 +1,4 @@
-#ifndef _COMPILER_H
-#define _COMPILER_H
+#pragma once
 
 #ifdef __GNUC__
 #define __noreturn __attribute__ ((noreturn))
@@ -8,6 +7,7 @@
 #define __attribute_malloc __attribute__((malloc))
 #define __attribute_warn_unused_result __attribute__((warn_unused_result))
 #define __attribute_used __attribute__((used))
+#define __attribute_unused __attribute__((unused))
 #define __pack__ __attribute__((packed))
 /*
  * The unaligned forms violate strict aliasing, which triggers a warning
@@ -23,6 +23,7 @@
 #define __attribute_malloc
 #define __attribute_warn_unused_result
 #define __attribute_used
+#define __attribute_unused
 #if defined(_MSC_VER)
 # pragma pack(push, packing)
 # pragma pack(1)
@@ -60,6 +61,4 @@
 	{ B; }
 #else
 #define CHK_REDIRECT(R,N,A,B)	__apply_c_linkage R unchecked_##N A
-#endif
-
 #endif
