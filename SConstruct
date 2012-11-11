@@ -263,7 +263,7 @@ arch_ogl_sources = [
 # for non-ogl
 arch_sdl_sources = [
 'arch/sdl/gr.cpp',
-'texmap/tmapflat.c'
+'texmap/tmapflat.cpp'
 ]
 
 # assembler related
