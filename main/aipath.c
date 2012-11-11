@@ -50,13 +50,9 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define	PATH_VALIDATION	1
 #endif
 
-void validate_all_paths(void);
 void ai_path_set_orient_and_vel(dxxobject *objp, vms_vector* goal_point, int player_visibility, vms_vector *vec_to_player);
 void maybe_ai_path_garbage_collect(void);
 void ai_path_garbage_collect(void);
-#if PATH_VALIDATION
-int validate_path(int debug_flag, point_seg* psegs, int num_points);
-#endif
 
 //	------------------------------------------------------------------------
 static void create_random_xlate(sbyte *xt)
@@ -286,10 +282,6 @@ int create_path_points(dxxobject *objp, int start_seg, int end_seg, point_seg *p
 	point_seg	*original_psegs = psegs;
 	int		l_num_points;
 
-#if PATH_VALIDATION
-	validate_all_paths();
-#endif
-
 if ((objp->type == OBJ_ROBOT) && (objp->ctype.ai_info.behavior == AIB_RUN_FROM)) {
 	random_flag = 1;
 	avoid_seg = ConsoleObject->segnum;
@@ -439,19 +431,12 @@ cpp_done1: ;
 	psegs++;
 	l_num_points++;
 
-#if PATH_VALIDATION
-	validate_path(1, original_psegs, l_num_points);
-#endif
-
 	//	Now, reverse point_segs in place.
 	for (i=0; i< l_num_points/2; i++) {
 		point_seg		temp_point_seg = *(original_psegs + i);
 		*(original_psegs + i) = *(original_psegs + l_num_points - i - 1);
 		*(original_psegs + l_num_points - i - 1) = temp_point_seg;
 	}
-#if PATH_VALIDATION
-	validate_path(2, original_psegs, l_num_points);
-#endif
 
 	//	Now, if safety_flag set, then insert the point at the center of the side connecting two segments
 	//	between the two points.  This is messy because we must insert into the list.  The simplest (and not too slow)
@@ -468,20 +453,12 @@ cpp_done1: ;
 		}
 	}
 
-#if PATH_VALIDATION
-	validate_path(3, original_psegs, l_num_points);
-#endif
-
 // -- MK, 10/30/95 -- This code causes apparent discontinuities in the path, moving a point
 //	into a new segment.  It is not necessarily bad, but it makes it hard to track down actual
 //	discontinuity problems.
 	if (objp->type == OBJ_ROBOT)
 		if (Robot_info[objp->id].companion)
 			move_towards_outside(original_psegs, &l_num_points, objp, 0);
-
-#if PATH_VALIDATION
-	validate_path(4, original_psegs, l_num_points);
-#endif
 
 	*num_points = l_num_points;
 	return 0;
@@ -545,83 +522,6 @@ int polish_path(dxxobject *objp, point_seg *psegs, int num_points)
 
 	return num_points - first_point;
 }
-
-#ifndef NDEBUG
-//	-------------------------------------------------------------------------------------------------------
-//	Make sure that there are connections between all segments on path.
-//	Note that if path has been optimized, connections may not be direct, so this function is useless, or worse.
-//	Return true if valid, else return false.
-int validate_path(int debug_flag, point_seg *psegs, int num_points)
-{
-#if PATH_VALIDATION
-	int		i, curseg;
-
-	curseg = psegs->segnum;
-	if ((curseg < 0) || (curseg > Highest_segment_index)) {
-		Int3();		//	Contact Mike: Debug trap for elusive, nasty bug.
-		return 0;
-	}
-
-if (num_points == 0)
-	return 1;
-
-	for (i=1; i<num_points; i++) {
-		int	sidenum;
-		int	nextseg = psegs[i].segnum;
-
-		if ((nextseg < 0) || (nextseg > Highest_segment_index)) {
-			Int3();		//	Contact Mike: Debug trap for elusive, nasty bug.
-			return 0;
-		}
-
-		if (curseg != nextseg) {
-			for (sidenum=0; sidenum<MAX_SIDES_PER_SEGMENT; sidenum++)
-				if (Segments[curseg].children[sidenum] == nextseg)
-					break;
-
-			// Assert(sidenum != MAX_SIDES_PER_SEGMENT);	//	Hey, created path is not contiguous, why!?
-			if (sidenum == MAX_SIDES_PER_SEGMENT) {
-				Int3();
-				return 0;
-			}
-			curseg = nextseg;
-		}
-	}
-#endif
-	return 1;
-
-}
-#endif
-
-#ifndef NDEBUG
-//	-----------------------------------------------------------------------------------------------------------
-void validate_all_paths(void)
-{
-
-#if PATH_VALIDATION
-	int	i;
-
-	for (i=0; i<=Highest_object_index; i++) {
-		if (Objects[i].type == OBJ_ROBOT) {
-			dxxobject		*objp = &Objects[i];
-			ai_static	*aip = &objp->ctype.ai_info;
-			//ai_local		*ailp = &Ai_local_info[i];
-
-			if (objp->control_type == CT_AI) {
-				if ((aip->hide_index != -1) && (aip->path_length > 0))
-					if (!validate_path(4, &Point_segs[aip->hide_index], aip->path_length)) {
-						Int3();	//	This path is bogus!  Who corrupted it!  Danger! Danger!
-									//	Contact Mike, he caused this mess.
-						//force_dump_ai_objects_all("Error in validate_all_paths");
-						aip->path_length=0;	//	This allows people to resume without harm...
-					}
-			}
-		}
-	}
-#endif
-
-}
-#endif
 
 //	-------------------------------------------------------------------------------------------------------
 //	Creates a path from the objects current segment (objp->segnum) to the specified segment for the object to
@@ -772,9 +672,6 @@ void create_n_segment_path(dxxobject *objp, int path_length, int avoid_seg)
 
 	aip->hide_index = Point_segs_free_ptr - Point_segs;
 	aip->cur_path_index = 0;
-#if PATH_VALIDATION
-	validate_path(8, Point_segs_free_ptr, aip->path_length);
-#endif
 	Point_segs_free_ptr += aip->path_length;
 	if (Point_segs_free_ptr - Point_segs + MAX_PATH_LENGTH*2 > MAX_POINT_SEGS) {
 		//Int3();	//	Contact Mike: This is curious, though not deadly. /eip++;g
@@ -1198,9 +1095,6 @@ void ai_path_garbage_collect(void)
 
 	Last_frame_garbage_collected = FrameCount;
 
-#if PATH_VALIDATION
-	validate_all_paths();
-#endif
 	//	Create a list of objects which have paths of length 1 or more.
 	for (objnum=0; objnum <= Highest_object_index; objnum++) {
 		dxxobject	*objp = &Objects[objnum];
@@ -1249,8 +1143,6 @@ void ai_path_garbage_collect(void)
 			if ((aip->hide_index + aip->path_length > Point_segs_free_ptr - Point_segs) && (aip->path_length>0))
 				Int3();		//	Contact Mike: Debug trap for nasty, elusive bug.
 	}
-
-	validate_all_paths();
 	}
 #endif
 
