@@ -174,7 +174,7 @@ common_sources = [
 'maths/tables.cpp',
 'maths/vecmat.cpp',
 'mem/mem.cpp',
-'misc/args.c',
+'misc/args.cpp',
 'misc/dl_list.c',
 'misc/error.c',
 'misc/hash.c',
