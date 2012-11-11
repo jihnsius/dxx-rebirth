@@ -158,7 +158,7 @@ common_sources = [
 'main/robot.cpp',
 'main/scores.c',
 'main/segment.cpp',
-'main/slew.c',
+'main/slew.cpp',
 'main/songs.c',
 'main/state.c',
 'main/switch.cpp',
