@@ -46,7 +46,7 @@ void draw_hostage(dxxobject *obj)
 
 
 //------------- Called once when a hostage is rescued -------------------------
-void hostage_rescue(int blah)
+void hostage_rescue(int)
 {
 	PALETTE_FLASH_ADD(0, 0, 25);		//small blue flash
 

@@ -130,7 +130,7 @@ common_sources = [
 'main/gameseg.cpp',
 'main/gameseq.cpp',
 'main/gauges.cpp',
-'main/hostage.c',
+'main/hostage.cpp',
 'main/hud.c',
 'main/inferno.c',
 'main/kconfig.c',
