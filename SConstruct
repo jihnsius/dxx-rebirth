@@ -249,7 +249,7 @@ editor_sources = [
 
 # SDL_mixer sound implementation
 arch_sdlmixer = [
-'arch/sdl/digi_mixer.c',
+'arch/sdl/digi_mixer.cpp',
 'arch/sdl/digi_mixer_music.c',
 'arch/sdl/jukebox.c'
 ]       
