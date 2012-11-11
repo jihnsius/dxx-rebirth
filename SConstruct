@@ -101,7 +101,7 @@ common_sources = [
 'libmve/mveplay.c',
 'main/ai.cpp',
 'main/ai2.cpp',
-'main/aipath.c',
+'main/aipath.cpp',
 'main/automap.c',
 'main/bm.c',
 'main/cntrlcen.c',

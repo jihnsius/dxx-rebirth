@@ -739,7 +739,7 @@ void create_n_segment_path_to_door(dxxobject *objp, int path_length, segnum_t av
 
 //	----------------------------------------------------------------------------------------------------------
 //	Optimization: If current velocity will take robot near goal, don't change velocity
-void ai_follow_path(dxxobject *objp, int player_visibility, int previous_visibility, vms_vector *vec_to_player)
+void ai_follow_path(dxxobject *objp, int player_visibility, int, vms_vector *vec_to_player)
 {
 	ai_static		*aip = &objp->ctype.ai_info;
 
