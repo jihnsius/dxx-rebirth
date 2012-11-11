@@ -80,7 +80,8 @@ static int area_on_all_sides(void)
 	return total_area;
 }
 
-fix average_connectivity(void)
+static fix average_connectivity(void) __attribute_unused;
+static fix average_connectivity(void)
 {
 	int	i,s;
 	int	total_sides = 0, total_mapped_sides = 0;
