@@ -170,7 +170,7 @@ common_sources = [
 'main/wall.cpp',
 'main/weapon.cpp',
 'maths/fixc.cpp',
-'maths/rand.c',
+'maths/rand.cpp',
 'maths/tables.c',
 'maths/vecmat.c',
 'mem/mem.c',
