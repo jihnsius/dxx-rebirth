@@ -112,7 +112,7 @@ common_sources = [
 'main/pybinding.cpp',
 'main/controls.cpp',
 'main/credits.c',
-'main/digiobj.c',
+'main/digiobj.cpp',
 'main/dumpmine.c',
 'main/effects.c',
 'main/endlevel.c',
