@@ -122,7 +122,7 @@ common_sources = [
 'main/fvi.cpp',
 'main/game.cpp',
 'main/gamecntl.cpp',
-'main/gamefont.c',
+'main/gamefont.cpp',
 'main/gamemine.cpp',
 'main/gamepal.c',
 'main/gamerend.c',
