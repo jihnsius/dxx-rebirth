@@ -92,7 +92,7 @@ common_sources = [
 'arch/sdl/timer.c',
 'arch/sdl/window.c',
 'arch/sdl/digi.cpp',
-'arch/sdl/digi_audio.c',
+'arch/sdl/digi_audio.cpp',
 'iff/iff.c',
 'libmve/decoder8.c',
 'libmve/decoder16.c',
