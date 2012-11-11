@@ -71,6 +71,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "editor/editor.h"
 #endif
 
+#include <algorithm>
+using std::min;
+using std::max;
+
 static void obj_detach_all(dxxobject *parent);
 static void obj_detach_one(dxxobject *sub);
 

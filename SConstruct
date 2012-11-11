@@ -146,7 +146,7 @@ common_sources = [
 'main/multibot.cpp',
 'main/newdemo.c',
 'main/newmenu.c',
-'main/object.c',
+'main/object.cpp',
 'main/paging.c',
 'main/physics.c',
 'main/piggy.c',
