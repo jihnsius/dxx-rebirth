@@ -128,7 +128,7 @@ common_sources = [
 'main/gamerend.c',
 'main/gamesave.cpp',
 'main/gameseg.cpp',
-'main/gameseq.c',
+'main/gameseq.cpp',
 'main/gauges.c',
 'main/hostage.c',
 'main/hud.c',
