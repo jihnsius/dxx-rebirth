@@ -1667,7 +1667,7 @@ int save_mine_data(PHYSFS_file * SaveFile);
 
 // -----------------------------------------------------------------------------
 // Save game
-static int save_level_sub(const char * filename, int compiled_version)
+static int save_level_sub(const char * filename, int)
 {
 	PHYSFS_file * SaveFile;
 	char temp_filename[PATH_MAX];

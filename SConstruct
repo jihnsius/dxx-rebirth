@@ -126,7 +126,7 @@ common_sources = [
 'main/gamemine.cpp',
 'main/gamepal.c',
 'main/gamerend.c',
-'main/gamesave.c',
+'main/gamesave.cpp',
 'main/gameseg.c',
 'main/gameseq.c',
 'main/gauges.c',
