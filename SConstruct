@@ -79,7 +79,7 @@ common_sources = [
 '3d/globvars.cpp',
 '3d/instance.cpp',
 '3d/interp.cpp',
-'3d/matrix.c',
+'3d/matrix.cpp',
 '3d/points.c',
 '3d/rod.c',
 '3d/setup.c',
