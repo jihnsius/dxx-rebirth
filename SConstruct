@@ -135,7 +135,7 @@ common_sources = [
 'main/inferno.cpp',
 'main/kconfig.c',
 'main/kmatrix.c',
-'main/laser.c',
+'main/laser.cpp',
 'main/lighting.cpp',
 'main/menu.c',
 'main/mglobal.c',
