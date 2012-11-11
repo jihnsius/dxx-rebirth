@@ -99,10 +99,10 @@ int ogl_texture_list_cur;
 #define GL_TEXTURE0_ARB 0x84C0
 extern GLubyte *pixels;
 extern GLubyte *texbuf;
-void ogl_filltexbuf(unsigned char *data, GLubyte *texp, int truewidth, int width, int height, int dxo, int dyo, int twidth, int theight, int type, int bm_flags, int data_format);
+static void ogl_filltexbuf(unsigned char *data, GLubyte *texp, int truewidth, int width, int height, int dxo, int dyo, int twidth, int theight, int type, int bm_flags, int data_format);
 void ogl_loadbmtexture(grs_bitmap *bm);
-int ogl_loadtexture(unsigned char *data, int dxo, int dyo, ogl_texture *tex, int bm_flags, int data_format, int texfilt);
-void ogl_freetexture(ogl_texture *gltexture);
+static int ogl_loadtexture(unsigned char *data, int dxo, int dyo, ogl_texture *tex, int bm_flags, int data_format, int texfilt);
+static void ogl_freetexture(ogl_texture *gltexture);
 
 #ifdef OGLES
 // Replacement for gluPerspective
@@ -1282,7 +1282,7 @@ void ogl_close_pixel_buffers(void)
 	d_free(texbuf);
 }
 
-void ogl_filltexbuf(unsigned char *data, GLubyte *texp, int truewidth, int width, int height, int dxo, int dyo, int twidth, int theight, int type, int bm_flags, int data_format)
+static void ogl_filltexbuf(unsigned char *data, GLubyte *texp, int truewidth, int width, int height, int dxo, int dyo, int twidth, int theight, int type, int bm_flags, int data_format)
 {
 	int x,y,c,i;
 
@@ -1482,7 +1482,7 @@ static void tex_set_size(ogl_texture *tex){
 //In theory this could be a problem for repeating textures, but all real
 //textures (not sprites, etc) in descent are 64x64, so we are ok.
 //stores OpenGL textured id in *texid and u/v values required to get only the real data in *u/*v
-int ogl_loadtexture (unsigned char *data, int dxo, int dyo, ogl_texture *tex, int bm_flags, int data_format, int texfilt)
+static int ogl_loadtexture (unsigned char *data, int dxo, int dyo, ogl_texture *tex, int bm_flags, int data_format, int texfilt)
 {
 	GLubyte	*bufP = texbuf;
 	tex->tw = pow2ize (tex->w);
@@ -1658,7 +1658,7 @@ void ogl_loadbmtexture(grs_bitmap *bm)
 	ogl_loadbmtexture_f(bm, GameCfg.TexFilt);
 }
 
-void ogl_freetexture(ogl_texture *gltexture)
+static void ogl_freetexture(ogl_texture *gltexture)
 {
 	if (gltexture->handle>0) {
 		r_texcount--;
