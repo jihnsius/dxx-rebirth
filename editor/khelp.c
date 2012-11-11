@@ -26,6 +26,7 @@ static char rcsid[] = "$Id: khelp.c,v 1.1.1.1 2006/03/17 19:58:15 zicodxx Exp $"
 #include "editor.h"
 
 #include "ui.h"
+#include "kdefs.h"
 
 static const char MainHelpText[] = "\nMED General Functions\n\n" \
 "SPACEBAR         Full Redraw\n" \

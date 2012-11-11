@@ -31,6 +31,7 @@ static char rcsid[] = "$Id: kgame.c,v 1.1.1.1 2006/03/17 19:58:13 zicodxx Exp $"
 #include "game.h"
 #include "gamesave.h"
 #include "gameseq.h"
+#include "kdefs.h"
 
 static char game_filename[PATH_MAX] = "*.RL2";
 

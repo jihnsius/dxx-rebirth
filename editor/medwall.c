@@ -41,6 +41,7 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "piggy.h"
 #include "u_mem.h"
 #include "physfsx.h"
+#include "kdefs.h"
 
 int wall_add_door_flag(sbyte flag);
 int wall_add_to_side(segment *segp, int side, sbyte type);

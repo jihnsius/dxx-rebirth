@@ -39,6 +39,7 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "medwall.h"
 #include "switch.h"
 #include "fuelcen.h"
+#include "kdefs.h"
 
 #define REMOVE_EXT(s)  (*(strchr( (s), '.' ))='\0')
 

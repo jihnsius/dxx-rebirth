@@ -29,6 +29,7 @@ static char rcsid[] = "$Id: ksegmove.c,v 1.1.1.1 2006/03/17 19:58:39 zicodxx Exp
 
 #include "inferno.h"
 #include "editor.h"
+#include "kdefs.h"
 
 // -- old -- int SegOrientCommon(fixang *ang, fix val)
 // -- old -- {

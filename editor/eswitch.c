@@ -40,6 +40,7 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "centers.h"
 #include "piggy.h"
 #include "u_mem.h"
+#include "kdefs.h"
 
 //-------------------------------------------------------------------------
 // Variables for this module...

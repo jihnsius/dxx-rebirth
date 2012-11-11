@@ -35,6 +35,7 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #include "medwall.h"
 #include "physfsx.h"
+#include "kdefs.h"
 
 void validate_selected_segments(void);
 

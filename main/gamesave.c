@@ -127,6 +127,7 @@ struct {
 //  LINT: adding function prototypes
 void read_object(dxxobject *obj, PHYSFS_file *f, int version);
 #ifdef EDITOR
+#include "kdefs.h"
 void write_object(dxxobject *obj, short version, PHYSFS_file *f);
 void do_load_save_levels(int save);
 #endif

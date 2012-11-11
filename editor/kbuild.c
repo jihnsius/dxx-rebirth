@@ -22,6 +22,7 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "editor/editor.h"
 #include "gameseg.h"
 #include "gamesave.h"
+#include "kdefs.h"
 
 //  ---------- Create a bridge segment between current segment/side and marked segment/side ----------
 int CreateBridge()

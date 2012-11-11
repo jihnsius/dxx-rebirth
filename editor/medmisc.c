@@ -39,6 +39,7 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "meddraw.h"		// For draw_World
 #include "game.h"
 #include "medmisc.h"
+#include "kdefs.h"
 
 //return 2d distance, i.e, sqrt(x*x + y*y)
 #ifdef __WATCOMC__

@@ -31,6 +31,7 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "segment.h"
 #include "object.h"
 #include "medsel.h"
+#include "kdefs.h"
 
 typedef struct sort_element {
 	short segnum;
