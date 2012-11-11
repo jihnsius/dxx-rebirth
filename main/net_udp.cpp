@@ -2086,7 +2086,7 @@ static void net_udp_send_version_deny(struct _sockaddr sender_addr)
 	dxx_sendto (UDP_Socket[0], buf, sizeof(buf), 0, (struct sockaddr *)&sender_addr, sizeof(struct _sockaddr));
 }
 
-static void net_udp_process_version_deny(ubyte *data, struct _sockaddr sender_addr)
+static void net_udp_process_version_deny(ubyte *data, struct _sockaddr )
 {
 	Netgame.protocol.udp.program_iver[0] = GET_INTEL_SHORT(&data[1]);
 	Netgame.protocol.udp.program_iver[1] = GET_INTEL_SHORT(&data[3]);

@@ -451,7 +451,7 @@ if (ipv6 == 1):
 # UDP support?
 if (use_udp == 1):
 	env.Append(CPPDEFINES = ['USE_UDP'])
-	common_sources += ['main/net_udp.c']
+	common_sources += ['main/net_udp.cpp']
 	
 	# Tracker support?  (Relies on UDP)
 	if( use_tracker == 1 ):
