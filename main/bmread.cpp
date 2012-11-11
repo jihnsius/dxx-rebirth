@@ -63,6 +63,9 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "physfsx.h"
 #include "bmread.h"
 
+#include <algorithm>
+using std::min;
+
 #define BM_NONE			-1
 #define BM_COCKPIT		 0
 #define BM_TEXTURES		 2
@@ -1016,7 +1019,7 @@ static void clear_to_end_of_line(void)
 		arg = strtok( NULL, space );
 }
 
-static void bm_read_sound(int skip, int pc_shareware)
+static void bm_read_sound(int skip, int )
 {
 	int sound_num;
 	int alt_sound_num;

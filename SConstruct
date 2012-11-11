@@ -224,7 +224,7 @@ editor_sources = [
 'editor/seguvs.cpp',
 'editor/texpage.cpp',
 'editor/texture.cpp',
-'main/bmread.c',
+'main/bmread.cpp',
 'ui/button.cpp',
 'ui/checkbox.cpp',
 'ui/dialog.cpp',
