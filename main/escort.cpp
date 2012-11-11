@@ -1628,7 +1628,7 @@ typedef struct escort_menu
 	char	msg[300];
 } escort_menu;
 
-static int escort_menu_keycommand(window *wind, d_event *event, escort_menu *menu)
+static int escort_menu_keycommand(window *wind, d_event *event, escort_menu *)
 {
 	int	key;
 

@@ -116,7 +116,7 @@ common_sources = [
 'main/dumpmine.cpp',
 'main/effects.cpp',
 'main/endlevel.cpp',
-'main/escort.c',
+'main/escort.cpp',
 'main/fireball.c',
 'main/fuelcen.c',
 'main/fvi.c',
