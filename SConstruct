@@ -93,7 +93,7 @@ common_sources = [
 'arch/sdl/window.cpp',
 'arch/sdl/digi.cpp',
 'arch/sdl/digi_audio.cpp',
-'iff/iff.c',
+'iff/iff.cpp',
 'libmve/decoder8.c',
 'libmve/decoder16.c',
 'libmve/mve_audio.c',
