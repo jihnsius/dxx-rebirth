@@ -70,7 +70,7 @@ common_sources = [
 '2d/palette.cpp',
 '2d/pcx.cpp',
 '2d/pixel.cpp',
-'2d/poly.c',
+'2d/poly.cpp',
 '2d/rect.c',
 '2d/rle.c',
 '2d/scalec.c',
