@@ -58,7 +58,7 @@ print '\n===== ' + PROGRAM_NAME + VERSION_STRING + ' =====\n'
 # general source files
 common_sources = [
 '2d/2dsline.cpp',
-'2d/bitblt.c',
+'2d/bitblt.cpp',
 '2d/bitmap.c',
 '2d/box.c',
 '2d/canvas.c',

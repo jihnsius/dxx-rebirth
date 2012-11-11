@@ -532,7 +532,7 @@ void gr_bm_ubitblt00m_rle(int w, int h, int dx, int dy, int sx, int sy, grs_bitm
 
 
 void gr_bm_ubitblt0x_rle(int w, int h, int dx, int dy, int sx, int sy, grs_bitmap * src,
-						 grs_bitmap * dest, int masked )
+						 grs_bitmap * dest, int)
 {
 	int i, data_offset;
 	register int y1;
