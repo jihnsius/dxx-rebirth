@@ -160,7 +160,7 @@ common_sources = [
 'main/segment.cpp',
 'main/slew.cpp',
 'main/songs.c',
-'main/state.c',
+'main/state.cpp',
 'main/switch.cpp',
 'main/terrain.c',
 'main/texmerge.c',

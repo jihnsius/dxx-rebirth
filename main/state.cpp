@@ -97,9 +97,15 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define THUMBNAIL_H 50
 #define DESC_LENGTH 20
 
+
+
+int state_save_all_sub(char *filename, char *desc);
+int state_restore_all_sub(char *filename, int secret_restore);
+
+
 int sc_last_item= 0;
 
-char dgss_id[4] = "DGSS";
+static const char dgss_id[4] = {'D', 'G', 'S', 'S'};
 
 uint state_game_id;
 
@@ -574,7 +580,7 @@ int state_quick_item = -1;
  * For restoring, dsc should be NULL, in which case empty slots will not be
  * selectable and savagames descriptions will not be editable.
  */
-static int state_get_savegame_filename(char * fname, char * dsc, char * caption, int blind_save)
+static int state_get_savegame_filename(char * fname, char * dsc, const char * caption, int blind_save)
 {
 	PHYSFS_file * fp;
 	int i, choice, version, nsaves;
@@ -678,7 +684,7 @@ int state_get_restore_file(char * fname)
 
 //	-----------------------------------------------------------------------------------
 //	Imagine if C had a function to copy a file...
-static int copy_file(char *old_file, char *new_file)
+static int copy_file(const char *old_file, const char *new_file)
 {
 	sbyte	*buf;
 	int		buf_size;
@@ -695,7 +701,7 @@ static int copy_file(char *old_file, char *new_file)
 		return -2;
 
 	buf_size = PHYSFS_fileLength(in_file);
-	while (buf_size && !(buf = d_malloc(buf_size)))
+	while (buf_size && !(MALLOC(buf, sbyte, (buf_size))))
 		buf_size /= 2;
 	if (buf_size == 0)
 		return -5;	// likely to be an empty file
@@ -730,7 +736,7 @@ static int copy_file(char *old_file, char *new_file)
 
 
 //	-----------------------------------------------------------------------------------
-int state_save_all(int secret_save, const char *filename_override, int blind_save)
+int state_save_all(int secret_save, const char *, int blind_save)
 {
 	int	rval, filenum = -1;
 	char	filename[PATH_MAX], desc[DESC_LENGTH+1];
@@ -873,7 +879,7 @@ int state_save_all_sub(char *filename, char *desc)
 		render_frame(0, 0);
 
 #if defined(OGL)
-		buf = d_malloc(THUMBNAIL_W * THUMBNAIL_H * 4);
+		MALLOC(buf, ubyte, THUMBNAIL_W * THUMBNAIL_H * 4);
 #ifndef OGLES
  		glGetIntegerv(GL_DRAW_BUFFER, &gl_draw_buffer);
  		glReadBuffer(gl_draw_buffer);
