@@ -1638,7 +1638,8 @@ int PrevGroup( void )
 // Returns:
 //	 0 = successfully selected
 //  1 = bad group number
-int select_group( int num )
+static int select_group( int num ) __attribute_unused;
+static int select_group( int num )
 {
 	if ((num>=0) && (num<num_groups))
 		{
