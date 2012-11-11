@@ -58,6 +58,9 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "automap.h"
 #include "byteswap.h"
 
+#include <algorithm>
+using std::min;
+
 #define EXPLOSION_SCALE (F1_0*5/2)		//explosion is the obj size times this
 
 fix	Flash_effect=0;
@@ -966,7 +969,7 @@ objnum_t object_create_egg(dxxobject *objp)
 		}
 	}
 
-	rval = drop_powerup(objp->contains_type, objp->contains_id, objp->contains_count, &objp->mtype.phys_info.velocity, &objp->pos, objp->segnum);
+	rval = drop_powerup(static_cast<object_type_t>(objp->contains_type), objp->contains_id, objp->contains_count, &objp->mtype.phys_info.velocity, &objp->pos, objp->segnum);
 
 	if (rval != object_none)
 	{
