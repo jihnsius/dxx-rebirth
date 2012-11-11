@@ -20,8 +20,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #ifndef _UI_H
 #define _UI_H
 
-struct d_event;
-enum event_type;
+#include "event.h"
 
 struct window;
 
@@ -239,7 +238,7 @@ extern void ui_close_dialog( UI_DIALOG * dlg );
 #define GADGET_PRESSED(g) ((event->type == EVENT_UI_GADGET_PRESSED) && (ui_event_get_gadget(event) == (UI_GADGET *)g))
 
 extern UI_GADGET * ui_gadget_add( UI_DIALOG * dlg, short kind, short x1, short y1, short x2, short y2 );
-extern UI_GADGET_BUTTON * ui_add_gadget_button( UI_DIALOG * dlg, short x, short y, short w, short h, char * text, int (*function_to_call)(void) );
+extern UI_GADGET_BUTTON * ui_add_gadget_button( UI_DIALOG * dlg, short x, short y, short w, short h, const char * text, int (*function_to_call)(void) );
 extern void ui_gadget_delete_all( UI_DIALOG * dlg );
 extern int ui_gadget_send_event(UI_DIALOG *dlg, enum event_type type, UI_GADGET *gadget);
 extern UI_GADGET *ui_event_get_gadget(struct d_event *event);
@@ -256,7 +255,7 @@ extern UI_GADGET_LISTBOX *ui_add_gadget_listbox(UI_DIALOG *dlg, short x, short y
 
 extern void ui_mega_process();
 
-extern void ui_get_button_size( char * text, int * width, int * height );
+extern void ui_get_button_size( const char * text, int * width, int * height );
 
 extern UI_GADGET_SCROLLBAR * ui_add_gadget_scrollbar( UI_DIALOG * dlg, short x, short y, short w, short h, int start, int stop, int position, int window_size  );
 extern int ui_scrollbar_do( UI_DIALOG *dlg, UI_GADGET_SCROLLBAR * scrollbar, struct d_event *event );
@@ -267,12 +266,12 @@ extern void ui_dprintf( UI_DIALOG * dlg, const char * format, ... ) __attribute_
 extern void ui_dprintf_at( UI_DIALOG * dlg, short x, short y, const char * format, ... ) __attribute_gcc_format((printf, 4, 5));
 
 extern void ui_draw_radio( UI_DIALOG *dlg, UI_GADGET_RADIO * radio );
-extern UI_GADGET_RADIO * ui_add_gadget_radio( UI_DIALOG * dlg, short x, short y, short w, short h, short group, char * text );
+extern UI_GADGET_RADIO * ui_add_gadget_radio( UI_DIALOG * dlg, short x, short y, short w, short h, short group, const char * text );
 extern int ui_radio_do( UI_DIALOG *dlg, UI_GADGET_RADIO * radio, struct d_event *event );
 extern void ui_radio_set_value(UI_GADGET_RADIO *radio, int value);
 
 extern void ui_draw_checkbox( UI_DIALOG *dlg, UI_GADGET_CHECKBOX * checkbox );
-extern UI_GADGET_CHECKBOX * ui_add_gadget_checkbox( UI_DIALOG * dlg, short x, short y, short w, short h, short group, char * text );
+extern UI_GADGET_CHECKBOX * ui_add_gadget_checkbox( UI_DIALOG * dlg, short x, short y, short w, short h, short group, const char * text );
 extern int ui_checkbox_do( UI_DIALOG *dlg, UI_GADGET_CHECKBOX * checkbox, struct d_event *event );
 extern void ui_checkbox_check(UI_GADGET_CHECKBOX * checkbox, int check);
 
@@ -284,9 +283,9 @@ extern void ui_listbox_change(UI_DIALOG *dlg, UI_GADGET_LISTBOX *listbox, short 
 
 
 extern void ui_draw_inputbox( UI_DIALOG *dlg, UI_GADGET_INPUTBOX * inputbox );
-extern UI_GADGET_INPUTBOX * ui_add_gadget_inputbox( UI_DIALOG * dlg, short x, short y, short w, short h, char * text );
+extern UI_GADGET_INPUTBOX * ui_add_gadget_inputbox( UI_DIALOG * dlg, short x, short y, short w, short h, const char * text );
 extern int ui_inputbox_do( UI_DIALOG *dlg, UI_GADGET_INPUTBOX * inputbox, struct d_event *event );
-extern void ui_inputbox_set_text(UI_GADGET_INPUTBOX *inputbox, char *text);
+extern void ui_inputbox_set_text(UI_GADGET_INPUTBOX *inputbox, const char *text);
 
 
 extern int ui_userbox_do( UI_DIALOG *dlg, UI_GADGET_USERBOX * userbox, struct d_event *event );
@@ -296,9 +295,9 @@ extern void ui_draw_userbox( UI_DIALOG *dlg, UI_GADGET_USERBOX * userbox );
 
 extern int MenuX( int x, int y, int NumButtons, char * text[] );
 
-char **file_getdirlist(int *NumFiles, char *dir);
-char **file_getfilelist(int *NumDirs, char *filespec, char *dir);
-int ui_get_filename( char * filename, char * Filespec, char * message  );
+char **file_getdirlist(int *NumFiles, const char *dir);
+char **file_getfilelist(int *NumDirs, const char *filespec, const char *dir);
+int ui_get_filename( char * filename, const char * Filespec, const char * message  );
 
 
 void * ui_malloc( int size );
@@ -324,17 +323,17 @@ extern unsigned int ui_number_of_events;
 extern unsigned int ui_event_counter;
 
 
-int ui_get_file( char * filename, char * Filespec  );
+int ui_get_file( char * filename, const char * Filespec  );
 
 void ui_draw_icon( UI_GADGET_ICON * icon );
 int ui_icon_do( UI_DIALOG *dlg, UI_GADGET_ICON * icon, struct d_event *event );
-UI_GADGET_ICON * ui_add_gadget_icon( UI_DIALOG * dlg, char * text, short x, short y, short w, short h, int k,int (*f)(void) );
+UI_GADGET_ICON * ui_add_gadget_icon( UI_DIALOG * dlg, const char * text, short x, short y, short w, short h, int k,int (*f)(void) );
 
-int GetKeyCode(char * text);
-int DecodeKeyText( char * text );
+int GetKeyCode(const char * text);
+int DecodeKeyText( const char * text );
 void GetKeyDescription( char * text, int keypress );
 
-extern void menubar_init(char * filename );
+extern void menubar_init(const char * filename );
 extern void menubar_close();
 extern void menubar_hide();
 extern void menubar_show();
@@ -346,11 +345,11 @@ void ui_pad_deactivate();
 void ui_pad_goto(int n);
 void ui_pad_goto_next();
 void ui_pad_goto_prev();
-void ui_pad_read( int n, char * filename );
+void ui_pad_read( int n, const char * filename );
 int ui_pad_get_current();
 void ui_pad_draw(UI_DIALOG *dlg, int x, int y);
 
-void ui_barbox_open( char * text, int length );
+void ui_barbox_open( const char * text, int length );
 void ui_barbox_update( int position );
 void ui_barbox_close();
 

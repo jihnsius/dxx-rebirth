@@ -78,7 +78,7 @@ void GetKeyDescription( char * text, int keypress )
 }
 
 
-int DecodeKeyText( char * text )
+int DecodeKeyText( const char * text )
 {
 	int i, code = 0;
 
@@ -136,7 +136,7 @@ static int key_dialog_handler(UI_DIALOG *dlg, d_event *event, key_dialog *k)
 	return rval;
 }
 
-int GetKeyCode(char * text)
+int GetKeyCode(const char * text)
 {
 	UI_DIALOG * dlg;
 	window *wind;
