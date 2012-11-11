@@ -100,6 +100,9 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #include <SDL/SDL.h>
 
+#include <algorithm>
+using std::min;
+
 // Global Variables -----------------------------------------------------------
 
 int	Debug_spew;
@@ -1584,7 +1587,7 @@ static const cheat_code cheat_codes[NUM_CHEATS] = {
 
 static int FinalCheats()
 {
-	static char cheat_buffer[CHEAT_MAX_LEN] = "AAAAAAAAAAAAAAA";
+	static char cheat_buffer[CHEAT_MAX_LEN];
 	int i = 0, gotcha = 0;
 
 	if (Game_mode & GM_MULTI)

@@ -121,7 +121,7 @@ common_sources = [
 'main/fuelcen.cpp',
 'main/fvi.cpp',
 'main/game.cpp',
-'main/gamecntl.c',
+'main/gamecntl.cpp',
 'main/gamefont.c',
 'main/gamemine.c',
 'main/gamepal.c',
