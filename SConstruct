@@ -107,7 +107,7 @@ common_sources = [
 'main/cntrlcen.cpp',
 'main/collide.cpp',
 'main/config.cpp',
-'main/console.c',
+'main/console.cpp',
 'main/cxxconsole.cpp',
 'main/pybinding.cpp',
 'main/controls.cpp',
