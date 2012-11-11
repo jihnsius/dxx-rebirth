@@ -91,7 +91,7 @@ common_sources = [
 'arch/sdl/rbaudio.c',
 'arch/sdl/timer.c',
 'arch/sdl/window.c',
-'arch/sdl/digi.c',
+'arch/sdl/digi.cpp',
 'arch/sdl/digi_audio.c',
 'iff/iff.c',
 'libmve/decoder8.c',
