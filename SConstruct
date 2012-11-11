@@ -251,7 +251,7 @@ editor_sources = [
 arch_sdlmixer = [
 'arch/sdl/digi_mixer.cpp',
 'arch/sdl/digi_mixer_music.cpp',
-'arch/sdl/jukebox.c'
+'arch/sdl/jukebox.cpp'
 ]       
 
 # for opengl
