@@ -299,7 +299,7 @@ static void do_physics_sim_rot(dxxobject *obj)
 }
 
 // On joining edges fvi tends to get inaccurate as hell. Approach is to check if the object interects with the wall and if so, move away from it.
-static void fix_illegal_wall_intersection(dxxobject *obj, vms_vector *origin)
+static void fix_illegal_wall_intersection(dxxobject *obj, vms_vector *)
 {
 	int hside = -1, hface = -1;
 
