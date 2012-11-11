@@ -82,7 +82,7 @@ common_sources = [
 '3d/matrix.cpp',
 '3d/points.cpp',
 '3d/rod.cpp',
-'3d/setup.c',
+'3d/setup.cpp',
 'arch/sdl/event.c',
 'arch/sdl/init.c',
 'arch/sdl/joy.c',
