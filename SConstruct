@@ -98,7 +98,7 @@ common_sources = [
 'libmve/decoder16.cpp',
 'libmve/mve_audio.cpp',
 'libmve/mvelib.cpp',
-'libmve/mveplay.c',
+'libmve/mveplay.cpp',
 'main/ai.cpp',
 'main/ai2.cpp',
 'main/aipath.cpp',
