@@ -28,6 +28,10 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "gamesave.h"
 #include "editor/eobject.h"
 #include "editor/medwall.h"
+#include "editor/ehostage.h"
+#include "editor/kfuncs.h"
+#include "editor/texpage.h"
+#include "kdefs.h"
 
 // Test function prototypes (replace Test1, 2 and 3 with whatever function you wish to test.)
 void create_all_paths();
@@ -35,14 +39,6 @@ void test_create_all_anchors();
 // extern void make_curside_bottom_side();
 void move_object_to_mouse_click();
 void test_create_n_segment_path();
-
-void set_all_modes_to_hover(void);
-
-void check_for_overlapping_segments(void);
-void init_replacements();
-
-void do_replacements(void);
-void do_replacements_all(void);
 
 int Test1()
 {

@@ -34,6 +34,11 @@ int LoadOldMine();
 
 int SaveSituation();
 int LoadSituation();
+void checkforext( char * f, char *ext );
+
+extern char mine_filename[PATH_MAX];
+struct PHYSFS_File;
+int save_mine_data_compiled(struct PHYSFS_File *SaveFile);
 
 // In kgame.c
 int SetPlayerPosition(void);
@@ -327,7 +332,4 @@ int goal_red_create_from_curseg();
 // In editor\robot.c
 int do_robot_dialog();
 int do_object_dialog();
-
-// In editor\hostage.c
-int do_hostage_dialog();
 

@@ -3,6 +3,7 @@
 #include "wrap-object.hpp"
 #include "weapon.h"
 #include "laser.h"
+#include "defmodules.hpp"
 
 using namespace boost::python;
 

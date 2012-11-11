@@ -1,6 +1,7 @@
 #include "filter.hpp"
 #include "wrap-filter-container.hpp"
 #include "reactor.hpp"
+#include "defmodules.hpp"
 
 using namespace boost::python;
 

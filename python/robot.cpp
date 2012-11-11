@@ -1,8 +1,8 @@
 #include "filter.hpp"
 #include "wrap-filter-container.hpp"
 #include "wrap-object.hpp"
-#include "defmodules.hpp"
 #include "robot.hpp"
+#include "defmodules.hpp"
 
 using namespace boost::python;
 

@@ -22,5 +22,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define _BMREAD_H
 
 void bm_write_all(PHYSFS_file *fp);
+int compute_average_pixel(grs_bitmap *);
+
 
 #endif /* _BMREAD_H */

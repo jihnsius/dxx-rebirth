@@ -22,5 +22,8 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define _KFUNCS_H
 
 void init_med_functions(void);
+int Test1();
+int Test2();
+int Test3();
 
 #endif

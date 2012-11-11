@@ -29,6 +29,8 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "inferno.h"
 #ifdef EDITOR
 #include "editor/editor.h"
+#include "kdefs.h"
+#include "eswitch.h"
 #endif
 #include "dxxerror.h"
 #include "object.h"
@@ -57,6 +59,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "multi.h"
 #include "makesig.h"
 #include "physfsx.h"
+#include "physics.h"
 #include "pybinding.h"
 
 char Gamesave_current_filename[PATH_MAX];
@@ -129,13 +132,6 @@ void do_load_save_levels(int save);
 #endif
 #ifndef NDEBUG
 void dump_mine_info(void);
-#endif
-
-#ifdef EDITOR
-extern char mine_filename[];
-int save_mine_data_compiled(PHYSFS_file *SaveFile);
-//--unused-- #else
-//--unused-- char mine_filename[128];
 #endif
 
 int Gamesave_num_org_robots = 0;
@@ -714,8 +710,6 @@ void write_object(dxxobject *obj, short version, PHYSFS_file *f)
 
 }
 #endif
-
-int remove_trigger_num(int trigger_num);
 
 // --------------------------------------------------------------------
 // Load game

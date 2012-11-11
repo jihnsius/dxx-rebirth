@@ -435,8 +435,6 @@ void piggy_init_pigfile(char *filename)
 
 #define MAX_BITMAPS_PER_BRUSH 30
 
-int compute_average_pixel(grs_bitmap *new);
-
 static ubyte *Bitmap_replacement_data = NULL;
 
 //reads in a new pigfile (for new palette)

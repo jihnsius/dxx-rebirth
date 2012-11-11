@@ -34,6 +34,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "endlevel.h"
 #include "fireball.h"
 #include "render.h"
+#include "terrain.h"
 
 #define GRID_MAX_SIZE   64
 #define GRID_SCALE      i2f(2*20)

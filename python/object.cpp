@@ -1,5 +1,6 @@
 #include "filter.hpp"
 #include "wrap-object.hpp"
+#include "defmodules.hpp"
 
 #include "fvi.h"
 

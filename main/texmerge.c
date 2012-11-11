@@ -25,6 +25,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "textures.h"
 #include "rle.h"
 #include "piggy.h"
+#include "texmerge.h"
 
 #ifdef OGL
 #include "ogl_init.h"

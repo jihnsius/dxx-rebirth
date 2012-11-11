@@ -49,6 +49,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "powerup.h"
 #include "fuelcen.h"
 #include "mission.h"
+#include "paging.h"
 #include "robot.h"
 
 static void paging_touch_vclip( vclip * vc )

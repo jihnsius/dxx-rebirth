@@ -61,6 +61,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "strutil.h"
 #include "editor/texpage.h"
 #include "physfsx.h"
+#include "bmread.h"
 
 #define BM_NONE			-1
 #define BM_COCKPIT		 0

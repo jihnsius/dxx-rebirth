@@ -7,6 +7,7 @@
 #include "setattr.hpp"
 #include "args.h"
 #include "player.hpp"
+#include "defmodules.hpp"
 
 using namespace boost::python;
 

@@ -33,5 +33,8 @@ int texpage_goto_first();
 void texpage_init( UI_DIALOG * dlg );
 void texpage_close();
 int texpage_do(struct d_event *event);
+void init_replacements();;
+void do_replacements(void);
+void do_replacements_all(void);
 
 #endif

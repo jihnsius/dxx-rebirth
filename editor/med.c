@@ -1049,8 +1049,6 @@ int RestoreGameState() {
 	return 0;
 }
 
-void check_wall_validity(void);
-
 // Handler for the main editor dialog
 int editor_handler(UI_DIALOG *dlg, d_event *event, void *data)
 {

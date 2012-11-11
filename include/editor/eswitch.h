@@ -25,15 +25,18 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "segment.h"
 #include "switch.h"
 
+#ifdef EDITOR
 extern int bind_wall_to_trigger();
 
 extern int trigger_remove();
 
 extern int remove_trigger(segment *seg, short side);
+int remove_trigger_num(int trigger_num);
 
 extern void close_trigger_window();
 
 extern void do_trigger_window();
+#endif
 
 #endif
 
