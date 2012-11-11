@@ -86,7 +86,7 @@ common_sources = [
 'arch/sdl/event.cpp',
 'arch/sdl/init.cpp',
 'arch/sdl/joy.cpp',
-'arch/sdl/key.c',
+'arch/sdl/key.cpp',
 'arch/sdl/mouse.c',
 'arch/sdl/rbaudio.c',
 'arch/sdl/timer.c',
