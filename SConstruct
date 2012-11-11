@@ -178,7 +178,7 @@ common_sources = [
 'misc/dl_list.cpp',
 'misc/error.cpp',
 'misc/hash.cpp',
-'misc/hmp.c',
+'misc/hmp.cpp',
 'misc/ignorecase.c',
 'misc/physfsrwops.c',
 'misc/physfsx.c',
