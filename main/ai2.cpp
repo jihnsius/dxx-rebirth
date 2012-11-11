@@ -69,6 +69,9 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include <time.h>
 #endif
 
+#include <algorithm>
+using std::min;
+
 void teleport_boss(dxxobject *objp);
 int boss_fits_in_seg(dxxobject *boss_objp, segnum_t segnum);
 
@@ -259,8 +262,7 @@ static void init_boss_segments(segnum_t segptr[], int *num_segs, int size_check,
 		Selected_segs[N_selected_segs++] = original_boss_seg;
 		#endif
 
-		for (i=0; i<=Highest_segment_index; i++)
-			visited[i] = 0;
+		std::fill(visited, visited + Highest_segment_index + 1, 0);
 
 		while (tail != head) {
 			int		sidenum;
