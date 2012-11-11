@@ -150,7 +150,10 @@ void info_display_object_placement(int show_all)
 
 	char		name[30];
 
-	if (init_info | show_all) {
+	const unsigned coi = Cur_object_index;
+	if (coi >= sizeof(Objects) / sizeof(Objects[0]))
+		return;
+	if (init_info || show_all) {
 		old_Cur_object_index = -2;
 		old_type = -2;
 		old_movement_type = -2;
@@ -158,11 +161,11 @@ void info_display_object_placement(int show_all)
 		old_mode = -2;
 	}
 
-	if ( ( Cur_object_index != old_Cur_object_index) || 
-			( Objects[Cur_object_index].type != old_type) || 
-			( Objects[Cur_object_index].movement_type != old_movement_type) || 
-			( Objects[Cur_object_index].control_type != old_control_type) || 
-			( Objects[Cur_object_index].ctype.ai_info.behavior != old_mode) ) {
+	if ( ( coi != (unsigned)old_Cur_object_index) || 
+			( Objects[coi].type != old_type) || 
+			( Objects[coi].movement_type != old_movement_type) || 
+			( Objects[coi].control_type != old_control_type) || 
+			( Objects[coi].ctype.ai_info.behavior != old_mode) ) {
 
 		gr_uprintf( 0, 0, "Object id: %4d\n", Cur_object_index);
 		gr_uprintf( 0, 16, "Type: %s\n", get_object_type(Objects[Cur_object_index].type , name));
