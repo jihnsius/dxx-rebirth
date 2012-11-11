@@ -71,7 +71,7 @@ common_sources = [
 '2d/pcx.cpp',
 '2d/pixel.cpp',
 '2d/poly.cpp',
-'2d/rect.c',
+'2d/rect.cpp',
 '2d/rle.c',
 '2d/scalec.c',
 '3d/clipper.c',
