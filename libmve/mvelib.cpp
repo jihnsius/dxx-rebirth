@@ -352,7 +352,7 @@ static int _mvefile_open(MVEFILE *file, void *stream)
 /*
  * allocate an MVEFILE
  */
-static void _mvefile_reset(MVEFILE *file)
+static void _mvefile_reset(MVEFILE *)
 {
 #if 0
     file->cur_chunk = NULL;
