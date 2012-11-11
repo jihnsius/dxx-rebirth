@@ -1605,7 +1605,7 @@ int Degroup( void )
 	return 1;
 }
 
-void NextGroup( void )
+int NextGroup( void ) 
 {
 
 	if (num_groups > 0)
@@ -1617,9 +1617,10 @@ void NextGroup( void )
 		mine_changed = 1;
 		}
 	else editor_status("No Next Group\n");
+	return 0;
 }
 
-void PrevGroup( void )
+int PrevGroup( void ) 
 {
 	if (num_groups > 0)
 		{
@@ -1630,6 +1631,7 @@ void PrevGroup( void )
 		mine_changed = 1;
 		}
 	else editor_status("No Previous Group\n");
+	return 0;
 }
 
 // Returns:

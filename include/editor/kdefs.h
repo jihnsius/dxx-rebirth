@@ -50,15 +50,15 @@ void ResetFilename();
 // In group.c
 int LoadGroup();
 int SaveGroup();
-int PrevGroup();
-int NextGroup();
+int PrevGroup(void);
+int NextGroup(void);
 int CreateGroup();
 int SubtractFromGroup();
 int DeleteGroup();
 int MarkGroupSegment();
 int MoveGroup(void);
 int CopyGroup(void);
-int AttachSegmentNew();
+int AttachSegmentNew(void);
 int UngroupSegment();
 int GroupSegment();
 int Degroup();
