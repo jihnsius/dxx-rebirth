@@ -665,7 +665,7 @@ int BigWindowSwitch=0;
 void update_cockpits();
 
 //render a frame for the game
-void game_render_frame_mono(int flip)
+void game_render_frame_mono(int)
 {
 	int no_draw_hud=0;
 

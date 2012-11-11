@@ -125,7 +125,7 @@ common_sources = [
 'main/gamefont.cpp',
 'main/gamemine.cpp',
 'main/gamepal.c',
-'main/gamerend.c',
+'main/gamerend.cpp',
 'main/gamesave.cpp',
 'main/gameseg.cpp',
 'main/gameseq.cpp',
