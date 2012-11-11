@@ -172,7 +172,7 @@ common_sources = [
 'maths/fixc.cpp',
 'maths/rand.cpp',
 'maths/tables.cpp',
-'maths/vecmat.c',
+'maths/vecmat.cpp',
 'mem/mem.c',
 'misc/args.c',
 'misc/dl_list.c',
