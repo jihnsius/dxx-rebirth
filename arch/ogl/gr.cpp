@@ -57,6 +57,9 @@
 #endif
 #endif
 
+#include <algorithm>
+using std::max;
+
 #ifdef OGLES
 int sdl_video_flags = 0;
 #else
@@ -531,8 +534,28 @@ void gr_close()
 
 void ogl_upixelc(int x, int y, int c)
 {
-	GLfloat vertex_array[] = { (x+grd_curcanv->cv_bitmap.bm_x)/(float)last_width, 1.0-(y+grd_curcanv->cv_bitmap.bm_y)/(float)last_height };
-	GLfloat color_array[] = { CPAL2Tr(c), CPAL2Tg(c), CPAL2Tb(c), 1.0, CPAL2Tr(c), CPAL2Tg(c), CPAL2Tb(c), 1.0, CPAL2Tr(c), CPAL2Tg(c), CPAL2Tb(c), 1.0, CPAL2Tr(c), CPAL2Tg(c), CPAL2Tb(c), 1.0 };
+	GLfloat vertex_array[] = {
+		static_cast<float>((x+grd_curcanv->cv_bitmap.bm_x)/(float)last_width),
+		static_cast<float>(1.0-(y+grd_curcanv->cv_bitmap.bm_y)/(float)last_height)
+	};
+	GLfloat color_array[] = {
+		static_cast<float>(CPAL2Tr(c)),
+		static_cast<float>(CPAL2Tg(c)),
+		static_cast<float>(CPAL2Tb(c)),
+		1.0,
+		static_cast<float>(CPAL2Tr(c)),
+		static_cast<float>(CPAL2Tg(c)),
+		static_cast<float>(CPAL2Tb(c)),
+		1.0,
+		static_cast<float>(CPAL2Tr(c)),
+		static_cast<float>(CPAL2Tg(c)),
+		static_cast<float>(CPAL2Tb(c)),
+		1.0,
+		static_cast<float>(CPAL2Tr(c)),
+		static_cast<float>(CPAL2Tg(c)),
+		static_cast<float>(CPAL2Tb(c)),
+		1.0
+	};
 
 	r_upixelc++;
 	OGL_DISABLE(TEXTURE_2D);
@@ -610,7 +633,24 @@ void ogl_urect(int left,int top,int right,int bot)
 void ogl_ulinec(int left,int top,int right,int bot,int c)
 {
 	GLfloat xo,yo,xf,yf;
-	GLfloat color_array[] = { CPAL2Tr(c), CPAL2Tg(c), CPAL2Tb(c), (grd_curcanv->cv_fade_level >= GR_FADE_OFF)?1.0:1.0 - (float)grd_curcanv->cv_fade_level / ((float)GR_FADE_LEVELS - 1.0), CPAL2Tr(c), CPAL2Tg(c), CPAL2Tb(c), (grd_curcanv->cv_fade_level >= GR_FADE_OFF)?1.0:1.0 - (float)grd_curcanv->cv_fade_level / ((float)GR_FADE_LEVELS - 1.0), CPAL2Tr(c), CPAL2Tg(c), CPAL2Tb(c), 1.0, CPAL2Tr(c), CPAL2Tg(c), CPAL2Tb(c), (grd_curcanv->cv_fade_level >= GR_FADE_OFF)?1.0:1.0 - (float)grd_curcanv->cv_fade_level / ((float)GR_FADE_LEVELS - 1.0) };
+	GLfloat color_array[] = {
+		static_cast<float>(CPAL2Tr(c)),
+		static_cast<float>(CPAL2Tg(c)),
+		static_cast<float>(CPAL2Tb(c)),
+		static_cast<float>((grd_curcanv->cv_fade_level >= GR_FADE_OFF)?1.0:1.0 - (float)grd_curcanv->cv_fade_level / ((float)GR_FADE_LEVELS - 1.0)),
+		static_cast<float>(CPAL2Tr(c)),
+		static_cast<float>(CPAL2Tg(c)),
+		static_cast<float>(CPAL2Tb(c)),
+		static_cast<float>((grd_curcanv->cv_fade_level >= GR_FADE_OFF)?1.0:1.0 - (float)grd_curcanv->cv_fade_level / ((float)GR_FADE_LEVELS - 1.0)),
+		static_cast<float>(CPAL2Tr(c)),
+		static_cast<float>(CPAL2Tg(c)),
+		static_cast<float>(CPAL2Tb(c)),
+		1.0,
+		static_cast<float>(CPAL2Tr(c)),
+		static_cast<float>(CPAL2Tg(c)),
+		static_cast<float>(CPAL2Tb(c)),
+		static_cast<float>((grd_curcanv->cv_fade_level >= GR_FADE_OFF)?1.0:1.0 - (float)grd_curcanv->cv_fade_level / ((float)GR_FADE_LEVELS - 1.0))
+	};
 	GLfloat vertex_array[] = { 0.0, 0.0, 0.0, 0.0 };
 
 	glEnableClientState(GL_VERTEX_ARRAY);

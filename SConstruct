@@ -256,7 +256,7 @@ arch_sdlmixer = [
 
 # for opengl
 arch_ogl_sources = [
-'arch/ogl/gr.c',
+'arch/ogl/gr.cpp',
 'arch/ogl/ogl.cpp',
 ]
 
