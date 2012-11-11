@@ -889,7 +889,7 @@ static void ai_fire_laser_at_player(dxxobject *obj, vms_vector *fire_point, int 
 
 	//	Don't let the boss fire while in death roll.  Sorry, this is the easiest way to do this.
 	//	If you try to key the boss off obj->ctype.ai_info.dying_start_time, it will hose the endlevel stuff.
-	if (Boss_dying_start_time & Robot_info[obj->id].boss_flag)
+	if (Boss_dying_start_time && Robot_info[obj->id].boss_flag)
 		return;
 
 	//	If player is cloaked, maybe don't fire based on how long cloaked and randomness.
