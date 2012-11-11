@@ -7,6 +7,7 @@
 #define __attribute_nonnull __attribute__((nonnull))
 #define __attribute_malloc __attribute__((malloc))
 #define __attribute_warn_unused_result __attribute__((warn_unused_result))
+#define __attribute_used __attribute__((used))
 #define __pack__ __attribute__((packed))
 /*
  * The unaligned forms violate strict aliasing, which triggers a warning
@@ -21,6 +22,7 @@
 #define __attribute_nonnull
 #define __attribute_malloc
 #define __attribute_warn_unused_result
+#define __attribute_used
 #if defined(_MSC_VER)
 # pragma pack(push, packing)
 # pragma pack(1)

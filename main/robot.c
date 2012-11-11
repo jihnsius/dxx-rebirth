@@ -144,8 +144,10 @@ int robot_get_anim_state(const jointpos **jp_list_ptr,int robot_type,int gun_num
 }
 
 
+#ifndef NDEBUG
 //for test, set a robot to a specific state
-void set_robot_state(dxxobject *obj,int state)
+static void set_robot_state(dxxobject *obj,int state) __attribute_used__;
+static void set_robot_state(dxxobject *obj,int state)
 {
 	int g,j,jo;
 	robot_info *ri;
@@ -171,6 +173,7 @@ void set_robot_state(dxxobject *obj,int state)
 		}
 	}
 }
+#endif
 
 //set the animation angles for this robot.  Gun fields of robot info must
 //be filled in.

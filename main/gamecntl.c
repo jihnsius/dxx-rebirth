@@ -1314,8 +1314,8 @@ kasf_done: ;
 }
 
 #ifndef RELEASE
-
-void kill_all_snipers(void)
+static void kill_all_snipers(void) __attribute_used__;
+static void kill_all_snipers(void)
 {
 	int     i, dead_count=0;
 
@@ -1330,7 +1330,8 @@ void kill_all_snipers(void)
 	HUD_init_message(HM_DEFAULT, "%i robots toasted!", dead_count);
 }
 
-void kill_thief(void)
+static void kill_thief(void) __attribute_used__;
+static void kill_thief(void)
 {
 	int     i;
 
@@ -1343,7 +1344,8 @@ void kill_thief(void)
 			}
 }
 
-void kill_buddy(void)
+static void kill_buddy(void) __attribute_used__;
+static void kill_buddy(void)
 {
 	int     i;
 
