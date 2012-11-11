@@ -176,7 +176,7 @@ common_sources = [
 'mem/mem.cpp',
 'misc/args.cpp',
 'misc/dl_list.cpp',
-'misc/error.c',
+'misc/error.cpp',
 'misc/hash.c',
 'misc/hmp.c',
 'misc/ignorecase.c',

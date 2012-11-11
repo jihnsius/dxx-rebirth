@@ -52,7 +52,7 @@ void set_warn_func(void (*f)(const char *s))
 }
 
 //uninstall warning function - install default printf
-void clear_warn_func(void (*f)(const char *s))
+void clear_warn_func(void (*)(const char *s))
 {
 	warn_func = warn_printf;
 }
