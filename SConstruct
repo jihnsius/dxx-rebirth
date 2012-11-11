@@ -64,7 +64,7 @@ common_sources = [
 '2d/canvas.c',
 '2d/circle.c',
 '2d/disc.c',
-'2d/font.c',
+'2d/font.cpp',
 '2d/gpixel.c',
 '2d/line.c',
 '2d/palette.c',
