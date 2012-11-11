@@ -138,7 +138,7 @@ common_sources = [
 'main/laser.cpp',
 'main/lighting.cpp',
 'main/menu.cpp',
-'main/mglobal.c',
+'main/mglobal.cpp',
 'main/mission.c',
 'main/morph.c',
 'main/movie.c',
