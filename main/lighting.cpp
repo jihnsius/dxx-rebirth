@@ -46,6 +46,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "rle.h"
 #include "wall.h"
 
+#include <algorithm>
+using std::min;
+using std::max;
+
 int	Do_dynamic_light=1;
 int use_fcd_lighting = 0;
 static int light_frame_count = 0;

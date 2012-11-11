@@ -136,7 +136,7 @@ common_sources = [
 'main/kconfig.c',
 'main/kmatrix.c',
 'main/laser.c',
-'main/lighting.c',
+'main/lighting.cpp',
 'main/menu.c',
 'main/mglobal.c',
 'main/mission.c',
