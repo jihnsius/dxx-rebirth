@@ -377,13 +377,6 @@ int AttachSegment()
 	return 1;
 }
 
-int ForceTotalRedraw()
-{
-	Update_flags = UF_ALL;
-	return 1;
-}
-
-
 #if ORTHO_VIEWS
 int SyncLargeView()
 {
