@@ -143,7 +143,7 @@ common_sources = [
 'main/morph.c',
 'main/movie.c',
 'main/multi.cpp',
-'main/multibot.c',
+'main/multibot.cpp',
 'main/newdemo.c',
 'main/newmenu.c',
 'main/object.c',
