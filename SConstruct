@@ -180,7 +180,7 @@ common_sources = [
 'misc/hash.cpp',
 'misc/hmp.cpp',
 'misc/ignorecase.cpp',
-'misc/physfsrwops.c',
+'misc/physfsrwops.cpp',
 'misc/physfsx.c',
 'misc/strio.c',
 'misc/strutil.c',
