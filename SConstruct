@@ -156,7 +156,7 @@ common_sources = [
 'main/powerup.cpp',
 'main/render.cpp',
 'main/robot.cpp',
-'main/scores.c',
+'main/scores.cpp',
 'main/segment.cpp',
 'main/slew.cpp',
 'main/songs.c',
