@@ -162,7 +162,7 @@ common_sources = [
 'main/songs.cpp',
 'main/state.cpp',
 'main/switch.cpp',
-'main/terrain.c',
+'main/terrain.cpp',
 'main/texmerge.c',
 'main/text.c',
 'main/titles.c',
