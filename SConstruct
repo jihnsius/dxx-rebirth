@@ -96,7 +96,7 @@ common_sources = [
 'iff/iff.cpp',
 'libmve/decoder8.cpp',
 'libmve/decoder16.cpp',
-'libmve/mve_audio.c',
+'libmve/mve_audio.cpp',
 'libmve/mvelib.c',
 'libmve/mveplay.c',
 'main/ai.cpp',
