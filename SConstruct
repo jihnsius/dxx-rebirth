@@ -120,7 +120,7 @@ common_sources = [
 'main/fireball.cpp',
 'main/fuelcen.cpp',
 'main/fvi.cpp',
-'main/game.c',
+'main/game.cpp',
 'main/gamecntl.c',
 'main/gamefont.c',
 'main/gamemine.c',

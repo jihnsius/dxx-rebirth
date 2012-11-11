@@ -1107,7 +1107,7 @@ void game_render_frame();
 window *Game_wind = NULL;
 
 // Event handler for the game
-int game_handler(window *wind, d_event *event, void *data)
+int game_handler(window *, d_event *event, void *data)
 {
 	data = data;
 
@@ -1584,7 +1584,7 @@ void flicker_lights()
 		if (! (TmapInfo[segp->sides[f->sidenum].tmap_num].lighting | TmapInfo[segp->sides[f->sidenum].tmap_num2 & 0x3fff].lighting))
 			continue;
 
-		if (f->timer == 0x80000000)		//disabled
+		if (f->timer == static_cast<fix>(0x80000000))		//disabled
 			continue;
 
 		if ((f->timer -= FrameTime) < 0) {
