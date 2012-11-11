@@ -118,7 +118,7 @@ common_sources = [
 'main/endlevel.cpp',
 'main/escort.cpp',
 'main/fireball.cpp',
-'main/fuelcen.c',
+'main/fuelcen.cpp',
 'main/fvi.c',
 'main/game.c',
 'main/gamecntl.c',
