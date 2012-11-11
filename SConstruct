@@ -147,7 +147,7 @@ common_sources = [
 'main/newdemo.cpp',
 'main/newmenu.cpp',
 'main/object.cpp',
-'main/paging.c',
+'main/paging.cpp',
 'main/physics.c',
 'main/piggy.c',
 'main/player.c',
