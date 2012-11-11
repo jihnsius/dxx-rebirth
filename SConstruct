@@ -185,7 +185,7 @@ common_sources = [
 'misc/strio.cpp',
 'misc/strutil.cpp',
 'texmap/ntmap.cpp',
-'texmap/scanline.c'
+'texmap/scanline.cpp'
 ]
 
 # for editor
