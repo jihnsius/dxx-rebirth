@@ -81,7 +81,7 @@ common_sources = [
 '3d/interp.cpp',
 '3d/matrix.cpp',
 '3d/points.cpp',
-'3d/rod.c',
+'3d/rod.cpp',
 '3d/setup.c',
 'arch/sdl/event.c',
 'arch/sdl/init.c',
