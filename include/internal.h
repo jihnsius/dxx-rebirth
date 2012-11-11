@@ -8,8 +8,6 @@
 /* I assume this ought to be >= MAX_BITMAP_FILES in piggy.h? */
 #define OGL_TEXTURE_LIST_SIZE 20000
 
-extern ogl_texture ogl_texture_list[OGL_TEXTURE_LIST_SIZE];
-
 void ogl_loadbmtexture(grs_bitmap *bm);
 void ogl_init_texture_list_internal(void);
 void ogl_smash_texture_list_internal(void);

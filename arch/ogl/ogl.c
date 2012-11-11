@@ -76,24 +76,27 @@ int last_width=-1,last_height=-1;
 int GL_TEXTURE_2D_enabled=-1;
 GLfloat ogl_maxanisotropy = 0;
 
-int r_texcount = 0, r_cachedtexcount = 0;
+static int r_texcount = 0, r_cachedtexcount = 0;
 #ifdef OGLES
-int ogl_rgba_internalformat = GL_RGBA;
-int ogl_rgb_internalformat = GL_RGB;
+static int ogl_rgba_internalformat = GL_RGBA;
+static int ogl_rgb_internalformat = GL_RGB;
 #else
-int ogl_rgba_internalformat = GL_RGBA8;
-int ogl_rgb_internalformat = GL_RGB8;
+static int ogl_rgba_internalformat = GL_RGBA8;
+static int ogl_rgb_internalformat = GL_RGB8;
 #endif
-GLfloat *sphere_va = NULL, *circle_va = NULL, *disk_va = NULL;
-GLfloat *secondary_lva[3]={NULL, NULL, NULL};
-int r_polyc,r_tpolyc,r_bitmapc,r_ubitbltc,r_upixelc;
+static GLfloat *sphere_va = NULL, *circle_va = NULL, *disk_va = NULL;
+static GLfloat *secondary_lva[3]={NULL, NULL, NULL};
+static int r_polyc,r_tpolyc,r_bitmapc,r_ubitbltc;
+int r_upixelc;
 #define f2glf(x) (f2fl(x))
 
 #define OGL_BINDTEXTURE(a) glBindTexture(GL_TEXTURE_2D, a);
 
 
-ogl_texture ogl_texture_list[OGL_TEXTURE_LIST_SIZE];
-int ogl_texture_list_cur;
+static ogl_texture ogl_texture_list[OGL_TEXTURE_LIST_SIZE];
+static int ogl_texture_list_cur;
+static int ogl_loadtexture (unsigned char *data, int dxo, int dyo, ogl_texture *tex, int bm_flags, int data_format, int texfilt);
+static void ogl_freetexture(ogl_texture *gltexture);
 
 /* some function prototypes */
 
@@ -107,7 +110,7 @@ static void ogl_freetexture(ogl_texture *gltexture);
 
 #ifdef OGLES
 // Replacement for gluPerspective
-void perspective(double fovy, double aspect, double zNear, double zFar)
+static void perspective(double fovy, double aspect, double zNear, double zFar)
 {
 	double xmin, xmax, ymin, ymax;
 
