@@ -99,7 +99,7 @@ common_sources = [
 'libmve/mve_audio.c',
 'libmve/mvelib.c',
 'libmve/mveplay.c',
-'main/ai.c',
+'main/ai.cpp',
 'main/ai2.c',
 'main/aipath.c',
 'main/automap.c',
