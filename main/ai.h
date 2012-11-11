@@ -113,7 +113,7 @@ void do_snipe_frame(dxxobject *objp, fix dist_to_player, int player_visibility, 
 void do_thief_frame(dxxobject *objp, fix dist_to_player, int player_visibility, vms_vector *vec_to_player);
 
 #ifndef NDEBUG
-void force_dump_ai_objects_all(char *msg);
+extern void force_dump_ai_objects_all(const char *msg);
 #else
 #define force_dump_ai_objects_all(msg)
 #endif
