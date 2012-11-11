@@ -26,11 +26,7 @@
 using namespace boost::python;
 
 extern script_control_info ScriptControls;
-
-extern "C"
-{
-	int py_get_glow_path(g3s_point (*)[3], unsigned);
-}
+int py_get_glow_path(g3s_point (*)[3], unsigned);
 
 boost::scoped_ptr<dxx_segment_adaptor::weight_map> g_wmap;
 

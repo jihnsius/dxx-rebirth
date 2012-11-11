@@ -57,6 +57,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "physfsx.h"
 #include "game.h"
 
+#include <algorithm>
+using std::min;
+using std::max;
+
 #define INITIAL_LOCAL_LIGHT (F1_0/4)    // local light value in segment of occurence (of light emission)
 
 #ifdef EDITOR
@@ -347,7 +351,7 @@ static void render_face(segnum_t segnum, int sidenum, int nv, int *vp, int tmap1
 // ----------------------------------------------------------------------------
 //	Only called if editor active.
 //	Used to determine which face was clicked on.
-static void check_face(segnum_t segnum, int sidenum, int facenum, int nv, int *vp, int tmap1, int tmap2, uvl *uvlp)
+static void check_face(segnum_t segnum, int sidenum, int facenum, int nv, int *vp, int tmap1 __attribute_unused, int tmap2 __attribute_unused, uvl *uvlp)
 {
 	int	i;
 
@@ -1429,7 +1433,8 @@ static int sort_func(const sort_item *a,const sort_item *b)
 	obj_a = &Objects[a->objnum];
 	obj_b = &Objects[b->objnum];
 
-	if (abs(delta_dist) < (obj_a->size + obj_b->size)) {		//same position
+	const unsigned sumsize = (obj_a->size + obj_b->size);
+	if ((unsigned)abs(delta_dist) < sumsize) {		//same position
 
 		//these two objects are in the same position.  see if one is a fireball
 		//or laser or something that should plot on top.  Don't do this for
@@ -1438,7 +1443,10 @@ static int sort_func(const sort_item *a,const sort_item *b)
 		if (obj_a->type == OBJ_WEAPON || (obj_a->type == OBJ_FIREBALL && obj_a->id != VCLIP_AFTERBURNER_BLOB))
 			if (!(obj_b->type == OBJ_WEAPON || obj_b->type == OBJ_FIREBALL))
 				return -1;	//a is weapon, b is not, so say a is closer
-			else;				//both are weapons
+			else
+			{
+				//both are weapons 
+			}
 		else
 			if (obj_b->type == OBJ_WEAPON || (obj_b->type == OBJ_FIREBALL && obj_b->id != VCLIP_AFTERBURNER_BLOB))
 				return 1;	//b is weapon, a is not, so say a is farther
@@ -1654,7 +1662,7 @@ static void set_horizontal_angle_bracket(const fix w, const fix h, fix (*x)[3], 
 	(*x)[2] = wcenter + wbias;
 }
 
-static void show_glow_arrow(const fix w, const fix h, const g3s_point *p, const unsigned dir, const unsigned which)
+static void show_glow_arrow(const fix w, const fix h, const g3s_point *, const unsigned dir, const unsigned which)
 {
 	fix x[3], y[3];
 	const fix caller_bias = i2f(which << 4),
@@ -1777,7 +1785,7 @@ static void show_glow_path(const int window_num)
 	if (!grd_curcanv)
 		return;
 	g3s_point glow_point[glow_segment_count];
-unsigned py_get_glow_path(g3s_point (*)[glow_segment_count], int);
+	extern unsigned py_get_glow_path(g3s_point (*)[glow_segment_count], unsigned);
 	const int count = py_get_glow_path(&glow_point, window_num);
 	if (count <= 0)
 		return;
