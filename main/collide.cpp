@@ -76,6 +76,9 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "collide.h"
 #include "escort.h"
 
+#include <algorithm>
+using std::min;
+
 #define STANDARD_EXPL_DELAY (f1_0/4)
 
 static int check_collision_delayfunc_exec()
@@ -92,7 +95,7 @@ static int check_collision_delayfunc_exec()
 
 //	-------------------------------------------------------------------------------------------------------------
 //	The only reason this routine is called (as of 10/12/94) is so Brain guys can open doors.
-static void collide_robot_and_wall( dxxobject * robot, fix hitspeed, segnum_t hitseg, short hitwall, vms_vector * hitpt)
+static void collide_robot_and_wall( dxxobject * robot, fix, segnum_t hitseg, short hitwall, vms_vector *)
 {
 	ai_local		*ailp = &Ai_local_info[robot-Objects];
 
@@ -388,7 +391,7 @@ fix64	Last_volatile_scrape_sound_time = 0;
 //see if wall is volatile or water
 //if volatile, cause damage to player
 //returns 1=lava, 2=water
-int check_volatile_wall(dxxobject *obj,segnum_t segnum,int sidenum,vms_vector *hitpt)
+int check_volatile_wall(dxxobject *obj,segnum_t segnum,int sidenum,vms_vector *)
 {
 	fix tmap_num,d,water;
 
@@ -609,7 +612,7 @@ int check_effect_blowup(segment *seg,int side,vms_vector *pnt, dxxobject *blower
 
 // int Show_seg_and_side = 0;
 
-static void collide_weapon_and_wall( dxxobject * weapon, fix hitspeed, segnum_t hitseg, short hitwall, vms_vector * hitpt)
+static void collide_weapon_and_wall( dxxobject * weapon, fix, segnum_t hitseg, short hitwall, vms_vector * hitpt)
 {
 	segment *seg = &Segments[hitseg];
 	int blew_up;
@@ -859,7 +862,7 @@ static void collide_weapon_and_wall( dxxobject * weapon, fix hitspeed, segnum_t 
 //##	return;
 //##}
 
-static void collide_debris_and_wall( dxxobject * debris, fix hitspeed, segnum_t hitseg, short hitwall, vms_vector * hitpt)	{
+static void collide_debris_and_wall( dxxobject * debris, fix, segnum_t hitseg, short hitwall, vms_vector *)	{
 	if (!PERSISTENT_DEBRIS || TmapInfo[Segments[hitseg].sides[hitwall].tmap_num].damage)
 		explode_object(debris,0);
 	return;
@@ -899,12 +902,12 @@ static void collide_debris_and_wall( dxxobject * debris, fix hitspeed, segnum_t 
 //##}
 
 //	-------------------------------------------------------------------------------------------------------------------
-static void collide_robot_and_robot( dxxobject * robot1, dxxobject * robot2, vms_vector *collision_point ) {
+static void collide_robot_and_robot( dxxobject * robot1, dxxobject * robot2, vms_vector *) {
 	bump_two_objects(robot1, robot2, 1);
 	return;
 }
 
-static void collide_robot_and_controlcen( dxxobject * obj1, dxxobject * obj2, vms_vector *collision_point )
+static void collide_robot_and_controlcen( dxxobject * obj1, dxxobject * obj2, vms_vector *)
 {
 	if (obj1->type == OBJ_ROBOT) {
 		vms_vector	hitvec;
@@ -1071,7 +1074,7 @@ static void collide_player_and_controlcen( dxxobject * controlcen, dxxobject * p
 	return;
 }
 
-static void collide_player_and_marker( dxxobject * marker, dxxobject * playerobj, vms_vector *collision_point )
+static void collide_player_and_marker( dxxobject * marker, dxxobject * playerobj, vms_vector *)
 {
 	if (playerobj->id==Player_num) {
 		int drawn;
@@ -1451,7 +1454,7 @@ static int do_boss_weapon_collision(dxxobject *robot, dxxobject *weapon, vms_vec
 			//	Cause weapon to bounce.
 			//	Make a copy of this weapon, because the physics wants to destroy it.
 			if (!Weapon_info[weapon->id].matter) {
-				new_obj = obj_create(weapon->type, weapon->id, weapon->segnum, &weapon->pos,
+				new_obj = obj_create(static_cast<object_type_t>(weapon->type), weapon->id, weapon->segnum, &weapon->pos,
 					&weapon->orient, weapon->size, weapon->control_type, weapon->movement_type, weapon->render_type);
 
 				if (new_obj != object_none) {
@@ -1668,7 +1671,7 @@ static void collide_robot_and_weapon( dxxobject * robot, dxxobject * weapon, vms
 //##	return;
 //##}
 
-static void collide_hostage_and_player( dxxobject * hostage, dxxobject * plr, vms_vector *collision_point ) {
+static void collide_hostage_and_player( dxxobject * hostage, dxxobject * plr, vms_vector *) {
 	// Give player points, etc.
 	if ( plr == ConsoleObject )	{
 		detect_escort_goal_accomplished(hostage-Objects);
@@ -1878,7 +1881,7 @@ void drop_player_eggs(dxxobject *playerobj)
 
 			int max_count,i;
 
-			max_count = min(Players[pnum].secondary_ammo[PROXIMITY_INDEX], 12);
+			max_count = min(Players[pnum].secondary_ammo[PROXIMITY_INDEX], static_cast<unsigned short>(12u));
 			for (i=0; i<max_count; i++)
 				call_object_create_egg(playerobj, 1, OBJ_POWERUP, POW_HOARD_ORB);
 		}
@@ -2232,7 +2235,7 @@ void collide_robot_and_materialization_center(dxxobject *objp)
 //##}
 
 
-void collide_player_and_powerup( dxxobject * playerobj, dxxobject * powerup, vms_vector *collision_point ) {
+void collide_player_and_powerup( dxxobject * playerobj, dxxobject * powerup, vms_vector *) {
 	if (!Endlevel_sequence && !Player_is_dead && (playerobj->id == Player_num )) {
 		int powerup_used;
 
