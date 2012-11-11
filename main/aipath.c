@@ -1332,49 +1332,6 @@ void attempt_to_resume_path(dxxobject *objp)
 #ifdef EDITOR
 int	Test_size = 1000;
 
-void test_create_path_many(void)
-{
-	point_seg	point_segs[200];
-	short			num_points;
-
-	int			i;
-
-	for (i=0; i<Test_size; i++) {
-		Cursegp = &Segments[(d_rand() * (Highest_segment_index + 1)) / D_RAND_MAX];
-		Markedsegp = &Segments[(d_rand() * (Highest_segment_index + 1)) / D_RAND_MAX];
-		create_path_points(&Objects[0], Cursegp-Segments, Markedsegp-Segments, point_segs, &num_points, -1, 0, 0, -1);
-	}
-
-}
-
-void test_create_path(void)
-{
-	point_seg	point_segs[200];
-	short			num_points;
-
-	create_path_points(&Objects[0], Cursegp-Segments, Markedsegp-Segments, point_segs, &num_points, -1, 0, 0, -1);
-
-}
-
-//	For all segments in mine, create paths to all segments in mine, print results.
-void test_create_all_paths(void)
-{
-	int	start_seg, end_seg;
-	short	resultant_length;
-
-	Point_segs_free_ptr = Point_segs;
-
-	for (start_seg=0; start_seg<=Highest_segment_index-1; start_seg++) {
-		if (Segments[start_seg].segnum != -1) {
-			for (end_seg=start_seg+1; end_seg<=Highest_segment_index; end_seg++) {
-				if (Segments[end_seg].segnum != -1) {
-					create_path_points(&Objects[0], start_seg, end_seg, Point_segs_free_ptr, &resultant_length, -1, 0, 0, -1);
-				}
-			}
-		}
-	}
-}
-
 short	Player_path_length=0;
 int	Player_hide_index=-1;
 int	Player_cur_path_index=0;
