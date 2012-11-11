@@ -96,8 +96,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define THUMBNAIL_H 50
 #define DESC_LENGTH 20
 
-extern void apply_all_changed_light(void);
-
 extern int Do_appearance_effect;
 
 extern int Physics_cheat_flag;
@@ -150,7 +148,7 @@ static void state_object_to_object_rw(dxxobject *obj, object_rw *obj_rw)
 	obj_rw->contains_count= obj->contains_count;
 	obj_rw->matcen_creator= obj->matcen_creator;
 	obj_rw->lifeleft      = obj->lifeleft;
-	
+
 	switch (obj_rw->movement_type)
 	{
 		case MT_PHYSICS:
@@ -172,14 +170,14 @@ static void state_object_to_object_rw(dxxobject *obj, object_rw *obj_rw)
 			obj_rw->mtype.phys_info.turnroll    = obj->mtype.phys_info.turnroll;
 			obj_rw->mtype.phys_info.flags       = obj->mtype.phys_info.flags;
 			break;
-			
+
 		case MT_SPINNING:
 			obj_rw->mtype.spin_rate.x = obj->mtype.spin_rate.x;
 			obj_rw->mtype.spin_rate.y = obj->mtype.spin_rate.y;
 			obj_rw->mtype.spin_rate.z = obj->mtype.spin_rate.z;
 			break;
 	}
-	
+
 	switch (obj_rw->control_type)
 	{
 		case CT_WEAPON:
@@ -194,7 +192,7 @@ static void state_object_to_object_rw(dxxobject *obj, object_rw *obj_rw)
 			obj_rw->ctype.laser_info.track_goal       = obj->ctype.laser_info.track_goal;
 			obj_rw->ctype.laser_info.multiplier       = obj->ctype.laser_info.multiplier;
 			break;
-			
+
 		case CT_EXPLOSION:
 			obj_rw->ctype.expl_info.spawn_time    = obj->ctype.expl_info.spawn_time;
 			obj_rw->ctype.expl_info.delete_time   = obj->ctype.expl_info.delete_time;
@@ -203,13 +201,13 @@ static void state_object_to_object_rw(dxxobject *obj, object_rw *obj_rw)
 			obj_rw->ctype.expl_info.prev_attach   = obj->ctype.expl_info.prev_attach;
 			obj_rw->ctype.expl_info.next_attach   = obj->ctype.expl_info.next_attach;
 			break;
-			
+
 		case CT_AI:
 		{
 			int i;
-			obj_rw->ctype.ai_info.behavior               = obj->ctype.ai_info.behavior; 
+			obj_rw->ctype.ai_info.behavior               = obj->ctype.ai_info.behavior;
 			for (i = 0; i < MAX_AI_FLAGS; i++)
-				obj_rw->ctype.ai_info.flags[i]       = obj->ctype.ai_info.flags[i]; 
+				obj_rw->ctype.ai_info.flags[i]       = obj->ctype.ai_info.flags[i];
 			obj_rw->ctype.ai_info.hide_segment           = obj->ctype.ai_info.hide_segment;
 			obj_rw->ctype.ai_info.hide_index             = obj->ctype.ai_info.hide_index;
 			obj_rw->ctype.ai_info.path_length            = obj->ctype.ai_info.path_length;
@@ -223,11 +221,11 @@ static void state_object_to_object_rw(dxxobject *obj, object_rw *obj_rw)
 				obj_rw->ctype.ai_info.dying_start_time = obj->ctype.ai_info.dying_start_time - GameTime64;
 			break;
 		}
-			
+
 		case CT_LIGHT:
 			obj_rw->ctype.light_info.intensity = obj->ctype.light_info.intensity;
 			break;
-			
+
 		case CT_POWERUP:
 			obj_rw->ctype.powerup_info.count         = obj->ctype.powerup_info.count;
 			if (obj->ctype.powerup_info.creation_time - GameTime64 < F1_0*(-18000))
@@ -237,7 +235,7 @@ static void state_object_to_object_rw(dxxobject *obj, object_rw *obj_rw)
 			obj_rw->ctype.powerup_info.flags         = obj->ctype.powerup_info.flags;
 			break;
 	}
-	
+
 	switch (obj_rw->render_type)
 	{
 		case RT_MORPH:
@@ -259,7 +257,7 @@ static void state_object_to_object_rw(dxxobject *obj, object_rw *obj_rw)
 			obj_rw->rtype.pobj_info.alt_textures             = obj->rtype.pobj_info.alt_textures;
 			break;
 		}
-			
+
 		case RT_WEAPON_VCLIP:
 		case RT_HOSTAGE:
 		case RT_POWERUP:
@@ -268,10 +266,10 @@ static void state_object_to_object_rw(dxxobject *obj, object_rw *obj_rw)
 			obj_rw->rtype.vclip_info.frametime = obj->rtype.vclip_info.frametime;
 			obj_rw->rtype.vclip_info.framenum  = obj->rtype.vclip_info.framenum;
 			break;
-			
+
 		case RT_LASER:
 			break;
-			
+
 	}
 }
 
@@ -311,7 +309,7 @@ static void state_object_rw_to_object(object_rw *obj_rw, dxxobject *obj)
 	obj->contains_count= obj_rw->contains_count;
 	obj->matcen_creator= obj_rw->matcen_creator;
 	obj->lifeleft      = obj_rw->lifeleft;
-	
+
 	switch (obj->movement_type)
 	{
 		case MT_PHYSICS:
@@ -333,14 +331,14 @@ static void state_object_rw_to_object(object_rw *obj_rw, dxxobject *obj)
 			obj->mtype.phys_info.turnroll    = obj_rw->mtype.phys_info.turnroll;
 			obj->mtype.phys_info.flags       = obj_rw->mtype.phys_info.flags;
 			break;
-			
+
 		case MT_SPINNING:
 			obj->mtype.spin_rate.x = obj_rw->mtype.spin_rate.x;
 			obj->mtype.spin_rate.y = obj_rw->mtype.spin_rate.y;
 			obj->mtype.spin_rate.z = obj_rw->mtype.spin_rate.z;
 			break;
 	}
-	
+
 	switch (obj->control_type)
 	{
 		case CT_WEAPON:
@@ -353,7 +351,7 @@ static void state_object_rw_to_object(object_rw *obj_rw, dxxobject *obj)
 			obj->ctype.laser_info.track_goal       = obj_rw->ctype.laser_info.track_goal;
 			obj->ctype.laser_info.multiplier       = obj_rw->ctype.laser_info.multiplier;
 			break;
-			
+
 		case CT_EXPLOSION:
 			obj->ctype.expl_info.spawn_time    = obj_rw->ctype.expl_info.spawn_time;
 			obj->ctype.expl_info.delete_time   = obj_rw->ctype.expl_info.delete_time;
@@ -362,13 +360,13 @@ static void state_object_rw_to_object(object_rw *obj_rw, dxxobject *obj)
 			obj->ctype.expl_info.prev_attach   = obj_rw->ctype.expl_info.prev_attach;
 			obj->ctype.expl_info.next_attach   = obj_rw->ctype.expl_info.next_attach;
 			break;
-			
+
 		case CT_AI:
 		{
 			int i;
-			obj->ctype.ai_info.behavior               = obj_rw->ctype.ai_info.behavior; 
+			obj->ctype.ai_info.behavior               = obj_rw->ctype.ai_info.behavior;
 			for (i = 0; i < MAX_AI_FLAGS; i++)
-				obj->ctype.ai_info.flags[i]       = obj_rw->ctype.ai_info.flags[i]; 
+				obj->ctype.ai_info.flags[i]       = obj_rw->ctype.ai_info.flags[i];
 			obj->ctype.ai_info.hide_segment           = obj_rw->ctype.ai_info.hide_segment;
 			obj->ctype.ai_info.hide_index             = obj_rw->ctype.ai_info.hide_index;
 			obj->ctype.ai_info.path_length            = obj_rw->ctype.ai_info.path_length;
@@ -379,18 +377,18 @@ static void state_object_rw_to_object(object_rw *obj_rw, dxxobject *obj)
 			obj->ctype.ai_info.dying_start_time       = obj_rw->ctype.ai_info.dying_start_time;
 			break;
 		}
-			
+
 		case CT_LIGHT:
 			obj->ctype.light_info.intensity = obj_rw->ctype.light_info.intensity;
 			break;
-			
+
 		case CT_POWERUP:
 			obj->ctype.powerup_info.count         = obj_rw->ctype.powerup_info.count;
 			obj->ctype.powerup_info.creation_time = obj_rw->ctype.powerup_info.creation_time;
 			obj->ctype.powerup_info.flags         = obj_rw->ctype.powerup_info.flags;
 			break;
 	}
-	
+
 	switch (obj->render_type)
 	{
 		case RT_MORPH:
@@ -412,7 +410,7 @@ static void state_object_rw_to_object(object_rw *obj_rw, dxxobject *obj)
 			obj->rtype.pobj_info.alt_textures             = obj_rw->rtype.pobj_info.alt_textures;
 			break;
 		}
-			
+
 		case RT_WEAPON_VCLIP:
 		case RT_HOSTAGE:
 		case RT_POWERUP:
@@ -421,10 +419,10 @@ static void state_object_rw_to_object(object_rw *obj_rw, dxxobject *obj)
 			obj->rtype.vclip_info.frametime = obj_rw->rtype.vclip_info.frametime;
 			obj->rtype.vclip_info.framenum  = obj_rw->rtype.vclip_info.framenum;
 			break;
-			
+
 		case RT_LASER:
 			break;
-			
+
 	}
 }
 
@@ -533,7 +531,7 @@ static int state_callback(newmenu *menu, d_event *event, grs_bitmap *sc_bmp[])
 {
 	newmenu_item *items = newmenu_get_items(menu);
 	int citem = newmenu_get_citem(menu);
-	
+
 	if ( (citem > 0) && (event->type == EVENT_NEWMENU_DRAW) )
 	{
 		if ( sc_bmp[citem-1] )	{
@@ -550,10 +548,10 @@ static int state_callback(newmenu *menu, d_event *event, grs_bitmap *sc_bmp[])
 #endif
 			gr_free_canvas(temp_canv);
 		}
-		
+
 		return 1;
 	}
-	
+
 	return 0;
 }
 
@@ -632,7 +630,7 @@ static int state_get_savegame_filename(char * fname, char * dsc, char * caption,
 				}
 			}
 			PHYSFS_close(fp);
-		} 
+		}
 		if (!valid) {
 			strcpy( desc[i], TXT_EMPTY );
 			//rpad_string( desc[i], DESC_LENGTH-1 );
@@ -785,7 +783,7 @@ int state_save_all(int secret_save, char *filename_override, int blind_save)
 			return 0;
 		}
 	}
-		
+
 	//	MK, 1/1/96
 	//	Do special secret level stuff.
 	//	If secret.sgc exists, then copy it to Nsecret.sgc (where N = filenum).
@@ -915,8 +913,8 @@ int state_save_all_sub(char *filename, char *desc)
 	{
 	 	ubyte color = 0;
 	 	for ( i=0; i<THUMBNAIL_W*THUMBNAIL_H; i++ )
-			PHYSFS_write(fp, &color, sizeof(ubyte), 1);		
-	} 
+			PHYSFS_write(fp, &color, sizeof(ubyte), 1);
+	}
 
 // Save the Between levels flag...
 	i = 0;
@@ -962,7 +960,7 @@ int state_save_all_sub(char *filename, char *desc)
 		if ( (Objects[i].type != OBJ_NONE) && (Objects[i].render_type==RT_MORPH))	{
 			morph_data *md;
 			md = find_morph_data(&Objects[i]);
-			if (md) {					
+			if (md) {
 				md->obj->control_type = md->morph_save_control_type;
 				md->obj->movement_type = md->morph_save_movement_type;
 				md->obj->render_type = RT_POLYOBJ;
@@ -990,7 +988,7 @@ int state_save_all_sub(char *filename, char *desc)
 		PHYSFS_write(fp, obj_rw, sizeof(object_rw), 1);
 		d_free(obj_rw);
 	}
-	
+
 //Save wall info
 	i = Num_walls;
 	PHYSFS_write(fp, &i, sizeof(int), 1);
@@ -1116,7 +1114,7 @@ int state_save_all_sub(char *filename, char *desc)
 	}
 
 	PHYSFS_close(fp);
-	
+
 	start_time();
 
 	return 1;
@@ -1167,7 +1165,7 @@ int state_restore_all(int in_game, int secret_restore, char *filename_override)
 		start_time();
 		return 0;
 	}
-	
+
 	//	MK, 1/1/96
 	//	Do special secret level stuff.
 	//	If Nsecret.sgc (where N = filenum) exists, then copy it to secret.sgc.
@@ -1181,7 +1179,7 @@ int state_restore_all(int in_game, int secret_restore, char *filename_override)
 				fc = (filenum-10) + 'a';
 			else
 				fc = '0' + filenum;
-			
+
 			snprintf(temp_fname, PATH_MAX, GameArg.SysUsePlayersDir? "Players/%csecret.sgc" : "%csecret.sgc", fc);
 
 			if (PHYSFSX_exists(temp_fname,0))
@@ -1207,13 +1205,6 @@ int state_restore_all(int in_game, int secret_restore, char *filename_override)
 
 	return state_restore_all_sub(filename, secret_restore);
 }
-
-extern void init_player_stats_new_ship(ubyte pnum);
-
-void ShowLevelIntro(int level_num);
-
-extern void do_cloak_invul_secret_stuff(fix64 old_gametime);
-extern void copy_defaults_to_robot(dxxobject *objp);
 
 int state_restore_all_sub(char *filename, int secret_restore)
 {
@@ -1495,7 +1486,7 @@ int state_restore_all_sub(char *filename, int secret_restore)
 	Dead_controlcen_object_num = PHYSFSX_readSXE32(fp, swap);
 	if (Control_center_destroyed)
 		Total_countdown_time = Countdown_timer/F0_5; // we do not need to know this, but it should not be 0 either...
-		
+
 
 	// Restore the AI state
 	ai_restore_state( fp, version, swap );
@@ -1621,7 +1612,7 @@ int state_restore_all_sub(char *filename, int secret_restore)
 		dxxobject restore_objects[MAX_PLAYERS];
 		int coop_got_nplayers = 0;
 
-		for (i = 0; i < MAX_PLAYERS; i++) 
+		for (i = 0; i < MAX_PLAYERS; i++)
 		{
 			player_rw *pl_rw;
 			dxxobject *obj;
@@ -1635,7 +1626,7 @@ int state_restore_all_sub(char *filename, int secret_restore)
 			player_rw_swap(pl_rw, swap);
 			state_player_rw_to_player(pl_rw, &restore_players[i]);
 			d_free(pl_rw);
-			
+
 			// make all (previous) player objects to ghosts but store them first for later remapping
 			obj = &Objects[restore_players[i].objnum];
 			if (restore_players[i].connected == CONNECT_PLAYING && obj->type == OBJ_PLAYER)
@@ -1654,10 +1645,10 @@ int state_restore_all_sub(char *filename, int secret_restore)
 				{
 					dxxobject *obj;
 					int sav_objnum = Players[i].objnum;
-					
+
 					memcpy(&Players[i], &restore_players[j], sizeof(player));
 					Players[i].objnum = sav_objnum;
-					
+
 					coop_player_got[i] = 1;
 					coop_got_nplayers++;
 

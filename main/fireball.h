@@ -74,5 +74,6 @@ void drop_afterburner_blobs(dxxobject *obj, int count, fix size_scale, fix lifet
  * reads n expl_wall structs from a PHYSFS_file and swaps if specified
  */
 extern void expl_wall_read_n_swap(expl_wall *ew, int n, int swap, PHYSFS_file *fp);
+int pick_connected_segment(dxxobject *objp, int max_depth);
 
 #endif /* _FIREBALL_H */

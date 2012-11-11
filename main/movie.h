@@ -47,6 +47,7 @@ void init_movies();
 
 int init_subtitles(char *filename);
 void close_subtitles();
+void init_extra_robot_movie(char *filename);
 
 extern int MovieHires;      // specifies whether movies use low or high res
 

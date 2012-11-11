@@ -266,6 +266,22 @@ typedef struct game_cheats
 } __pack__ game_cheats;
 extern game_cheats cheats;
 void game_disable_cheats();
+struct segment;
+void move_player_2_segment(struct segment *seg, int side);
+int allowed_to_fire_laser(void);
+int allowed_to_fire_flare(void);
+int allowed_to_fire_missile(void);
+void	check_rear_view(void);
+window *game_setup(void);
+int create_special_path(void);
+int which_bomb();
+int ReadControls(d_event *event);
+void toggle_cockpit(void);
+void game_render_frame();
+
+#ifdef EDITOR
+void dump_used_textures_all();
+#endif
 
 #ifdef __cplusplus
 }

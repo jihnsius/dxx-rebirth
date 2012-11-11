@@ -67,7 +67,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 //version 18 -> 19: added automap-highres flag
 //version 19 -> 20: added kconfig data for windows joysticks
 //version 20 -> 21: save seperate config types for DOS & Windows
-//version 21 -> 22: save lifetime netstats 
+//version 21 -> 22: save lifetime netstats
 //version 22 -> 23: ??
 //version 23 -> 24: add name of joystick for windows version.
 
@@ -77,7 +77,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 struct player_config PlayerCfg;
 int get_lifetime_checksum (int a,int b);
-extern void InitWeaponOrdering();
 
 int new_player_config()
 {
@@ -129,7 +128,7 @@ int new_player_config()
 	strcpy(PlayerCfg.NetworkMessageMacro[3], "This one's headed for Uranus");
 	PlayerCfg.NetlifeKills=0; PlayerCfg.NetlifeKilled=0;
 	#endif
-	
+
 	return 1;
 }
 
@@ -156,7 +155,7 @@ static int read_player_d2x(char *filename)
 			PHYSFSX_fgets(line,50,f);
 			word=splitword(line,'=');
 			strupr(word);
-	
+
 			while(!strstr(word,"END") && !PHYSFS_eof(f))
 			{
 				if(!strcmp(word,"SENSITIVITY0"))
@@ -195,7 +194,7 @@ static int read_player_d2x(char *filename)
 			PHYSFSX_fgets(line,50,f);
 			word=splitword(line,'=');
 			strupr(word);
-	
+
 			while(!strstr(word,"END") && !PHYSFS_eof(f))
 			{
 				if(!strcmp(word,"FLIGHTSIM"))
@@ -232,10 +231,10 @@ static int read_player_d2x(char *filename)
 			{
 				int kc1=0,kc2=0,kc3=0;
 				int i=atoi(word);
-				
+
 				if(i==0) i=10;
 					i=(i-1)*3;
-		
+
 				sscanf(line,"0x%x,0x%x,0x%x",&kc1,&kc2,&kc3);
 				PlayerCfg.KeySettingsD2X[i]   = kc1;
 				PlayerCfg.KeySettingsD2X[i+1] = kc2;
@@ -252,7 +251,7 @@ static int read_player_d2x(char *filename)
 			PHYSFSX_fgets(line,50,f);
 			word=splitword(line,'=');
 			strupr(word);
-	
+
 			while(!strstr(word,"END") && !PHYSFS_eof(f))
 			{
 				if(!strcmp(word,"HUD"))
@@ -275,7 +274,7 @@ static int read_player_d2x(char *filename)
 			PHYSFSX_fgets(line,50,f);
 			word=splitword(line,'=');
 			strupr(word);
-	
+
 			while(!strstr(word,"END") && !PHYSFS_eof(f))
 			{
 				if(!strcmp(word,"ESCORTHOTKEYS"))
@@ -306,7 +305,7 @@ static int read_player_d2x(char *filename)
 			PHYSFSX_fgets(line,50,f);
 			word=splitword(line,'=');
 			strupr(word);
-	
+
 			while(!strstr(word,"END") && !PHYSFS_eof(f))
 			{
 				if(!strcmp(word,"ALPHAEFFECTS"))
@@ -377,13 +376,13 @@ static int write_player_d2x(char *filename)
 	tempfile[strlen(tempfile)-4]=0;
 	strcat(tempfile,".pl$");
 	fout=PHYSFSX_openWriteBuffered(tempfile);
-	
+
 	if (!fout && GameArg.SysUsePlayersDir)
 	{
 		PHYSFS_mkdir("Players/");	//try making directory
 		fout=PHYSFSX_openWriteBuffered(tempfile);
 	}
-	
+
 	if(fout)
 	{
 		PHYSFSX_printf(fout,"[D2X OPTIONS]\n");
@@ -448,7 +447,7 @@ static int write_player_d2x(char *filename)
 		PHYSFSX_printf(fout,"plx version=%s\n", VERSION);
 		PHYSFSX_printf(fout,"[end]\n");
 		PHYSFSX_printf(fout,"[end]\n");
-		
+
 		PHYSFS_close(fout);
 		if(rc==0)
 		{
@@ -571,7 +570,7 @@ int read_player_file()
 			goto read_player_file_failed;
 
 		PlayerCfg.ControlType = control_type_dos;
-	
+
 		for (i=0;i<11;i++)
 		{
 			PlayerCfg.PrimaryOrder[i] = PHYSFSX_readByte(file);
@@ -644,7 +643,7 @@ int read_player_file()
 	{
 		char buf[128];
 
-		if (player_file_version >= 24) 
+		if (player_file_version >= 24)
 			PHYSFSX_fgets(buf, sizeof(buf), file);			// Just read it in fpr DPS.
 	}
 
@@ -670,8 +669,8 @@ int read_player_file()
 }
 
 
-//finds entry for this level in table.  if not found, returns ptr to 
-//empty entry.  If no empty entries, takes over last one 
+//finds entry for this level in table.  if not found, returns ptr to
+//empty entry.  If no empty entries, takes over last one
 static int find_hli_entry()
 {
 	int i;
@@ -721,7 +720,7 @@ int get_highest_level(void)
 	if (strlen(Current_mission_filename)==0 )	{
 		for (i=0;i<PlayerCfg.NHighestLevels;i++)
 			if (!stricmp(PlayerCfg.HighestLevels[i].Shortname, "DESTSAT")) 	//	Destination Saturn.
-		 		highest_saturn_level			= PlayerCfg.HighestLevels[i].LevelNum; 
+		 		highest_saturn_level			= PlayerCfg.HighestLevels[i].LevelNum;
 	}
 #endif
    i			= PlayerCfg.HighestLevels[find_hli_entry()].LevelNum;
@@ -755,7 +754,7 @@ int write_player_file()
 	PHYSFS_writeULE32(file, SAVE_FILE_ID);
 	PHYSFS_writeULE16(file, PLAYER_FILE_VERSION);
 
-	
+
 	PHYSFS_seek(file,PHYSFS_tell(file)+2*(sizeof(PHYSFS_uint16))); // skip Game_window_w, Game_window_h
 	PHYSFSX_writeU8(file, PlayerCfg.DefaultDifficulty);
 	PHYSFSX_writeU8(file, PlayerCfg.AutoLeveling);

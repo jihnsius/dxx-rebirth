@@ -44,7 +44,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "effects.h"
 #include "physics.h" 
 #include "byteswap.h"
-
+#include "escort.h"
 
 
 int multi_add_controlled_robot(int objnum, int agitation);
@@ -76,7 +76,6 @@ sbyte robot_fire_buf[MAX_ROBOTS_CONTROLLED][18+3];
 #define MULTI_ROBOT_PRIORITY(objnum, pnum) (((objnum % 4) + pnum) % N_players)
 
 extern void multi_send_stolen_items();
-extern int multi_powerup_is_allowed (int);
 
 //#define MULTI_ROBOT_PRIORITY(objnum, pnum) multi_robot_priority(objnum, pnum)
 //int multi_robot_priority(int objnum, int pnum)
@@ -798,8 +797,6 @@ multi_do_robot_fire(char *buf)
 	else	
 		Laser_create_new_easy( &fire, &gun_point, botnum, robptr->weapon_type, 1);
 }
-
-extern void drop_stolen_items (dxxobject *);
 
 int
 multi_explode_robot_sub(int botnum, int killer,char isthief)

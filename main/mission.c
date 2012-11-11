@@ -38,6 +38,8 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "u_mem.h"
 #include "ignorecase.h"
 #include "physfsx.h"
+#include "bm.h"
+#include "movie.h"
 
 //mission list entry
 typedef struct mle {
@@ -587,7 +589,6 @@ static void free_mission_list(mle *mission_list)
 	num_missions = 0;
 }
 
-void init_extra_robot_movie(char *filename);
 int read_hamfile();
 
 //values for built-in mission
@@ -821,7 +822,6 @@ static int load_mission(mle *mission)
 
 	if (Current_mission->enhanced) {
 		char t[50];
-		extern void bm_read_extra_robots();
 		sprintf(t,"%s.ham",Current_mission_filename);
 		bm_read_extra_robots(t, Current_mission->enhanced);
 		init_extra_robot_movie(Current_mission_filename);

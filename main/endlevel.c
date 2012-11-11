@@ -968,7 +968,7 @@ fix satellite_size = i2f(400);
 #define SATELLITE_WIDTH		satellite_size
 #define SATELLITE_HEIGHT	((satellite_size*9)/4)		//((satellite_size*5)/2)
 
-void render_external_scene(fix eye_offset)
+static void render_external_scene(fix eye_offset)
 {
 #ifdef OGL
 	int orig_Render_depth = Render_depth;

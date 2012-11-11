@@ -66,6 +66,7 @@ typedef struct _ogl_texture {
 
 extern ogl_texture* ogl_get_free_texture();
 void ogl_init_texture(ogl_texture* t, int w, int h, int flags);
+void ogl_cache_polymodel_textures(int model_num);
 
 extern int ogl_rgba_internalformat;
 extern int ogl_rgb_internalformat;

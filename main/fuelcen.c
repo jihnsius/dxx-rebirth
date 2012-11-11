@@ -214,7 +214,7 @@ void fuelcen_activate( segment * segp, int station_type )
 		matcen_create( segp);
 	else
 		fuelcen_create( segp);
-	
+
 }
 
 //	The lower this number is, the more quickly the center can be re-triggered.
@@ -350,7 +350,7 @@ dxxobject * create_morph_robot( segment *segp, vms_vector *object_pos, int objec
 	obj->mtype.phys_info.flags |= (PF_LEVELLING);
 
 	obj->shields = Robot_info[obj->id].strength;
-	
+
 	default_behavior = Robot_info[obj->id].behavior;
 
 	init_ai_object(obj-Objects, default_behavior, -1 );		//	Note, -1 = segment this robot goes to to hide, should probably be something useful
@@ -431,7 +431,7 @@ static void robotmaker_proc( FuelCenter * robotcen )
 	case 0:		// Wait until next robot can generate
 		if (Game_mode & GM_MULTI)
 		{
-			top_time = ROBOT_GEN_TIME;	
+			top_time = ROBOT_GEN_TIME;
 		}
 		else
 		{
@@ -539,13 +539,13 @@ static void robotmaker_proc( FuelCenter * robotcen )
 					// Make object faces player...
 					vm_vec_sub( &direction, &ConsoleObject->pos,&obj->pos );
 					vm_vector_2_matrix( &obj->orient, &direction, &obj->orient.uvec, NULL);
-	
+
 					morph_start( obj );
 					//robotcen->last_created_obj = obj;
 					//robotcen->last_created_sig = robotcen->last_created_obj->signature;
 				}
 			}
- 
+
 		}
 		break;
 	default:
@@ -561,7 +561,7 @@ void fuelcen_update_all()
 {
 	int i;
 	fix AmountToreplenish;
-	
+
 	AmountToreplenish = fixmul(FrameTime,Fuelcen_refill_speed);
 
 	for (i=0; i<Num_fuelcenters; i++ )	{
@@ -570,7 +570,7 @@ void fuelcen_update_all()
 				robotmaker_proc( &Station[i] );
 		} else if ( Station[i].Type == SEGMENT_IS_CONTROLCEN )	{
 			//controlcen_proc( &Station[i] );
-	
+
 		} else if ( (Station[i].MaxCapacity > 0) && (PlayerSegment!=&Segments[Station[i].segnum]) )	{
 			if ( Station[i].Capacity < Station[i].MaxCapacity )	{
  				Station[i].Capacity += AmountToreplenish;
@@ -751,8 +751,6 @@ void init_all_matcens(void)
 }
 
 #ifdef NETWORK
-extern void multi_send_capture_bonus (char);
-
 void fuelcen_check_for_goal(segment *segp)
 {
 	segment2	*seg2p = &Segment2s[segp-Segments];
@@ -772,7 +770,7 @@ void fuelcen_check_for_goal(segment *segp)
 	if ( seg2p->special==SEGMENT_IS_GOAL_RED) {
 
 			if ((get_team(Player_num)==TEAM_RED) && (Players[Player_num].flags & PLAYER_FLAGS_FLAG))
-			 {		
+			 {
 				multi_send_capture_bonus (Player_num);
 				Players[Player_num].flags &=(~(PLAYER_FLAGS_FLAG));
 				maybe_drop_net_powerup (POW_FLAG_BLUE);
@@ -790,7 +788,7 @@ void fuelcen_check_for_hoard_goal(segment *segp)
    if (Player_is_dead)
 		return;
 
-	if (seg2p->special==SEGMENT_IS_GOAL_BLUE || seg2p->special==SEGMENT_IS_GOAL_RED  )	
+	if (seg2p->special==SEGMENT_IS_GOAL_BLUE || seg2p->special==SEGMENT_IS_GOAL_RED  )
 	{
 		if (Players[Player_num].secondary_ammo[PROXIMITY_INDEX])
 		{
@@ -833,7 +831,7 @@ static void matcen_info_swap(matcen_info *mi, int swap)
 {
 	if (!swap)
 		return;
-	
+
 	mi->robot_flags[0] = SWAPINT(mi->robot_flags[0]);
 	mi->robot_flags[1] = SWAPINT(mi->robot_flags[1]);
 	mi->hit_points = SWAPINT(mi->hit_points);
@@ -848,9 +846,9 @@ static void matcen_info_swap(matcen_info *mi, int swap)
 void matcen_info_read_n_swap(matcen_info *mi, int n, int swap, PHYSFS_file *fp)
 {
 	int i;
-	
+
 	PHYSFS_read(fp, mi, sizeof(matcen_info), n);
-	
+
 	if (swap)
 		for (i = 0; i < n; i++)
 			matcen_info_swap(&mi[i], swap);
@@ -871,7 +869,7 @@ static void fuelcen_swap(FuelCenter *fc, int swap)
 {
 	if (!swap)
 		return;
-	
+
 	fc->Type = SWAPINT(fc->Type);
 	fc->segnum = SWAPINT(fc->segnum);
 	fc->Capacity = SWAPINT(fc->Capacity);
@@ -889,9 +887,9 @@ static void fuelcen_swap(FuelCenter *fc, int swap)
 void fuelcen_read_n_swap(FuelCenter *fc, int n, int swap, PHYSFS_file *fp)
 {
 	int i;
-	
+
 	PHYSFS_read(fp, fc, sizeof(FuelCenter), n);
-	
+
 	if (swap)
 		for (i = 0; i < n; i++)
 			fuelcen_swap(&fc[i], swap);

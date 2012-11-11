@@ -127,9 +127,7 @@ void do_multi_player_menu();
 #ifndef RELEASE
 void do_sandbox_menu();
 #endif
-extern void newmenu_free_background();
-extern void ReorderPrimary();
-extern void ReorderSecondary();
+void newmenu_free_background();
 
 // Hide all menus
 int hide_menus(void)
@@ -410,9 +408,6 @@ static void draw_copyright()
 	gr_string(0x8000,SHEIGHT-(LINE_SPACING*2),DESCENT_VERSION);
 }
 
-//returns the number of demo files on the disk
-int newdemo_count_demos();
-
 // ------------------------------------------------------------------------
 static int main_menu_handler(newmenu *menu, d_event *event, int *menu_choice )
 {
@@ -581,7 +576,7 @@ int DoMenu()
 	return 0;
 }
 
-extern void show_order_form(void);	// John didn't want this in inferno.h so I just externed it.
+void show_order_form(void);	// John didn't want this in inferno.h so I just externed it.
 
 //returns flag, true means quit menu
 int do_option ( int select)
@@ -1175,7 +1170,7 @@ static void reticle_config()
 	newmenu_item m[17];
 #endif
 	int nitems = 0, i, opt_ret_type, opt_ret_rgba, opt_ret_size;
-	
+
 	m[nitems].type = NM_TYPE_TEXT; m[nitems].text = "Reticle Type:"; nitems++;
 	opt_ret_type = nitems;
 	m[nitems].type = NM_TYPE_RADIO; m[nitems].text = "Classic"; m[nitems].value = 0; m[nitems].group = 0; nitems++;
@@ -1346,11 +1341,11 @@ static void list_dir_el(browser *b, const char *origdir, const char *fname)
 {
 	char *ext;
 	const char *const *i = NULL;
-	
+
 	ext = strrchr(fname, '.');
 	if (ext)
 		for (i = b->ext_list; *i != NULL && stricmp(ext, *i); i++) {}	// see if the file is of a type we want
-	
+
 	if ((!strcmp((PHYSFS_getRealDir(fname)==NULL?"":PHYSFS_getRealDir(fname)), b->view_path)) && (PHYSFS_isDirectory(fname) || (ext && *i))
 #if defined(__MACH__) && defined(__APPLE__)
 		&& stricmp(fname, "Volumes")	// this messes things up, use '..' instead
@@ -1363,16 +1358,16 @@ static int list_directory(browser *b)
 {
 	if (!string_array_new(&b->list, &b->list_buf, &b->num_files, &b->max_files, &b->max_buf))
 		return 0;
-	
+
 	strcpy(b->list_buf, "..");		// go to parent directory
 	b->list[b->num_files++] = b->list_buf;
-	
+
 	if (b->select_dir)
 	{
 		b->list[b->num_files] = b->list[b->num_files - 1] + strlen(b->list[b->num_files - 1]) + 1;
 		strcpy(b->list[b->num_files++], "<this directory>");	// choose the directory being viewed
 	}
-	
+
 	PHYSFS_enumerateFilesCallback("", (PHYSFS_EnumFilesCallback) list_dir_el, b);
 	string_array_tidy(&b->list, &b->list_buf, &b->num_files, &b->max_files, &b->max_buf, 1 + (b->select_dir ? 1 : 0),
 #ifdef __LINUX__
@@ -1383,7 +1378,7 @@ static int list_directory(browser *b)
 					  strcasecmp
 #endif
 					  );
-					  
+
 	return 1;
 }
 
@@ -1413,7 +1408,7 @@ static int select_file_handler(listbox *menu, d_event *event, browser *b)
 				snprintf(text, sizeof(char)*PATH_MAX, "c");
 				m->type=NM_TYPE_INPUT; m->text_len = 3; m->text = text;
 				rval = newmenu_do( NULL, "Enter drive letter", 1, m, NULL, NULL );
-				text[1] = '\0'; 
+				text[1] = '\0';
 				snprintf(newpath, sizeof(char)*PATH_MAX, "%s:%s", text, sep);
 				if (!rval && strlen(text))
 				{
@@ -1435,15 +1430,15 @@ static int select_file_handler(listbox *menu, d_event *event, browser *b)
 			if (citem == 0)		// go to parent dir
 			{
 				char *p;
-				
+
 				if ((p = strstr(&newpath[strlen(newpath) - strlen(sep)], sep)))
 					if (p != strstr(newpath, sep))	// if this isn't the only separator (i.e. it's not about to look at the root)
 						*p = 0;
-				
+
 				p = newpath + strlen(newpath) - 1;
 				while ((p > newpath) && strncmp(p, sep, strlen(sep)))	// make sure full separator string is matched (typically is)
 					p--;
-				
+
 				if (p == strstr(newpath, sep))	// Look at root directory next, if not already
 				{
 #if defined(__MACH__) && defined(__APPLE__)
@@ -1477,16 +1472,16 @@ static int select_file_handler(listbox *menu, d_event *event, browser *b)
 				strncat(newpath, list[citem], PATH_MAX - 1 - strlen(newpath));
 				newpath[PATH_MAX - 1] = '\0';
 			}
-			
+
 			if ((citem == 0) || PHYSFS_isDirectory(list[citem]))
 			{
 				// If it fails, stay in this one
 				return !select_file_recursive(b->title, newpath, b->ext_list, b->select_dir, b->when_selected, b->userdata);
 			}
-			
+
 			return !(*b->when_selected)(b->userdata, list[citem]);
 			break;
-			
+
 		case EVENT_WINDOW_CLOSE:
 			if (b->new_path)
 				PHYSFS_removeFromSearchPath(b->view_path);
@@ -1497,11 +1492,11 @@ static int select_file_handler(listbox *menu, d_event *event, browser *b)
 				d_free(b->list_buf);
 			d_free(b);
 			break;
-			
+
 		default:
 			break;
 	}
-	
+
 	return 0;
 }
 
@@ -1511,11 +1506,11 @@ static int select_file_recursive(char *title, const char *orig_path, const char 
 	const char *sep = PHYSFS_getDirSeparator();
 	char *p;
 	char new_path[PATH_MAX];
-	
+
 	MALLOC(b, browser, 1);
 	if (!b)
 		return 0;
-	
+
 	b->title = title;
 	b->when_selected = when_selected;
 	b->userdata = userdata;
@@ -1524,7 +1519,7 @@ static int select_file_recursive(char *title, const char *orig_path, const char 
 	b->num_files = b->max_files = 0;
 	b->view_path[0] = '\0';
 	b->new_path = 1;
-	
+
 	// Check for a PhysicsFS path first, saves complication!
 	if (orig_path && strncmp(orig_path, sep, strlen(sep)) && PHYSFSX_exists(orig_path,0))
 	{
@@ -1560,20 +1555,20 @@ static int select_file_recursive(char *title, const char *orig_path, const char 
 
 		p = b->view_path + strlen(b->view_path) - 1;
 		b->new_path = PHYSFSX_isNewPath(b->view_path);
-		
+
 		while (!PHYSFS_addToSearchPath(b->view_path, 0))
 		{
 			while ((p > b->view_path) && strncmp(p, sep, strlen(sep)))
 				p--;
 			*p = '\0';
-			
+
 			if (p == b->view_path)
 				break;
-			
+
 			b->new_path = PHYSFSX_isNewPath(b->view_path);
 		}
 	}
-	
+
 	// Set to user directory if we couldn't find a searchpath
 	if (!b->view_path[0])
 	{
@@ -1586,13 +1581,13 @@ static int select_file_recursive(char *title, const char *orig_path, const char 
 			return 0;
 		}
 	}
-	
+
 	if (!list_directory(b))
 	{
 		d_free(b);
 		return 0;
 	}
-	
+
 	return newmenu_listbox1(title, b->num_files, b->list, 1, 0, (int (*)(listbox *, d_event *, void *))select_file_handler, b) >= 0;
 }
 
@@ -2099,7 +2094,7 @@ static int polygon_models_viewer_handler(window *wind, d_event *event)
 		default:
 			break;
 	}
-	
+
 	return 0;
 }
 
@@ -2199,7 +2194,7 @@ static int gamebitmaps_viewer_handler(window *wind, d_event *event)
 		default:
 			break;
 	}
-	
+
 	return 0;
 }
 

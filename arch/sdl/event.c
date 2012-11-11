@@ -18,11 +18,6 @@
 #include "joy.h"
 #include "args.h"
 
-extern void key_handler(SDL_KeyboardEvent *event);
-extern void mouse_button_handler(SDL_MouseButtonEvent *mbe);
-extern void mouse_motion_handler(SDL_MouseMotionEvent *mme);
-extern void mouse_cursor_autohide();
-
 static int initialised=0;
 
 void event_poll()
@@ -31,7 +26,7 @@ void event_poll()
 	int clean_uniframe=1;
 	window *wind = window_get_front();
 	int idle = 1;
-	
+
 	// If the front window changes, exit this loop, otherwise unintended behavior can occur
 	// like pressing 'Return' really fast at 'Difficulty Level' causing multiple games to be started
 	while ((wind == window_get_front()) && (memset(&event, 0, sizeof(event)), SDL_PollEvent(&event)))
@@ -81,20 +76,20 @@ void event_poll()
 	if (idle)
 	{
 		d_event ievent;
-		
+
 		ievent.type = EVENT_IDLE;
 		event_send(&ievent);
 	}
 	else
 		event_reset_idle_seconds();
-	
+
 	mouse_cursor_autohide();
 }
 
 void event_flush()
 {
 	SDL_Event event;
-	
+
 	while (SDL_PollEvent(&event));
 }
 
@@ -117,7 +112,7 @@ int call_default_handler(d_event *event)
 {
 	if (default_handler)
 		return (*default_handler)(event);
-	
+
 	return 0;
 }
 
@@ -136,7 +131,7 @@ void event_send(d_event *event)
 			if (window_is_modal(wind))
 				break;
 		}
-	
+
 	if (!handled)
 		call_default_handler(event);
 }
@@ -157,7 +152,7 @@ void event_process(void)
 	// such as some network menus when they report a problem
 	if (window_get_front() != wind)
 		return;
-	
+
 	event.type = EVENT_WINDOW_DRAW;	// then draw all visible windows
 	wind = window_get_first();
 	while (wind != NULL)

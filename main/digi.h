@@ -113,6 +113,11 @@ void digi_start_sound_queued( short soundnum, fix volume );
 extern int digi_volume;
 extern int digi_sample_rate;
 void digi_select_system(int);
+void digi_end_soundobj(int i);
+void SoundQ_end();
+#ifndef NDEBUG
+int verify_sound_channel_free( int channel );
+#endif
 
 #ifdef _WIN32
 // Windows native-MIDI stuff.

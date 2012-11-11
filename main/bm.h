@@ -93,5 +93,7 @@ int gamedata_read_tbl(int pc_shareware);
 extern void bm_read_all(PHYSFS_file * fp);
 
 int load_exit_models();
+void load_robot_replacements(char *level_name);
+void bm_read_extra_robots(char *fname,int type);
 
 #endif /* _BM_H */

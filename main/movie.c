@@ -90,7 +90,6 @@ SDL_RWops *RoboFile;
 // Function Prototypes
 int RunMovie(char *filename, int highres_flag, int allow_abort,int dx,int dy);
 
-void decode_text_line(char *p);
 void draw_subtitles(int frame_num);
 
 // ----------------------------------------------------------------------

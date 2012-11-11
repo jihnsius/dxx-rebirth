@@ -10,6 +10,7 @@
 
 #include <array>
 
+#include "../python/defmodules.hpp"
 #include "../python/exception.hpp"
 #include "../python/wrap-object.hpp"
 #include "../python/pretty.hpp"
@@ -64,14 +65,6 @@ static str dxxpowerup(const dxxpowerup& v)
 
 }
 #endif
-
-void define_object_base_class(scope& scope_dxx);
-void define_reactor_module(object& __main__, scope& scope_dxx);
-void define_robot_module(object& __main__, scope& scope_dxx);
-void define_weapon_module(object& __main__, scope& scope_dxx);
-void define_player_module(object& __main__, scope& scope_dxx);
-void define_powerup_module(object& __main__, scope& scope_dxx);
-void define_input_class();
 
 static void define_dxx_modules(object& __main__)
 {

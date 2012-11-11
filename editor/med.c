@@ -276,11 +276,11 @@ int	GotoGameScreen()
 //@@
 //@@	Player_init.pos = Player->pos;
 //@@	Player_init.orient = Player->orient;
-//@@	Player_init.segnum = Player->segnum;	
-	
+//@@	Player_init.segnum = Player->segnum;
+
 // -- must always save gamesave.sav because the restore-objects code relies on it
 // -- that code could be made smarter and use the original file, if appropriate.
-//	if (mine_changed) 
+//	if (mine_changed)
 	if (gamestate_not_restored == 0) {
 		gamestate_not_restored = 1;
 		save_level("GAMESAVE.LVL");
@@ -373,36 +373,36 @@ void init_editor()
 	medkey_init();
 
 	game_flush_inputs();
-	
+
 	editor_font = gr_init_font( "pc8x16.fnt" );
-	
+
 	menubar_init( "MED.MNU" );
 
 	Draw_all_segments = 1;						// Say draw all segments, not just connected ones
-	
+
 	if (!Cursegp)
 		Cursegp = &Segments[0];
 
 	init_autosave();
-  
+
 //	atexit(close_editor);
 
 	Clear_window = 1;	//	do full window clear.
-	
+
 	InitCurve();
-	
+
 	restore_effect_bitmap_icons();
-	
+
 	if (!set_screen_mode(SCREEN_EDITOR))	{
 		set_screen_mode(SCREEN_MENU);
 		show_menus();			//force back into menu
 		return;
 	}
-	
+
 	load_palette(Current_level_palette,1,0);
-	
-	//Editor renders into full (320x200) game screen 
-	
+
+	//Editor renders into full (320x200) game screen
+
 	game_init_render_buffers(320, 200, VR_NONE);
 	gr_init_sub_canvas( &VR_editor_canvas, &grd_curscreen->sc_canvas, 0, 0, SWIDTH, SHEIGHT );
 	Canv_editor = &VR_editor_canvas;
@@ -410,43 +410,43 @@ void init_editor()
 	init_editor_screen(); // load the main editor dialog
 	gr_set_current_canvas( NULL );
 	gr_set_curfont(editor_font);
-	
+
 	set_warn_func(med_show_warning);
-	
+
 	//	_MARK_("start of editor");//Nuked to compile -KRB
-	
+
 	//@@	//create a camera for viewing in the editor. copy position from ConsoleObject
 	//@@	camera_objnum = obj_create(OBJ_CAMERA,0,ConsoleObject->segnum,&ConsoleObject->pos,&ConsoleObject->orient,0);
 	//@@	Viewer = &Objects[camera_objnum];
 	//@@	slew_init(Viewer);		//camera is slewing
-	
+
 	Viewer = ConsoleObject;
 	slew_init(ConsoleObject);
 	init_player_object();
-	
+
 	Update_flags = UF_ALL;
-	
+
 	//set the wire-frame window to be the current view
 	current_view = &LargeView;
-	
+
 	if (faded_in==0)
 	{
 		faded_in = 1;
 		//gr_pal_fade_in( grd_curscreen->pal );
 	}
-	
+
 	gr_set_current_canvas( GameViewBox->canvas );
 	gr_set_curfont(editor_font);
 	//gr_setcolor( CBLACK );
 	//gr_deaccent_canvas();
 	//gr_grey_canvas();
-	
+
 	gr_set_curfont(editor_font);
 	FNTScaleX = FNTScaleY = 1;		// No font scaling!
 	ui_pad_goto(padnum);
-	
+
 	ModeFlag = 0;
-	
+
 	gamestate_restore_check();
 }
 
@@ -457,8 +457,6 @@ int ShowAbout()
 									"OK");
 	return 0;
 }
-
-void move_player_2_segment(segment *seg,int side);
 
 int SetPlayerFromCurseg()
 {
@@ -551,7 +549,7 @@ void move_player_2_segment_and_rotate(segment *seg,int side)
 //	vm_vector_2_matrix(&ConsoleObject->orient,&vp,NULL,NULL);
 
 	obj_relink( ConsoleObject-Objects, SEG_PTR_2_NUM(seg) );
-	
+
 }
 
 int SetPlayerFromCursegAndRotate()
@@ -648,8 +646,6 @@ int ToggleLighting(void)
 
 	return Lighting_on;
 }
-
-void find_concave_segs();
 
 int FindConcaveSegs()
 {
@@ -769,20 +765,20 @@ int editor_handler(UI_DIALOG *dlg, d_event *event, void *data);
 
 //setup the editors windows, canvases, gadgets, etc.
 void init_editor_screen()
-{	
+{
 //	grs_bitmap * bmp;
 
 	if (editor_screen_open) return;
 
 	grd_curscreen->sc_canvas.cv_font = editor_font;
-	
+
 	//create canvas for game on the editor screen
 	initializing = 1;
 	gr_set_current_canvas(Canv_editor);
 	Canv_editor->cv_font = editor_font;
 	gr_init_sub_canvas(Canv_editor_game,Canv_editor,GAMEVIEW_X,GAMEVIEW_Y,GAMEVIEW_W,GAMEVIEW_H);
-	
-	//Editor renders into full (320x200) game screen 
+
+	//Editor renders into full (320x200) game screen
 
 	init_info = 1;
 
@@ -860,8 +856,8 @@ void init_editor_screen()
 
 	EditorWindow->keyboard_focus_gadget = (UI_GADGET *)LargeViewBox;
 
-//	BigCanvas[0]->cv_font = grd_curscreen->sc_canvas.cv_font; 
-//	BigCanvas[1]->cv_font = grd_curscreen->sc_canvas.cv_font; 
+//	BigCanvas[0]->cv_font = grd_curscreen->sc_canvas.cv_font;
+//	BigCanvas[1]->cv_font = grd_curscreen->sc_canvas.cv_font;
 //	BigCanvasFirstTime = 1;
 
 	Update_flags = UF_ALL;
@@ -908,7 +904,7 @@ static void med_show_warning(const char *s)
 int SafetyCheck()
 {
 	int x;
-			
+
 	if (mine_changed) {
 		x = nm_messagebox( "Warning!", 2, "Cancel", "OK", "You are about to lose work." );
 		if (x<1) {
@@ -922,22 +918,22 @@ int SafetyCheck()
 void close_editor() {
 
 	//	_MARK_("end of editor");//Nuked to compile -KRB
-	
+
 #ifndef __LINUX__
 	set_warn_func(msgbox_warning);
 #else
 	clear_warn_func(NULL);
 #endif
-	
+
 	close_editor_screen();
-	
+
 	//kill our camera object
-	
+
 	Viewer = ConsoleObject;					//reset viewer
 	//@@obj_delete(camera_objnum);
-	
+
 	padnum = ui_pad_get_current();
-	
+
 	close_autosave();
 
 	ui_close();
@@ -1018,7 +1014,7 @@ void gamestate_restore_check()
 
 	if (gamestate_not_restored) {
 		sprintf( Message, "Do you wish to restore game state?\n");
-	
+
 		if (ui_messagebox( -2, -2, 2, Message, "Yes", "No" )==1) {
 
 			// Save current position
@@ -1036,7 +1032,7 @@ void gamestate_restore_check()
 			}
 
 			gamestate_not_restored = 0;
-			Update_flags |= UF_WORLD_CHANGED;	
+			Update_flags |= UF_WORLD_CHANGED;
 			}
 		else
 			gamestate_not_restored = 1;
@@ -1053,7 +1049,7 @@ int RestoreGameState() {
 	return 0;
 }
 
-extern void check_wall_validity(void);
+void check_wall_validity(void);
 
 // Handler for the main editor dialog
 int editor_handler(UI_DIALOG *dlg, d_event *event, void *data)
@@ -1070,7 +1066,7 @@ int editor_handler(UI_DIALOG *dlg, d_event *event, void *data)
 		EditorWindow = NULL;
 		return 0;
 	}
-	
+
 	// Update the windows
 
 	if (event->type == EVENT_UI_DIALOG_DRAW)
@@ -1081,7 +1077,7 @@ int editor_handler(UI_DIALOG *dlg, d_event *event, void *data)
 		gr_set_current_canvas( NULL );
 		gr_setcolor( CGREY );
 		gr_rect(STATUS_X,STATUS_Y,STATUS_X+STATUS_W-1,STATUS_Y+STATUS_H-1);			//0, 582, 799, 599 );
-		
+
 		medlisp_update_screen();
 		calc_frame_time();
 		texpage_do(event);
@@ -1092,7 +1088,7 @@ int editor_handler(UI_DIALOG *dlg, d_event *event, void *data)
 		set_editor_time_of_day();
 		return 1;
 	}
-	
+
 	if ((selected_gadget == (UI_GADGET *)GameViewBox && !render_3d_in_big_window) ||
 		(selected_gadget == (UI_GADGET *)LargeViewBox && render_3d_in_big_window))
 		switch (event->type)
@@ -1124,7 +1120,7 @@ int editor_handler(UI_DIALOG *dlg, d_event *event, void *data)
 					rval = 1;
 				}
 				break;
-				
+
 			default:
 				break;
 		}
@@ -1146,7 +1142,7 @@ int editor_handler(UI_DIALOG *dlg, d_event *event, void *data)
 			}
 		}
 
-		if ( event_get_idle_seconds() > COMPRESS_INTERVAL ) 
+		if ( event_get_idle_seconds() > COMPRESS_INTERVAL )
 		{
 			med_compress_mine();
 			event_reset_idle_seconds();
@@ -1159,7 +1155,7 @@ int editor_handler(UI_DIALOG *dlg, d_event *event, void *data)
 	}
 
 	gr_set_current_canvas( GameViewBox->canvas );
-	
+
 	// Remove keys used for slew
 	switch(keypress)
 	{
@@ -1214,7 +1210,7 @@ int editor_handler(UI_DIALOG *dlg, d_event *event, void *data)
 			render_3d_in_big_window = !render_3d_in_big_window;
 			Update_flags |= UF_ALL;
 			rval = 1;
-			break;			
+			break;
 		default:
 			if (!rval)
 			{
@@ -1252,13 +1248,13 @@ int editor_handler(UI_DIALOG *dlg, d_event *event, void *data)
 	// DO TEXTURE STUFF
 	if (texpage_do(event))
 		rval = 1;
-	
+
 	if (objpage_do(event))
 		rval = 1;
 
 
 	// Process selection of Cursegp using mouse.
-	if (GADGET_PRESSED(LargeViewBox) && !render_3d_in_big_window) 
+	if (GADGET_PRESSED(LargeViewBox) && !render_3d_in_big_window)
 	{
 		int	xcrd,ycrd;
 		xcrd = LargeViewBox->b1_drag_x1;
@@ -1272,8 +1268,8 @@ int editor_handler(UI_DIALOG *dlg, d_event *event, void *data)
 		else
 			add_found_segments_to_selected_list();
 
-		Found_seg_index = 0;	
-	
+		Found_seg_index = 0;
+
 		if (N_found_segs > 0) {
 			sort_seg_list(N_found_segs,Found_segs,&ConsoleObject->pos);
 			Cursegp = &Segments[Found_segs[0]];
@@ -1295,7 +1291,7 @@ int editor_handler(UI_DIALOG *dlg, d_event *event, void *data)
 		gr_setcolor( 15 );
 		gr_rect( x-1, y-1, x+1, y+1 );
 	}
-	
+
 	// Set current segment and side by clicking on a polygon in game window.
 	//	If ctrl pressed, also assign current texture map to that side.
 	//if (GameViewBox->mouse_onme && (GameViewBox->b1_done_dragging || GameViewBox->b1_clicked)) {
@@ -1351,7 +1347,7 @@ int editor_handler(UI_DIALOG *dlg, d_event *event, void *data)
 
 			Update_flags |= UF_ED_STATE_CHANGED;
 		}
-		else 
+		else
 			editor_status("Click on non-texture ingored");
 
 	}
@@ -1365,7 +1361,7 @@ int editor_handler(UI_DIALOG *dlg, d_event *event, void *data)
 		if ((dx != 0) && (dy != 0))
 		{
 			vms_matrix	MouseRotMat,tempm;
-			
+
 			GetMouseRotation( dx, dy, &MouseRotMat );
 			vm_matrix_x_matrix(&tempm,&LargeView.ev_matrix,&MouseRotMat);
 			LargeView.ev_matrix = tempm;
@@ -1386,7 +1382,7 @@ int editor_handler(UI_DIALOG *dlg, d_event *event, void *data)
 			current_view->ev_changed = 1;
 		}
 	}
-	
+
 	return rval;
 }
 

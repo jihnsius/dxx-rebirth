@@ -741,8 +741,6 @@ void render_object(dxxobject *obj)
 
 }
 
-void check_and_fix_matrix(vms_matrix *m);
-
 #define vm_angvec_zero(v) (v)->p=(v)->b=(v)->h=0
 
 void reset_player_object()
@@ -1345,7 +1343,6 @@ static void set_camera_pos(vms_vector *camera_pos, dxxobject *objp)
 	}
 }
 
-void drop_player_eggs(dxxobject *objp);
 int get_explosion_vclip(dxxobject *obj,int stage);
 void multi_cap_objects();
 
@@ -1638,8 +1635,6 @@ static spin_object(dxxobject *obj)
 }
 
 int Drop_afterburner_blob_flag;		//ugly hack
-void multi_send_drop_blobs(char);
-void fuelcen_check_for_goal (segment *);
 
 //	Time at which this object last created afterburner blobs.
 fix64	Last_afterburner_time[MAX_OBJECTS];

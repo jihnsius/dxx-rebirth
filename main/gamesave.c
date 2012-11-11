@@ -133,7 +133,7 @@ void dump_mine_info(void);
 
 #ifdef EDITOR
 extern char mine_filename[];
-extern int save_mine_data_compiled(PHYSFS_file *SaveFile);
+int save_mine_data_compiled(PHYSFS_file *SaveFile);
 //--unused-- #else
 //--unused-- char mine_filename[128];
 #endif
@@ -199,7 +199,7 @@ static void verify_object( dxxobject * obj )	{
 			//@@//this is a super-ugly hack.  Since the baby stripe robots have
 			//@@//their firing point on their bounding sphere, the firing points
 			//@@//can poke through a wall if the robots are very close to it. So
-			//@@//we make their radii bigger so the guns can't get too close to 
+			//@@//we make their radii bigger so the guns can't get too close to
 			//@@//the walls
 			//@@if (Robot_info[obj->id].flags & RIF_BIG_RADIUS)
 			//@@	obj->size = (obj->size*3)/2;
@@ -223,7 +223,7 @@ static void verify_object( dxxobject * obj )	{
 			char *name = Save_pof_names[obj->rtype.pobj_info.model_num];
 
 			for (i=0;i<N_polygon_models;i++)
-				if (!stricmp(Pof_names[i],name)) {		//found it!	
+				if (!stricmp(Pof_names[i],name)) {		//found it!
 					obj->rtype.pobj_info.model_num = i;
 					break;
 				}
@@ -282,7 +282,7 @@ static void verify_object( dxxobject * obj )	{
 			obj->mtype.phys_info.drag = Weapon_info[obj->id].drag;
 			obj->mtype.phys_info.flags |= PF_FREE_SPINNING;
 
-			// Make sure model number & size are correct...		
+			// Make sure model number & size are correct...
 			Assert( obj->render_type == RT_POLYOBJ );
 
 			obj->rtype.pobj_info.model_num = Weapon_info[obj->id].model_num;
@@ -309,7 +309,7 @@ static void verify_object( dxxobject * obj )	{
 
 		//Assert(obj == Player);
 
-		if ( obj == ConsoleObject )		
+		if ( obj == ConsoleObject )
 			init_player_object();
 		else
 			if (obj->render_type == RT_POLYOBJ)	//recover from Matt's pof file matchup bug
@@ -339,7 +339,7 @@ static void verify_object( dxxobject * obj )	{
 //}
 
 
-extern int multi_powerup_is_4pack(int);
+int multi_powerup_is_4pack(int);
 //reads one object of the given version from the given file
 void read_object(dxxobject *obj,PHYSFS_file *f,int version)
 {
@@ -414,8 +414,8 @@ void read_object(dxxobject *obj,PHYSFS_file *f,int version)
 			obj->ctype.ai_info.cur_path_index		= PHYSFSX_readShort(f);
 
 			if (version <= 25) {
-				PHYSFSX_readShort(f);	//				obj->ctype.ai_info.follow_path_start_seg	= 
-				PHYSFSX_readShort(f);	//				obj->ctype.ai_info.follow_path_end_seg		= 
+				PHYSFSX_readShort(f);	//				obj->ctype.ai_info.follow_path_start_seg	=
+				PHYSFSX_readShort(f);	//				obj->ctype.ai_info.follow_path_end_seg		=
 			}
 
 			break;
@@ -480,7 +480,7 @@ void read_object(dxxobject *obj,PHYSFS_file *f,int version)
 		case CT_REPAIRCEN:
 		default:
 			Int3();
-	
+
 	}
 
 	switch (obj->render_type) {
@@ -669,7 +669,7 @@ void write_object(dxxobject *obj, short version, PHYSFS_file *f)
 		case CT_FLYTHROUGH:
 		default:
 			Int3();
-	
+
 	}
 
 	switch (obj->render_type) {
@@ -715,10 +715,10 @@ void write_object(dxxobject *obj, short version, PHYSFS_file *f)
 }
 #endif
 
-extern int remove_trigger_num(int trigger_num);
+int remove_trigger_num(int trigger_num);
 
 // --------------------------------------------------------------------
-// Load game 
+// Load game
 // Loads all the relevant data for a level.
 // If level != -1, it loads the filename with extension changed to .min
 // Otherwise it loads the appropriate level mine.
@@ -1165,11 +1165,6 @@ static int load_game_data(PHYSFS_file *LoadFile)
 		return 0;
 }
 
-
-int check_segment_connections(void);
-
-extern void	set_ambient_sound_flags(void);
-
 // ----------------------------------------------------------------------------
 
 #define LEVEL_FILE_VERSION      8
@@ -1186,7 +1181,7 @@ const char *Level_being_loaded=NULL;
 #endif
 
 #ifdef COMPACT_SEGS
-extern void ncache_flush();
+void ncache_flush();
 #endif
 
 extern int Slide_segs_computed;
@@ -1235,7 +1230,7 @@ int load_level(const char * filename_passed)
 
 #ifdef EDITOR
 	//if we have the editor, try the LVL first, no matter what was passed.
-	//if we don't have an LVL, try what was passed or RL2  
+	//if we don't have an LVL, try what was passed or RL2
 	//if we don't have the editor, we just use what was passed
 
 	change_filename_extension(filename,filename_passed,".lvl");
@@ -1250,7 +1245,7 @@ int load_level(const char * filename_passed)
 		else
 			change_filename_extension(filename, filename, ".rl2");
 		use_compiled_level = 1;
-	}		
+	}
 #endif
 
 	if (!PHYSFSX_exists(filename,1))
@@ -1432,7 +1427,7 @@ int load_level(const char * filename_passed)
 
 	#if !defined(NDEBUG) && !defined(COMPACT_SEGS)
 	if (check_segment_connections())
-		nm_messagebox( "ERROR", 1, "Ok", 
+		nm_messagebox( "ERROR", 1, "Ok",
 				"Connectivity errors detected in\n"
 				"mine.  See monochrome screen for\n"
 				"details, and contact Matt or Mike." );
@@ -1464,30 +1459,30 @@ int create_new_mine(void)
 	int	s;
 	vms_vector	sizevec;
 	vms_matrix	m1 = IDENTITY_MATRIX;
-	
+
 	// initialize_mine_arrays();
-	
+
 	//	gamestate_not_restored = 1;
-	
+
 	// Clear refueling center code
 	fuelcen_reset();
 	//	hostage_init_all();
-	
+
 	init_all_vertices();
-	
+
 	Current_level_num = 0;		//0 means not a real level
 	Current_level_name[0] = 0;
 	Gamesave_current_version = GAME_VERSION;
-	
+
 	strcpy(Current_level_palette, DEFAULT_LEVEL_PALETTE);
-	
+
 	Cur_object_index = -1;
 	reset_objects(1);		//just one object, the player
-	
+
 	num_groups = 0;
 	current_group = -1;
-	
-	
+
+
 	Num_vertices = 0;		// Number of vertices in global array.
 	Highest_vertex_index = 0;
 	Num_segments = 0;		// Number of segments in global array, will get increased in med_create_segment
@@ -1497,32 +1492,32 @@ int create_new_mine(void)
 	Markedsegp = 0;		// Say there is no marked segment.
 	Markedside = WBACK;	//	Shouldn't matter since Markedsegp == 0, but just in case...
 	for (s=0;s<MAX_GROUPS+1;s++) {
-		GroupList[s].num_segments = 0;		
-		GroupList[s].num_vertices = 0;		
+		GroupList[s].num_segments = 0;
+		GroupList[s].num_vertices = 0;
 		Groupsegp[s] = NULL;
 		Groupside[s] = 0;
 	}
-	
+
 	Num_robot_centers = 0;
 	Num_open_doors = 0;
 	wall_init();
 	trigger_init();
-	
+
 	// Create New_segment, which is the segment we will be adding at each instance.
 	med_create_new_segment(vm_vec_make(&sizevec,DEFAULT_X_SIZE,DEFAULT_Y_SIZE,DEFAULT_Z_SIZE));		// New_segment = Segments[0];
 	//	med_create_segment(Segments,0,0,0,DEFAULT_X_SIZE,DEFAULT_Y_SIZE,DEFAULT_Z_SIZE,vm_mat_make(&m1,F1_0,0,0,0,F1_0,0,0,0,F1_0));
 	med_create_segment(Segments,0,0,0,DEFAULT_X_SIZE,DEFAULT_Y_SIZE,DEFAULT_Z_SIZE,&m1);
-	
+
 	N_found_segs = 0;
 	N_selected_segs = 0;
 	N_warning_segs = 0;
-	
+
 	//--repair-- create_local_segment_data();
-	
+
 	ControlCenterTriggers.num_links = 0;
-	
+
 	create_new_mission();
-	
+
     //editor_status("New mine created.");
 	return	0;			// say no error
 }
@@ -1695,10 +1690,10 @@ static int save_level_sub(char * filename, int compiled_version)
 		if (Errors_in_mine) {
 			if (is_real_level(filename)) {
 				char  ErrorMessage[200];
-	
+
 				sprintf( ErrorMessage, "Warning: %i errors in this mine!\n", Errors_in_mine );
 				gr_palette_load(gr_palette);
-	 
+
 				if (nm_messagebox( NULL, 2, "Cancel Save", "Save", ErrorMessage )!=1)	{
 					return 1;
 				}
@@ -1723,7 +1718,7 @@ static int save_level_sub(char * filename, int compiled_version)
 		_splitpath( temp_filename, NULL, NULL, fname, NULL );
 
 		sprintf( ErrorMessage, \
-			"ERROR: Cannot write to '%s'.\nYou probably need to check out a locked\nversion of the file. You should save\nthis under a different filename, and then\ncheck out a locked copy by typing\n\'co -l %s.lvl'\nat the DOS prompt.\n" 
+			"ERROR: Cannot write to '%s'.\nYou probably need to check out a locked\nversion of the file. You should save\nthis under a different filename, and then\ncheck out a locked copy by typing\n\'co -l %s.lvl'\nat the DOS prompt.\n"
 			, temp_filename, fname );
 		gr_palette_load(gr_palette);
 		nm_messagebox( NULL, 1, "Ok", ErrorMessage );
@@ -1743,7 +1738,7 @@ static int save_level_sub(char * filename, int compiled_version)
 			ConsoleObject->segnum = 0;
 		compute_segment_center(&ConsoleObject->pos,&(Segments[ConsoleObject->segnum]));
 	}
- 
+
 	fix_object_segs();
 
 	//Write the header
@@ -1796,7 +1791,7 @@ static int save_level_sub(char * filename, int compiled_version)
 
 	minedata_offset = PHYSFS_tell(SaveFile);
 #if 0	// only save compiled mine data
-	if ( !compiled_version )	
+	if ( !compiled_version )
 		save_mine_data(SaveFile);
 	else
 #endif
@@ -1825,7 +1820,7 @@ static int save_level_sub(char * filename, int compiled_version)
 }
 
 #if 0 //dunno - 3rd party stuff?
-extern void compress_uv_coordinates_all(void);
+void compress_uv_coordinates_all(void);
 #endif
 
 int save_level(char * filename)

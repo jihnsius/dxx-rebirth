@@ -1166,8 +1166,6 @@ void do_snipe_frame(dxxobject *objp, fix dist_to_player, int player_visibility, 
 
 #define	THIEF_DEPTH	20
 
-int pick_connected_segment(dxxobject *objp, int max_depth);
-
 //	------------------------------------------------------------------------------------------------------
 //	Choose segment to recreate thief in.
 static int choose_thief_recreation_segment(void)

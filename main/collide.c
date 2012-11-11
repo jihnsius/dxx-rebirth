@@ -1207,7 +1207,7 @@ static void collide_weapon_and_clutter( dxxobject * weapon, dxxobject *clutter, 
 
 //--mk, 121094 -- extern void spin_robot(object *robot, vms_vector *collision_point);
 
-extern dxxobject *explode_badass_object(dxxobject *objp, fix damage, fix distance, fix force);
+dxxobject *explode_badass_object(dxxobject *objp, fix damage, fix distance, fix force);
 
 int	Final_boss_is_dead = 0;
 fix	Final_boss_countdown_time = 0;
@@ -1256,9 +1256,6 @@ void do_final_boss_hacks(void)
 
 	Final_boss_is_dead = 1;
 }
-
-extern int multi_all_players_alive();
-void multi_send_finish_game ();
 
 //	------------------------------------------------------------------------------------------------------
 //	Return 1 if robot died, else return 0
@@ -1374,8 +1371,6 @@ int apply_damage_to_robot(dxxobject *robot, fix damage, int killer_objnum)
 	} else
 		return 0;
 }
-
-extern int boss_spew_robot(dxxobject *objp, vms_vector *pos);
 
 //--ubyte	Boss_teleports[NUM_D2_BOSSES] = 				{1,1,1,1,1,1};		// Set byte if this boss can teleport
 //--ubyte	Boss_cloaks[NUM_D2_BOSSES] = 					{1,1,1,1,1,1};		// Set byte if this boss can cloak

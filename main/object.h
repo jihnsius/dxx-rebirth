@@ -485,6 +485,12 @@ void wake_up_rendered_objects(dxxobject *gmissp, int window_num);
 void reset_player_object(void);
 
 extern void object_rw_swap(object_rw *obj_rw, int swap);
+dxxobject *obj_find_first_of_type (int);
+void dead_player_frame(void);
+
+#ifdef NETWORK
+void fuelcen_check_for_goal (segment *);
+#endif
 
 #ifdef __cplusplus
 }

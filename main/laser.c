@@ -50,6 +50,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "multi.h"
 #include "physics.h"
 #include "multi.h"
+#include "wall.h"
 
 #define NEWHOMER
 
@@ -60,9 +61,6 @@ int Network_laser_track = -1;
 int find_homing_object_complete(vms_vector *curpos, dxxobject *tracker, int track_obj_type1, int track_obj_type2);
 
 extern char Multi_is_guided;
-
-extern void newdemo_record_guided_end();
-extern void newdemo_record_guided_start();
 
 int find_homing_object(vms_vector *curpos, dxxobject *tracker);
 
@@ -1882,8 +1880,6 @@ static int create_homing_missile(dxxobject *objp, int goal_obj, int objtype, int
 	return objnum;
 }
 
-extern void blast_nearby_glass(dxxobject *objp, fix damage);
-
 //-----------------------------------------------------------------------------
 // Create the children of a smart bomb, which is a bunch of homing missiles.
 void create_smart_children(dxxobject *objp, int num_smart_children)
@@ -2007,8 +2003,6 @@ void release_guided_missile(int player_num)
 }
 
 int Proximity_dropped=0,Smartmines_dropped=0;
-
-extern int which_bomb();
 
 //	-------------------------------------------------------------------------------------------
 //changed on 31/3/10 by kreatordxx to distinguish between drop bomb and secondary fire

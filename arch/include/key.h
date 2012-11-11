@@ -29,6 +29,8 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define KEY_REPEAT_DELAY 400
 #define KEY_REPEAT_INTERVAL 50
 
+struct SDL_KeyboardEvent;
+
 //==========================================================================
 // This installs the int9 vector and initializes the keyboard in buffered
 // ASCII mode. key_close simply undoes that.
@@ -52,6 +54,7 @@ extern volatile unsigned char keyd_last_pressed;
 extern volatile unsigned char keyd_last_released;
 
 extern void key_toggle_repeat(int enable);
+void key_handler(struct SDL_KeyboardEvent *kevent);
 
 // for key_ismodlck
 #define KEY_ISMOD	1

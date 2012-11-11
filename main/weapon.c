@@ -693,7 +693,8 @@ int pick_up_primary(int weapon_index)
 
 	return 1;
 }
-int check_to_use_primary(int weapon_index)
+
+void check_to_use_primary(int weapon_index)
 {
 	ushort old_flags = Players[Player_num].primary_weapon_flags;
 	ushort flag = 1<<weapon_index;
@@ -710,8 +711,6 @@ int check_to_use_primary(int weapon_index)
 	}
 
 	PALETTE_FLASH_ADD(7,14,21);
-
-	return 1;
 }
 
 
@@ -836,9 +835,6 @@ void rock_the_mine_frame(void)
 }
 
 extern	int	Level_shake_frequency, Level_shake_duration;
-#ifdef NETWORK
-extern void multi_send_seismic (fix64,fix64);
-#endif
 
 #define	SEISMIC_DISTURBANCE_DURATION	(F1_0*5)
 fix64	Seismic_disturbance_start_time = 0, Seismic_disturbance_end_time;

@@ -216,10 +216,7 @@ void digi_audio_stop_all_channels()
 }
 
 
-void digi_end_soundobj(int channel);
 extern int SoundQ_channel;
-void SoundQ_end();
-int verify_sound_channel_free(int channel);
 
 // Volume 0-F1_0
 int digi_audio_start_sound(short soundnum, fix volume, int pan, int looping, int loop_start, int loop_end, int soundobj)

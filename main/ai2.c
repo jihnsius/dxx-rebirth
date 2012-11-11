@@ -223,7 +223,7 @@ void create_buddy_bot(void)
 //	Boss is allowed to teleport to segments he fits in (calls object_intersects_wall) and
 //	he can reach from his initial position (calls find_connected_distance).
 //	If size_check is set, then only add segment if boss can fit in it, else any segment is legal.
-//	one_wall_hack added by MK, 10/13/95: A mega-hack!  Set to !0 to ignore the 
+//	one_wall_hack added by MK, 10/13/95: A mega-hack!  Set to !0 to ignore the
 static void init_boss_segments(short segptr[], int *num_segs, int size_check, int one_wall_hack)
 {
 	int			boss_objnum=-1;
@@ -317,8 +317,6 @@ static void init_boss_segments(short segptr[], int *num_segs, int size_check, in
 
 }
 
-void init_buddy_for_level(void);
-
 // ---------------------------------------------------------------------------------------------------------------------
 void init_ai_objects(void)
 {
@@ -370,7 +368,6 @@ void init_ai_objects(void)
 #define	BABY_SPIDER_ID	14
 #define	FIRE_AT_NEARBY_PLAYER_THRESHOLD	(F1_0*40)
 
-void physics_turn_towards_vector(vms_vector *goal_vector, dxxobject *obj, fix rate);
 extern fix Seismic_tremor_magnitude;
 
 //-------------------------------------------------------------------------------------------
@@ -1989,8 +1986,6 @@ void do_boss_dying_frame(dxxobject *objp)
 		digi_link_sound_to_object2(SOUND_BADASS_EXPLOSION, objp-Objects, 0, F2_0, F1_0*512);
 	}
 }
-
-void recreate_thief(dxxobject *objp);
 
 //	----------------------------------------------------------------------
 int do_any_robot_dying_frame(dxxobject *objp)

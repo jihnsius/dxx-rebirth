@@ -49,6 +49,8 @@ extern int check_effect_blowup(segment *seg,int side,vms_vector *pnt, dxxobject 
 extern void apply_damage_to_controlcen(dxxobject *controlcen, fix damage, short who);
 extern void bump_one_object(dxxobject *obj0, vms_vector *hit_dir, fix damage);
 void do_final_boss_hacks();
+void do_final_boss_frame(void);
+void drop_player_eggs(dxxobject *objp);
 
 //see if wall is volatile, and if so, cause damage to player
 //returns true if player is in lava

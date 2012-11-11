@@ -308,5 +308,9 @@ void cloaking_wall_read_n_swap(cloaking_wall *cw, int n, int swap, PHYSFS_file *
 
 extern void wall_write(wall *w, short version, PHYSFS_file *fp);
 void wall_close_door_num(int door_num);
+void init_stuck_objects(void);
+void clear_stuck_objects(void);
+void blast_nearby_glass(dxxobject *objp, fix damage);
+
 
 #endif

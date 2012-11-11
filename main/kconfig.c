@@ -83,7 +83,6 @@ static const char mousebutton_text[][8] = { "LEFT", "RIGHT", "MID", "M4", "M5", 
 
 static const ubyte system_keys[19] = { KEY_ESC, KEY_F1, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6, KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F11, KEY_F12, KEY_MINUS, KEY_EQUAL, KEY_PRINT_SCREEN, KEY_CAPSLOCK, KEY_SCROLLOCK, KEY_NUMLOCK }; // KEY_*LOCK should always be last since we wanna skip these if -nostickykeys
 
-extern void CyclePrimary(),CycleSecondary(),InitMarkerInput();
 extern ubyte DefiningMarkerMessage;
 
 control_info Controls;
@@ -339,7 +338,7 @@ void kc_change_invert( kc_menu *menu, kc_item * item );
 static int find_item_at( kc_item * items, int nitems, int x, int y )
 {
 	int i;
-	
+
 	for (i=0; i<nitems; i++ )	{
 		if ( ((items[i].x+items[i].w1)==x) && (items[i].y==y))
 			return i;
@@ -353,8 +352,8 @@ static int find_next_item_up( kc_item * items, int nitems, int citem )
 
 	y = items[citem].y;
 	x = items[citem].x+items[citem].w1;
-	
-	do {	
+
+	do {
 		y--;
 		if ( y < 0 ) {
 			y = grd_curcanv->cv_bitmap.bm_h-1;
@@ -365,7 +364,7 @@ static int find_next_item_up( kc_item * items, int nitems, int citem )
 		}
 		i = find_item_at( items, nitems, x, y );
 	} while ( i < 0 );
-	
+
 	return i;
 }
 
@@ -375,8 +374,8 @@ static int find_next_item_down( kc_item * items, int nitems, int citem )
 
 	y = items[citem].y;
 	x = items[citem].x+items[citem].w1;
-	
-	do {	
+
+	do {
 		y++;
 		if ( y > grd_curcanv->cv_bitmap.bm_h-1 ) {
 			y = 0;
@@ -387,7 +386,7 @@ static int find_next_item_down( kc_item * items, int nitems, int citem )
 		}
 		i = find_item_at( items, nitems, x, y );
 	} while ( i < 0 );
-	
+
 	return i;
 }
 
@@ -397,8 +396,8 @@ static int find_next_item_right( kc_item * items, int nitems, int citem )
 
 	y = items[citem].y;
 	x = items[citem].x+items[citem].w1;
-	
-	do {	
+
+	do {
 		x++;
 		if ( x > grd_curcanv->cv_bitmap.bm_w-1 ) {
 			x = 0;
@@ -409,7 +408,7 @@ static int find_next_item_right( kc_item * items, int nitems, int citem )
 		}
 		i = find_item_at( items, nitems, x, y );
 	} while ( i < 0 );
-	
+
 	return i;
 }
 
@@ -419,8 +418,8 @@ static int find_next_item_left( kc_item * items, int nitems, int citem )
 
 	y = items[citem].y;
 	x = items[citem].x+items[citem].w1;
-	
-	do {	
+
+	do {
 		x--;
 		if ( x < 0 ) {
 			x = grd_curcanv->cv_bitmap.bm_w-1;
@@ -431,7 +430,7 @@ static int find_next_item_left( kc_item * items, int nitems, int citem )
 		}
 		i = find_item_at( items, nitems, x, y );
 	} while ( i < 0 );
-	
+
 	return i;
 }
 #endif
@@ -504,12 +503,12 @@ static void kconfig_draw(kc_menu *menu)
 	{
 		gr_set_fontcolor( BM_XRGB(31,27,6), -1 );
 		gr_setcolor( BM_XRGB(31,27,6) );
-		
+
 		gr_rect( FSPACX( 98), FSPACY(42), FSPACX(106), FSPACY(42) ); // horiz/left
 		gr_rect( FSPACX(120), FSPACY(42), FSPACX(128), FSPACY(42) ); // horiz/right
 		gr_rect( FSPACX( 98), FSPACY(42), FSPACX( 98), FSPACY(44) ); // vert/left
 		gr_rect( FSPACX(128), FSPACY(42), FSPACX(128), FSPACY(44) ); // vert/right
-		
+
 		gr_string( FSPACX(109), FSPACY(40), "OR" );
 
 		gr_rect( FSPACX(253), FSPACY(42), FSPACX(261), FSPACY(42) ); // horiz/left
@@ -568,12 +567,12 @@ static void kconfig_draw(kc_menu *menu)
 		gr_string(FSPACX(210), FSPACY(60), "JOYSTICK");
 		gr_string(FSPACX(273), FSPACY(60), "MOUSE");
 	}
-	
+
 	for (i=0; i<menu->nitems; i++ )	{
 		kc_drawitem( &menu->items[i], 0 );
 	}
 	kc_drawitem( &menu->items[menu->citem], 1 );
-	
+
 	if (menu->changing)
 	{
 		switch( menu->items[menu->citem].type )
@@ -586,7 +585,7 @@ static void kconfig_draw(kc_menu *menu)
 		}
 		kc_drawquestion( menu, &menu->items[menu->citem] );
 	}
-	
+
 	gr_set_fontcolor( BM_XRGB(28,28,28), -1 );
 	grd_curcanv->cv_font	= save_font;
 	gr_set_current_canvas( save_canvas );
@@ -612,11 +611,11 @@ static int kconfig_mouse(window *wind, d_event *event, kc_menu *menu)
 	int rval = 0;
 
 	gr_set_current_canvas(window_get_canvas(wind));
-	
+
 	if (menu->mouse_state)
 	{
 		int item_height;
-		
+
 		mouse_get_pos(&mx, &my, &mz);
 		for (i=0; i<menu->nitems; i++ )	{
 			item_height = get_item_height( &menu->items[i] );
@@ -634,7 +633,7 @@ static int kconfig_mouse(window *wind, d_event *event, kc_menu *menu)
 	else if (event->type == EVENT_MOUSE_BUTTON_UP)
 	{
 		int item_height;
-		
+
 		mouse_get_pos(&mx, &my, &mz);
 		item_height = get_item_height( &menu->items[menu->citem] );
 		x1 = grd_curcanv->cv_bitmap.bm_x + FSPACX(menu->items[menu->citem].x) + FSPACX(menu->items[menu->citem].w1);
@@ -652,9 +651,9 @@ static int kconfig_mouse(window *wind, d_event *event, kc_menu *menu)
 			rval = 1;
 		}
 	}
-	
+
 	gr_set_current_canvas(save_canvas);
-	
+
 	return rval;
 }
 
@@ -673,7 +672,7 @@ static int kconfig_key_command(window *wind, d_event *event, kc_menu *menu)
 		case KEY_CTRLED+KEY_D:
 			menu->items[menu->citem].value = 255;
 			return 1;
-		case KEY_CTRLED+KEY_R:	
+		case KEY_CTRLED+KEY_R:
 			if ( menu->items==kc_keyboard )
 				for (i=0; i<NUM_KEY_CONTROLS; i++ )
 					menu->items[i].value=DefaultKeySettings[0][i];
@@ -692,39 +691,39 @@ static int kconfig_key_command(window *wind, d_event *event, kc_menu *menu)
 		case KEY_DELETE:
 			menu->items[menu->citem].value=255;
 			return 1;
-		case KEY_UP: 		
+		case KEY_UP:
 		case KEY_PAD8:
 #ifdef TABLE_CREATION
 			if (menu->items[menu->citem].u==-1) menu->items[menu->citem].u=find_next_item_up( menu->items,menu->nitems, menu->citem);
 #endif
-			menu->citem = menu->items[menu->citem].u; 
+			menu->citem = menu->items[menu->citem].u;
 			return 1;
 		case KEY_DOWN:
 		case KEY_PAD2:
 #ifdef TABLE_CREATION
 			if (menu->items[menu->citem].d==-1) menu->items[menu->citem].d=find_next_item_down( menu->items,menu->nitems, menu->citem);
 #endif
-			menu->citem = menu->items[menu->citem].d; 
+			menu->citem = menu->items[menu->citem].d;
 			return 1;
 		case KEY_LEFT:
 		case KEY_PAD4:
 #ifdef TABLE_CREATION
 			if (menu->items[menu->citem].l==-1) menu->items[menu->citem].l=find_next_item_left( menu->items,menu->nitems, menu->citem);
 #endif
-			menu->citem = menu->items[menu->citem].l; 
+			menu->citem = menu->items[menu->citem].l;
 			return 1;
 		case KEY_RIGHT:
 		case KEY_PAD6:
 #ifdef TABLE_CREATION
 			if (menu->items[menu->citem].r==-1) menu->items[menu->citem].r=find_next_item_right( menu->items,menu->nitems, menu->citem);
 #endif
-			menu->citem = menu->items[menu->citem].r; 
+			menu->citem = menu->items[menu->citem].r;
 			return 1;
 		case KEY_ENTER:
 		case KEY_PADENTER:
 			kconfig_start_changing(menu);
 			return 1;
-		case -2:	
+		case -2:
 		case KEY_ESC:
 			if (menu->changing)
 				menu->changing = 0;
@@ -760,7 +759,7 @@ static int kconfig_key_command(window *wind, d_event *event, kc_menu *menu)
 					kc_d2x[i].r = find_next_item_right( kc_d2x,NUM_D2X_CONTROLS, i);
 				}
 				fp = PHYSFSX_openWriteBuffered( "kconfig.cod" );
-				
+
 				PHYSFSX_printf( fp, "const ubyte DefaultKeySettings[3][MAX_CONTROLS] = {\n" );
 				for (i=0; i<3; i++ )	{
 					int j;
@@ -770,78 +769,78 @@ static int kconfig_key_command(window *wind, d_event *event, kc_menu *menu)
 					PHYSFSX_printf( fp, "},\n" );
 				}
 				PHYSFSX_printf( fp, "};\n" );
-				
+
 				PHYSFSX_printf( fp, "\nkc_item kc_keyboard[NUM_KEY_CONTROLS] = {\n" );
 				for (i=0; i<NUM_KEY_CONTROLS; i++ )	{
-					PHYSFSX_printf( fp, "\t{ %2d,%3d,%3d,%3d,%3d,%3d,%3d,%3d,%3d,%c%s%c, %s, 255 },\n", 
+					PHYSFSX_printf( fp, "\t{ %2d,%3d,%3d,%3d,%3d,%3d,%3d,%3d,%3d,%c%s%c, %s, 255 },\n",
 							kc_keyboard[i].id, kc_keyboard[i].x, kc_keyboard[i].y, kc_keyboard[i].w1, kc_keyboard[i].w2,
 							kc_keyboard[i].u, kc_keyboard[i].d, kc_keyboard[i].l, kc_keyboard[i].r,
 							34, kc_keyboard[i].text, 34, btype_text[kc_keyboard[i].type] );
 				}
 				PHYSFSX_printf( fp, "};" );
-				
+
 				PHYSFSX_printf( fp, "\nkc_item kc_joystick[NUM_JOYSTICK_CONTROLS] = {\n" );
 				for (i=0; i<NUM_JOYSTICK_CONTROLS; i++ )	{
 					if (kc_joystick[i].type == BT_JOY_BUTTON)
-						PHYSFSX_printf( fp, "\t{ %2d,%3d,%3d,%3d,%3d,%3d,%3d,%3d,%3d,%c%s%c, %s, 255 },\n", 
+						PHYSFSX_printf( fp, "\t{ %2d,%3d,%3d,%3d,%3d,%3d,%3d,%3d,%3d,%c%s%c, %s, 255 },\n",
 								kc_joystick[i].id, kc_joystick[i].x, kc_joystick[i].y, kc_joystick[i].w1, kc_joystick[i].w2,
 								kc_joystick[i].u, kc_joystick[i].d, kc_joystick[i].l, kc_joystick[i].r,
 								34, kc_joystick[i].text, 34, btype_text[kc_joystick[i].type] );
 					else
-						PHYSFSX_printf( fp, "\t{ %2d,%3d,%3d,%3d,%3d,%3d,%3d,%3d,%3d,%c%s%c, %s, 255 },\n", 
+						PHYSFSX_printf( fp, "\t{ %2d,%3d,%3d,%3d,%3d,%3d,%3d,%3d,%3d,%c%s%c, %s, 255 },\n",
 								kc_joystick[i].id, kc_joystick[i].x, kc_joystick[i].y, kc_joystick[i].w1, kc_joystick[i].w2,
 								kc_joystick[i].u, kc_joystick[i].d, kc_joystick[i].l, kc_joystick[i].r,
 								34, kc_joystick[i].text, 34, btype_text[kc_joystick[i].type] );
 				}
 				PHYSFSX_printf( fp, "};" );
-				
+
 				PHYSFSX_printf( fp, "\nkc_item kc_mouse[NUM_MOUSE_CONTROLS] = {\n" );
 				for (i=0; i<NUM_MOUSE_CONTROLS; i++ )	{
-					PHYSFSX_printf( fp, "\t{ %2d,%3d,%3d,%3d,%3d,%3d,%3d,%3d,%3d,%c%s%c, %s, 255 },\n", 
+					PHYSFSX_printf( fp, "\t{ %2d,%3d,%3d,%3d,%3d,%3d,%3d,%3d,%3d,%c%s%c, %s, 255 },\n",
 							kc_mouse[i].id, kc_mouse[i].x, kc_mouse[i].y, kc_mouse[i].w1, kc_mouse[i].w2,
 							kc_mouse[i].u, kc_mouse[i].d, kc_mouse[i].l, kc_mouse[i].r,
 							34, kc_mouse[i].text, 34, btype_text[kc_mouse[i].type] );
 				}
 				PHYSFSX_printf( fp, "};" );
-				
+
 				PHYSFSX_printf( fp, "\nkc_item kc_d2x[NUM_D2X_CONTROLS] = {\n" );
 				for (i=0; i<NUM_D2X_CONTROLS; i++ )	{
-					PHYSFSX_printf( fp, "\t{ %2d,%3d,%3d,%3d,%3d,%3d,%3d,%3d,%3d,%c%s%c, %s, 255 },\n", 
+					PHYSFSX_printf( fp, "\t{ %2d,%3d,%3d,%3d,%3d,%3d,%3d,%3d,%3d,%c%s%c, %s, 255 },\n",
 							kc_d2x[i].id, kc_d2x[i].x, kc_d2x[i].y, kc_d2x[i].w1, kc_d2x[i].w2,
 							kc_d2x[i].u, kc_d2x[i].d, kc_d2x[i].l, kc_d2x[i].r,
 							34, kc_d2x[i].text, 34, btype_text[kc_d2x[i].type] );
 				}
 				PHYSFSX_printf( fp, "};" );
-				
+
 				PHYSFS_close(fp);
-				
+
 			}
 			return 1;
 #endif
 		case 0:		// some other event
 			break;
-			
+
 		default:
 			break;
 	}
-	
+
 	return 0;
 }
 
 static int kconfig_handler(window *wind, d_event *event, kc_menu *menu)
 {
 	int i;
-	
+
 	switch (event->type)
 	{
 		case EVENT_WINDOW_ACTIVATED:
 			game_flush_inputs();
 			break;
-			
+
 		case EVENT_WINDOW_DEACTIVATED:
 			menu->mouse_state = 0;
 			break;
-			
+
 		case EVENT_MOUSE_BUTTON_DOWN:
 		case EVENT_MOUSE_BUTTON_UP:
 			if (menu->changing && (menu->items[menu->citem].type == BT_MOUSE_BUTTON) && (event->type == EVENT_MOUSE_BUTTON_UP))
@@ -895,7 +894,7 @@ static int kconfig_handler(window *wind, d_event *event, kc_menu *menu)
 		case EVENT_IDLE:
 			kconfig_mouse(wind, event, menu);
 			break;
-			
+
 		case EVENT_WINDOW_DRAW:
 			if (menu->changing)
 				timer_delay(f0_1/10);
@@ -903,31 +902,31 @@ static int kconfig_handler(window *wind, d_event *event, kc_menu *menu)
 				timer_delay2(50);
 			kconfig_draw(menu);
 			break;
-			
+
 		case EVENT_WINDOW_CLOSE:
 			d_free(menu);
-			
+
 			// Update save values...
-			
-			for (i=0; i<NUM_KEY_CONTROLS; i++ ) 
+
+			for (i=0; i<NUM_KEY_CONTROLS; i++ )
 				PlayerCfg.KeySettings[0][i] = kc_keyboard[i].value;
-			
-			for (i=0; i<NUM_JOYSTICK_CONTROLS; i++ ) 
+
+			for (i=0; i<NUM_JOYSTICK_CONTROLS; i++ )
 				PlayerCfg.KeySettings[1][i] = kc_joystick[i].value;
 
-			for (i=0; i<NUM_MOUSE_CONTROLS; i++ ) 
+			for (i=0; i<NUM_MOUSE_CONTROLS; i++ )
 				PlayerCfg.KeySettings[2][i] = kc_mouse[i].value;
-			
+
 			for (i=0; i<NUM_D2X_CONTROLS; i++)
 				PlayerCfg.KeySettingsD2X[i] = kc_d2x[i].value;
 			return 0;	// continue closing
 			break;
-			
+
 		default:
 			return 0;
 			break;
 	}
-	
+
 	return 1;
 }
 
@@ -936,7 +935,7 @@ static void kconfig_sub(kc_item * items,int nitems, char *title)
 	kc_menu *menu;
 
 	MALLOC(menu, kc_menu, 1);
-	
+
 	if (!menu)
 		return;
 
@@ -1000,11 +999,11 @@ void kc_drawitem( kc_item *item, int is_current )
 		else
 			gr_setcolor( BM_XRGB(16,0,19) );
 		gr_urect( FSPACX(item->w1+item->x), FSPACY(item->y-1), FSPACX(item->w1+item->x+item->w2), FSPACY(item->y)+h );
-		
+
 		gr_set_fontcolor( BM_XRGB(28,28,28), -1 );
 
 		x = FSPACX(item->w1+item->x)+((FSPACX(item->w2)-w)/2);
-	
+
 		gr_string( x, FSPACY(item->y), btext );
 	}
 }
@@ -1021,7 +1020,7 @@ void kc_drawquestion( kc_menu *menu, kc_item *item )
 	if (menu->q_fade_i>63) menu->q_fade_i=0;
 
 	gr_urect( FSPACX(item->w1+item->x), FSPACY(item->y-1), FSPACX(item->w1+item->x+item->w2), FSPACY(item->y)+h );
-	
+
 	gr_set_fontcolor( BM_XRGB(28,28,28), -1 );
 
 	x = FSPACX(item->w1+item->x)+((FSPACX(item->w2)-w)/2);
@@ -1139,7 +1138,7 @@ void kc_change_invert( kc_menu *menu, kc_item * item )
 {
 	if (item->value)
 		item->value = 0;
-	else 
+	else
 		item->value = 1;
 
 	menu->changing = 0;		// in case we were changing something else
@@ -1291,7 +1290,7 @@ void kconfig_read_controls(d_event *event, int automap_flag)
 			if (axis == kc_joystick[23].value) // Throttle - default deadzone
 				joy_null_value = PlayerCfg.JoystickDead[5]*3;
 
-			if (Controls.raw_joy_axis[axis] > joy_null_value) 
+			if (Controls.raw_joy_axis[axis] > joy_null_value)
 				Controls.raw_joy_axis[axis] = ((Controls.raw_joy_axis[axis]-joy_null_value)*128)/(128-joy_null_value);
 			else if (Controls.raw_joy_axis[axis] < -joy_null_value)
 				Controls.raw_joy_axis[axis] = ((Controls.raw_joy_axis[axis]+joy_null_value)*128)/(128-joy_null_value);
@@ -1316,7 +1315,7 @@ void kconfig_read_controls(d_event *event, int automap_flag)
 						Controls.raw_mouse_axis[i] = -MOUSEFS_DELTA_RANGE;
 					if (Controls.raw_mouse_axis[i] > MOUSEFS_DELTA_RANGE)
 						Controls.raw_mouse_axis[i] = MOUSEFS_DELTA_RANGE;
-					if (Controls.raw_mouse_axis[i] > mouse_null_value) 
+					if (Controls.raw_mouse_axis[i] > mouse_null_value)
 						Controls.mouse_axis[i] = (((Controls.raw_mouse_axis[i]-mouse_null_value)*MOUSEFS_DELTA_RANGE)/(MOUSEFS_DELTA_RANGE-mouse_null_value)*FrameTime)/MOUSEFS_DELTA_RANGE;
 					else if (Controls.raw_mouse_axis[i] < -mouse_null_value)
 						Controls.mouse_axis[i] = (((Controls.raw_mouse_axis[i]+mouse_null_value)*MOUSEFS_DELTA_RANGE)/(MOUSEFS_DELTA_RANGE-mouse_null_value)*FrameTime)/MOUSEFS_DELTA_RANGE;

@@ -29,6 +29,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "dxxerror.h"
 #include "physics.h"
 #include "kconfig.h"
+#include "slew.h"
 
 #ifdef EDITOR
 #include "editor/editor.h"
@@ -50,10 +51,6 @@ dxxobject *slew_obj=NULL;	//what object is slewing, or NULL if none
 #define ZOOM_SPEED_FACTOR		(1000)	//(1500)
 
 short old_joy_x,old_joy_y;	//position last time around
-
-//	Function Prototypes
-int slew_stop(void);
-
 
 // -------------------------------------------------------------------
 //say start slewing with this object

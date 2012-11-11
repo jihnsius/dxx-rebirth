@@ -5,6 +5,7 @@
 #include "wrap-object.hpp"
 #include "filter.hpp"
 #include <boost/python/def.hpp>
+#include "defmodules.hpp"
 
 using namespace boost::python;
 

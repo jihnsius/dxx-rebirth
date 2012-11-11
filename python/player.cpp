@@ -3,6 +3,7 @@
 #include <boost/python/scope.hpp>
 #include <boost/python/str.hpp>
 #include <boost/format.hpp>
+#include "defmodules.hpp"
 
 #include "lighting.h"
 

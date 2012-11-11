@@ -157,13 +157,6 @@ void slide_textures(void);
 void powerup_grab_cheat_all(void);
 void game_init_render_sub_buffers(int x, int y, int w, int h);
 
-//	Other functions
-extern void multi_check_for_killgoal_winner();
-
-extern int ReadControls(d_event *event);		// located in gamecntl.c
-extern void do_final_boss_frame(void);
-
-
 // text functions
 
 extern ubyte DefiningMarkerMessage;
@@ -624,11 +617,6 @@ fix Last_afterburner_charge = 0;
 
 int	Ab_scale = 4;
 
-//	------------------------------------------------------------------------------------
-#ifdef NETWORK
-extern void multi_send_sound_function (char,char);
-#endif
-
 static void do_afterburner_stuff(void)
 {
 	static sbyte func_play = 0;
@@ -807,8 +795,6 @@ void palette_restore(void)
 	//	Forces flash effect to fixup palette next frame.
 	Time_flash_last_played = 0;
 }
-
-extern void dead_player_frame(void);
 
 //	--------------------------------------------------------------------------------------------------
 int allowed_to_fire_laser(void)
@@ -999,7 +985,7 @@ void show_newdemo_help()
 }
 
 //temp function until Matt cleans up game sequencing
-extern void temp_reset_stuff_on_level();
+void temp_reset_stuff_on_level();
 
 #define LEAVE_TIME 0x4000		//how long until we decide key is down	(Used to be 0x4000)
 
@@ -1104,7 +1090,7 @@ window *game_setup(void)
 		Cursegp = &Segments[0];
 		Curside = 0;
 	}
-	
+
 	if (Segments[ConsoleObject->segnum].segnum == -1)      //segment no longer exists
 		obj_relink( ConsoleObject-Objects, SEG_PTR_2_NUM(Cursegp) );
 
@@ -1156,7 +1142,7 @@ int game_handler(window *wind, d_event *event, void *data)
 
 			if (!((Game_mode & GM_MULTI) && (Newdemo_state != ND_STATE_PLAYBACK)))
 				palette_restore();
-			
+
 			reset_cockpit();
 			break;
 
@@ -1258,12 +1244,6 @@ void close_game()
 	restore_effect_bitmap_icons();
 }
 
-
-#ifdef EDITOR
-extern void player_follow_path(dxxobject *objp);
-extern void check_create_player_path(void);
-#endif
-
 extern	int Do_appearance_effect;
 
 dxxobject *Missile_viewer=NULL;
@@ -1285,8 +1265,6 @@ dxxobject *find_escort()
 	return NULL;
 }
 
-extern void process_super_mines_frame(void);
-extern void do_seismic_stuff(void);
 extern int Level_shake_duration;
 
 //if water or fire level, make occasional sound
@@ -1315,9 +1293,6 @@ static void do_ambient_sounds()
 }
 
 // -- extern void lightning_frame(void);
-
-extern void omega_charge_frame(void);
-
 void flicker_lights();
 
 void game_leave_menus(void)

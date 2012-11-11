@@ -30,31 +30,28 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "editor/medwall.h"
 
 // Test function prototypes (replace Test1, 2 and 3 with whatever function you wish to test.)
-extern void test_create_path();
-extern void test_create_all_paths();
-extern void test_create_path_many();
-extern void create_all_paths();
-extern void test_create_all_anchors();
+void create_all_paths();
+void test_create_all_anchors();
 // extern void make_curside_bottom_side();
-extern void move_object_to_mouse_click();
-extern void test_create_n_segment_path();
+void move_object_to_mouse_click();
+void test_create_n_segment_path();
 
-extern void set_all_modes_to_hover(void);
+void set_all_modes_to_hover(void);
 
-extern void check_for_overlapping_segments(void);
-extern void init_replacements();
+void check_for_overlapping_segments(void);
+void init_replacements();
 
-extern void do_replacements(void);
-extern void do_replacements_all(void);
+void do_replacements(void);
+void do_replacements_all(void);
 
-int Test1() 
+int Test1()
 {
 	init_replacements();
 
 	return 0;
 }
 
-int Test2() 
+int Test2()
 {
 	do_replacements();
 
@@ -102,7 +99,7 @@ static const FUNCTION med_functions[] = {
 //{   "med-mine-load",                    0,      LoadMine },
 {   "med-mine-menu",                    0,      MineMenu },
 {   "med-mine-create-new",              0,      CreateNewMine },
-//{	 "med-mine-load-old",					 0,		LoadOldMine },			
+//{	 "med-mine-load-old",					 0,		LoadOldMine },
 {   "med-situation-save",               0,      SaveSituation },
 {   "med-situation-load",               0,      LoadSituation },
 {	 "med-restore-game-state",				 0,		RestoreGameState },
@@ -335,7 +332,7 @@ static const FUNCTION med_functions[] = {
 {	"med-light-assign-default-all",		 0,	LightSetDefaultAll },
 {	"med-light-ambient-lighting",			 0,	LightAmbientLighting },
 
-// In seguvs.c																		
+// In seguvs.c
 {	"med-seguvs-fix-bogus-uvs-on-side",	 0,	fix_bogus_uvs_on_side},
 {	"med-seguvs-fix-bogus-uvs-all",	 	 0,	fix_bogus_uvs_all},
 {	"med-seguvs-smooth-lighting-all",	 0,   set_average_light_on_all},

@@ -74,6 +74,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "window.h"
 #include "playsave.h"
 #include "args.h"
+#include "physics.h"
 
 #define LEAVE_TIME 0x4000
 
@@ -189,8 +190,6 @@ ubyte Automap_visited[MAX_SEGMENTS];
 void adjust_segment_limit(automap *am, int SegmentLimit);
 void draw_all_edges(automap *am);
 void automap_build_edge_list(automap *am);
-// extern
-void check_and_fix_matrix(vms_matrix *m);
 
 #define	MAX_DROP_MULTI	2
 #define	MAX_DROP_SINGLE	9
@@ -561,8 +560,6 @@ static void draw_automap(automap *am)
 	}
 	am->t1 = am->t2;
 }
-
-int set_segment_depths(int start_seg, ubyte *segbuf);
 
 #define MAP_BACKGROUND_FILENAME ((HIRESMODE && PHYSFSX_exists("mapb.pcx",1))?"MAPB.PCX":"MAP.PCX")
 

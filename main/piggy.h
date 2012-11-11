@@ -135,5 +135,7 @@ extern ubyte bogus_bitmap_initialized;
 extern digi_sound bogus_sound;
 extern const char space[3];
 extern const char equal_space[4];
+void piggy_init_pigfile(char *filename);
+int read_hamfile();
 
 #endif //_PIGGY_H

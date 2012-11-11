@@ -161,6 +161,7 @@ extern muzzle_info Muzzle_data[MUZZLE_QUEUE_MAX];
 extern fix Omega_charge;
 // NOTE: OMEGA_CHARGE_SCALE moved to laser.c to avoid long rebuilds if changed
 int ok_to_do_omega_damage(struct dxxobject *weapon);
+void omega_charge_frame(void);
 
 #ifdef __cplusplus
 }

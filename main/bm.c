@@ -53,6 +53,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "console.h"
 #include "rle.h"
 #include "physfsx.h"
+#include "internal.h"
 
 ubyte Sounds[MAX_SOUNDS];
 ubyte AltSounds[MAX_SOUNDS];
@@ -474,10 +475,6 @@ static grs_bitmap *bm_load_extra_objbitmap(char *name)
 		return &GameBitmaps[ObjBitmaps[N_ObjBitmaps-1].index];
 	}
 }
-
-#ifdef OGL
-void ogl_cache_polymodel_textures(int model_num);
-#endif
 
 int load_exit_models()
 {

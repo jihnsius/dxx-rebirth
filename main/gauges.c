@@ -1086,8 +1086,6 @@ static inline const char *SECONDARY_WEAPON_NAMES_VERY_SHORT(const unsigned u)
 }
 
 //return which bomb will be dropped next time the bomb key is pressed
-int which_bomb();
-
 static void show_bomb_count(int x,int y,int bg_color,int always_show,int right_align)
 {
 	int bomb,count,w=0,h=0,aw=0;
@@ -2390,8 +2388,6 @@ static void draw_invulnerable_ship()
 }
 
 extern int Missile_gun;
-int allowed_to_fire_laser(void);
-int allowed_to_fire_missile(void);
 
 const rgb player_rgb[MAX_PLAYERS] = {
 							{15,15,23},

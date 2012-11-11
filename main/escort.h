@@ -11,4 +11,8 @@ extern void change_guidebot_name(void);
 extern void do_escort_menu(void);
 extern void detect_escort_goal_accomplished(int index);
 extern void set_escort_special_goal(int key);
+void init_buddy_for_level(void);
+void invalidate_escort_goal(void);
+void recreate_thief(dxxobject *objp);
+void drop_stolen_items (dxxobject *);
 #endif // _ESCORT_H

@@ -1448,8 +1448,6 @@ void force_dump_ai_objects_all(char *msg)
 // ----------------------------------------------------------------------------------
 #endif
 
-void do_boss_dying_frame(dxxobject *objp);
-
 // ----------------------------------------------------------------------------------
 // Do things which need to get done for all AI objects each frame.
 // This includes:

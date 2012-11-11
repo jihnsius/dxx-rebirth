@@ -23,3 +23,5 @@ enum player_object_type_t
 
 DECLARE_DXX_OBJECT_TYPESAFE_SUBTYPE(player_object);
 DECLARE_DXX_OBJECT_TYPESAFE_CONTAINER(player_object, OBJ_PLAYER);
+
+const dxxplayer_object& get_player_object(const player& player);

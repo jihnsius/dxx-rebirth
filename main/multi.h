@@ -391,6 +391,16 @@ void multi_send_trigger_specific(char pnum,char trig);
 void multi_send_door_open_specific(int pnum,int segnum, int side,ubyte flag);
 void multi_send_wall_status_specific (int pnum,int wallnum,ubyte type,ubyte flags,ubyte state);
 void multi_send_light_specific (int pnum,int segnum,ubyte val);
+void multi_send_capture_bonus (char pnum);
+int multi_all_players_alive();
+void multi_check_for_killgoal_winner();
+void multi_send_seismic (fix64,fix64);
+void multi_send_drop_blobs(char);
+void multi_send_sound_function (char,char);
+void multi_send_got_flag (char);
+void DropFlag();
+int multi_powerup_is_allowed (int);
+void multi_send_finish_game ();
 
 //how to encode missiles & flares in weapon packets
 #define MISSILE_ADJUST  100

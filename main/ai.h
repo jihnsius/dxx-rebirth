@@ -204,6 +204,9 @@ extern int   Max_escort_length;
 
 
 void  ai_multi_send_robot_position(int objnum, int force);
+int boss_spew_robot(dxxobject *objp, vms_vector *pos);
+void init_ai_for_ship(void);
+void do_boss_dying_frame(dxxobject *objp);
 
 // Amount of time since the current robot was last processed for things such as movement.
 // It is not valid to use FrameTime because robots do not get moved every frame.
@@ -294,5 +297,10 @@ void buddy_message(const char * format, ... ) __attribute_gcc_format((printf, 1,
 
 #define SPECIAL_REACTOR_ROBOT   65
 void special_reactor_stuff(void);
+
+#ifdef EDITOR
+void player_follow_path(dxxobject *objp);
+void check_create_player_path(void);
+#endif
 
 #endif /* _AI_H */

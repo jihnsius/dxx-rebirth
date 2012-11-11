@@ -94,7 +94,7 @@ struct sound_slot {
  int looped;    // Play this sample looped?
  fix pan;       // 0 = far left, 1 = far right
  fix volume;    // 0 = nothing, 1 = fully on
- //changed on 980905 by adb from char * to unsigned char * 
+ //changed on 980905 by adb from char * to unsigned char *
  unsigned char *samples;
  //end changes by adb
  unsigned int length; // Length of the sample
@@ -144,7 +144,7 @@ static void audio_mixcallback(void *userdata, ubyte *stream, int len)
    }
    vl = fixmul(vl, (x = sl->volume));
    vr = fixmul(vr, x);
-   while (sp < streamend) 
+   while (sp < streamend)
    {
     if (sldata == slend)
     {
@@ -223,8 +223,8 @@ int digi_init()
  /* Open the ALSA sound device */
 	if ((err = snd_pcm_open(&snd_devhandle, device, SND_PCM_STREAM_PLAYBACK)) < 0)
 	{
-     con_printf(CON_CRITICAL, "open failed: %s\n", snd_strerror( err ));  
-     return -1; 
+     con_printf(CON_CRITICAL, "open failed: %s\n", snd_strerror( err ));
+     return -1;
 	}
 
 	snd_pcm_hw_params_alloca(&params);
@@ -275,10 +275,10 @@ int digi_init()
  pthread_mutexattr_init(&mutexattr);
  pthread_mutex_init(&mutex,&mutexattr);
  pthread_mutexattr_destroy(&mutexattr);
- 
+
  if (pthread_attr_init(&attr) != 0) {
   con_printf(CON_CRITICAL, "failed to init attr\n");
-  snd_pcm_close( snd_devhandle ); 
+  snd_pcm_close( snd_devhandle );
   return -1;
  }
 
@@ -313,10 +313,7 @@ void digi_stop_all_channels()
 }
 
 
-extern void digi_end_soundobj(int channel);	
 extern int SoundQ_channel;
-extern void SoundQ_end();
-int verify_sound_channel_free(int channel);
 
 // Volume 0-F1_0
 int digi_start_sound(short soundnum, fix volume, int pan, int looping, int loop_start, int loop_end, int soundobj)
@@ -338,7 +335,7 @@ int digi_start_sound(short soundnum, fix volume, int pan, int looping, int loop_
 			break;
 
 		if (!SoundSlots[next_channel].persistent)
-			break;	// use this channel!	
+			break;	// use this channel!
 
 		next_channel++;
 		if (next_channel >= digi_max_channels)
@@ -448,10 +445,10 @@ int digi_is_sound_playing(int soundno)
 
 
  //added on 980905 by adb to make sound channel setting work
-void digi_set_max_channels(int n) { 
+void digi_set_max_channels(int n) {
 	digi_max_channels	= n;
 
-	if ( digi_max_channels < 1 ) 
+	if ( digi_max_channels < 1 )
 		digi_max_channels = 1;
 	if (digi_max_channels > MAX_SOUND_SLOTS)
 		digi_max_channels = MAX_SOUND_SLOTS;
@@ -461,8 +458,8 @@ void digi_set_max_channels(int n) {
 	digi_stop_all_channels();
 }
 
-int digi_get_max_channels() { 
-	return digi_max_channels; 
+int digi_get_max_channels() {
+	return digi_max_channels;
 }
 // end edit by adb
 

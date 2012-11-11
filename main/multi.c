@@ -108,8 +108,6 @@ void multi_do_gmode_update(char *buf);
 
 #define vm_angvec_zero(v) (v)->p=(v)->b=(v)->h=0
 
-void drop_player_eggs(dxxobject *player); // from collide.c
-
 //
 // Global variables
 //
@@ -174,7 +172,6 @@ bitmap_index multi_player_textures[MAX_PLAYERS][N_PLAYER_SHIP_TEXTURES];
 // Globals for protocol-bound Refuse-functions
 char RefuseThisPlayer=0,WaitForRefuseAnswer=0,RefuseTeam,RefusePlayerName[12];
 fix64 RefuseTimeLimit=0;
-void init_player_stats_new_ship(ubyte pnum);
 
 static const int message_length[MULTI_MAX_TYPE+1] = {
 	25, // POSITION
@@ -623,7 +620,6 @@ multi_sort_kill_list(void)
 	}
 }
 
-dxxobject *obj_find_first_of_type (int);
 char Multi_killed_yourself=0;
 
 static void multi_compute_kill(int killer, int killed)

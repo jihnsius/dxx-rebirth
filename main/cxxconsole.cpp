@@ -16,6 +16,7 @@
 #endif
 #include "key.h"
 #include "gamefont.h"
+#include "pybinding.h"
 
 using std::swap;
 
@@ -48,24 +49,6 @@ static unsigned g_con_input_position;
  */
 static unsigned g_con_history_pos;
 static bool g_con_history_browse;
-
-#ifdef USE_PYTHON
-void scripting_init();
-void scripting_close();
-void scripting_input_enter(const char *);
-#else
-static void scripting_init()
-{
-}
-
-static void scripting_close()
-{
-}
-
-static void scripting_input_enter(const char *)
-{
-}
-#endif
 
 static bool history_index_out_of_range(const unsigned history_pos)
 {

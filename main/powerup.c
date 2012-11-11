@@ -65,13 +65,13 @@ void do_powerup_frame(dxxobject *obj)
 	vclip *vc = &Vclip[vci->vclip_num];
 
 	fudge = (FrameTime * ((obj-Objects)&3)) >> 4;
-	
+
 	vci->frametime -= FrameTime+fudge;
-	
+
 	while (vci->frametime < 0 ) {
 
 		vci->frametime += vc->frame_time;
-		
+
 		if ((obj-Objects)&1)
 			vci->framenum--;
 		else
@@ -185,10 +185,7 @@ static int pick_up_vulcan_ammo(void)
 	return used;
 }
 
-extern void invalidate_escort_goal(void);
-extern char GetKeyValue(char);
-extern void check_to_use_primary(int);
-extern void multi_send_got_flag (char);
+char GetKeyValue(char);
 
 //	returns true if powerup consumed
 int do_powerup(dxxobject *obj)
@@ -577,7 +574,7 @@ int do_powerup(dxxobject *obj)
 
 #ifdef NETWORK
 		case POW_FLAG_BLUE:
-			if (Game_mode & GM_CAPTURE)			
+			if (Game_mode & GM_CAPTURE)
 				if (get_team(Player_num) == TEAM_RED) {
 					powerup_basic(15, 0, 15, 0, "BLUE FLAG!");
 					Players[Player_num].flags |= PLAYER_FLAGS_FLAG;
@@ -587,7 +584,7 @@ int do_powerup(dxxobject *obj)
 		   break;
 
 		case POW_HOARD_ORB:
-			if (Game_mode & GM_HOARD)			
+			if (Game_mode & GM_HOARD)
 				if (Players[Player_num].secondary_ammo[PROXIMITY_INDEX]<12) {
 					powerup_basic(15, 0, 15, 0, "Orb!!!");
 					Players[Player_num].secondary_ammo[PROXIMITY_INDEX]++;
@@ -595,10 +592,10 @@ int do_powerup(dxxobject *obj)
 					used=1;
 					multi_send_got_orb (Player_num);
 				}
-		  break;	
+		  break;
 
 		case POW_FLAG_RED:
-			if (Game_mode & GM_CAPTURE)			
+			if (Game_mode & GM_CAPTURE)
 				if (get_team(Player_num) == TEAM_BLUE) {
 					powerup_basic(15, 0, 15, 0, "RED FLAG!");
 					Players[Player_num].flags |= PLAYER_FLAGS_FLAG;
@@ -635,7 +632,7 @@ int do_powerup(dxxobject *obj)
 /*
  * reads n powerup_type_info structs from a PHYSFS_file
  */
-extern int powerup_type_info_read_n(powerup_type_info *pti, int n, PHYSFS_file *fp)
+int powerup_type_info_read_n(powerup_type_info *pti, int n, PHYSFS_file *fp)
 {
 	int i;
 

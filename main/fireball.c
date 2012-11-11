@@ -58,7 +58,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "automap.h"
 #include "byteswap.h"
 
-#define EXPLOSION_SCALE (F1_0*5/2)		//explosion is the obj size times this 
+#define EXPLOSION_SCALE (F1_0*5/2)		//explosion is the obj size times this
 
 fix	Flash_effect=0;
 //--unused-- ubyte	Frame_processed[MAX_OBJECTS];
@@ -92,7 +92,7 @@ static dxxobject *object_create_explosion_sub(dxxobject *objp, short segnum, vms
 		fix damage;
 		int i;
 		dxxobject * obj0p = &Objects[0];
-					 
+
 		// -- now legal for badass explosions on a wall. Assert(objp != NULL);
 
 		for (i=0; i<=Highest_object_index; i++ )	{
@@ -118,10 +118,10 @@ static dxxobject *object_create_explosion_sub(dxxobject *objp, short segnum, vms
 						// Find the force vector on the object
 						vm_vec_normalized_dir_quick( &vforce, &obj0p->pos, &obj->pos );
 						vm_vec_scale(&vforce, force );
-	
+
 						// Find where the point of impact is... ( pos_hit )
 						vm_vec_scale(vm_vec_sub(&pos_hit, &obj->pos, &obj0p->pos), fixdiv(obj0p->size, obj0p->size + dist));
-	
+
 						switch ( obj0p->type )	{
 							case OBJ_WEAPON:
 								phys_apply_force(obj0p,&vforce);
@@ -797,7 +797,7 @@ int drop_powerup(int type, int id, int num, vms_vector *init_vel, vms_vector *po
 
 #ifdef NETWORK
 				if (Game_mode & GM_MULTI)
-				{	
+				{
 					if (Net_create_loc >= MAX_NET_CREATE_OBJECTS)
 					{
 						return (-1);
@@ -908,7 +908,7 @@ int drop_powerup(int type, int id, int num, vms_vector *init_vel, vms_vector *po
 				obj->rtype.pobj_info.subobj_flags = 0;
 
 				//set Physics info
-		
+
 				obj->mtype.phys_info.velocity = new_velocity;
 
 				obj->mtype.phys_info.mass = Robot_info[obj->id].mass;
@@ -1083,17 +1083,17 @@ void explode_object(dxxobject *hitobj,fix delay_time)
 
 		objnum = obj_create( OBJ_FIREBALL,-1,hitobj->segnum,&hitobj->pos,&vmd_identity_matrix,0,
 						CT_EXPLOSION,MT_NONE,RT_NONE);
-	
+
 		if (objnum < 0 ) {
 			maybe_delete_object(hitobj);		//no explosion, die instantly
 			Int3();
 			return;
 		}
-	
+
 		obj = &Objects[objnum];
-	
+
 		//now set explosion-specific data
-	
+
 		obj->lifeleft = delay_time;
 		obj->ctype.expl_info.delete_objnum = hitobj-Objects;
 #ifndef NDEBUG
@@ -1111,7 +1111,7 @@ void explode_object(dxxobject *hitobj,fix delay_time)
 		vclip_num = get_explosion_vclip(hitobj,0);
 
 		expl_obj = object_create_explosion(hitobj->segnum, &hitobj->pos, fixmul(hitobj->size,EXPLOSION_SCALE), vclip_num );
-	
+
 		if (! expl_obj) {
 			maybe_delete_object(hitobj);		//no explosion, die instantly
 			return;
@@ -1119,12 +1119,12 @@ void explode_object(dxxobject *hitobj,fix delay_time)
 
 		//don't make debris explosions have physics, because they often
 		//happen when the debris has hit the wall, so the fireball is trying
-		//to move into the wall, which shows off FVI problems.   	
+		//to move into the wall, which shows off FVI problems.
 		if (hitobj->type!=OBJ_DEBRIS && hitobj->movement_type==MT_PHYSICS) {
 			expl_obj->movement_type = MT_PHYSICS;
 			expl_obj->mtype.phys_info = hitobj->mtype.phys_info;
 		}
-	
+
 		if (hitobj->render_type==RT_POLYOBJ && hitobj->type!=OBJ_DEBRIS)
 			explode_model(hitobj);
 
@@ -1146,8 +1146,6 @@ void do_debris_frame(dxxobject *obj)
 		explode_object(obj,0);
 
 }
-
-extern void drop_stolen_items(dxxobject *objp);
 
 //do whatever needs to be done for this explosion for this frame
 void do_explosion_sequence(dxxobject *obj)
@@ -1365,7 +1363,7 @@ void do_exploding_wall_frame()
 				size = EXPL_WALL_FIREBALL_SIZE + (2*EXPL_WALL_FIREBALL_SIZE * e / EXPL_WALL_TOTAL_FIREBALLS);
 
 				//fireballs start away from door, with subsequent ones getting closer
-				#ifdef COMPACT_SEGS	
+				#ifdef COMPACT_SEGS
 					{
 					vms_vector _vn;
 					get_side_normal(&Segments[segnum], sidenum, 0, &_vn );
@@ -1431,7 +1429,7 @@ static void expl_wall_swap(expl_wall *ew, int swap)
 {
 	if (!swap)
 		return;
-	
+
 	ew->segnum = SWAPINT(ew->segnum);
 	ew->sidenum = SWAPINT(ew->sidenum);
 	ew->time = SWAPINT(ew->time);
@@ -1443,9 +1441,9 @@ static void expl_wall_swap(expl_wall *ew, int swap)
 void expl_wall_read_n_swap(expl_wall *ew, int n, int swap, PHYSFS_file *fp)
 {
 	int i;
-	
+
 	PHYSFS_read(fp, ew, sizeof(expl_wall), n);
-	
+
 	if (swap)
 		for (i = 0; i < n; i++)
 			expl_wall_swap(&ew[i], swap);

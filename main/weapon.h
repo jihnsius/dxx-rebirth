@@ -238,6 +238,17 @@ void init_smega_detonates(void);
  * reads n weapon_info structs from a PHYSFS_file
  */
 int weapon_info_read_n(weapon_info *wi, int n, PHYSFS_file *fp, int file_version);
+void InitWeaponOrdering();
+void CyclePrimary();
+void CycleSecondary();
+void ReorderPrimary();
+void ReorderSecondary();
+void check_to_use_primary(int);
+void init_seismic_disturbances(void);
+void process_super_mines_frame(void);
+void DropCurrentWeapon();
+void DropSecondaryWeapon();
+void do_seismic_stuff(void);
 
 #ifdef __cplusplus
 }

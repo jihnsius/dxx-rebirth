@@ -112,6 +112,13 @@ extern int NumNetPlayerPositions;
 
 void bash_to_shield(int, char *);
 
+int p_secret_level_destroyed(void);
+void ExitSecretLevel(void);
+void do_cloak_invul_secret_stuff(fix64 old_gametime);
+void EnterSecretLevel(void);
+void copy_defaults_to_robot(dxxobject *objp);
+void init_player_stats_new_ship(ubyte pnum);
+
 #ifdef __cplusplus
 }
 #endif

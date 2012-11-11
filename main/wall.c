@@ -122,7 +122,7 @@ static int check_transparency( segment * seg, int side )
 //		WID_RENDER_FLAG			2
 //		WID_RENDPAST_FLAG			4
 //	 Return values:
-//		WID_WALL						2	// 0/1/0		wall	
+//		WID_WALL						2	// 0/1/0		wall
 //		WID_TRANSPARENT_WALL		6	//	0/1/1		transparent wall
 //		WID_ILLUSORY_WALL			3	//	1/1/0		illusory wall
 //		WID_TRANSILLUSORY_WALL	7	//	1/1/1		transparent illusory wall
@@ -170,18 +170,18 @@ int wall_is_doorway ( segment * seg, int side )
 			return WID_TRANSPARENT_WALL;
 		else
 			return WID_WALL;
-	}	
-	
+	}
+
 	if (flags & WALL_DOOR_OPENED)
 		return WID_TRANSILLUSORY_WALL;
-	
+
 	if (type == WALL_CLOAKED)
 		return WID_RENDER_FLAG | WID_RENDPAST_FLAG | WID_CLOAKED_FLAG;
 
 	state = Walls[seg->sides[side].wall_num].state;
 	if ((type == WALL_DOOR) && (state == WALL_DOOR_OPENING))
 		return WID_TRANSPARENT_WALL;
-	
+
 // If none of the above flags are set, there is no doorway.
 	if (check_transparency( seg, side))
 		return WID_TRANSPARENT_WALL;
@@ -195,7 +195,7 @@ int wall_is_doorway ( segment * seg, int side )
 void wall_init()
 {
 	int i;
-	
+
 	Num_walls = 0;
 	for (i=0;i<MAX_WALLS;i++) {
 		Walls[i].segnum = Walls[i].sidenum = -1;
@@ -300,7 +300,7 @@ void wall_damage(segment *seg, int side, fix damage)
 
 	if (Walls[seg->sides[side].wall_num].type != WALL_BLASTABLE)
 		return;
-	
+
 	if (!(Walls[seg->sides[side].wall_num].flags & WALL_BLASTED) && Walls[seg->sides[side].wall_num].hps >= 0)
 		{
 		int Connectside;
@@ -313,12 +313,12 @@ void wall_damage(segment *seg, int side, fix damage)
 		Walls[seg->sides[side].wall_num].hps -= damage;
 		if (cwall_num > -1)
 			Walls[cwall_num].hps -= damage;
-			
+
 		a = Walls[seg->sides[side].wall_num].clip_num;
 		n = WallAnims[a].num_frames;
-		
+
 		if (Walls[seg->sides[side].wall_num].hps < WALL_HPS*1/n) {
-			blast_blastable_wall( seg, side );			
+			blast_blastable_wall( seg, side );
 			#ifdef NETWORK
 			if (Game_mode & GM_MULTI)
 				multi_send_door_open(seg-Segments, side,Walls[seg->sides[side].wall_num].flags);
@@ -356,13 +356,13 @@ void wall_open_door(segment *seg, int side)
 	if (w->state == WALL_DOOR_CLOSING) {		//closing, so reuse door
 
 		int i;
-	
+
 		d = NULL;
 
 		for (i=0;i<Num_open_doors;i++) {		//find door
 
 			d = &ActiveDoors[i];
-	
+
 			if (d->front_wallnum[0]==w-Walls || d->back_wallnum[0]==wall_num ||
 				 (d->n_parts==2 && (d->front_wallnum[1]==wall_num || d->back_wallnum[1]==wall_num)))
 				break;
@@ -384,7 +384,7 @@ void wall_open_door(segment *seg, int side)
 			if (d->time < 0)
 				d->time = 0;
 		}
-	
+
 	}
 	else {											//create new door
 		Assert(w->state == WALL_DOOR_CLOSED);
@@ -489,7 +489,7 @@ void start_wall_cloak(segment *seg, int side)
 		for (i=0;i<Num_cloaking_walls;i++) {		//find door
 
 			d = &CloakingWalls[i];
-	
+
 			if (d->front_wallnum==w-Walls || d->back_wallnum==w-Walls )
 				break;
 		}
@@ -569,7 +569,7 @@ void start_wall_decloak(segment *seg, int side)
 		for (i=0;i<Num_cloaking_walls;i++) {		//find door
 
 			d = &CloakingWalls[i];
-	
+
 			if (d->front_wallnum==w-Walls || d->back_wallnum==w-Walls )
 				break;
 		}
@@ -643,14 +643,14 @@ void wall_close_door_num(int door_num)
 		wall *w;
 		int Connectside, side;
 		segment *csegp, *seg;
-	
+
 		w = &Walls[d->front_wallnum[p]];
 
 		seg = &Segments[w->segnum];
 		side = w->sidenum;
-	
+
 		Assert(seg->sides[side].wall_num != -1);		//Closing door on illegal wall
-		
+
 		csegp = &Segments[seg->children[side]];
 		Connectside = find_connect_side(seg, csegp);
 		Assert(Connectside != -1);
@@ -658,11 +658,11 @@ void wall_close_door_num(int door_num)
 		Walls[seg->sides[side].wall_num].state = WALL_DOOR_CLOSED;
 		if (cwall_num > -1)
 			Walls[cwall_num].state = WALL_DOOR_CLOSED;
-	
+
 		wall_set_tmap_num(seg,side,csegp,Connectside,w->clip_num,0);
 
 	}
-	
+
 	for (i=door_num;i<Num_open_doors;i++)
 		ActiveDoors[i] = ActiveDoors[i+1];
 
@@ -689,7 +689,7 @@ static int is_door_free(segment *seg,int side)
 	int Connectside;
 	segment *csegp;
 	int objnum;
-	
+
 	csegp = &Segments[seg->children[side]];
 	Connectside = find_connect_side(seg, csegp);
 	Assert(Connectside != -1);
@@ -734,13 +734,13 @@ void wall_close_door(segment *seg, int side)
 	if (w->state == WALL_DOOR_OPENING) {	//reuse door
 
 		int i;
-	
+
 		d = NULL;
 
 		for (i=0;i<Num_open_doors;i++) {		//find door
 
 			d = &ActiveDoors[i];
-	
+
 			if (d->front_wallnum[0]==wall_num || d->back_wallnum[0]==wall_num ||
 				 (d->n_parts==2 && (d->front_wallnum[1]==wall_num || d->back_wallnum[1]==wall_num)))
 				break;
@@ -753,7 +753,7 @@ void wall_close_door(segment *seg, int side)
 
 		if (d->time < 0)
 			d->time = 0;
-	
+
 	}
 	else {											//create new door
 		Assert(w->state == WALL_DOOR_OPEN);
@@ -811,7 +811,7 @@ void do_door_open(int door_num)
 // 	Assert(door_num != -1);		//Trying to do_door_open on illegal door
 	if (door_num == -1)
 		return;
-	
+
 	d = &ActiveDoors[door_num];
 
 	for (p=0;p<d->n_parts;p++) {
@@ -820,43 +820,43 @@ void do_door_open(int door_num)
 		segment *csegp, *seg;
 		fix time_elapsed, time_total, one_frame;
 		int i, n;
-	
+
 		w = &Walls[d->front_wallnum[p]];
 		kill_stuck_objects(d->front_wallnum[p]);
 		kill_stuck_objects(d->back_wallnum[p]);
 
 		seg = &Segments[w->segnum];
 		side = w->sidenum;
-	
+
 // 		Assert(seg->sides[side].wall_num != -1);		//Trying to do_door_open on illegal wall
 		if (seg->sides[side].wall_num == -1)
 		{
 			con_printf(CON_URGENT, "Trying to do_door_open on illegal wall %i. Please check your level!\n",side);
 			continue;
 		}
-	
+
 		csegp = &Segments[seg->children[side]];
 		Connectside = find_connect_side(seg, csegp);
 		Assert(Connectside != -1);
 
 		d->time += FrameTime;
-	
+
 		time_elapsed = d->time;
 		n = WallAnims[w->clip_num].num_frames;
 		time_total = WallAnims[w->clip_num].play_time;
-	
-		one_frame = time_total/n;	
-	
+
+		one_frame = time_total/n;
+
 		i = time_elapsed/one_frame;
-	
+
 		if (i < n)
 			wall_set_tmap_num(seg,side,csegp,Connectside,w->clip_num,i);
-	
+
 		if (i> n/2) {
 			Walls[seg->sides[side].wall_num].flags |= WALL_DOOR_OPENED;
 			Walls[csegp->sides[Connectside].wall_num].flags |= WALL_DOOR_OPENED;
 		}
-	
+
 		if (i >= n-1) {
 			wall_set_tmap_num(seg,side,csegp,Connectside,w->clip_num,n-1);
 
@@ -891,7 +891,7 @@ void do_door_close(int door_num)
 	wall *w;
 
 	Assert(door_num != -1);		//Trying to do_door_open on illegal door
-	
+
 	d = &ActiveDoors[door_num];
 
 	w = &Walls[d->front_wallnum[0]];
@@ -910,25 +910,25 @@ void do_door_close(int door_num)
 		segment *csegp, *seg;
 		fix time_elapsed, time_total, one_frame;
 		int i, n;
-	
+
 		w = &Walls[d->front_wallnum[p]];
 
 		seg = &Segments[w->segnum];
 		side = w->sidenum;
-	
+
 		if (seg->sides[side].wall_num == -1) {
 			return;
 		}
-	
+
 		//if here, must be auto door
-//		Assert(Walls[seg->sides[side].wall_num].flags & WALL_DOOR_AUTO);		
+//		Assert(Walls[seg->sides[side].wall_num].flags & WALL_DOOR_AUTO);
 //don't assert here, because now we have triggers to close non-auto doors
-	
+
 		// Otherwise, close it.
 		csegp = &Segments[seg->children[side]];
 		Connectside = find_connect_side(seg, csegp);
 		Assert(Connectside != -1);
-	
+
 
 		if ( Newdemo_state != ND_STATE_PLAYBACK )
 			// NOTE THE LINK TO ABOVE!!
@@ -939,22 +939,22 @@ void do_door_close(int door_num)
 					if (WallAnims[w->clip_num].close_sound  > -1 )
 						digi_link_sound_to_pos( WallAnims[Walls[seg->sides[side].wall_num].clip_num].close_sound, seg-Segments, side, &cp, 0, F1_0 );
 				}
-	
+
 		d->time += FrameTime;
 
 		time_elapsed = d->time;
 		n = WallAnims[w->clip_num].num_frames;
 		time_total = WallAnims[w->clip_num].play_time;
-	
-		one_frame = time_total/n;	
-	
+
+		one_frame = time_total/n;
+
 		i = n-time_elapsed/one_frame-1;
-	
+
 		if (i < n/2) {
 			Walls[seg->sides[side].wall_num].flags &= ~WALL_DOOR_OPENED;
 			Walls[csegp->sides[Connectside].wall_num].flags &= ~WALL_DOOR_OPENED;
 		}
-	
+
 		// Animate door.
 		if (i > 0) {
 			wall_set_tmap_num(seg,side,csegp,Connectside,w->clip_num,i);
@@ -1055,7 +1055,7 @@ int wall_hit_process(segment *seg, int side, fix damage, int playernum, dxxobjec
 		return WHP_NOT_SPECIAL;
 
 	Assert( playernum > -1 );
-	
+
 	//	Determine whether player is moving forward.  If not, don't say negative
 	//	messages because he probably didn't intentionally hit the door.
 	if (obj->type == OBJ_PLAYER)
@@ -1082,7 +1082,7 @@ int wall_hit_process(segment *seg, int side, fix damage, int playernum, dxxobjec
 					HUD_init_message(HM_DEFAULT, "%s %s",TXT_RED,TXT_ACCESS_DENIED);
 			return WHP_NO_KEY;
 		}
-	
+
 	if (w->keys == KEY_GOLD)
 		if (!(Players[playernum].flags & PLAYER_FLAGS_GOLD_KEY)) {
 			if ( playernum==Player_num )
@@ -1109,7 +1109,7 @@ int wall_hit_process(segment *seg, int side, fix damage, int playernum, dxxobjec
 			#endif
 			}
 			return WHP_DOOR;
-			
+
 		}
 	}
 
@@ -1120,7 +1120,7 @@ int wall_hit_process(segment *seg, int side, fix damage, int playernum, dxxobjec
 // Opens doors/destroys wall/shuts off triggers.
 void wall_toggle(int segnum, int side)
 {
-	int wall_num; 
+	int wall_num;
 
 	if (segnum < 0 || segnum > Highest_segment_index || side < 0 || side >= MAX_SIDES_PER_SEGMENT)
 	{
@@ -1412,8 +1412,6 @@ void remove_obsolete_stuck_objects(void)
 
 }
 
-extern void flush_fcd_cache(void);
-
 //	----------------------------------------------------------------------------------------------------
 //	Door with wall index wallnum is opening, kill all objects stuck in it.
 void kill_stuck_objects(int wallnum)
@@ -1613,7 +1611,7 @@ int wclip_read_n(wclip *wc, int n, PHYSFS_file *fp)
 /*
  * reads a v16_wall structure from a PHYSFS_file
  */
-extern void v16_wall_read(v16_wall *w, PHYSFS_file *fp)
+void v16_wall_read(v16_wall *w, PHYSFS_file *fp)
 {
 	w->type = PHYSFSX_readByte(fp);
 	w->flags = PHYSFSX_readByte(fp);
@@ -1626,7 +1624,7 @@ extern void v16_wall_read(v16_wall *w, PHYSFS_file *fp)
 /*
  * reads a v19_wall structure from a PHYSFS_file
  */
-extern void v19_wall_read(v19_wall *w, PHYSFS_file *fp)
+void v19_wall_read(v19_wall *w, PHYSFS_file *fp)
 {
 	w->segnum = PHYSFSX_readInt(fp);
 	w->sidenum = PHYSFSX_readInt(fp);
@@ -1642,7 +1640,7 @@ extern void v19_wall_read(v19_wall *w, PHYSFS_file *fp)
 /*
  * reads a wall structure from a PHYSFS_file
  */
-extern void wall_read(wall *w, PHYSFS_file *fp)
+void wall_read(wall *w, PHYSFS_file *fp)
 {
 	w->segnum = PHYSFSX_readInt(fp);
 	w->sidenum = PHYSFSX_readInt(fp);
@@ -1662,7 +1660,7 @@ static void wall_swap(wall *w, int swap)
 {
 	if (!swap)
 		return;
-	
+
 	w->segnum = SWAPINT(w->segnum);
 	w->sidenum = SWAPINT(w->sidenum);
 	w->hps = SWAPINT(w->hps);
@@ -1675,9 +1673,9 @@ static void wall_swap(wall *w, int swap)
 void wall_read_n_swap(wall *w, int n, int swap, PHYSFS_file *fp)
 {
 	int i;
-	
+
 	PHYSFS_read(fp, w, sizeof(wall), n);
-	
+
 	if (swap)
 		for (i = 0; i < n; i++)
 			wall_swap(&w[i], swap);
@@ -1686,7 +1684,7 @@ void wall_read_n_swap(wall *w, int n, int swap, PHYSFS_file *fp)
 /*
  * reads a v19_door structure from a PHYSFS_file
  */
-extern void v19_door_read(v19_door *d, PHYSFS_file *fp)
+void v19_door_read(v19_door *d, PHYSFS_file *fp)
 {
 	d->n_parts = PHYSFSX_readInt(fp);
 	d->seg[0] = PHYSFSX_readShort(fp);
@@ -1701,7 +1699,7 @@ extern void v19_door_read(v19_door *d, PHYSFS_file *fp)
 /*
  * reads an active_door structure from a PHYSFS_file
  */
-extern void active_door_read(active_door *ad, PHYSFS_file *fp)
+void active_door_read(active_door *ad, PHYSFS_file *fp)
 {
 	ad->n_parts = PHYSFSX_readInt(fp);
 	ad->front_wallnum[0] = PHYSFSX_readShort(fp);
@@ -1715,7 +1713,7 @@ static void active_door_swap(active_door *ad, int swap)
 {
 	if (!swap)
 		return;
-	
+
 	ad->n_parts = SWAPINT(ad->n_parts);
 	ad->front_wallnum[0] = SWAPSHORT(ad->front_wallnum[0]);
 	ad->front_wallnum[1] = SWAPSHORT(ad->front_wallnum[1]);
@@ -1730,9 +1728,9 @@ static void active_door_swap(active_door *ad, int swap)
 void active_door_read_n_swap(active_door *ad, int n, int swap, PHYSFS_file *fp)
 {
 	int i;
-	
+
 	PHYSFS_read(fp, ad, sizeof(active_door), n);
-	
+
 	if (swap)
 		for (i = 0; i < n; i++)
 			active_door_swap(&ad[i], swap);
@@ -1751,19 +1749,19 @@ void wall_write(wall *w, short version, PHYSFS_file *fp)
 		PHYSFSX_writeFix(fp, w->hps);
 		PHYSFS_writeSLE32(fp, w->linked_wall);
 	}
-	
+
 	PHYSFSX_writeU8(fp, w->type);
 	PHYSFSX_writeU8(fp, w->flags);
-	
+
 	if (version < 20)
 		PHYSFSX_writeFix(fp, w->hps);
 	else
 		PHYSFSX_writeU8(fp, w->state);
-	
+
 	PHYSFSX_writeU8(fp, w->trigger);
 	PHYSFSX_writeU8(fp, w->clip_num);
 	PHYSFSX_writeU8(fp, w->keys);
-	
+
 	if (version >= 20)
 	{
 		PHYSFSX_writeU8(fp, w->controlling_trigger);
@@ -1776,10 +1774,10 @@ void wall_write(wall *w, short version, PHYSFS_file *fp)
 static void cloaking_wall_swap(cloaking_wall *cw, int swap)
 {
 	int i;
-	
+
 	if (!swap)
 		return;
-	
+
 	cw->front_wallnum = SWAPSHORT(cw->front_wallnum);
 	cw->back_wallnum = SWAPSHORT(cw->back_wallnum);
 	for (i = 0; i < 4; i++)
@@ -1796,9 +1794,9 @@ static void cloaking_wall_swap(cloaking_wall *cw, int swap)
 void cloaking_wall_read_n_swap(cloaking_wall *cw, int n, int swap, PHYSFS_file *fp)
 {
 	int i;
-	
+
 	PHYSFS_read(fp, cw, sizeof(cloaking_wall), n);
-	
+
 	if (swap)
 		for (i = 0; i < n; i++)
 			cloaking_wall_swap(&cw[i], swap);

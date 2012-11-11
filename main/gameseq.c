@@ -139,7 +139,6 @@ void HUD_clear_messages(); // From hud.c
 #endif
 
 //	Extra prototypes declared for the sake of LINT
-void init_player_stats_new_ship(ubyte pnum);
 void copy_defaults_to_robot_all(void);
 
 int	Do_appearance_effect=0;
@@ -370,8 +369,6 @@ void init_player_stats_level(int secret_flag)
 	Missile_viewer = NULL;
 }
 
-void init_ai_for_ship(void);
-
 // Setup player for a brand-new ship
 void init_player_stats_new_ship(ubyte pnum)
 {
@@ -423,8 +420,6 @@ void init_player_stats_new_ship(ubyte pnum)
 	Players[pnum].homing_object_dist = -F1_0; // Added by RH
 	digi_kill_sound_linked_to_object(Players[pnum].objnum);
 }
-
-void init_stuck_objects(void);
 
 #ifdef EDITOR
 
@@ -642,8 +637,6 @@ static ushort netmisc_calc_checksum()
 }
 
 void free_polygon_models();
-void load_robot_replacements(char *level_name);
-int read_hamfile();
 extern int Robot_replacements_loaded;
 
 // load just the hxm file
@@ -664,7 +657,6 @@ void load_level_robots(int level_num)
 		if (Current_mission->enhanced) {
 			// load extra data
 			char t[50];
-void bm_read_extra_robots();
 			sprintf(t,"%s.ham",Current_mission_filename);
 			bm_read_extra_robots(t, Current_mission->enhanced);
 		}
@@ -755,8 +747,6 @@ void InitPlayerObject()
 	ConsoleObject->control_type	= CT_FLYING;
 	ConsoleObject->movement_type	= MT_PHYSICS;
 }
-
-void init_seismic_disturbances(void);
 
 //starts a new game on the given level
 void StartNewGame(int start_level)
@@ -910,8 +900,6 @@ static void StartSecretLevel()
 	Auto_fire_fusion_cannon_time = 0;
 	Fusion_charge = 0;
 }
-
-void set_pos_from_return_segment(void);
 
 //	Returns true if secret level has been destroyed.
 int p_secret_level_destroyed(void)
@@ -1800,8 +1788,6 @@ void copy_defaults_to_robot_all()
 			copy_defaults_to_robot(&Objects[i]);
 
 }
-
-void clear_stuck_objects(void);
 
 //	-----------------------------------------------------------------------------------------------------
 //called when the player is starting a level (new game or new ship)

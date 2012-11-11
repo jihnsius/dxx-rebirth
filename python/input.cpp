@@ -128,7 +128,6 @@ static void write_script_attitude_object_segment(script_control_info::location& 
 	l.enable_segment = true;
 }
 
-const dxxplayer_object& get_player_object(const player& player);
 static void write_script_attitude_player_segment(script_control_info::location& l, const player& o)
 {
 	const dxxplayer_object& po = get_player_object(o);

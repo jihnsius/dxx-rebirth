@@ -100,7 +100,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #include <SDL/SDL.h>
 
-extern void object_goto_prev_viewer(void);
+void object_goto_prev_viewer(void);
 
 // Global Variables -----------------------------------------------------------
 
@@ -125,22 +125,8 @@ extern ubyte DefiningMarkerMessage;
 //	Function prototypes --------------------------------------------------------
 
 
-extern void CyclePrimary();
-extern void CycleSecondary();
-extern void InitMarkerInput();
-extern int  MarkerInputMessage(int key);
-extern int	allowed_to_fire_missile(void);
-extern int	allowed_to_fire_flare(void);
-extern void	check_rear_view(void);
-extern int	create_special_path(void);
-extern void move_player_2_segment(segment *seg, int side);
-extern void	kconfig_center_headset(void);
-extern void newdemo_strip_frames(char *, int);
-extern void toggle_cockpit(void);
-extern void dump_used_textures_all();
-extern void DropMarker();
-extern void DropSecondaryWeapon();
-extern void DropCurrentWeapon();
+void	kconfig_center_headset(void);
+void DropMarker();
 
 int FinalCheats(int key);
 
@@ -300,14 +286,14 @@ void do_weapon_n_item_stuff()
 	if (Controls.toggle_bomb_count > 0)
 	{
 		int bomb = Secondary_last_was_super[PROXIMITY_INDEX]?PROXIMITY_INDEX:SMART_MINE_INDEX;
-	
+
 		if (!Players[Player_num].secondary_ammo[PROXIMITY_INDEX] && !Players[Player_num].secondary_ammo[SMART_MINE_INDEX])
 		{
 			digi_play_sample_once( SOUND_BAD_SELECTION, F1_0 );
 			HUD_init_message(HM_DEFAULT, "No bombs available!");
 		}
 		else
-		{	
+		{
 			if (Players[Player_num].secondary_ammo[bomb]==0)
 			{
 				digi_play_sample_once( SOUND_BAD_SELECTION, F1_0 );
@@ -327,8 +313,7 @@ void do_weapon_n_item_stuff()
 }
 
 
-extern void game_render_frame();
-extern void show_extra_views();
+void show_extra_views();
 extern fix Flash_effect;
 
 void apply_modified_palette(void)
@@ -1113,9 +1098,6 @@ static int HandleSystemKey(int key)
 	return 1;
 }
 
-
-extern void DropFlag();
-
 static int HandleGameKey(int key)
 {
 	switch (key) {
@@ -1185,7 +1167,7 @@ static int HandleGameKey(int key)
 	if (!Player_is_dead)
 		switch (key)
 		{
-#if 0 
+#if 0
 // weapon selection handled in kconfig_read_controls, d1x-style
 				// MWA changed the weapon select cases to have each case call
 				// do_weapon_select the macintosh keycodes aren't consecutive from 1
@@ -1649,7 +1631,7 @@ int FinalCheats(int key)
 			break;
 		}
 	}
-	
+
 	if (!gotcha)
 		return 0;
 
@@ -1740,7 +1722,7 @@ int FinalCheats(int key)
 		char text[10]="";
 		int new_level_num;
 		int item;
-		
+
 		m.type=NM_TYPE_INPUT; m.text_len = 10; m.text = text;
 		item = newmenu_do( NULL, TXT_WARP_TO_LEVEL, 1, &m, NULL, NULL );
 		if (item != -1) {
@@ -1760,19 +1742,19 @@ int FinalCheats(int key)
 
 	if (cheat_codes[gotcha].stateptr == &cheats.rapidfire)
 	{
-		
+
 		HUD_init_message(HM_DEFAULT, "Rapid fire %s!", cheats.rapidfire?TXT_ON:TXT_OFF);
 	}
 
 	if (cheat_codes[gotcha].stateptr == &cheats.bouncyfire)
 	{
-		
+
 		HUD_init_message(HM_DEFAULT, "Bouncing weapons %s!", cheats.bouncyfire?TXT_ON:TXT_OFF);
 	}
 
 	if (cheat_codes[gotcha].stateptr == &cheats.turbo)
 	{
-		
+
 		HUD_init_message(HM_DEFAULT, "%s %s!", "Turbo mode", cheats.turbo?TXT_ON:TXT_OFF);
 	}
 
@@ -1804,7 +1786,7 @@ int FinalCheats(int key)
 
 	if (cheat_codes[gotcha].stateptr == &cheats.buddyangry)
 	{
-		
+
 		if (cheats.buddyangry)
 		{
 			HUD_init_message(HM_DEFAULT, "%s gets angry!",PlayerCfg.GuidebotName);

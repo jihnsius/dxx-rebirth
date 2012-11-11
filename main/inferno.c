@@ -109,8 +109,6 @@ unsigned int descent_critical_deverror = 0;
 unsigned int descent_critical_errcode = 0;
 
 extern int Network_allow_socket_changes;
-extern void piggy_init_pigfile(char *filename);
-extern void arch_init(void);
 void cxx_con_handle_idle();
 
 #define LINE_LEN	100
@@ -221,7 +219,7 @@ int standard_handler(d_event *event)
 		window *wind = window_get_front();
 		if (!wind)
 			return 0;
-	
+
 		if (wind == Game_wind)
 		{
 			int choice;
@@ -235,11 +233,11 @@ int standard_handler(d_event *event)
 				Quitting = 1;
 			}
 		}
-		
+
 		// Close front window, let the code flow continue until all windows closed or quit cancelled
 		if (!window_close(wind))
 			Quitting = 0;
-		
+
 		return 1;
 	}
 
@@ -349,7 +347,7 @@ int main(int argc, char *argv[])
 	printf("\nType %s -help' for a list of command-line options.\n\n", PROGNAME);
 
 	PHYSFSX_listSearchPathContent();
-	
+
 	if (!PHYSFSX_checkSupportedArchiveTypes())
 		return(0);
 
@@ -382,7 +380,7 @@ int main(int argc, char *argv[])
 
 	if (g_DbgVerbose)
 		con_printf(CON_VERBOSE,"%s\n", TXT_VERBOSE_1);
-	
+
 	ReadConfigFile();
 
 	PHYSFSX_addArchiveContent();
@@ -486,7 +484,7 @@ int main(int argc, char *argv[])
 	while (window_get_front())
 		// Send events to windows and the default handler
 		event_process();
-	
+
 	// Tidy up - avoids a crash on exit
 	{
 		window *wind;
