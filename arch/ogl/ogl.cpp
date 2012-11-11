@@ -54,6 +54,9 @@
 #include "args.h"
 #include "robot.h"
 
+#include <algorithm>
+using std::max;
+
 //change to 1 for lots of spew.
 #if 0
 #define glmprintf(0,a) con_printf(CON_DEBUG, a)
@@ -507,7 +510,14 @@ bool g3_draw_line(g3s_point *p0,g3s_point *p1)
 	int c;
 	GLfloat color_r, color_g, color_b;
 	GLfloat color_array[] = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
-	GLfloat vertex_array[] = { f2glf(p0->p3_vec.x),f2glf(p0->p3_vec.y),-f2glf(p0->p3_vec.z), f2glf(p1->p3_vec.x),f2glf(p1->p3_vec.y),-f2glf(p1->p3_vec.z) };
+	GLfloat vertex_array[] = {
+		static_cast<float>(f2glf(p0->p3_vec.x)),
+		static_cast<float>(f2glf(p0->p3_vec.y)),
+		static_cast<float>(-f2glf(p0->p3_vec.z)),
+		static_cast<float>(f2glf(p1->p3_vec.x)),
+		static_cast<float>(f2glf(p1->p3_vec.y)),
+		static_cast<float>(-f2glf(p1->p3_vec.z))
+	};
 
 	c=grd_curcanv->cv_color;
 	glEnableClientState(GL_VERTEX_ARRAY);
@@ -865,11 +875,11 @@ bool g3_draw_poly(int nv,g3s_point **pointlist)
 	return 0;
 }
 
-void gr_upoly_tmap(int nverts, int *vert ){
+void gr_upoly_tmap(int, int *){
 		glmprintf((0,"gr_upoly_tmap: unhandled\n"));//should never get called
 }
 
-void draw_tmap_flat(grs_bitmap *bm,int nv,g3s_point **vertlist){
+void draw_tmap_flat(grs_bitmap *,int,g3s_point **){
 		glmprintf((0,"draw_tmap_flat: unhandled\n"));//should never get called
 }
 
@@ -1290,7 +1300,7 @@ static void ogl_filltexbuf(unsigned char *data, GLubyte *texp, int truewidth, un
 {
 	unsigned x,y,c,i;
 
-	if ((width > max(grd_curscreen->sc_w, 1024u)) || (height > max(grd_curscreen->sc_h, 256u)))
+	if ((width > max(static_cast<unsigned>(grd_curscreen->sc_w), 1024u)) || (height > max(static_cast<unsigned>(grd_curscreen->sc_h), 256u)))
 		Error("Texture is too big: %ix%i", width, height);
 
 	i=0;
