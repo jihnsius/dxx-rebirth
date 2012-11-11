@@ -68,7 +68,7 @@ common_sources = [
 '2d/gpixel.cpp',
 '2d/line.cpp',
 '2d/palette.cpp',
-'2d/pcx.c',
+'2d/pcx.cpp',
 '2d/pixel.c',
 '2d/poly.c',
 '2d/rect.c',
