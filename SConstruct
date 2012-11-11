@@ -153,7 +153,7 @@ common_sources = [
 'main/player.cpp',
 'main/playsave.cpp',
 'main/polyobj.cpp',
-'main/powerup.c',
+'main/powerup.cpp',
 'main/render.cpp',
 'main/robot.cpp',
 'main/scores.c',
