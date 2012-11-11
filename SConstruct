@@ -155,7 +155,7 @@ common_sources = [
 'main/polyobj.c',
 'main/powerup.c',
 'main/render.c',
-'main/robot.c',
+'main/robot.cpp',
 'main/scores.c',
 'main/segment.cpp',
 'main/slew.c',
