@@ -59,6 +59,9 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "gameseg.h"
 #include "args.h"
 
+#include <algorithm>
+using std::min;
+
 //bitmap numbers for gauges
 #define GAUGE_SHIELDS			0		//0..9, in decreasing order (100%,90%...0%)
 #define GAUGE_INVULNERABLE		10		//10..19
@@ -2088,7 +2091,7 @@ static void draw_weapon_info(int weapon_type,int weapon_num,int laser_level)
 }
 #endif
 
-void draw_ammo_info(int x,int y,int ammo_count,int primary)
+void draw_ammo_info(int x,int y,int ammo_count,int)
 {
 	if (!PlayerCfg.HudMode)
 	{
