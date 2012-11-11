@@ -27,6 +27,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 typedef struct newmenu newmenu;
 typedef struct listbox listbox;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define NM_TYPE_MENU        0   // A menu item... when enter is hit on this, newmenu_do returns this item number
 #define NM_TYPE_INPUT       1   // An input box... fills the text field in, and you need to fill in text_len field.
 #define NM_TYPE_CHECK       2   // A check box. Set and get its status by looking at flags field (1=on, 0=off)
@@ -183,6 +187,10 @@ extern void newmenu_free_background();
 
 #define BORDERX (15*(SWIDTH/320))
 #define BORDERY (15*(SHEIGHT/200))
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _NEWMENU_H */
 

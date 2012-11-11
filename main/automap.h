@@ -23,6 +23,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #include "player.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 extern int Automap_active;
 
 extern char Marker_input[40];
@@ -43,5 +47,9 @@ extern int  MarkerObject[NUM_MARKERS];
 void InitMarkerInput();
 int MarkerInputMessage(int key);
 extern ubyte DefiningMarkerMessage;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

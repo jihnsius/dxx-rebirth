@@ -23,6 +23,10 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #ifndef _SCANLINE_H
 #define _SCANLINE_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 extern void c_tmap_scanline_per();
 extern void c_tmap_scanline_per_nolight();
 extern void c_tmap_scanline_lin();
@@ -41,6 +45,10 @@ extern void (*cur_tmap_scanline_shaded)(void);
 
 //extern tmap_scanline_funcs tmap_funcs;
 void select_tmap(char *type);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 

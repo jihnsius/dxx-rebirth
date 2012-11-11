@@ -30,6 +30,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 //#define FL_HOVER   2
 //#define FL_REVERSE 3
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // these global vars are set after a call to do_physics_sim().  Ugly, I know.
 // list of segments went through
 extern int phys_seglist[MAX_FVI_SEGS], n_phys_segs;
@@ -55,5 +59,9 @@ void phys_apply_rot(dxxobject *obj, vms_vector *force_vec);
 void set_thrust_from_velocity(dxxobject *obj);
 void check_and_fix_matrix(vms_matrix *m);
 void physics_turn_towards_vector(vms_vector *goal_vector, dxxobject *obj, fix rate);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _PHYSICS_H */

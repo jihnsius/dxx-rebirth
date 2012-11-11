@@ -29,6 +29,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "joy.h"
 #include "mouse.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct _control_info {
 	fix pitch_time;
 	fix vertical_thrust_time;
@@ -87,5 +91,9 @@ extern void reset_cruise(void);
 extern char *joybutton_text[JOY_MAX_BUTTONS];
 extern char *joyaxis_text[JOY_MAX_AXES];
 extern fix Cruise_speed;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _KCONFIG_H */

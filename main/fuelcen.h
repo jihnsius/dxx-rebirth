@@ -24,6 +24,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "segment.h"
 #include "object.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 //------------------------------------------------------------
 // A refueling center is one segment... to identify it in the
 // segment structure, the "special" field is set to
@@ -171,5 +175,9 @@ void matcen_info_write(matcen_info *mi, short version, PHYSFS_file *fp);
  * reads n Station structs from a PHYSFS_file and swaps if specified
  */
 void fuelcen_read_n_swap(FuelCenter *fc, int n, int swap, PHYSFS_file *fp);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

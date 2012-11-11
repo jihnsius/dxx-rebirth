@@ -23,6 +23,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #include "gr.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // What graphics modes the game & editor open
 
 // for Screen_mode variable
@@ -71,5 +75,9 @@ void set_display_mode(int mode);
 extern int Default_display_mode;
 
 #define MENU_SCREEN_MODE (menu_use_game_res?Game_screen_mode:MENU_HIRES_MODE)
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _SCREENS_H */

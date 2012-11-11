@@ -26,6 +26,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "fvi.h"
 #include "robot.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define PLAYER_AWARENESS_INITIAL_TIME   (3*F1_0)
 #define MAX_PATH_LENGTH                 30          // Maximum length of path in ai path following.
 #define MAX_DEPTH_TO_SEARCH_FOR_PLAYER  10
@@ -302,6 +306,10 @@ void special_reactor_stuff(void);
 #ifdef EDITOR
 void player_follow_path(dxxobject *objp);
 void check_create_player_path(void);
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #endif /* _AI_H */

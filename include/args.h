@@ -23,6 +23,10 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #include "pstypes.h"	// for __packed__ definition (varies with compiler)
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 extern int Num_args;
 extern char *Args[];
 extern void AppendIniArgs(void);
@@ -108,5 +112,9 @@ typedef struct Arg
 } __pack__ Arg;
 
 extern struct Arg GameArg;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

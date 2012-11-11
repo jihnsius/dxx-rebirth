@@ -16,6 +16,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #ifndef _RBAUDIO_H
 #define _RBAUDIO_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define RBA_MEDIA_CHANGED	-1
 
 typedef struct _RBACHANNELCTL {
@@ -58,5 +62,9 @@ unsigned long RBAGetDiscID();
 
 // List the tracks on the CD
 void RBAList(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -39,6 +39,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define DEMO_BACKUP_EXT			"ppc"
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // Gives state of recorder
 extern int Newdemo_state;
 extern int NewdemoFrameCount;
@@ -127,5 +131,9 @@ void newdemo_record_guided_start();
 int newdemo_count_demos();
 void newdemo_strip_frames(char *, int);
 extern ubyte DemoDoRight,DemoDoLeft;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // _NEWDEMO_H

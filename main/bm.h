@@ -23,6 +23,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "gr.h"
 #include "piggy.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define MAX_TEXTURES    1200
 
 //tmapinfo flags
@@ -97,5 +101,9 @@ void load_robot_replacements(char *level_name);
 void bm_read_extra_robots(char *fname,int type);
 extern int Robot_replacements_loaded;
 extern int extra_bitmap_num;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _BM_H */

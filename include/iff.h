@@ -26,6 +26,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 //Prototypes for IFF library functions
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 int iff_read_bitmap(char *ifilename,grs_bitmap *bm,int bitmap_type,ubyte *palette);
 	//reads an IFF file into a grs_bitmap structure. fills in palette if not null
 	//returns error codes - see IFF.H.  see GR.H for bitmap_type
@@ -75,6 +79,10 @@ const char *iff_errormsg(int error_number);
 #define IFF_UNKNOWN_MASK    10  //unknown masking type
 #define IFF_READ_ERROR      11  //error reading from file
 #define IFF_BM_MISMATCH     12  //bm being loaded doesn't match bm loaded into
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 

@@ -20,7 +20,11 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #ifndef _OUTSIDE_H
 #define _OUTSIDE_H
 
-#include "object.h"
+#include "gr.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 extern int Endlevel_sequence;
 void do_endlevel_frame();
@@ -44,5 +48,9 @@ void load_endlevel_data(int level_num);
 
 extern int exit_modelnum, destroyed_exit_modelnum;
 extern vms_matrix surface_orient;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _OUTSIDE_H */

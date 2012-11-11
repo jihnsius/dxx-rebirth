@@ -30,6 +30,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define N_SAVE_SLOTS    10
 #define GAME_NAME_LEN   25      // +1 for terminating zero = 26
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct hli {
 	char	Shortname[9];
 	ubyte	LevelNum;
@@ -111,5 +115,9 @@ int get_highest_level(void);
 
 void read_netgame_profile(netgame_info *ng);
 void write_netgame_profile(netgame_info *ng);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _PLAYSAVE_H */

@@ -17,10 +17,6 @@ extern "C" {
 void d_srand (unsigned int seed);
 int d_rand ();			// Random number function which returns in the range 0-0x7FFF
 
-#ifdef __cplusplus
-}
-#endif
-
 //=============================== FIXED POINT ===============================
 
 typedef int64_t fix64;		//64 bits int, for timers
@@ -124,5 +120,9 @@ extern const short sincos_table[321];
 extern const ushort asin_table[258];
 extern const ushort acos_table[258];
 extern const fix isqrt_guess_table[1024];
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

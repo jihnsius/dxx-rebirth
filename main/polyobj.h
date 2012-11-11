@@ -27,6 +27,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #include "piggy.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define MAX_POLYGON_MODELS 200
 #define MAX_SUBMODELS 10
 
@@ -109,5 +113,9 @@ extern int polymodel_read_n(polymodel *pm, int n, PHYSFS_file *fp);
  * routine which allocates, reads, and inits a polymodel's model_data
  */
 void polygon_model_data_read(polymodel *pm, PHYSFS_file *fp);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _POLYOBJ_H */

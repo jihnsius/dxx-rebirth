@@ -26,6 +26,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "gr.h"
 #include "ui.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct window;
 
 /*
@@ -646,6 +650,10 @@ void close_all_windows(void);
 //	Amount to stretch a texture map by.
 //	The two different ones are for the two dimensions of a texture map.
 extern fix Stretch_scale_x, Stretch_scale_y;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 

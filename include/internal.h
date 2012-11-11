@@ -5,6 +5,10 @@
 
 #include "ogl_init.h" // interface to OpenGL module
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* I assume this ought to be >= MAX_BITMAP_FILES in piggy.h? */
 #define OGL_TEXTURE_LIST_SIZE 20000
 
@@ -62,5 +66,9 @@ extern ubyte (*ogl_pal)[256*3];
 //inline GLfloat PAL2Tr(int c);
 //inline GLfloat PAL2Tg(int c);
 //inline GLfloat PAL2Tb(int c);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // _INTERNAL_H_

@@ -50,6 +50,10 @@ int ogl_init_load_library(void);
 #define GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT 0x84FF
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* we need to export ogl_texture for 2d/font.c */
 typedef struct _ogl_texture {
 	GLuint handle;
@@ -106,5 +110,9 @@ void ogl_draw_vertex_reticle(int cross,int primary,int secondary,int color,int a
 void ogl_toggle_depth_test(int enable);
 void ogl_set_blending();
 int pow2ize(int x);//from ogl.c
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _OGL_INIT_H_ */

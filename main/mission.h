@@ -124,6 +124,10 @@ extern Mission *Current_mission; // current mission
 #define BIMD2_ENDING_FILE_OEM		"end2oem.txb"
 #define BIMD2_ENDING_FILE_SHARE		"ending2.txb"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 //loads the named mission if it exists.
 //Returns true if mission loaded ok, else false.
 int load_mission_by_name (char *mission_name);
@@ -136,6 +140,10 @@ void free_mission(void);
 
 #ifdef EDITOR
 void create_new_mission(void);
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #endif

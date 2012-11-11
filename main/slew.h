@@ -24,6 +24,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #include "object.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 //from slew.c
 
 #if 1   //ndef RELEASE  //kill error on RELEASE build
@@ -40,6 +44,10 @@ int slew_frame(int dont_check_keys);        // Does slew frame
 #define slew_reset_orient()
 #define slew_frame(dont_check_keys)
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #endif /* _SLEW_H */

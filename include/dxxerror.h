@@ -23,6 +23,10 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include <stdio.h>
 #include "compiler.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 int error_init(void (*func)(const char *), const char *fmt,...);    //init error system, set default message, returns 0=ok
 void set_exit_message(const char *fmt,...) __attribute_gcc_format((printf, 1, 2));	//specify message to print at exit
 void Warning(const char *fmt,...) __attribute_gcc_format((printf, 1, 2));				//print out warning message to user
@@ -48,6 +52,10 @@ extern void Debugger(void);	// Avoids some name clashes
 //Changed Assert and Int3 because I couldn't get the macros to compile -KRB
 #define Assert(__ignore) ((void)0)
 #define Int3() ((void)0)
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #endif /* _ERROR_H */

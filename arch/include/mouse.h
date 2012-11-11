@@ -10,6 +10,10 @@
 #include "pstypes.h"
 #include "maths.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct d_event;
 struct window;
 struct SDL_MouseButtonEvent;
@@ -51,5 +55,9 @@ extern void mouse_toggle_cursor(int activate);
 void mouse_button_handler(struct SDL_MouseButtonEvent *mbe);;
 void mouse_motion_handler(struct SDL_MouseMotionEvent *mme);
 void mouse_cursor_autohide();
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

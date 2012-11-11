@@ -26,6 +26,10 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "switch.h"
 
 #ifdef EDITOR
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 extern int bind_wall_to_trigger();
 
 extern int trigger_remove();
@@ -36,6 +40,10 @@ int remove_trigger_num(int trigger_num);
 extern void close_trigger_window();
 
 extern void do_trigger_window();
+
+#ifdef __cplusplus
+}
+#endif
 #endif
 
 #endif
