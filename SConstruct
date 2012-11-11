@@ -198,7 +198,6 @@ editor_sources = [
 'editor/elight.c',
 'editor/eobject.c',
 'editor/eswitch.c',
-'editor/fixseg.c',
 'editor/func.c',
 'editor/group.c',
 'editor/info.c',
