@@ -134,7 +134,7 @@ static int title_handler(window *wind, d_event *event, title_screen *ts)
 	return 0;
 }
 
-static int show_title_screen(const char * filename, int allow_keys, int from_hog_only )
+static int show_title_screen(const char * filename, int allow_keys, int from_hog_only __attribute_unused)
 {
 	title_screen *ts;
 	window *wind;

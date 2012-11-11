@@ -165,7 +165,7 @@ common_sources = [
 'main/terrain.cpp',
 'main/texmerge.cpp',
 'main/text.cpp',
-'main/titles.c',
+'main/titles.cpp',
 'main/vclip.c',
 'main/wall.cpp',
 'main/weapon.cpp',
