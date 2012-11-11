@@ -99,6 +99,7 @@ char copyright[] = "DESCENT II  COPYRIGHT (C) 1994-1996 PARALLAX SOFTWARE CORPOR
 #include "net_udp.h"
 #endif
 #include "physfsx.h"
+#include "cxxconsole.h"
 
 //Current version number
 
@@ -107,9 +108,6 @@ int Screen_mode=-1;					//game screen or editor screen?
 int descent_critical_error = 0;
 unsigned int descent_critical_deverror = 0;
 unsigned int descent_critical_errcode = 0;
-
-extern int Network_allow_socket_changes;
-void cxx_con_handle_idle();
 
 #define LINE_LEN	100
 

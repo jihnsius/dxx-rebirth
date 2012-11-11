@@ -34,11 +34,6 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "kdefs.h"
 
 // Test function prototypes (replace Test1, 2 and 3 with whatever function you wish to test.)
-void create_all_paths();
-void test_create_all_anchors();
-// extern void make_curside_bottom_side();
-void move_object_to_mouse_click();
-void test_create_n_segment_path();
 
 int Test1()
 {

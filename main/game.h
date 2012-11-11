@@ -102,6 +102,7 @@ extern int gauge_message_on;
 
 #ifndef NDEBUG      // if debugging, these are variables
 
+extern fix Show_view_text_timer;
 extern int Slew_on;                 // in slew or sim mode?
 
 #else               // if not debugging, these are constants
@@ -278,6 +279,17 @@ int which_bomb();
 int ReadControls(d_event *event);
 void toggle_cockpit(void);
 void game_render_frame();
+int game_handler(window *wind, d_event *event, void *data);
+extern int netplayerinfo_on;
+extern int	force_cockpit_redraw;
+extern int	Slide_segs_computed;
+extern int	Last_level_path_created;
+extern int BigWindowSwitch;
+extern ubyte DemoDoingRight,DemoDoingLeft;
+extern struct dxxobject DemoRightExtra,DemoLeftExtra;
+extern ubyte RenderingType;
+extern fix64 Time_flash_last_played;
+extern ubyte Last_afterburner_state;
 
 #ifdef EDITOR
 void dump_used_textures_all();

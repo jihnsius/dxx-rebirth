@@ -335,8 +335,6 @@ static void verify_object( dxxobject * obj )	{
 //	PHYSFSX_fseek(file,len,SEEK_CUR);
 //}
 
-
-int multi_powerup_is_4pack(int);
 //reads one object of the given version from the given file
 void read_object(dxxobject *obj,PHYSFS_file *f,int version)
 {
@@ -1175,12 +1173,6 @@ static int load_game_data(PHYSFS_file *LoadFile)
 const char *Level_being_loaded=NULL;
 #endif
 
-#ifdef COMPACT_SEGS
-void ncache_flush();
-#endif
-
-extern int Slide_segs_computed;
-extern int d1_pig_present;
 
 int no_old_level_file_error=0;
 
@@ -1813,10 +1805,6 @@ static int save_level_sub(char * filename, int compiled_version)
 	return 0;
 
 }
-
-#if 0 //dunno - 3rd party stuff?
-void compress_uv_coordinates_all(void);
-#endif
 
 int save_level(char * filename)
 {

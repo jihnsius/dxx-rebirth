@@ -140,6 +140,7 @@ void flush_fcd_cache(void);
 int set_segment_depths(int start_seg, ubyte *segbuf);
 void apply_all_changed_light(void);
 void	set_ambient_sound_flags(void);
+extern int	Doing_lighting_hack_flag;
 
 #ifdef __cplusplus
 }

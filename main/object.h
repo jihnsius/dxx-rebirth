@@ -492,6 +492,8 @@ void dead_player_frame(void);
 void fuelcen_check_for_goal (segment *);
 #endif
 
+extern int Drop_afterburner_blob_flag;
+
 #ifdef __cplusplus
 }
 #endif

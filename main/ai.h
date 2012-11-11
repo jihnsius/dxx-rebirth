@@ -290,6 +290,7 @@ int ai_save_state(PHYSFS_file * fp);
 int ai_restore_state(PHYSFS_file *fp, int version, int swap);
 
 extern int Buddy_objnum, Buddy_allowed_to_talk;
+extern int Ai_last_missile_camera;
 
 void start_robot_death_sequence(dxxobject *objp);
 int do_any_robot_dying_frame(dxxobject *objp);

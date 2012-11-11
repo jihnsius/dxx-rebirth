@@ -54,7 +54,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #endif
 #include "physfsx.h"
 
-extern char CDROM_dir[];
 
 #define VID_PLAY 0
 #define VID_PAUSE 1
@@ -342,7 +341,7 @@ static int MovieHandler(window *wind, d_event *event, movie *m)
 			if (Quitting)
 				m->result = m->aborted = 1;
 			break;
-			
+
 		default:
 			break;
 	}

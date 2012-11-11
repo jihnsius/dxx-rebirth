@@ -313,7 +313,6 @@ void digi_stop_all_channels()
 }
 
 
-extern int SoundQ_channel;
 
 // Volume 0-F1_0
 int digi_start_sound(short soundnum, fix volume, int pan, int looping, int loop_start, int loop_end, int soundobj)

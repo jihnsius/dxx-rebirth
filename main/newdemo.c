@@ -86,8 +86,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "editor/editor.h"
 #endif
 
-int init_hoard_data();
-
 #define ND_EVENT_EOF				0	// EOF
 #define ND_EVENT_START_DEMO			1	// Followed by 16 character, NULL terminated filename of .SAV file to use
 #define ND_EVENT_START_FRAME			2	// Followed by integer frame number, then a fix FrameTime
@@ -205,7 +203,6 @@ static int nd_record_v_primary_ammo = -1;
 static int nd_record_v_secondary_ammo = -1;
 
 void newdemo_record_oneframeevent_update();
-int digi_link_sound_to_object3( int org_soundnum, short objnum, int forever, fix max_volume, fix  max_distance, int loop_start, int loop_end );
 
 int newdemo_get_percent_done()	{
 	if ( Newdemo_state == ND_STATE_PLAYBACK ) {
@@ -982,7 +979,6 @@ void newdemo_record_render_object(dxxobject * obj)
 	start_time();
 }
 
-extern ubyte RenderingType;
 
 void newdemo_record_viewer_object(dxxobject * obj)
 {
@@ -1708,7 +1704,6 @@ static void newdemo_pop_ctrlcen_triggers()
 }
 
 void nd_render_extras (ubyte,dxxobject *);
-void multi_apply_goal_textures ();
 
 static int newdemo_read_frame_information(int rewrite)
 {

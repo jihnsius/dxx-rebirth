@@ -110,6 +110,8 @@ void digi_start_sound_queued( short soundnum, fix volume );
 
 #define SOUND_MAX_VOLUME F1_0 / 2
 
+extern int Dont_start_sound_objects;
+extern int SoundQ_channel;
 extern int digi_volume;
 extern int digi_sample_rate;
 void digi_select_system(int);

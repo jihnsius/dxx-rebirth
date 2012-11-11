@@ -61,6 +61,9 @@ struct d_event;
 extern jmp_buf LeaveEvents;
 extern int Quitting;
 extern int Screen_mode;			// editor screen or game screen?
+extern int descent_critical_error;
+extern unsigned int descent_critical_deverror;
+extern unsigned int descent_critical_errcode;
 
 // Default event handler for everything except the editor
 int standard_handler(struct d_event *event);

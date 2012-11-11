@@ -1207,8 +1207,6 @@ static void collide_weapon_and_clutter( dxxobject * weapon, dxxobject *clutter, 
 
 //--mk, 121094 -- extern void spin_robot(object *robot, vms_vector *collision_point);
 
-dxxobject *explode_badass_object(dxxobject *objp, fix damage, fix distance, fix force);
-
 int	Final_boss_is_dead = 0;
 fix	Final_boss_countdown_time = 0;
 
@@ -2011,7 +2009,6 @@ void drop_player_eggs(dxxobject *playerobj)
 // -- removed, 09/06/95, MK --
 // -- removed, 09/06/95, MK -- #define	LOSE_WEAPON_THRESHOLD	(F1_0*30)
 
-extern fix64 Buddy_sorry_time;
 
 void apply_damage_to_player(dxxobject *playerobj, dxxobject *killer, fix damage, ubyte possibly_friendly)
 {
@@ -2234,7 +2231,6 @@ void collide_robot_and_materialization_center(dxxobject *objp)
 //##	return;
 //##}
 
-extern int Network_got_powerup; // HACK!!!
 
 void collide_player_and_powerup( dxxobject * playerobj, dxxobject * powerup, vms_vector *collision_point ) {
 	if (!Endlevel_sequence && !Player_is_dead && (playerobj->id == Player_num )) {

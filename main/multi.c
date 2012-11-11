@@ -81,7 +81,6 @@ void multi_powcap_adjust_remote_cap(int pnum);
 void multi_set_robot_ai(void);
 void multi_send_powcap_update();
 void bash_to_shield(int i,char *s);
-void init_hoard_data();
 void multi_apply_goal_textures();
 int  find_goal_texture(ubyte t);
 void multi_do_capture_bonus(char *buf);
@@ -115,7 +114,6 @@ void multi_do_gmode_update(char *buf);
 int multi_protocol=0; // set and determinate used protocol
 int imulti_new_game=0; // to prep stuff for level only when starting new game
 
-extern int MarkerObject[];
 
 int who_killed_controlcen = -1;  // -1 = noone
 
@@ -1232,12 +1230,6 @@ multi_send_message_start()
 		key_toggle_repeat(1);
 	}
 }
-
-extern fix StartingShields;
-
-int multi_who_is_master();
-extern char NameReturning;
-extern int force_cockpit_redraw;
 
 static void multi_send_message_end()
 {
@@ -2629,7 +2621,6 @@ multi_send_player_explode(char type)
 		multi_strip_robots(Player_num);
 }
 
-extern int Proximity_dropped, Smartmines_dropped;
 
 /*
  * Powerup capping: Keep track of how many powerups are in level and kill these which would exceed initial limit.
@@ -3273,7 +3264,6 @@ multi_send_hostage_door_status(int wallnum)
 	multi_send_data(multibuf, count, 0);
 }
 
-extern int Drop_afterburner_blob_flag;
 int PhallicLimit=0;
 int PhallicMan=-1;
 
@@ -3998,8 +3988,6 @@ void multi_check_for_killgoal_winner ()
 	net_destroy_controlcen (objp);
 }
 
-extern fix64 Seismic_disturbance_start_time;
-extern fix64 Seismic_disturbance_end_time;
 
 // Sync our seismic time with other players
 void multi_send_seismic (fix64 t1,fix64 t2)
@@ -4108,8 +4096,6 @@ void multi_do_powcap_update (char *buf)
 			MaxPowerupsAllowed[i]=buf[i+1];
 }
 
-extern active_door ActiveDoors[];
-extern int Num_open_doors;          // Number of open doors
 
 
 #if 0 // never used...
@@ -4935,8 +4921,6 @@ void multi_initiate_save_game()
 	multi_do_frame();
 	multi_save_game( slot,game_id, desc );
 }
-
-int state_get_game_id(char *);
 
 void multi_initiate_restore_game()
 {

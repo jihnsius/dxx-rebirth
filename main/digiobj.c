@@ -34,6 +34,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "text.h"
 #include "kconfig.h"
 #include "config.h"
+#include "digi_audio.h"
 
 #define SOF_USED				1 		// Set if this sample is used
 #define SOF_PLAYING			2		// Set if this sample is playing on a channel
@@ -219,7 +220,6 @@ void digi_init_sounds()
 	digi_sounds_initialized = 1;
 }
 
-extern int digi_max_channels;
 
 // plays a sample that loops forever.
 // Call digi_stop_channe(channel) to stop it.

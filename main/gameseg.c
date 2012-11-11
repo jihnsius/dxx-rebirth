@@ -34,6 +34,11 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "fvi.h"
 #include "byteswap.h"
 #include "mission.h"
+#include "lighting.h"
+
+#ifdef EDITOR
+#include "editor.h"
+#endif
 
 // How far a point can be from a plane, and still be "in" the plane
 #define PLANE_DIST_TOLERANCE	250
@@ -1312,7 +1317,6 @@ static int check_for_degenerate_side(segment *sp, int sidenum)
 
 }
 
-extern int Degenerate_segment_found;
 //	----
 //	See if a segment has gotten turned inside out, or something.
 //	If so, set global Degenerate_segment_found and return 1, else return 0.
@@ -1968,8 +1972,6 @@ static void apply_light_to_segment(segment *segp,vms_vector *segment_center, fix
 	inner_apply_light_to_segment(segp, segment_center, light_intensity, recursion_depth, &changed_segs, &n_changed_segs);
 }
 
-
-extern dxxobject *old_viewer;
 
 //update the static_light field in a segment, which is used for object lighting
 //this code is copied from the editor routine calim_process_all_lights()

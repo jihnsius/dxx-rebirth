@@ -249,6 +249,8 @@ void process_super_mines_frame(void);
 void DropCurrentWeapon();
 void DropSecondaryWeapon();
 void do_seismic_stuff(void);
+extern fix Seismic_tremor_magnitude;
+extern fix64 Seismic_disturbance_start_time, Seismic_disturbance_end_time;
 
 #ifdef __cplusplus
 }

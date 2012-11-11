@@ -38,6 +38,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "args.h"
 #include "playsave.h"
 #include "physfsx.h"
+#include "gamemine.h"
 
 int POrderList (int num);
 int SOrderList (int num);
@@ -72,7 +73,6 @@ static const ubyte DefaultPrimaryOrder[]={9,8,7,6,5,4,3,2,1,0,255};
 static const ubyte DefaultSecondaryOrder[]={9,8,4,3,1,5,0,255,7,6,2};
 
 //allow player to reorder menus?
-extern ubyte MenuReordering;
 
 //char	*Primary_weapon_names[MAX_PRIMARY_WEAPONS] = {
 //	"Laser Cannon",
@@ -834,7 +834,6 @@ void rock_the_mine_frame(void)
 	//	Hook in the rumble sound effect here.
 }
 
-extern	int	Level_shake_frequency, Level_shake_duration;
 
 #define	SEISMIC_DISTURBANCE_DURATION	(F1_0*5)
 fix64	Seismic_disturbance_start_time = 0, Seismic_disturbance_end_time;

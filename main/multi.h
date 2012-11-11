@@ -400,7 +400,12 @@ void multi_send_sound_function (char,char);
 void multi_send_got_flag (char);
 void DropFlag();
 int multi_powerup_is_allowed (int);
+void init_hoard_data();
+void multi_apply_goal_textures();
 void multi_send_finish_game ();
+extern grs_bitmap Orb_icons[2];
+extern char Multi_is_guided;
+extern char Multi_killed_yourself;
 
 //how to encode missiles & flares in weapon packets
 #define MISSILE_ADJUST  100

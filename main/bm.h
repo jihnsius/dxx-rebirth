@@ -95,5 +95,7 @@ extern void bm_read_all(PHYSFS_file * fp);
 int load_exit_models();
 void load_robot_replacements(char *level_name);
 void bm_read_extra_robots(char *fname,int type);
+extern int Robot_replacements_loaded;
+extern int extra_bitmap_num;
 
 #endif /* _BM_H */

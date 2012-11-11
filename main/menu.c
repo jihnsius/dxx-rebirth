@@ -127,7 +127,6 @@ void do_multi_player_menu();
 #ifndef RELEASE
 void do_sandbox_menu();
 #endif
-void newmenu_free_background();
 
 // Hide all menus
 int hide_menus(void)
@@ -575,8 +574,6 @@ int DoMenu()
 
 	return 0;
 }
-
-void show_order_form(void);	// John didn't want this in inferno.h so I just externed it.
 
 //returns flag, true means quit menu
 int do_option ( int select)

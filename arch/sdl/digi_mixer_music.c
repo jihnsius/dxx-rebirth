@@ -22,9 +22,6 @@
 #include "console.h"
 #include "physfsx.h"
 
-#ifdef _WIN32
-extern int digi_win32_play_midi_song( char * filename, int loop );
-#endif
 Mix_Music *current_music = NULL;
 static unsigned char *current_music_hndlbuf = NULL;
 
@@ -52,7 +49,7 @@ int mix_play_file(char *filename, int loop, void (*hook_finished_track)())
 	if (!stricmp(fptr, ".hmp"))
 	{
 #ifdef _WIN32 // on _WIN32, play natively
-		return digi_win32_play_midi_song( filename, loop ); 
+		return digi_win32_play_midi_song( filename, loop );
 #else // otherwise convert and load to current_music
 		hmp2mid(filename, &current_music_hndlbuf, &bufsize);
 		rw = SDL_RWFromConstMem(current_music_hndlbuf,bufsize*sizeof(char));
@@ -69,13 +66,13 @@ int mix_play_file(char *filename, int loop, void (*hook_finished_track)())
 	if (!current_music && *filename == '~')
 	{
 		snprintf(full_path, PATH_MAX, "%s%s", PHYSFS_getUserDir(),
-				 &filename[1 + (!strncmp(&filename[1], PHYSFS_getDirSeparator(), strlen(PHYSFS_getDirSeparator())) ? 
+				 &filename[1 + (!strncmp(&filename[1], PHYSFS_getDirSeparator(), strlen(PHYSFS_getDirSeparator())) ?
 				 strlen(PHYSFS_getDirSeparator()) : 0)]);
 		current_music = Mix_LoadMUS(full_path);
 		if (current_music)
 			filename = full_path;	// used later for possible error reporting
 	}
-		
+
 
 	// no luck. so it might be in Searchpath. So try to build absolute path
 	if (!current_music)

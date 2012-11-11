@@ -56,7 +56,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #ifdef EDITOR
 
-extern ubyte bogus_data[64*64];
 
 void dump_used_textures_level(PHYSFS_file *my_file, int level_num);
 static void say_totals(PHYSFS_file *my_file, const char *level_name);
@@ -373,7 +372,7 @@ static void write_segment_text(PHYSFS_file *my_file)
 
 		if (Segment2s[i].matcen_num != -1)
 			PHYSFSX_printf(my_file, "matcen = %3i, ", Segment2s[i].matcen_num);
-		
+
 		PHYSFSX_printf(my_file, "\n");
 	}
 
@@ -738,12 +737,6 @@ static const char *const Adam_level_names[NUM_ADAM_LEVELS] = {
 	"D2LEVF-4.LVL",
 	"D2LEVF-S.LVL",
 };
-
-typedef struct BitmapFile	{
-	char			name[15];
-} BitmapFile;
-
-extern BitmapFile AllBitmaps[ MAX_BITMAP_FILES ];
 
 int	Ignore_tmap_num2_error;
 

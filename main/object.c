@@ -229,7 +229,6 @@ void draw_object_tmap_rod(dxxobject *obj,bitmap_index bitmapi,int lighted)
 
 int	Linear_tmap_polygon_objects = 1;
 
-extern fix Max_thrust;
 
 //used for robot engine glow
 #define MAX_VELOCITY i2f(50)
@@ -1203,8 +1202,6 @@ int obj_create_copy(int objnum, vms_vector *new_pos, int newsegnum)
 }
 #endif
 
-void newdemo_record_guided_end();
-
 //remove object from the world
 void obj_delete(int objnum)
 {
@@ -1343,9 +1340,6 @@ static void set_camera_pos(vms_vector *camera_pos, dxxobject *objp)
 	}
 }
 
-int get_explosion_vclip(dxxobject *obj,int stage);
-void multi_cap_objects();
-
 //	------------------------------------------------------------------------------------------------------------------
 void dead_player_frame(void)
 {
@@ -1474,7 +1468,6 @@ void dead_player_frame(void)
 
 int Killed_in_frame = -1;
 short Killed_objnum = -1;
-extern char Multi_killed_yourself;
 
 //	------------------------------------------------------------------------------------------------------------------
 static void start_player_death_sequence(dxxobject *player)
@@ -2147,7 +2140,6 @@ int drop_marker_object(vms_vector *pos,int segnum,vms_matrix *orient, int marker
 	return objnum;
 }
 
-extern int Ai_last_missile_camera;
 
 //	*viewer is a viewer, probably a missile.
 //	wake up all robots that were rendered last frame subject to some constraints.

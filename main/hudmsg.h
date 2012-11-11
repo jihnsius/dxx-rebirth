@@ -1,6 +1,7 @@
 #ifndef _HUD_MSG_H
 #define _HUD_MSG_H
 
+#include <stdarg.h>
 #include "compiler.h"
 
 #define HUD_MESSAGE_LENGTH	150

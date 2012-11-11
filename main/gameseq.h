@@ -118,6 +118,9 @@ void do_cloak_invul_secret_stuff(fix64 old_gametime);
 void EnterSecretLevel(void);
 void copy_defaults_to_robot(dxxobject *objp);
 void init_player_stats_new_ship(ubyte pnum);
+extern fix StartingShields;
+extern int	First_secret_visit;
+extern int Do_appearance_effect;
 
 #ifdef __cplusplus
 }

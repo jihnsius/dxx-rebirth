@@ -90,7 +90,6 @@ void digi_select_system(int n) {
 #ifndef NDEBUG
 static int digi_initialised = 0;
 #endif
-extern int digi_max_channels;
 int digi_volume = SOUND_MAX_VOLUME;
 
 void digi_set_volume(int dvolume) {
@@ -162,7 +161,7 @@ int digi_win32_play_midi_song( char * filename, int loop )
 
 	if ((cur_hmp = hmp_open(filename)))
 	{
-		/* 
+		/*
 		 * FIXME: to be implemented as soon as we have some kind or checksum function - replacement for ugly hack in hmp.c for descent.hmp
 		 * if (***filesize check*** && ***CRC32 or MD5 check***)
 		 *	(((*cur_hmp).trks)[1]).data[6] = 0x6C;

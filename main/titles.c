@@ -59,7 +59,6 @@ static char rcsid[] = "$Id: titles.c,v 1.2 2006/03/18 23:08:13 michaelstather Ex
 #include "robot.h"
 #include "titles.h"
 
-extern unsigned RobSX,RobSY,RobDX,RobDY; // Robot movie coords
 
 struct briefing;
 void set_briefing_fontcolor (struct briefing *br);
@@ -457,7 +456,7 @@ static int load_screen_text(char *filename, char **buf)
 
 	if (!stricmp(strrchr(filename, '.'), ".txb"))
 		have_binary = 1;
-	
+
 	if ((tfile = PHYSFSX_openReadBuffered(filename)) == NULL)
 		return (0);
 

@@ -55,6 +55,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "ogl_init.h"
 #endif
 #include "physfsx.h"
+#include "game.h"
 
 #define INITIAL_LOCAL_LIGHT (F1_0/4)    // local light value in segment of occurence (of light emission)
 
@@ -151,7 +152,6 @@ static void draw_outline(int nverts,g3s_point **pointlist)
 }
 #endif
 
-extern fix Seismic_tremor_magnitude;
 
 fix flash_scale;
 
@@ -403,9 +403,6 @@ fix	Tulate_min_dot = (F1_0/4);
 //--unused-- fix	Tulate_min_ratio = (2*F1_0);
 fix	Min_n0_n1_dot	= (F1_0*15/16);
 
-int contains_flare(segment *segp, int sidenum);
-extern fix	Obj_light_xlate[16];
-
 // -----------------------------------------------------------------------------------
 //	Render a side.
 //	Check for normal facing.  If so, render faces on side dictated by sidep->type.
@@ -626,7 +623,6 @@ static void render_object_search(dxxobject *obj)
 }
 #endif
 
-extern ubyte DemoDoingRight,DemoDoingLeft;
 
 static void do_render_object(int objnum, int window_num)
 {
@@ -982,8 +978,6 @@ static void draw_window_box(int color,short left,short top,short right,short bot
 
 }
 #endif
-
-int matt_find_connect_side(int seg0,int seg1);
 
 #ifndef NDEBUG
 char visited2[MAX_SEGMENTS];
@@ -1616,12 +1610,9 @@ static void build_object_lists(int n_segs)
 
 vms_angvec Player_head_angles;
 
-extern int Num_tmaps_drawn;
-extern int Total_pixels;
 //--unused-- int Total_num_tmaps_drawn=0;
 
 int Rear_view=0;
-extern ubyte RenderingType;
 
 #ifdef USE_PYTHON
 enum
@@ -2472,7 +2463,6 @@ done_rendering:
 }
 #ifdef EDITOR
 
-extern int render_3d_in_big_window;
 
 //finds what segment is at a given x&y -  seg,side,face are filled in
 //works on last frame rendered. returns true if found

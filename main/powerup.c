@@ -185,8 +185,6 @@ static int pick_up_vulcan_ammo(void)
 	return used;
 }
 
-char GetKeyValue(char);
-
 //	returns true if powerup consumed
 int do_powerup(dxxobject *obj)
 {

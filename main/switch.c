@@ -329,9 +329,6 @@ static void do_il_off(sbyte trigger_num)
   	}
 }
 
-extern void EnterSecretLevel(void);
-extern void ExitSecretLevel(void);
-extern int p_secret_level_destroyed(void);
 
 static int wall_is_forcefield(trigger *trig)
 {

@@ -291,7 +291,7 @@ static polymodel *read_model_file(polymodel *pm,char *filename,robot_info *r)
 		Error("Bad ID in model file <%s>",filename);
 
 	version = pof_read_short(model_buf);
-	
+
 	if (version < PM_COMPATIBLE_VERSION || version > PM_OBJFILE_VERSION)
 		Error("Bad version (%d) in model file <%s>",version,filename);
 
@@ -316,7 +316,7 @@ static polymodel *read_model_file(polymodel *pm,char *filename,robot_info *r)
 
 				break;
 			}
-			
+
 			case ID_SOBJ: {		//Subobject header
 				int n;
 
@@ -339,7 +339,7 @@ static polymodel *read_model_file(polymodel *pm,char *filename,robot_info *r)
 				break;
 
 			}
-			
+
 			#ifndef DRIVE
 			case ID_GUNS: {		//List of guns on this object
 
@@ -378,7 +378,7 @@ static polymodel *read_model_file(polymodel *pm,char *filename,robot_info *r)
 
 				break;
 			}
-			
+
 			case ID_ANIM:		//Animation data
 				anim_flag++;
 
@@ -395,14 +395,14 @@ static polymodel *read_model_file(polymodel *pm,char *filename,robot_info *r)
 
 
 					robot_set_angles(r,pm,anim_angs);
-				
+
 				}
 				else
 					pof_cfseek(model_buf,len,SEEK_CUR);
 
 				break;
 			#endif
-			
+
 			case ID_TXTR: {		//Texture filename list
 				int n;
 				char name_buf[128];
@@ -414,7 +414,7 @@ static polymodel *read_model_file(polymodel *pm,char *filename,robot_info *r)
 
 				break;
 			}
-			
+
 			case ID_IDTA:		//Interpreter data
 				pm->model_data = d_malloc(len);
 				pm->model_data_size = len;
@@ -512,7 +512,7 @@ int read_model_guns(char *filename,vms_vector *gun_points, vms_vector *gun_dirs,
 	}
 
 	d_free(model_buf);
-	
+
 	return n_guns;
 }
 
@@ -545,7 +545,7 @@ void draw_polygon_model(vms_vector *pos,vms_matrix *orient,vms_angvec *anim_angl
 			{
 				int cnt=1;
 				fix depth;
-	
+
 				depth = g3_calc_point_depth(pos);		//gets 3d depth
 
 				while (po->simpler_model && depth > cnt++ * Simple_model_threshhold_scale * po->rad)
@@ -569,13 +569,13 @@ void draw_polygon_model(vms_vector *pos,vms_matrix *orient,vms_angvec *anim_angl
 
 	// Make sure the textures for this object are paged in...
 	piggy_page_flushed = 0;
-	for (i=0;i<po->n_textures;i++)	
+	for (i=0;i<po->n_textures;i++)
 		PIGGY_PAGE_IN( texture_list_index[i] );
 	// Hmmm... cache got flushed in the middle of paging all these in,
 	// so we need to reread them all in.
 	if (piggy_page_flushed)	{
 		piggy_page_flushed = 0;
-		for (i=0;i<po->n_textures;i++)	
+		for (i=0;i<po->n_textures;i++)
 			PIGGY_PAGE_IN( texture_list_index[i] );
 	}
 	// Make sure that they can all fit in memory.
@@ -591,7 +591,7 @@ void draw_polygon_model(vms_vector *pos,vms_matrix *orient,vms_angvec *anim_angl
 
 	else {
 		int i;
-	
+
 		for (i=0;flags;flags>>=1,i++)
 			if (flags & 1) {
 				vms_vector ofs;
@@ -599,15 +599,15 @@ void draw_polygon_model(vms_vector *pos,vms_matrix *orient,vms_angvec *anim_angl
 				Assert(i < po->n_models);
 
 				//if submodel, rotate around its center point, not pivot point
-	
+
 				vm_vec_avg(&ofs,&po->submodel_mins[i],&po->submodel_maxs[i]);
 				vm_vec_negate(&ofs);
 				g3_start_instance_matrix(&ofs,NULL);
-	
+
 				g3_draw_polygon_model(&po->model_data[po->submodel_ptrs[i]],texture_list,anim_angles,light,glow_values);
-	
+
 				g3_done_instance();
-			}	
+			}
 	}
 
 	g3_done_instance();
@@ -630,7 +630,7 @@ static void polyobj_find_min_max(polymodel *pm)
 	ushort *data,type;
 	int m;
 	vms_vector *big_mn,*big_mx;
-	
+
 	big_mn = &pm->mins;
 	big_mx = &pm->maxs;
 
@@ -642,46 +642,45 @@ static void polyobj_find_min_max(polymodel *pm)
 		ofs= &pm->submodel_offsets[m];
 
 		data = (ushort *)&pm->model_data[pm->submodel_ptrs[m]];
-	
+
 		type = *data++;
-	
+
 		Assert(type == 7 || type == 1);
-	
+
 		nverts = *data++;
-	
+
 		if (type==7)
 			data+=2;		//skip start & pad
-	
+
 		vp = (vms_vector *) data;
-	
+
 		*mn = *mx = *vp++; nverts--;
 
 		if (m==0)
 			*big_mn = *big_mx = *mn;
-	
+
 		while (nverts--) {
 			if (vp->x > mx->x) mx->x = vp->x;
 			if (vp->y > mx->y) mx->y = vp->y;
 			if (vp->z > mx->z) mx->z = vp->z;
-	
+
 			if (vp->x < mn->x) mn->x = vp->x;
 			if (vp->y < mn->y) mn->y = vp->y;
 			if (vp->z < mn->z) mn->z = vp->z;
-	
+
 			if (vp->x+ofs->x > big_mx->x) big_mx->x = vp->x+ofs->x;
 			if (vp->y+ofs->y > big_mx->y) big_mx->y = vp->y+ofs->y;
 			if (vp->z+ofs->z > big_mx->z) big_mx->z = vp->z+ofs->z;
-	
+
 			if (vp->x+ofs->x < big_mn->x) big_mn->x = vp->x+ofs->x;
 			if (vp->y+ofs->y < big_mn->y) big_mn->y = vp->y+ofs->y;
 			if (vp->z+ofs->z < big_mn->z) big_mn->z = vp->z+ofs->z;
-	
+
 			vp++;
 		}
 	}
 }
 
-extern short highest_texture_num;	//from the 3d
 
 char Pof_names[MAX_POLYGON_MODELS][FILENAME_LEN];
 

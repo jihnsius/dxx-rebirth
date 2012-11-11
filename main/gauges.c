@@ -345,7 +345,6 @@ static int weapon_box_state_1;
 static fix weapon_box_fade_values[2];
 #endif
 int	Color_0_31_0 = -1;
-extern fix Omega_charge;
 
 typedef struct gauge_box {
 	int left,top;
@@ -972,7 +971,6 @@ static void hud_show_keys(void)
 }
 
 #ifdef NETWORK
-extern grs_bitmap Orb_icons[2];
 
 static void hud_show_orbs (void)
 {
@@ -1602,7 +1600,6 @@ static void sb_show_lives()
 
 #ifndef RELEASE
 
-extern int Piggy_bitmap_cache_next;
 
 static void show_time()
 {
@@ -2387,7 +2384,6 @@ static void draw_invulnerable_ship()
 		draw_shield_bar(f2ir(Players[Player_num].shields));
 }
 
-extern int Missile_gun;
 
 const rgb player_rgb[MAX_PLAYERS] = {
 							{15,15,23},

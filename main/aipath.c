@@ -217,7 +217,7 @@ if (vm_vec_mag_quick(&e) < F1_0/2)
 			fvi_query	fq;
 			fvi_info		hit_data;
 			int			hit_type;
-	
+
 			fq.p0						= &psegs[i].point;
 			fq.startseg				= psegs[i].segnum;
 			fq.p1						= &goal_pos;
@@ -225,9 +225,9 @@ if (vm_vec_mag_quick(&e) < F1_0/2)
 			fq.thisobjnum			= objp-Objects;
 			fq.ignore_obj_list	= NULL;
 			fq.flags					= 0;
-	
+
 			hit_type = find_vector_intersection(&fq, &hit_data);
-	
+
 			if (hit_type == HIT_NONE)
 				count = 0;
 			else {
@@ -349,7 +349,7 @@ if ((objp->type == OBJ_ROBOT) && (objp->ctype.ai_info.behavior == AIB_RUN_FROM))
 					fvi_query	fq;
 					fvi_info		hit_data;
 					int			hit_type;
-	
+
 					compute_center_point_on_side(&center_point, segp, snum);
 
 					fq.p0						= &objp->pos;
@@ -520,7 +520,7 @@ int polish_path(dxxobject *objp, point_seg *psegs, int num_points)
 		fvi_query	fq;
 		fvi_info		hit_data;
 		int			hit_type;
-	
+
 		fq.p0						= &objp->pos;
 		fq.startseg				= objp->segnum;
 		fq.p1						= &psegs[i].point;
@@ -530,11 +530,11 @@ int polish_path(dxxobject *objp, point_seg *psegs, int num_points)
 		fq.flags					= 0;
 
 		hit_type = find_vector_intersection(&fq, &hit_data);
-	
+
 		if (hit_type == HIT_NONE)
 			first_point = i+1;
 		else
-			break;		
+			break;
 	}
 
 	if (first_point) {
@@ -806,7 +806,6 @@ void create_n_segment_path_to_door(dxxobject *objp, int path_length, int avoid_s
 	create_n_segment_path(objp, path_length, avoid_seg);
 }
 
-extern int Connected_segment_distance;
 
 #define Int3_if(cond) if (!cond) Int3();
 

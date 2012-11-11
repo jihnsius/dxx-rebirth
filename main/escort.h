@@ -15,4 +15,5 @@ void init_buddy_for_level(void);
 void invalidate_escort_goal(void);
 void recreate_thief(dxxobject *objp);
 void drop_stolen_items (dxxobject *);
+extern fix64 Buddy_sorry_time;
 #endif // _ESCORT_H

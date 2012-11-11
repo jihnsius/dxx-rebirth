@@ -55,5 +55,6 @@ void drop_player_eggs(dxxobject *objp);
 //see if wall is volatile, and if so, cause damage to player
 //returns true if player is in lava
 int check_volatile_wall(dxxobject *obj,int segnum,int sidenum,vms_vector *hitpt);
+extern int Final_boss_is_dead;
 
 #endif /* _COLLIDE_H */

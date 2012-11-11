@@ -43,6 +43,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "vclip.h"
 #include "fireball.h"
 #include "pybinding.h"
+#include "weapon.h"
 
 //look at keyboard, mouse, joystick, CyberMan, whatever, and set 
 //physics vars rotvel, velocity
@@ -52,9 +53,7 @@ fix Afterburner_charge=f1_0;
 #define AFTERBURNER_USE_SECS	3				//use up in 3 seconds
 #define DROP_DELTA_TIME			(f1_0/15)	//drop 3 per second
 
-extern int Drop_afterburner_blob_flag;		//ugly hack
 
-extern fix	Seismic_tremor_magnitude;
 
 void read_flying_controls( dxxobject * obj )
 {

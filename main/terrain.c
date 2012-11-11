@@ -144,7 +144,6 @@ static void draw_cell(int i,int j,g3s_point *p0,g3s_point *p1,g3s_point *p2,g3s_
 vms_vector y_cache[256];
 ubyte yc_flags[256];
 
-extern vms_matrix surface_orient;
 
 static vms_vector *get_dy_vec(int h)
 {
@@ -224,7 +223,7 @@ void render_terrain(vms_vector *org_point,int org_2dx,int org_2dy)
 		g3_add_delta_vec(&save_p_low,&save_p_low,&delta_i);
 		last_p = save_p_low;
 		g3_add_delta_vec(&last_p2,&last_p,get_dy_vec(HEIGHT(i+1,low_j)));
-		
+
 		for (j=low_j;j<viewer_j;j++) {
 			g3s_point p2;
 
@@ -244,7 +243,7 @@ void render_terrain(vms_vector *org_point,int org_2dx,int org_2dy)
 		g3_add_delta_vec(&save_p_high,&save_p_high,&delta_i);
 		last_p = save_p_high;
 		g3_add_delta_vec(&last_p2,&last_p,get_dy_vec(HEIGHT(i+1,high_j)));
-		
+
 		for (j=high_j-1;j>=viewer_j;j--) {
 			g3s_point p2;
 
@@ -287,7 +286,7 @@ void render_terrain(vms_vector *org_point,int org_2dx,int org_2dy)
 		g3_add_delta_vec(&save_p_low,&save_p_low,&delta_i);
 		last_p = save_p_low;
 		g3_add_delta_vec(&last_p2,&last_p,get_dy_vec(HEIGHT(i,low_j)));
-		
+
 		for (j=low_j;j<viewer_j;j++) {
 			g3s_point p2;
 
@@ -307,7 +306,7 @@ void render_terrain(vms_vector *org_point,int org_2dx,int org_2dy)
 		g3_add_delta_vec(&save_p_high,&save_p_high,&delta_i);
 		last_p = save_p_high;
 		g3_add_delta_vec(&last_p2,&last_p,get_dy_vec(HEIGHT(i,high_j)));
-		
+
 		for (j=high_j-1;j>=viewer_j;j--) {
 			g3s_point p2;
 
@@ -375,7 +374,7 @@ void load_terrain(char *filename)
 	for (i=0;i<grid_w;i++)
 		for (j=0;j<grid_h;j++)
 			HEIGHT(i,j) -= min_h;
-	
+
 
 //	d_free(height_bitmap.bm_data);
 

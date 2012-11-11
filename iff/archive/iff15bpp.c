@@ -7,7 +7,6 @@
 
 #define INDEX_TO_15BPP(i) ((WORD)((((palptr[(i)].r/2)&31)<<10)+(((palptr[(i)].g/2)&31)<<5)+((palptr[(i)].b/2 )&31)))
 
-extern int parse_iff(FILE *ifile,struct bitmap_header *bitmap_header);
 
 int x,y,pl,bc;
 int bytes_per_row,color;

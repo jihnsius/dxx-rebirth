@@ -234,7 +234,6 @@ void bm_read_all(PHYSFS_file * fp)
 #define N_D2_OBJBITMAPPTRS		502
 #define N_D2_WEAPON_TYPES		62
 
-extern int Num_bitmap_files;
 int extra_bitmap_num = 0;
 
 void bm_free_extra_objbitmaps()

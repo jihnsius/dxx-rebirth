@@ -304,7 +304,6 @@ static void set_average_light_on_all_fast(void)
 
 }
 
-extern int Doing_lighting_hack_flag;
 int set_average_light_on_all(void)
 {
 //	set_average_light_on_all_fast();
@@ -611,21 +610,21 @@ static void assign_uvs_to_side(segment *segp, int sidenum, uvl *uva, uvl *uvb, i
 		editor_status("U, V bogosity in segment #%i, probably on side #%i.  CLEAN UP YOUR MESS!", segp-Segments, sidenum);
 	else {
 		vm_vec_sub(&tvec,&Vertices[v2],&Vertices[v1]);
-		uvls[(vhi+1)%4].u = uvhi.u + 
+		uvls[(vhi+1)%4].u = uvhi.u +
 			fixdiv(fixmul(ruvmag.u,vm_vec_dotprod(&rvec,&tvec)),mag01) +
 			fixdiv(fixmul(fuvmag.u,vm_vec_dotprod(&fvec,&tvec)),mag01);
 
-		uvls[(vhi+1)%4].v = uvhi.v + 
+		uvls[(vhi+1)%4].v = uvhi.v +
 			fixdiv(fixmul(ruvmag.v,vm_vec_dotprod(&rvec,&tvec)),mag01) +
 			fixdiv(fixmul(fuvmag.v,vm_vec_dotprod(&fvec,&tvec)),mag01);
 
 
 		vm_vec_sub(&tvec,&Vertices[v3],&Vertices[v0]);
-		uvls[(vhi+2)%4].u = uvlo.u + 
+		uvls[(vhi+2)%4].u = uvlo.u +
 			fixdiv(fixmul(ruvmag.u,vm_vec_dotprod(&rvec,&tvec)),mag01) +
 			fixdiv(fixmul(fuvmag.u,vm_vec_dotprod(&fvec,&tvec)),mag01);
 
-		uvls[(vhi+2)%4].v = uvlo.v + 
+		uvls[(vhi+2)%4].v = uvlo.v +
 			fixdiv(fixmul(ruvmag.v,vm_vec_dotprod(&rvec,&tvec)),mag01) +
 			fixdiv(fixmul(fuvmag.v,vm_vec_dotprod(&fvec,&tvec)),mag01);
 
@@ -703,7 +702,7 @@ void assign_default_uvs_to_segment(segment *segp)
 // -- mk021394 -- void get_face_and_vert(segment *base_seg, int base_common_side, int v1, int *ff, int *vv, int *pi)
 // -- mk021394 -- {
 // -- mk021394 -- 	int	p,f,v;
-// -- mk021394 -- 
+// -- mk021394 --
 // -- mk021394 -- 	for (f=0; f<base_seg->sides[base_common_side].num_faces; f++) {
 // -- mk021394 -- 		face *fp = &base_seg->sides[base_common_side].faces[f];
 // -- mk021394 -- 		for (p=0; p<fp->num_polys; p++) {
@@ -717,7 +716,7 @@ void assign_default_uvs_to_segment(segment *segp)
 // -- mk021394 -- 				}
 // -- mk021394 -- 		}
 // -- mk021394 -- 	}
-// -- mk021394 -- 
+// -- mk021394 --
 // -- mk021394 -- 	Assert(0);	// Error -- Couldn't find face:vertex which matched vertex v1 on base_seg:base_common_side
 // -- mk021394 -- }
 
@@ -727,10 +726,10 @@ void assign_default_uvs_to_segment(segment *segp)
 // -- mk021394 -- void get_side_vert(segment *base_seg,int base_common_side,int v1,int *vv)
 // -- mk021394 -- {
 // -- mk021394 -- 	int	p,f,v;
-// -- mk021394 -- 
+// -- mk021394 --
 // -- mk021394 -- 	Assert((base_seg->sides[base_common_side].tri_edge == 0) || (base_seg->sides[base_common_side].tri_edge == 1));
 // -- mk021394 -- 	Assert(base_seg->sides[base_common_side].num_faces <= 2);
-// -- mk021394 -- 
+// -- mk021394 --
 // -- mk021394 -- 	for (f=0; f<base_seg->sides[base_common_side].num_faces; f++) {
 // -- mk021394 -- 		face *fp = &base_seg->sides[base_common_side].faces[f];
 // -- mk021394 -- 		for (p=0; p<fp->num_polys; p++) {
@@ -741,7 +740,7 @@ void assign_default_uvs_to_segment(segment *segp)
 // -- mk021394 -- 						*vv = v;
 // -- mk021394 -- 						return;
 // -- mk021394 -- 					}
-// -- mk021394 -- 
+// -- mk021394 --
 // -- mk021394 -- 					if (base_seg->sides[base_common_side].tri_edge == 0) {	// triangulated 012, 023, so if f==0, *vv = v, if f==1, *vv = v if v=0, else v+1
 // -- mk021394 -- 						if ((f == 1) && (v > 0))
 // -- mk021394 -- 							v++;
@@ -759,7 +758,7 @@ void assign_default_uvs_to_segment(segment *segp)
 // -- mk021394 -- 				}
 // -- mk021394 -- 		}
 // -- mk021394 -- 	}
-// -- mk021394 -- 
+// -- mk021394 --
 // -- mk021394 -- 	Assert(0);	// Error -- Couldn't find face:vertex which matched vertex v1 on base_seg:base_common_side
 // -- mk021394 -- }
 
@@ -768,19 +767,19 @@ void assign_default_uvs_to_segment(segment *segp)
 //--rotate_uvs-- void rotate_uvs(uvl *uva, uvl *uvb, vms_vector *rvec)
 //--rotate_uvs-- {
 //--rotate_uvs-- 	uvl	uvc, uva1, uvb1;
-//--rotate_uvs-- 
+//--rotate_uvs--
 //--rotate_uvs-- 	uvc.u = (uva->u + uvb->u)/2;
 //--rotate_uvs-- 	uvc.v = (uva->v + uvb->v)/2;
-//--rotate_uvs-- 
+//--rotate_uvs--
 //--rotate_uvs-- 	uva1.u = fixmul(uva->u - uvc.u, rvec->x) - fixmul(uva->v - uvc.v, rvec->z);
 //--rotate_uvs-- 	uva1.v = fixmul(uva->u - uvc.u, rvec->z) + fixmul(uva->v - uvc.v, rvec->x);
-//--rotate_uvs-- 
+//--rotate_uvs--
 //--rotate_uvs-- 	uva->u = uva1.u + uvc.u;
 //--rotate_uvs-- 	uva->v = uva1.v + uvc.v;
-//--rotate_uvs-- 
+//--rotate_uvs--
 //--rotate_uvs-- 	uvb1.u = fixmul(uvb->u - uvc.u, rvec->x) - fixmul(uvb->v - uvc.v, rvec->z);
 //--rotate_uvs-- 	uvb1.v = fixmul(uvb->u - uvc.u, rvec->z) + fixmul(uvb->v - uvc.v, rvec->x);
-//--rotate_uvs-- 
+//--rotate_uvs--
 //--rotate_uvs-- 	uvb->u = uvb1.u + uvc.u;
 //--rotate_uvs-- 	uvb->v = uvb1.v + uvc.v;
 //--rotate_uvs-- }
@@ -1445,7 +1444,7 @@ void cast_all_light_in_mine(int quick_flag)
 }
 
 // int	Fvit_num = 1000;
-// 
+//
 // fix find_vector_intersection_test(void)
 // {
 // 	int		i;
@@ -1454,22 +1453,22 @@ void cast_all_light_in_mine(int quick_flag)
 // 	fix		rad;
 // 	int		start_time = timer_get_milliseconds();;
 // 	vms_vector	p0,p1;
-// 
+//
 // 	ignore_obj = 1;
 // 	check_obj_flag = 0;
 // 	this_objnum = -1;
 // 	rad = F1_0/4;
-// 
+//
 // 	for (i=0; i<Fvit_num; i++) {
 //		p0_seg = d_rand()*(Highest_segment_index+1)/32768;
 // 		compute_segment_center(&p0, &Segments[p0_seg]);
-// 
+//
 //		p1_seg = d_rand()*(Highest_segment_index+1)/32768;
 // 		compute_segment_center(&p1, &Segments[p1_seg]);
-// 
+//
 // 		find_vector_intersection(&hit_data, &p0, p0_seg, &p1, rad, this_objnum, ignore_obj, check_obj_flag);
 // 	}
-// 
+//
 // 	return timer_get_milliseconds() - start_time;
 // }
 

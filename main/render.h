@@ -104,4 +104,7 @@ extern void render_mine(int start_seg_num, fix eye_offset, int window_num);
 
 extern void update_rendered_data(int window_num, dxxobject *viewer, int rear_view_flag, int user);
 
+extern fix flash_scale;
+extern vms_vector Viewer_eye;
+
 #endif /* _RENDER_H */

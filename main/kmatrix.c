@@ -161,7 +161,6 @@ static void kmatrix_draw_coop_names(int *sorted)
 	gr_string( CENTERSCREEN+FSPACX(50), FSPACY(40), "DEATHS");
 }
 
-extern int PhallicLimit,PhallicMan;
 
 void kmatrix_phallic ()
 {
@@ -204,7 +203,7 @@ static void kmatrix_redraw(kmatrix_screen *km)
 
 	gr_set_current_canvas(NULL);
 	show_fullscr(&km->background);
-	
+
 	if (Game_mode & GM_MULTI_COOP)
 	{
 		kmatrix_redraw_coop();
@@ -274,7 +273,7 @@ void kmatrix_redraw_coop()
 static int kmatrix_handler(window *wind, d_event *event, kmatrix_screen *km)
 {
 	int i = 0, k = 0, choice = 0;
-	
+
 	switch (event->type)
 	{
 		case EVENT_KEY_COMMAND:
@@ -289,14 +288,14 @@ static int kmatrix_handler(window *wind, d_event *event, kmatrix_screen *km)
 					}
 					else
 						choice=nm_messagebox( NULL, 2, TXT_YES, TXT_NO, TXT_ABORT_GAME );
-					
+
 					if (choice==0)
 					{
 						Players[Player_num].connected=CONNECT_DISCONNECTED;
-						
+
 						if (km->network)
 							multi_send_endlevel_packet();
-						
+
 						multi_leave_game();
 						window_close(wind);
 						if (Game_wind)
@@ -307,18 +306,18 @@ static int kmatrix_handler(window *wind, d_event *event, kmatrix_screen *km)
 				case KEY_PAUSE:
 					km->pause_time = !km->pause_time;
 					break;
-					
+
 				default:
 					break;
 			}
 			break;
-			
+
 		case EVENT_WINDOW_DRAW:
 			timer_delay2(50);
 
 			if (km->network)
 				multi_do_protocol_frame(0, 1);
-			
+
 			km->playing = 0;
 
 			// Check if all connected players are also looking at this screen ...
@@ -326,17 +325,17 @@ static int kmatrix_handler(window *wind, d_event *event, kmatrix_screen *km)
 				if (Players[i].connected)
 					if (Players[i].connected != CONNECT_END_MENU && Players[i].connected != CONNECT_DIED_IN_MINE)
 						km->playing = 1;
-			
+
 			// ... and let the reactor blow sky high!
 			if (!km->playing)
 				Countdown_seconds_left = -1;
-			
+
 			// If Reactor is finished and end_time not inited, set the time when we will exit this loop
 			{
 			const fix64 now = timer_query();
 			if (km->end_time == -1 && Countdown_seconds_left < 0 && !km->playing)
 				km->end_time = now + (KMATRIX_VIEW_SEC * F1_0);
-			
+
 			// Check if end_time has been reached and exit loop
 			if (km->pause_time)
 			{
@@ -348,16 +347,16 @@ static int kmatrix_handler(window *wind, d_event *event, kmatrix_screen *km)
 			{
 				if (km->network)
 					multi_send_endlevel_packet();  // make sure
-				
+
 				if (is_D2_OEM)
 				{
 					if (Current_level_num==8)
 					{
 						Players[Player_num].connected=CONNECT_DISCONNECTED;
-						
+
 						if (km->network)
 							multi_send_endlevel_packet();
-						
+
 						multi_leave_game();
 						window_close(wind);
 						if (Game_wind)
@@ -365,30 +364,30 @@ static int kmatrix_handler(window *wind, d_event *event, kmatrix_screen *km)
 						return 0;
 					}
 				}
-				
+
 				window_close(wind);
 				break;
 			}
 			}
 
 			kmatrix_redraw(km);
-			
+
 			if (km->playing)
 				kmatrix_status_msg(Countdown_seconds_left, 1, !! km->pause_time);
 			else
 				kmatrix_status_msg(f2i(timer_query()-km->end_time), 0, !! km->pause_time);
 			break;
-			
+
 		case EVENT_WINDOW_CLOSE:
 			game_flush_inputs();
 			newmenu_free_background();
-			
+
 			break;
-			
+
 		default:
 			break;
 	}
-	
+
 	return 0;
 }
 
@@ -409,12 +408,12 @@ void kmatrix_view(int network)
 		return;
 	}
 	gr_palette_load(gr_palette);
-	
+
 	km->network = network;
 	km->end_time = -1;
 	km->pause_time = 0;
 	km->playing = 0;
-	
+
 	set_screen_mode( SCREEN_MENU );
 	game_flush_inputs();
 
@@ -427,7 +426,7 @@ void kmatrix_view(int network)
 		d_free(km);
 		return;
 	}
-	
+
 	while (window_exists(wind))
 		event_process();
 	gr_free_bitmap_data(&km->background);

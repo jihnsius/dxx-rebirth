@@ -1484,7 +1484,6 @@ void do_ai_frame_all(void)
 }
 
 
-extern int Final_boss_is_dead;
 
 // Initializations to be performed for all robots for a new level.
 void init_robots_for_level(void)

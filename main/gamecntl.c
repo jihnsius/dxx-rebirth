@@ -100,33 +100,20 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #include <SDL/SDL.h>
 
-void object_goto_prev_viewer(void);
-
 // Global Variables -----------------------------------------------------------
 
 int	Debug_spew;
 
+//	Toggle_var points at a variable which gets !ed on del-T press.
+static int	Dummy_var;
+static int	*Toggle_var = &Dummy_var;
+
 //	External Variables ---------------------------------------------------------
 
-extern char WaitForRefuseAnswer,RefuseThisPlayer,RefuseTeam;
 
 #ifndef NDEBUG
-extern int	Mark_count;
 #endif
 
-extern int	Global_missile_firing_count;
-
-extern int	*Toggle_var;
-
-extern fix	Show_view_text_timer;
-
-extern ubyte DefiningMarkerMessage;
-
-//	Function prototypes --------------------------------------------------------
-
-
-void	kconfig_center_headset(void);
-void DropMarker();
 
 #ifndef RELEASE
 void do_cheat_menu(void);
@@ -310,10 +297,6 @@ void do_weapon_n_item_stuff()
 		transfer_energy_to_shield();
 }
 
-
-void show_extra_views();
-extern fix Flash_effect;
-
 void apply_modified_palette(void)
 {
 //@@    int				k,x,y;
@@ -380,7 +363,6 @@ static void format_time(char *str, int secs_int)
 	sprintf(str, "%1d:%02d:%02d", h, m, s );
 }
 
-extern int netplayerinfo_on;
 
 //Process selected keys until game unpaused
 static int pause_handler(window *wind, d_event *event, char *msg)
@@ -464,7 +446,6 @@ static int do_game_pause()
 	return 0 /*key*/;	// Keycode returning ripped out (kreatordxx)
 }
 
-extern int PhallicLimit,PhallicMan;
 
 static int HandleEndlevelKey(int key)
 {

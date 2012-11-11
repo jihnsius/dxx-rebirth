@@ -42,5 +42,6 @@ extern int  MarkerObject[NUM_MARKERS];
 
 void InitMarkerInput();
 int MarkerInputMessage(int key);
+extern ubyte DefiningMarkerMessage;
 
 #endif

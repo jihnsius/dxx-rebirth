@@ -131,10 +131,6 @@ grs_canvas	VR_render_sub_buffer[2];			//  Two sub buffers for left/right eyes.
 int	force_cockpit_redraw=0;
 int	PaletteRedAdd, PaletteGreenAdd, PaletteBlueAdd;
 
-//	Toggle_var points at a variable which gets !ed on del-T press.
-int	Dummy_var;
-int	*Toggle_var = &Dummy_var;
-
 #ifdef EDITOR
 //flag for whether initial fade-in has been done
 char	faded_in;
@@ -159,8 +155,6 @@ void game_init_render_sub_buffers(int x, int y, int w, int h);
 
 // text functions
 
-extern ubyte DefiningMarkerMessage;
-extern char Marker_input[];
 
 // Cheats
 game_cheats cheats;
@@ -558,7 +552,6 @@ void fly_init(dxxobject *obj)
 
 void test_anim_states();
 
-extern int been_in_editor;
 
 //	------------------------------------------------------------------------------------
 static void do_cloak_stuff(void)
@@ -682,7 +675,6 @@ static void do_afterburner_stuff(void)
 //	Amount to diminish guns towards normal, per second.
 #define	DIMINISH_RATE 16 // gots to be a power of 2, else change the code in diminish_palette_towards_normal
 
-extern fix Flash_effect;
 
  //adds to rgb values for palette flash
 void PALETTE_FLASH_ADD(int _dr, int _dg, int _db)
@@ -841,7 +833,6 @@ void full_palette_save(void)
 	gr_palette_load( gr_palette );
 }
 
-extern int Death_sequence_aborted;
 
 #ifdef USE_SDLMIXER
 #define EXT_MUSIC_TEXT "Jukebox/Audio CD"
@@ -984,9 +975,6 @@ void show_newdemo_help()
 	newmenu_dotiny( NULL, "DEMO PLAYBACK CONTROLS", nitems, m, 0, free_help, NULL );
 }
 
-//temp function until Matt cleans up game sequencing
-void temp_reset_stuff_on_level();
-
 #define LEAVE_TIME 0x4000		//how long until we decide key is down	(Used to be 0x4000)
 
 //deal with rear view - switch it on, or off, or whatever
@@ -1052,7 +1040,6 @@ void reset_rear_view(void)
 
 int Config_menu_flag;
 
-extern char AcidCheatOn,old_IntMethod;
 
 //turns off all cheats & resets cheater flag
 void game_disable_cheats()
@@ -1060,7 +1047,6 @@ void game_disable_cheats()
 	memset(&cheats, 0, sizeof(cheats));
 }
 
-extern int netplayerinfo_on;
 
 //	game_setup()
 // ----------------------------------------------------------------------------
@@ -1244,8 +1230,6 @@ void close_game()
 	restore_effect_bitmap_icons();
 }
 
-extern	int Do_appearance_effect;
-
 dxxobject *Missile_viewer=NULL;
 int Missile_viewer_sig=-1;
 
@@ -1265,7 +1249,6 @@ dxxobject *find_escort()
 	return NULL;
 }
 
-extern int Level_shake_duration;
 
 //if water or fire level, make occasional sound
 static void do_ambient_sounds()
@@ -1515,7 +1498,7 @@ void GameProcessFrame(void)
 //!!}
 
 
-ubyte	Slide_segs[MAX_SEGMENTS];
+static ubyte	Slide_segs[MAX_SEGMENTS];
 int	Slide_segs_computed;
 
 static void compute_slide_segs(void)

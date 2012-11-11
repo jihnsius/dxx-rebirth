@@ -58,6 +58,7 @@ extern void player_dead_message(void);
 
 // fills in the coords of the hostage video window
 void get_hostage_window_coords(int *x, int *y, int *w, int *h);
+extern int	Color_0_31_0;
 
 // from testgaug.c
 

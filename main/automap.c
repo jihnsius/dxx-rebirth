@@ -1193,10 +1193,6 @@ static void add_one_unknown_edge( automap *am, int va, int vb )
 		e->flags|=EF_FRONTIER;		// Mark as a border edge
 }
 
-#ifndef _GAMESEQ_H
-extern obj_position Player_init[];
-#endif
-
 static void add_segment_edges(automap *am, segment *seg)
 {
 	int 	is_grate, no_fade;

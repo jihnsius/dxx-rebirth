@@ -53,7 +53,6 @@ vms_angvec objpage_view_orient;
 fix objpage_view_dist;
 
 //this is bad to have the extern, but this snapshot stuff is special
-extern int polyobj_lighting;
 
 
 //canvas set
@@ -200,9 +199,9 @@ int objpage_grab_current(int n)
 	int i;
 
 	if ((n < 0) || (n >= Num_object_subtypes)) return 0;
-	
+
 	ObjectPage = n / OBJS_PER_PAGE;
-	
+
 	if (ObjectPage*OBJS_PER_PAGE < Num_object_subtypes) {
 		for (i=0;  i<OBJS_PER_PAGE; i++ )
 		{
@@ -223,7 +222,7 @@ int objpage_grab_current(int n)
 	gr_label_box(Cur_object_id);
 
 	//objpage_display_name( Texture[Cur_robot_type]->filename );
-	
+
 	return 1;
 }
 
@@ -348,7 +347,7 @@ void objpage_init( UI_DIALOG *dlg )
 	//Num_total_object_types = N_polygon_models + N_hostage_types + N_powerup_types;
 	//Assert (N_polygon_models < MAX_POLYGON_MODELS);
 	//Assert (Num_total_object_types < MAX_OBJTYPE );
-	//Assert (N_hostage_types < MAX_HOSTAGE_TYPES ); 
+	//Assert (N_hostage_types < MAX_HOSTAGE_TYPES );
 	//Assert (N_powerup_types < MAX_POWERUP_TYPES );
 	// Assert (N_robot_types < MAX_ROBOTS);
 
@@ -388,7 +387,7 @@ void objpage_close()
 int objpage_do(d_event *event)
 {
 	int i;
-	
+
 	if (event->type == EVENT_UI_DIALOG_DRAW)
 	{
 		for (i=0;  i<OBJS_PER_PAGE; i++ )
@@ -402,19 +401,19 @@ int objpage_do(d_event *event)
 				gr_clear_canvas( CGREY );
 			}
 		}
-		
+
 		// Don't reset robot_type when we return to editor.
 		//	Cur_robot_type = ObjectPage*OBJS_PER_PAGE;
 		gr_set_current_canvas(ObjCurrent->canvas);
 		//gr_ubitmap(0,0, robot_bms[robot_bm_nums[ Cur_robot_type ] ] );
 		gr_label_box(Cur_object_id);
-		
+
 		//ObjnameCanvas = gr_create_sub_canvas(&grd_curscreen->sc_canvas, OBJCURBOX_X , OBJCURBOX_Y + OBJBOX_H + 10, 100, 20);
 		//gr_set_current_canvas( ObjnameCanvas );
-		//gr_set_curfont( ui_small_font ); 
+		//gr_set_curfont( ui_small_font );
 		//gr_set_fontcolor( CBLACK, CWHITE );
 		//objpage_display_name( Texture[Cur_robot_type]->filename );
-		
+
 		return 1;
 	}
 
@@ -430,6 +429,6 @@ int objpage_do(d_event *event)
 			return 1;
 		}
 	}
-	
+
 	return 0;
 }

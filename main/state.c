@@ -67,6 +67,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "ogl_init.h"
 #endif
 #include "physfsx.h"
+#include "collide.h"
 
 #define STATE_VERSION 22
 #define STATE_COMPATIBLE_VERSION 20
@@ -96,14 +97,11 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define THUMBNAIL_H 50
 #define DESC_LENGTH 20
 
-extern int Do_appearance_effect;
 
-extern int Physics_cheat_flag;
 
 int state_save_all_sub(char *filename, char *desc);
 int state_restore_all_sub(char *filename, int secret_restore);
 
-extern int First_secret_visit;
 
 int sc_last_item= 0;
 
@@ -736,7 +734,6 @@ static int copy_file(char *old_file, char *new_file)
 	return 0;
 }
 
-extern int Final_boss_is_dead;
 
 //	-----------------------------------------------------------------------------------
 int state_save_all(int secret_save, char *filename_override, int blind_save)
@@ -824,8 +821,6 @@ int state_save_all(int secret_save, char *filename_override, int blind_save)
 	return rval;
 }
 
-extern	fix	Flash_effect;
-extern fix64 Time_flash_last_played;
 
 
 int state_save_all_sub(char *filename, char *desc)

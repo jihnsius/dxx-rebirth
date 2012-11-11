@@ -57,6 +57,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "gauges.h"
 #include "text.h"
 #include "args.h"
+#include "fuelcen.h"
 
 #ifdef EDITOR
 #include "editor/editor.h"
@@ -189,9 +190,6 @@ void init_ai_object(int objnum, int behavior, int hide_segment)
 	aip->dying_start_time = 0;
 
 }
-
-
-dxxobject * create_morph_robot( segment *segp, vms_vector *object_pos, int object_id);
 
 // --------------------------------------------------------------------------------------------------------------------
 //	Create a Buddy bot.
@@ -368,7 +366,6 @@ void init_ai_objects(void)
 #define	BABY_SPIDER_ID	14
 #define	FIRE_AT_NEARBY_PLAYER_THRESHOLD	(F1_0*40)
 
-extern fix Seismic_tremor_magnitude;
 
 //-------------------------------------------------------------------------------------------
 void ai_turn_towards_vector(vms_vector *goal_vector, dxxobject *objp, fix rate)
@@ -760,10 +757,6 @@ void do_ai_robot_hit_attack(dxxobject *robot, dxxobject *playerobj, vms_vector *
 	}
 
 }
-
-#ifndef _OBJECT_H
-extern int Player_exploded;
-#endif
 
 #define	FIRE_K	8		//	Controls average accuracy of robot firing.  Smaller numbers make firing worse.  Being power of 2 doesn't matter.
 

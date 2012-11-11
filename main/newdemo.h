@@ -126,5 +126,6 @@ void newdemo_record_guided_end();
 void newdemo_record_guided_start();
 int newdemo_count_demos();
 void newdemo_strip_frames(char *, int);
+extern ubyte DemoDoRight,DemoDoLeft;
 
 #endif // _NEWDEMO_H

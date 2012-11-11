@@ -100,7 +100,6 @@ typedef struct flythrough_data {
 
 int Endlevel_sequence = 0;
 
-extern fix player_speed;
 
 int transition_segnum,exit_segnum;
 
@@ -148,8 +147,6 @@ static const char movie_table_secret[] = {'a','d','g','j','m','p'};
 
 fix cur_fly_speed,desired_fly_speed;
 
-int matt_find_connect_side(int seg0,int seg1);
-
 grs_bitmap *satellite_bitmap,*station_bitmap,*terrain_bitmap;	//!!*exit_bitmap,
 vms_vector satellite_pos,satellite_upvec;
 //!!grs_bitmap **exit_bitmap_list[1];
@@ -183,7 +180,7 @@ static fixang delta_ang(fixang a,fixang b)
 }
 
 //return though which side of seg0 is seg1
-int matt_find_connect_side(int seg0,int seg1)
+static int matt_find_connect_side(int seg0,int seg1)
 {
 	segment *Seg=&Segments[seg0];
 	int i;
@@ -193,7 +190,6 @@ int matt_find_connect_side(int seg0,int seg1)
 	return -1;
 }
 
-extern int Kmatrix_nomovie_message;
 
 #if defined(D2_OEM) || defined(COMPILATION)
 #define MOVIE_REQUIRED 0
@@ -280,7 +276,6 @@ void init_endlevel()
 dxxobject external_explosion;
 int ext_expl_playing,mine_destroyed;
 
-extern fix flash_scale;
 
 vms_angvec exit_angles={-0xa00,0,0};
 
@@ -440,12 +435,12 @@ void start_rendered_endlevel_sequence()
 
 }
 
-extern flythrough_data fly_objects[];
-
-extern dxxobject *slew_obj;
 
 vms_angvec player_angles,player_dest_angles;
 vms_angvec camera_desired_angles,camera_cur_angles;
+
+#define MAX_FLY_OBJECTS 2
+static flythrough_data fly_objects[MAX_FLY_OBJECTS];
 
 #define CHASE_TURN_RATE (0x4000/4)		//max turn per second
 
@@ -946,7 +941,6 @@ int find_exit_side(dxxobject *obj)
 	return best_side;
 }
 
-extern vms_vector Viewer_eye;	//valid during render
 
 void draw_exit_model()
 {
@@ -1171,10 +1165,6 @@ void render_endlevel_frame(fix eye_offset)
 ///////////////////////// copy of flythrough code for endlevel
 
 
-#define MAX_FLY_OBJECTS 2
-
-flythrough_data fly_objects[MAX_FLY_OBJECTS];
-
 flythrough_data *flydata;
 
 fixang interp_angle(fixang dest,fixang src,fixang step);
@@ -1355,7 +1345,6 @@ void do_endlevel_flythrough(int n)
 #define ROT_SPEED 8		//rate of rotation while key held down
 #define VEL_SPEED (15)	//rate of acceleration while key held down
 
-extern short old_joy_x,old_joy_y;	//position last time around
 
 #include "key.h"
 #include "joy.h"

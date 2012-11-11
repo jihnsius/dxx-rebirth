@@ -131,23 +131,14 @@ int NumNetPlayerPositions = -1;
 
 // Extern from game.c to fix a bug in the cockpit!
 
-extern int Last_level_path_created;
-
-//	HUD_clear_messages external, declared in gauges.h
-#ifndef _GAUGES_H
-void HUD_clear_messages(); // From hud.c
-#endif
-
 //	Extra prototypes declared for the sake of LINT
 void copy_defaults_to_robot_all(void);
 
 int	Do_appearance_effect=0;
 
-extern int Rear_view;
 
 int	First_secret_visit = 1;
 
-extern int descent_critical_error;
 
 //--------------------------------------------------------------------
 static void verify_console_object()
@@ -304,7 +295,6 @@ static void init_ammo_and_energy(void)
 		Players[Player_num].secondary_ammo[0] = 2 + NDL - Difficulty_level;
 }
 
-extern	ubyte	Last_afterburner_state;
 
 // Setup player for new level (After completion of previous level)
 void init_player_stats_level(int secret_flag)
@@ -422,11 +412,6 @@ void init_player_stats_new_ship(ubyte pnum)
 }
 
 #ifdef EDITOR
-
-extern int Slide_segs_computed;
-
-int game_handler(window *wind, d_event *event, void *data);
-
 //reset stuff so game is semi-normal when playing from editor
 void editor_reset_stuff_on_level()
 {
@@ -489,7 +474,6 @@ void update_player_stats()
 }
 
 //hack to not start object when loading level
-extern int Dont_start_sound_objects;
 
 //go through this level and start any eclip sounds
 static void set_sound_sources()
@@ -637,7 +621,6 @@ static ushort netmisc_calc_checksum()
 }
 
 void free_polygon_models();
-extern int Robot_replacements_loaded;
 
 // load just the hxm file
 void load_level_robots(int level_num)
@@ -1438,7 +1421,6 @@ void DoPlayerDead()
 	reset_time();
 }
 
-extern int BigWindowSwitch;
 
 //called when the player is starting a new level for normal game mode and restore state
 //	secret_flag set if came from a secret level
@@ -1563,7 +1545,6 @@ void StartNewLevelSub(int level_num, int page_in_textures, int secret_flag)
 }
 
 #ifdef NETWORK
-extern char PowerupsInMine[MAX_POWERUP_TYPES], MaxPowerupsAllowed[MAX_POWERUP_TYPES];
 #endif
 void bash_to_shield (int i,char *s)
 {
@@ -1607,8 +1588,6 @@ static struct {
 
 #define NUM_INTRO_MOVIES (sizeof(intro_movie) / sizeof(*intro_movie))
 
-extern int robot_movies;	//0 means none, 1 means lowres, 2 means hires
-extern int intro_played;	//true if big intro movie played
 
 static void ShowLevelIntro(int level_num)
 {

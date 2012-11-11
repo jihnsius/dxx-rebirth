@@ -83,7 +83,6 @@ static const char mousebutton_text[][8] = { "LEFT", "RIGHT", "MID", "M4", "M5", 
 
 static const ubyte system_keys[19] = { KEY_ESC, KEY_F1, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6, KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F11, KEY_F12, KEY_MINUS, KEY_EQUAL, KEY_PRINT_SCREEN, KEY_CAPSLOCK, KEY_SCROLLOCK, KEY_NUMLOCK }; // KEY_*LOCK should always be last since we wanna skip these if -nostickykeys
 
-extern ubyte DefiningMarkerMessage;
 
 control_info Controls;
 
@@ -1165,7 +1164,6 @@ fix Last_angles_b = 0;
 fix Last_angles_h = 0;
 ubyte Last_angles_read = 0;
 
-extern int VR_sensitivity;
 int VR_sense_range[3] = { 25, 50, 75 };
 
 void kconfig_read_controls(d_event *event, int automap_flag)

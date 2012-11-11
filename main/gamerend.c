@@ -55,13 +55,9 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "ogl_init.h"
 #endif
 
-extern fix Cruise_speed;
-extern int LinearSVGABuffer;
 
-extern void newmenu_free_background();
 int netplayerinfo_on=0;
 
-extern ubyte DefiningMarkerMessage;
 
 #define MAX_MARKER_MESSAGE_LEN 120
 static void game_draw_marker_message()
@@ -413,14 +409,9 @@ static void game_draw_hud_stuff()
 		player_dead_message();
 }
 
-extern int gr_bitblt_dest_step_shift;
-extern int gr_bitblt_double;
 
-extern int SW_drawn[2], SW_x[2], SW_y[2], SW_w[2], SW_h[2];
 ubyte RenderingType=0;
 ubyte DemoDoingRight=0,DemoDoingLeft=0;
-extern ubyte DemoDoRight,DemoDoLeft;
-extern dxxobject DemoRightExtra,DemoLeftExtra;
 
 static const weapon_box_user_t DemoWBUType[]={WBU_WEAPON,WBU_GUIDED,WBU_MISSILE,WBU_REAR,WBU_ESCORT,WBU_MARKER,WBU_WEAPON};
 char DemoRearCheck[]={0,0,0,1,0,0,0};
@@ -471,11 +462,11 @@ static void show_extra_views()
 		}
 		else
 			do_cockpit_window_view(iwi_0,NULL,0,WBU_WEAPON,NULL);
-	
+
 		if (DemoDoRight)
 		{
 			DemoDoingRight=DemoDoRight;
-			
+
 			if (DemoDoRight==3)
 				do_cockpit_window_view(iwi_1,ConsoleObject,1,WBU_REAR,"REAR");
 			else
@@ -485,13 +476,13 @@ static void show_extra_views()
 		}
 		else
 			do_cockpit_window_view(iwi_1,NULL,0,WBU_WEAPON,NULL);
-		
+
 		DemoDoLeft=DemoDoRight=0;
 		DemoDoingLeft=DemoDoingRight=0;
 		return;
 	}
 
-	if (Guided_missile[Player_num] && Guided_missile[Player_num]->type==OBJ_WEAPON && Guided_missile[Player_num]->id==GUIDEDMISS_ID && Guided_missile[Player_num]->signature==Guided_missile_sig[Player_num]) 
+	if (Guided_missile[Player_num] && Guided_missile[Player_num]->type==OBJ_WEAPON && Guided_missile[Player_num]->id==GUIDEDMISS_ID && Guided_missile[Player_num]->signature==Guided_missile_sig[Player_num])
 	{
 		if (PlayerCfg.GuidedInBigWindow)
 		{
@@ -503,7 +494,7 @@ static void show_extra_views()
 			RenderingType=1+(1<<4);
 			do_cockpit_window_view(iwi_rightmost,Guided_missile[Player_num],0,WBU_GUIDED,"GUIDED");
 		}
-			
+
 		did_missile_view=1;
 	}
 	else {
@@ -634,8 +625,8 @@ static void show_one_extra_view(const InsetWindowIndex w)
 			case CV_COOP: {
 				int player = Coop_view_player[iwi_value(w)];
 
-	         RenderingType=255; // don't handle coop stuff			
-				
+	         RenderingType=255; // don't handle coop stuff
+
 				if (player!=-1 && Players[player].connected && ((Game_mode & GM_MULTI_COOP) || ((Game_mode & GM_TEAM) && (get_team(player) == get_team(Player_num)))))
 				{
 					dxxobject *inset_viewer = &Objects[Players[Coop_view_player[iwi_value(w)]].objnum];
@@ -671,16 +662,15 @@ static void show_one_extra_view(const InsetWindowIndex w)
 }
 
 int BigWindowSwitch=0;
-extern int force_cockpit_redraw;
 void update_cockpits();
 
 //render a frame for the game
 void game_render_frame_mono(int flip)
 {
 	int no_draw_hud=0;
-	
+
 	gr_set_current_canvas(&Screen_3d_window);
-	
+
 	if (Guided_missile[Player_num] && Guided_missile[Player_num]->type==OBJ_WEAPON && Guided_missile[Player_num]->id==GUIDEDMISS_ID && Guided_missile[Player_num]->signature==Guided_missile_sig[Player_num] && PlayerCfg.GuidedInBigWindow) {
 		dxxobject *viewer_save = Viewer;
 
@@ -738,7 +728,7 @@ void game_render_frame_mono(int flip)
 
 	if (Newdemo_state == ND_STATE_PLAYBACK)
 		Game_mode = GM_NORMAL;
-		
+
 	gr_set_current_canvas(&Screen_3d_window);
 	if (!no_draw_hud)
 		game_draw_hud_stuff();
@@ -783,7 +773,6 @@ void toggle_cockpit()
 }
 
 int last_drawn_cockpit = -1;
-extern void ogl_loadbmtexture(grs_bitmap *bm);
 
 // This actually renders the new cockpit onto the screen.
 void update_cockpits()
@@ -813,12 +802,12 @@ void update_cockpits()
 			gr_ubitmapm(0,0, bm);
 #endif
 			break;
-	
+
 		case CM_FULL_SCREEN:
 			break;
-	
+
 		case CM_STATUS_BAR:
-	
+
 			gr_set_current_canvas(NULL);
 #ifdef OGL
 			ogl_ubitmapm_cs (0, (HIRESMODE?(SHEIGHT*2)/2.6:(SHEIGHT*2)/2.72), -1, ((int) ((double) (bm->bm_h) * (HIRESMODE?(double)SHEIGHT/480:(double)SHEIGHT/200) + 0.5)), bm,255, F1_0);
@@ -826,7 +815,7 @@ void update_cockpits()
 			gr_ubitmapm(0,SHEIGHT-bm->bm_h,bm);
 #endif
 			break;
-	
+
 		case CM_LETTERBOX:
 			gr_set_current_canvas(NULL);
 			break;
@@ -862,19 +851,19 @@ void show_boxed_message(char *msg, int RenderFlag)
 {
 	int w,h,aw;
 	int x,y;
-	
+
 	gr_set_current_canvas(NULL);
 	gr_set_curfont( MEDIUM1_FONT );
 	gr_set_fontcolor(BM_XRGB(31, 31, 31), -1);
 	gr_get_string_size(msg,&w,&h,&aw);
-	
+
 	x = (SWIDTH-w)/2;
 	y = (SHEIGHT-h)/2;
-	
+
 	nm_draw_background(x-BORDERX,y-BORDERY,x+w+BORDERX,y+h+BORDERY);
-	
+
 	gr_string( 0x8000, y, msg );
-	
+
 	// If we haven't drawn behind it, need to flip
 	if (!RenderFlag)
 		gr_flip();

@@ -75,5 +75,6 @@ void drop_afterburner_blobs(dxxobject *obj, int count, fix size_scale, fix lifet
  */
 extern void expl_wall_read_n_swap(expl_wall *ew, int n, int swap, PHYSFS_file *fp);
 int pick_connected_segment(dxxobject *objp, int max_depth);
+extern fix Flash_effect;
 
 #endif /* _FIREBALL_H */

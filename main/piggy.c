@@ -74,10 +74,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 ubyte *BitmapBits = NULL;
 ubyte *SoundBits = NULL;
 
-typedef struct BitmapFile {
-	char    name[15];
-} BitmapFile;
-
 typedef struct SoundFile {
 	char    name[15];
 } SoundFile;
@@ -334,7 +330,6 @@ static int Pigfile_initialized=0;
 #define PIGFILE_ID              MAKE_SIG('G','I','P','P') //PPIG
 #define PIGFILE_VERSION         2
 
-extern char CDROM_dir[];
 
 int request_cd(void);
 
@@ -962,9 +957,6 @@ void piggy_read_sounds(void)
 }
 
 
-extern int descent_critical_error;
-extern unsigned descent_critical_deverror;
-extern unsigned descent_critical_errcode;
 
 char * crit_errors[13] = { "Write Protected", "Unknown Unit", "Drive Not Ready", "Unknown Command", "CRC Error", \
 "Bad struct length", "Seek Error", "Unknown media type", "Sector not found", "Printer out of paper", "Write Fault", \
@@ -1900,7 +1892,6 @@ void load_d1_bitmap_replacements()
 }
 
 
-extern int extra_bitmap_num;
 
 /*
  * Find and load the named bitmap from descent.pig

@@ -4,7 +4,6 @@
 
 #include "iff.h"
 
-extern int parse_iff(FILE *ifile,struct bitmap_header *bitmap_header);
 
 int x,y,pl,bc;
 int bytes_per_row,color;

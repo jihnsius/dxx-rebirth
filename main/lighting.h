@@ -53,6 +53,7 @@ g3s_lrgb compute_object_light(dxxobject *obj,vms_vector *rotated_pnt);
 // turn headlight boost on & off
 void toggle_headlight_active(void);
 void start_lighting_frame(dxxobject *viewer);
+extern dxxobject *old_viewer;
 
 #ifdef __cplusplus
 }

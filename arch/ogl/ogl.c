@@ -101,8 +101,6 @@ static void ogl_freetexture(ogl_texture *gltexture);
 /* some function prototypes */
 
 #define GL_TEXTURE0_ARB 0x84C0
-extern GLubyte *pixels;
-extern GLubyte *texbuf;
 static void ogl_filltexbuf(unsigned char *data, GLubyte *texp, int truewidth, int width, int height, int dxo, int dyo, int twidth, int theight, int type, int bm_flags, int data_format);
 void ogl_loadbmtexture(grs_bitmap *bm);
 static int ogl_loadtexture(unsigned char *data, int dxo, int dyo, ogl_texture *tex, int bm_flags, int data_format, int texfilt);
@@ -870,8 +868,6 @@ void gr_upoly_tmap(int nverts, int *vert ){
 void draw_tmap_flat(grs_bitmap *bm,int nv,g3s_point **vertlist){
 		glmprintf((0,"draw_tmap_flat: unhandled\n"));//should never get called
 }
-
-void (*tmap_drawer_ptr)(grs_bitmap *bm,int nv,g3s_point **vertlist);
 
 /*
  * Everything texturemapped (walls, robots, ship)

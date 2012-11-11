@@ -60,7 +60,6 @@ int Network_laser_track = -1;
 
 int find_homing_object_complete(vms_vector *curpos, dxxobject *tracker, int track_obj_type1, int track_obj_type2);
 
-extern char Multi_is_guided;
 
 int find_homing_object(vms_vector *curpos, dxxobject *tracker);
 
@@ -280,7 +279,6 @@ int create_weapon_object(int weapon_type,int segnum,vms_vector *position)
 	return objnum;
 }
 
-extern int Doing_lighting_hack_flag;
 
 //	-------------------------------------------------------------------------------------------------------------------------------
 //	***** HEY ARTISTS!! *****
@@ -1402,9 +1400,9 @@ static void homing_missile_turn_towards_velocity(dxxobject *objp, vms_vector *no
 }
 
 #ifdef NEWHOMER
-/* 
+/*
  * In the original game homers turned sharper in higher FPS-values. We do not want that so we need to scale vector_to_object to FrameTime.
- * For each difficulty setting we have a base value the homers will align to. This we express in a FPS value representing the homers turn radius of the original game (i.e. "The homer will turn like on XXFPS"). 
+ * For each difficulty setting we have a base value the homers will align to. This we express in a FPS value representing the homers turn radius of the original game (i.e. "The homer will turn like on XXFPS").
  * NOTE: Old homers only get valid track_goal every 8 frames. This does not apply anymore so these values are divided by 4 to compensate this.
  */
 fix homing_turn_base[NDL] = { 4, 5, 6, 7, 8 };
@@ -1570,7 +1568,6 @@ void Laser_do_weapon_sequence(dxxobject *obj)
 
 fix64	Last_laser_fired_time = 0;
 
-extern int Player_fired_laser_this_frame;
 
 //	--------------------------------------------------------------------------------------------------
 // Assumption: This is only called by the actual console player, not for network players
