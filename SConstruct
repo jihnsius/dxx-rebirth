@@ -132,7 +132,7 @@ common_sources = [
 'main/gauges.cpp',
 'main/hostage.cpp',
 'main/hud.c',
-'main/inferno.c',
+'main/inferno.cpp',
 'main/kconfig.c',
 'main/kmatrix.c',
 'main/laser.c',
