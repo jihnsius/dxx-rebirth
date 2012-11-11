@@ -175,7 +175,7 @@ common_sources = [
 'maths/vecmat.cpp',
 'mem/mem.cpp',
 'misc/args.cpp',
-'misc/dl_list.c',
+'misc/dl_list.cpp',
 'misc/error.c',
 'misc/hash.c',
 'misc/hmp.c',
