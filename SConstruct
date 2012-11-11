@@ -181,7 +181,7 @@ common_sources = [
 'misc/hmp.cpp',
 'misc/ignorecase.cpp',
 'misc/physfsrwops.cpp',
-'misc/physfsx.c',
+'misc/physfsx.cpp',
 'misc/strio.c',
 'misc/strutil.c',
 'texmap/ntmap.c',
