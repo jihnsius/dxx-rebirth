@@ -73,6 +73,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "editor/editor.h"
 #endif
 
+#include <algorithm>
+using std::min;
+using std::max;
+
 typedef struct flythrough_data {
 	dxxobject		*obj;
 	vms_angvec	angles;			//orientation in angles

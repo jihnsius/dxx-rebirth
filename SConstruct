@@ -115,7 +115,7 @@ common_sources = [
 'main/digiobj.cpp',
 'main/dumpmine.cpp',
 'main/effects.cpp',
-'main/endlevel.c',
+'main/endlevel.cpp',
 'main/escort.c',
 'main/fireball.c',
 'main/fuelcen.c',
