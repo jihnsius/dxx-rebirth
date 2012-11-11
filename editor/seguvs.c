@@ -63,7 +63,8 @@ static fix area_on_side(side *sidep)
 //	Returns approximate area of all sides which get mapped (ie, are not a connection).
 //	I wrote this because I was curious how much memory would be required to texture map all
 //	sides individually with custom artwork.  For demo1.min on 2/18/94, it would be about 5 meg.
-int area_on_all_sides(void)
+static int area_on_all_sides(void) __attribute_used__;
+static int area_on_all_sides(void)
 {
 	int	i,s;
 	int	total_area = 0;
