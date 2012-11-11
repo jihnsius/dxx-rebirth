@@ -159,7 +159,7 @@ common_sources = [
 'main/scores.cpp',
 'main/segment.cpp',
 'main/slew.cpp',
-'main/songs.c',
+'main/songs.cpp',
 'main/state.cpp',
 'main/switch.cpp',
 'main/terrain.c',
