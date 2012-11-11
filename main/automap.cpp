@@ -76,6 +76,8 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "args.h"
 #include "physics.h"
 
+#include <algorithm>
+
 #define LEAVE_TIME 0x4000
 
 #define EF_USED     1   // This edge is used
@@ -368,9 +370,7 @@ static void ClearMarkers()
 
 void automap_clear_visited()
 {
-	unsigned i;
-	for (i=0; i< sizeof(Automap_visited) / sizeof(Automap_visited[0]); i++ )
-		Automap_visited[i] = 0;
+	std::fill(Automap_visited, Automap_visited + (sizeof(Automap_visited) / sizeof(Automap_visited[0])), 0);
 		ClearMarkers();
 }
 
@@ -566,7 +566,7 @@ static void draw_automap(automap *am)
 static int automap_key_command(window *wind, d_event *event, automap *am)
 {
 	int c = event_key_get(event);
-	int marker_num;
+	unsigned marker_num;
 
 	switch (c)
 	{
@@ -586,10 +586,7 @@ static int automap_key_command(window *wind, d_event *event, automap *am)
 
 #ifndef NDEBUG
 		case KEY_DEBUGGED+KEY_F: 	{
-				int i;
-
-				for (i=0; i<=Highest_segment_index; i++ )
-					Automap_visited[i] = 1;
+				std::fill(Automap_visited, Automap_visited + Highest_segment_index + 1, 1);
 				automap_build_edge_list(am);
 				am->max_segments_away = set_segment_depths(Objects[Players[Player_num].objnum].segnum, Automap_visited);
 				am->segment_limit = am->max_segments_away;
