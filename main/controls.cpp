@@ -45,6 +45,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "pybinding.h"
 #include "weapon.h"
 
+#include <algorithm>
+using std::min;
+using std::max;
+
 //look at keyboard, mouse, joystick, CyberMan, whatever, and set 
 //physics vars rotvel, velocity
 

@@ -110,7 +110,7 @@ common_sources = [
 'main/console.c',
 'main/cxxconsole.cpp',
 'main/pybinding.cpp',
-'main/controls.c',
+'main/controls.cpp',
 'main/credits.c',
 'main/digiobj.c',
 'main/dumpmine.c',
