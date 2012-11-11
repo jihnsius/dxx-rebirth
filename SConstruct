@@ -104,7 +104,7 @@ common_sources = [
 'main/aipath.cpp',
 'main/automap.cpp',
 'main/bm.cpp',
-'main/cntrlcen.c',
+'main/cntrlcen.cpp',
 'main/collide.c',
 'main/config.c',
 'main/console.c',
