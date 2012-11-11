@@ -872,7 +872,7 @@ static int newmenu_mouse(window *wind, d_event *event, newmenu *menu, int button
 	return 0;
 }
 
-static int newmenu_key_command(window *wind, d_event *event, newmenu *menu)
+static int newmenu_key_command(window *, d_event *event, newmenu *menu)
 {
 	newmenu_item *item = &menu->items[menu->citem];
 	int k = event_key_get(event);
@@ -1986,7 +1986,7 @@ static void listbox_create_structure( listbox *lb)
 	lb->fntscaley = FNTScaleY;
 }
 
-static int listbox_draw(window *wind, listbox *lb)
+static int listbox_draw(window *, listbox *lb)
 {
 	int i;
 
