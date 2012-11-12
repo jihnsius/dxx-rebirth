@@ -624,7 +624,7 @@ static int fvi_sub(vms_vector *intp,int *ints,const vms_vector *p0,int startseg,
 //  ingore_obj			ignore collisions with this object
 //  check_obj_flag	determines whether collisions with objects are checked
 //Returns the hit_data->hit_type
-int find_vector_intersection(fvi_query *fq,fvi_info *hit_data)
+int find_vector_intersection(const fvi_query *fq,fvi_info *hit_data)
 {
 	int hit_type,hit_seg,hit_seg2;
 	vms_vector hit_pnt;
