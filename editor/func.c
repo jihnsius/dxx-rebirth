@@ -62,7 +62,7 @@ void func_close()
 	}
 }
 
-int (*func_get( char * name, int * numparams ))(void)
+int (*func_get( const char * name, int * numparams ))(void)
 {
 	int i;
 
