@@ -359,7 +359,8 @@ int ui_get_file( char * filename, const char * Filespec  )
 
 	if (!list) return 0;
 
-	x = MenuX(-1, -1, NumFiles, list);
+	const char *const *const clist = (const char *const*)list;
+	x = MenuX(-1, -1, NumFiles, clist);
 
 	if (x > 0)
 		strcpy(filename, list[x - 1]);

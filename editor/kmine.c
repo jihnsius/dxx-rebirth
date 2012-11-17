@@ -142,7 +142,7 @@ int CreateNewMine()
 int MineMenu()
 {
 	int x;
-	char *MenuItems[] = { "New mine",
+	const char *const MenuItems[] = { "New mine",
 					   "Load mine",
 					   "Save mine",
 					   "Print mine",
