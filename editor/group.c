@@ -1044,7 +1044,12 @@ static char	 current_tmap_list[MAX_TEXTURES][13];
 //    and new_segment in that order, marking their file offset.
 // 2. Go through all the fields and fill in the offset, size, and sizeof
 //    values in the headers.
-int med_save_group( char *filename, int *vertex_ids, short *segment_ids, int num_vertices, int num_segments)
+// Saves group *filename from disk.
+//	Saves group defined by vertex_ids and segment_ids to disk. 
+//	Returns:
+//	 0 = successfully saved.
+//	 1 = unable to save.
+static int med_save_group(const char *filename, int *vertex_ids, short *segment_ids, int num_vertices, int num_segments)
 {
 	PHYSFS_file * SaveFile;
 	int header_offset, editor_offset, vertex_offset, segment_offset, texture_offset;
