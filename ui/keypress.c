@@ -28,7 +28,7 @@ static char rcsid[] = "$Id: keypress.c,v 1.1.1.1 2006/03/17 19:52:24 zicodxx Exp
 #include "key.h"
 #include "window.h"
 
-char * KeyDesc[256] = {         \
+const char *const KeyDesc[256] = {         \
 "","{Esc}","{1}","{2}","{3}","{4}","{5}","{6}","{7}","{8}","{9}","{0}","{-}",           \
 "{=}","{Backspace}","{Tab}","{Q}","{W}","{E}","{R}","{T}","{Y}","{U}","{I}","{O}",      \
 "{P}","{[}","{]}","{Enter}","{LeftCtrl}","{A}","{S}","{D}","{F}",        \
