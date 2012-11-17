@@ -294,13 +294,6 @@ int med_load_pmine(char *name);
 //  1 = unable to save.
 int med_save_mine(char *name);
 
-// Loads group *filename from disk.
-//	Adds group to global Segments and Vertices array.
-//	Returns:
-//	 0 = successfully loaded.
-//	 1 = unable to load.
-int med_load_group( char *filename, int *vertex_ids, short *segment_ids, int *num_vertices, int *num_segments);
-
 // Updates the screen... (I put the prototype here for curves.c)
 int medlisp_update_screen();
 

@@ -1183,9 +1183,12 @@ static int med_save_group(const char *filename, int *vertex_ids, short *segment_
 static char old_tmap_list[MAX_TEXTURES][13];
 
 // -----------------------------------------------------------------------------
-// Load group will:
-//int med_load_group(char * filename)
-int med_load_group( char *filename, int *vertex_ids, short *segment_ids, int *num_vertices, int *num_segments)
+// Loads group *filename from disk.
+//	Adds group to global Segments and Vertices array.
+//	Returns:
+//	 0 = successfully loaded.
+//	 1 = unable to load.
+static int med_load_group(const char *filename, int *vertex_ids, short *segment_ids, int *num_vertices, int *num_segments)
 {
 	int segnum, vertnum;
 	char ErrorMessage[200];
