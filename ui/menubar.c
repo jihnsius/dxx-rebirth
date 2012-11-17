@@ -805,7 +805,8 @@ void menubar_init( const char * file )
 		Menu[menu].Item[item].InactiveText = d_strdup(Menu[menu].Item[item].Text);
 		
 		j= 0;
-		for (i=0; i<=strlen(Menu[menu].Item[item].Text); i++ )
+		const int l = strlen(Menu[menu].Item[item].Text);
+		for (i=0; i<=l; i++ )
 		{
 			np = Menu[menu].Item[item].Text[i];
 			if (np != CC_UNDERLINE) 
