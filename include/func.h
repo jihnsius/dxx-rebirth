@@ -17,7 +17,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define _FUNC_H
 
 typedef struct {
-	char *  name;
+	const char *  name;
 	int     nparams;
 	int  (*cfunction)(void);
 } FUNCTION;

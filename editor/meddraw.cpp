@@ -46,6 +46,9 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "fuelcen.h"
 #include "meddraw.h"
 
+#include <algorithm>
+using std::min;
+
 //	Colors used in editor for indicating various kinds of segments.
 #define	SELECT_COLOR		BM_XRGB( 63/2 , 41/2 ,  0/2)
 #define	FOUND_COLOR			BM_XRGB(  0/2 , 30/2 , 45/2)

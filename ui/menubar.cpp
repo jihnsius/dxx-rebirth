@@ -515,7 +515,7 @@ static int do_state_2(d_event *event)
 
 
 
-int menu_handler(window *wind, d_event *event, MENU *menu)
+int menu_handler(window *, d_event *event, MENU *menu)
 {
 	int i;
 	int keypress = 0;
@@ -670,7 +670,7 @@ int menu_handler(window *wind, d_event *event, MENU *menu)
 	return rval;
 }
 
-int menubar_handler(window *wind, d_event *event, MENU *menu)
+int menubar_handler(window *, d_event *event, MENU *)
 {
 	int rval = 0;
 

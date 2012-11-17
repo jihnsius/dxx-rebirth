@@ -528,7 +528,7 @@ void robot_close_window()
 
 #define	STRING_LENGTH	8
 
-int robot_dialog_handler(UI_DIALOG *dlg, d_event *event, robot_dialog *r)
+int robot_dialog_handler(UI_DIALOG *, d_event *event, robot_dialog *r)
 {
 	int	i;
 	fix	DeltaTime;
@@ -802,7 +802,7 @@ int do_object_dialog()
 
 }
 
-int object_dialog_handler(UI_DIALOG *dlg, d_event *event, object_dialog *o)
+int object_dialog_handler(UI_DIALOG *, d_event *event, object_dialog *o)
 {
 	dxxobject *obj=&Objects[Cur_object_index];
 	int keypress = 0;

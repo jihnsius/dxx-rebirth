@@ -38,7 +38,7 @@ char **file_getdirlist(int *NumDirs, const char *dir)
 	char	**list = PHYSFS_enumerateFiles(dir);
 	char	**i, **j = list;
 	char	*test_filename;
-	int		test_max;
+	unsigned		test_max;
 
 	if (!list)
 		return NULL;
@@ -70,7 +70,7 @@ char **file_getdirlist(int *NumDirs, const char *dir)
 	{
 		// Put the 'go to parent directory' sequence '..' first
 		(*NumDirs)++;
-		list = realloc(list, sizeof(char *)*(*NumDirs + 1));
+		list = (char **) realloc(list, sizeof(char *)*(*NumDirs + 1));
 		list[*NumDirs] = NULL;	// terminate
 		for (i = list + *NumDirs - 1; i != list; i--)
 			*i = i[-1];
@@ -306,7 +306,7 @@ int ui_get_filename( char * filename, const char * filespec, const char * messag
 		b->spaces[i] = ' ';
 	b->spaces[34] = 0;
 
-	dlg = ui_create_dialog( 200, 100, 400, 370, DF_DIALOG | DF_MODAL, (int (*)(UI_DIALOG *, d_event *, void *))browser_handler, b );
+	dlg = ui_create_dialog( 200, 100, 400, 370, static_cast<dialog_flags>(DF_DIALOG | DF_MODAL), (int (*)(UI_DIALOG *, d_event *, void *))browser_handler, b );
 
 	b->user_file  = ui_add_gadget_inputbox( dlg, 60, 30, PATH_MAX, 40, InputText );
 

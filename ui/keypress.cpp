@@ -144,7 +144,7 @@ int GetKeyCode(const char * text)
 
 	text = text;
 
-	dlg = ui_create_dialog( 200, 200, 400, 200, DF_DIALOG | DF_MODAL, (int (*)(UI_DIALOG *, d_event *, void *))key_dialog_handler, &k );
+	dlg = ui_create_dialog( 200, 200, 400, 200, static_cast<dialog_flags>(DF_DIALOG | DF_MODAL), (int (*)(UI_DIALOG *, d_event *, void *))key_dialog_handler, &k );
 
 	k.DoneButton = ui_add_gadget_button( dlg, 170, 165, 60, 25, "Ok", NULL );
 	strcpy(k.text, "");

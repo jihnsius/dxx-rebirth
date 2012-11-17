@@ -1016,7 +1016,7 @@ int RestoreGameState() {
 }
 
 // Handler for the main editor dialog
-int editor_handler(UI_DIALOG *dlg, d_event *event, void *data)
+int editor_handler(UI_DIALOG *, d_event *event, void *)
 {
 	editor_view *new_cv;
 	int keypress = 0;

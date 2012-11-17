@@ -411,7 +411,7 @@ void close_wall_window()
 	}
 }
 
-int wall_dialog_handler(UI_DIALOG *dlg, d_event *event, wall_dialog *wd)
+int wall_dialog_handler(UI_DIALOG *, d_event *event, wall_dialog *wd)
 {
 	int i;
 	sbyte type;

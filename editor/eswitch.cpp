@@ -353,7 +353,7 @@ void close_trigger_window()
 	}
 }
 
-int trigger_dialog_handler(UI_DIALOG *dlg, d_event *event, trigger_dialog *t)
+int trigger_dialog_handler(UI_DIALOG *, d_event *event, trigger_dialog *t)
 {
 	int i;
 	short Markedwall, trigger_num;

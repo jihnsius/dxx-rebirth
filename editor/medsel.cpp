@@ -65,7 +65,7 @@ void sort_seg_list(int n_segs,segnum_t *segnumlist,vms_vector *pos)
 	int i;
 	sort_element *sortlist;
 
-	sortlist = d_calloc(n_segs, sizeof(*sortlist));
+	sortlist = (sort_element *) d_calloc(n_segs, sizeof(*sortlist));
 
 	for (i=0;i<n_segs;i++) {
 		sortlist[i].segnum = segnumlist[i];
