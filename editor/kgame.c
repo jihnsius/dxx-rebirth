@@ -37,9 +37,10 @@ static char game_filename[PATH_MAX] = "*.RL2";
 
 static void checkforgamext( char * f )
 {
-	int i;
+	unsigned i;
+	const unsigned l = strlen(f);
 
-	for (i=1; i<strlen(f); i++ )
+	for (i=1; i<l; i++ )
 	{
 		if (f[i]=='.') return;
 
