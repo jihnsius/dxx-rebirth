@@ -477,9 +477,6 @@ int med_find_adjacent_segment_side(segment *sp, int side, segment **adj_sp, int 
 // Finds the closest segment and side to sp:side.
 int med_find_closest_threshold_segment_side(segment *sp, int side, segment **adj_sp, int *adj_side, fix threshold);
 
-//	Given two segments, return the side index in the connecting segment which connects to the base segment
-int find_connect_side(segment *base_seg, segment *con_seg);
-
 // Select previous segment.
 //	If there is a connection on the side opposite to the current side, then choose that segment.
 // If there is no connecting segment on the opposite face, try any segment.
