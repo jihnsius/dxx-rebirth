@@ -39,7 +39,6 @@ int LoadOldMine();
 int SaveSituation();
 int LoadSituation();
 
-extern char mine_filename[PATH_MAX];
 struct PHYSFS_File;
 int save_mine_data_compiled(struct PHYSFS_File *SaveFile);
 
@@ -158,9 +157,6 @@ int PropagateTexturesSelected();
 //--//int MacroLoad();
 
 // In editor.c
-int medlisp_delete_segment(void);
-int medlisp_scale_segment(void);
-int medlisp_rotate_segment(void);
 int medlisp_add_segment();
 int AttachSegment();
 int DeleteSegment();
@@ -254,8 +250,6 @@ int set_average_light_on_all(void);
 int set_average_light_on_all_quick(void);
 
 // Miscellaneous, please put in correct file if you have time
-int IncreaseDrawDepth();
-int DecreaseDrawDepth();
 int GotoMainMenu();
 int GotoGameScreen();
 int DropIntoDebugger();
@@ -283,30 +277,26 @@ int objpage_goto_next_object();
 int SelectPreviousFoundSeg(void);
 
 // In wall.c
-int wall_add_blastable(void);
-int wall_add_door(void);
-int wall_add_closed_wall(void);
-int wall_add_external_wall(void);
-int wall_lock_door(void);
-int wall_unlock_door(void);
-int wall_automate_door(void);
-int wall_deautomate_door(void);
-int wall_add_illusion(void);
-int wall_remove(void);
-int wall_restore_all(void);
-int wall_assign_door_1(void);
-int wall_assign_door_2(void);
-int wall_assign_door_3(void);
-int wall_assign_door_4(void);
-int wall_assign_door_5(void);
-int wall_assign_door_6(void);
-int wall_assign_door_7(void);
-int wall_assign_door_8(void);
-int do_wall_dialog(void);
-int do_trigger_dialog(void);
-int check_walls(void);
-int delete_all_walls(void);
-int delete_all_controlcen_triggers(void);
+extern int wall_add_blastable(void);
+extern int wall_add_closed_wall(void);
+extern int wall_add_external_wall(void);
+extern int wall_lock_door(void);
+extern int wall_unlock_door(void);
+extern int wall_automate_door(void);
+extern int wall_deautomate_door(void);
+extern int wall_assign_door_1(void);
+extern int wall_assign_door_2(void);
+extern int wall_assign_door_3(void);
+extern int wall_assign_door_4(void);
+extern int wall_assign_door_5(void);
+extern int wall_assign_door_6(void);
+extern int wall_assign_door_7(void);
+extern int wall_assign_door_8(void);
+extern int do_wall_dialog(void);
+extern int do_trigger_dialog(void);
+extern int check_walls(void);
+extern int delete_all_walls(void);
+extern int delete_all_controlcen_triggers(void);
 
 // In centers.c
 int do_centers_dialog(void);

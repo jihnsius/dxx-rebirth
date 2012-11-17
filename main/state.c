@@ -97,12 +97,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define THUMBNAIL_H 50
 #define DESC_LENGTH 20
 
-
-
-int state_save_all_sub(char *filename, char *desc);
-int state_restore_all_sub(char *filename, int secret_restore);
-
-
 int sc_last_item= 0;
 
 char dgss_id[4] = "DGSS";

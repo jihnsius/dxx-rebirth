@@ -32,6 +32,7 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "editor/kfuncs.h"
 #include "editor/texpage.h"
 #include "kdefs.h"
+#include "editor/medmisc.h"
 
 // Test function prototypes (replace Test1, 2 and 3 with whatever function you wish to test.)
 
