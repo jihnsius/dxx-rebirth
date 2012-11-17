@@ -42,7 +42,7 @@ static char sit_filename[PATH_MAX] = "*.SIT";
 #define MAX_NAME_LENGTH PATH_MAX
 
 //	See if filename f contains an extent.  If not, add extent ext.
-void checkforext( char * f, char *ext )
+static void checkforext( char * f, const char *ext )
 {
 	int i;
 
@@ -71,7 +71,7 @@ void checkforext( char * f, char *ext )
 }
 
 //	See if filename f contains an extent.  If not, add extent ext.
-static void set_extension( char * f, char *ext )
+static void set_extension( char * f, const char *ext )
 {
 	int i;
 

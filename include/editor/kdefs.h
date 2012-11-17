@@ -38,7 +38,6 @@ int LoadOldMine();
 
 int SaveSituation();
 int LoadSituation();
-void checkforext( char * f, char *ext );
 
 extern char mine_filename[PATH_MAX];
 struct PHYSFS_File;
