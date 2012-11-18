@@ -211,7 +211,19 @@ try_again:
 	return 1;
 }
 
-void delete_player_saved_games(char * name);
+static void delete_player_saved_games(char (*name)[PATH_MAX], const unsigned namelen)
+{
+	unsigned i;
+	(*name)[namelen - 2] = 'g';
+	for (i=0;i<10; i++)
+	{
+		(*name)[namelen - 1] = '0' + i;
+		(*name)[namelen - 3] = 's';
+		PHYSFS_delete(*name);
+		(*name)[namelen - 3] = 'm';
+		PHYSFS_delete(*name);
+	}
+}
 
 static int player_menu_keycommand( listbox *lb, d_event *event )
 {
@@ -226,35 +238,27 @@ static int player_menu_keycommand( listbox *lb, d_event *event )
 				int x = 1;
 				x = nm_messagebox( NULL, 2, TXT_YES, TXT_NO, "%s %s?", TXT_DELETE_PILOT, items[citem]+((items[citem][0]=='$')?1:0) );
 				if (x==0)	{
-					char * p;
-					char plxfile[PATH_MAX], efffile[PATH_MAX], ngpfile[PATH_MAX];
 					int ret;
 					char name[PATH_MAX];
-
-					p = items[citem] + strlen(items[citem]);
-					*p = '.';
-
-					strcpy(name, GameArg.SysUsePlayersDir ? "Players/" : "");
-					strcat(name, items[citem]);
+					const unsigned namelen = snprintf(name, sizeof(name), "%s%.8s.plr", GameArg.SysUsePlayersDir ? "Players/" : "", items[citem]);
 
 					ret = !PHYSFS_delete(name);
-					*p = 0;
 
 					if (!ret)
 					{
-						delete_player_saved_games( items[citem] );
+						delete_player_saved_games(&name, namelen);
 						// delete PLX file
-						sprintf(plxfile, GameArg.SysUsePlayersDir? "Players/%.8s.plx" : "%.8s.plx", items[citem]);
-						if (PHYSFSX_exists(plxfile,0))
-							PHYSFS_delete(plxfile);
+						strcpy(name + namelen - 3, "plx");
+						if (PHYSFSX_exists(name,0))
+							PHYSFS_delete(name);
 						// delete EFF file
-						sprintf(efffile, GameArg.SysUsePlayersDir? "Players/%.8s.eff" : "%.8s.eff", items[citem]);
-						if (PHYSFSX_exists(efffile,0))
-							PHYSFS_delete(efffile);
+						strcpy(name + namelen - 3, "eff");
+						if (PHYSFSX_exists(name,0))
+							PHYSFS_delete(name);
 						// delete NGP file
-						sprintf(ngpfile, GameArg.SysUsePlayersDir? "Players/%.8s.ngp" : "%.8s.ngp", items[citem]);
-						if (PHYSFSX_exists(ngpfile,0))
-							PHYSFS_delete(ngpfile);
+						strcpy(name + namelen - 3, "ngp");
+						if (PHYSFSX_exists(name,0))
+							PHYSFS_delete(name);
 					}
 
 					if (ret)
@@ -656,20 +660,6 @@ int do_option ( int select)
 	}
 
 	return 1;		// stay in main menu unless quitting
-}
-
-void delete_player_saved_games(char * name)
-{
-	int i;
-	char filename[PATH_MAX];
-
-	for (i=0;i<10; i++)
-	{
-		snprintf( filename, PATH_MAX, GameArg.SysUsePlayersDir? "Players/%s.sg%x" : "%s.sg%x", name, i );
-		PHYSFS_delete(filename);
-		snprintf( filename, PATH_MAX, GameArg.SysUsePlayersDir? "Players/%s.mg%x" : "%s.mg%x", name, i );
-		PHYSFS_delete(filename);
-	}
 }
 
 static int demo_menu_keycommand( listbox *lb, d_event *event )
