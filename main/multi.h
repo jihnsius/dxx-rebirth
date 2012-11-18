@@ -347,6 +347,7 @@ extern int multi_powerup_is_4pack(int);
 extern void multi_send_orb_bonus( char pnum );
 extern void multi_send_got_orb( char pnum );
 extern void multi_add_lifetime_kills(void);
+void multi_add_lifetime_killed(void);
 
 extern int PhallicLimit,PhallicMan;
 extern int Bounty_target;

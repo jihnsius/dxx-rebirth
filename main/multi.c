@@ -70,33 +70,22 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "automap.h"
 #include "physfsx.h"
 
-void multi_reset_player_object(dxxobject *objp);
-void multi_reset_object_texture(dxxobject *objp);
-void multi_add_lifetime_killed();
-void multi_add_lifetime_kills();
-void multi_send_play_by_play(int num,int spnum,int dpnum);
-void multi_send_heartbeat();
-void multi_powcap_cap_objects();
-void multi_powcap_adjust_remote_cap(int pnum);
-void multi_set_robot_ai(void);
-void multi_send_powcap_update();
-void multi_apply_goal_textures();
-int  find_goal_texture(ubyte t);
-void multi_do_capture_bonus(char *buf);
-void multi_do_orb_bonus(char *buf);
-void multi_send_drop_flag(int objnum,int seed);
-void multi_send_ranking();
-void multi_do_play_by_play(char *buf);
-void multi_new_bounty_target( int pnum );
-void multi_do_bounty( char *buf );
-void multi_save_game(ubyte slot, uint id, char *desc);
-void multi_restore_game(ubyte slot, uint id);
-void multi_do_save_game(char *buf);
-void multi_do_restore_game(char *buf);
-void multi_do_msgsend_state(char *buf);
-void multi_send_msgsend_state(int state);
-void multi_send_gmode_update();
-void multi_do_gmode_update(char *buf);
+static void multi_reset_object_texture(dxxobject *objp);
+static void multi_send_play_by_play(int num,int spnum,int dpnum);
+static void multi_send_heartbeat();
+static void multi_powcap_adjust_remote_cap(int pnum);
+static void multi_set_robot_ai(void);
+static int  find_goal_texture(ubyte t);
+static void multi_do_capture_bonus(char *buf);
+static void multi_do_orb_bonus(char *buf);
+static void multi_send_drop_flag(int objnum,int seed);
+static void multi_send_ranking();
+static void multi_do_play_by_play(char *buf);
+static void multi_new_bounty_target( int pnum );
+static void multi_save_game(ubyte slot, uint id, char *desc);
+static void multi_restore_game(ubyte slot, uint id);
+static void multi_send_msgsend_state(int state);
+static void multi_send_gmode_update();
 
 //
 // Local macros and prototypes
@@ -2403,7 +2392,7 @@ multi_reset_player_object(dxxobject *objp)
 
 }
 
-void multi_reset_object_texture (dxxobject *objp)
+static void multi_reset_object_texture (dxxobject *objp)
 {
 	int id,i;
 
@@ -2803,7 +2792,7 @@ static void multi_powcap_adjust_cap_for_player(int pnum)
 		MaxPowerupsAllowed[POW_HEADLIGHT]++;
 }
 
-void multi_powcap_adjust_remote_cap(int pnum)
+static void multi_powcap_adjust_remote_cap(int pnum)
 {
 	char type;
 
@@ -3594,7 +3583,7 @@ void multi_apply_goal_textures()
 		}
 	}
 }
-int find_goal_texture (ubyte t)
+static int find_goal_texture (ubyte t)
 {
 	int i;
 
@@ -3609,7 +3598,7 @@ int find_goal_texture (ubyte t)
 }
 
 
-void multi_set_robot_ai(void)
+static void multi_set_robot_ai(void)
 {
 	// Go through the objects array looking for robots and setting
 	// them to certain supported types of NET AI behavior.
@@ -3936,7 +3925,7 @@ static void multi_do_kill_goal_counts(char *buf)
 
 }
 
-void multi_send_heartbeat ()
+static void multi_send_heartbeat ()
 {
 	if (!Netgame.PlayTimeAllowed)
 		return;
@@ -4200,7 +4189,7 @@ void multi_send_orb_bonus (char pnum)
 	multi_send_data (multibuf,3,2);
 	multi_do_orb_bonus (multibuf);
 }
-void multi_do_capture_bonus(char *buf)
+static void multi_do_capture_bonus(char *buf)
 {
 	// Figure out the results of a network kills and add it to the
 	// appropriate player's tally.
@@ -4257,7 +4246,7 @@ static int GetOrbBonus (char num)
 	return (bonus);
 }
 
-void multi_do_orb_bonus(char *buf)
+static void multi_do_orb_bonus(char *buf)
 {
 	// Figure out the results of a network kills and add it to the
 	// appropriate player's tally.
@@ -4460,7 +4449,7 @@ void DropFlag ()
 }
 
 
-void multi_send_drop_flag (int objnum,int seed)
+static void multi_send_drop_flag (int objnum,int seed)
 {
 	dxxobject *objp;
 	int count=0;
@@ -4684,7 +4673,7 @@ void multi_add_lifetime_killed ()
 
 }
 
-void multi_send_ranking ()
+static void multi_send_ranking ()
 {
 	multibuf[0]=(char)MULTI_RANK;
 	multibuf[1]=(char)Player_num;
@@ -4726,7 +4715,7 @@ void multi_send_play_by_play (int num,int spnum,int dpnum)
 	multi_do_play_by_play (multibuf);
 }
 
-void multi_do_play_by_play (char *buf)
+static void multi_do_play_by_play (char *buf)
 {
 	int whichplay=buf[1];
 	int spnum=buf[2];
@@ -4791,7 +4780,7 @@ void multi_send_bounty( void )
 	multi_send_data( multibuf, 2, 2 );
 }
 
-void multi_do_bounty( char *buf )
+static void multi_do_bounty( char *buf )
 {
 	if ( multi_i_am_master() )
 		return;
@@ -4799,7 +4788,7 @@ void multi_do_bounty( char *buf )
 	multi_new_bounty_target( buf[1] );
 }
 
-void multi_new_bounty_target( int pnum )
+static void multi_new_bounty_target( int pnum )
 {
 	/* If it's already the same, don't do it */
 	if( Bounty_target == pnum )
@@ -4816,7 +4805,7 @@ void multi_new_bounty_target( int pnum )
 	digi_play_sample( SOUND_BUDDY_MET_GOAL, F1_0 * 2 );
 }
 
-void multi_do_save_game(char *buf)
+static void multi_do_save_game(char *buf)
 {
 	int count = 1;
 	ubyte slot;
@@ -4830,7 +4819,7 @@ void multi_do_save_game(char *buf)
 	multi_save_game( slot, id, desc );
 }
 
-void multi_do_restore_game(char *buf)
+static void multi_do_restore_game(char *buf)
 {
 	int count = 1;
 	ubyte slot;
@@ -4976,7 +4965,7 @@ void multi_save_game(ubyte slot, uint id, char *desc)
 	state_save_all_sub(filename, desc );
 }
 
-void multi_restore_game(ubyte slot, uint id)
+static void multi_restore_game(ubyte slot, uint id)
 {
 	char filename[PATH_MAX];
 	int i;
@@ -5005,12 +4994,12 @@ void multi_restore_game(ubyte slot, uint id)
 	multi_send_score(); // send my restored scores. I sent 0 when I loaded the level anyways...
 }
 
-void multi_do_msgsend_state(char *buf)
+static void multi_do_msgsend_state(char *buf)
 {
 	multi_sending_message[(int)buf[1]] = (int)buf[2];
 }
 
-void multi_send_msgsend_state(int state)
+static void multi_send_msgsend_state(int state)
 {
 	multibuf[0] = (char)MULTI_TYPING_STATE;
 	multibuf[1] = Player_num;
@@ -5020,7 +5009,7 @@ void multi_send_msgsend_state(int state)
 }
 
 // Specific variables related to our game mode we want the clients to know about
-void multi_send_gmode_update()
+static void multi_send_gmode_update()
 {
 	if (!multi_i_am_master())
 		return;
@@ -5033,7 +5022,7 @@ void multi_send_gmode_update()
 	multi_send_data(multibuf, 3, 0);
 }
 
-void multi_do_gmode_update(char *buf)
+static void multi_do_gmode_update(char *buf)
 {
 	if (multi_i_am_master())
 		return;
