@@ -83,7 +83,7 @@ typedef struct _grs_point {
 #define BM_FLAG_PAGED_OUT           16  // This bitmap's data is paged out.
 #define BM_FLAG_RLE_BIG             32  // for bitmaps that RLE to > 255 per row (i.e. cockpits)
 
-typedef struct _grs_bitmap {
+typedef struct grs_bitmap {
 	short   bm_x,bm_y;  // Offset from parent's origin
 	short   bm_w,bm_h;  // width,height
 	sbyte   bm_type;    // 0=Linear, 1=ModeX, 2=SVGA
@@ -99,7 +99,7 @@ typedef struct _grs_bitmap {
 	ubyte   avg_color;  //  Average color of all pixels in texture map.
 	fix avg_color_rgb[3]; // same as above but real rgb value to be used to textured objects that should emit light
 	sbyte   unused;     // to 4-byte align.
-	struct _grs_bitmap  *bm_parent;
+	struct grs_bitmap  *bm_parent;
 #ifdef OGL
 	struct _ogl_texture *gltexture;
 #endif /* def OGL */
