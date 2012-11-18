@@ -28,6 +28,7 @@
 #include "args.h"
 #include "ignorecase.h"
 #include "byteswap.h"
+#include "compiler.h"
 
 extern void PHYSFSX_init(int argc, char *argv[]);
 
@@ -148,7 +149,20 @@ static inline int PHYSFSX_fseek(PHYSFS_file *fp, long int offset, int where)
 	return !c;
 }
 
-static inline char * PHYSFSX_fgets(char *buf, size_t n, PHYSFS_file *const fp)
+#if defined(__GNUC__) && defined(__OPTIMIZE__) && defined(__INLINE__)
+void __trap_PHYSFSX_fgets_wrong_size() __attribute__((__error__("wrong size passed to PHYSFSX_fgets")));
+void __trap_PHYSFSX_fgets_unknown_size() __attribute__((__error__("unknown size passed to PHYSFSX_fgets")));
+#define PHYSFSX_fgets(B,N,F)	({	\
+	if (__bos((B)) != (size_t)-1) {	\
+		if (!__builtin_constant_p((N)))	\
+			__trap_PHYSFSX_fgets_unknown_size();	\
+		else if ((N) != __bos((B)))	\
+			__trap_PHYSFSX_fgets_wrong_size();	\
+	}	\
+	(PHYSFSX_fgets)((B),(N),(F));	\
+	})
+#endif
+static inline char * (PHYSFSX_fgets)(char *buf, size_t n, PHYSFS_file *const fp)
 {
 	size_t i;
 	int c;
