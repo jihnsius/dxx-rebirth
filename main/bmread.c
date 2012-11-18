@@ -121,21 +121,21 @@ int	linenum;		//line int table currently being parsed
 #define IFTOK(str) if (!strcmp(arg, str))
 
 //	For the sake of LINT, defining prototypes to module's functions
-void bm_read_alias(void);
-void bm_read_marker(void);
-void bm_read_robot_ai(int skip);
-void bm_read_powerup(int unused_flag);
-void bm_read_hostage(void);
-void bm_read_robot(int skip);
-void bm_read_weapon(int skip, int unused_flag);
-void bm_read_reactor(void);
-void bm_read_exitmodel(void);
-void bm_read_player_ship(void);
-void bm_read_some_file(int skip);
-void bm_read_sound(int skip, int pc_shareware);
-void bm_write_extra_robots(void);
-void clear_to_end_of_line(void);
-void verify_textures(void);
+static void bm_read_alias(void);
+static void bm_read_marker(void);
+static void bm_read_robot_ai(int skip);
+static void bm_read_powerup(int unused_flag);
+static void bm_read_hostage(void);
+static void bm_read_robot(int skip);
+static void bm_read_weapon(int skip, int unused_flag);
+static void bm_read_reactor(void);
+static void bm_read_exitmodel(void);
+static void bm_read_player_ship(void);
+static void bm_read_some_file(int skip);
+static void bm_read_sound(int skip, int pc_shareware);
+static void bm_write_extra_robots(void);
+static void clear_to_end_of_line(void);
+static void verify_textures(void);
 
 
 //---------------------------------------------------------------
@@ -626,7 +626,7 @@ int gamedata_read_tbl(int pc_shareware)
 	return 0;
 }
 
-void verify_textures()
+static void verify_textures()
 {
 	grs_bitmap * bmp;
 	int i,j;
@@ -647,7 +647,7 @@ void verify_textures()
 
 }
 
-void bm_read_alias()
+static void bm_read_alias()
 {
 	char *t;
 
@@ -1009,14 +1009,14 @@ static void adjust_field_of_view(fix *fovp)
 	}
 }
 
-void clear_to_end_of_line(void)
+static void clear_to_end_of_line(void)
 {
 	arg = strtok( NULL, space );
 	while (arg != NULL)
 		arg = strtok( NULL, space );
 }
 
-void bm_read_sound(int skip, int pc_shareware)
+static void bm_read_sound(int skip, int pc_shareware)
 {
 	int sound_num;
 	int alt_sound_num;
@@ -1049,7 +1049,7 @@ void bm_read_sound(int skip, int pc_shareware)
 }
 
 // ------------------------------------------------------------------------------
-void bm_read_robot_ai(int skip)
+static void bm_read_robot_ai(int skip)
 {
 	char			*robotnum_text;
 	int			robotnum;
@@ -1128,7 +1128,7 @@ static grs_bitmap *load_polymodel_bitmap(int skip, char *name)
 #define MAX_MODEL_VARIANTS	4
 
 // ------------------------------------------------------------------------------
-void bm_read_robot(int skip)
+static void bm_read_robot(int skip)
 {
 	char			*model_name[MAX_MODEL_VARIANTS];
 	int			n_models,i;
@@ -1373,7 +1373,7 @@ void bm_read_robot(int skip)
 }
 
 //read a reactor model
-void bm_read_reactor(void)
+static void bm_read_reactor(void)
 {
 	char *model_name, *model_name_dead=NULL;
 	int first_bitmap_num, first_bitmap_num_dead=0, n_normal_bitmaps;
@@ -1446,7 +1446,7 @@ void bm_read_reactor(void)
 }
 
 //read the marker object
-void bm_read_marker()
+static void bm_read_marker()
 {
 	char *model_name;
 	int first_bitmap_num, n_normal_bitmaps;
@@ -1482,7 +1482,7 @@ void bm_read_marker()
 }
 
 //read the exit model
-void bm_read_exitmodel()
+static void bm_read_exitmodel()
 {
 	char *model_name, *model_name_dead=NULL;
 	int first_bitmap_num=0, first_bitmap_num_dead=0, n_normal_bitmaps;
@@ -1535,7 +1535,7 @@ void bm_read_exitmodel()
 
 }
 
-void bm_read_player_ship(void)
+static void bm_read_player_ship(void)
 {
 	char	*model_name_dying=NULL;
 	char	*model_name[MAX_MODEL_VARIANTS];
@@ -1681,7 +1681,7 @@ void bm_read_player_ship(void)
 
 }
 
-void bm_read_some_file(int skip)
+static void bm_read_some_file(int skip)
 {
 
 	switch (bm_flag) {
@@ -1741,7 +1741,7 @@ void bm_read_some_file(int skip)
 
 // ------------------------------------------------------------------------------
 //	If unused_flag is set, then this is just a placeholder.  Don't actually reference vclips or load bbms.
-void bm_read_weapon(int skip, int unused_flag)
+static void bm_read_weapon(int skip, int unused_flag)
 {
 	int	i,n;
 	int	n_models=0;
@@ -1992,7 +1992,7 @@ void bm_read_weapon(int skip, int unused_flag)
 // ------------------------------------------------------------------------------
 #define DEFAULT_POWERUP_SIZE i2f(3)
 
-void bm_read_powerup(int unused_flag)
+static void bm_read_powerup(int unused_flag)
 {
 	int n;
 	char 	*equal_ptr;
@@ -2045,7 +2045,7 @@ void bm_read_powerup(int unused_flag)
 	}
 }
 
-void bm_read_hostage()
+static void bm_read_hostage()
 {
 	int n;
 	char 	*equal_ptr;
@@ -2194,7 +2194,7 @@ void bm_write_all(PHYSFS_file *fp)
 	bm_write_extra_robots();
 }
 
-void bm_write_extra_robots()
+static void bm_write_extra_robots()
 {
 	PHYSFS_file *fp;
 	u_int32_t t;
