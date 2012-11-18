@@ -43,7 +43,7 @@ extern "C" {
 typedef struct eclip {
 	vclip   vc;             //imbedded vclip
 	fix     time_left;      //for sequencing
-	int     frame_count;    //for sequencing
+	unsigned     frame_count;    //for sequencing
 	short   changing_wall_texture;      //Which element of Textures array to replace.
 	short   changing_object_texture;    //Which element of ObjBitmapPtrs array to replace.
 	int     flags;          //see above
