@@ -1684,7 +1684,7 @@ int state_restore_all_sub(char *filename, int secret_restore)
 	return 1;
 }
 
-int state_get_game_id(const char *filename)
+uint state_get_game_id(const char *filename)
 {
 	int version;
 	PHYSFS_file *fp;

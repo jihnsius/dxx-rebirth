@@ -101,7 +101,7 @@ static void ogl_freetexture(ogl_texture *gltexture);
 /* some function prototypes */
 
 #define GL_TEXTURE0_ARB 0x84C0
-static void ogl_filltexbuf(unsigned char *data, GLubyte *texp, int truewidth, int width, int height, int dxo, int dyo, int twidth, int theight, int type, int bm_flags, int data_format);
+static void ogl_filltexbuf(unsigned char *data, GLubyte *texp, int truewidth, unsigned width, unsigned height, int dxo, int dyo, unsigned twidth, unsigned theight, int type, int bm_flags, int data_format);
 void ogl_loadbmtexture(grs_bitmap *bm);
 static int ogl_loadtexture(unsigned char *data, int dxo, int dyo, ogl_texture *tex, int bm_flags, int data_format, int texfilt);
 static void ogl_freetexture(ogl_texture *gltexture);
@@ -352,7 +352,7 @@ void ogl_cache_polymodel_textures(int model_num)
 }
 
 static void ogl_cache_vclip_textures(vclip *vc){
-	int i;
+	unsigned i;
 	for (i=0;i<vc->num_frames;i++){
 		PIGGY_PAGE_IN(vc->frames[i]);
 		ogl_loadbmtexture(&GameBitmaps[vc->frames[i].index]);
@@ -391,7 +391,7 @@ void ogl_cache_level_textures(void)
 	short tmap1,tmap2;
 	grs_bitmap *bm,*bm2;
 	struct side *sidep;
-	int max_efx=0,ef;
+	unsigned max_efx=0,ef;
 
 	ogl_reset_texture_stats_internal();//loading a new lev should reset textures
 
@@ -1282,11 +1282,11 @@ void ogl_close_pixel_buffers(void)
 	d_free(texbuf);
 }
 
-static void ogl_filltexbuf(unsigned char *data, GLubyte *texp, int truewidth, int width, int height, int dxo, int dyo, int twidth, int theight, int type, int bm_flags, int data_format)
+static void ogl_filltexbuf(unsigned char *data, GLubyte *texp, int truewidth, unsigned width, unsigned height, int dxo, int dyo, unsigned twidth, unsigned theight, int type, int bm_flags, int data_format)
 {
-	int x,y,c,i;
+	unsigned x,y,c,i;
 
-	if ((width > max(grd_curscreen->sc_w, 1024)) || (height > max(grd_curscreen->sc_h, 256)))
+	if ((width > max(grd_curscreen->sc_w, 1024u)) || (height > max(grd_curscreen->sc_h, 256u)))
 		Error("Texture is too big: %ix%i", width, height);
 
 	i=0;

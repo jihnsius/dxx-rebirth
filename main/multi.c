@@ -1258,7 +1258,7 @@ static void multi_send_message_end()
 	{
 		if ((Game_mode & GM_NETWORK) && (Game_mode & GM_TEAM))
 		{
-			int name_index=7;
+			unsigned name_index=7;
 			if (strlen(Network_message) > 7)
 				while (Network_message[name_index] == ' ')
 					name_index++;
@@ -1311,7 +1311,7 @@ static void multi_send_message_end()
 
 	else if (!strnicmp (Network_message,"/kick: ",7) && (Game_mode & GM_NETWORK))
 	{
-		int name_index=7;
+		unsigned name_index=7;
 		if (strlen(Network_message) > 7)
 			while (Network_message[name_index] == ' ')
 				name_index++;
@@ -4980,7 +4980,7 @@ void multi_restore_game(ubyte slot, uint id)
 {
 	char filename[PATH_MAX];
 	int i;
-	int thisid;
+	uint thisid;
 
 	if ((Endlevel_sequence) || (Control_center_destroyed))
 		return;
