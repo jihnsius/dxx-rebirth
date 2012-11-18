@@ -70,10 +70,7 @@ int org_i,org_j;
 
 int mine_tiles_drawn;    //flags to tell if all 4 tiles under mine have drawn
 
-
-// LINT: adding function prototypes
-void build_light_table(void);
-void free_light_table(void);
+static void build_light_table();
 
 // ------------------------------------------------------------------------
 static void draw_cell(int i,int j,g3s_point *p0,g3s_point *p1,g3s_point *p2,g3s_point *p3)
@@ -435,7 +432,7 @@ void free_light_table()
 
 }
 
-void build_light_table()
+static void build_light_table()
 {
 	int i,j;
 	fix l,l2,min_l=0x7fffffff,max_l=0;
