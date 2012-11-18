@@ -757,7 +757,7 @@ void maybe_replace_powerup_with_energy(dxxobject *del_obj)
 	}
 }
 
-int drop_powerup(int type, int id, int num, vms_vector *init_vel, vms_vector *pos, int segnum)
+int drop_powerup(object_type_t type, int id, int num, vms_vector *init_vel, vms_vector *pos, int segnum)
 {
 	int		objnum=-1;
 	dxxobject	*obj;

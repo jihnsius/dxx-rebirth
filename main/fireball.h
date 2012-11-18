@@ -22,6 +22,8 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #ifndef _FIREBALL_H
 #define _FIREBALL_H
 
+#include "object.types.h"
+
 // explosion types
 #define ET_SPARKS       0   //little sparks, like when laser hits wall
 #define ET_MULTI_START  1   //first part of multi-part explosion
@@ -69,7 +71,7 @@ extern void maybe_drop_net_powerup(int powerup_type);
 extern void maybe_replace_powerup_with_energy(dxxobject *del_obj);
 
 extern int get_explosion_vclip(dxxobject *obj, int stage);
-extern int drop_powerup(int type, int id, int num, vms_vector *init_vel, vms_vector *pos, int segnum);
+int drop_powerup(object_type_t type, int id, int num, vms_vector *init_vel, vms_vector *pos, int segnum);
 
 // creates afterburner blobs behind the specified object
 void drop_afterburner_blobs(dxxobject *obj, int count, fix size_scale, fix lifetime);

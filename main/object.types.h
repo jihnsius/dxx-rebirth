@@ -22,6 +22,8 @@ OBJ_COOP        = 14,  // a cooperative player object.
 OBJ_MARKER      = 15,  // a map marker
 };
 
+typedef enum object_type_t object_type_t;
+
 // WARNING!! If you add a type here, add its name to Object_type_names
 // in object.c
 #define MAX_OBJECT_TYPES    16
