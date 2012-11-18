@@ -43,9 +43,6 @@ extern int last_width,last_height;
 
 //platform specific funcs
 //MSVC seems to have problems with inline funcs not being found during linking
-#ifndef _MSC_VER
-inline
-#endif
 void ogl_swap_buffers_internal(void);
 
 extern ubyte (*ogl_pal)[256*3];
