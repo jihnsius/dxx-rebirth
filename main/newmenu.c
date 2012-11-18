@@ -652,6 +652,12 @@ static int newmenu_mouse(window *wind, d_event *event, newmenu *menu, int button
 						menu->citem = i;
 
 						switch( menu->items[menu->citem].type )	{
+							case NM_TYPE_MENU:
+							case NM_TYPE_INPUT:
+							case NM_TYPE_NUMBER:
+							case NM_TYPE_INPUT_MENU:
+							case NM_TYPE_SLIDER:
+								break;
 							case NM_TYPE_CHECK:
 								if ( menu->items[menu->citem].value )
 									menu->items[menu->citem].value = 0;
@@ -945,6 +951,9 @@ static int newmenu_key_command(window *wind, d_event *event, newmenu *menu)
 			if ( menu->citem > -1 )	{
 
 				switch( item->type )	{
+					case NM_TYPE_TEXT:
+					case NM_TYPE_NUMBER:
+					case NM_TYPE_SLIDER:
 					case NM_TYPE_MENU:
 					case NM_TYPE_INPUT:
 					case NM_TYPE_INPUT_MENU:
