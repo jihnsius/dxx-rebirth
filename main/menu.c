@@ -385,6 +385,7 @@ int RegisterPlayer()
 	{
 		MakeNewPlayerFile(0);	// make a new player without showing listbox
 		PHYSFS_freeList(list);
+		d_free(m);
 		return 0;
 	}
 
