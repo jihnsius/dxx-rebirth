@@ -1659,7 +1659,7 @@ void add_points_to_score(int points)
 	}
 }
 
-void add_bonus_points_to_score(int points)
+void add_bonus_points_to_score(unsigned points)
 {
 	int prev_score;
 
