@@ -3186,6 +3186,7 @@ multi_send_play_sound(int sound_num, fix volume)
 void
 multi_send_audio_taunt(int taunt_num)
 {
+	(void)taunt_num;
 	return; // Taken out, awaiting sounds..
 
 #if 0
@@ -5195,7 +5196,7 @@ void init_hoard_data()
 		}
 
 		GameSounds[Num_sound_files+i].length = len;
-		GameSounds[Num_sound_files+i].data = d_malloc(len);
+		MALLOC(GameSounds[Num_sound_files+i].data, ubyte, len);
 		PHYSFS_read(ifile,GameSounds[Num_sound_files+i].data,1,len);
 
 		if (GameArg.SndDigiSampleRate == SAMPLE_RATE_11K) {
@@ -5267,7 +5268,7 @@ void save_hoard_data(void)
 		ifile = PHYSFS_openRead(sounds[i]);
 		Assert(ifile != NULL);
 		size = PHYSFS_fileLength(ifile);
-		buf = d_malloc(size);
+		MALLOC(buf, ubyte, size);
 		PHYSFS_read(ifile, buf, size, 1);
 		PHYSFS_writeULE32(ofile, size);
 		PHYSFS_write(ofile, buf, size, 1);
