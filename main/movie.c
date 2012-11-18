@@ -88,9 +88,9 @@ char movielib_files[4][FILENAME_LEN] = {"intro","other","robots"};
 SDL_RWops *RoboFile;
 
 // Function Prototypes
-int RunMovie(char *filename, int highres_flag, int allow_abort,int dx,int dy);
+static int RunMovie(char *filename, int highres_flag, int allow_abort,int dx,int dy);
 
-void draw_subtitles(int frame_num);
+static void draw_subtitles(int frame_num);
 
 // ----------------------------------------------------------------------
 static void* MPlayAlloc(unsigned size)
@@ -351,7 +351,7 @@ static int MovieHandler(window *wind, d_event *event, movie *m)
 }
 
 //returns status.  see movie.h
-int RunMovie(char *filename, int hires_flag, int must_have,int dx,int dy)
+static int RunMovie(char *filename, int hires_flag, int must_have,int dx,int dy)
 {
 	window *wind;
 	movie *m;
