@@ -210,7 +210,7 @@ static bitmap_index bm_load_sub(int skip, char * filename )
 	return bitmap_num;
 }
 
-static void ab_load(int skip, char * filename, bitmap_index bmp[], int *nframes )
+static void ab_load(int skip, const char * filename, bitmap_index bmp[], int *nframes )
 {
 	grs_bitmap * bm[MAX_BITMAPS_PER_BRUSH];
 	bitmap_index bi;

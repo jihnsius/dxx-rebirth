@@ -76,7 +76,7 @@ void gr_copy_palette(ubyte *gr_palette, ubyte *pal, int size)
 }
 
 
-void gr_use_palette_table( char * filename )
+void gr_use_palette_table(const char * filename )
 {
 	PHYSFS_file *fp;
 	int i,fsize;

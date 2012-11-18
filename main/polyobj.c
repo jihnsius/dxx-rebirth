@@ -264,7 +264,7 @@ void align_polygon_model_data(polymodel *pm)
 #endif //def WORDS_NEED_ALIGNMENT
 
 //reads a binary file containing a 3d model
-static polymodel *read_model_file(polymodel *pm,char *filename,robot_info *r)
+static polymodel *read_model_file(polymodel *pm,const char *filename,robot_info *r)
 {
 	PHYSFS_file *ifile;
 	short version;
@@ -685,16 +685,8 @@ static void polyobj_find_min_max(polymodel *pm)
 char Pof_names[MAX_POLYGON_MODELS][FILENAME_LEN];
 
 //returns the number of this model
-#ifndef DRIVE
-int load_polygon_model(char *filename,int n_textures,int first_texture,robot_info *r)
-#else
-int load_polygon_model(char *filename,int n_textures,grs_bitmap ***textures)
-#endif
+int load_polygon_model(const char *filename,int n_textures,int first_texture,robot_info *r)
 {
-	#ifdef DRIVE
-	#define r NULL
-	#endif
-
 	Assert(N_polygon_models < MAX_POLYGON_MODELS);
 	Assert(n_textures < MAX_POLYOBJ_TEXTURES);
 

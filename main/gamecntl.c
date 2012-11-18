@@ -1539,9 +1539,6 @@ int HandleTestKey(int key)
 }
 #endif		//#ifndef RELEASE
 
-//	Cheat functions ------------------------------------------------------------
-char *AcidCheat         ="qPmwxz\"S";   // bit-tersweet
-
 //	Main Cheat function
 
 char AcidCheatOn=0;
@@ -1552,11 +1549,11 @@ char old_IntMethod;
 
 typedef struct cheat_code
 {
-	char *string;
+	const char *string;
 	int *stateptr;
 } __pack__ cheat_code;
 
-cheat_code cheat_codes[NUM_CHEATS] = {
+static const cheat_code cheat_codes[NUM_CHEATS] = {
 	{ "gabbagabbahey", &cheats.lamer },
 	{ "motherlode", &cheats.lamer },
 	{ "currygoat", &cheats.lamer },

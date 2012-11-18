@@ -49,7 +49,7 @@ extern void DeInitRobotMovie(void);
 // find and initialize the movie libraries
 void init_movies();
 
-int init_subtitles(char *filename);
+int init_subtitles(const char *filename);
 void close_subtitles();
 void init_extra_robot_movie(char *filename);
 

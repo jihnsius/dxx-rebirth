@@ -227,7 +227,7 @@ static void delete_player_saved_games(char (*name)[PATH_MAX], const unsigned nam
 
 static int player_menu_keycommand( listbox *lb, d_event *event )
 {
-	char **items = listbox_get_items(lb);
+	const char **items = listbox_get_items(lb);
 	int citem = listbox_get_citem(lb);
 
 	switch (event_key_get(event))
@@ -277,7 +277,7 @@ static int player_menu_keycommand( listbox *lb, d_event *event )
 
 static int player_menu_handler( listbox *lb, d_event *event, char **list )
 {
-	char **items = listbox_get_items(lb);
+	const char **items = listbox_get_items(lb);
 	int citem = listbox_get_citem(lb);
 
 	switch (event->type)
@@ -321,7 +321,7 @@ static int player_menu_handler( listbox *lb, d_event *event, char **list )
 //Inputs the player's name, without putting up the background screen
 int RegisterPlayer()
 {
-	char **m;
+	const char **m;
 	char **f;
 	char **list;
 	static const char *const types[] = { ".plr", NULL };
@@ -357,7 +357,7 @@ int RegisterPlayer()
 	for (NumItems = 0; list[NumItems] != NULL; NumItems++) {}
 	NumItems++;		// for TXT_CREATE_NEW
 
-	MALLOC(m, char *, NumItems);
+	MALLOC(m, const char *, NumItems);
 	if (m == NULL)
 	{
 		PHYSFS_freeList(list);
@@ -664,7 +664,7 @@ int do_option ( int select)
 
 static int demo_menu_keycommand( listbox *lb, d_event *event )
 {
-	char **items = listbox_get_items(lb);
+	const char **items = listbox_get_items(lb);
 	int citem = listbox_get_citem(lb);
 
 	switch (event_key_get(event))
@@ -720,7 +720,7 @@ static int demo_menu_keycommand( listbox *lb, d_event *event )
 
 static int demo_menu_handler( listbox *lb, d_event *event, void *userdata )
 {
-	char **items = listbox_get_items(lb);
+	const char **items = listbox_get_items(lb);
 	int citem = listbox_get_citem(lb);
 
 	userdata = userdata;
@@ -770,7 +770,7 @@ int select_demo(void)
 	// Sort by name
 	qsort(list, NumItems, sizeof(char *), (int (*)( const void *, const void * ))string_array_sort_func);
 
-	newmenu_listbox1(TXT_SELECT_DEMO, NumItems, list, 1, 0, demo_menu_handler, NULL);
+	newmenu_listbox1(TXT_SELECT_DEMO, NumItems, (const char **) list, 1, 0, demo_menu_handler, NULL);
 
 	return 1;
 }
@@ -1310,7 +1310,7 @@ void graphics_config()
 #if PHYSFS_VER_MAJOR >= 2
 typedef struct browser
 {
-	char	*title;			// The title - needed for making another listbox when changing directory
+	const char	*title;			// The title - needed for making another listbox when changing directory
 	int		(*when_selected)(void *userdata, const char *filename);	// What to do when something chosen
 	void	*userdata;		// Whatever you want passed to when_selected
 	char	**list;			// All menu items
@@ -1326,7 +1326,7 @@ typedef struct browser
 
 static void list_dir_el(browser *b, const char *origdir, const char *fname)
 {
-	char *ext;
+	const char *ext;
 	const char *const *i = NULL;
 
 	ext = strrchr(fname, '.');
@@ -1369,12 +1369,12 @@ static int list_directory(browser *b)
 	return 1;
 }
 
-static int select_file_recursive(char *title, const char *orig_path, const char *const *ext_list, int select_dir, int (*when_selected)(void *userdata, const char *filename), void *userdata);
+static int select_file_recursive(const char *title, const char *orig_path, const char *const *ext_list, int select_dir, int (*when_selected)(void *userdata, const char *filename), void *userdata);
 
 static int select_file_handler(listbox *menu, d_event *event, browser *b)
 {
 	char newpath[PATH_MAX];
-	char **list = listbox_get_items(menu);
+	const char **list = listbox_get_items(menu);
 	int citem = listbox_get_citem(menu);
 	const char *sep = PHYSFS_getDirSeparator();
 
@@ -1487,7 +1487,7 @@ static int select_file_handler(listbox *menu, d_event *event, browser *b)
 	return 0;
 }
 
-static int select_file_recursive(char *title, const char *orig_path, const char *const *ext_list, int select_dir, int (*when_selected)(void *userdata, const char *filename), void *userdata)
+static int select_file_recursive(const char *title, const char *orig_path, const char *const *ext_list, int select_dir, int (*when_selected)(void *userdata, const char *filename), void *userdata)
 {
 	browser *b;
 	const char *sep = PHYSFS_getDirSeparator();
@@ -1574,8 +1574,8 @@ static int select_file_recursive(char *title, const char *orig_path, const char 
 		d_free(b);
 		return 0;
 	}
-
-	return newmenu_listbox1(title, b->num_files, b->list, 1, 0, (int (*)(listbox *, d_event *, void *))select_file_handler, b) >= 0;
+	
+	return newmenu_listbox1(title, b->num_files, (const char **) b->list, 1, 0, (int (*)(listbox *, d_event *, void *))select_file_handler, b) >= 0;
 }
 
 #define PATH_HEADER_TYPE NM_TYPE_MENU

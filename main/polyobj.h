@@ -71,12 +71,8 @@ extern char Pof_names[MAX_POLYGON_MODELS][13];
 void free_polygon_models();
 void init_polygon_models();
 
-#ifndef DRIVE
 struct robot_info;
-int load_polygon_model(char *filename,int n_textures,int first_texture,struct robot_info *r);
-#else
-int load_polygon_model(char *filename,int n_textures,grs_bitmap ***textures);
-#endif
+int load_polygon_model(const char *filename,int n_textures,int first_texture,struct robot_info *r);
 
 // draw a polygon model
 void draw_polygon_model(vms_vector *pos,vms_matrix *orient,vms_angvec *anim_angles,int model_num,int flags,g3s_lrgb lrgb,fix *glow_values,bitmap_index alt_textures[]);

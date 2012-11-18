@@ -61,8 +61,8 @@ typedef struct bitmap_index {
 int properties_init();
 void piggy_close();
 void piggy_dump_all();
-bitmap_index piggy_register_bitmap( grs_bitmap * bmp, char * name, int in_file );
-int piggy_register_sound( digi_sound * snd, char * name, int in_file );
+bitmap_index piggy_register_bitmap( grs_bitmap * bmp, const char * name, int in_file );
+int piggy_register_sound( digi_sound * snd, const char * name, int in_file );
 bitmap_index piggy_find_bitmap( char * name );
 int piggy_find_sound( char * name );
 
@@ -143,7 +143,7 @@ extern ubyte bogus_bitmap_initialized;
 extern digi_sound bogus_sound;
 extern const char space[3];
 extern const char equal_space[4];
-void piggy_init_pigfile(char *filename);
+void piggy_init_pigfile(const char *filename);
 int read_hamfile();
 extern int Num_bitmap_files;
 extern BitmapFile AllBitmaps[ MAX_BITMAP_FILES ];

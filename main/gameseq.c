@@ -1546,8 +1546,9 @@ void StartNewLevelSub(int level_num, int page_in_textures, int secret_flag)
 
 #ifdef NETWORK
 #endif
-void bash_to_shield (int i,char *s)
+void bash_to_shield (int i,const char *s)
 {
+	(void)s;
 #ifdef NETWORK
 	int type=Objects[i].id;
 #endif

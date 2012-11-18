@@ -134,7 +134,7 @@ void strrev( char *s1 )
 // remove extension from filename
 void removeext(const char *filename, char *out)
 {
-	char *p;
+	const char *p;
 
 	if ((p = strrchr(filename, '.')))
 	{
@@ -147,7 +147,7 @@ void removeext(const char *filename, char *out)
 
 
 //give a filename a new extension, won't append if strlen(dest) > 8 chars.
-void change_filename_extension( char *dest, const char *src, char *ext )
+void change_filename_extension( char *dest, const char *src, const char *ext )
 {
 	char *p;
 	
@@ -169,7 +169,7 @@ void change_filename_extension( char *dest, const char *src, char *ext )
 }
 
 #if !(defined(_WIN32))
-void _splitpath(char *name, char *drive, char *path, char *base, char *ext)
+void _splitpath(const char *name, char *drive, char *path, char *base, char *ext)
 {
 	const char *s, *p;
 

@@ -416,7 +416,7 @@ void load_robot_replacements(char *level_name)
  */
 
 // formerly exitmodel_bm_load_sub
-static bitmap_index read_extra_bitmap_iff( char * filename )
+static bitmap_index read_extra_bitmap_iff(const char * filename )
 {
 	bitmap_index bitmap_num;
 	grs_bitmap * new = &GameBitmaps[extra_bitmap_num];
@@ -449,7 +449,7 @@ static bitmap_index read_extra_bitmap_iff( char * filename )
 }
 
 // formerly load_exit_model_bitmap
-static grs_bitmap *bm_load_extra_objbitmap(char *name)
+static grs_bitmap *bm_load_extra_objbitmap(const char *name)
 {
 	Assert(N_ObjBitmaps < MAX_OBJ_BITMAPS);
 

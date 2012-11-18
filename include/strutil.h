@@ -28,10 +28,10 @@ void strrev( char *s1 );
 void removeext(const char *filename, char *out);
 
 //give a filename a new extension, doesn't work with paths with no extension already there
-extern void change_filename_extension( char *dest, const char *src, char *new_ext );
+void change_filename_extension( char *dest, const char *src, const char *new_ext );
 
 #if !(defined(_WIN32))
-void _splitpath(char *name, char *drive, char *path, char *base, char *ext);
+void _splitpath(const char *name, char *drive, char *path, char *base, char *ext);
 #endif
 
 // create a growing 2D array with a single growing buffer for the text

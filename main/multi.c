@@ -80,7 +80,6 @@ void multi_powcap_cap_objects();
 void multi_powcap_adjust_remote_cap(int pnum);
 void multi_set_robot_ai(void);
 void multi_send_powcap_update();
-void bash_to_shield(int i,char *s);
 void multi_apply_goal_textures();
 int  find_goal_texture(ubyte t);
 void multi_do_capture_bonus(char *buf);
@@ -4087,7 +4086,7 @@ void multi_send_powcap_update ()
 
 	multi_send_data(multibuf, MAX_POWERUP_TYPES+1, 2);
 }
-void multi_do_powcap_update (char *buf)
+void multi_do_powcap_update (const char *buf)
 {
 	int i;
 
@@ -5236,7 +5235,7 @@ void save_hoard_data(void)
 	ubyte palette[256*3];
 	PHYSFS_file *ofile;
 	int iff_error,i;
-	char *sounds[] = {"selforb.raw","selforb.r22",          //SOUND_YOU_GOT_ORB
+	static const char *const sounds[] = {"selforb.raw","selforb.r22",          //SOUND_YOU_GOT_ORB
 				"teamorb.raw","teamorb.r22",    //SOUND_FRIEND_GOT_ORB
 				"enemyorb.raw","enemyorb.r22",  //SOUND_OPPONENT_GOT_ORB
 				"OPSCORE1.raw","OPSCORE1.r22"}; //SOUND_OPPONENT_HAS_SCORED

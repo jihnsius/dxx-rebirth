@@ -153,7 +153,7 @@ static void udp_traffic_stat()
 }
 
 // Resolve address
-static int udp_dns_filladdr( char *host, int port, struct _sockaddr *sAddr )
+static int udp_dns_filladdr(const char *host, int port, struct _sockaddr *sAddr )
 {
 	// Variables
 	struct addrinfo *result, hints;
@@ -566,9 +566,6 @@ static int net_udp_game_connect(direct_join *dj)
 	return net_udp_do_join_game();
 }
 
-static char *connecting_txt = "Connecting...";
-static char *blank = "";
-
 static int manual_join_game_handler(newmenu *menu, d_event *event, direct_join *dj)
 {
 	newmenu_item *items = newmenu_get_items(menu);
@@ -579,7 +576,7 @@ static int manual_join_game_handler(newmenu *menu, d_event *event, direct_join *
 			if (dj->connecting && event_key_get(event) == KEY_ESC)
 			{
 				dj->connecting = 0;
-				items[6].text = blank;
+				items[6].text = "";
 				return 1;
 			}
 			break;
@@ -590,7 +587,7 @@ static int manual_join_game_handler(newmenu *menu, d_event *event, direct_join *
 				if (net_udp_game_connect(dj))
 					return -2;	// Success!
 				else if (!dj->connecting)
-					items[6].text = blank;
+					items[6].text = "";
 			}
 			break;
 
@@ -628,7 +625,7 @@ static int manual_join_game_handler(newmenu *menu, d_event *event, direct_join *
 				memcpy((struct _sockaddr *)&Netgame.players[0].protocol.udp.addr, (struct _sockaddr *)&dj->host_addr, sizeof(struct _sockaddr));
 
 				dj->connecting = 1;
-				items[6].text = connecting_txt;
+				items[6].text = "Connecting...";
 				return 1;
 			}
 
@@ -684,7 +681,7 @@ void net_udp_manual_join_game()
 	m[nitems].type = NM_TYPE_INPUT; m[nitems].text=dj->portbuf; m[nitems].text_len=5;   	nitems++;
 	m[nitems].type = NM_TYPE_TEXT;  m[nitems].text="MY PORT:";	                    	nitems++;
 	m[nitems].type = NM_TYPE_INPUT; m[nitems].text=UDP_MyPort; m[nitems].text_len=5;	nitems++;
-	m[nitems].type = NM_TYPE_TEXT;  m[nitems].text=blank;								nitems++;	// for connecting_txt
+	m[nitems].type = NM_TYPE_TEXT;  m[nitems].text="";								nitems++;	// for connecting_txt
 
 	newmenu_do1( NULL, "ENTER GAME ADDRESS", nitems, m, (int (*)(newmenu *, d_event *, void *))manual_join_game_handler, dj, 0 );
 }

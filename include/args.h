@@ -45,12 +45,12 @@ extern void args_exit();
 //   Dbg - Debugging/Undocumented Options
 typedef struct Arg
 {
-	char *SysHogDir;
-	char *SysPilot;
+	const char *SysHogDir;
+	const char *SysPilot;
 	const char *MplUdpHostAddr;
-	char *EdiAutoLoad;
-	char *DbgAltTex;
-	char *DbgTexMap;
+	const char *EdiAutoLoad;
+	const char *DbgAltTex;
+	const char *DbgTexMap;
 #ifdef USE_PYTHON
 	const char *SysPythonSrc;
 #endif

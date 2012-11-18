@@ -35,7 +35,7 @@ void PHYSFSX_init(int argc, char *argv[])
 {
 	char fullPath[PATH_MAX + 5];
 #if defined(__unix__)
-	char *path = NULL;
+	const char *path = NULL;
 #endif
 #ifdef macintosh	// Mac OS 9
 	char base_dir[PATH_MAX];

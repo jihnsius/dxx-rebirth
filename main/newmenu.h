@@ -70,10 +70,10 @@ extern int newmenu_do(const char * title, const char * subtitle, int nitems, new
 extern int newmenu_do1(const char *title, const char *subtitle, int nitems, newmenu_item *item, int (*subfunction)(newmenu *menu, d_event *event, void *userdata), void *userdata, int citem);
 
 // Same as above, only you can pass through what background bitmap to use.
-extern int newmenu_do2(const char *title, const char *subtitle, int nitems, newmenu_item *item, int (*subfunction)(newmenu *menu, d_event *event, void *userdata), void *userdata, int citem, char *filename);
+extern int newmenu_do2(const char *title, const char *subtitle, int nitems, newmenu_item *item, int (*subfunction)(newmenu *menu, d_event *event, void *userdata), void *userdata, int citem, const char *filename);
 
 // Same as above, but returns menu instead of citem 
-extern newmenu *newmenu_do3(const char *title, const char *subtitle, int nitems, newmenu_item *item, int (*subfunction)(newmenu *menu, d_event *event, void *userdata), void *userdata, int citem, char *filename);
+extern newmenu *newmenu_do3(const char *title, const char *subtitle, int nitems, newmenu_item *item, int (*subfunction)(newmenu *menu, d_event *event, void *userdata), void *userdata, int citem, const char *filename);
 
 // Tiny menu with GAME_FONT
 extern newmenu *newmenu_dotiny(const char * title, const char * subtitle, int nitems, newmenu_item * item, int TabsFlag, int (*subfunction)(newmenu *menu, d_event *event, void *userdata), void *userdata);
@@ -142,14 +142,14 @@ extern const char *Newmenu_allowed_chars;
 // 	return 0;
 // }
 
-extern char **listbox_get_items(listbox *lb);
+extern const char **listbox_get_items(listbox *lb);
 extern int listbox_get_nitems(listbox *lb);
 extern int listbox_get_citem(listbox *lb);
 struct window *listbox_get_window(listbox *lb);
 extern void listbox_delete_item(listbox *lb, int item);
 
-extern listbox *newmenu_listbox(const char *title, int nitems, char *items[], int allow_abort_flag, int (*listbox_callback)(listbox *lb, d_event *event, void *userdata), void *userdata);
-extern listbox *newmenu_listbox1(const char *title, int nitems, char *items[], int allow_abort_flag, int default_item, int (*listbox_callback)(listbox *lb, d_event *event, void *userdata), void *userdata);
+extern listbox *newmenu_listbox(const char *title, int nitems, const char *items[], int allow_abort_flag, int (*listbox_callback)(listbox *lb, d_event *event, void *userdata), void *userdata);
+extern listbox *newmenu_listbox1(const char *title, int nitems, const char *items[], int allow_abort_flag, int default_item, int (*listbox_callback)(listbox *lb, d_event *event, void *userdata), void *userdata);
 
 //added on 10/14/98 by Victor Rachels to attempt a fixedwidth font messagebox
 newmenu *nm_messagebox_fixedfont(const char *title, int nchoices, ...);

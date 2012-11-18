@@ -1225,7 +1225,7 @@ int load_level(const char * filename_passed)
 
 	if (!PHYSFSX_exists(filename,1))
 	{
-		char *p = strrchr(filename_passed, '.');
+		const char *p = strrchr(filename_passed, '.');
 
 		if (stricmp(p, ".lvl"))
 			strcpy(filename, filename_passed);	// set to what was passed

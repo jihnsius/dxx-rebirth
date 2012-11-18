@@ -44,7 +44,7 @@ extern void (*cur_tmap_scanline_shaded)(void);
 //} tmap_scanline_funcs;
 
 //extern tmap_scanline_funcs tmap_funcs;
-void select_tmap(char *type);
+void select_tmap(const char *type);
 
 #ifdef __cplusplus
 }

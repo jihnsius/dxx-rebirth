@@ -82,7 +82,7 @@ struct newmenu
 	newmenu_item	*items;
 	int				(*subfunction)(newmenu *menu, d_event *event, void *userdata);
 	int				citem;
-	char			*filename;
+	const char			*filename;
 	int				tiny_mode;
 	int			tabs_flag;
 	int			reorderitems;
@@ -98,7 +98,7 @@ struct newmenu
 grs_bitmap nm_background, nm_background1;
 grs_bitmap *nm_background_sub = NULL;
 
-newmenu *newmenu_do4( const char * title, const char * subtitle, int nitems, newmenu_item * item, int (*subfunction)(newmenu *menu, d_event *event, void *userdata), void *userdata, int citem, char * filename, int TinyMode, int TabsFlag );
+static newmenu *newmenu_do4( const char * title, const char * subtitle, int nitems, newmenu_item * item, int (*subfunction)(newmenu *menu, d_event *event, void *userdata), void *userdata, int citem, const char * filename, int TinyMode, int TabsFlag );
 
 void newmenu_free_background()	{
 	if (nm_background.bm_data)
@@ -115,7 +115,7 @@ void newmenu_free_background()	{
 }
 
 // Draws the custom menu background pcx, if available
-static void nm_draw_background1(char * filename)
+static void nm_draw_background1(const char * filename)
 {
 	int pcx_error;
 
@@ -462,7 +462,7 @@ int newmenu_do1( const char * title, const char * subtitle, int nitems, newmenu_
 }
 
 
-int newmenu_do2( const char * title, const char * subtitle, int nitems, newmenu_item * item, int (*subfunction)(newmenu *menu, d_event *event, void *userdata), void *userdata, int citem, char * filename )
+int newmenu_do2( const char * title, const char * subtitle, int nitems, newmenu_item * item, int (*subfunction)(newmenu *menu, d_event *event, void *userdata), void *userdata, int citem, const char * filename )
 {
 	newmenu *menu;
 	window *wind;
@@ -506,7 +506,7 @@ int newmenu_doreorder( const char * title, const char * subtitle, int nitems, ne
 	return rval;
 }
 
-newmenu *newmenu_do3( const char * title, const char * subtitle, int nitems, newmenu_item * item, int (*subfunction)(newmenu *menu, d_event *event, void *userdata), void *userdata, int citem, char * filename )
+newmenu *newmenu_do3( const char * title, const char * subtitle, int nitems, newmenu_item * item, int (*subfunction)(newmenu *menu, d_event *event, void *userdata), void *userdata, int citem, const char * filename )
 {
 	return newmenu_do4( title, subtitle, nitems, item, subfunction, userdata, citem, filename, 0, 0 );
 }
@@ -1550,7 +1550,7 @@ static int newmenu_handler(window *wind, d_event *event, newmenu *menu)
 	return 0;
 }
 
-newmenu *newmenu_do4( const char * title, const char * subtitle, int nitems, newmenu_item * item, int (*subfunction)(newmenu *menu, d_event *event, void *userdata), void *userdata, int citem, char * filename, int TinyMode, int TabsFlag )
+static newmenu *newmenu_do4( const char * title, const char * subtitle, int nitems, newmenu_item * item, int (*subfunction)(newmenu *menu, d_event *event, void *userdata), void *userdata, int citem, const char * filename, int TinyMode, int TabsFlag )
 {
 	window *wind = NULL;
 	newmenu *menu;
@@ -1689,7 +1689,7 @@ struct listbox
 	window *wind;
 	const char *title;
 	int nitems;
-	char **item;
+	const char **item;
 	int allow_abort_flag;
 	int (*listbox_callback)(listbox *lb, d_event *event, void *userdata);
 	int citem, first_item;
@@ -1701,7 +1701,7 @@ struct listbox
 	void *userdata;
 };
 
-char **listbox_get_items(listbox *lb)
+const char **listbox_get_items(listbox *lb)
 {
 	return lb->item;
 }
@@ -2127,12 +2127,12 @@ static int listbox_handler(window *wind, d_event *event, listbox *lb)
 	return 0;
 }
 
-listbox *newmenu_listbox( const char * title, int nitems, char * items[], int allow_abort_flag, int (*listbox_callback)(listbox *lb, d_event *event, void *userdata), void *userdata )
+listbox *newmenu_listbox( const char * title, int nitems, const char * items[], int allow_abort_flag, int (*listbox_callback)(listbox *lb, d_event *event, void *userdata), void *userdata )
 {
 	return newmenu_listbox1( title, nitems, items, allow_abort_flag, 0, listbox_callback, userdata );
 }
 
-listbox *newmenu_listbox1( const char * title, int nitems, char * items[], int allow_abort_flag, int default_item, int (*listbox_callback)(listbox *lb, d_event *event, void *userdata), void *userdata )
+listbox *newmenu_listbox1( const char * title, int nitems, const char *items[], int allow_abort_flag, int default_item, int (*listbox_callback)(listbox *lb, d_event *event, void *userdata), void *userdata )
 {
 	listbox *lb;
 	window *wind;

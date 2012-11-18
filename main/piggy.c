@@ -184,7 +184,7 @@ static void DiskBitmapHeader_d1_read(DiskBitmapHeader *dbh, PHYSFS_file *fp)
 static int piggy_is_substitutable_bitmap( char * name, char * subst_name );
 
 #ifdef EDITOR
-void piggy_write_pigfile(char *filename);
+static void piggy_write_pigfile(const char *filename);
 static void write_int(int i,PHYSFS_file *file);
 #endif
 
@@ -211,7 +211,7 @@ char* piggy_game_bitmap_name(grs_bitmap *bmp)
 	return NULL;
 }
 
-bitmap_index piggy_register_bitmap( grs_bitmap * bmp, char * name, int in_file )
+bitmap_index piggy_register_bitmap( grs_bitmap * bmp, const char * name, int in_file )
 {
 	bitmap_index temp;
 	Assert( Num_bitmap_files < MAX_BITMAP_FILES );
@@ -241,7 +241,7 @@ bitmap_index piggy_register_bitmap( grs_bitmap * bmp, char * name, int in_file )
 	return temp;
 }
 
-int piggy_register_sound( digi_sound * snd, char * name, int in_file )
+int piggy_register_sound( digi_sound * snd, const char * name, int in_file )
 {
 	int i;
 
@@ -336,7 +336,7 @@ int request_cd(void);
 
 //initialize a pigfile, reading headers
 //returns the size of all the bitmap data
-void piggy_init_pigfile(char *filename)
+void piggy_init_pigfile(const char *filename)
 {
 	int i;
 	char temp_name[16];
@@ -958,7 +958,7 @@ void piggy_read_sounds(void)
 
 
 
-char * crit_errors[13] = { "Write Protected", "Unknown Unit", "Drive Not Ready", "Unknown Command", "CRC Error", \
+static const char *const crit_errors[13] = { "Write Protected", "Unknown Unit", "Drive Not Ready", "Unknown Command", "CRC Error", \
 "Bad struct length", "Seek Error", "Unknown media type", "Sector not found", "Printer out of paper", "Write Fault", \
 "Read fault", "General Failure" };
 
@@ -1156,7 +1156,7 @@ void piggy_load_level_data()
 
 #ifdef EDITOR
 
-void piggy_write_pigfile(char *filename)
+static void piggy_write_pigfile(const char *filename)
 {
 	PHYSFS_file *pig_fp;
 	int bitmap_data_start, data_offset;
@@ -1411,7 +1411,7 @@ static int piggy_does_bitmap_exist_slow( char * name )
 
 
 #define NUM_GAUGE_BITMAPS 23
-char * gauge_bitmap_names[NUM_GAUGE_BITMAPS] = {
+static const char *const gauge_bitmap_names[NUM_GAUGE_BITMAPS] = {
 	"gauge01", "gauge01b",
 	"gauge02", "gauge02b",
 	"gauge06", "gauge06b",
@@ -1427,7 +1427,7 @@ char * gauge_bitmap_names[NUM_GAUGE_BITMAPS] = {
 };
 
 
-static int piggy_is_gauge_bitmap( char * base_name )
+static int piggy_is_gauge_bitmap(const char * base_name )
 {
 	int i;
 	for (i=0; i<NUM_GAUGE_BITMAPS; i++ )    {

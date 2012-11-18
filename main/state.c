@@ -736,7 +736,7 @@ static int copy_file(char *old_file, char *new_file)
 
 
 //	-----------------------------------------------------------------------------------
-int state_save_all(int secret_save, char *filename_override, int blind_save)
+int state_save_all(int secret_save, const char *filename_override, int blind_save)
 {
 	int	rval, filenum = -1;
 	char	filename[PATH_MAX], desc[DESC_LENGTH+1];
@@ -768,11 +768,9 @@ int state_save_all(int secret_save, char *filename_override, int blind_save)
 	memset(&filename, '\0', PATH_MAX);
 	memset(&desc, '\0', DESC_LENGTH+1);
 	if (secret_save == 1) {
-		filename_override = filename;
-		sprintf(filename_override, SECRETB_FILENAME);
+		strcpy(filename, SECRETB_FILENAME);
 	} else if (secret_save == 2) {
-		filename_override = filename;
-		sprintf(filename_override, SECRETC_FILENAME);
+		strcpy(filename, SECRETC_FILENAME);
 	} else {
 		if (!(filenum = state_get_save_file(filename, desc, blind_save)))
 		{
@@ -1128,7 +1126,7 @@ void set_pos_from_return_segment(void)
 }
 
 //	-----------------------------------------------------------------------------------
-int state_restore_all(int in_game, int secret_restore, char *filename_override)
+int state_restore_all(int in_game, int secret_restore, const char *filename_override)
 {
 	char filename[PATH_MAX];
 	int	filenum = -1;
@@ -1696,7 +1694,7 @@ int state_restore_all_sub(char *filename, int secret_restore)
 	return 1;
 }
 
-int state_get_game_id(char *filename)
+int state_get_game_id(const char *filename)
 {
 	int version;
 	PHYSFS_file *fp;

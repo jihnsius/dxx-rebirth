@@ -399,7 +399,7 @@ static void med_rotate_group(vms_matrix *rotmat, short *group_seglist, int group
 
 
 // ------------------------------------------------------------------------------------------------
-static void cgl_aux(segment *segp, short *seglistp, int *num_segs, short *ignore_list, int num_ignore_segs)
+static void cgl_aux(segment *segp, short *seglistp, int *num_segs, const short *ignore_list, int num_ignore_segs)
 {
 	int	i, side;
 	int	curseg = segp-Segments;
@@ -424,7 +424,7 @@ static void cgl_aux(segment *segp, short *seglistp, int *num_segs, short *ignore
 
 // ------------------------------------------------------------------------------------------------
 //	Sets Been_visited[n] if n is reachable from segp
-static void create_group_list(segment *segp, short *seglistp, int *num_segs, short *ignore_list, int num_ignore_segs)
+static void create_group_list(segment *segp, short *seglistp, int *num_segs, const short *ignore_list, int num_ignore_segs)
 {
 	int	i;
 

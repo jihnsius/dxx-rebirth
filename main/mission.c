@@ -282,7 +282,7 @@ static int ml_sort_func(mle *e0,mle *e1)
 }
 
 //returns 1 if file read ok, else 0
-static int read_mission_file(mle *mission, char *filename, int location)
+static int read_mission_file(mle *mission, const char *filename, int location)
 {
 	char filename2[100];
 	PHYSFS_file *mfile;
@@ -485,7 +485,7 @@ static void add_missions_to_list(mle *mission_list, char *path, char *rel_path, 
 }
 
 /* move <mission_name> to <place> on mission list, increment <place> */
-static void promote (mle *mission_list, char * mission_name, int * top_place)
+static void promote (mle *mission_list, const char * mission_name, int * top_place)
 {
 	int i;
 	char name[FILENAME_LEN], * t;
@@ -832,7 +832,7 @@ static int load_mission(mle *mission)
 
 //loads the named mission if exists.
 //Returns true if mission loaded ok, else false.
-int load_mission_by_name(char *mission_name)
+int load_mission_by_name(const char *mission_name)
 {
 	int i;
 	mle *mission_list = build_mission_list(1);
@@ -854,7 +854,7 @@ typedef struct mission_menu
 
 static int mission_menu_handler(listbox *lb, d_event *event, mission_menu *mm)
 {
-	char **list = listbox_get_items(lb);
+	const char **list = listbox_get_items(lb);
 	int citem = listbox_get_citem(lb);
 
 	switch (event->type)
@@ -887,7 +887,7 @@ static int mission_menu_handler(listbox *lb, d_event *event, mission_menu *mm)
 	return 0;
 }
 
-int select_mission(int anarchy_mode, char *message, int (*when_selected)(void))
+int select_mission(int anarchy_mode, const char *message, int (*when_selected)(void))
 {
     mle *mission_list = build_mission_list(anarchy_mode);
 	int new_mission_num;
@@ -904,9 +904,9 @@ int select_mission(int anarchy_mode, char *message, int (*when_selected)(void))
 	{
 		mission_menu *mm;
         int i, default_mission;
-        char **m;
+        const char **m;
 		
-		MALLOC(m, char *, num_missions);
+		MALLOC(m, const char *, num_missions);
 		if (!m)
 		{
 			free_mission_list(mission_list);

@@ -3499,7 +3499,7 @@ int newdemo_count_demos()
 	return NumFiles;
 }
 
-void newdemo_start_playback(char * filename)
+void newdemo_start_playback(const char * filename)
 {
 	char **find = NULL, **i;
 	int rnd_demo = 0;
@@ -3608,7 +3608,7 @@ void newdemo_stop_playback()
 }
 
 
-int newdemo_swap_endian(char *filename)
+int newdemo_swap_endian(const char *filename)
 {
 	char inpath[PATH_MAX+FILENAME_LEN] = DEMO_DIR;
 	int complete = 0;

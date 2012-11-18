@@ -242,7 +242,7 @@ void gr_set_bitmap_data(grs_bitmap *bm, unsigned char *data);
 // When this function is called, the guns are set to gr_palette, and
 // the palette stays the same until gr_close is called
 
-void gr_use_palette_table(char * filename );
+void gr_use_palette_table(const char * filename );
 void gr_copy_palette(ubyte *gr_palette, ubyte *pal, int size);
 
 //=========================================================================

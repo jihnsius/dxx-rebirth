@@ -74,6 +74,7 @@ int Num_subtitles;
 
 // Movielib data
 
+static const
 #ifdef D2_OEM
 char movielib_files[5][FILENAME_LEN] = {"intro","other","robots","oem"};
 #else
@@ -260,7 +261,7 @@ static int show_pause_message(window *wind, d_event *event, void *userdata)
 
 		case EVENT_WINDOW_DRAW:
 		{
-			char *msg = TXT_PAUSE;
+			const char *msg = TXT_PAUSE;
 			int w,h,aw;
 			int y;
 
@@ -542,7 +543,7 @@ static char *next_field (char *p)
 }
 
 
-int init_subtitles(char *filename)
+int init_subtitles(const char *filename)
 {
 	PHYSFS_file *ifile;
 	int size,read_count;
@@ -677,7 +678,7 @@ void draw_subtitles(int frame_num)
 		}
 }
 
-static void init_movie(char *movielib, int required)
+static void init_movie(const char *movielib, int required)
 {
 	char filename[FILENAME_LEN];
 
