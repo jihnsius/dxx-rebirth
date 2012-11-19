@@ -49,6 +49,8 @@ enum cockpit_mode_t
 	CM_LETTERBOX   // half-height window (for cutscenes)
 };
 
+typedef enum cockpit_mode_t cockpit_mode_t;
+
 typedef struct player_config
 {
 	ubyte ControlType;
@@ -115,6 +117,9 @@ int get_highest_level(void);
 
 void read_netgame_profile(netgame_info *ng);
 void write_netgame_profile(netgame_info *ng);
+
+// selects a given cockpit (or lack of one).
+void select_cockpit(cockpit_mode_t mode);
 
 #ifdef __cplusplus
 }

@@ -176,9 +176,6 @@ extern int Rear_view;           // if true, looking back.
 // initalize flying
 void fly_init(struct dxxobject *obj);
 
-// selects a given cockpit (or lack of one).
-void select_cockpit(int mode);
-
 // force cockpit redraw next time. call this if you've trashed the screen
 void reset_cockpit(void);       // called if you've trashed the screen
 
