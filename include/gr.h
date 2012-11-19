@@ -140,7 +140,7 @@ typedef struct _grs_canvas {
 
 typedef struct _grs_screen {    // This is a video screen
 	grs_canvas  sc_canvas;  // Represents the entire screen
-	int     sc_mode;        // Video mode number
+	unsigned     sc_mode;        // Video mode number
 	unsigned short   sc_w, sc_h;     // Actual Width and Height
 	fix     sc_aspect;      //aspect ratio (w/h) for this screen
 } grs_screen;
