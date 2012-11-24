@@ -1117,7 +1117,7 @@ void wall_toggle(segnum_t segnum, int side)
 	if (segnum > Highest_segment_index || side < 0 || side >= MAX_SIDES_PER_SEGMENT)
 	{
 #ifndef NDEBUG
-		Warning("Can't toggle side %d (%i) of\nsegment %d (%i)!\n", side, MAX_SIDES_PER_SEGMENT, segnum, Highest_segment_index);
+		Warning("Can't toggle side %d (%i) of\nsegment %u (%u)!\n", side, MAX_SIDES_PER_SEGMENT, static_cast<unsigned>(segnum), static_cast<unsigned>(Highest_segment_index));
 #endif
 		return;
 	}

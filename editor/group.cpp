@@ -1702,7 +1702,7 @@ int CopyGroup(void)
 				break;
 
 		if (i != GroupList[current_group].num_segments) {
-			editor_status("Error -- Cannot copy group, attach side has a child (segment %i) attached.", Groupsegp[current_group]->children[Groupside[current_group]]);
+			editor_status("Error -- Cannot copy group, attach side has a child (segment %i) attached.", static_cast<unsigned>(Groupsegp[current_group]->children[Groupside[current_group]]));
 			return 1;
 		}
 	}

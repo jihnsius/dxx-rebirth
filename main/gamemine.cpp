@@ -717,7 +717,7 @@ int load_mine_data(PHYSFS_file *LoadFile)
 
 			} else  {
 				if (PHYSFS_read( LoadFile, &Segments[i], mine_fileinfo.segment_sizeof, 1 )!=1)
-					Error("Unable to read segment %i\n", i);
+					Error("Unable to read segment %u\n", static_cast<unsigned>(i));
 			}
 
 			Segments[i].objects = object_none;
@@ -882,7 +882,7 @@ static void read_children(segnum_t segnum,ubyte bit_mask,PHYSFS_file *LoadFile)
 			 * Newer levels omit the child bit when the child is none.
 			 */
 			if (!((s < Num_segments || s == segment_exit || s == segment_none)))
-				Error("Segment %i side %i has s=%hi at lf=%lx, but Num_segments=%i", segnum, bit, s, (unsigned long)PHYSFS_tell(LoadFile), Num_segments);
+				Error("Segment %u side %i has s=%u at lf=%lx, but Num_segments=%u", static_cast<unsigned>(segnum), bit, static_cast<unsigned>(s), (unsigned long)PHYSFS_tell(LoadFile), static_cast<unsigned>(Num_segments));
 			Segments[segnum].children[bit] = s;
 		} else
 			Segments[segnum].children[bit] = segment_none;
@@ -897,7 +897,7 @@ static void read_verts(segnum_t segnum,PHYSFS_file *LoadFile)
 	{
 		const vertnum_t v = PHYSFSX_readShort(LoadFile);
 		if (!((v < Num_vertices)))
-			Error("Segment %i vert %i has v=%hi at lf=%lx, but Num_vertices=%i", segnum, i, v, (unsigned long)PHYSFS_tell(LoadFile), Num_vertices);
+			Error("Segment %u vert %i has v=%hi at lf=%lx, but Num_vertices=%i", static_cast<unsigned>(segnum), i, v, (unsigned long)PHYSFS_tell(LoadFile), Num_vertices);
 		Segments[segnum].verts[i] = v;
 	}
 }

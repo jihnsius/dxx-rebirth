@@ -651,7 +651,7 @@ static void collide_weapon_and_wall( dxxobject * weapon, fix, segnum_t hitseg, s
 	if (keyd_pressed[KEY_LAPOSTRO])
 		if (weapon->ctype.laser_info.parent_num == Players[Player_num].objnum) {
 			//	MK: Real pain when you need to know a seg:side and you've got quad lasers.
-			HUD_init_message(HM_DEFAULT, "Hit at segment = %i, side = %i", hitseg, hitwall);
+			HUD_init_message(HM_DEFAULT, "Hit at segment = %hu, side = %i", static_cast<unsigned short>(hitseg), hitwall);
 			if (weapon->id < 4)
 				subtract_light(hitseg, hitwall);
 			else if (weapon->id == FLARE_ID)

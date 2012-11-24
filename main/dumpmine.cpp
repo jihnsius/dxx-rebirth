@@ -140,7 +140,7 @@ static void write_exit_text(PHYSFS_file *my_file)
 			for (j=0; j<Num_walls; j++)
 				if (Walls[j].trigger == i) {
 					count2++;
-					PHYSFSX_printf(my_file, "Exit trigger %i is in segment %i, on side %i, bound to wall %i\n", i, Walls[j].segnum, Walls[j].sidenum, j);
+					PHYSFSX_printf(my_file, "Exit trigger %i is in segment %hu, on side %i, bound to wall %i\n", i, static_cast<unsigned short>(Walls[j].segnum), Walls[j].sidenum, j);
 				}
 			if (count2 == 0)
 				err_printf(my_file, "Error: Trigger %i is not bound to any wall.\n", i);
@@ -161,7 +161,7 @@ static void write_exit_text(PHYSFS_file *my_file)
 	for (segnum_t i=segment_first; i<=Highest_segment_index; i++)
 		for (j=0; j<MAX_SIDES_PER_SEGMENT; j++)
 			if (Segments[i].children[j] == segment_exit) {
-				PHYSFSX_printf(my_file, "Segment %3i, side %i is an exit door.\n", i, j);
+				PHYSFSX_printf(my_file, "Segment %3hu, side %i is an exit door.\n", static_cast<unsigned short>(i), j);
 				count++;
 			}
 
@@ -192,7 +192,7 @@ static void write_key_text(PHYSFS_file *my_file)
 
 	for (unsigned i=0; i<Num_walls; i++) {
 		if (Walls[i].keys & KEY_BLUE) {
-			PHYSFSX_printf(my_file, "Wall %i (seg=%i, side=%i) is keyed to the blue key.\n", i, Walls[i].segnum, Walls[i].sidenum);
+			PHYSFSX_printf(my_file, "Wall %i (seg=%hu, side=%i) is keyed to the blue key.\n", i, static_cast<unsigned>(Walls[i].segnum), Walls[i].sidenum);
 			if (blue_segnum == segment_none) {
 				blue_segnum = Walls[i].segnum;
 				blue_sidenum = Walls[i].sidenum;
@@ -200,13 +200,13 @@ static void write_key_text(PHYSFS_file *my_file)
 			} else {
 				connect_side = find_connect_side(&Segments[Walls[i].segnum], &Segments[blue_segnum]);
 				if (connect_side != blue_sidenum) {
-					warning_printf(my_file, "Warning: This blue door at seg %i, is different than the one at seg %i, side %i\n", Walls[i].segnum, blue_segnum, blue_sidenum);
+					warning_printf(my_file, "Warning: This blue door at seg %u, is different than the one at seg %u, side %i\n", static_cast<unsigned>(Walls[i].segnum), static_cast<unsigned>(blue_segnum), blue_sidenum);
 					blue_count++;
 				}
 			}
 		}
 		if (Walls[i].keys & KEY_RED) {
-			PHYSFSX_printf(my_file, "Wall %i (seg=%i, side=%i) is keyed to the red key.\n", i, Walls[i].segnum, Walls[i].sidenum);
+			PHYSFSX_printf(my_file, "Wall %i (seg=%hu, side=%i) is keyed to the red key.\n", i, static_cast<unsigned>(Walls[i].segnum), Walls[i].sidenum);
 			if (red_segnum == segment_none) {
 				red_segnum = Walls[i].segnum;
 				red_sidenum = Walls[i].sidenum;
@@ -214,13 +214,13 @@ static void write_key_text(PHYSFS_file *my_file)
 			} else {
 				connect_side = find_connect_side(&Segments[Walls[i].segnum], &Segments[red_segnum]);
 				if (connect_side != red_sidenum) {
-					warning_printf(my_file, "Warning: This red door at seg %i, is different than the one at seg %i, side %i\n", Walls[i].segnum, red_segnum, red_sidenum);
+					warning_printf(my_file, "Warning: This red door at seg %u, is different than the one at seg %u, side %i\n", static_cast<unsigned>(Walls[i].segnum), static_cast<unsigned>(red_segnum), red_sidenum);
 					red_count++;
 				}
 			}
 		}
 		if (Walls[i].keys & KEY_GOLD) {
-			PHYSFSX_printf(my_file, "Wall %i (seg=%i, side=%i) is keyed to the gold key.\n", i, Walls[i].segnum, Walls[i].sidenum);
+			PHYSFSX_printf(my_file, "Wall %i (seg=%hu, side=%i) is keyed to the gold key.\n", i, static_cast<unsigned>(Walls[i].segnum), Walls[i].sidenum);
 			if (gold_segnum == segment_none) {
 				gold_segnum = Walls[i].segnum;
 				gold_sidenum = Walls[i].sidenum;
@@ -228,7 +228,7 @@ static void write_key_text(PHYSFS_file *my_file)
 			} else {
 				connect_side = find_connect_side(&Segments[Walls[i].segnum], &Segments[gold_segnum]);
 				if (connect_side != gold_sidenum) {
-					warning_printf(my_file, "Warning: This gold door at seg %i, is different than the one at seg %i, side %i\n", Walls[i].segnum, gold_segnum, gold_sidenum);
+					warning_printf(my_file, "Warning: This gold door at seg %u, is different than the one at seg %u, side %i\n", static_cast<unsigned>(Walls[i].segnum), static_cast<unsigned>(gold_segnum), gold_sidenum);
 					gold_count++;
 				}
 			}
@@ -251,17 +251,17 @@ static void write_key_text(PHYSFS_file *my_file)
 	for (objnum_t i=object_first; i<=Highest_object_index; i++) {
 		if (Objects[i].type == OBJ_POWERUP)
 			if (Objects[i].id == POW_KEY_BLUE) {
-				PHYSFSX_printf(my_file, "The BLUE key is object %i in segment %i\n", i, Objects[i].segnum);
+				PHYSFSX_printf(my_file, "The BLUE key is object %i in segment %u\n", i, static_cast<unsigned>(Objects[i].segnum));
 				blue_count2++;
 			}
 		if (Objects[i].type == OBJ_POWERUP)
 			if (Objects[i].id == POW_KEY_RED) {
-				PHYSFSX_printf(my_file, "The RED key is object %i in segment %i\n", i, Objects[i].segnum);
+				PHYSFSX_printf(my_file, "The RED key is object %i in segment %u\n", i, static_cast<unsigned>(Objects[i].segnum));
 				red_count2++;
 			}
 		if (Objects[i].type == OBJ_POWERUP)
 			if (Objects[i].id == POW_KEY_GOLD) {
-				PHYSFSX_printf(my_file, "The GOLD key is object %i in segment %i\n", i, Objects[i].segnum);
+				PHYSFSX_printf(my_file, "The GOLD key is object %i in segment %u\n", i, static_cast<unsigned>(Objects[i].segnum));
 				gold_count2++;
 			}
 
@@ -269,15 +269,15 @@ static void write_key_text(PHYSFS_file *my_file)
 			if (Objects[i].contains_type == OBJ_POWERUP) {
 				switch (Objects[i].contains_id) {
 					case POW_KEY_BLUE:
-						PHYSFSX_printf(my_file, "The BLUE key is contained in object %i (a %s %s) in segment %i\n", i, Object_type_names[Objects[i].type], Robot_names[Objects[i].id], Objects[i].segnum);
+						PHYSFSX_printf(my_file, "The BLUE key is contained in object %i (a %s %s) in segment %u\n", i, Object_type_names[Objects[i].type], Robot_names[Objects[i].id], static_cast<unsigned>(Objects[i].segnum));
 						blue_count2 += Objects[i].contains_count;
 						break;
 					case POW_KEY_GOLD:
-						PHYSFSX_printf(my_file, "The GOLD key is contained in object %i (a %s %s) in segment %i\n", i, Object_type_names[Objects[i].type], Robot_names[Objects[i].id], Objects[i].segnum);
+						PHYSFSX_printf(my_file, "The GOLD key is contained in object %i (a %s %s) in segment %u\n", i, Object_type_names[Objects[i].type], Robot_names[Objects[i].id], static_cast<unsigned>(Objects[i].segnum));
 						gold_count2 += Objects[i].contains_count;
 						break;
 					case POW_KEY_RED:
-						PHYSFSX_printf(my_file, "The RED key is contained in object %i (a %s %s) in segment %i\n", i, Object_type_names[Objects[i].type], Robot_names[Objects[i].id], Objects[i].segnum);
+						PHYSFSX_printf(my_file, "The RED key is contained in object %i (a %s %s) in segment %u\n", i, Object_type_names[Objects[i].type], Robot_names[Objects[i].id], static_cast<unsigned>(Objects[i].segnum));
 						red_count2 += Objects[i].contains_count;
 						break;
 					default:
@@ -322,7 +322,7 @@ static void write_control_center_text(PHYSFS_file *my_file)
 	for (i=segment_first; i<=Highest_segment_index; i++)
 		if (Segment2s[i].special == SEGMENT_IS_CONTROLCEN) {
 			count++;
-			PHYSFSX_printf(my_file, "Segment %3i is a control center.\n", i);
+			PHYSFSX_printf(my_file, "Segment %3u is a control center.\n", static_cast<unsigned>(i));
 			objnum_t objnum = Segments[i].objects;
 			count2 = 0;
 			while (objnum != object_none) {
@@ -351,9 +351,9 @@ static void write_fuelcen_text(PHYSFS_file *my_file)
 	PHYSFSX_printf(my_file, "Fuel Center stuff: (Note: This means fuel, repair, materialize, control centers!)\n");
 
 	for (i=0; i<Num_fuelcenters; i++) {
-		PHYSFSX_printf(my_file, "Fuelcenter %i: Type=%i (%s), segment = %3i\n", i, Station[i].Type, Special_names[Station[i].Type], Station[i].segnum);
+		PHYSFSX_printf(my_file, "Fuelcenter %i: Type=%i (%s), segment = %3u\n", i, Station[i].Type, Special_names[Station[i].Type], static_cast<unsigned>(Station[i].segnum));
 		if (Segment2s[Station[i].segnum].special != Station[i].Type)
-			err_printf(my_file, "Error: Conflicting data: Segment %i has special type %i (%s), expected to be %i\n", Station[i].segnum, Segment2s[Station[i].segnum].special, Special_names[Segment2s[Station[i].segnum].special], Station[i].Type);
+			err_printf(my_file, "Error: Conflicting data: Segment %u has special type %i (%s), expected to be %i\n", static_cast<unsigned>(Station[i].segnum), Segment2s[Station[i].segnum].special, Special_names[Segment2s[Station[i].segnum].special], Station[i].Type);
 	}
 }
 
@@ -367,7 +367,7 @@ static void write_segment_text(PHYSFS_file *my_file)
 
 	for (i=segment_first; i<=Highest_segment_index; i++) {
 
-		PHYSFSX_printf(my_file, "Segment %4i: ", i);
+		PHYSFSX_printf(my_file, "Segment %4u: ", static_cast<unsigned>(i));
 		if (Segment2s[i].special != 0)
 			PHYSFSX_printf(my_file, "special = %3i (%s), value = %3i ", Segment2s[i].special, Special_names[Segment2s[i].special], Segment2s[i].value);
 
@@ -381,7 +381,7 @@ static void write_segment_text(PHYSFS_file *my_file)
 		int	depth;
 
 		objnum_t objnum = Segments[i].objects;
-		PHYSFSX_printf(my_file, "Segment %4i: ", i);
+		PHYSFSX_printf(my_file, "Segment %4u: ", static_cast<unsigned>(i));
 		depth=0;
 		if (objnum != object_none) {
 			PHYSFSX_printf(my_file, "Objects: ");
@@ -411,8 +411,8 @@ static void write_matcen_text(PHYSFS_file *my_file)
 		int	trigger_count=0, fuelcen_num;
 		segnum_t segnum;
 
-		PHYSFSX_printf(my_file, "FuelCenter[%02i].Segment = %04i  ", i, Station[i].segnum);
-		PHYSFSX_printf(my_file, "Segment2[%04i].matcen_num = %02i  ", Station[i].segnum, Segment2s[Station[i].segnum].matcen_num);
+		PHYSFSX_printf(my_file, "FuelCenter[%02i].Segment = %04u  ", i, static_cast<unsigned>(Station[i].segnum));
+		PHYSFSX_printf(my_file, "Segment2[%04u].matcen_num = %02i  ", static_cast<unsigned>(Station[i].segnum), Segment2s[Station[i].segnum].matcen_num);
 
 		fuelcen_num = RobotCenters[i].fuelcen_num;
 		if (Station[fuelcen_num].Type != SEGMENT_IS_ROBOTMAKER)
@@ -433,7 +433,7 @@ static void write_matcen_text(PHYSFS_file *my_file)
 		PHYSFSX_printf(my_file, "\n");
 
 		if (trigger_count == 0)
-			err_printf(my_file, "Error: Matcen %i in segment %i has no trigger!\n", i, segnum);
+			err_printf(my_file, "Error: Matcen %i in segment %u has no trigger!\n", i, static_cast<unsigned>(segnum));
 
 	}
 }
@@ -450,8 +450,8 @@ static void write_wall_text(PHYSFS_file *my_file)
 		segnum_t	segnum;
 		int sidenum;
 
-		PHYSFSX_printf(my_file, "Wall %03i: seg=%3i, side=%2i, linked_wall=%3i, type=%s, flags=%4x, hps=%3i, trigger=%2i, clip_num=%2i, keys=%2i, state=%i\n", i,
-			Walls[i].segnum, Walls[i].sidenum, Walls[i].linked_wall, Wall_names[Walls[i].type], Walls[i].flags, Walls[i].hps >> 16, Walls[i].trigger, Walls[i].clip_num, Walls[i].keys, Walls[i].state);
+		PHYSFSX_printf(my_file, "Wall %03i: seg=%3u, side=%2i, linked_wall=%3i, type=%s, flags=%4x, hps=%3i, trigger=%2i, clip_num=%2i, keys=%2i, state=%i\n", i,
+			static_cast<unsigned>(Walls[i].segnum), Walls[i].sidenum, Walls[i].linked_wall, Wall_names[Walls[i].type], Walls[i].flags, Walls[i].hps >> 16, Walls[i].trigger, Walls[i].clip_num, Walls[i].keys, Walls[i].state);
 
 		if (Walls[i].trigger >= Num_triggers)
 			PHYSFSX_printf(my_file, "Wall %03d points to invalid trigger %d\n",i,Walls[i].trigger);
@@ -460,7 +460,7 @@ static void write_wall_text(PHYSFS_file *my_file)
 		sidenum = Walls[i].sidenum;
 
 		if (Segments[segnum].sides[sidenum].wall_num != i)
-			err_printf(my_file, "Error: Wall %i points at segment %i, side %i, but that segment doesn't point back (it's wall_num = %i)\n", i, segnum, sidenum, Segments[segnum].sides[sidenum].wall_num);
+			err_printf(my_file, "Error: Wall %i points at segment %u, side %i, but that segment doesn't point back (it's wall_num = %i)\n", i, static_cast<unsigned>(segnum), sidenum, Segments[segnum].sides[sidenum].wall_num);
 	}
 
 	for (unsigned i=0; i<sizeof(wall_flags)/sizeof(wall_flags[0]); i++)
@@ -473,7 +473,7 @@ static void write_wall_text(PHYSFS_file *my_file)
 			if (sidep->wall_num != -1)
 			{
 				if (wall_flags[sidep->wall_num])
-					err_printf(my_file, "Error: Wall %i appears in two or more segments, including segment %i, side %i.\n", sidep->wall_num, i, j);
+					err_printf(my_file, "Error: Wall %i appears in two or more segments, including segment %u, side %i.\n", sidep->wall_num, static_cast<unsigned>(i), j);
 				else
 					wall_flags[sidep->wall_num] = 1;
 			}
@@ -503,7 +503,7 @@ static void write_player_text(PHYSFS_file *my_file)
 	for (objnum_t i=object_first; i<=Highest_object_index; i++) {
 		if (Objects[i].type == OBJ_PLAYER) {
 			num_players++;
-			PHYSFSX_printf(my_file, "Player %2i is object #%3i in segment #%3i.\n", Objects[i].id, i, Objects[i].segnum);
+			PHYSFSX_printf(my_file, "Player %2i is object #%3i in segment #%3u.\n", Objects[i].id, i, static_cast<unsigned>(Objects[i].segnum));
 		}
 	}
 
@@ -525,7 +525,7 @@ static void write_trigger_text(PHYSFS_file *my_file)
 			Triggers[i].type, Triggers[i].flags, Triggers[i].value, Triggers[i].time, Triggers[i].num_links);
 
 		for (j=0; j<Triggers[i].num_links; j++)
-			PHYSFSX_printf(my_file, "[%03i:%i] ", Triggers[i].seg[j], Triggers[i].side[j]);
+			PHYSFSX_printf(my_file, "[%03u:%i] ", static_cast<unsigned>(Triggers[i].seg[j]), Triggers[i].side[j]);
 
 		//	Find which wall this trigger is connected to.
 		for (w=0; w<Num_walls; w++)
@@ -535,7 +535,7 @@ static void write_trigger_text(PHYSFS_file *my_file)
 		if (w == Num_walls)
 			err_printf(my_file, "\nError: Trigger %i is not connected to any wall, so it can never be triggered.\n", i);
 		else
-			PHYSFSX_printf(my_file, "Attached to seg:side = %i:%i, wall %i\n", Walls[w].segnum, Walls[w].sidenum, Segments[Walls[w].segnum].sides[Walls[w].sidenum].wall_num);
+			PHYSFSX_printf(my_file, "Attached to seg:side = %u:%i, wall %i\n", static_cast<unsigned>(Walls[w].segnum), Walls[w].sidenum, Segments[Walls[w].segnum].sides[Walls[w].sidenum].wall_num);
 
 	}
 

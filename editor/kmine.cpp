@@ -209,7 +209,7 @@ static int med_save_situation(char * filename)
         PHYSFSX_printf(SaveFile, "%8x %8x %8x\n",(unsigned int) ConsoleObject->orient.rvec.x,(unsigned int) ConsoleObject->orient.rvec.y,(unsigned int) ConsoleObject->orient.rvec.z);
         PHYSFSX_printf(SaveFile, "%8x %8x %8x\n",(unsigned int) ConsoleObject->orient.uvec.x,(unsigned int) ConsoleObject->orient.uvec.y,(unsigned int) ConsoleObject->orient.uvec.z);                       
         PHYSFSX_printf(SaveFile, "%8x %8x %8x\n",(unsigned int) ConsoleObject->orient.fvec.x,(unsigned int) ConsoleObject->orient.fvec.y,(unsigned int) ConsoleObject->orient.fvec.z);
-	PHYSFSX_printf(SaveFile, "%i\n", ConsoleObject->segnum);
+	PHYSFSX_printf(SaveFile, "%u\n", static_cast<unsigned>(ConsoleObject->segnum));
 
 	PHYSFS_close( SaveFile);
 

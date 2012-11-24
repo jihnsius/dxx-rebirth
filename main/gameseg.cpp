@@ -191,7 +191,7 @@ void create_all_vertex_lists(int *num_faces, int *vertices, segnum_t segnum, int
 			//CREATE_ABS_VERTEX_LISTS(), CREATE_ALL_VERTEX_LISTS(), CREATE_ALL_VERTNUM_LISTS()
 			break;
 		default:
-			Error("Illegal side type (1), type = %i, segment # = %i, side # = %i\n Please report this bug.\n", sidep->type, segnum, sidenum);
+			Error("Illegal side type (1), type = %i, segment # = %u, side # = %i\n Please report this bug.\n", sidep->type, static_cast<unsigned>(segnum), sidenum);
 			break;
 	}
 
@@ -250,7 +250,7 @@ void create_all_vertnum_lists(int *num_faces, int *vertnums, segnum_t segnum, in
 			//CREATE_ABS_VERTEX_LISTS(), CREATE_ALL_VERTEX_LISTS(), CREATE_ALL_VERTNUM_LISTS()
 			break;
 		default:
-			Error("Illegal side type (2), type = %i, segment # = %i, side # = %i\n Please report this bug.\n", sidep->type, segnum, sidenum);
+			Error("Illegal side type (2), type = %i, segment # = %u, side # = %i\n Please report this bug.\n", sidep->type, static_cast<unsigned>(segnum), sidenum);
 			break;
 	}
 
@@ -306,7 +306,7 @@ void create_abs_vertex_lists(int *num_faces, int *vertices, segnum_t segnum, int
 			//CREATE_ABS_VERTEX_LISTS(), CREATE_ALL_VERTEX_LISTS(), CREATE_ALL_VERTNUM_LISTS()
 			break;
 		default:
-			Error("Illegal side type (3), type = %i, segment # = %i, side # = %i caller:%s:%i\n Please report this bug.\n", sidep->type, segnum, sidenum, calling_file, calling_linenum);
+			Error("Illegal side type (3), type = %i, segment # = %u, side # = %i caller:%s:%i\n Please report this bug.\n", sidep->type, static_cast<unsigned>(segnum), sidenum, calling_file, calling_linenum);
 			break;
 	}
 
@@ -325,7 +325,7 @@ segmasks get_seg_masks(const vms_vector *checkp, segnum_t segnum, fix rad, const
 	extern int Current_level_num;
 
 	if (segnum > Highest_segment_index)
-		Error("segnum == %i (%i) in get_seg_masks() \ncheckp: %i,%i,%i, rad: %i \nfrom file: %s, line: %i \nMission: %s (%i) \nPlease report this bug.\n",segnum,Highest_segment_index,checkp->x,checkp->y,checkp->z,rad,calling_file,calling_linenum, Current_mission_filename, Current_level_num);
+		Error("segnum == %u (%u) in get_seg_masks() \ncheckp: %i,%i,%i, rad: %i \nfrom file: %s, line: %i \nMission: %s (%i) \nPlease report this bug.\n",static_cast<unsigned>(segnum),static_cast<unsigned>(Highest_segment_index),checkp->x,checkp->y,checkp->z,rad,calling_file,calling_linenum, Current_mission_filename, Current_level_num);
 
 	Assert(Highest_segment_index < Segments.size());
 	Assert(segnum <= Highest_segment_index);
@@ -614,18 +614,18 @@ static int check_norms(const unsigned line, segnum_t segnum,int sidenum,int face
 	n1 = &Segments[csegnum].sides[csidenum].normals[cfacenum];
 	if (n0->x != -n1->x)
 	{
-		con_printf(CON_URGENT, "%s:%u.%u: segnum=%i sidenum=%i facenum=%i csegnum=%i csidenum=%i cfacenum=%i: bad x: n0={%u, %u, %u} n1={%u, %u, %u}\n", __func__, line, __LINE__, segnum,sidenum,facenum,csegnum,csidenum,cfacenum, n0->x, n0->y, n0->z, n1->x, n1->y, n1->z);
+		con_printf(CON_URGENT, "%s:%u.%u: segnum=%u sidenum=%i facenum=%i csegnum=%u csidenum=%i cfacenum=%i: bad x: n0={%u, %u, %u} n1={%u, %u, %u}\n", __func__, line, __LINE__, static_cast<unsigned>(segnum),sidenum,facenum,static_cast<unsigned>(csegnum),csidenum,cfacenum, n0->x, n0->y, n0->z, n1->x, n1->y, n1->z);
 		return 1;
 	}
 	if (n0->y != -n1->y)
 	{
-		con_printf(CON_URGENT, "%s:%u.%u: segnum=%i sidenum=%i facenum=%i csegnum=%i csidenum=%i cfacenum=%i: bad y: n0={%u, %u, %u} n1={%u, %u, %u}\n", __func__, line, __LINE__, segnum,sidenum,facenum,csegnum,csidenum,cfacenum, n0->x, n0->y, n0->z, n1->x, n1->y, n1->z);
+		con_printf(CON_URGENT, "%s:%u.%u: segnum=%u sidenum=%i facenum=%i csegnum=%u csidenum=%i cfacenum=%i: bad y: n0={%u, %u, %u} n1={%u, %u, %u}\n", __func__, line, __LINE__, static_cast<unsigned>(segnum),sidenum,facenum,static_cast<unsigned>(csegnum),csidenum,cfacenum, n0->x, n0->y, n0->z, n1->x, n1->y, n1->z);
 		return 1;
 	}
 
 	if (n0->z != -n1->z)
 	{
-		con_printf(CON_URGENT, "%s:%u.%u: segnum=%i sidenum=%i facenum=%i csegnum=%i csidenum=%i cfacenum=%i: bad z: n0={%u, %u, %u} n1={%u, %u, %u}\n", __func__, line, __LINE__, segnum,sidenum,facenum,csegnum,csidenum,cfacenum, n0->x, n0->y, n0->z, n1->x, n1->y, n1->z);
+		con_printf(CON_URGENT, "%s:%u.%u: segnum=%u sidenum=%i facenum=%i csegnum=%u csidenum=%i cfacenum=%i: bad z: n0={%u, %u, %u} n1={%u, %u, %u}\n", __func__, line, __LINE__, static_cast<unsigned>(segnum),sidenum,facenum,static_cast<unsigned>(csegnum),csidenum,cfacenum, n0->x, n0->y, n0->z, n1->x, n1->y, n1->z);
 		return 1;
 	}
 	else
@@ -662,7 +662,7 @@ int check_segment_connections(void)
 				csidenum = find_connect_side(seg,cseg);
 
 				if (csidenum == -1) {
-					con_printf(CON_URGENT, "%s:%u: segnum=%i sidenum=%i: csidenum=-1\n", __func__, __LINE__, segnum, sidenum);
+					con_printf(CON_URGENT, "%s:%u: segnum=%u sidenum=%i: csidenum=-1\n", __func__, __LINE__, static_cast<unsigned>(segnum), sidenum);
 					errors = 1;
 					continue;
 				}
@@ -670,7 +670,7 @@ int check_segment_connections(void)
 				create_abs_vertex_lists(&con_num_faces, con_vertex_list, csegnum, csidenum, __FILE__, __LINE__);
 
 				if (con_num_faces != num_faces) {
-					con_printf(CON_URGENT, "%s:%u: segnum=%i sidenum=%i: num_faces=%i; csegnum=%i csidenum=%i: con_num_faces=%i\n", __func__, __LINE__, segnum, sidenum, num_faces, csegnum, csidenum, con_num_faces);
+					con_printf(CON_URGENT, "%s:%u: segnum=%u sidenum=%i: num_faces=%i; csegnum=%u csidenum=%i: con_num_faces=%i\n", __func__, __LINE__, static_cast<unsigned>(segnum), sidenum, num_faces, static_cast<unsigned>(csegnum), csidenum, con_num_faces);
 					errors = 1;
 				}
 				else
@@ -681,7 +681,7 @@ int check_segment_connections(void)
 
 						if (t==4)
 						{
-							con_printf(CON_URGENT, "%s:%u: segnum=%i sidenum=%i csegnum=%i csidenum=%i: t=%i vl={%u, %u, %u, %u} cvl={%u, %u, %u, %u}\n", __func__, __LINE__, segnum, sidenum, csegnum, csidenum, t,
+							con_printf(CON_URGENT, "%s:%u: segnum=%u sidenum=%i csegnum=%u csidenum=%i: t=%i vl={%u, %u, %u, %u} cvl={%u, %u, %u, %u}\n", __func__, __LINE__, static_cast<unsigned>(segnum), sidenum, static_cast<unsigned>(csegnum), csidenum, t,
 							 vertex_list[0], vertex_list[1], vertex_list[2], vertex_list[3],
 							 con_vertex_list[t % 4], con_vertex_list[(t+3)%4], con_vertex_list[(t+2)%4], con_vertex_list[(t+1)%4]);
 							errors = 1;
@@ -691,7 +691,7 @@ int check_segment_connections(void)
 							 vertex_list[1] != con_vertex_list[(t+3)%4] ||
 							 vertex_list[2] != con_vertex_list[(t+2)%4] ||
 							 vertex_list[3] != con_vertex_list[(t+1)%4]) {
-							con_printf(CON_URGENT, "%s:%u: segnum=%i sidenum=%i csegnum=%i csidenum=%i: t=%i vl={%u, %u, %u, %u} cvl={%u, %u, %u, %u}\n", __func__, __LINE__, segnum, sidenum, csegnum, csidenum, t,
+							con_printf(CON_URGENT, "%s:%u: segnum=%u sidenum=%i csegnum=%u csidenum=%i: t=%i vl={%u, %u, %u, %u} cvl={%u, %u, %u, %u}\n", __func__, __LINE__, static_cast<unsigned>(segnum), sidenum, static_cast<unsigned>(csegnum), csidenum, t,
 							 vertex_list[0], vertex_list[1], vertex_list[2], vertex_list[3],
 							 con_vertex_list[t], con_vertex_list[(t+3)%4], con_vertex_list[(t+2)%4], con_vertex_list[(t+1)%4]);
 							errors = 1;
@@ -731,7 +731,7 @@ int check_segment_connections(void)
 						}
 					}
 			} else {
-				con_printf(CON_URGENT, "%s:%u: segnum=%i sidenum=%i: csegnum=%u\n", __func__, __LINE__, segnum, sidenum, csegnum);
+				con_printf(CON_URGENT, "%s:%u: segnum=%u sidenum=%i: csegnum=%u\n", __func__, __LINE__, static_cast<unsigned>(segnum), sidenum, static_cast<unsigned>(csegnum));
 				errors = 1;
 				continue;
 			}
