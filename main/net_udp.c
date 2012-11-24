@@ -2908,19 +2908,19 @@ static void net_udp_more_game_options ()
 	snprintf(packstring,sizeof(char)*4,"%d",Netgame.PacketsPerSec);
 
 	opt_difficulty = opt;
-	m[opt].type = NM_TYPE_SLIDER; m[opt].value=Netgame.difficulty; m[opt].text=TXT_DIFFICULTY; m[opt].min_value=0; m[opt].max_value=(NDL-1); opt++;
+	nm_set_item_slider(&m[opt],TXT_DIFFICULTY,Netgame.difficulty,0,(NDL-1)); opt++;
 
 	opt_cinvul = opt;
 	sprintf( srinvul, "%s: %d %s", TXT_REACTOR_LIFE, Netgame.control_invul_time/F1_0/60, TXT_MINUTES_ABBREV );
-	m[opt].type = NM_TYPE_SLIDER; m[opt].value=Netgame.control_invul_time/5/F1_0/60; m[opt].text= srinvul; m[opt].min_value=0; m[opt].max_value=10; opt++;
+	nm_set_item_slider(&m[opt], srinvul,Netgame.control_invul_time/5/F1_0/60,0,10); opt++;
 
 	opt_playtime=opt;
 	sprintf( PlayText, "Max time: %d %s", Netgame.PlayTimeAllowed*5, TXT_MINUTES_ABBREV );
-	m[opt].type = NM_TYPE_SLIDER; m[opt].value=Netgame.PlayTimeAllowed; m[opt].text= PlayText; m[opt].min_value=0; m[opt].max_value=10; opt++;
+	nm_set_item_slider(&m[opt], PlayText,Netgame.PlayTimeAllowed,0,10); opt++;
 
 	opt_killgoal=opt;
 	sprintf( KillText, "Kill Goal: %d kills", Netgame.KillGoal*5);
-	m[opt].type = NM_TYPE_SLIDER; m[opt].value=Netgame.KillGoal; m[opt].text= KillText; m[opt].min_value=0; m[opt].max_value=10; opt++;
+	nm_set_item_slider(&m[opt], KillText,Netgame.KillGoal,0,10); opt++;
 
 	opt_start_invul=opt;
 	nm_set_item_checkbox(&m[opt], "Invulnerable when reappearing",Netgame.InvulAppear); opt++;
@@ -3288,8 +3288,7 @@ int net_udp_setup_game()
 
 	opt.maxnet = optnum;
 	sprintf( srmaxnet, "Maximum players: %d", Netgame.max_numplayers);
-	m[optnum].type = NM_TYPE_SLIDER; m[optnum].value=Netgame.max_numplayers-2; m[optnum].text= srmaxnet; m[optnum].min_value=0;
-	m[optnum].max_value=Netgame.max_numplayers-2; optnum++;
+	nm_set_item_slider(&m[optnum], srmaxnet,Netgame.max_numplayers-2,0,Netgame.max_numplayers-2); optnum++;
 
 	opt.moreopts=optnum;
 	nm_set_item_menu(&  m[optnum], "Advanced Options"); optnum++;
