@@ -249,9 +249,6 @@ static int check_line_to_face(vms_vector *newp,const vms_vector *p0,const vms_ve
 		norm = seg->sides[side].normals[facenum];
 	#endif
 
-	if ((seg-Segments)==-1)
-		Error("segnum == -1 in check_line_to_face()");
-
 	create_abs_vertex_lists(&num_faces, vertex_list, seg - Segments, side, __FILE__, __LINE__);
 
 	//use lowest point number
