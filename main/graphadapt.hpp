@@ -95,7 +95,7 @@ public:
 		m_wmap(Num_segments)
 	{
 		const unsigned numsegments = Num_segments;
-		for (segment_descriptor seg(0); seg != numsegments; ++seg)
+		for (segment_descriptor seg(segment_first); seg != numsegments; ++seg)
 			compute_segment(seg, m_wmap[seg]);
 	}
 	const per_srcside_t& get_srcside(const per_segment_t& seg, const side_descriptor& srcside) const

@@ -636,7 +636,7 @@ int check_segment_connections(void)
 	int errors=0;
 	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
 
-	for (segnum=0;segnum<=Highest_segment_index;segnum++) {
+	for (segnum=segment_first;segnum<=Highest_segment_index;segnum++) {
 		segment *seg;
 
 		seg = &Segments[segnum];
@@ -754,12 +754,12 @@ static int trace_segs(const vms_vector *p0, int oldsegnum, int recursion_count)
 
 	if (recursion_count >= Num_segments) {
 		con_printf (CON_DEBUG, "trace_segs: Segment not found\n");
-		return -1;
+		return segment_none;
 	}
 	if (recursion_count == 0)
 		memset (visited, 0, sizeof (visited));
 	if (visited [oldsegnum])
-		return -1;
+		return segment_none;
 	visited [oldsegnum] = 1;
 
 	centermask = get_side_dists(p0,oldsegnum,side_dists);		//check old segment
@@ -783,10 +783,10 @@ static int trace_segs(const vms_vector *p0, int oldsegnum, int recursion_count)
 			side_dists[biggest_side] = 0;
 			// trace into adjacent segment:
 			check = trace_segs(p0, seg->children[biggest_side], recursion_count + 1);
-			if (check >= 0)		//we've found a segment
+			if (check != segment_none)		//we've found a segment
 				return check;
 	}
-	return -1;		//we haven't found a segment
+	return segment_none;		//we haven't found a segment
 }
 
 
@@ -803,12 +803,12 @@ int find_point_seg(const vms_vector *p,int segnum)
 
 	//allow segnum==-1, meaning we have no idea what segment point is in
 	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
-	Assert((segnum <= Highest_segment_index) && (segnum >= -1));
+	Assert((segnum <= Highest_segment_index) && (segnum >= segment_none));
 
-	if (segnum != -1) {
+	if (segnum != segment_none) {
 		newseg = trace_segs(p, segnum, 0);
 
-		if (newseg != -1)			//we found a segment!
+		if (newseg != segment_none)			//we found a segment!
 			return newseg;
 	}
 
@@ -819,13 +819,11 @@ int find_point_seg(const vms_vector *p,int segnum)
 	//	slowing down lighting, and in about 98% of cases, it would just return -1 anyway.
 	//	Matt: This really should be fixed, though.  We're probably screwing up our lighting in a few places.
 	if (!Doing_lighting_hack_flag) {
-		for (newseg=0;newseg <= Highest_segment_index;newseg++)
+		for (newseg=segment_first;newseg <= Highest_segment_index;newseg++)
 			if (get_seg_masks(p, newseg, 0, __FILE__, __LINE__).centermask == 0)
 				return newseg;
-
-		return -1;		//no segment found
-	} else
-		return -1;
+	}
+	return segment_none;
 }
 
 
@@ -1812,17 +1810,17 @@ void validate_segment_all(void)
 	int	s;
 	Assert(Highest_segment_index < (sizeof(Segments) / sizeof(Segments[0])));
 
-	for (s=0; s<=Highest_segment_index; s++)
+	for (s=segment_first; s<=Highest_segment_index; s++)
 		#ifdef EDITOR
-		if (Segments[s].segnum != -1)
+		if (Segments[s].segnum != segment_none)
 		#endif
 			validate_segment(&Segments[s]);
 
 	#ifdef EDITOR
 	{
 		for (s=Highest_segment_index+1; s<MAX_SEGMENTS; s++)
-			if (Segments[s].segnum != -1) {
-				Segments[s].segnum = -1;
+			if (Segments[s].segnum != segment_none) {
+				Segments[s].segnum = segment_none;
 			}
 	}
 	#endif
@@ -1883,7 +1881,7 @@ int set_segment_depths(int start_seg, ubyte *segbuf)
 			int	childnum;
 
 			childnum = Segments[curseg].children[i];
-			if (childnum != -1)
+			if (childnum != segment_none)
 				if (segbuf[childnum])
 					if (!visited[childnum]) {
 						visited[childnum] = 1;
@@ -2082,7 +2080,7 @@ void apply_all_changed_light(void)
 	int	i,j;
 	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
 
-	for (i=0; i<=Highest_segment_index; i++) {
+	for (i=segment_first; i<=Highest_segment_index; i++) {
 		for (j=0; j<MAX_SIDES_PER_SEGMENT; j++)
 			if (Light_subtracted[i] & (1 << j))
 				change_light(i, j, -1);
@@ -2127,7 +2125,7 @@ void clear_light_subtracted(void)
 	int	i;
 	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
 
-	for (i=0; i<=Highest_segment_index; i++)
+	for (i=segment_first; i<=Highest_segment_index; i++)
 		Light_subtracted[i] = 0;
 
 }

@@ -154,7 +154,7 @@ int wall_add_closed_wall()
 
 int wall_add_external_wall()
 {
-	if (Cursegp->children[Curside] == -2) {
+	if (Cursegp->children[Curside] == segment_exit) {
 		editor_status( "Wall is already external!" );
 		return 1;
 	}
@@ -164,7 +164,7 @@ int wall_add_external_wall()
 		return 0;
 	}
 
-	Cursegp->children[Curside] = -2;
+	Cursegp->children[Curside] = segment_exit;
 
 	return 1;
 }
@@ -206,7 +206,7 @@ static int GotoPrevWall() {
 	if (current_wall < 0) current_wall = Num_walls-1;
 	if (current_wall >= Num_walls) current_wall = Num_walls-1;
 
-	if (Walls[current_wall].segnum == -1) {
+	if (Walls[current_wall].segnum == segment_none) {
 		return 0;
 	}
 
@@ -231,7 +231,7 @@ static int GotoNextWall() {
 	if (current_wall >= Num_walls) current_wall = 0;
 	if (current_wall < 0) current_wall = 0;
 
-	if (Walls[current_wall].segnum == -1) {
+	if (Walls[current_wall].segnum == segment_none) {
 		return 0;
 	}
 
@@ -684,7 +684,7 @@ int wall_remove_side(segment *seg, short side)
 		Num_walls -= 2;
 
 		for (s=0;s<=Highest_segment_index;s++)
-			if (Segments[s].segnum != -1)
+			if (Segments[s].segnum != segment_none)
 			for (w=0;w<MAX_SIDES_PER_SEGMENT;w++)
 				if	(Segments[s].sides[w].wall_num > lower_wallnum+1)
 					Segments[s].sides[w].wall_num -= 2;
@@ -1003,8 +1003,8 @@ int check_walls()
 	int matcen_num;
 
 	wall_count = 0;
-	for (seg=0;seg<=Highest_segment_index;seg++)
-		if (Segments[seg].segnum != -1) {
+	for (seg=segment_first;seg<=Highest_segment_index;seg++)
+		if (Segments[seg].segnum != segment_none) {
 			// Check fuelcenters
 			matcen_num = Segment2s[seg].matcen_num;
 			if (matcen_num == 0)
@@ -1071,7 +1071,7 @@ int delete_all_walls()
 
 	sprintf( Message, "Are you sure that walls are hosed so\n badly that you want them ALL GONE!?\n");
 	if (ui_messagebox( -2, -2, 2, Message, "YES!", "No" )==1) {
-		for (seg=0;seg<=Highest_segment_index;seg++)
+		for (seg=segment_first;seg<=Highest_segment_index;seg++)
 			for (side=0;side<MAX_SIDES_PER_SEGMENT;side++)
 				Segments[seg].sides[side].wall_num = -1;
 		Num_walls=0;
@@ -1170,7 +1170,7 @@ void check_wall_validity(void)
 		wall_flags[i] = 0;
 
 	for (i=0; i<=Highest_segment_index; i++) {
-		if (Segments[i].segnum != -1)
+		if (Segments[i].segnum != segment_none)
 			for (j=0; j<MAX_SIDES_PER_SEGMENT; j++) {
 				// Check walls
 				wall_num = Segments[i].sides[j].wall_num;

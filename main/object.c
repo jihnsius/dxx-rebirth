@@ -620,7 +620,7 @@ void create_small_fireball_on_object(dxxobject *objp, fix size_scale, int sound_
 	size = fixmul(size_scale, F1_0/2 + d_rand()*4/2);
 
 	segnum = find_point_seg(&pos, objp->segnum);
-	if (segnum != -1) {
+	if (segnum != segment_none) {
 		dxxobject *expl_obj;
 		expl_obj = object_create_explosion(segnum, &pos, size, VCLIP_SMALL_EXPLOSION);
 		if (!expl_obj)
@@ -806,16 +806,16 @@ void init_objects()
 	for (i=0;i<MAX_OBJECTS;i++) {
 		free_obj_list[i] = i;
 		Objects[i].type = OBJ_NONE;
-		Objects[i].segnum = -1;
+		Objects[i].segnum = segment_none;
 	}
 
-	for (j=0;j<sizeof(Segments)/sizeof(Segments[0]);j++)
+	for (j=segment_first;j<sizeof(Segments)/sizeof(Segments[0]);j++)
 		Segments[j].objects = -1;
 
 	ConsoleObject = Viewer = &Objects[0];
 
 	init_player_object();
-	obj_link(ConsoleObject-Objects,0);	//put in the world in segment 0
+	obj_link(ConsoleObject-Objects,segment_first);	//put in the world in segment 0
 
 	num_objects = 1;						//just the player
 	Highest_object_index = 0;
@@ -850,7 +850,7 @@ void obj_link(int objnum,int segnum)
 
 	Assert(objnum != -1);
 
-	Assert(obj->segnum == -1);
+	Assert(obj->segnum == segment_none);
 
 	Assert(segnum>=0 && segnum<=Highest_segment_index);
 
@@ -889,7 +889,7 @@ void obj_unlink(int objnum)
 
 	if (obj->next != -1) Objects[obj->next].prev = obj->prev;
 
-	obj->segnum = -1;
+	obj->segnum = segment_none;
 
 	Assert(Objects[0].next != 0);
 	Assert(Objects[0].prev != 0);
@@ -1079,7 +1079,7 @@ int obj_create(enum object_type_t type,ubyte id,int segnum,const vms_vector *pos
 		return -1;
 
 	if (get_seg_masks(pos, segnum, 0, __FILE__, __LINE__).centermask != 0)
-		if ((segnum=find_point_seg(pos,segnum))==-1) {
+		if ((segnum=find_point_seg(pos,segnum))==segment_none) {
 			return -1;		//don't create this object
 		}
 
@@ -1093,7 +1093,7 @@ int obj_create(enum object_type_t type,ubyte id,int segnum,const vms_vector *pos
 
 	obj = &Objects[objnum];
 
-	Assert(obj->segnum == -1);
+	Assert(obj->segnum == segment_none);
 
 	// Zero out object structure to keep weird bugs from happening
 	// in uninitialized fields.
@@ -1144,9 +1144,9 @@ int obj_create(enum object_type_t type,ubyte id,int segnum,const vms_vector *pos
 
 	segnum = find_point_seg(pos,segnum);		//find correct segment
 
-	Assert(segnum!=-1);
+	Assert(segnum!=segment_none);
 
-	obj->segnum = -1;					//set to zero by memset, above
+	obj->segnum = segment_none;					//set to zero by memset, above
 	obj_link(objnum,segnum);
 
 	//	Set (or not) persistent bit in phys_info.
@@ -1190,7 +1190,8 @@ int obj_create_copy(int objnum, vms_vector *new_pos, int newsegnum)
 
 	obj->pos = obj->last_pos = *new_pos;
 
-	obj->next = obj->prev = obj->segnum = -1;
+	obj->next = obj->prev = -1;
+	obj->segnum = segment_none;
 
 	obj_link(newobjnum,newsegnum);
 
@@ -1244,7 +1245,7 @@ void obj_delete(int objnum)
 
 	obj->type = OBJ_NONE;		//unused!
 	obj->signature = -1;
-	obj->segnum=-1;				// zero it!
+	obj->segnum=segment_none;				// zero it!
 
 	obj_free(objnum);
 }
@@ -1592,17 +1593,18 @@ void obj_relink_all(void)
 	int segnum;
 	int objnum;
 	dxxobject *obj;
-	for (segnum=0; segnum <= Highest_segment_index; segnum++)
+	for (segnum=segment_first; segnum <= Highest_segment_index; segnum++)
 		Segments[segnum].objects = -1;
 
 	for (objnum=0,obj=&Objects[0];objnum<=Highest_object_index;objnum++,obj++)
 		if (obj->type != OBJ_NONE)
 		{
 			segnum = obj->segnum;
-			obj->next = obj->prev = obj->segnum = -1;
+			obj->next = obj->prev = -1;
+			obj->segnum = segment_none;
 
 			if (segnum > Highest_segment_index)
-				segnum = 0;
+				segnum = segment_first;
 			obj_link(objnum, segnum);
 		}
 }
@@ -1955,7 +1957,7 @@ void reset_objects(int n_objs)
 		free_obj_list[i] = i;
 		memset( &Objects[i], 0, sizeof(dxxobject) );
 		Objects[i].type = OBJ_NONE;
-		Objects[i].segnum = -1;
+		Objects[i].segnum = segment_none;
 	}
 
 	Highest_object_index = num_objects-1;
@@ -1979,7 +1981,7 @@ int update_object_seg(dxxobject * obj )
 
 	newseg = find_object_seg(obj);
 
-	if (newseg == -1)
+	if (newseg == segment_none)
 		return 0;
 
 	if ( newseg != obj->segnum )

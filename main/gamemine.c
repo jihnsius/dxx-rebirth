@@ -536,7 +536,7 @@ int load_mine_data(PHYSFS_file *LoadFile)
 	if (mine_top_fileinfo.fileinfo_version < 18) {
 		Level_shake_frequency = 0;
 		Level_shake_duration = 0;
-		Secret_return_segment = 0;
+		Secret_return_segment = segment_first;
 		Secret_return_orient = vmd_identity_matrix;
 	} else {
 		Level_shake_frequency = mine_fileinfo.level_shake_frequency << 12;
@@ -563,11 +563,11 @@ int load_mine_data(PHYSFS_file *LoadFile)
 	//===================== READ EDITOR INFO ==========================
 
 	// Set default values
-	mine_editor.current_seg         =   0;
+	mine_editor.current_seg         =   segment_first;
 	mine_editor.newsegment_offset   =   -1; // To be written
 	mine_editor.newsegment_size     =   sizeof(segment);
 	mine_editor.Curside             =   0;
-	mine_editor.Markedsegp          =   -1;
+	mine_editor.Markedsegp          =   segment_none;
 	mine_editor.Markedside          =   0;
 
 	if (mine_fileinfo.editor_offset > -1 )
@@ -681,7 +681,7 @@ int load_mine_data(PHYSFS_file *LoadFile)
 
 		Highest_segment_index = mine_fileinfo.segment_howmany-1;
 
-		for (int i=0; i< mine_fileinfo.segment_howmany; i++ ) {
+		for (int i=segment_first; i< mine_fileinfo.segment_howmany; i++ ) {
 
 			// Set the default values for this segment (clear to zero )
 			//memset( &Segments[i], 0, sizeof(segment) );
@@ -763,7 +763,7 @@ int load_mine_data(PHYSFS_file *LoadFile)
 
 
 		if (mine_top_fileinfo.fileinfo_version >= 20)
-			for (int i=0; i<=Highest_segment_index; i++) {
+			for (int i=segment_first; i<=Highest_segment_index; i++) {
 				PHYSFS_read(LoadFile, &Segment2s[i], sizeof(segment2), 1);
 				fuelcen_activate( &Segments[i], Segment2s[i].special );
 			}
@@ -819,12 +819,12 @@ int load_mine_data(PHYSFS_file *LoadFile)
 	for (int i=0;i<10;i++)
 		Groupside[i] = mine_editor.Groupside[i];
 
-	if ( mine_editor.current_seg != -1 )
+	if ( mine_editor.current_seg != segment_none )
 		Cursegp = mine_editor.current_seg + Segments;
 	else
  		Cursegp = NULL;
 
-	if (mine_editor.Markedsegp != -1 ) 
+	if (mine_editor.Markedsegp != segment_none ) 
 		Markedsegp = mine_editor.Markedsegp + Segments;
 	else
 		Markedsegp = NULL;
@@ -880,7 +880,7 @@ static void read_children(int segnum,ubyte bit_mask,PHYSFS_file *LoadFile)
 				Error("Segment %i side %i has s=%hi at lf=%lx, but Num_segments=%i", segnum, bit, s, (unsigned long)PHYSFS_tell(LoadFile), Num_segments);
 			Segments[segnum].children[bit] = s;
 		} else
-			Segments[segnum].children[bit] = -1;
+			Segments[segnum].children[bit] = segment_none;
 	}
 }
 
@@ -979,7 +979,7 @@ int load_mine_data_compiled(PHYSFS_file *LoadFile)
 	for (unsigned i = 0; i < Num_vertices; i++)
 		PHYSFSX_readVector( &(Vertices[i]), LoadFile);
 
-	for (segnum=0; segnum<Num_segments; segnum++ )	{
+	for (segnum=segment_first; segnum<Num_segments; segnum++ )	{
 
 		#ifdef EDITOR
 		Segments[segnum].segnum = segnum;
@@ -1036,7 +1036,7 @@ int load_mine_data_compiled(PHYSFS_file *LoadFile)
 
 		for (sidenum=0; sidenum<MAX_SIDES_PER_SEGMENT; sidenum++ )	{
 
-			if ( (Segments[segnum].children[sidenum]==-1) || (Segments[segnum].sides[sidenum].wall_num!=-1) )	{
+			if ( (Segments[segnum].children[sidenum]==segment_none) || (Segments[segnum].sides[sidenum].wall_num!=-1) )	{
 				// Read short Segments[segnum].sides[sidenum].tmap_num;
 				if (New_file_format_load) {
 					temp_ushort = PHYSFSX_readShort(LoadFile);
@@ -1113,7 +1113,7 @@ int load_mine_data_compiled(PHYSFS_file *LoadFile)
 
 	validate_segment_all();			// Fill in side type and normals.
 
-	for (unsigned i=0; i<Num_segments; i++) {
+	for (unsigned i=segment_first; i<Num_segments; i++) {
 		if (Gamesave_current_version > 5)
 			segment2_read(&Segment2s[i], LoadFile);
 		fuelcen_activate( &Segments[i], Segment2s[i].special );

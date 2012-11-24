@@ -158,9 +158,9 @@ static void write_exit_text(PHYSFS_file *my_file)
 
 	//	---------- Find exit doors ----------
 	count = 0;
-	for (i=0; i<=Highest_segment_index; i++)
+	for (i=segment_first; i<=Highest_segment_index; i++)
 		for (j=0; j<MAX_SIDES_PER_SEGMENT; j++)
-			if (Segments[i].children[j] == -2) {
+			if (Segments[i].children[j] == segment_exit) {
 				PHYSFSX_printf(my_file, "Segment %3i, side %i is an exit door.\n", i, j);
 				count++;
 			}
@@ -180,7 +180,7 @@ static void write_key_text(PHYSFS_file *my_file)
 	int	i;
 	int	red_count, blue_count, gold_count;
 	int	red_count2, blue_count2, gold_count2;
-	int	blue_segnum=-1, blue_sidenum=-1, red_segnum=-1, red_sidenum=-1, gold_segnum=-1, gold_sidenum=-1;
+	int	blue_segnum=segment_none, blue_sidenum=-1, red_segnum=segment_none, red_sidenum=-1, gold_segnum=segment_none, gold_sidenum=-1;
 	int	connect_side;
 
 	PHYSFSX_printf(my_file, "-----------------------------------------------------------------------------\n");
@@ -193,7 +193,7 @@ static void write_key_text(PHYSFS_file *my_file)
 	for (i=0; i<Num_walls; i++) {
 		if (Walls[i].keys & KEY_BLUE) {
 			PHYSFSX_printf(my_file, "Wall %i (seg=%i, side=%i) is keyed to the blue key.\n", i, Walls[i].segnum, Walls[i].sidenum);
-			if (blue_segnum == -1) {
+			if (blue_segnum == segment_none) {
 				blue_segnum = Walls[i].segnum;
 				blue_sidenum = Walls[i].sidenum;
 				blue_count++;
@@ -207,7 +207,7 @@ static void write_key_text(PHYSFS_file *my_file)
 		}
 		if (Walls[i].keys & KEY_RED) {
 			PHYSFSX_printf(my_file, "Wall %i (seg=%i, side=%i) is keyed to the red key.\n", i, Walls[i].segnum, Walls[i].sidenum);
-			if (red_segnum == -1) {
+			if (red_segnum == segment_none) {
 				red_segnum = Walls[i].segnum;
 				red_sidenum = Walls[i].sidenum;
 				red_count++;
@@ -221,7 +221,7 @@ static void write_key_text(PHYSFS_file *my_file)
 		}
 		if (Walls[i].keys & KEY_GOLD) {
 			PHYSFSX_printf(my_file, "Wall %i (seg=%i, side=%i) is keyed to the gold key.\n", i, Walls[i].segnum, Walls[i].sidenum);
-			if (gold_segnum == -1) {
+			if (gold_segnum == segment_none) {
 				gold_segnum = Walls[i].segnum;
 				gold_sidenum = Walls[i].sidenum;
 				gold_count++;
@@ -318,7 +318,7 @@ static void write_control_center_text(PHYSFS_file *my_file)
 	PHYSFSX_printf(my_file, "Control Center stuff:\n");
 
 	count = 0;
-	for (i=0; i<=Highest_segment_index; i++)
+	for (i=segment_first; i<=Highest_segment_index; i++)
 		if (Segment2s[i].special == SEGMENT_IS_CONTROLCEN) {
 			count++;
 			PHYSFSX_printf(my_file, "Segment %3i is a control center.\n", i);
@@ -364,7 +364,7 @@ static void write_segment_text(PHYSFS_file *my_file)
 	PHYSFSX_printf(my_file, "-----------------------------------------------------------------------------\n");
 	PHYSFSX_printf(my_file, "Segment stuff:\n");
 
-	for (i=0; i<=Highest_segment_index; i++) {
+	for (i=segment_first; i<=Highest_segment_index; i++) {
 
 		PHYSFSX_printf(my_file, "Segment %4i: ", i);
 		if (Segment2s[i].special != 0)
@@ -376,7 +376,7 @@ static void write_segment_text(PHYSFS_file *my_file)
 		PHYSFSX_printf(my_file, "\n");
 	}
 
-	for (i=0; i<=Highest_segment_index; i++) {
+	for (i=segment_first; i<=Highest_segment_index; i++) {
 		int	depth;
 
 		objnum = Segments[i].objects;
@@ -463,7 +463,7 @@ static void write_wall_text(PHYSFS_file *my_file)
 	for (i=0; i<sizeof(wall_flags)/sizeof(wall_flags[0]); i++)
 		wall_flags[i] = 0;
 
-	for (i=0; i<=Highest_segment_index; i++) {
+	for (i=segment_first; i<=Highest_segment_index; i++) {
 		segment	*segp = &Segments[i];
 		for (j=0; j<MAX_SIDES_PER_SEGMENT; j++) {
 			side	*sidep = &segp->sides[j];
@@ -782,7 +782,7 @@ static void determine_used_textures_level(int load_level_flag, int shareware_fla
 	Ignore_tmap_num2_error = 0;
 
 	//	Process walls and segment sides.
-	for (segnum=0; segnum<=Highest_segment_index; segnum++) {
+	for (segnum=segment_first; segnum<=Highest_segment_index; segnum++) {
 		segment	*segp = &Segments[segnum];
 
 		for (sidenum=0; sidenum<MAX_SIDES_PER_SEGMENT; sidenum++) {
@@ -806,7 +806,7 @@ static void determine_used_textures_level(int load_level_flag, int shareware_fla
 							level_tmap_buf[tmap_num] = level_num;
 					}
 				}
-			} else if (segp->children[sidenum] == -1) {
+			} else if (segp->children[sidenum] == segment_none) {
 
 				if (sidep->tmap_num >= 0)
 				{

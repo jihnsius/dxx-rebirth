@@ -1716,7 +1716,7 @@ static int newdemo_read_frame_information(int rewrite)
 	done = 0;
 
 	if (Newdemo_vcr_state != ND_STATE_PAUSED)
-		for (segnum=0; segnum <= Highest_segment_index; segnum++)
+		for (segnum=segment_first; segnum <= Highest_segment_index; segnum++)
 			Segments[segnum].objects = -1;
 
 	reset_objects(1);
@@ -1788,7 +1788,8 @@ static int newdemo_read_frame_information(int rewrite)
 
 				if (Newdemo_vcr_state != ND_STATE_PAUSED) {
 					segnum = Viewer->segnum;
-					Viewer->next = Viewer->prev = Viewer->segnum = -1;
+					Viewer->next = Viewer->prev = -1;
+					Viewer->segnum = segment_none;
 
 					// HACK HACK HACK -- since we have multiple level recording, it can be the case
 					// HACK HACK HACK -- that when rewinding the demo, the viewer is in a segment
@@ -1796,7 +1797,7 @@ static int newdemo_read_frame_information(int rewrite)
 					// HACK HACK HACK -- the viewer to segment 0 for bogus view.
 
 					if (segnum > Highest_segment_index)
-						segnum = 0;
+						segnum = segment_first;
 					obj_link(Viewer-Objects,segnum);
 				}
 			}
@@ -1816,7 +1817,8 @@ static int newdemo_read_frame_information(int rewrite)
 			}
 			if (Newdemo_vcr_state != ND_STATE_PAUSED) {
 				segnum = obj->segnum;
-				obj->next = obj->prev = obj->segnum = -1;
+				obj->next = obj->prev = -1;
+				obj->segnum = segment_none;
 
 				// HACK HACK HACK -- don't render objects is segments greater than Highest_segment_index
 				// HACK HACK HACK -- (see above)
@@ -2030,7 +2032,8 @@ static int newdemo_read_frame_information(int rewrite)
 			if (Newdemo_vcr_state != ND_STATE_PAUSED) {
 				if (Newdemo_vcr_state != ND_STATE_PAUSED) {
 					segnum = obj->segnum;
-					obj->next = obj->prev = obj->segnum = -1;
+					obj->next = obj->prev = -1;
+					obj->segnum = segment_none;
 					obj_link(obj-Objects,segnum);
 				}
 			}
@@ -2772,7 +2775,7 @@ static int newdemo_read_frame_information(int rewrite)
 
 					if (rewrite)	// hack some dummy variables
 					{
-						seg = &Segments[0];
+						seg = &Segments[segment_first];
 						side = 0;
 					}
 					else

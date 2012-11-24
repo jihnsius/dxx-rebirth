@@ -478,7 +478,7 @@ void set_dynamic_light(void)
 	n_render_vertices = 0;
 	for (render_seg=0; render_seg<N_render_segs; render_seg++) {
 		segnum = Render_list[render_seg];
-		if (segnum != -1) {
+		if (segnum != segment_none) {
 			int	*vp = Segments[segnum].verts;
 			for (v=0; v<MAX_VERTICES_PER_SEGMENT; v++) {
 				int	vnum = vp[v];

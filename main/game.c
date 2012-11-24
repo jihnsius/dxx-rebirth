@@ -1073,11 +1073,11 @@ window *game_setup(void)
 #ifdef EDITOR
 	if (!Cursegp)
 	{
-		Cursegp = &Segments[0];
+		Cursegp = &Segments[segment_first];
 		Curside = 0;
 	}
 
-	if (Segments[ConsoleObject->segnum].segnum == -1)      //segment no longer exists
+	if (Segments[ConsoleObject->segnum].segnum == segment_none)      //segment no longer exists
 		obj_relink( ConsoleObject-Objects, SEG_PTR_2_NUM(Cursegp) );
 
 	if (!check_obj_seg(ConsoleObject))
@@ -1505,7 +1505,7 @@ static void compute_slide_segs(void)
 {
 	int	segnum, sidenum;
 
-	for (segnum=0;segnum<=Highest_segment_index;segnum++) {
+	for (segnum=segment_first;segnum<=Highest_segment_index;segnum++) {
 		Slide_segs[segnum] = 0;
 		for (sidenum=0;sidenum<6;sidenum++) {
 			int tmn = Segments[segnum].sides[sidenum].tmap_num;
@@ -1525,7 +1525,7 @@ void slide_textures(void)
 	if (!Slide_segs_computed)
 		compute_slide_segs();
 
-	for (segnum=0;segnum<=Highest_segment_index;segnum++) {
+	for (segnum=segment_first;segnum<=Highest_segment_index;segnum++) {
 		if (Slide_segs[segnum]) {
 			for (sidenum=0;sidenum<6;sidenum++) {
 				if (Slide_segs[segnum] & (1 << sidenum)) {
@@ -1800,7 +1800,7 @@ static int mark_player_path_to_segment(int dstseg)
 
 	Last_level_path_created = Current_level_num;
 
-	if (create_path_points(objp, objp->segnum, dstseg, Point_segs_free_ptr, &player_path_length, 100, 0, 0, -1) == -1) {
+	if (create_path_points(objp, objp->segnum, dstseg, Point_segs_free_ptr, &player_path_length, 100, 0, 0, segment_none) == -1) {
 		return 0;
 	}
 
@@ -1842,9 +1842,9 @@ int create_special_path(void)
 	int	i,j;
 
 	//	---------- Find exit doors ----------
-	for (i=0; i<=Highest_segment_index; i++)
+	for (i=segment_first; i<=Highest_segment_index; i++)
 		for (j=0; j<MAX_SIDES_PER_SEGMENT; j++)
-			if (Segments[i].children[j] == -2) {
+			if (Segments[i].children[j] == segment_exit) {
 				return mark_player_path_to_segment(i);
 			}
 

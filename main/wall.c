@@ -198,7 +198,8 @@ void wall_init()
 
 	Num_walls = 0;
 	for (i=0;i<MAX_WALLS;i++) {
-		Walls[i].segnum = Walls[i].sidenum = -1;
+		Walls[i].segnum = segment_none;
+		Walls[i].sidenum = -1;
 		Walls[i].type = WALL_NORMAL;
 		Walls[i].flags = 0;
 		Walls[i].hps = 0;
@@ -1534,7 +1535,7 @@ static void bng_process_segment(dxxobject *objp, fix damage, segment *segp, int 
 	for (i=0; i<MAX_SIDES_PER_SEGMENT; i++) {
 		int	segnum = segp->children[i];
 
-		if (segnum != -1) {
+		if (segnum != segment_none) {
 			if (!visited[segnum]) {
 				if (WALL_IS_DOORWAY(segp, i) & WID_FLY_FLAG) {
 					visited[segnum] = 1;

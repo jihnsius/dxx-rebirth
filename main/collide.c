@@ -562,7 +562,7 @@ int check_effect_blowup(segment *seg,int side,vms_vector *pnt, dxxobject *blower
 					if ((sound_num=Effects[ec].sound_num)!=-1)		//kill sound
 						digi_kill_sound_linked_to_segment(seg-Segments,side,sound_num);
 
-					if (Effects[ec].dest_eclip!=-1 && Effects[Effects[ec].dest_eclip].segnum==-1) {
+					if (Effects[ec].dest_eclip!=-1 && Effects[Effects[ec].dest_eclip].segnum==segment_none) {
 						int bm_num;
 						eclip *new_ec;
 
@@ -973,7 +973,7 @@ static void collide_robot_and_player( dxxobject * robot, dxxobject * playerobj, 
 		if ((!steal_attempt) && !Robot_info[robot->id].energy_drain)
 			digi_link_sound_to_pos( SOUND_ROBOT_HIT_PLAYER, playerobj->segnum, 0, collision_point, 0, F1_0 );
 
-		if (collision_seg != -1)
+		if (collision_seg != segment_none)
 			object_create_explosion( collision_seg, collision_point, Weapon_info[0].impact_size, Weapon_info[0].wall_hit_vclip );
 	}
 
@@ -1808,7 +1808,7 @@ void drop_player_eggs(dxxobject *playerobj)
 			rthresh /= 2;
 			vm_vec_add(&tvec, &playerobj->pos, &randvec);
 			newseg = find_point_seg(&tvec, playerobj->segnum);
-			if (newseg != -1)
+			if (newseg != segment_none)
 				Laser_create_new(&randvec, &tvec, newseg, playerobj-Objects, SUPERPROX_ID, 0);
 	  	}
 
@@ -1825,7 +1825,7 @@ void drop_player_eggs(dxxobject *playerobj)
 				rthresh /= 2;
 				vm_vec_add(&tvec, &playerobj->pos, &randvec);
 				newseg = find_point_seg(&tvec, playerobj->segnum);
-				if (newseg != -1)
+				if (newseg != segment_none)
 					Laser_create_new(&randvec, &tvec, newseg, playerobj-Objects, PROXIMITY_ID, 0);
 
 			}

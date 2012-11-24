@@ -65,9 +65,17 @@ extern "C" {
 # define MAX_VERTICES           (MAX_SEGMENT_VERTICES)
 #endif
 
+#define DECLARE_SEGMENT_INDEX(N,V)	enum { segment_##N = V }
+
+DECLARE_SEGMENT_INDEX(exit, -2);
+DECLARE_SEGMENT_INDEX(none, -1);
+DECLARE_SEGMENT_INDEX(first, 0);
+
 // Returns true if segnum references a child, else returns false.
 // Note that -1 means no connection, -2 means a connection to the outside world.
-#define IS_CHILD(segnum) (segnum > -1)
+static inline int IS_CHILD(int s) {
+	return s != segment_exit && s != segment_none;
+}
 
 //Structure for storing u,v,light values.
 //NOTE: this structure should be the same as the one in 3d.h

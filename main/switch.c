@@ -190,8 +190,14 @@ static int do_change_walls(sbyte trigger_num)
 			segp = &Segments[Triggers[trigger_num].seg[i]];
 			side = Triggers[trigger_num].side[i];
 
-			if (segp->children[side] < 0)
+			if (segp->children[side] == segment_exit || segp->children[side] == segment_none)
 			{
+				csegp = NULL;
+				cside = -1;
+			}
+			else if (segp->children[side] > Highest_segment_index)
+			{
+				Int3();
 				csegp = NULL;
 				cside = -1;
 			}

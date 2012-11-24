@@ -278,7 +278,7 @@ void do_replacements(void)
 		Assert(old_tmap_num >= 0);
 		Assert(new_tmap_num >= 0);
 
-		for (segnum=0; segnum <= Highest_segment_index; segnum++) {
+		for (segnum=segment_first; segnum <= Highest_segment_index; segnum++) {
 			segment	*segp=&Segments[segnum];
 			for (sidenum=0; sidenum<MAX_SIDES_PER_SEGMENT; sidenum++) {
 				side	*sidep=&segp->sides[sidenum];

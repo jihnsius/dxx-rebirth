@@ -616,7 +616,7 @@ static void render_object_search(dxxobject *obj)
 		changed=1;
 
 	if (changed) {
-		if (obj->segnum != -1)
+		if (obj->segnum != segment_none)
 			Cursegp = &Segments[obj->segnum];
 		found_seg = -(obj-Objects+1);
 	}
@@ -806,7 +806,7 @@ static void render_segment(int segnum, int window_num)
 	g3s_codes 	cc;
 	int			sn;
 
-	Assert(segnum!=-1 && segnum<=Highest_segment_index);
+	Assert(segnum!=segment_none && segnum<=Highest_segment_index);
 
 	cc=rotate_list(8,seg->verts);
 
@@ -1458,7 +1458,7 @@ static void build_object_lists(int n_segs)
 
 		segnum = Render_list[nn];
 
-		if (segnum != -1) {
+		if (segnum != segment_none) {
 			int objnum;
 			dxxobject *obj;
 
@@ -1519,7 +1519,7 @@ static void build_object_lists(int n_segs)
 
 		segnum = Render_list[nn];
 
-		if (segnum != -1) {
+		if (segnum != segment_none) {
 			int t,lookn,i,n;
 
 			//first count the number of objects & copy into sort list
@@ -1828,7 +1828,7 @@ void render_frame(fix eye_offset, int window_num)
 
 	start_seg_num = find_point_seg(&Viewer_eye,Viewer->segnum);
 
-	if (start_seg_num==-1)
+	if (start_seg_num==segment_none)
 		start_seg_num = Viewer->segnum;
 
 	if (Rear_view && (Viewer==ConsoleObject)) {
@@ -1945,7 +1945,7 @@ static void build_segment_list(int start_seg_num, int window_num)
 				draw_window_box(RED,check_w->left,check_w->top,check_w->right,check_w->bot);
 			#endif
 
-			if (segnum == -1) continue;
+			if (segnum == segment_none) continue;
 
 			seg = &Segments[segnum];
 			rotated=0;
@@ -2068,13 +2068,13 @@ static void build_segment_list(int start_seg_num, int window_num)
 
 									if (no_migrate_segs) {
 										//no_render_flag[lcnt] = 1;
-										Render_list[lcnt] = -1;
+										Render_list[lcnt] = segment_none;
 										render_windows[rp] = *new_w;		//get updated window
 										processed[rp] = 0;		//force reprocess
 										goto no_add;
 									}
 									else
-										Render_list[rp]=-1;
+										Render_list[rp]=segment_none;
 								}
 								else goto no_add;
 							}
@@ -2185,7 +2185,7 @@ void render_mine(int start_seg_num,fix eye_offset, int window_num)
 
 			segnum = Render_list[i];
 
-			if (segnum != -1)
+			if (segnum != segment_none)
 			{
 				if (visited2[segnum])
 					Int3();		//get Matt
@@ -2215,7 +2215,7 @@ void render_mine(int start_seg_num,fix eye_offset, int window_num)
 			gr_setcolor(Clear_window_color);
 
 			for (i=first_terminal_seg; i<N_render_segs; i++) {
-				if (Render_list[i] != -1) {
+				if (Render_list[i] != segment_none) {
 					#ifndef NDEBUG
 					if ((render_windows[i].left == -1) || (render_windows[i].top == -1) || (render_windows[i].right == -1) || (render_windows[i].bot == -1))
 						Int3();
@@ -2238,7 +2238,7 @@ void render_mine(int start_seg_num,fix eye_offset, int window_num)
 		Current_seg_depth = Seg_depth[nn];
 
 		//if (!no_render_flag[nn])
-		if (segnum!=-1 && (_search_mode || visited[segnum]!=255)) {
+		if (segnum!=segment_none && (_search_mode || visited[segnum]!=255)) {
 			//set global render window vars
 
 			if (window_check) {
@@ -2298,7 +2298,7 @@ void render_mine(int start_seg_num,fix eye_offset, int window_num)
 		segnum = Render_list[nn];
 		Current_seg_depth = Seg_depth[nn];
 
-		if (segnum!=-1 && (_search_mode || visited[segnum]!=255))
+		if (segnum!=segment_none && (_search_mode || visited[segnum]!=255))
 		{
 			//set global render window vars
 
@@ -2315,7 +2315,7 @@ void render_mine(int start_seg_num,fix eye_offset, int window_num)
 				g3s_codes 	cc;
 				int			sn;
 
-				Assert(segnum!=-1 && segnum<=Highest_segment_index);
+				Assert(segnum!=segment_none && segnum<=Highest_segment_index);
 
 				cc=rotate_list(8,seg->verts);
 
@@ -2351,7 +2351,7 @@ void render_mine(int start_seg_num,fix eye_offset, int window_num)
 		segnum = Render_list[nn];
 		Current_seg_depth = Seg_depth[nn];
 
-		if (segnum!=-1 && (_search_mode || visited[segnum]!=255))
+		if (segnum!=segment_none && (_search_mode || visited[segnum]!=255))
 		{
 			//set global render window vars
 
@@ -2410,7 +2410,7 @@ void render_mine(int start_seg_num,fix eye_offset, int window_num)
 		segnum = Render_list[nn];
 		Current_seg_depth = Seg_depth[nn];
 
-		if (segnum!=-1 && (_search_mode || visited[segnum]!=255))
+		if (segnum!=segment_none && (_search_mode || visited[segnum]!=255))
 		{
 			//set global render window vars
 
@@ -2427,7 +2427,7 @@ void render_mine(int start_seg_num,fix eye_offset, int window_num)
 				g3s_codes 	cc;
 				int			sn;
 
-				Assert(segnum!=-1 && segnum<=Highest_segment_index);
+				Assert(segnum!=segment_none && segnum<=Highest_segment_index);
 
 				cc=rotate_list(8,seg->verts);
 
@@ -2473,7 +2473,7 @@ int find_seg_side_face(short x,short y,int *seg,int *side,int *face,int *poly)
 
 	_search_x = x; _search_y = y;
 
-	found_seg = -1;
+	found_seg = segment_none;
 
 	if (render_3d_in_big_window) {
 		gr_set_current_canvas(LargeView.ev_canv);
@@ -2492,7 +2492,7 @@ int find_seg_side_face(short x,short y,int *seg,int *side,int *face,int *poly)
 	*face = found_face;
 	*poly = found_poly;
 
-	return (found_seg!=-1);
+	return (found_seg!=segment_none);
 
 }
 

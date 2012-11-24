@@ -407,7 +407,7 @@ int gamedata_read_tbl(int pc_shareware)
 		//Effects[i].bm_ptr = (grs_bitmap **) -1;
 		Effects[i].changing_wall_texture = -1;
 		Effects[i].changing_object_texture = -1;
-		Effects[i].segnum = -1;
+		Effects[i].segnum = segment_none;
 		Effects[i].vc.num_frames = -1;		//another mark of being unused
 	}
 

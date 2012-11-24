@@ -605,7 +605,7 @@ static int med_copy_group(int delta_flag, segment *base_seg, int base_side, segm
 		for (c=0; c<MAX_SIDES_PER_SEGMENT; c++)
 			if (IS_CHILD(segp->children[c])) {
 				if (!in_group(segp->children[c], new_current_group)) {
-					segp->children[c] = -1;
+					segp->children[c] = segment_none;
 					validate_segment_side(segp,c);					// we have converted a connection to a side so validate the segment
 				}
 			}
@@ -709,7 +709,7 @@ static int med_move_group(int delta_flag, segment *base_seg, int base_side, segm
 			in_vertex_list[Segments[GroupList[current_group].segments[s]].verts[v]] = 1;
 
 	//	For all segments which are not in GroupList[current_group].segments, mark all their vertices in the out list.
-	for (s=0; s<=Highest_segment_index; s++) {
+	for (s=segment_first; s<=Highest_segment_index; s++) {
 		for (ss=0; ss<GroupList[current_group].num_segments; ss++)
 			if (GroupList[current_group].segments[ss] == s)
 				break;
@@ -759,11 +759,11 @@ static int med_move_group(int delta_flag, segment *base_seg, int base_side, segm
 							dsegp = &Segments[csegp->children[d]];
 							if (dsegp->group == current_group)
 								{
-								csegp->children[d] = -1;
+								csegp->children[d] = segment_none;
 								validate_segment_side(csegp,d);					// we have converted a connection to a side so validate the segment
 								}
 							}
-					segp->children[c] = -1;
+					segp->children[c] = segment_none;
 					validate_segment_side(segp,c);					// we have converted a connection to a side so validate the segment
 					}
 				}
@@ -977,7 +977,7 @@ int rotate_segment_new(vms_angvec *pbh)
 	// Create list of segments to rotate.
 	//	Sever connection between first seg to rotate and its connection on Side_opposite[Curside].
 	child_save = Cursegp->children[newseg_side];	// save connection we are about to sever
-	Cursegp->children[newseg_side] = -1;			// sever connection
+	Cursegp->children[newseg_side] = segment_none;			// sever connection
 	create_group_list(Cursegp, GroupList[ROT_GROUP].segments, &GroupList[ROT_GROUP].num_segments, Selected_segs, 0);       // create list of segments in group
 	Cursegp->children[newseg_side] = child_save;	// restore severed connection
 	GroupList[ROT_GROUP].segments[0] = newseg;
@@ -997,8 +997,8 @@ int rotate_segment_new(vms_angvec *pbh)
 	vm_angles_2_matrix(&tm2,pbh);
 	vm_matrix_x_matrix(&orient_matrix,&tm1,&tm2);
 
-	Segments[baseseg].children[baseseg_side] = -1;
-	Segments[newseg].children[newseg_side] = -1;
+	Segments[baseseg].children[baseseg_side] = segment_none;
+	Segments[newseg].children[newseg_side] = segment_none;
 
 	if (!med_move_group(1, &Segments[baseseg], baseseg_side, &Segments[newseg], newseg_side, &orient_matrix, 0)) {
 		Cursegp = &Segments[newseg];
@@ -1137,7 +1137,7 @@ static int med_save_group(const char *filename, int *vertex_ids, short *segment_
 					found = 1;
 					break;
 					}
-			if (found==0) tseg.children[j] = -1;
+			if (found==0) tseg.children[j] = segment_none;
 		}
 
 		for (j=0;j<8;j++)
@@ -1691,7 +1691,7 @@ int CopyGroup(void)
 	//	See if the attach side in the group is attached to another segment.
 	//	If so, it must not be in the group for group copy to be legal.
 	attach_seg = Groupsegp[current_group]->children[Groupside[current_group]];
-	if (attach_seg != -1) {
+	if (attach_seg != segment_none) {
 		int	i;
 
 		for (i=0; i<GroupList[current_group].num_segments; i++)
@@ -1805,7 +1805,7 @@ int SubtractFromGroup(void)
 		Segments[GroupList[current_group].segments[s]].group = current_group;
 	}
 
-	for (s=0; s<=Highest_segment_index; s++) {
+	for (s=segment_first; s<=Highest_segment_index; s++) {
 		int	t;
 		if (Segments[s].group == current_group) {
 			for (t=0; t<cur_num_segs; t++)

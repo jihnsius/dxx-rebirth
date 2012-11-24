@@ -183,7 +183,7 @@ int CreateAdjacentJointsAll()
 
 	med_combine_duplicate_vertices(Vertex_active);
 
-	for (seg=0; seg<=Highest_segment_index; seg++)
+	for (seg=segment_first; seg<=Highest_segment_index; seg++)
 		for (s=0; s<MAX_SIDES_PER_SEGMENT; s++)
 			if (med_find_adjacent_segment_side(&Segments[seg], s, &adj_sp, &adj_side))
 				if (Segments[seg].children[s] != adj_sp-Segments)

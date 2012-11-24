@@ -3534,7 +3534,7 @@ void multi_apply_goal_textures()
 	segment	*seg;
 	segment2	*seg2;
 
-	for (i=0; i <= Highest_segment_index; i++)
+	for (i=segment_first; i <= Highest_segment_index; i++)
 	{
 		seg = &Segments[i];
 		seg2 = &Segment2s[i];

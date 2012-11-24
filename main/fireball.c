@@ -502,12 +502,12 @@ int pick_connected_segment(dxxobject *objp, int max_depth)
 
 		if ((seg_queue[tail] < 0) || (seg_queue[tail] > Highest_segment_index)) {
 			// -- Int3();	//	Something bad has happened.  Queue is trashed.  --MK, 12/13/94
-			return -1;
+			return segment_none;
 		}
 
 		cur_depth = depth[seg_queue[tail]];
 	}
-	return -1;
+	return segment_none;
 }
 
 #define BASE_NET_DROP_DEPTH 8
@@ -520,7 +520,7 @@ int pick_connected_segment(dxxobject *objp, int max_depth)
 static int choose_drop_segment()
 {
 	int	pnum = 0;
-	int	segnum = -1;
+	int	segnum = segment_none;
 	int	cur_drop_depth;
 	int	count;
 	int	player_seg;
@@ -533,7 +533,7 @@ static int choose_drop_segment()
 	player_pos = &Objects[Players[Player_num].objnum].pos;
 	player_seg = Objects[Players[Player_num].objnum].segnum;
 
-	while ((segnum == -1) && (cur_drop_depth > BASE_NET_DROP_DEPTH/2)) {
+	while ((segnum == segment_none) && (cur_drop_depth > BASE_NET_DROP_DEPTH/2)) {
 		pnum = (d_rand() * N_players) >> 15;
 		count = 0;
 		while ((count < N_players) && ((Players[pnum].connected == CONNECT_DISCONNECTED) || (pnum==Player_num) || ((Game_mode & (GM_TEAM|GM_CAPTURE)) && (get_team(pnum)==get_team(Player_num))))) {
@@ -547,44 +547,44 @@ static int choose_drop_segment()
 		}
 
 		segnum = pick_connected_segment(&Objects[Players[pnum].objnum], cur_drop_depth);
-		if (segnum == -1)
+		if (segnum == segment_none)
 		{
 			cur_drop_depth--;
 			continue;
 		}
 		if (Segment2s[segnum].special == SEGMENT_IS_CONTROLCEN)
-			{segnum = -1;}
+			{segnum = segment_none;}
 		else {	//don't drop in any children of control centers
 			int i;
 			for (i=0;i<6;i++) {
 				int ch = Segments[segnum].children[i];
 				if (IS_CHILD(ch) && Segment2s[ch].special == SEGMENT_IS_CONTROLCEN) {
-					segnum = -1;
+					segnum = segment_none;
 					break;
 				}
 			}
 		}
 
 		//bail if not far enough from original position
-		if (segnum != -1) {
+		if (segnum != segment_none) {
 			compute_segment_center(&tempv, &Segments[segnum]);
 			if (find_connected_distance(player_pos,player_seg,&tempv,segnum,-1,WID_FLY_FLAG) < i2f(20)*cur_drop_depth) {
-				segnum = -1;
+				segnum = segment_none;
 			}
 		}
 
 		cur_drop_depth--;
 	}
 
-	if (segnum == -1) {
+	if (segnum == segment_none) {
 		cur_drop_depth = BASE_NET_DROP_DEPTH;
-		while (cur_drop_depth > 0 && segnum == -1) // before dropping in random segment, try to find ANY segment which is connected to the player responsible for the drop so object will not spawn in inaccessible areas
+		while (cur_drop_depth > 0 && segnum == segment_none) // before dropping in random segment, try to find ANY segment which is connected to the player responsible for the drop so object will not spawn in inaccessible areas
 		{
 			segnum = pick_connected_segment(&Objects[Players[Player_num].objnum], --cur_drop_depth);
 			if (Segment2s[segnum].special == SEGMENT_IS_CONTROLCEN)
-				segnum = -1;
+				segnum = segment_none;
 		}
-		return ((segnum == -1)?((d_rand() * Highest_segment_index) >> 15):segnum); // basically it should be impossible segnum == -1 now... but oh well...
+		return ((segnum == segment_none)?((d_rand() * Highest_segment_index) >> 15):segnum); // basically it should be impossible segnum == -1 now... but oh well...
 	} else
 		return segnum;
 
@@ -641,7 +641,7 @@ static int segment_contains_object(int obj_type, int obj_id, int segnum)
 {
 	int	objnum;
 
-	if (segnum == -1)
+	if (segnum == segment_none)
 		return 0;
 
 	objnum = Segments[segnum].objects;
@@ -669,7 +669,7 @@ static int object_nearby_aux(int segnum, int object_type, int object_id, int dep
 	for (i=0; i<MAX_SIDES_PER_SEGMENT; i++) {
 		int	seg2 = Segments[segnum].children[i];
 
-		if (seg2 != -1)
+		if (seg2 != segment_none)
 			if (object_nearby_aux(seg2, object_type, object_id, depth-1))
 				return 1;
 	}
@@ -1173,7 +1173,7 @@ void do_explosion_sequence(dxxobject *obj)
 
 		spawn_pos = &del_obj->pos;
 
-		if (!((del_obj->type==OBJ_ROBOT || del_obj->type==OBJ_CLUTTER || del_obj->type==OBJ_CNTRLCEN || del_obj->type == OBJ_PLAYER) && (del_obj->segnum != -1))) {
+		if (!((del_obj->type==OBJ_ROBOT || del_obj->type==OBJ_CLUTTER || del_obj->type==OBJ_CNTRLCEN || del_obj->type == OBJ_PLAYER) && (del_obj->segnum != segment_none))) {
 			Int3();	//pretty bad
 			return;
 		}
@@ -1264,7 +1264,7 @@ void init_exploding_walls()
 	int i;
 
 	for (i=0;i<MAX_EXPLODING_WALLS;i++)
-		expl_wall_list[i].segnum = -1;
+		expl_wall_list[i].segnum = segment_none;
 }
 
 //explode the given wall
@@ -1275,7 +1275,7 @@ void explode_wall(int segnum,int sidenum)
 
 	//find a free slot
 
-	for (i=0;i<MAX_EXPLODING_WALLS && expl_wall_list[i].segnum != -1;i++);
+	for (i=0;i<MAX_EXPLODING_WALLS && expl_wall_list[i].segnum != segment_none;i++);
 
 	if (i==MAX_EXPLODING_WALLS) {		//didn't find slot.
 		Int3();
@@ -1301,7 +1301,7 @@ void do_exploding_wall_frame()
 	for (i=0;i<MAX_EXPLODING_WALLS;i++) {
 		int segnum = expl_wall_list[i].segnum;
 
-		if (segnum != -1) {
+		if (segnum != segment_none) {
 			int sidenum = expl_wall_list[i].sidenum;
 			fix oldfrac,newfrac;
 			int old_count,new_count,e;		//n,
@@ -1389,7 +1389,7 @@ void do_exploding_wall_frame()
 			}
 
 			if (expl_wall_list[i].time >= EXPL_WALL_TIME)
-				expl_wall_list[i].segnum = -1;	//flag this slot as free
+				expl_wall_list[i].segnum = segment_none;	//flag this slot as free
 
 		}
 	}
@@ -1411,12 +1411,12 @@ void drop_afterburner_blobs(dxxobject *obj, int count, fix size_scale, fix lifet
 		vm_vec_avg(&pos_left, &pos_left, &pos_right);
 
 	segnum = find_point_seg(&pos_left, obj->segnum);
-	if (segnum != -1)
+	if (segnum != segment_none)
 		object_create_explosion(segnum, &pos_left, size_scale, VCLIP_AFTERBURNER_BLOB );
 
 	if (count > 1) {
 		segnum = find_point_seg(&pos_right, obj->segnum);
-		if (segnum != -1) {
+		if (segnum != segment_none) {
 			dxxobject	*blob_obj;
 			blob_obj = object_create_explosion(segnum, &pos_right, size_scale, VCLIP_AFTERBURNER_BLOB );
 			if (lifetime != -1)

@@ -417,7 +417,7 @@ static void create_omega_blobs(int firing_segnum, vms_vector *firing_pos, vms_ve
 		vm_vec_scale_add(&temp_pos, &blob_pos, &perturb_vec, perturb_array[i]);
 
 		segnum = find_point_seg(&temp_pos, last_segnum);
-		if (segnum != -1) {
+		if (segnum != segment_none) {
 			dxxobject *objp;
 
 			last_segnum = segnum;
@@ -570,7 +570,7 @@ static void do_omega_stuff(dxxobject *parent_objp, vms_vector *firing_pos, dxxob
 
 		vm_vec_scale_add(&goal_pos, firing_pos, &perturbed_fvec, MAX_OMEGA_DIST);
 		fq.startseg = firing_segnum;
-		if (fq.startseg == -1) {
+		if (fq.startseg == segment_none) {
 			return;
 		}
 		fq.p0						= firing_pos;
@@ -582,7 +582,7 @@ static void do_omega_stuff(dxxobject *parent_objp, vms_vector *firing_pos, dxxob
 
 		fate = find_vector_intersection(&fq, &hit_data);
 		if (fate != HIT_NONE) {
-			Assert(hit_data.hit_seg != -1);		//	How can this be?  We went from inside the mine to outside without hitting anything?
+			Assert(hit_data.hit_seg != segment_none);		//	How can this be?  We went from inside the mine to outside without hitting anything?
 			goal_pos = hit_data.hit_pnt;
 		}
 	} else
@@ -755,7 +755,7 @@ int Laser_create_new( vms_vector * direction, vms_vector * position, int segnum,
 	 	vm_vec_scale_add( &end_pos, &obj->pos, direction, Laser_offset+(laser_length/2) );
 		end_segnum = find_point_seg(&end_pos, obj->segnum);
 		if (end_segnum != obj->segnum) {
-			if (end_segnum != -1) {
+			if (end_segnum != segment_none) {
 				obj->pos = end_pos;
 				obj_relink(obj-Objects, end_segnum);
 			}
@@ -827,7 +827,7 @@ int Laser_create_new_easy( vms_vector * direction, vms_vector * position, int pa
 	fq.flags					= FQ_TRANSWALL | FQ_CHECK_OBJS;		//what about trans walls???
 
 	fate = find_vector_intersection(&fq, &hit_data);
-	if (fate != HIT_NONE  || hit_data.hit_seg==-1) {
+	if (fate != HIT_NONE  || hit_data.hit_seg==segment_none) {
 		return -1;
 	}
 
@@ -1250,7 +1250,7 @@ static void Laser_player_fire_spread_delay(dxxobject *obj, int laser_type, int g
 
 	LaserSeg = hit_data.hit_seg;
 
-	if (LaserSeg == -1)		//some sort of annoying error
+	if (LaserSeg == segment_none)		//some sort of annoying error
 		return;
 
 	//SORT OF HACK... IF ABOVE WAS CORRECT THIS WOULDNT BE NECESSARY.

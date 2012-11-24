@@ -485,7 +485,7 @@ static void set_sound_sources()
 
 	Dont_start_sound_objects = 1;
 
-	for (seg=&Segments[0],segnum=0;segnum<=Highest_segment_index;seg++,segnum++)
+	for (segnum=segment_first,seg=&Segments[segnum];segnum<=Highest_segment_index;seg++,segnum++)
 		for (sidenum=0;sidenum<MAX_SIDES_PER_SEGMENT;sidenum++) {
 			int tm,ec,sn;
 
@@ -578,7 +578,7 @@ static ushort netmisc_calc_checksum()
 	int t;
 
 	sum1 = sum2 = 0;
-	for (i = 0; i < Highest_segment_index + 1; i++) {
+	for (i = segment_first; i < Highest_segment_index + 1; i++) {
 		for (j = 0; j < MAX_SIDES_PER_SEGMENT; j++) {
 			do_checksum_calc((unsigned char *)&(Segments[i].sides[j].type), 1, &sum1, &sum2);
 			do_checksum_calc(&(Segments[i].sides[j].pad), 1, &sum1, &sum2);

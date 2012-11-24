@@ -461,7 +461,7 @@ int player_is_visible_from_object(dxxobject *objp, vms_vector *pos, fix field_of
 	fq.p0						= pos;
 	if ((pos->x != objp->pos.x) || (pos->y != objp->pos.y) || (pos->z != objp->pos.z)) {
 		int	segnum = find_point_seg(pos, objp->segnum);
-		if (segnum == -1) {
+		if (segnum == segment_none) {
 			fq.startseg = objp->segnum;
 			*pos = objp->pos;
 			move_towards_segment_center(objp);
@@ -1357,7 +1357,7 @@ void do_ai_robot_hit(dxxobject *objp, int type)
 						objp->ctype.ai_info.hide_segment = objp->segnum;
 						Ai_local_info[objp-Objects].mode = AIM_CHASE_OBJECT;
 					} else if (r < 4096+8192) {
-						create_n_segment_path(objp, d_rand()/8192 + 2, -1);
+						create_n_segment_path(objp, d_rand()/8192 + 2, segment_none);
 						Ai_local_info[objp-Objects].mode = AIM_FOLLOW_PATH;
 					}
 					break;
@@ -1741,7 +1741,7 @@ static int create_gated_robot( int segnum, int object_id, vms_vector *pos)
 	objp->matcen_creator = BOSS_GATE_MATCEN_NUM;	//	flag this robot as having been created by the boss.
 
 	default_behavior = Robot_info[objp->id].behavior;
-	init_ai_object(objp-Objects, default_behavior, -1 );		//	Note, -1 = segment this robot goes to to hide, should probably be something useful
+	init_ai_object(objp-Objects, default_behavior, segment_none );		//	Note, -1 = segment this robot goes to to hide, should probably be something useful
 
 	object_create_explosion(segnum, &object_pos, i2f(10), VCLIP_MORPHING_ROBOT );
 	digi_link_sound_to_pos( Vclip[VCLIP_MORPHING_ROBOT].sound_num, segnum, 0, &object_pos, 0 , F1_0);
@@ -1783,7 +1783,7 @@ int boss_spew_robot(dxxobject *objp, vms_vector *pos)
 	Assert((boss_index >= 0) && (boss_index < NUM_D2_BOSSES));
 
 	segnum = find_point_seg(pos, objp->segnum);
-	if (segnum == -1) {
+	if (segnum == segment_none) {
 		return -1;
 	}
 

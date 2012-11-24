@@ -357,7 +357,7 @@ void do_ai_frame(dxxobject *obj)
 		aip->behavior = AIB_NORMAL;
 	}
 
-	Assert(obj->segnum != -1);
+	Assert(obj->segnum != segment_none);
 	Assert(obj->id < N_robot_types);
 
 	obj_ref = objnum ^ FrameCount;
@@ -497,7 +497,7 @@ _exit_cheat:
 					obj->mtype.phys_info.velocity.x = 0;
 					obj->mtype.phys_info.velocity.y = 0;
 					obj->mtype.phys_info.velocity.z = 0;
-					create_n_segment_path(obj, 5, -1);
+					create_n_segment_path(obj, 5, segment_none);
 					ailp->mode = AIM_RUN_FROM_OBJECT;
 					break;
 				case AIM_BEHIND:
@@ -507,7 +507,7 @@ _exit_cheat:
 					obj->mtype.phys_info.velocity.z = 0;
 					break;
 				case AIM_OPEN_DOOR:
-					create_n_segment_path_to_door(obj, 5, -1);
+					create_n_segment_path_to_door(obj, 5, segment_none);
 					break;
 				#ifndef NDEBUG
 				case AIM_FOLLOW_PATH_2:
@@ -693,7 +693,7 @@ _exit_cheat:
 				} else if (ailp->mode != AIM_FOLLOW_PATH) {
 					if (!ai_multiplayer_awareness(obj, 50))
 						return;
-					create_n_segment_path_to_door(obj, 8+Difficulty_level, -1);     // third parameter is avoid_seg, -1 means avoid nothing.
+					create_n_segment_path_to_door(obj, 8+Difficulty_level, segment_none);     // third parameter is avoid_seg, -1 means avoid nothing.
 					ai_multi_send_robot_position(objnum, -1);
 				}
 
@@ -709,7 +709,7 @@ _exit_cheat:
 				if (player_visibility) {
 					if (!ai_multiplayer_awareness(obj, 50))
 						return;
-					create_n_segment_path_to_door(obj, 8+Difficulty_level, -1);     // third parameter is avoid_seg, -1 means avoid nothing.
+					create_n_segment_path_to_door(obj, 8+Difficulty_level, segment_none);     // third parameter is avoid_seg, -1 means avoid nothing.
 					ai_multi_send_robot_position(objnum, -1);
 				}
 			}

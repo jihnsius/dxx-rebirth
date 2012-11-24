@@ -848,7 +848,8 @@ static int load_game_data(PHYSFS_file *LoadFile)
 		} else {
 			v16_wall w;
 			v16_wall_read(&w, LoadFile);
-			Walls[i].segnum = Walls[i].sidenum = Walls[i].linked_wall = -1;
+			Walls[i].segnum = segment_none;
+			Walls[i].sidenum = Walls[i].linked_wall = -1;
 			Walls[i].type		= w.type;
 			Walls[i].flags		= w.flags;
 			Walls[i].hps		= w.hps;
@@ -1032,7 +1033,7 @@ static int load_game_data(PHYSFS_file *LoadFile)
 				Objects[i].type = OBJ_NONE;
 			}
 			else {
-				Objects[i].segnum = -1;			//avoid Assert()
+				Objects[i].segnum = segment_none;			//avoid Assert()
 				obj_link(i,objsegnum);
 			}
 		}
@@ -1041,7 +1042,7 @@ static int load_game_data(PHYSFS_file *LoadFile)
 	clear_transient_objects(1);		//1 means clear proximity bombs
 
 	// Make sure non-transparent doors are set correctly.
-	for (unsigned i=0; i< Num_segments; i++)
+	for (unsigned i=segment_first; i< Num_segments; i++)
 		for (j=0;j<MAX_SIDES_PER_SEGMENT;j++) {
 			side	*sidep = &Segments[i].sides[j];
 			if ((sidep->wall_num != -1) && (Walls[sidep->wall_num].clip_num != -1)) {
@@ -1122,7 +1123,7 @@ static int load_game_data(PHYSFS_file *LoadFile)
 	if (game_top_fileinfo_version < 17) {
 		int segnum,sidenum,wallnum;
 
-		for (segnum=0; segnum<=Highest_segment_index; segnum++)
+		for (segnum=segment_first; segnum<=Highest_segment_index; segnum++)
 			for (sidenum=0;sidenum<6;sidenum++)
 				if ((wallnum=Segments[segnum].sides[sidenum].wall_num) != -1) {
 					Walls[wallnum].segnum = segnum;
@@ -1303,7 +1304,7 @@ int load_level(const char * filename_passed)
 		Num_flickering_lights = 0;
 
 	if (Gamesave_current_version < 6) {
-		Secret_return_segment = 0;
+		Secret_return_segment = segment_first;
 		Secret_return_orient.rvec.x = F1_0;
 		Secret_return_orient.rvec.y = 0;
 		Secret_return_orient.rvec.z = 0;
@@ -1474,7 +1475,7 @@ int create_new_mine(void)
 	Highest_vertex_index = 0;
 	Num_segments = 0;		// Number of segments in global array, will get increased in med_create_segment
 	Highest_segment_index = 0;
-	Cursegp = Segments;	// Say current segment is the only segment.
+	Cursegp = &Segments[segment_first];	// Say current segment is the only segment.
 	Curside = WBACK;		// The active side is the back side
 	Markedsegp = 0;		// Say there is no marked segment.
 	Markedside = WBACK;	//	Shouldn't matter since Markedsegp == 0, but just in case...
@@ -1722,7 +1723,7 @@ static int save_level_sub(const char * filename, int compiled_version)
 	//make sure player is in a segment
 	if (update_object_seg(&Objects[Players[0].objnum]) == 0) {
 		if (ConsoleObject->segnum > Highest_segment_index)
-			ConsoleObject->segnum = 0;
+			ConsoleObject->segnum = segment_first;
 		compute_segment_center(&ConsoleObject->pos,&(Segments[ConsoleObject->segnum]));
 	}
 
@@ -1837,7 +1838,7 @@ void dump_mine_info(void)
 
 	max_sl = 0;
 
-	for (segnum=0; segnum<=Highest_segment_index; segnum++) {
+	for (segnum=segment_first; segnum<=Highest_segment_index; segnum++) {
 		for (sidenum=0; sidenum<MAX_SIDES_PER_SEGMENT; sidenum++) {
 			int	vertnum;
 			side	*sidep = &Segments[segnum].sides[sidenum];

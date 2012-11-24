@@ -366,10 +366,10 @@ static int16_t get_desired_segment(int16_t& cached_segnum, const script_control_
 			cached_segnum = requested_segment;
 			return requested_segment;
 		}
-		return -1;
+		return segment_none;
 	}
 	const int cseg = cached_segnum;
-	const int segnum = find_point_seg(&loc.pos, (static_cast<unsigned>(cseg) > static_cast<unsigned>(Highest_segment_index) ? -1 : cseg));
+	const int segnum = find_point_seg(&loc.pos, (static_cast<unsigned>(cseg) > static_cast<unsigned>(Highest_segment_index) ? segment_none : cseg));
 	cached_segnum = segnum;
 	return segnum;
 }
@@ -404,10 +404,10 @@ struct thrust_nearest_vertex_visitor_t : pathfinder_t::nearest_vertex_visitor_t<
 
 static vms_vector get_player_thrust(const dxxobject& plr)
 {
-	static int16_t s_target_segnum = -1;
+	static int16_t s_target_segnum = segment_none;
 	const int16_t segnum = get_desired_segment(s_target_segnum, ScriptControls.ship_destination);
 	vms_vector vs;
-	if (segnum == -1 || static_cast<unsigned>(segnum) > static_cast<unsigned>(Highest_segment_index))
+	if (segnum == segment_none || static_cast<unsigned>(segnum) > static_cast<unsigned>(Highest_segment_index))
 	{
 		vm_vec_zero(&vs);
 		return vs;
@@ -567,7 +567,7 @@ static int py_get_internal_glow_path(const script_control_info::location& l, con
 {
 	static glow_path_cache_t s_cache[MAX_RENDERED_WINDOWS] = {
 #define BOOST_PP_LOCAL_LIMITS (0,MAX_RENDERED_WINDOWS-1)
-#define BOOST_PP_LOCAL_MACRO(N)	{-1, -1, 0, {{{0, 0, 0}, {0, 0, 0}, {0, 0, 0}}}},
+#define BOOST_PP_LOCAL_MACRO(N)	{segment_none, segment_none, 0, {{{0, 0, 0}, {0, 0, 0}, {0, 0, 0}}}},
 #include BOOST_PP_LOCAL_ITERATE()
 	};
 	if (!l.enable_position && !l.enable_segment)
@@ -575,15 +575,15 @@ static int py_get_internal_glow_path(const script_control_info::location& l, con
 	glow_path_cache_t& cache = s_cache[window_num];
 	const int16_t cseg = cache.dstseg;
 	const int16_t segnum = get_desired_segment(cache.dstseg, l);
-	if (segnum == -1 || static_cast<unsigned>(segnum) > static_cast<unsigned>(Highest_segment_index))
+	if (segnum == segment_none || static_cast<unsigned>(segnum) > static_cast<unsigned>(Highest_segment_index))
 	{
-		cache.srcseg = -1;
+		cache.srcseg = segment_none;
 		return -2;
 	}
 	const dxxobject *const viewer = Viewer;
 	if (!viewer)
 	{
-		cache.srcseg = -1;
+		cache.srcseg = segment_none;
 		return -3;
 	}
 	if (cseg == segnum && viewer->segnum == cache.srcseg)
@@ -592,7 +592,7 @@ static int py_get_internal_glow_path(const script_control_info::location& l, con
 	const int rcpath = path.dijkstra_shortest_paths(viewer, segnum);
 	if (rcpath < 0)
 	{
-		cache.srcseg = -1;
+		cache.srcseg = segment_none;
 		return rcpath - 2;
 	}
 	typedef dxx_segment_adaptor Graph;
@@ -601,7 +601,7 @@ static int py_get_internal_glow_path(const script_control_info::location& l, con
 	const int rcvisit = path.visit(vertex_descriptor(Graph::segment_descriptor(segnum), Graph::side_descriptor(0)), rnvv);
 	if (rcvisit < 0)
 	{
-		cache.srcseg = -1;
+		cache.srcseg = segment_none;
 		return rcvisit - 10;
 	}
 	cache.srcseg = viewer->segnum;

@@ -300,11 +300,12 @@ static void do_physics_sim_rot(dxxobject *obj)
 // On joining edges fvi tends to get inaccurate as hell. Approach is to check if the object interects with the wall and if so, move away from it.
 static void fix_illegal_wall_intersection(dxxobject *obj, vms_vector *origin)
 {
-	int hseg = -1, hside = -1, hface = -1;
+	int hside = -1, hface = -1;
 
 	if (!(obj->type == OBJ_PLAYER || obj->type == OBJ_ROBOT))
 		return;
 
+	int hseg = segment_none;
 	if ( object_intersects_wall_d(obj,&hseg,&hside,&hface) )
 	{
 		vm_vec_scale_add2(&obj->pos,&Segments[hseg].sides[hside].normals[0],FrameTime*10);
@@ -497,13 +498,13 @@ void do_physics_sim(dxxobject *obj)
 		WallHitSide = hit_info.hit_side;
 		WallHitSeg = hit_info.hit_side_seg;
 
-		if (iseg==-1) {		//some sort of horrible error
+		if (iseg==segment_none) {		//some sort of horrible error
 			if (obj->type == OBJ_WEAPON)
 				obj->flags |= OF_SHOULD_BE_DEAD;
 			break;
 		}
 
-		Assert(!((fate==HIT_WALL) && ((WallHitSeg == -1) || (WallHitSeg > Highest_segment_index))));
+		Assert(!((fate==HIT_WALL) && ((WallHitSeg == segment_none) || (WallHitSeg > Highest_segment_index))));
 
 		//if(!get_seg_masks(&hit_info.hit_pnt, hit_info.hit_seg, 0, __FILE__, __LINE__).centermask == 0)
 		//	Int3();
@@ -522,9 +523,9 @@ void do_physics_sim(dxxobject *obj)
 		{
 			int n;
 
-			if ((n=find_object_seg(obj))==-1) {
+			if ((n=find_object_seg(obj))==segment_none) {
 				//Int3();
-				if (obj->type==OBJ_PLAYER && (n=find_point_seg(&obj->last_pos,obj->segnum))!=-1) {
+				if (obj->type==OBJ_PLAYER && (n=find_point_seg(&obj->last_pos,obj->segnum))!=segment_none) {
 					obj->pos = obj->last_pos;
 					obj_relink(objnum, n );
 				}
@@ -596,7 +597,7 @@ void do_physics_sim(dxxobject *obj)
 				if (obj->type == OBJ_PLAYER)
 					scrape_player_on_wall(obj, WallHitSeg, WallHitSide, &hit_info.hit_pnt );
 
-				Assert( WallHitSeg > -1 );
+				Assert( WallHitSeg != segment_none );
 				Assert( WallHitSide > -1 );
 
 				if ( !(obj->flags&OF_SHOULD_BE_DEAD) )	{
@@ -784,7 +785,7 @@ void do_physics_sim(dxxobject *obj)
 
 				s = &Segments[orig_segnum].sides[sidenum];
 
-				if (orig_segnum==-1)
+				if (orig_segnum==segment_none)
 					Error("orig_segnum == -1 in physics");
 
 				create_abs_vertex_lists(&num_faces, vertex_list, orig_segnum, sidenum, __FILE__, __LINE__);
@@ -816,11 +817,11 @@ void do_physics_sim(dxxobject *obj)
 	//if end point not in segment, move object to last pos, or segment center
 	if (get_seg_masks(&obj->pos, obj->segnum, 0, __FILE__, __LINE__).centermask != 0)
 	{
-		if (find_object_seg(obj)==-1) {
+		if (find_object_seg(obj)==segment_none) {
 			int n;
 
 			//Int3();
-			if (obj->type==OBJ_PLAYER && (n=find_point_seg(&obj->last_pos,obj->segnum))!=-1) {
+			if (obj->type==OBJ_PLAYER && (n=find_point_seg(&obj->last_pos,obj->segnum))!=segment_none) {
 				obj->pos = obj->last_pos;
 				obj_relink(objnum, n );
 			}

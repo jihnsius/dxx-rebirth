@@ -45,16 +45,16 @@ static void validate_modified_segments(void)
 	for (v=0; v<Modified_vertex_index; v++) {
 		v0 = Modified_vertices[v];
 
-		for (seg = 0; seg <= Highest_segment_index; seg++) {
+		for (seg = segment_first; seg <= Highest_segment_index; seg++) {
 			int *vp = Segments[seg].verts;
-			if (Segments[seg].segnum != -1)
+			if (Segments[seg].segnum != segment_none)
 				for (w=0; w<MAX_VERTICES_PER_SEGMENT; w++)
 					if (*vp++ == v0)
 						modified_segments[seg] = 1;
 		}
 	}
 
-	for (v=0; v<=Highest_segment_index; v++)
+	for (v=segment_first; v<=Highest_segment_index; v++)
 		if (modified_segments[v]) {
 			int	s;
 

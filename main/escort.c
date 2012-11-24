@@ -599,11 +599,11 @@ static int exists_in_mine(int start_seg, int objtype, int objid, int special)
 	//	See if it's in the mine.  It could be hidden behind a trigger or switch
 	//	which the buddybot doesn't understand.
 	if (objtype == FUELCEN_CHECK) {
-		for (segnum=0; segnum<=Highest_segment_index; segnum++)
+		for (segnum=segment_first; segnum<=Highest_segment_index; segnum++)
 			if (Segment2s[segnum].special == SEGMENT_IS_FUELCEN)
 				return -2;
 	} else {
-		for (segnum=0; segnum<=Highest_segment_index; segnum++) {
+		for (segnum=segment_first; segnum<=Highest_segment_index; segnum++) {
 			int	objnum;
 
 			objnum = exists_in_mine_2(segnum, objtype, objid, special);
@@ -622,13 +622,13 @@ static int find_exit_segment(void)
 	int	i,j;
 
 	//	---------- Find exit doors ----------
-	for (i=0; i<=Highest_segment_index; i++)
+	for (i=segment_first; i<=Highest_segment_index; i++)
 		for (j=0; j<MAX_SIDES_PER_SEGMENT; j++)
-			if (Segments[i].children[j] == -2) {
+			if (Segments[i].children[j] == segment_exit) {
 				return i;
 			}
 
-	return -1;
+	return segment_none;
 }
 
 //	-----------------------------------------------------------------------------
@@ -669,7 +669,7 @@ void say_escort_goal(int goal_num)
 //	-----------------------------------------------------------------------------
 static void escort_create_path_to_goal(dxxobject *objp)
 {
-	int	goal_seg = -1;
+	int	goal_seg = segment_none;
 	int			objnum = objp-Objects;
 	ai_static	*aip = &objp->ctype.ai_info;
 	ai_local		*ailp = &Ai_local_info[objnum];
@@ -750,7 +750,7 @@ static void escort_create_path_to_goal(dxxobject *objp)
 			}
 			default:
 				Int3();	//	Oops, Illegal value in Escort_goal_object.
-				goal_seg = 0;
+				goal_seg = segment_first;
 				break;
 		}
 	}
@@ -771,7 +771,7 @@ static void escort_create_path_to_goal(dxxobject *objp)
 		Escort_special_goal = -1;
 	} else {
 		if (Escort_goal_object == ESCORT_GOAL_SCRAM) {
-			create_n_segment_path(objp, 16 + d_rand() * 16, -1);
+			create_n_segment_path(objp, 16 + d_rand() * 16, segment_none);
 			aip->path_length = polish_path(objp, &Point_segs[aip->hide_index], aip->path_length);
 		} else {
 			create_path_to_segment(objp, goal_seg, Max_escort_length, 1);	//	MK!: Last parm (safety_flag) used to be 1!!
@@ -787,7 +787,7 @@ static void escort_create_path_to_goal(dxxobject *objp)
 				if (dist_to_player > MIN_ESCORT_DISTANCE)
 					create_path_to_player(objp, Max_escort_length, 1);	//	MK!: Last parm used to be 1!
 				else {
-					create_n_segment_path(objp, 8 + d_rand() * 8, -1);
+					create_n_segment_path(objp, 8 + d_rand() * 8, segment_none);
 					aip->path_length = polish_path(objp, &Point_segs[aip->hide_index], aip->path_length);
 				}
 			}
@@ -998,7 +998,7 @@ void do_escort_frame(dxxobject *objp, fix dist_to_player, int player_visibility)
 	//	If the player is now visible, then create a path.
 	if (ailp->mode == AIM_WANDER)
 		if (player_visibility) {
-			create_n_segment_path(objp, 16 + d_rand() * 16, -1);
+			create_n_segment_path(objp, 16 + d_rand() * 16, segment_none);
 			aip->path_length = polish_path(objp, &Point_segs[aip->hide_index], aip->path_length);
 		}
 
@@ -1151,19 +1151,19 @@ void do_snipe_frame(dxxobject *objp, fix dist_to_player, int player_visibility, 
 //	Choose segment to recreate thief in.
 static int choose_thief_recreation_segment(void)
 {
-	int	segnum = -1;
+	int	segnum = segment_none;
 	int	cur_drop_depth;
 
 	cur_drop_depth = THIEF_DEPTH;
 
-	while ((segnum == -1) && (cur_drop_depth > THIEF_DEPTH/2)) {
+	while ((segnum == segment_none) && (cur_drop_depth > THIEF_DEPTH/2)) {
 		segnum = pick_connected_segment(&Objects[Players[Player_num].objnum], cur_drop_depth);
 		if (Segment2s[segnum].special == SEGMENT_IS_CONTROLCEN)
-			segnum = -1;
+			segnum = segment_none;
 		cur_drop_depth--;
 	}
 
-	if (segnum == -1) {
+	if (segnum == segment_none) {
 		return (d_rand() * Highest_segment_index) >> 15;
 	} else
 		return segnum;
@@ -1183,7 +1183,7 @@ void recreate_thief(dxxobject *objp)
 	compute_segment_center(&center_point, &Segments[segnum]);
 
 	new_obj = create_morph_robot( &Segments[segnum], &center_point, objp->id);
-	init_ai_object(new_obj-Objects, AIB_SNIPE, -1);
+	init_ai_object(new_obj-Objects, AIB_SNIPE, segment_none);
 	Re_init_thief_time = GameTime64 + F1_0*10;		//	In 10 seconds, re-initialize thief.
 }
 
@@ -1253,11 +1253,11 @@ void do_thief_frame(dxxobject *objp, fix dist_to_player, int player_visibility, 
 
 						//	If path is real short, try again, allowing to go through player's segment
 						if (aip->path_length < 4) {
-							create_n_segment_path(objp, 10, -1);
+							create_n_segment_path(objp, 10, segment_none);
 						} else if (objp->shields* 4 < Robot_info[objp->id].strength) {
 							//	If robot really low on hits, will run through player with even longer path
 							if (aip->path_length < 8) {
-								create_n_segment_path(objp, 10, -1);
+								create_n_segment_path(objp, 10, segment_none);
 							}
 						}
 

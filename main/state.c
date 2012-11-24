@@ -1365,7 +1365,7 @@ int state_restore_all_sub(char *filename, int secret_restore)
 	Do_appearance_effect = 0;			// Don't do this for middle o' game stuff.
 
 	//Clear out all the objects from the lvl file
-	for (segnum=0; segnum <= Highest_segment_index; segnum++)
+	for (segnum=segment_first; segnum <= Highest_segment_index; segnum++)
 		Segments[segnum].objects = -1;
 	reset_objects(1);
 
@@ -1560,7 +1560,7 @@ int state_restore_all_sub(char *filename, int secret_restore)
 		apply_all_changed_light();
 	} else {
 		int	i;
-		for (i=0; i<=Highest_segment_index; i++)
+		for (i=segment_first; i<=Highest_segment_index; i++)
 			Light_subtracted[i] = 0;
 	}
 

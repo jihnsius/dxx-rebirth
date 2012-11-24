@@ -1211,7 +1211,7 @@ static void add_segment_edges(automap *am, segment *seg)
 		no_fade = 0;
 
 		color = 255;
-		if (seg->children[sn] == -1) {
+		if (seg->children[sn] == segment_none) {
 			color = am->wall_normal_color;
 		}
 
@@ -1252,7 +1252,7 @@ static void add_segment_edges(automap *am, segment *seg)
 					color = am->wall_door_red;
 				} else if (!(WallAnims[Walls[seg->sides[sn].wall_num].clip_num].flags & WCF_HIDDEN)) {
 					int	connected_seg = seg->children[sn];
-					if (connected_seg != -1) {
+					if (connected_seg != segment_none) {
 						int connected_side = find_connect_side(seg, &Segments[connected_seg]);
 						int	keytype = Walls[Segments[connected_seg].sides[connected_side].wall_num].keys;
 						if ((keytype != KEY_BLUE) && (keytype != KEY_GOLD) && (keytype != KEY_RED))
@@ -1323,7 +1323,7 @@ static void add_unknown_segment_edges(automap *am, segment *seg)
 		int	vertex_list[4];
 
 		// Only add edges that have no children
-		if (seg->children[sn] == -1) {
+		if (seg->children[sn] == segment_none) {
 			get_side_verts(vertex_list,segnum,sn);
 
 			add_one_unknown_edge( am, vertex_list[0], vertex_list[1] );
@@ -1349,26 +1349,26 @@ void automap_build_edge_list(automap *am)
 
 	if (cheats.fullautomap || (Players[Player_num].flags & PLAYER_FLAGS_MAP_ALL) )	{
 		// Cheating, add all edges as visited
-		for (s=0; s<=Highest_segment_index; s++)
+		for (s=segment_first; s<=Highest_segment_index; ++s)
 #ifdef EDITOR
-			if (Segments[s].segnum != -1)
+			if (Segments[s].segnum != segment_none)
 #endif
 			{
 				add_segment_edges(am, &Segments[s]);
 			}
 	} else {
 		// Not cheating, add visited edges, and then unvisited edges
-		for (s=0; s<=Highest_segment_index; s++)
+		for (s=segment_first; s<=Highest_segment_index; ++s)
 #ifdef EDITOR
-			if (Segments[s].segnum != -1)
+			if (Segments[s].segnum != segment_none)
 #endif
 				if (Automap_visited[s]) {
 					add_segment_edges(am, &Segments[s]);
 				}
 
-		for (s=0; s<=Highest_segment_index; s++)
+		for (s=segment_first; s<=Highest_segment_index; ++s)
 #ifdef EDITOR
-			if (Segments[s].segnum != -1)
+			if (Segments[s].segnum != segment_none)
 #endif
 				if (!Automap_visited[s]) {
 					add_unknown_segment_edges(am, &Segments[s]);

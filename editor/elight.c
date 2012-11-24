@@ -147,7 +147,7 @@ int LightAmbientLighting()
 {
 	int seg, side;
 
-	for (seg=0; seg<=Highest_segment_index; seg++)
+	for (seg=segment_first; seg<=Highest_segment_index; seg++)
 		for (side=0;side<MAX_SIDES_PER_SEGMENT;side++)
 			propagate_light_intensity(&Segments[seg], side);
 	return 0;

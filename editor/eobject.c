@@ -168,7 +168,7 @@ static int place_object(segment *segp, vms_vector *object_pos, short object_type
 			if (Markedsegp)
 				hide_segment = Markedsegp-Segments;
 			else
-				hide_segment = -1;
+				hide_segment = segment_none;
 			//	robots which lunge forward to attack cannot have behavior type still.
 			if (Robot_info[obj->id].attack_type)
 				init_ai_object(obj-Objects, AIB_NORMAL, hide_segment);
@@ -469,7 +469,7 @@ static int move_object_within_mine(dxxobject * obj, vms_vector *newpos )
 {
 	int segnum;
 
-	for (segnum=0;segnum <= Highest_segment_index; segnum++) {
+	for (segnum=segment_first;segnum <= Highest_segment_index; segnum++) {
 		segmasks result = get_seg_masks(&obj->pos, segnum, 0, __FILE__, __LINE__);
 
 		if (result.centermask == 0) {
@@ -815,10 +815,10 @@ static void move_object_to_position(int objnum, vms_vector *newpos)
 			temp_viewer_obj.segnum = viewer_segnum;
 
 			//	If the viewer is outside the mine, get him in the mine!
-			if (viewer_segnum == -1) {
+			if (viewer_segnum == segment_none) {
 				//	While outside mine, move towards object
 				count = 0;
-				while (viewer_segnum == -1) {
+				while (viewer_segnum == segment_none) {
 					vms_vector	temp_vec;
 
 					last_outside_pos = temp_viewer_obj.pos;
@@ -836,7 +836,7 @@ static void move_object_to_position(int objnum, vms_vector *newpos)
 
 				count = 0;
 				//	While inside mine, move away from object.
-				while (viewer_segnum != -1) {
+				while (viewer_segnum != segment_none) {
 
 					vms_vector	temp_vec;
 
@@ -867,7 +867,7 @@ static void move_object_to_position(int objnum, vms_vector *newpos)
 
 				objp->pos = hit_info.hit_pnt;
 				new_segnum = find_object_seg(objp);
-				Assert(new_segnum != -1);
+				Assert(new_segnum != segment_none);
 				obj_relink(objp-Objects, new_segnum);
 			} else {
 				editor_status("Attempted to move object out of mine.  Object not moved.");

@@ -93,7 +93,7 @@ void fuelcen_reset()
 
 	Num_fuelcenters = 0;
 
-	for(i=0; i<sizeof(Segment2s)/sizeof(Segment2s[0]); i++ )
+	for(i=segment_first; i<sizeof(Segment2s)/sizeof(Segment2s[0]); i++ )
 		Segment2s[i].special = SEGMENT_IS_NOTHING;
 
 	Num_robot_centers = 0;
@@ -107,7 +107,7 @@ static void reset_all_robot_centers()
 	int i;
 
 	// Remove all materialization centers
-	for (i=0; i<Num_segments; i++)
+	for (i=segment_first; i<Num_segments; i++)
 		if (Segment2s[i].special == SEGMENT_IS_ROBOTMAKER) {
 			Segment2s[i].special = SEGMENT_IS_NOTHING;
 			Segment2s[i].matcen_num = -1;
@@ -354,9 +354,9 @@ dxxobject * create_morph_robot( segment *segp, vms_vector *object_pos, int objec
 
 	default_behavior = Robot_info[obj->id].behavior;
 
-	init_ai_object(obj-Objects, default_behavior, -1 );		//	Note, -1 = segment this robot goes to to hide, should probably be something useful
+	init_ai_object(obj-Objects, default_behavior, segment_none );		//	Note, -1 = segment this robot goes to to hide, should probably be something useful
 
-	create_n_segment_path(obj, 6, -1);		//	Create a 6 segment path from creation point.
+	create_n_segment_path(obj, 6, segment_none);		//	Create a 6 segment path from creation point.
 
 	Ai_local_info[objnum].mode = ai_behavior_to_mode(default_behavior);
 

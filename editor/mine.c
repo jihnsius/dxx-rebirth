@@ -428,7 +428,7 @@ int save_mine_data(PHYSFS_file * SaveFile)
 	if (Markedsegp)
 		mine_editor.Markedsegp       =   Markedsegp - Segments;
 	else									  
-		mine_editor.Markedsegp       =   -1;
+		mine_editor.Markedsegp       =   segment_none;
 	mine_editor.Markedside          =   Markedside;
 	for (i=0;i<10;i++)
 		mine_editor.Groupsegp[i]	  =	Groupsegp[i] - Segments;
@@ -584,14 +584,14 @@ int save_mine_data_compiled(PHYSFS_file *SaveFile)
 	for (i = 0; i < Num_vertices; i++)
 		PHYSFSX_writeVector(SaveFile, &(Vertices[i]));
 	
-	for (segnum = 0; segnum < Num_segments; segnum++)
+	for (segnum = segment_first; segnum < Num_segments; segnum++)
 	{
 		segment *seg = &Segments[segnum];
 		segment2 *seg2 = &Segment2s[segnum];
 
 		for (sidenum = 0; sidenum < MAX_SIDES_PER_SEGMENT; sidenum++)
 		{
- 			if (seg->children[sidenum] != -1)
+ 			if (seg->children[sidenum] != segment_none)
 				bit_mask |= (1 << sidenum);
 		}
 
@@ -647,7 +647,7 @@ int save_mine_data_compiled(PHYSFS_file *SaveFile)
 
 		for (sidenum = 0; sidenum < MAX_SIDES_PER_SEGMENT; sidenum++)
 		{
-			if ((seg->children[sidenum] == -1) || (seg->sides[sidenum].wall_num != -1))
+			if ((seg->children[sidenum] == segment_none) || (seg->sides[sidenum].wall_num != -1))
 			{
 				ushort	tmap_num, tmap_num2;
 
@@ -680,7 +680,7 @@ int save_mine_data_compiled(PHYSFS_file *SaveFile)
 	}
 
 	if (Gamesave_current_version > 5)
-		for (i = 0; i < Num_segments; i++)
+		for (i = segment_first; i < Num_segments; i++)
 			segment2_write(&Segment2s[i], SaveFile);
 
 	return 0;

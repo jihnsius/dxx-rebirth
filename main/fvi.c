@@ -633,7 +633,7 @@ int find_vector_intersection(const fvi_query *fq,fvi_info *hit_data)
 	Assert(fq->ignore_obj_list != (int *)(-1));
 	Assert((fq->startseg <= Highest_segment_index) && (fq->startseg >= 0));
 
-	fvi_hit_seg = -1;
+	fvi_hit_seg = segment_none;
 	fvi_hit_side = -1;
 
 	fvi_hit_object = -1;
@@ -647,8 +647,9 @@ int find_vector_intersection(const fvi_query *fq,fvi_info *hit_data)
 
 		hit_data->hit_type = HIT_BAD_P0;
 		hit_data->hit_pnt = *fq->p0;
-		hit_data->hit_seg = hit_data->hit_side = hit_data->hit_object = 0;
-		hit_data->hit_side_seg = -1;
+		hit_data->hit_seg = segment_none;
+		hit_data->hit_side = hit_data->hit_object = 0;
+		hit_data->hit_side_seg = segment_none;
 
 		return hit_data->hit_type;
 	}
@@ -661,7 +662,7 @@ int find_vector_intersection(const fvi_query *fq,fvi_info *hit_data)
 		hit_data->hit_pnt = *fq->p0;
 		hit_data->hit_seg = fq->startseg;
 		hit_data->hit_side = hit_data->hit_object = 0;
-		hit_data->hit_side_seg = -1;
+		hit_data->hit_side_seg = segment_none;
 
 		return hit_data->hit_type;
 	}
@@ -672,43 +673,43 @@ int find_vector_intersection(const fvi_query *fq,fvi_info *hit_data)
 
 	fvi_nest_count = 0;
 
-	hit_seg2 = fvi_hit_seg2 = -1;
+	hit_seg2 = fvi_hit_seg2 = segment_none;
 
-	hit_type = fvi_sub(&hit_pnt,&hit_seg2,fq->p0,fq->startseg,fq->p1,fq->rad,fq->thisobjnum,fq->ignore_obj_list,fq->flags,hit_data->seglist,&hit_data->n_segs,-2);
+	hit_type = fvi_sub(&hit_pnt,&hit_seg2,fq->p0,fq->startseg,fq->p1,fq->rad,fq->thisobjnum,fq->ignore_obj_list,fq->flags,hit_data->seglist,&hit_data->n_segs,segment_exit);
 	//!!hit_seg = find_point_seg(&hit_pnt,fq->startseg);
-	if (hit_seg2 != -1 && !get_seg_masks(&hit_pnt, hit_seg2, 0, __FILE__, __LINE__).centermask)
+	if (hit_seg2 != segment_none && !get_seg_masks(&hit_pnt, hit_seg2, 0, __FILE__, __LINE__).centermask)
 		hit_seg = hit_seg2;
 	else
 		hit_seg = find_point_seg(&hit_pnt,fq->startseg);
 
 //MATT: TAKE OUT THIS HACK AND FIX THE BUGS!
-	if (hit_type == HIT_WALL && hit_seg==-1)
-		if (fvi_hit_seg2 != -1 && get_seg_masks(&hit_pnt, fvi_hit_seg2, 0, __FILE__, __LINE__).centermask == 0)
+	if (hit_type == HIT_WALL && hit_seg==segment_none)
+		if (fvi_hit_seg2 != segment_none && get_seg_masks(&hit_pnt, fvi_hit_seg2, 0, __FILE__, __LINE__).centermask == 0)
 			hit_seg = fvi_hit_seg2;
 
-	if (hit_seg == -1) {
+	if (hit_seg == segment_none) {
 		int new_hit_type;
-		int new_hit_seg2=-1;
+		int new_hit_seg2=segment_none;
 		vms_vector new_hit_pnt;
 
 		//because of code that deal with object with non-zero radius has
 		//problems, try using zero radius and see if we hit a wall
 
-		new_hit_type = fvi_sub(&new_hit_pnt,&new_hit_seg2,fq->p0,fq->startseg,fq->p1,0,fq->thisobjnum,fq->ignore_obj_list,fq->flags,hit_data->seglist,&hit_data->n_segs,-2);
+		new_hit_type = fvi_sub(&new_hit_pnt,&new_hit_seg2,fq->p0,fq->startseg,fq->p1,0,fq->thisobjnum,fq->ignore_obj_list,fq->flags,hit_data->seglist,&hit_data->n_segs,segment_exit);
 		(void)new_hit_type; // FIXME! This should become hit_type, right?
 
-		if (new_hit_seg2 != -1) {
+		if (new_hit_seg2 != segment_none) {
 			hit_seg = new_hit_seg2;
 			hit_pnt = new_hit_pnt;
 		}
 	}
 
 
-if (hit_seg!=-1 && fq->flags&FQ_GET_SEGLIST)
+if (hit_seg!=segment_none && fq->flags&FQ_GET_SEGLIST)
 	if (hit_seg != hit_data->seglist[hit_data->n_segs-1] && hit_data->n_segs<MAX_FVI_SEGS-1)
 		hit_data->seglist[hit_data->n_segs++] = hit_seg;
 
-if (hit_seg!=-1 && fq->flags&FQ_GET_SEGLIST)
+if (hit_seg!=segment_none && fq->flags&FQ_GET_SEGLIST)
 	for (i=0;i<hit_data->n_segs && i<MAX_FVI_SEGS-1;i++)
 		if (hit_data->seglist[i] == hit_seg) {
 			hit_data->n_segs = i+1;
@@ -790,8 +791,8 @@ static int fvi_sub(vms_vector *intp,int *ints,const vms_vector *p0,int startseg,
 	vms_vector hit_point,closest_hit_point = { 0, 0, 0 }; 	//where we hit
 	fix d,closest_d=0x7fffffff;					//distance to hit point
 	int hit_type=HIT_NONE;							//what sort of hit
-	int hit_seg=-1;
-	int hit_none_seg=-1;
+	int hit_seg=segment_none;
+	int hit_none_seg=segment_none;
 	int hit_none_n_segs=0;
 	int hit_none_seglist[MAX_FVI_SEGS];
 	int cur_nest_level = fvi_nest_count;
@@ -952,7 +953,7 @@ static int fvi_sub(vms_vector *intp,int *ints,const vms_vector *p0,int startseg,
 										closest_d = d;
 										closest_hit_point = sub_hit_point;
 										hit_type = sub_hit_type;
-										if (sub_hit_seg!=-1) hit_seg = sub_hit_seg;
+										if (sub_hit_seg!=segment_none) hit_seg = sub_hit_seg;
 
 										//copy seglist
 										if (flags&FQ_GET_SEGLIST) {
@@ -971,7 +972,7 @@ static int fvi_sub(vms_vector *intp,int *ints,const vms_vector *p0,int startseg,
 								}
 								else {
 									wall_norm = save_wall_norm;     //global could be trashed
-									if (sub_hit_seg!=-1) hit_none_seg = sub_hit_seg;
+									if (sub_hit_seg!=segment_none) hit_none_seg = sub_hit_seg;
 									//copy seglist
 									if (flags&FQ_GET_SEGLIST) {
 										int ii;
@@ -1032,7 +1033,7 @@ quit_looking:
 		//MATT: MUST FIX THIS!!!!
 		//Assert(!centermask);
 
-		if (hit_none_seg!=-1) {			///(centermask == 0)
+		if (hit_none_seg!=segment_none) {			///(centermask == 0)
 			if (flags&FQ_GET_SEGLIST)
 				//copy seglist
 				for (i=0;i<hit_none_n_segs && *n_segs<MAX_FVI_SEGS-1;)
@@ -1045,8 +1046,8 @@ quit_looking:
 	}
 	else {
 		*intp = closest_hit_point;
-		if (hit_seg==-1)
-			if (fvi_hit_seg2 != -1)
+		if (hit_seg==segment_none)
+			if (fvi_hit_seg2 != segment_none)
 				*ints = fvi_hit_seg2;
 			else
 				*ints = hit_none_seg;

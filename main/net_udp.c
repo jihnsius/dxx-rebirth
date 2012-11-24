@@ -1485,7 +1485,7 @@ static void net_udp_process_monitor_vector(int vector)
 	int count = 0;
 	segment *seg;
 
-	for (i=0; i <= Highest_segment_index; i++)
+	for (i=segment_first; i <= Highest_segment_index; i++)
 	{
 		int tm, ec, bm;
 		seg = &Segments[i];
@@ -1778,9 +1778,9 @@ void net_udp_read_object_packet( ubyte *data )
 			}
 			if (objnum != -1) {
 				obj = &Objects[objnum];
-				if (obj->segnum != -1)
+				if (obj->segnum != segment_none)
 					obj_unlink(objnum);
-				Assert(obj->segnum == -1);
+				Assert(obj->segnum == segment_none);
 				Assert(objnum < MAX_OBJECTS);
 #ifdef WORDS_BIGENDIAN
 				object_rw_swap((object_rw *)&data[loc], 1);
@@ -1788,9 +1788,10 @@ void net_udp_read_object_packet( ubyte *data )
 				multi_object_rw_to_object((object_rw *)&data[loc], obj);
 				loc += sizeof(object_rw);
 				segnum = obj->segnum;
-				obj->next = obj->prev = obj->segnum = -1;
+				obj->next = obj->prev = -1;
+				obj->segnum = segment_none;
 				obj->attached_obj = -1;
-				if (segnum > -1)
+				if (segnum != segment_none)
 					obj_link(obj-Objects,segnum);
 				if (obj_owner == my_pnum)
 					map_objnum_local_to_local(objnum);
@@ -4780,7 +4781,7 @@ static void net_udp_send_smash_lights (int pnum)
 
   pnum=pnum;
 
-  for (i=0;i<=Highest_segment_index;i++)
+  for (i=segment_first;i<=Highest_segment_index;i++)
    if (Light_subtracted[i])
     multi_send_light_specific(pnum,i,Light_subtracted[i]);
  }
