@@ -80,11 +80,13 @@ int Gamesave_current_version;
 #define MENU_CURSOR_X_MAX       MENU_X+6
 
 #ifdef EDITOR
+#if 0
 struct {
 	ushort  fileinfo_signature;
 	ushort  fileinfo_version;
 	int     fileinfo_sizeof;
 } game_top_fileinfo;    // Should be same as first two fields below...
+#endif
 
 struct {
 	ushort  fileinfo_signature;
