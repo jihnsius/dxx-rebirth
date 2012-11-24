@@ -331,9 +331,6 @@ static int special_check_line_to_face(vms_vector *newp,const vms_vector *p0,cons
 
 	//calc some basic stuff
 
-	if ((seg-Segments)==-1)
-		Error("segnum == -1 in special_check_line_to_face()");
-
 	create_abs_vertex_lists(&num_faces, vertex_list, seg - Segments, side, __FILE__, __LINE__);
 	vm_vec_sub(&move_vec,p1,p0);
 
