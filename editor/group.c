@@ -402,15 +402,14 @@ static void med_rotate_group(vms_matrix *rotmat, short *group_seglist, int group
 static void cgl_aux(segment *segp, short *seglistp, int *num_segs, const short *ignore_list, int num_ignore_segs)
 {
 	int	i, side;
-	int	curseg = segp-Segments;
+	unsigned	curseg = segp-Segments;
+
+	if (curseg >= sizeof(Segments) / sizeof(Segments[0]))
+		Int3();
 
 	for (i=0; i<num_ignore_segs; i++)
 		if (curseg == ignore_list[i])
 			return;
-
-	if ((segp-Segments < 0) || (segp-Segments >= MAX_SEGMENTS)) {
-		Int3();
-	}
 
 	if (!Been_visited[segp-Segments]) {
 		seglistp[(*num_segs)++] = segp-Segments;
