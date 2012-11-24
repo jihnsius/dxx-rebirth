@@ -431,9 +431,7 @@ short convert_d1_tmap_num(short d1_tmap_num) {
 
 #ifdef EDITOR
 
-static char old_tmap_list[MAX_TEXTURES][FILENAME_LEN];
 short tmap_xlate_table[MAX_TEXTURES];
-static short tmap_times_used[MAX_TEXTURES];
 
 // -----------------------------------------------------------------------------
 //loads from an already-open file
@@ -445,6 +443,8 @@ int load_mine_data(PHYSFS_file *LoadFile)
 	int 	translate;
 	char 	*temptr;
 	int	mine_start = PHYSFS_tell(LoadFile);
+	char old_tmap_list[MAX_TEXTURES][FILENAME_LEN];
+	short tmap_times_used[MAX_TEXTURES];
 
 	fuelcen_reset();
 
