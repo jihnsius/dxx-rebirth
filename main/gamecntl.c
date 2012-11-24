@@ -1801,10 +1801,6 @@ void do_cheat_menu()
 	mm[4].type=NM_TYPE_NUMBER; mm[4].value=f2i(Players[Player_num].shields); mm[4].text="% Shields"; mm[4].min_value=0; mm[4].max_value=200;
 	nm_set_item_text(& mm[5], "Score:");
 	nm_set_item_input(&mm[6], 10, score_text);
-	//mm[7].type=NM_TYPE_RADIO; mm[7].value=(Players[Player_num].laser_level==0); mm[7].group=0; mm[7].text="Laser level 1";
-	//mm[8].type=NM_TYPE_RADIO; mm[8].value=(Players[Player_num].laser_level==1); mm[8].group=0; mm[8].text="Laser level 2";
-	//mm[9].type=NM_TYPE_RADIO; mm[9].value=(Players[Player_num].laser_level==2); mm[9].group=0; mm[9].text="Laser level 3";
-	//mm[10].type=NM_TYPE_RADIO; mm[10].value=(Players[Player_num].laser_level==3); mm[10].group=0; mm[10].text="Laser level 4";
 
 	mm[7].type=NM_TYPE_NUMBER; mm[7].value=Players[Player_num].laser_level+1; mm[7].text="Laser Level"; mm[7].min_value=0; mm[7].max_value=MAX_SUPER_LASER_LEVEL+1;
 	mm[8].type=NM_TYPE_NUMBER; mm[8].value=Players[Player_num].secondary_ammo[CONCUSSION_INDEX]; mm[8].text="Missiles"; mm[8].min_value=0; mm[8].max_value=200;
