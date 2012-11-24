@@ -285,21 +285,8 @@ static int ml_sort_func(mle *e0,mle *e1)
 static int read_mission_file(mle *mission, const char *filename, int location)
 {
 	char filename2[100];
+	snprintf(filename2, sizeof(filename2), "%s%s", location == ML_MISSIONDIR ? MISSION_DIR : (location == ML_CURDIR ? "" : (Int3(), "")), filename);
 	PHYSFS_file *mfile;
-
-	switch (location) {
-		case ML_MISSIONDIR:
-			strcpy(filename2,MISSION_DIR);
-			break;
-
-		default:
-			Int3();		//fall through
-
-		case ML_CURDIR:
-			strcpy(filename2,"");
-			break;
-	}
-	strcat(filename2,filename);
 
 	mfile = PHYSFSX_openReadBuffered(filename2);
 
