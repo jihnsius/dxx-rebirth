@@ -1633,7 +1633,7 @@ int nm_messagebox1( const char *title, int (*subfunction)(newmenu *menu, d_event
 
 	for (i=0; i<nchoices; i++ )	{
 		s = va_arg( args, char * );
-		nm_message_items[i].type = NM_TYPE_MENU; nm_message_items[i].text = s;
+		nm_set_item_menu(& nm_message_items[i], s);
 	}
 	format = va_arg( args, char * );
 	vsnprintf(nm_text,sizeof(nm_text),format,args);
@@ -1659,7 +1659,7 @@ int nm_messagebox( const char *title, int nchoices, ... )
 
 	for (i=0; i<nchoices; i++ )	{
 		s = va_arg( args, char * );
-		nm_message_items[i].type = NM_TYPE_MENU; nm_message_items[i].text = s;
+		nm_set_item_menu(& nm_message_items[i], s);
 	}
 	format = va_arg( args, char * );
 	vsnprintf(nm_text,sizeof(nm_text),format,args);
@@ -2195,7 +2195,7 @@ newmenu *nm_messagebox_fixedfont( const char *title, int nchoices, ... )
 
 	for (i=0; i<nchoices; i++ )	{
 		s = va_arg( args, char * );
-		nm_message_items[i].type = NM_TYPE_MENU; nm_message_items[i].text = s;
+		nm_set_item_menu(& nm_message_items[i], s);
 	}
 	format = va_arg( args, char * );
 	//sprintf(	  nm_text, "" ); // adb: ?

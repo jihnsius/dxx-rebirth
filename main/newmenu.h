@@ -161,6 +161,18 @@ newmenu *nm_messagebox_fixedfont(const char *title, int nchoices, ...);
 //should be called whenever the palette changes
 extern void newmenu_free_background();
 
+static inline void nm_set_item_menu(newmenu_item *ni, const char *text)
+{
+	ni->type = NM_TYPE_MENU;
+	ni->text = (char *)text;
+}
+
+static inline void nm_set_item_text(newmenu_item *ni, const char *text)
+{
+	ni->type = NM_TYPE_TEXT;
+	ni->text = (char *)text;
+}
+
 #define NEWMENU_MOUSE
 
 // #define NORMAL_CHECK_BOX    "Å"
