@@ -1241,9 +1241,6 @@ static int sphere_intersects_wall(vms_vector *pnt,segnum_t segnum,fix rad,segnum
 
 					//did we go through this wall/door?
 
-					if ((seg-Segments)==-1)
-						Error("segnum == -1 in sphere_intersects_wall()");
-
 					create_abs_vertex_lists(&num_faces, vertex_list, seg - Segments, side, __FILE__, __LINE__);
 
 					face_hit_type = check_sphere_to_face( pnt,&seg->sides[side],
