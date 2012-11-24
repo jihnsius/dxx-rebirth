@@ -590,7 +590,7 @@ static int load_mission(mle *mission)
 
 	if (Current_mission)
 		free_mission();
-	Current_mission = d_malloc(sizeof(Mission));
+	MALLOC(Current_mission, Mission, 1);
 	if (!Current_mission) return 0;
 	*(mle *) Current_mission = *mission;
 	Current_mission->path = d_strdup(mission->path);
@@ -930,7 +930,7 @@ void create_new_mission(void)
 	if (Current_mission)
 		free_mission();
 	
-	Current_mission = d_malloc(sizeof(Mission));
+	MALLOC(Current_mission, Mission, 1);
 	if (!Current_mission)
 		return;
 	memset(Current_mission, 0, sizeof(Mission));
