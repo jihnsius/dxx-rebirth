@@ -921,21 +921,21 @@ void delete_segment_from_group(int segment_num, int group_num)
 {
 	int g, del_seg_index;
 
-	del_seg_index = -1;
-	for (g=0; g<GroupList[group_num].num_segments; g++)
+	for (g=0;; g++)
+	{
+		if (!(g<GroupList[group_num].num_segments))
+			return;
 		if (segment_num == GroupList[group_num].segments[g]) {
 			del_seg_index = g;
 			break;
 		}
+	}
 
-	if (IS_CHILD(del_seg_index)) {
 		for (g=del_seg_index;g<GroupList[group_num].num_segments-1;g++) {
 			GroupList[group_num].segments[g] = GroupList[group_num].segments[g+1];
 			}
 		GroupList[group_num].num_segments--;
 		Segments[segment_num].group = -1;
-		}
-
 }
 // =====================================================================================
 
