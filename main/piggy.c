@@ -1600,7 +1600,7 @@ static void bitmap_read_d1( grs_bitmap *bitmap, /* read into this bitmap */
 		data = *next_bitmap;
 		*next_bitmap += zsize;
 	} else {
-		data = d_malloc(zsize + JUST_IN_CASE);
+		MALLOC(data, ubyte, zsize + JUST_IN_CASE);
 	}
 	if (!data) return;
 
