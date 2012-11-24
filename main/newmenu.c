@@ -260,24 +260,21 @@ static void nm_string( int w1,int x, int y, const char * s, int tabs_flag)
 static void nm_string_slider( int w1,int x, int y, const char * s )
 {
 	int w,h,aw;
-	char *p,*s1;
+	const char *p,*s1;
 
 	s1=NULL;
 
 	p = strchr( s, '\t' );
 	if (p)	{
-		*p = '\0';
 		s1 = p+1;
 	}
 
-	gr_get_string_size(s, &w, &h, &aw  );
+	gr_get_bounded_string_size(s, p - s, &w, &h, &aw  );
 	gr_string( x, y, s );
 
 	if (p)	{
 		gr_get_string_size(s1, &w, &h, &aw  );
 		gr_string( x+w1-w, y, s1 );
-
-		*p = '\t';
 	}
 }
 
