@@ -792,7 +792,7 @@ int read_hamfile()
 				sbytes += sndh.length;
 		}
 
-		SoundBits = d_malloc( sbytes + 16 );
+		MALLOC(SoundBits, ubyte, sbytes + 16);
 		if ( SoundBits == NULL )
 			Error( "Not enough memory to load sounds\n" );
 	}
@@ -848,7 +848,7 @@ static int read_sndfile()
 			sbytes += sndh.length;
 	}
 
-	SoundBits = d_malloc( sbytes + 16 );
+	MALLOC(SoundBits, ubyte, sbytes + 16);
 	if ( SoundBits == NULL )
 		Error( "Not enough memory to load sounds\n" );
 
