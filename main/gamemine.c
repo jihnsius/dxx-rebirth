@@ -440,7 +440,7 @@ static short tmap_times_used[MAX_TEXTURES];
 // returns 0=everything ok, 1=old version, -1=error
 int load_mine_data(PHYSFS_file *LoadFile)
 {
-	int   i, j;
+	int   j;
 	short tmap_xlate;
 	int 	translate;
 	char 	*temptr;
@@ -448,7 +448,7 @@ int load_mine_data(PHYSFS_file *LoadFile)
 
 	fuelcen_reset();
 
-	for (i=0; i<sizeof(tmap_times_used)/sizeof(tmap_times_used[0]); i++ )
+	for (unsigned i=0; i<sizeof(tmap_times_used)/sizeof(tmap_times_used[0]); i++ )
 		tmap_times_used[i] = 0;
 
 	#ifdef EDITOR
@@ -586,7 +586,7 @@ int load_mine_data(PHYSFS_file *LoadFile)
 		if (PHYSFSX_fseek( LoadFile, mine_fileinfo.texture_offset, SEEK_SET ))
 			Error( "Error seeking to texture_offset in gamemine.c" );
 
-		for (i=0; i< mine_fileinfo.texture_howmany; i++ )
+		for (int i=0; i< mine_fileinfo.texture_howmany; i++ )
 		{
 			if (PHYSFS_read( LoadFile, &old_tmap_list[i], mine_fileinfo.texture_sizeof, 1 )!=1)
 				Error( "Error reading old_tmap_list[i] in gamemine.c" );
@@ -606,7 +606,7 @@ int load_mine_data(PHYSFS_file *LoadFile)
 	
 		// Remove all the file extensions in the textures list
 	
-		for (i=0;i<NumTextures;i++)	{
+		for (int i=0;i<NumTextures;i++)	{
 			temptr = strchr(TmapInfo[i].filename, '.');
 			if (temptr) *temptr = '\0';
 			hashtable_insert( &ht, TmapInfo[i].filename, i );
@@ -630,7 +630,7 @@ int load_mine_data(PHYSFS_file *LoadFile)
 	
 		{
 			int count = 0;
-			for (i=0; i<MAX_TEXTURES; i++ )
+			for (int i=0; i<MAX_TEXTURES; i++ )
 				if (tmap_times_used[i])
 					count++;
 		}
@@ -651,7 +651,7 @@ int load_mine_data(PHYSFS_file *LoadFile)
 		if (PHYSFSX_fseek( LoadFile, mine_fileinfo.vertex_offset, SEEK_SET ))
 			Error( "Error seeking to vertex_offset in gamemine.c" );
 
-		for (i=0; i< mine_fileinfo.vertex_howmany; i++ )
+		for (int i=0; i< mine_fileinfo.vertex_howmany; i++ )
 		{
 			// Set the default values for this vertex
 			Vertices[i].x = 1;
@@ -681,7 +681,7 @@ int load_mine_data(PHYSFS_file *LoadFile)
 
 		Highest_segment_index = mine_fileinfo.segment_howmany-1;
 
-		for (i=0; i< mine_fileinfo.segment_howmany; i++ ) {
+		for (int i=0; i< mine_fileinfo.segment_howmany; i++ ) {
 
 			// Set the default values for this segment (clear to zero )
 			//memset( &Segments[i], 0, sizeof(segment) );
@@ -763,7 +763,7 @@ int load_mine_data(PHYSFS_file *LoadFile)
 
 
 		if (mine_top_fileinfo.fileinfo_version >= 20)
-			for (i=0; i<=Highest_segment_index; i++) {
+			for (int i=0; i<=Highest_segment_index; i++) {
 				PHYSFS_read(LoadFile, &Segment2s[i], sizeof(segment2), 1);
 				fuelcen_activate( &Segments[i], Segment2s[i].special );
 			}
@@ -791,7 +791,7 @@ int load_mine_data(PHYSFS_file *LoadFile)
 	{
 		if (PHYSFSX_fseek( LoadFile, mine_fileinfo.newseg_verts_offset, SEEK_SET ))
 			Error( "Error seeking to newseg_verts_offset in gamemine.c" );
-		for (i=0; i< mine_fileinfo.newseg_verts_howmany; i++ )
+		for (int i=0; i< mine_fileinfo.newseg_verts_howmany; i++ )
 		{
 			// Set the default values for this vertex
 			Vertices[NEW_SEGMENT_VERTICES+i].x = 1;
@@ -816,7 +816,7 @@ int load_mine_data(PHYSFS_file *LoadFile)
 	
  	Markedside = mine_editor.Markedside;
 	Curside = mine_editor.Curside;
-	for (i=0;i<10;i++)
+	for (int i=0;i<10;i++)
 		Groupside[i] = mine_editor.Groupside[i];
 
 	if ( mine_editor.current_seg != -1 )
@@ -915,7 +915,7 @@ static void read_special(int segnum,ubyte bit_mask,PHYSFS_file *LoadFile)
 
 int load_mine_data_compiled(PHYSFS_file *LoadFile)
 {
-	int     i, segnum, sidenum;
+	int     segnum, sidenum;
 	ubyte   compiled_version;
 	short   temp_short;
 	ushort  temp_ushort = 0;
@@ -945,7 +945,7 @@ int load_mine_data_compiled(PHYSFS_file *LoadFile)
 	//	For compiled levels, textures map to themselves, prevent tmap_override always being gray,
 	//	bug which Matt and John refused to acknowledge, so here is Mike, fixing it.
 #ifdef EDITOR
-	for (i=0; i<MAX_TEXTURES; i++)
+	for (unsigned i=0; i<MAX_TEXTURES; i++)
 		tmap_xlate_table[i] = i;
 #endif
 
@@ -976,7 +976,7 @@ int load_mine_data_compiled(PHYSFS_file *LoadFile)
 	}
 	Assert( Num_segments <= MAX_SEGMENTS );
 
-	for (i = 0; i < Num_vertices; i++)
+	for (unsigned i = 0; i < Num_vertices; i++)
 		PHYSFSX_readVector( &(Vertices[i]), LoadFile);
 
 	for (segnum=0; segnum<Num_segments; segnum++ )	{
@@ -1057,7 +1057,7 @@ int load_mine_data_compiled(PHYSFS_file *LoadFile)
 				}
 
 				// Read uvl Segments[segnum].sides[sidenum].uvls[4] (u,v>>5, write as short, l>>1 write as short)
-				for (i=0; i<4; i++ )	{
+				for (unsigned i=0; i<4; i++ )	{
 					temp_short = PHYSFSX_readShort(LoadFile);
 					Segments[segnum].sides[sidenum].uvls[i].u = ((fix)temp_short) << 5;
 					temp_short = PHYSFSX_readShort(LoadFile);
@@ -1069,7 +1069,7 @@ int load_mine_data_compiled(PHYSFS_file *LoadFile)
 			} else {
 				Segments[segnum].sides[sidenum].tmap_num = 0;
 				Segments[segnum].sides[sidenum].tmap_num2 = 0;
-				for (i=0; i<4; i++ )	{
+				for (unsigned i=0; i<4; i++ )	{
 					Segments[segnum].sides[sidenum].uvls[i].u = 0;
 					Segments[segnum].sides[sidenum].uvls[i].v = 0;
 					Segments[segnum].sides[sidenum].uvls[i].l = 0;
@@ -1113,7 +1113,7 @@ int load_mine_data_compiled(PHYSFS_file *LoadFile)
 
 	validate_segment_all();			// Fill in side type and normals.
 
-	for (i=0; i<Num_segments; i++) {
+	for (unsigned i=0; i<Num_segments; i++) {
 		if (Gamesave_current_version > 5)
 			segment2_read(&Segment2s[i], LoadFile);
 		fuelcen_activate( &Segments[i], Segment2s[i].special );
