@@ -2013,7 +2013,8 @@ static int listbox_draw(window *wind, listbox *lb)
 
 			if (lb->marquee_maxchars && strlen(lb->item[i]) > lb->marquee_maxchars)
 			{
-				char *shrtstr = d_malloc(lb->marquee_maxchars+1);
+				char *shrtstr;
+				MALLOC(shrtstr, char, lb->marquee_maxchars+1);
 				static int prev_citem = -1;
 				
 				if (prev_citem != lb->citem)

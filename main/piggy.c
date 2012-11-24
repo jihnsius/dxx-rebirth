@@ -419,7 +419,7 @@ void piggy_init_pigfile(const char *filename)
 	if (GameArg.SysLowMem)
 		Piggy_bitmap_cache_size = PIGGY_SMALL_BUFFER_SIZE;
 #endif
-	BitmapBits = d_malloc( Piggy_bitmap_cache_size );
+	MALLOC(BitmapBits, ubyte, Piggy_bitmap_cache_size);
 	if ( BitmapBits == NULL )
 		Error( "Not enough memory to load bitmaps\n" );
 	Piggy_bitmap_cache_data = BitmapBits;
