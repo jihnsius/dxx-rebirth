@@ -770,7 +770,7 @@ static void escort_create_path_to_goal(dxxobject *objp)
 		Escort_goal_object = ESCORT_GOAL_UNSPECIFIED;
 		Escort_special_goal = -1;
 	} else {
-		if (goal_seg == -3) {
+		if (Escort_goal_object == ESCORT_GOAL_SCRAM) {
 			create_n_segment_path(objp, 16 + d_rand() * 16, -1);
 			aip->path_length = polish_path(objp, &Point_segs[aip->hide_index], aip->path_length);
 		} else {
