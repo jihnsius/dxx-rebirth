@@ -577,7 +577,9 @@ static segnum_t choose_drop_segment()
 			if (Segment2s[segnum].special == SEGMENT_IS_CONTROLCEN)
 				segnum = segment_none;
 		}
-		return ((segnum == segment_none)?((d_rand() * Highest_segment_index) >> 15):segnum); // basically it should be impossible segnum == -1 now... but oh well...
+		if (segnum == segment_none) // basically it should be impossible segnum == -1 now... but oh well...
+			segnum = ((d_rand() * Highest_segment_index) >> 15);
+		return segnum;
 	} else
 		return segnum;
 
