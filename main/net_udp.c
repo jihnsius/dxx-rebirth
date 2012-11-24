@@ -2881,12 +2881,7 @@ static void net_udp_set_power (void)
 
 	for (i = 0; i < MULTI_ALLOW_POWERUP_MAX; i++)
 	{
-		m[i].type = NM_TYPE_CHECK;
-		/*
-		 * Cast away const-ness because of a horrible menu design.
-		 */
-		m[i].text = (char *)multi_allow_powerup_text[i];
-		m[i].value = (Netgame.AllowedItems >> i) & 1;
+		nm_set_item_checkbox(&m[i], (char *)multi_allow_powerup_text[i], (Netgame.AllowedItems >> i) & 1);
 	}
 
 	newmenu_do1( NULL, "Objects to allow", MULTI_ALLOW_POWERUP_MAX, m, NULL, NULL, 0 );
@@ -2928,24 +2923,24 @@ static void net_udp_more_game_options ()
 	m[opt].type = NM_TYPE_SLIDER; m[opt].value=Netgame.KillGoal; m[opt].text= KillText; m[opt].min_value=0; m[opt].max_value=10; opt++;
 
 	opt_start_invul=opt;
-	m[opt].type = NM_TYPE_CHECK; m[opt].text = "Invulnerable when reappearing"; m[opt].value=Netgame.InvulAppear; opt++;
+	nm_set_item_checkbox(&m[opt], "Invulnerable when reappearing",Netgame.InvulAppear); opt++;
 
 	opt_marker_view = opt;
-	m[opt].type = NM_TYPE_CHECK; m[opt].text = "Allow Marker camera views"; m[opt].value=Netgame.Allow_marker_view; opt++;
+	nm_set_item_checkbox(&m[opt], "Allow Marker camera views",Netgame.Allow_marker_view); opt++;
 	opt_light = opt;
-	m[opt].type = NM_TYPE_CHECK; m[opt].text = "Indestructible lights"; m[opt].value=Netgame.AlwaysLighting; opt++;
+	nm_set_item_checkbox(&m[opt], "Indestructible lights",Netgame.AlwaysLighting); opt++;
 
 	opt_bright = opt;
-	m[opt].type = NM_TYPE_CHECK; m[opt].text = "Bright player ships"; m[opt].value=Netgame.BrightPlayers; opt++;
+	nm_set_item_checkbox(&m[opt], "Bright player ships",Netgame.BrightPlayers); opt++;
 
 	opt_show_names=opt;
-	m[opt].type = NM_TYPE_CHECK; m[opt].text = "Show enemy names on HUD"; m[opt].value=Netgame.ShowEnemyNames; opt++;
+	nm_set_item_checkbox(&m[opt], "Show enemy names on HUD",Netgame.ShowEnemyNames); opt++;
 
 	opt_show_on_map=opt;
-	m[opt].type = NM_TYPE_CHECK; m[opt].text = TXT_SHOW_ON_MAP; m[opt].value=(Netgame.game_flags & NETGAME_FLAG_SHOW_MAP); opt_show_on_map=opt; opt++;
+	nm_set_item_checkbox(&m[opt], TXT_SHOW_ON_MAP,(Netgame.game_flags & NETGAME_FLAG_SHOW_MAP)); opt_show_on_map=opt; opt++;
 
 	opt_ffire=opt;
-	m[opt].type = NM_TYPE_CHECK; m[opt].text = "No friendly fire (Team, Coop)"; m[opt].value=Netgame.NoFriendlyFire; opt++;
+	nm_set_item_checkbox(&m[opt], "No friendly fire (Team, Coop)",Netgame.NoFriendlyFire); opt++;
 
 	opt_setpower = opt;
 	nm_set_item_menu(&  m[opt], "Set Objects allowed..."); opt++;
@@ -2960,7 +2955,7 @@ static void net_udp_more_game_options ()
 
 #ifdef USE_TRACKER
 	opt_tracker = opt;
-	m[opt].type = NM_TYPE_CHECK; m[opt].text = "Track this game"; m[opt].value = Netgame.Tracker; opt++;
+	nm_set_item_checkbox(&m[opt], "Track this game", Netgame.Tracker); opt++;
 #endif
 
 menu:
@@ -3596,7 +3591,7 @@ static net_udp_select_players(void)
 
 	for (i=0; i< MAX_PLAYERS+4; i++ ) {
 		sprintf( text[i], "%d.  %-20s", i+1, "" );
-		m[i].type = NM_TYPE_CHECK; m[i].text = text[i]; m[i].value = 0;
+		nm_set_item_checkbox(&m[i], text[i], 0);
 	}
 
 	m[0].value = 1;                         // Assume server will play...

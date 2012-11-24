@@ -174,6 +174,13 @@ static inline void nm_set_item_input(newmenu_item *ni, unsigned len, char *text)
 	ni->text_len = len;
 }
 
+static inline void nm_set_item_checkbox(newmenu_item *ni, const char *text, unsigned checked)
+{
+	ni->type = NM_TYPE_CHECK;
+	ni->text = (char *)text;
+	ni->value = checked;
+}
+
 static inline void nm_set_item_text(newmenu_item *ni, const char *text)
 {
 	ni->type = NM_TYPE_TEXT;
