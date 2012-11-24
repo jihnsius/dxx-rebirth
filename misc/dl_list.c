@@ -8,7 +8,8 @@
 #include "dl_list.h"
 
 dl_list *dl_init() {
-	dl_list *list = d_malloc(sizeof(dl_list));
+	dl_list *list;
+	MALLOC(list, dl_list, 1);
 	list->first = NULL;
 	list->last = NULL;
 	list->current = NULL;
@@ -18,7 +19,7 @@ dl_list *dl_init() {
 
 void dl_add(dl_list *list, void *data) {
 	dl_item *item;
-	item = d_malloc(sizeof(dl_item));
+	MALLOC(item, dl_item, 1);
 	item->data = data;
 	item->prev = list->last;
 	item->next = NULL;
