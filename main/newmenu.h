@@ -167,6 +167,13 @@ static inline void nm_set_item_menu(newmenu_item *ni, const char *text)
 	ni->text = (char *)text;
 }
 
+static inline void nm_set_item_input(newmenu_item *ni, unsigned len, char *text)
+{
+	ni->type = NM_TYPE_INPUT;
+	ni->text = text;
+	ni->text_len = len;
+}
+
 static inline void nm_set_item_text(newmenu_item *ni, const char *text)
 {
 	ni->type = NM_TYPE_TEXT;

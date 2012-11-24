@@ -676,11 +676,11 @@ void net_udp_manual_join_game()
 	nitems = 0;
 
 	nm_set_item_text(&  m[nitems],"GAME ADDRESS OR HOSTNAME:");     	nitems++;
-	m[nitems].type = NM_TYPE_INPUT; m[nitems].text=dj->addrbuf; m[nitems].text_len=128; 	nitems++;
+	nm_set_item_input(&m[nitems],128,dj->addrbuf); 	nitems++;
 	nm_set_item_text(&  m[nitems],"GAME PORT:");                    	nitems++;
-	m[nitems].type = NM_TYPE_INPUT; m[nitems].text=dj->portbuf; m[nitems].text_len=5;   	nitems++;
+	nm_set_item_input(&m[nitems],5,dj->portbuf);   	nitems++;
 	nm_set_item_text(&  m[nitems],"MY PORT:");	                    	nitems++;
-	m[nitems].type = NM_TYPE_INPUT; m[nitems].text=UDP_MyPort; m[nitems].text_len=5;	nitems++;
+	nm_set_item_input(&m[nitems],5,UDP_MyPort);	nitems++;
 	nm_set_item_text(&  m[nitems],"");								nitems++;	// for connecting_txt
 
 	newmenu_do1( NULL, "ENTER GAME ADDRESS", nitems, m, (int (*)(newmenu *, d_event *, void *))manual_join_game_handler, dj, 0 );
@@ -2952,11 +2952,11 @@ static void net_udp_more_game_options ()
 
 	nm_set_item_text(& m[opt], "Packets per second (2 - 20)"); opt++;
 	opt_packets=opt;
-	m[opt].type = NM_TYPE_INPUT; m[opt].text=packstring; m[opt].text_len=2; opt++;
+	nm_set_item_input(&m[opt],2,packstring); opt++;
 
 	nm_set_item_text(& m[opt], "Network port"); opt++;
 	opt_port = opt;
-	m[opt].type = NM_TYPE_INPUT; m[opt].text = UDP_MyPort; m[opt].text_len=5; opt++;
+	nm_set_item_input(&m[opt],5, UDP_MyPort); opt++;
 
 #ifdef USE_TRACKER
 	opt_tracker = opt;
@@ -3252,7 +3252,7 @@ int net_udp_setup_game()
 	nm_set_item_text(& m[optnum], TXT_DESCRIPTION); optnum++;
 
 	opt.name = optnum;
-	m[optnum].type = NM_TYPE_INPUT; m[optnum].text = Netgame.game_name; m[optnum].text_len = NETGAME_NAME_LEN; optnum++;
+	nm_set_item_input(&m[optnum], NETGAME_NAME_LEN, Netgame.game_name); optnum++;
 
 	sprintf(level_text, "%s (1-%d)", TXT_LEVEL_, Last_level);
 
@@ -3261,7 +3261,7 @@ int net_udp_setup_game()
 	nm_set_item_text(& m[optnum], level_text); optnum++;
 
 	opt.level = optnum;
-	m[optnum].type = NM_TYPE_INPUT; m[optnum].text = slevel; m[optnum].text_len=4; optnum++;
+	nm_set_item_input(&m[optnum],4, slevel); optnum++;
 	nm_set_item_text(& m[optnum], TXT_OPTIONS); optnum++;
 
 	opt.mode = optnum;
@@ -3529,7 +3529,7 @@ static net_udp_select_teams(void)
 
 	// Here comes da menu
 menu:
-	m[0].type = NM_TYPE_INPUT; m[0].text = team_names[0]; m[0].text_len = CALLSIGN_LEN;
+	nm_set_item_input(&m[0], CALLSIGN_LEN, team_names[0]);
 
 	opt = 1;
 	for (i = 0; i < N_players; i++)
@@ -3540,7 +3540,7 @@ menu:
 		}
 	}
 	opt_team_b = opt;
-	m[opt].type = NM_TYPE_INPUT; m[opt].text = team_names[1]; m[opt].text_len = CALLSIGN_LEN; opt++;
+	nm_set_item_input(&m[opt], CALLSIGN_LEN, team_names[1]); opt++;
 	for (i = 0; i < N_players; i++)
 	{
 		if (team_vector & (1 << i))
