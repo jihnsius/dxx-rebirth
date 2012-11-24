@@ -1576,7 +1576,7 @@ static int select_file_recursive(const char *title, const char *orig_path, const
 		return 0;
 	}
 	
-	return newmenu_listbox1(title, b->num_files, (const char **) b->list, 1, 0, (int (*)(listbox *, d_event *, void *))select_file_handler, b) >= 0;
+	return newmenu_listbox1(title, b->num_files, (const char **) b->list, 1, 0, (int (*)(listbox *, d_event *, void *))select_file_handler, b) != 0;
 }
 
 #define PATH_HEADER_TYPE NM_TYPE_MENU
