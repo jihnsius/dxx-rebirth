@@ -774,7 +774,7 @@ static int trace_segs(const vms_vector *p0, int oldsegnum, int recursion_count)
 		biggest_side = -1;
 		biggest_val = 0;
 		for (sidenum = 0, bit = 1; sidenum < 6; sidenum++, bit <<= 1)
-			if ((centermask & bit) && (seg->children[sidenum] > -1)
+			if ((centermask & bit) && IS_CHILD(seg->children[sidenum])
 			    && side_dists[sidenum] < biggest_val) {
 				biggest_val = side_dists[sidenum];
 				biggest_side = sidenum;

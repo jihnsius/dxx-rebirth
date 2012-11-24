@@ -910,7 +910,7 @@ static int fvi_sub(vms_vector *intp,int *ints,const vms_vector *p0,int startseg,
 
 						if ( (thisobjnum == Players[Player_num].objnum) && (cheats.ghostphysics) )	{
 							wid_flag = WALL_IS_DOORWAY(seg, side);
-							if (seg->children[side] >= 0 )
+							if (IS_CHILD(seg->children[side]))
  								wid_flag |= WID_FLY_FLAG;
 						} else {
 							wid_flag = WALL_IS_DOORWAY(seg, side);
