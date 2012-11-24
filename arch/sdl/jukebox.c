@@ -124,7 +124,7 @@ static int read_m3u(void)
 		{
 			if (JukeboxSongs.num_songs >= JukeboxSongs.max_songs)
 			{
-				char **new_list = d_realloc(JukeboxSongs.list, JukeboxSongs.max_buf*sizeof(char *)*MEM_K);
+				char **new_list = (char **) d_realloc(JukeboxSongs.list, JukeboxSongs.max_buf*sizeof(char *)*MEM_K);
 				if (new_list == NULL)
 					break;
 				JukeboxSongs.max_buf *= MEM_K;
