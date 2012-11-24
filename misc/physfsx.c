@@ -357,7 +357,7 @@ char **PHYSFSX_findFiles(const char *path, const char *const *exts)
 	}
 	
 	*j = NULL;
-	list = realloc(list, (j - list + 1)*sizeof(char *));	// save a bit of memory (or a lot?)
+	list = (char **) realloc(list, (j - list + 1)*sizeof(char *));	// save a bit of memory (or a lot?)
 	return list;
 }
 
@@ -386,7 +386,7 @@ char **PHYSFSX_findabsoluteFiles(const char *path, const char *realpath, const c
 	}
 	
 	*j = NULL;
-	list = realloc(list, (j - list + 1)*sizeof(char *));	// save a bit of memory (or a lot?)
+	list = (char **) realloc(list, (j - list + 1)*sizeof(char *));	// save a bit of memory (or a lot?)
 	return list;
 }
 
