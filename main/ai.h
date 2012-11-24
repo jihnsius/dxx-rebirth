@@ -217,9 +217,9 @@ void do_boss_dying_frame(dxxobject *objp);
 // It is not valid to use FrameTime because robots do not get moved every frame.
 
 extern int   Num_boss_teleport_segs;
-extern short Boss_teleport_segs[MAX_BOSS_TELEPORT_SEGS];
+extern segnum_t Boss_teleport_segs[MAX_BOSS_TELEPORT_SEGS];
 extern int   Num_boss_gate_segs;
-extern short Boss_gate_segs[MAX_BOSS_TELEPORT_SEGS];
+extern segnum_t Boss_gate_segs[MAX_BOSS_TELEPORT_SEGS];
 
 
 // --------- John: These variables must be saved as part of gamesave. ---------

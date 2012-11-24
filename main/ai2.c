@@ -83,9 +83,9 @@ static const sbyte Mike_to_matt_xlate[] = {AS_REST, AS_REST, AS_ALERT, AS_ALERT,
 //	It is not valid to use FrameTime because robots do not get moved every frame.
 
 int	Num_boss_teleport_segs;
-short	Boss_teleport_segs[MAX_BOSS_TELEPORT_SEGS];
+segnum_t	Boss_teleport_segs[MAX_BOSS_TELEPORT_SEGS];
 int	Num_boss_gate_segs;
-short	Boss_gate_segs[MAX_BOSS_TELEPORT_SEGS];
+segnum_t	Boss_gate_segs[MAX_BOSS_TELEPORT_SEGS];
 
 // ---------------------------------------------------------------------------------------------------------------------
 //	Given a behavior, set initial mode.
@@ -222,7 +222,7 @@ void create_buddy_bot(void)
 //	he can reach from his initial position (calls find_connected_distance).
 //	If size_check is set, then only add segment if boss can fit in it, else any segment is legal.
 //	one_wall_hack added by MK, 10/13/95: A mega-hack!  Set to !0 to ignore the
-static void init_boss_segments(short segptr[], int *num_segs, int size_check, int one_wall_hack)
+static void init_boss_segments(segnum_t segptr[], int *num_segs, int size_check, int one_wall_hack)
 {
 	objnum_t			boss_objnum=object_none;
 	objnum_t			i;
@@ -1871,14 +1871,15 @@ int boss_fits_in_seg(dxxobject *boss_objp, segnum_t segnum)
 // --------------------------------------------------------------------------------------------------------------------
 void teleport_boss(dxxobject *objp)
 {
-	int			rand_segnum, rand_index;
+	segnum_t			rand_segnum;
+	unsigned rand_index;
 	vms_vector	boss_dir;
 	Assert(Num_boss_teleport_segs > 0);
 
 	//	Pick a random segment from the list of boss-teleportable-to segments.
 	rand_index = (d_rand() * Num_boss_teleport_segs) >> 15;
 	rand_segnum = Boss_teleport_segs[rand_index];
-	Assert((rand_segnum >= 0) && (rand_segnum <= Highest_segment_index));
+	Assert(rand_segnum <= Highest_segment_index);
 
 #ifdef NETWORK
 	if (Game_mode & GM_MULTI)
