@@ -560,7 +560,7 @@ _exit_cheat:
 				if (!((ailp->mode == AIM_FOLLOW_PATH) && (aip->cur_path_index < aip->path_length-1)))
 					if ((aip->behavior != AIB_SNIPE) && (aip->behavior != AIB_RUN_FROM)) {
 						if (dist_to_player < F1_0*30)
-							create_n_segment_path(obj, 5, 1);
+							create_n_segment_path(obj, 5, segment_none);
 						else
 							create_path_to_player(obj, 20, 1);
 					}
