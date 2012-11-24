@@ -171,15 +171,15 @@ void change_filename_extension( char *dest, const char *src, char *ext )
 #if !(defined(_WIN32))
 void _splitpath(char *name, char *drive, char *path, char *base, char *ext)
 {
-	char *s, *p;
+	const char *s, *p;
 
 	p = name;
 	s = strchr(p, ':');
 	if ( s != NULL ) {
 		if (drive) {
-			*s = '\0';
-			strcpy(drive, p);
-			*s = ':';
+			size_t l = s - p;
+			memcpy(drive, p, l);
+			drive[l] = 0;
 		}
 		p = s+1;
 		if (!p)
@@ -190,12 +190,9 @@ void _splitpath(char *name, char *drive, char *path, char *base, char *ext)
 	s = strrchr(p, '\\');
 	if ( s != NULL) {
 		if (path) {
-			char c;
-			
-			c = *(s+1);
-			*(s+1) = '\0';
-			strcpy(path, p);
-			*(s+1) = c;
+			size_t l = (s+1) - p;
+			memcpy(path, p, l);
+			path[l] = 0;
 		}
 		p = s+1;
 		if (!p)
@@ -206,9 +203,9 @@ void _splitpath(char *name, char *drive, char *path, char *base, char *ext)
 	s = strchr(p, '.');
 	if ( s != NULL) {
 		if (base) {
-			*s = '\0';
-			strcpy(base, p);
-			*s = '.';
+			size_t l = s - p;
+			memcpy(base, p, l);
+			base[l] = 0;
 		}
 		p = s+1;
 		if (!p)
