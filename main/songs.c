@@ -120,7 +120,10 @@ static void songs_init()
 			PHYSFSX_fgets(inputline, sizeof(inputline), fp );
 			if ( strlen( inputline ) )
 			{
-				BIMSongs = d_realloc(BIMSongs, sizeof(bim_song_info)*(i+1));
+				bim_song_info *p = (bim_song_info *)d_realloc(BIMSongs, sizeof(bim_song_info)*(i+1));
+				if (!p)
+					break;
+				BIMSongs = p;
 				memset(BIMSongs[i].filename, '\0', sizeof(BIMSongs[i].filename));
 				sscanf( inputline, "%15s", BIMSongs[i].filename );
 
