@@ -55,7 +55,7 @@ typedef struct eclip {
 	int     sound_num;      //what sound this makes
 	segnum_t     segnum;
 	int     sidenum; //what seg & side, for one-shot clips
-} __pack__ eclip;
+} eclip;
 
 extern int Num_effects;
 extern eclip Effects[MAX_EFFECTS];

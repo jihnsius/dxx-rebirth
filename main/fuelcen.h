@@ -112,7 +112,7 @@ typedef struct FuelCenter {
 	//object  *last_created_obj;
 	//int     last_created_sig;
 	vms_vector Center;
-} __pack__ FuelCenter;
+} FuelCenter;
 
 // The max number of robot centers per mine.
 #define MAX_ROBOT_CENTERS  20
@@ -125,7 +125,7 @@ typedef struct  {
 	fix     interval;       // Interval between materialogrifizations
 	segnum_t   segnum;         // Segment this is attached to.
 	short   fuelcen_num;    // Index in fuelcen array.
-} __pack__ old_matcen_info;
+} old_matcen_info;
 
 typedef struct matcen_info {
 	int     robot_flags[2]; // Up to 64 different robots
@@ -133,7 +133,7 @@ typedef struct matcen_info {
 	fix     interval;       // Interval between materialogrifizations
 	segnum_t   segnum;         // Segment this is attached to.
 	short   fuelcen_num;    // Index in fuelcen array.
-} __pack__ matcen_info;
+} matcen_info;
 
 extern matcen_info RobotCenters[MAX_ROBOT_CENTERS];
 

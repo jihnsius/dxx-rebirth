@@ -121,7 +121,7 @@ typedef struct v19_wall {
 	sbyte   clip_num;           // Which animation associated with the wall.
 	sbyte   keys;
 	int linked_wall;            // number of linked wall
-} __pack__ v19_wall;
+} v19_wall;
 
 typedef struct v19_door {
 	int     n_parts;            // for linked walls
@@ -147,7 +147,7 @@ typedef struct wall {
 	sbyte   controlling_trigger;// which trigger causes something to happen here.  Not like "trigger" above, which is the trigger on this wall.
                                 //  Note: This gets stuffed at load time in gamemine.c.  Don't try to use it in the editor.  You will be sorry!
 	sbyte   cloak_value;        // if this wall is cloaked, the fade value
-} __pack__ wall;
+} wall;
 
 typedef struct active_door {
 	int     n_parts;            // for linked walls

@@ -107,7 +107,7 @@ typedef struct trigger {
 	fix     time;
 	segnum_t   seg[MAX_WALLS_PER_LINK];
 	short   side[MAX_WALLS_PER_LINK];
-} __pack__ trigger;
+} trigger;
 
 extern trigger Triggers[MAX_TRIGGERS];
 

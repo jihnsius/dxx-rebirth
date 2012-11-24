@@ -123,7 +123,7 @@ typedef struct player {
 	fix     homing_object_dist;     // Distance of nearest homing object.
 	sbyte   hours_level;            // Hours played (since time_total can only go up to 9 hours)
 	sbyte   hours_total;            // Hours played (since time_total can only go up to 9 hours)
-} __pack__ player;
+} player;
 
 // Same as above but structure how Savegames expect
 typedef struct player_rw {

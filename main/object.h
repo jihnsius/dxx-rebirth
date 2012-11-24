@@ -120,7 +120,7 @@ typedef struct laser_info {
 	ubyte   hitobj_list[MAX_OBJECTS]; // list of all objects persistent weapon has already damaged (useful in case it's in contact with two objects at the same time)
 	objnum_t   track_goal;         // Object this object is tracking.
 	fix     multiplier;         // Power if this is a fusion bolt (or other super weapon to be added).
-} __pack__ laser_info;
+} laser_info;
 
 // Same as above but structure Savegames/Multiplayer objects expect
 typedef struct laser_info_rw {
@@ -142,7 +142,7 @@ typedef struct explosion_info {
     objnum_t   attach_parent;      // explosion is attached to this object
     objnum_t   prev_attach;        // previous explosion in attach list
     objnum_t   next_attach;        // next explosion in attach list
-} __pack__ explosion_info;
+} explosion_info;
 
 typedef struct light_info {
     fix     intensity;          // how bright the light is
@@ -209,7 +209,7 @@ typedef struct dxxobject {
 	union {
 		physics_info phys_info; // a physics object
 		vms_vector   spin_rate; // for spinning objects
-	} __pack__ mtype;
+	} mtype;
 
 	// control info, determined by CONTROL_TYPE
 	union {
@@ -218,18 +218,18 @@ typedef struct dxxobject {
 		struct ai_static       ai_info;
 		struct light_info      light_info;     // why put this here?  Didn't know what else to do with it.
 		struct powerup_info    powerup_info;
-	} __pack__ ctype ;
+	} ctype ;
 
 	// render info, determined by RENDER_TYPE
 	union {
 		struct polyobj_info    pobj_info;      // polygon model
 		struct vclip_info      vclip_info;     // vclip
-	} __pack__ rtype ;
+	} rtype ;
 
 #ifdef WORDS_NEED_ALIGNMENT
 	short   pad2;
 #endif
-} __pack__ dxxobject;
+} dxxobject;
 
 // Same as above but structure Savegames/Multiplayer objects expect
 typedef struct object_rw {
