@@ -2573,7 +2573,7 @@ static unsigned show_player_score_with_position(const unsigned player_num, const
 		return 0;
 	if (Newdemo_state == ND_STATE_PLAYBACK)
 		return 0;
-	const unsigned objnum_of_player_num = Players[player_num].objnum;
+	const objnum_t objnum_of_player_num = Players[player_num].objnum;
 	if (objnum_of_player_num > Highest_object_index)
 		return 0;
 	const vms_vector *vvop = &Objects[objnum_of_player_num].pos;
@@ -2737,7 +2737,7 @@ static void hud_show_kill_list()
 #endif
 
 //returns true if viewer can see object
-static int see_object(int objnum)
+static int see_object(objnum_t objnum)
 {
 	fvi_query fq;
 	int hit_type;
@@ -2762,7 +2762,7 @@ static int see_object(int objnum)
 //show names of teammates & players carrying flags
 void show_HUD_names()
 {
-	int is_friend = 0, show_friend_name = 0, show_enemy_name = 0, show_name = 0, show_typing = 0, show_indi = 0, pnum = 0, objnum = 0;
+	int is_friend = 0, show_friend_name = 0, show_enemy_name = 0, show_name = 0, show_typing = 0, show_indi = 0, pnum = 0;
 
 	for (pnum=0;pnum<N_players;pnum++)
 	{
@@ -2776,6 +2776,7 @@ void show_HUD_names()
 		show_typing = is_friend || !(Players[pnum].flags & PLAYER_FLAGS_CLOAKED);
 		show_indi = (((Game_mode & ( GM_CAPTURE | GM_HOARD ) && Players[pnum].flags & PLAYER_FLAGS_FLAG) || (Game_mode & GM_BOUNTY &&  pnum == Bounty_target)) && (is_friend || !(Players[pnum].flags & PLAYER_FLAGS_CLOAKED)));
 
+		objnum_t objnum;
 		if (Newdemo_state == ND_STATE_PLAYBACK) {
 			//if this is a demo, the objnum in the player struct is wrong, so we search the object list for the objnum
 			for (objnum=0;objnum<=Highest_object_index;objnum++)

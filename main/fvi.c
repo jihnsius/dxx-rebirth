@@ -603,14 +603,14 @@ segnum_t segs_visited[MAX_SEGS_VISITED];
 int fvi_nest_count;
 
 //these vars are used to pass vars from fvi_sub() to find_vector_intersection()
-int fvi_hit_object;	// object number of object hit in last find_vector_intersection call.
+objnum_t fvi_hit_object;	// object number of object hit in last find_vector_intersection call.
 segnum_t fvi_hit_seg;		// what segment the hit point is in
 int fvi_hit_side;		// what side was hit
 segnum_t fvi_hit_side_seg;// what seg the hitside is in
 vms_vector wall_norm;	//ptr to surface normal of hit wall
 segnum_t fvi_hit_seg2;		// what segment the hit point is in
 
-static int fvi_sub(vms_vector *intp,segnum_t *ints,const vms_vector *p0,segnum_t startseg,const vms_vector *p1,fix rad,short thisobjnum,const int *ignore_obj_list,int flags,segnum_t *seglist,int *n_segs,segnum_t entry_seg);
+static int fvi_sub(vms_vector *intp,segnum_t *ints,const vms_vector *p0,segnum_t startseg,const vms_vector *p1,fix rad,objnum_t thisobjnum,const objnum_t *ignore_obj_list,int flags,segnum_t *seglist,int *n_segs,segnum_t entry_seg);
 
 //What the hell is fvi_hit_seg for???
 
@@ -631,7 +631,6 @@ int find_vector_intersection(const fvi_query *fq,fvi_info *hit_data)
 	vms_vector hit_pnt;
 	int i;
 
-	Assert(fq->ignore_obj_list != (int *)(-1));
 	Assert(fq->startseg <= Highest_segment_index);
 
 	fvi_hit_seg = segment_none;
@@ -769,9 +768,9 @@ if (hit_seg!=segment_none && fq->flags&FQ_GET_SEGLIST)
 //--unused-- 	return vm_vec_dist(v0,v1);
 //--unused-- }
 
-static int obj_in_list(int objnum,const int *obj_list)
+static int obj_in_list(objnum_t objnum,const objnum_t *obj_list)
 {
-	int t;
+	objnum_t t;
 
 	while ((t=*obj_list)!=-1 && t!=objnum) obj_list++;
 
@@ -781,13 +780,12 @@ static int obj_in_list(int objnum,const int *obj_list)
 
 int check_trans_wall(vms_vector *pnt,segment *seg,int sidenum,int facenum);
 
-static int fvi_sub(vms_vector *intp,segnum_t *ints,const vms_vector *p0,segnum_t startseg,const vms_vector *p1,fix rad,short thisobjnum,const int *ignore_obj_list,int flags,segnum_t *seglist,int *n_segs,segnum_t entry_seg)
+static int fvi_sub(vms_vector *intp,segnum_t *ints,const vms_vector *p0,segnum_t startseg,const vms_vector *p1,fix rad,objnum_t thisobjnum,const objnum_t *ignore_obj_list,int flags,segnum_t *seglist,int *n_segs,segnum_t entry_seg)
 {
 	segment *seg;				//the segment we're looking at
 	int startmask,endmask;	//mask of faces
 	//@@int sidemask;				//mask of sides - can be on back of face but not side
 	int centermask;			//where the center point is
-	int objnum;
 	segmasks masks;
 	vms_vector hit_point,closest_hit_point = { 0, 0, 0 }; 	//where we hit
 	fix d,closest_d=0x7fffffff;					//distance to hit point
@@ -810,7 +808,7 @@ static int fvi_sub(vms_vector *intp,segnum_t *ints,const vms_vector *p0,segnum_t
 
 	//first, see if vector hit any objects in this segment
 	if (flags & FQ_CHECK_OBJS)
-		for (objnum=seg->objects;objnum!=-1;objnum=Objects[objnum].next)
+		for (objnum_t objnum=seg->objects;objnum!=-1;objnum=Objects[objnum].next)
 			if (	!(Objects[objnum].flags & OF_SHOULD_BE_DEAD) &&
 				 	!(thisobjnum == objnum ) &&
 				 	(ignore_obj_list==NULL || !obj_in_list(objnum,ignore_obj_list)) &&
@@ -927,7 +925,7 @@ static int fvi_sub(vms_vector *intp,segnum_t *ints,const vms_vector *p0,segnum_t
 							int sub_hit_type;
 							segnum_t sub_hit_seg;
 							vms_vector save_wall_norm = wall_norm;
-							int save_hit_objnum=fvi_hit_object;
+							objnum_t save_hit_objnum=fvi_hit_object;
 							int i;
 
 							//do the check recursively on the next seg.

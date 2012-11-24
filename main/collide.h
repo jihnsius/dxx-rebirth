@@ -34,7 +34,7 @@ void collide_object_with_wall(dxxobject * A, fix hitspeed, segnum_t hitseg, shor
 extern void apply_damage_to_player(dxxobject *player, dxxobject *killer, fix damage, ubyte possibly_friendly);
 
 // Returns 1 if robot died, else 0.
-extern int apply_damage_to_robot(dxxobject *robot, fix damage, int killer_objnum);
+extern int apply_damage_to_robot(dxxobject *robot, fix damage, objnum_t killer_objnum);
 
 extern fix Boss_invulnerable_dot;
 
@@ -50,7 +50,7 @@ extern void collide_player_and_nasty_robot(dxxobject * player, dxxobject * robot
 extern void net_destroy_controlcen(dxxobject *controlcen);
 extern void collide_player_and_powerup(dxxobject * player, dxxobject * powerup, vms_vector *collision_point);
 extern int check_effect_blowup(segment *seg,int side,vms_vector *pnt, dxxobject *blower, int force_blowup_flag);
-extern void apply_damage_to_controlcen(dxxobject *controlcen, fix damage, short who);
+extern void apply_damage_to_controlcen(dxxobject *controlcen, fix damage, objnum_t who);
 extern void bump_one_object(dxxobject *obj0, vms_vector *hit_dir, fix damage);
 void do_final_boss_hacks();
 void do_final_boss_frame(void);

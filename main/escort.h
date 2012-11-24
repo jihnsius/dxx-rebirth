@@ -14,7 +14,7 @@ extern "C" {
 
 extern void change_guidebot_name(void);
 extern void do_escort_menu(void);
-extern void detect_escort_goal_accomplished(int index);
+extern void detect_escort_goal_accomplished(objnum_t index);
 void detect_escort_goal_fuelcen_accomplished();
 extern void set_escort_special_goal(int key);
 void init_buddy_for_level(void);

@@ -298,7 +298,7 @@ static void paging_touch_robot_maker( segment * segp )
 static void paging_touch_segment(segment * segp)
 {
 	int sn;
-	int objnum;
+	objnum_t objnum;
 	segment2	*seg2p = &Segment2s[segp-Segments];
 
 	if ( seg2p->special == SEGMENT_IS_ROBOTMAKER )	

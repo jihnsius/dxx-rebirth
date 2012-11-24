@@ -817,7 +817,7 @@ static int load_game_data(PHYSFS_file *LoadFile)
 		if (PHYSFSX_fseek( LoadFile, object_offset, SEEK_SET ))
 			Error( "Error seeking to object_offset in gamesave.c" );
 
-		for (unsigned i = 0; i < gs_num_objects; i++) {
+		for (objnum_t i = 0; i < gs_num_objects; i++) {
 
 			read_object(&Objects[i], LoadFile, game_top_fileinfo_version);
 
@@ -1022,7 +1022,7 @@ static int load_game_data(PHYSFS_file *LoadFile)
 
 	reset_objects(gs_num_objects);
 
-	for (unsigned i=0; i<MAX_OBJECTS; i++) {
+	for (objnum_t i=0; i<MAX_OBJECTS; i++) {
 		Objects[i].next = Objects[i].prev = -1;
 		if (Objects[i].type != OBJ_NONE) {
 			segnum_t objsegnum = Objects[i].segnum;
@@ -1588,7 +1588,7 @@ static int save_game_data(PHYSFS_file *SaveFile)
 	object_offset = PHYSFS_tell(SaveFile);
 	//fwrite( &Objects, sizeof(object), game_fileinfo.object_howmany, SaveFile );
 	{
-		for (i = 0; i <= Highest_object_index; i++)
+		for (objnum_t i = 0; i <= Highest_object_index; i++)
 			write_object(&Objects[i], game_top_fileinfo_version, SaveFile);
 	}
 

@@ -625,14 +625,13 @@ static void render_object_search(dxxobject *obj)
 #endif
 
 
-static void do_render_object(int objnum, int window_num)
+static void do_render_object(objnum_t objnum, int window_num)
 {
 	#ifdef EDITOR
 	int save_3d_outline=0;
 	#endif
 	dxxobject *obj = &Objects[objnum];
 	int count = 0;
-	int n;
 
 	Assert(objnum < MAX_OBJECTS);
 
@@ -695,7 +694,7 @@ static void do_render_object(int objnum, int window_num)
 		//NOTE LINK TO ABOVE
 		render_object(obj);
 
-	for (n=obj->attached_obj;n!=-1;n=Objects[n].ctype.expl_info.next_attach) {
+	for (objnum_t n=obj->attached_obj;n!=-1;n=Objects[n].ctype.expl_info.next_attach) {
 
 		Assert(Objects[n].type == OBJ_FIREBALL);
 		Assert(Objects[n].control_type == CT_EXPLOSION);
@@ -827,8 +826,7 @@ static void render_segment(segnum_t segnum, int window_num)
 
 	#ifndef NDEBUG
 	if (!migrate_objects) {
-		int objnum;
-		for (objnum=seg->objects;objnum!=-1;objnum=Objects[objnum].next)
+		for (objnum_t objnum=seg->objects;objnum!=-1;objnum=Objects[objnum].next)
 			do_render_object(objnum, window_num);
 	}
 	#endif
@@ -994,7 +992,7 @@ short render_pos[MAX_SEGMENTS];	//where in render_list does this segment appear?
 //ubyte no_render_flag[MAX_RENDER_SEGS];
 rect render_windows[MAX_RENDER_SEGS];
 
-short render_obj_list[MAX_RENDER_SEGS+N_EXTRA_OBJ_LISTS][OBJS_PER_SEG];
+static objnum_t render_obj_list[MAX_RENDER_SEGS+N_EXTRA_OBJ_LISTS][OBJS_PER_SEG];
 
 //for objects
 
@@ -1267,9 +1265,10 @@ static int sort_seg_children(segment *seg,int n_children,short *child_list)
 	return count;
 }
 
-static void add_obj_to_seglist(int objnum,int listnum)
+static void add_obj_to_seglist(objnum_t objnum,int listnum)
 {
-	int i,checkn,marker;
+	int i,checkn;
+	objnum_t marker;
 
 	checkn = listnum;
 
@@ -1409,7 +1408,7 @@ void qsort(void *basep, size_t nelems, size_t size,
 #define SORT_LIST_SIZE 100
 
 typedef struct sort_item {
-	int objnum;
+	objnum_t objnum;
 	fix dist;
 } sort_item;
 
@@ -1460,10 +1459,9 @@ static void build_object_lists(int n_segs)
 		segnum = Render_list[nn];
 
 		if (segnum != segment_none) {
-			int objnum;
 			dxxobject *obj;
 
-			for (objnum=Segments[segnum].objects;objnum!=-1;objnum = obj->next) {
+			for (objnum_t objnum=Segments[segnum].objects;objnum!=-1;objnum = obj->next) {
 				segnum_t new_segnum;
 				int list_pos;
 
@@ -1522,7 +1520,8 @@ static void build_object_lists(int n_segs)
 		segnum = Render_list[nn];
 
 		if (segnum != segment_none) {
-			int t,lookn,i,n;
+			int lookn,i,n;
+			objnum_t t;
 
 			//first count the number of objects & copy into sort list
 
@@ -1548,7 +1547,7 @@ static void build_object_lists(int n_segs)
 						//some information to look at later
 						if (tfile) {
 							for (ii=0;ii<SORT_LIST_SIZE;ii++) {
-								int objnum = sort_list[ii].objnum;
+								objnum_t objnum = sort_list[ii].objnum;
 
 								PHYSFSX_printf(tfile,"Obj %3d  Type = %2d  Id = %2d  Dist = %08x  Segnum = %3d\n",
 									objnum,Objects[objnum].type,Objects[objnum].id,sort_list[ii].dist,Objects[objnum].segnum);
@@ -1563,7 +1562,7 @@ static void build_object_lists(int n_segs)
 						//of an object we don't care about
 
 						for (ii=0;ii<SORT_LIST_SIZE;ii++) {
-							int objnum = sort_list[ii].objnum;
+							objnum_t objnum = sort_list[ii].objnum;
 							dxxobject *obj = &Objects[objnum];
 							int type = obj->type;
 
@@ -2270,7 +2269,7 @@ void render_mine(segnum_t start_seg_num,fix eye_offset, int window_num)
 				listnum = nn;
 
 				for (objnp=0;render_obj_list[listnum][objnp]!=-1;)	{
-					int ObjNumber = render_obj_list[listnum][objnp];
+					objnum_t ObjNumber = render_obj_list[listnum][objnp];
 
 					if (ObjNumber >= 0) {
 						do_render_object(ObjNumber, window_num);	// note link to above else
@@ -2384,7 +2383,7 @@ void render_mine(segnum_t start_seg_num,fix eye_offset, int window_num)
 
 				for (objnp=0;render_obj_list[listnum][objnp]!=-1;)
 				{
-					int ObjNumber = render_obj_list[listnum][objnp];
+					objnum_t ObjNumber = render_obj_list[listnum][objnp];
 
 					if (ObjNumber >= 0)
 					{

@@ -521,7 +521,7 @@ int check_trigger_sub(int trigger_num, int pnum,int shot)
 
 //-----------------------------------------------------------------
 // Checks for a trigger whenever an object hits a trigger side.
-void check_trigger(segment *seg, short side, short objnum,int shot)
+void check_trigger(segment *seg, short side, objnum_t objnum,int shot)
 {
 	int wall_num, trigger_num;	//, ctrigger_num;
 	//segment *csegp;

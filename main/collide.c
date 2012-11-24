@@ -1001,7 +1001,7 @@ void net_destroy_controlcen(dxxobject *controlcen)
 }
 
 //	-----------------------------------------------------------------------------
-void apply_damage_to_controlcen(dxxobject *controlcen, fix damage, short who)
+void apply_damage_to_controlcen(dxxobject *controlcen, fix damage, objnum_t who)
 {
 	int	whotype;
 
@@ -1043,7 +1043,7 @@ void apply_damage_to_controlcen(dxxobject *controlcen, fix damage, short who)
 		if (Game_mode & GM_MULTI) {
 			if (who == Players[Player_num].objnum)
 				add_points_to_score(CONTROL_CEN_SCORE);
-			multi_send_destroy_controlcen((ushort)(controlcen-Objects), Objects[who].id );
+			multi_send_destroy_controlcen((controlcen-Objects), Objects[who].id );
 		}
 		#endif
 
@@ -1257,7 +1257,7 @@ void do_final_boss_hacks(void)
 
 //	------------------------------------------------------------------------------------------------------
 //	Return 1 if robot died, else return 0
-int apply_damage_to_robot(dxxobject *robot, fix damage, int killer_objnum)
+int apply_damage_to_robot(dxxobject *robot, fix damage, objnum_t killer_objnum)
 {
 #ifdef NETWORK
    char isthief;
@@ -1417,7 +1417,7 @@ static int do_boss_weapon_collision(dxxobject *robot, dxxobject *weapon, vms_vec
 		vm_vec_normalize_quick(&tvec1);	//	Note, if BOSS_INVULNERABLE_DOT is close to F1_0 (in magnitude), then should probably use non-quick version.
 		dot = vm_vec_dot(&tvec1, &robot->orient.fvec);
 		if (dot > Boss_invulnerable_dot) {
-			int	new_obj;
+			objnum_t	new_obj;
 			segnum_t	segnum;
 
 			segnum = find_point_seg(collision_point, robot->segnum);
@@ -1732,7 +1732,7 @@ static void collide_player_and_player( dxxobject * player1, dxxobject * player2,
 	return;
 }
 
-static int maybe_drop_primary_weapon_egg(dxxobject *playerobj, int weapon_index)
+static objnum_t maybe_drop_primary_weapon_egg(dxxobject *playerobj, int weapon_index)
 {
 	int weapon_flag = HAS_FLAG(weapon_index);
 	int powerup_num;
@@ -1782,7 +1782,7 @@ void drop_player_eggs(dxxobject *playerobj)
 	if ((playerobj->type == OBJ_PLAYER) || (playerobj->type == OBJ_GHOST)) {
 		int	rthresh;
 		int	pnum = playerobj->id;
-		int	objnum;
+		objnum_t	objnum;
 		int	vulcan_ammo=0;
 		vms_vector	randvec;
 

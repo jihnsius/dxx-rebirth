@@ -941,8 +941,8 @@ int	Super_mines_yes = 1;
 //	Call this once/frame to process all super mines in the level.
 void process_super_mines_frame(void)
 {
-	int	i, j;
-	int	start, add;
+	objnum_t	start;
+	int add;
 
 	//	If we don't know of there being any super mines in the level, just
 	//	check every 8th object each frame.
@@ -956,9 +956,9 @@ void process_super_mines_frame(void)
 
 	Super_mines_yes = 0;
 
-	for (i=start; i<=Highest_object_index; i+=add) {
+	for (objnum_t i=start; i<=Highest_object_index; i+=add) {
 		if ((Objects[i].type == OBJ_WEAPON) && (Objects[i].id == SUPERPROX_ID)) {
-			int	parent_num;
+			objnum_t	parent_num;
 
 			parent_num = Objects[i].ctype.laser_info.parent_num;
 
@@ -968,7 +968,7 @@ void process_super_mines_frame(void)
 
 				bombpos = &Objects[i].pos;
 
-				for (j=0; j<=Highest_object_index; j++) {
+				for (objnum_t j=0; j<=Highest_object_index; j++) {
 					if ((Objects[j].type == OBJ_PLAYER) || (Objects[j].type == OBJ_ROBOT)) {
 						fix	dist;
 
@@ -1013,9 +1013,9 @@ void process_super_mines_frame(void)
 
 //this function is for when the player intentionally drops a powerup
 //this function is based on drop_powerup()
-int spit_powerup(dxxobject *spitter, int id,int seed)
+objnum_t spit_powerup(dxxobject *spitter, int id,int seed)
 {
-	int		objnum;
+	objnum_t		objnum;
 	dxxobject	*obj;
 	vms_vector	new_velocity, new_pos;
 
@@ -1091,7 +1091,8 @@ int spit_powerup(dxxobject *spitter, int id,int seed)
 
 void DropCurrentWeapon ()
 {
-	int objnum,ammo=0,seed;
+	int ammo=0,seed;
+	objnum_t objnum;
 
 	if (num_objects >= MAX_USED_OBJECTS)
 		return;
@@ -1146,7 +1147,8 @@ void DropCurrentWeapon ()
 
 void DropSecondaryWeapon ()
 {
-	int objnum,seed;
+	objnum_t objnum;
+	int seed;
 	ubyte weapon_drop_id=-1;
 	ushort sub_ammo=0;
 

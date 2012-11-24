@@ -256,12 +256,10 @@ static int newdemo_read( void *buffer, int elsize, int nelem )
 	return num_read;
 }
 
-int newdemo_find_object( int signature )
+objnum_t newdemo_find_object( int signature )
 {
-	int i;
-	dxxobject * objp;
-	objp = &Objects[0];
-	for (i=0; i<=Highest_object_index; i++, objp++ ) {
+	for (objnum_t i=0; i<=Highest_object_index; i++) {
+		dxxobject *objp = &Objects[i];
 		if ( (objp->type != OBJ_NONE) && (objp->signature == signature))
 			return i;
 	}
@@ -302,9 +300,21 @@ static void nd_write_short(short s)
 	newdemo_write(&s, 2, 1);
 }
 
+static void nd_write_objnum_short(objnum_t o)
+{
+	short s = o;
+	nd_write_short(s);
+}
+
 static void nd_write_int(int i)
 {
 	newdemo_write(&i, 4, 1);
+}
+
+static void nd_write_objnum_int(objnum_t o)
+{
+	int s = o;
+	nd_write_int(s);
 }
 
 static void nd_write_string(char *str)
@@ -386,6 +396,13 @@ static void nd_read_segnum_short(segnum_t *s)
 	*s = i;
 }
 
+static void nd_read_objnum_short(objnum_t *o)
+{
+	short i;
+	nd_read_short(&i);
+	*o = i;
+}
+
 static void nd_read_int(int *i)
 {
 	newdemo_read(i, 4, 1);
@@ -394,6 +411,13 @@ static void nd_read_int(int *i)
 }
 
 static void nd_read_segnum_int(segnum_t *s)
+{
+	int i;
+	nd_read_int(&i);
+	*s = i;
+}
+
+static void nd_read_objnum_int(objnum_t *s)
 {
 	int i;
 	nd_read_int(&i);
@@ -592,7 +616,7 @@ static void nd_read_object(dxxobject *obj)
 
 		nd_read_fix(&(obj->ctype.expl_info.spawn_time));
 		nd_read_fix(&(obj->ctype.expl_info.delete_time));
-		nd_read_short(&(obj->ctype.expl_info.delete_objnum));
+		nd_read_objnum_short(&(obj->ctype.expl_info.delete_objnum));
 
 		obj->ctype.expl_info.next_attach = obj->ctype.expl_info.prev_attach = obj->ctype.expl_info.attach_parent = -1;
 
@@ -773,7 +797,7 @@ static void nd_write_object(dxxobject *obj)
 	case CT_EXPLOSION:
 		nd_write_fix(obj->ctype.expl_info.spawn_time);
 		nd_write_fix(obj->ctype.expl_info.delete_time);
-		nd_write_short(obj->ctype.expl_info.delete_objnum);
+		nd_write_objnum_short(obj->ctype.expl_info.delete_objnum);
 		break;
 
 	case CT_WEAPON:
@@ -1050,7 +1074,7 @@ void newdemo_record_sound_3d_once( int soundno, int angle, int volume )
 }
 
 
-void newdemo_record_link_sound_to_object3( int soundno, short objnum, fix max_volume, fix  max_distance, int loop_start, int loop_end )
+void newdemo_record_link_sound_to_object3( int soundno, objnum_t objnum, fix max_volume, fix  max_distance, int loop_start, int loop_end )
 {
 	stop_time();
 	nd_write_byte( ND_EVENT_LINK_SOUND_TO_OBJ );
@@ -1063,7 +1087,7 @@ void newdemo_record_link_sound_to_object3( int soundno, short objnum, fix max_vo
 	start_time();
 }
 
-void newdemo_record_kill_sound_linked_to_object( int objnum )
+void newdemo_record_kill_sound_linked_to_object( objnum_t objnum )
 {
 	stop_time();
 	nd_write_byte( ND_EVENT_KILL_SOUND_TO_OBJ );
@@ -1721,7 +1745,8 @@ void nd_render_extras (ubyte,dxxobject *);
 
 static int newdemo_read_frame_information(int rewrite)
 {
-	int done, side, objnum, soundno, angle, volume, i,shot;
+	int done, side, soundno, angle, volume, i,shot;
+	objnum_t objnum;
 	segnum_t segnum;
 	dxxobject *obj;
 	sbyte c,WhichWindow;
@@ -1911,8 +1936,9 @@ static int newdemo_read_frame_information(int rewrite)
 
 		case ND_EVENT_LINK_SOUND_TO_OBJ:
 			{
-				int soundno, objnum, max_volume, max_distance, loop_start, loop_end;
+				int soundno, max_volume, max_distance, loop_start, loop_end;
 				int signature;
+				objnum_t objnum;
 				nd_read_int( &soundno );
 				nd_read_int( &signature );
 				nd_read_int( &max_volume );
@@ -1938,7 +1964,8 @@ static int newdemo_read_frame_information(int rewrite)
 
 		case ND_EVENT_KILL_SOUND_TO_OBJ:
 			{
-				int objnum, signature;
+				objnum_t objnum;
+				int signature;
 				nd_read_int( &signature );
 				if (rewrite)
 				{
@@ -1978,14 +2005,14 @@ static int newdemo_read_frame_information(int rewrite)
 		case ND_EVENT_TRIGGER:
 			nd_read_segnum_int(&segnum);
 			nd_read_int(&side);
-			nd_read_int(&objnum);
+			nd_read_objnum_int(&objnum);
 			nd_read_int(&shot);
 			if (nd_playback_v_bad_read) { done = -1; break; }
 			if (rewrite)
 			{
 				nd_write_int(segnum);
 				nd_write_int(side);
-				nd_write_int(objnum);
+				nd_write_objnum_int(objnum);
 				nd_write_int(shot);
 			}
 			if (Newdemo_vcr_state != ND_STATE_PAUSED)
@@ -3044,7 +3071,7 @@ static void newdemo_back_frames(int frames)
 
 static void interpolate_frame(fix d_play, fix d_recorded)
 {
-	int i, j, num_cur_objs;
+	int num_cur_objs;
 	fix factor;
 	dxxobject *cur_objs;
 	static fix InterpolStep = fl2f(.01);
@@ -3062,7 +3089,7 @@ static void interpolate_frame(fix d_play, fix d_recorded)
 		Int3();
 		return;
 	}
-	for (i = 0; i <= num_cur_objs; i++)
+	for (objnum_t i = 0; i <= num_cur_objs; i++)
 		memcpy(&(cur_objs[i]), &(Objects[i]), sizeof(cur_objs[i]));
 
 	Newdemo_vcr_state = ND_STATE_PAUSED;
@@ -3077,8 +3104,8 @@ static void interpolate_frame(fix d_play, fix d_recorded)
 	// This interpolating looks just more crappy on high FPS, so let's not even waste performance on it.
 	if (InterpolStep <= 0)
 	{
-		for (i = 0; i <= num_cur_objs; i++) {
-			for (j = 0; j <= Highest_object_index; j++) {
+		for (objnum_t i = 0; i <= num_cur_objs; i++) {
+			for (objnum_t j = 0; j <= Highest_object_index; j++) {
 				if (cur_objs[i].signature == Objects[j].signature) {
 					sbyte render_type = cur_objs[i].render_type;
 					fix delta_x, delta_y, delta_z;
@@ -3139,7 +3166,7 @@ static void interpolate_frame(fix d_play, fix d_recorded)
 		newdemo_stop_playback();
 	Newdemo_vcr_state = ND_STATE_PLAYBACK;
 
-	for (i = 0; i <= num_cur_objs; i++)
+	for (objnum_t i = 0; i <= num_cur_objs; i++)
 		memcpy(&(Objects[i]), &(cur_objs[i]), sizeof(Objects[i]));
 	Highest_object_index = num_cur_objs;
 	d_free(cur_objs);
@@ -3262,7 +3289,7 @@ void newdemo_playback_one_frame()
 
 				while (nd_recorded_total - nd_playback_total < FrameTime) {
 					dxxobject *cur_objs;
-					int i, j, num_objs, level;
+					int num_objs, level;
 
 					num_objs = Highest_object_index;
 					cur_objs = (dxxobject *)d_malloc(sizeof(dxxobject) * (num_objs + 1));
@@ -3270,7 +3297,7 @@ void newdemo_playback_one_frame()
 						Warning ("Couldn't get %ld bytes for objects in interpolate playback\n", sizeof(dxxobject) * num_objs);
 						break;
 					}
-					for (i = 0; i <= num_objs; i++)
+					for (objnum_t i = 0; i <= num_objs; i++)
 						memcpy(&(cur_objs[i]), &(Objects[i]), sizeof(cur_objs[i]));
 
 					level = Current_level_num;
@@ -3292,7 +3319,7 @@ void newdemo_playback_one_frame()
 					//  interpolated position and orientation can be preserved.
 
 					for (i = 0; i <= num_objs; i++) {
-						for (j = 0; j <= Highest_object_index; j++) {
+						for (objnum_t j = 0; j <= Highest_object_index; j++) {
 							if (cur_objs[i].signature == Objects[j].signature) {
 								memcpy(&(Objects[j].orient), &(cur_objs[i].orient), sizeof(vms_matrix));
 								memcpy(&(Objects[j].pos), &(cur_objs[i].pos), sizeof(vms_vector));

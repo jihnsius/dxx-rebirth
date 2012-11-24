@@ -943,7 +943,7 @@ int state_save_all_sub(char *filename, char *desc)
 	PHYSFS_write(fp, &cheats.enabled, sizeof(int), 1);
 
 //Finish all morph objects
-	for (i=0; i<=Highest_object_index; i++ )	{
+	for (objnum_t i=0; i<=Highest_object_index; i++ )	{
 		if ( (Objects[i].type != OBJ_NONE) && (Objects[i].render_type==RT_MORPH))	{
 			morph_data *md;
 			md = find_morph_data(&Objects[i]);
@@ -966,7 +966,7 @@ int state_save_all_sub(char *filename, char *desc)
 	i = Highest_object_index+1;
 	PHYSFS_write(fp, &i, sizeof(int), 1);
 	//PHYSFS_write(fp, Objects, sizeof(object), i);
-	for (i = 0; i <= Highest_object_index; i++)
+	for (objnum_t i = 0; i <= Highest_object_index; i++)
 	{
 		object_rw *obj_rw;
 		MALLOC(obj_rw, object_rw, 1);
@@ -1109,7 +1109,7 @@ int state_save_all_sub(char *filename, char *desc)
 //	Set the player's position from the globals Secret_return_segment and Secret_return_orient.
 void set_pos_from_return_segment(void)
 {
-	int	plobjnum = Players[Player_num].objnum;
+	objnum_t	plobjnum = Players[Player_num].objnum;
 
 	compute_segment_center(&Objects[plobjnum].pos, &Segments[Secret_return_segment]);
 	obj_relink(plobjnum, Secret_return_segment);
@@ -1193,7 +1193,8 @@ int state_restore_all(int in_game, int secret_restore, const char *filename_over
 
 int state_restore_all_sub(char *filename, int secret_restore)
 {
-	int version,i, j, coop_player_got[MAX_PLAYERS], coop_org_objnum;
+	int version,i, j, coop_player_got[MAX_PLAYERS];
+	objnum_t coop_org_objnum;
 	segnum_t segnum;
 	dxxobject * obj;
 	PHYSFS_file *fp;
@@ -1374,7 +1375,7 @@ int state_restore_all_sub(char *filename, int secret_restore)
 	i = PHYSFSX_readSXE32(fp, swap);
 	Highest_object_index = i-1;
 	//object_read_n_swap(Objects, i, swap, fp);
-	for (i=0; i<=Highest_object_index; i++ )
+	for (objnum_t i=0; i<=Highest_object_index; i++ )
 	{
 		object_rw *obj_rw;
 		MALLOC(obj_rw, object_rw, 1);
@@ -1384,7 +1385,7 @@ int state_restore_all_sub(char *filename, int secret_restore)
 		d_free(obj_rw);
 	}
 
-	for (i=0; i<=Highest_object_index; i++ )	{
+	for (objnum_t i=0; i<=Highest_object_index; i++ )	{
 		obj = &Objects[i];
 		obj->rtype.pobj_info.alt_textures = -1;
 		segnum = obj->segnum;
@@ -1628,7 +1629,7 @@ int state_restore_all_sub(char *filename, int secret_restore)
 				if (Players[i].connected == CONNECT_PLAYING && restore_players[j].connected == CONNECT_PLAYING && !strcmp(Players[i].callsign, restore_players[j].callsign))
 				{
 					dxxobject *obj;
-					int sav_objnum = Players[i].objnum;
+					objnum_t sav_objnum = Players[i].objnum;
 
 					memcpy(&Players[i], &restore_players[j], sizeof(player));
 					Players[i].objnum = sav_objnum;

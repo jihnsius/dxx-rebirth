@@ -62,7 +62,7 @@ typedef struct sound_object {
 			vms_vector	position;
 		} pos;
 		struct {
-			short			objnum;				// Used if SOF_LINK_TO_OBJ field is used
+			objnum_t			objnum;				// Used if SOF_LINK_TO_OBJ field is used
 			short			objsignature;
 		} obj;
 	} link_type;
@@ -319,7 +319,7 @@ static void digi_start_sound_object(int i)
 //sounds longer than this get their 3d aspects updated
 #define SOUND_3D_THRESHHOLD  (GameArg.SndDigiSampleRate * 3 / 2)	//1.5 seconds
 
-int digi_link_sound_to_object3( int org_soundnum, short objnum, int forever, fix max_volume, fix  max_distance, int loop_start, int loop_end )
+int digi_link_sound_to_object3( int org_soundnum, objnum_t objnum, int forever, fix max_volume, fix  max_distance, int loop_start, int loop_end )
 {
 
 	int i,volume,pan;
@@ -396,13 +396,13 @@ int digi_link_sound_to_object3( int org_soundnum, short objnum, int forever, fix
 	return SoundObjects[i].signature;
 }
 
-int digi_link_sound_to_object2( int org_soundnum, short objnum, int forever, fix max_volume, fix  max_distance )
+int digi_link_sound_to_object2( int org_soundnum, objnum_t objnum, int forever, fix max_volume, fix  max_distance )
 {
 	return digi_link_sound_to_object3( org_soundnum, objnum, forever, max_volume, max_distance, -1, -1 );
 }
 
 
-int digi_link_sound_to_object( int soundnum, short objnum, int forever, fix max_volume )
+int digi_link_sound_to_object( int soundnum, objnum_t objnum, int forever, fix max_volume )
 {
 	return digi_link_sound_to_object2( soundnum, objnum, forever, max_volume, 256*F1_0  );
 }
@@ -513,7 +513,7 @@ void digi_kill_sound_linked_to_segment( segnum_t segnum, int sidenum, int soundn
 	}
 }
 
-void digi_kill_sound_linked_to_object( int objnum )
+void digi_kill_sound_linked_to_object( objnum_t objnum )
 {
 
 	int i,killed;
@@ -602,7 +602,7 @@ void digi_sync_sounds()
 
 
 				if ( Newdemo_state == ND_STATE_PLAYBACK )	{
-					int objnum;
+					objnum_t objnum;
 					objnum = newdemo_find_object( SoundObjects[i].link_type.obj.objsignature );
 					if ( objnum > -1 )	{
 						objp = &Objects[objnum];

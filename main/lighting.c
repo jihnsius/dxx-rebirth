@@ -55,7 +55,7 @@ g3s_lrgb Dynamic_light[MAX_VERTICES];
 #define	HEADLIGHT_SCALE		(F1_0*10)
 
 // ----------------------------------------------------------------------------------------------
-static void apply_light(g3s_lrgb obj_light_emission, segnum_t obj_seg, vms_vector *obj_pos, int n_render_vertices, vertnum_t *render_vertices, segnum_t *vert_segnum_list, int objnum)
+static void apply_light(g3s_lrgb obj_light_emission, segnum_t obj_seg, vms_vector *obj_pos, int n_render_vertices, vertnum_t *render_vertices, segnum_t *vert_segnum_list, objnum_t objnum)
 {
 	int	vv;
 
@@ -240,7 +240,7 @@ dxxobject *Headlights[MAX_HEADLIGHTS];
 int Num_headlights;
 
 // ---------------------------------------------------------
-static g3s_lrgb compute_light_emission(int objnum)
+static g3s_lrgb compute_light_emission(objnum_t objnum)
 {
 	dxxobject *obj = &Objects[objnum];
 	int compute_color = 0;
@@ -457,7 +457,6 @@ static g3s_lrgb compute_light_emission(int objnum)
 void set_dynamic_light(void)
 {
 	int	vv;
-	int	objnum;
 	int	n_render_vertices;
 	vertnum_t	render_vertices[MAX_VERTICES];
 	segnum_t	vert_segnum_list[MAX_VERTICES];
@@ -509,7 +508,7 @@ void set_dynamic_light(void)
 
 	cast_muzzle_flash_light(n_render_vertices, render_vertices, vert_segnum_list);
 
-	for (objnum=0; objnum<=Highest_object_index; objnum++)
+	for (objnum_t objnum=0; objnum<=Highest_object_index; objnum++)
 	{
 		dxxobject		*obj = &Objects[objnum];
 		vms_vector	*objpos = &obj->pos;
@@ -639,7 +638,7 @@ g3s_lrgb compute_object_light(dxxobject *obj,vms_vector *rotated_pnt)
 	g3s_lrgb light, seg_dl;
 	fix mlight;
 	g3s_point objpnt;
-	int objnum = obj-Objects;
+	objnum_t objnum = obj-Objects;
 
 	if (!rotated_pnt)
 	{

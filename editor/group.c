@@ -355,7 +355,8 @@ static void med_create_group_rotation_matrix(vms_matrix *result_mat, int delta_f
 // Rotate all vertices and objects in group.
 static void med_rotate_group(vms_matrix *rotmat, segnum_t *group_seglist, int group_size, segment *first_seg, int first_side)
 {
-	int			v,s, objnum;
+	int			v,s;
+	objnum_t objnum;
 	sbyte			vertex_list[MAX_VERTICES];
 	vms_vector	rotate_center;
 
@@ -459,7 +460,7 @@ static void duplicate_group(sbyte *vertex_ids, segnum_t *segment_ids, int num_se
 
 	//	duplicate segments
 	for (s=0; s<num_segments; s++) {
-		int	objnum;
+		objnum_t objnum;
 
 		new_segment_id = med_create_duplicate_segment(&Segments[segment_ids[s]]);
 		new_segment_ids[s] = new_segment_id;
@@ -467,7 +468,7 @@ static void duplicate_group(sbyte *vertex_ids, segnum_t *segment_ids, int num_se
 		Segments[new_segment_id].objects = -1;
 		while (objnum != -1) {
 			if (Objects[objnum].type != OBJ_PLAYER) {
-				int new_obj_id;
+				objnum_t new_obj_id;
 				new_obj_id = obj_create_copy(objnum, &Objects[objnum].pos, new_segment_id);
 				(void)new_obj_id; // FIXME!
 			}
@@ -541,7 +542,7 @@ static int med_copy_group(int delta_flag, segment *base_seg, int base_side, segm
         int                     gs_index=0;
 	sbyte			in_vertex_list[MAX_VERTICES];
 	vms_matrix	rotmat;
-	int			objnum;
+	objnum_t objnum;
 
 	if (IS_CHILD(base_seg->children[base_side])) {
 		editor_status("Error -- unable to copy group, base_seg:base_side must be free.");
@@ -644,7 +645,7 @@ static int med_copy_group(int delta_flag, segment *base_seg, int base_side, segm
 	//	Now, xlate all object positions.
 	for (s=0; s<GroupList[new_current_group].num_segments; s++) {
 		segnum_t	segnum = GroupList[new_current_group].segments[s];
-		int	objnum = Segments[segnum].objects;
+		objnum_t	objnum = Segments[segnum].objects;
 
 		while (objnum != -1) {
 			vm_vec_add2(&Objects[objnum].pos, &destv);
@@ -780,7 +781,7 @@ static int med_move_group(int delta_flag, segment *base_seg, int base_side, segm
 	//	Now, move all object positions.
 	for (s=0; s<GroupList[current_group].num_segments; s++) {
 		segnum_t	segnum = GroupList[current_group].segments[s];
-		int	objnum = Segments[segnum].objects;
+		objnum_t	objnum = Segments[segnum].objects;
 
 		while (objnum != -1) {
 			vm_vec_sub2(&Objects[objnum].pos, &srcv);
@@ -801,7 +802,7 @@ static int med_move_group(int delta_flag, segment *base_seg, int base_side, segm
 	//	Now, rotate all object positions.
 	for (s=0; s<GroupList[current_group].num_segments; s++) {
 		segnum_t	segnum = GroupList[current_group].segments[s];
-		int	objnum = Segments[segnum].objects;
+		objnum_t	objnum = Segments[segnum].objects;
 
 		while (objnum != -1) {
 			vm_vec_add2(&Objects[objnum].pos, &destv);

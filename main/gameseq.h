@@ -110,7 +110,7 @@ void DoEndLevelScoreGlitz(int network);
 // stuff for multiplayer
 extern int NumNetPlayerPositions;
 
-void bash_to_shield(int, const char *);
+void bash_to_shield(objnum_t, const char *);
 
 int p_secret_level_destroyed(void);
 void ExitSecretLevel(void);

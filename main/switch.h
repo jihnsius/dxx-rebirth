@@ -114,7 +114,7 @@ extern trigger Triggers[MAX_TRIGGERS];
 extern int Num_triggers;
 
 extern void trigger_init();
-extern void check_trigger(segment *seg, short side, short objnum,int shot);
+extern void check_trigger(segment *seg, short side, objnum_t objnum,int shot);
 extern int check_trigger_sub(int trigger_num, int player_num,int shot);
 extern void triggers_frame_process();
 

@@ -287,7 +287,6 @@ int endlevel_movie_played = MOVIE_NOT_PLAYED;
 
 void start_endlevel_sequence()
 {
-	int	i;
 
 
 	reset_rear_view(); //turn off rear view if set - NOTE: make sure this happens before we pause demo recording!!
@@ -310,7 +309,7 @@ void start_endlevel_sequence()
 		return;				//don't start if dead!
 
 	//	Dematerialize Buddy!
-	for (i=0; i<=Highest_object_index; i++)
+	for (objnum_t i=0; i<=Highest_object_index; i++)
 		if (Objects[i].type == OBJ_ROBOT)
 			if (Robot_info[Objects[i].id].companion) {
 				object_create_explosion(Objects[i].segnum, &Objects[i].pos, F1_0*7/2, VCLIP_POWERUP_DISAPPEARANCE );
@@ -694,7 +693,7 @@ void do_endlevel_frame()
 				if (PLAYING_BUILTIN_MISSION && endlevel_movie_played != MOVIE_NOT_PLAYED)
 					stop_endlevel_sequence();
 				else {
-					int objnum;
+					objnum_t objnum;
 
 					//songs_play_song( SONG_ENDLEVEL, 0 );
 

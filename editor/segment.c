@@ -670,7 +670,6 @@ static void compress_segments(void)
 			if (seg > hole) {
 				int		f,g,l,s,t,w;
 				segment	*sp;
-				int objnum;
 
 				// Ok, hole is the index of a hole, seg is the index of a segment which follows it.
 				// Copy seg into hole, update pointers to it, update Cursegp, Markedsegp if necessary.
@@ -724,7 +723,7 @@ static void compress_segments(void)
 				}	// end for s
 
 				//Update object segment pointers
-				for (objnum = sp->objects; objnum != -1; objnum = Objects[objnum].next) {
+				for (objnum_t objnum = sp->objects; objnum != -1; objnum = Objects[objnum].next) {
 					Assert(Objects[objnum].segnum == seg);
 					Objects[objnum].segnum = hole;
 				}
@@ -1017,7 +1016,6 @@ int med_delete_segment(segment *sp)
 {
 	int		s,side;
 	segnum_t segnum;
-	int 		objnum;
 
 	segnum = sp-Segments;
 
@@ -1086,7 +1084,7 @@ int med_delete_segment(segment *sp)
 
 	// If deleted segment contains objects, wipe out all objects
 	if (sp->objects != -1) 	{
-		for (objnum=sp->objects;objnum!=-1;objnum=Objects[objnum].next) 	{
+		for (objnum_t objnum=sp->objects;objnum!=-1;objnum=Objects[objnum].next) 	{
 
 			//if an object is in the seg, delete it
 			//if the object is the player, move to new curseg

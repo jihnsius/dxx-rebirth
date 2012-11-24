@@ -687,7 +687,7 @@ static void select_big_window_function(unsigned which)
 {
 	if (which >= N_players)
 		which = Player_num;
-	const unsigned objnum = Players[which].objnum;
+	const objnum_t objnum = Players[which].objnum;
 	if (objnum > Highest_object_index)
 		return;
 	HUD_init_message(HM_DEFAULT, "Viewer changed to '%s'(%u)", Players[which].callsign, which);
@@ -1219,11 +1219,11 @@ static int HandleGameKey(int key)
 
 static void kill_all_robots(void)
 {
-	int	i, dead_count=0;
+	int	dead_count=0;
 	//int	boss_index = -1;
 
 	// Kill all bots except for Buddy bot and boss.  However, if only boss and buddy left, kill boss.
-	for (i=0; i<=Highest_object_index; i++)
+	for (objnum_t i=0; i<=Highest_object_index; i++)
 		if (Objects[i].type == OBJ_ROBOT) {
 			if (!Robot_info[Objects[i].id].companion && !Robot_info[Objects[i].id].boss_flag) {
 				dead_count++;
@@ -1240,7 +1240,7 @@ static void kill_all_robots(void)
 
 	// Toast the buddy if nothing else toasted!
 	if (dead_count == 0)
-		for (i=0; i<=Highest_object_index; i++)
+		for (objnum_t i=0; i<=Highest_object_index; i++)
 			if (Objects[i].type == OBJ_ROBOT)
 				if (Robot_info[Objects[i].id].companion) {
 					Objects[i].flags |= OF_EXPLODING|OF_SHOULD_BE_DEAD;
@@ -1259,11 +1259,11 @@ static void kill_all_robots(void)
 //	Yippee!!
 static void kill_and_so_forth(void)
 {
-	int     i, j;
+	int     j;
 
 	HUD_init_message(HM_DEFAULT, "Killing, awarding, etc.!");
 
-	for (i=0; i<=Highest_object_index; i++) {
+	for (objnum_t i=0; i<=Highest_object_index; i++) {
 		switch (Objects[i].type) {
 			case OBJ_ROBOT:
 				Objects[i].flags |= OF_EXPLODING|OF_SHOULD_BE_DEAD;
@@ -1276,7 +1276,7 @@ static void kill_and_so_forth(void)
 
 	do_controlcen_destroyed_stuff(NULL);
 
-	for (i=0; i<Num_triggers; i++) {
+	for (unsigned i=0; i<Num_triggers; i++) {
 		if (Triggers[i].type == TT_EXIT) {
 			for (j=0; j<Num_walls; j++) {
 				if (Walls[j].trigger == i) {
@@ -1296,10 +1296,10 @@ kasf_done: ;
 static void kill_all_snipers(void) __attribute_used__;
 static void kill_all_snipers(void)
 {
-	int     i, dead_count=0;
+	int     dead_count=0;
 
 	//	Kill all snipers.
-	for (i=0; i<=Highest_object_index; i++)
+	for (objnum_t i=0; i<=Highest_object_index; i++)
 		if (Objects[i].type == OBJ_ROBOT)
 			if (Objects[i].ctype.ai_info.behavior == AIB_SNIPE) {
 				dead_count++;
@@ -1312,10 +1312,9 @@ static void kill_all_snipers(void)
 static void kill_thief(void) __attribute_used__;
 static void kill_thief(void)
 {
-	int     i;
 
 	//	Kill thief.
-	for (i=0; i<=Highest_object_index; i++)
+	for (objnum_t i=0; i<=Highest_object_index; i++)
 		if (Objects[i].type == OBJ_ROBOT)
 			if (Robot_info[Objects[i].id].thief) {
 				Objects[i].flags |= OF_EXPLODING|OF_SHOULD_BE_DEAD;
@@ -1326,10 +1325,9 @@ static void kill_thief(void)
 static void kill_buddy(void) __attribute_used__;
 static void kill_buddy(void)
 {
-	int     i;
 
 	//	Kill buddy.
-	for (i=0; i<=Highest_object_index; i++)
+	for (objnum_t i=0; i<=Highest_object_index; i++)
 		if (Objects[i].type == OBJ_ROBOT)
 			if (Robot_info[Objects[i].id].companion) {
 				Objects[i].flags |= OF_EXPLODING|OF_SHOULD_BE_DEAD;

@@ -25,6 +25,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "pstypes.h"
 #include "maths.h"
 #include "vecmat.h"
+#include "object.types.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -117,10 +118,8 @@ typedef struct segment {
 	vertnum_t     verts[MAX_VERTICES_PER_SEGMENT];    // vertex ids of 4 front and 4 back vertices
 #ifdef EDITOR
 	short   group;      // group number to which the segment belongs.
-	short   objects;    // pointer to objects in this segment
-#else
-	int     objects;    // pointer to objects in this segment
 #endif
+	objnum_t objects;    // pointer to objects in this segment
 	int     degenerated; // true if this segment has gotten turned inside out, or something.
 
 	// -- Moved to segment2 to make this struct 512 bytes long --

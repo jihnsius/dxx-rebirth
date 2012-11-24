@@ -110,14 +110,14 @@ void Laser_player_fire(struct dxxobject * obj, int type, int gun_num, int make_s
 void Laser_player_fire_spread(struct dxxobject *obj, int laser_type, int gun_num, fix spreadr, fix spreadu, int make_sound, int harmless);
 void Laser_do_weapon_sequence(struct dxxobject *obj);
 void Flare_create(struct dxxobject *obj);
-int laser_are_related(int o1, int o2);
+int laser_are_related(objnum_t o1, objnum_t o2);
 
 int do_laser_firing_player(void);
 void do_missile_firing(int drop_bomb);
 void net_missile_firing(int player, int weapon, int flags);
-extern int Network_laser_track;
+extern objnum_t Network_laser_track;
 
-int Laser_create_new(vms_vector * direction, vms_vector * position, segnum_t segnum, int parent, int type, int make_sound);
+objnum_t Laser_create_new(vms_vector * direction, vms_vector * position, segnum_t segnum, objnum_t parent, int type, int make_sound);
 
 // Fires a laser-type weapon (a Primary weapon)
 // Fires from object objnum, weapon type weapon_id.
@@ -126,7 +126,7 @@ int Laser_create_new(vms_vector * direction, vms_vector * position, segnum_t seg
 // Returns the number of shots actually fired, which will typically be
 // 1, but could be higher for low frame rates when rapidfire weapons,
 // such as vulcan or plasma are fired.
-int do_laser_firing(int objnum, int weapon_id, int level, int flags, int nfires);
+int do_laser_firing(objnum_t objnum, int weapon_id, int level, int flags, int nfires);
 
 // Easier to call than Laser_create_new because it determines the
 // segment containing the firing point and deals with it being stuck
@@ -135,10 +135,7 @@ int do_laser_firing(int objnum, int weapon_id, int level, int flags, int nfires)
 // direction "direction" from the position "position"
 // Returns object number of laser fired or -1 if not possible to fire
 // laser.
-int Laser_create_new_easy(vms_vector * direction, vms_vector * position, int parent, int weapon_type, int make_sound);
-
-// creates a weapon object
-int create_weapon_object(int weapon_type,segnum_t segnum,vms_vector *position);
+objnum_t Laser_create_new_easy(vms_vector * direction, vms_vector * position, objnum_t parent, int weapon_type, int make_sound);
 
 // give up control of the guided missile
 void release_guided_missile(int player_num);

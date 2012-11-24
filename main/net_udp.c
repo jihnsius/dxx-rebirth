@@ -1419,7 +1419,7 @@ static void net_udp_welcome_player(UDP_sequence_packet *their)
 	net_udp_send_objects();
 }
 
-int net_udp_objnum_is_past(int objnum)
+int net_udp_objnum_is_past(objnum_t objnum)
 {
 	// determine whether or not a given object number has already been sent
 	// to a re-joining player.
@@ -1582,8 +1582,9 @@ void net_udp_send_objects(void)
 {
 	sbyte owner, player_num = UDP_sync_player.player.connected;
 	static int obj_count = 0;
-	int loc = 0, i = 0, remote_objnum = 0, obj_count_frame = 0;
+	int loc = 0, remote_objnum = 0, obj_count_frame = 0;
 	static fix64 last_send_time = 0;
+	objnum_t i;
 
 	if (last_send_time + (F1_0/50) > timer_query())
 		return;
@@ -1698,12 +1699,12 @@ void net_udp_send_objects(void)
 
 static int net_udp_verify_objects(int remote, int local)
 {
-	int i, nplayers = 0;
+	int nplayers = 0;
 
 	if ((remote-local) > 10)
 		return(2);
 
-	for (i = 0; i <= Highest_object_index; i++)
+	for (objnum_t i = 0; i <= Highest_object_index; i++)
 	{
 		if ((Objects[i].type == OBJ_PLAYER) || (Objects[i].type == OBJ_GHOST))
 			nplayers++;
@@ -1721,13 +1722,14 @@ void net_udp_read_object_packet( ubyte *data )
 	dxxobject *obj;
 	sbyte obj_owner;
 	static int mode = 0, object_count = 0, my_pnum = 0;
-	int i = 0, objnum = 0, remote_objnum = 0, nobj = 0, loc = 5;
+	int i = 0, remote_objnum = 0, nobj = 0, loc = 5;
 	segnum_t segnum;
 
 	nobj = GET_INTEL_INT(data + 1);
 
 	for (i = 0; i < nobj; i++)
 	{
+		objnum_t objnum;
 		objnum = GET_INTEL_INT(data + loc);                         loc += 4;
 		obj_owner = data[loc];                                      loc += 1;
 		remote_objnum = GET_INTEL_INT(data + loc);                  loc += 4;
@@ -4712,7 +4714,7 @@ void net_udp_process_pdata ( ubyte *data, int data_len, struct _sockaddr sender_
 void net_udp_read_pdata_short_packet(UDP_frame_info *pd)
 {
 	int TheirPlayernum;
-	int TheirObjnum;
+	objnum_t TheirObjnum;
 	dxxobject * TheirObj = NULL;
 
 	TheirPlayernum = pd->Player_num;

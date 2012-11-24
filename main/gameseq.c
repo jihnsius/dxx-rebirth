@@ -153,10 +153,9 @@ static void verify_console_object()
 static int count_number_of_robots()
 {
 	int robot_count;
-	int i;
 
 	robot_count = 0;
-	for (i=0;i<=Highest_object_index;i++) {
+	for (objnum_t i=0;i<=Highest_object_index;i++) {
 		if (Objects[i].type == OBJ_ROBOT)
 			robot_count++;
 	}
@@ -168,10 +167,9 @@ static int count_number_of_robots()
 static int count_number_of_hostages()
 {
 	int count;
-	int i;
 
 	count = 0;
-	for (i=0;i<=Highest_object_index;i++) {
+	for (objnum_t i=0;i<=Highest_object_index;i++) {
 		if (Objects[i].type == OBJ_HOSTAGE)
 			count++;
 	}
@@ -183,14 +181,14 @@ static int count_number_of_hostages()
 void
 static gameseq_init_network_players()
 {
-	int i,k,j;
+	int k,j;
 
 	// Initialize network player start locations and object numbers
 
 	ConsoleObject = &Objects[0];
 	k = 0;
 	j = 0;
-	for (i=0;i<=Highest_object_index;i++) {
+	for (objnum_t i=0;i<=Highest_object_index;i++) {
 
 		if (( Objects[i].type==OBJ_PLAYER )	|| (Objects[i].type == OBJ_GHOST) || (Objects[i].type == OBJ_COOP))
 		{
@@ -535,7 +533,7 @@ void create_player_appearance_effect(dxxobject *player_obj)
 
 #ifndef NDEBUG
 	{
-		int objnum = player_obj-Objects;
+		objnum_t objnum = player_obj-Objects;
 		if ( (objnum < 0) || (objnum > Highest_object_index) )
 			Int3(); // See Rob, trying to track down weird network bug
 	}
@@ -1548,7 +1546,7 @@ void StartNewLevelSub(int level_num, int page_in_textures, int secret_flag)
 
 #ifdef NETWORK
 #endif
-void bash_to_shield (int i,const char *s)
+void bash_to_shield (objnum_t i,const char *s)
 {
 	(void)s;
 #ifdef NETWORK
@@ -1567,9 +1565,8 @@ void bash_to_shield (int i,const char *s)
 
 void filter_objects_from_level()
  {
-  int i;
 
-  for (i=0;i<=Highest_object_index;i++)
+  for (objnum_t i=0;i<=Highest_object_index;i++)
 	{
 	 if (Objects[i].type==OBJ_POWERUP)
      if (Objects[i].id==POW_FLAG_RED || Objects[i].id==POW_FLAG_BLUE)
@@ -1763,9 +1760,7 @@ void copy_defaults_to_robot(dxxobject *objp)
 //	This function should be called at level load time.
 void copy_defaults_to_robot_all()
 {
-	int	i;
-
-	for (i=0; i<=Highest_object_index; i++)
+	for (objnum_t i=0; i<=Highest_object_index; i++)
 		if (Objects[i].type == OBJ_ROBOT)
 			copy_defaults_to_robot(&Objects[i]);
 

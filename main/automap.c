@@ -199,7 +199,7 @@ int HighlightMarker=-1;
 char MarkerMessage[NUM_MARKERS][MARKER_MESSAGE_LEN];
 char MarkerOwner[NUM_MARKERS][CALLSIGN_LEN+1];
 float MarkerScale=2.0;
-int	MarkerObject[NUM_MARKERS];
+objnum_t	MarkerObject[NUM_MARKERS];
 
 # define automap_draw_line g3_draw_line
 
@@ -505,8 +505,8 @@ static void draw_automap(automap *am)
 	}
 #endif
 
-	objp = &Objects[0];
-	for (i=0;i<=Highest_object_index;i++,objp++) {
+	for (objnum_t o=0;o<=Highest_object_index;o++) {
+		objp = &Objects[o];
 		switch( objp->type )	{
 		case OBJ_HOSTAGE:
 			gr_setcolor(am->hostage_color);

@@ -113,12 +113,12 @@ typedef struct physics_info {
 
 typedef struct laser_info {
 	short   parent_type;        // The type of the parent of this object
-	short   parent_num;         // The object's parent's number
+	objnum_t   parent_num;         // The object's parent's number
 	int     parent_signature;   // The object's parent's signature...
 	fix64   creation_time;      // Absolute time of creation.
-	short   last_hitobj;        // For persistent weapons (survive object collision), object it most recently hit.
+	objnum_t   last_hitobj;        // For persistent weapons (survive object collision), object it most recently hit.
 	ubyte   hitobj_list[MAX_OBJECTS]; // list of all objects persistent weapon has already damaged (useful in case it's in contact with two objects at the same time)
-	short   track_goal;         // Object this object is tracking.
+	objnum_t   track_goal;         // Object this object is tracking.
 	fix     multiplier;         // Power if this is a fusion bolt (or other super weapon to be added).
 } __pack__ laser_info;
 
@@ -138,10 +138,10 @@ extern ubyte hitobj_list[MAX_OBJECTS][MAX_OBJECTS];
 typedef struct explosion_info {
     fix     spawn_time;         // when lifeleft is < this, spawn another
     fix     delete_time;        // when to delete object
-    short   delete_objnum;      // and what object to delete
-    short   attach_parent;      // explosion is attached to this object
-    short   prev_attach;        // previous explosion in attach list
-    short   next_attach;        // next explosion in attach list
+    objnum_t   delete_objnum;      // and what object to delete
+    objnum_t   attach_parent;      // explosion is attached to this object
+    objnum_t   prev_attach;        // previous explosion in attach list
+    objnum_t   next_attach;        // next explosion in attach list
 } __pack__ explosion_info;
 
 typedef struct light_info {
@@ -186,13 +186,13 @@ typedef struct dxxobject {
 #ifdef WORDS_NEED_ALIGNMENT
 	short   pad;
 #endif
-	short   next,prev;      // id of next and previous connected object in Objects, -1 = no connection
+	objnum_t   next,prev;      // id of next and previous connected object in Objects, -1 = no connection
 	ubyte   control_type;   // how this object is controlled
 	ubyte   movement_type;  // how this object moves
 	ubyte   render_type;    // how this object renders
 	ubyte   flags;          // misc flags
 	segnum_t   segnum;         // segment number containing object
-	short   attached_obj;   // number of attached fireball object
+	objnum_t   attached_obj;   // number of attached fireball object
 	vms_vector pos;         // absolute x,y,z coordinate of center of object
 	vms_matrix orient;      // orientation of object in world
 	fix     size;           // 3d size of object - for collision detection
@@ -296,7 +296,7 @@ typedef struct {
 	int     rear_view;
 	int     user;
 	int     num_objects;
-	short   rendered_objects[MAX_RENDERED_OBJECTS];
+	objnum_t   rendered_objects[MAX_RENDERED_OBJECTS];
 } window_rendered_data;
 
 #define MAX_RENDERED_WINDOWS    6
@@ -329,7 +329,7 @@ extern int Player_is_dead;          // !0 means player is dead!
 extern int Player_exploded;
 extern int Player_eggs_dropped;
 extern int Death_sequence_aborted;
-extern int Player_fired_laser_this_frame;
+extern objnum_t Player_fired_laser_this_frame;
 
 /*
  * FUNCTIONS
@@ -348,7 +348,7 @@ int obj_get_new_seg(dxxobject *obj);
 
 // when an object has moved into a new segment, this function unlinks it
 // from its old segment, and links it into the new segment
-void obj_relink(int objnum,segnum_t newsegnum);
+void obj_relink(objnum_t objnum,segnum_t newsegnum);
 
 // for getting out of messed up linking situations (i.e. caused by demo playback)
 void obj_relink_all(void);
@@ -358,22 +358,22 @@ void obj_set_new_seg(int objnum,segnum_t newsegnum);
 
 // links an object into a segment's list of objects.
 // takes object number and segment number
-void obj_link(int objnum,segnum_t segnum);
+void obj_link(objnum_t objnum,segnum_t segnum);
 
 // unlinks an object from a segment's list of objects
-void obj_unlink(int objnum);
+void obj_unlink(objnum_t objnum);
 
 // initialize a new object.  adds to the list for the given segment
 // returns the object number
-int obj_create(enum object_type_t type, ubyte id, segnum_t segnum, const vms_vector *pos,
+objnum_t obj_create(enum object_type_t type, ubyte id, segnum_t segnum, const vms_vector *pos,
                const vms_matrix *orient, fix size,
                ubyte ctype, ubyte mtype, ubyte rtype);
 
 // make a copy of an object. returs num of new object
-int obj_create_copy(int objnum, vms_vector *new_pos, segnum_t newsegnum);
+objnum_t obj_create_copy(objnum_t objnum, vms_vector *new_pos, segnum_t newsegnum);
 
 // remove object from the world
-void obj_delete(int objnum);
+void obj_delete(objnum_t objnum);
 
 // called after load.  Takes number of objects, and objects should be
 // compressed
@@ -430,11 +430,11 @@ extern segnum_t find_object_seg(dxxobject * obj );
 void fix_object_segs();
 
 // Drops objects contained in objp.
-int object_create_egg(dxxobject *objp);
+objnum_t object_create_egg(dxxobject *objp);
 
 // Interface to object_create_egg, puts count objects of type type, id
 // = id in objp and then drops them.
-int call_object_create_egg(dxxobject *objp, int count, int type, int id);
+objnum_t call_object_create_egg(dxxobject *objp, int count, int type, int id);
 
 extern void dead_player_end(void);
 
@@ -458,12 +458,12 @@ int obj_get_signature();
 // Generally, obj_create() should be called to get an object, since it
 // fills in important fields and does the linking.  returns -1 if no
 // free objects
-int obj_allocate(void);
+objnum_t obj_allocate(void);
 
 // frees up an object.  Generally, obj_delete() should be called to
 // get rid of an object.  This function deallocates the object entry
 // after the object has been unlinked
-void obj_free(int objnum);
+void obj_free(objnum_t objnum);
 
 // after calling init_object(), the network code has grabbed specific
 // object slots without allocating them.  Go though the objects &
@@ -478,7 +478,7 @@ void obj_attach(dxxobject *parent,dxxobject *sub);
 void create_small_fireball_on_object(dxxobject *objp, fix size_scale, int sound_flag);
 
 // returns object number
-int drop_marker_object(vms_vector *pos, segnum_t segnum, vms_matrix *orient, int marker_num);
+objnum_t drop_marker_object(vms_vector *pos, segnum_t segnum, vms_matrix *orient, int marker_num);
 
 void wake_up_rendered_objects(dxxobject *gmissp, int window_num);
 

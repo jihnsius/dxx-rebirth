@@ -115,7 +115,7 @@ void ai_init_boss_for_ship(void)
 
 // ---------------------------------------------------------------------------------------------------------------------
 //	initial_mode == -1 means leave mode unchanged.
-void init_ai_object(int objnum, int behavior, segnum_t hide_segment)
+void init_ai_object(objnum_t objnum, int behavior, segnum_t hide_segment)
 {
 	dxxobject	*objp = &Objects[objnum];
 	ai_static	*aip = &objp->ctype.ai_info;
@@ -224,8 +224,8 @@ void create_buddy_bot(void)
 //	one_wall_hack added by MK, 10/13/95: A mega-hack!  Set to !0 to ignore the
 static void init_boss_segments(short segptr[], int *num_segs, int size_check, int one_wall_hack)
 {
-	int			boss_objnum=-1;
-	int			i;
+	objnum_t			boss_objnum=-1;
+	objnum_t			i;
 
 	*num_segs = 0;
 #ifdef EDITOR
@@ -318,11 +318,9 @@ static void init_boss_segments(short segptr[], int *num_segs, int size_check, in
 // ---------------------------------------------------------------------------------------------------------------------
 void init_ai_objects(void)
 {
-	int	i;
-
 	Point_segs_free_ptr = Point_segs;
 
-	for (i=0; i<MAX_OBJECTS; i++) {
+	for (objnum_t i=0; i<MAX_OBJECTS; i++) {
 		dxxobject *objp = &Objects[i];
 
 		if (objp->control_type == CT_AI)
@@ -501,7 +499,7 @@ int player_is_visible_from_object(dxxobject *objp, vms_vector *pos, fix field_of
 //	Return 1 if animates, else return 0
 int do_silly_animation(dxxobject *objp)
 {
-	int				objnum = objp-Objects;
+	objnum_t				objnum = objp-Objects;
 	const jointpos 		*jp_list;
 	int				robot_type, gun_num, robot_state, num_joint_positions;
 	polyobj_info	*pobj_info = &objp->rtype.pobj_info;
@@ -634,7 +632,7 @@ int do_silly_animation(dxxobject *objp)
 //	Delta orientation of object is at:		ai_info.delta_angles
 void ai_frame_animation(dxxobject *objp)
 {
-	int	objnum = objp-Objects;
+	objnum_t	objnum = objp-Objects;
 	int	joint;
 	int	num_joints;
 
@@ -859,7 +857,7 @@ static int lead_player(dxxobject *objp, vms_vector *fire_point, vms_vector *beli
 //	When this routine is complete, the parameter vec_to_player should not be necessary.
 static void ai_fire_laser_at_player(dxxobject *obj, vms_vector *fire_point, int gun_num, vms_vector *believed_player_pos)
 {
-	int			objnum = obj-Objects;
+	objnum_t			objnum = obj-Objects;
 	ai_local		*ailp = &Ai_local_info[objnum];
 	robot_info	*robptr = &Robot_info[obj->id];
 	vms_vector	fire_vec;
@@ -1060,7 +1058,7 @@ static void move_around_player(dxxobject *objp, vms_vector *vec_to_player, int f
 	physics_info	*pptr = &objp->mtype.phys_info;
 	fix				speed;
 	robot_info		*robptr = &Robot_info[objp->id];
-	int				objnum = objp-Objects;
+	objnum_t				objnum = objp-Objects;
 	int				dir;
 	int				dir_change;
 	fix				ft;
@@ -1299,7 +1297,7 @@ void make_random_vector(vms_vector *vec)
 }
 
 //	-------------------------------------------------------------------------------------------------------------------
-int	Break_on_object = -1;
+objnum_t	Break_on_object = -1;
 
 void do_firing_stuff(dxxobject *obj, int player_visibility, vms_vector *vec_to_player)
 {
@@ -1654,7 +1652,7 @@ int openable_doors_in_segment(segnum_t segnum)
 //	Return true if placing an object of size size at pos *pos intersects a (player or robot or control center) in segment *segp.
 static int check_object_object_intersection(vms_vector *pos, fix size, segment *segp)
 {
-	int		curobjnum;
+	objnum_t		curobjnum;
 
 	//	If this would intersect with another object (only check those in this segment), then try to move.
 	curobjnum = segp->objects;
@@ -1674,14 +1672,15 @@ static int check_object_object_intersection(vms_vector *pos, fix size, segment *
 // --------------------------------------------------------------------------------------------------------------------
 //	Return objnum if object created, else return -1.
 //	If pos == NULL, pick random spot in segment.
-static int create_gated_robot( segnum_t segnum, int object_id, vms_vector *pos)
+static objnum_t create_gated_robot( segnum_t segnum, int object_id, vms_vector *pos)
 {
-	int		objnum;
+	objnum_t		objnum;
 	dxxobject	*objp;
 	segment	*segp = &Segments[segnum];
 	vms_vector	object_pos;
 	robot_info	*robptr = &Robot_info[object_id];
-	int		i, count=0;
+	objnum_t		i;
+	int count=0;
 	fix		objsize = Polygon_models[robptr->model_num].rad;
 	int		default_behavior;
 
@@ -1773,9 +1772,9 @@ int	Max_spew_bots[NUM_D2_BOSSES] = {2, 1, 2, 3, 3, 3,  3, 3};
 
 //	----------------------------------------------------------------------------------------------------------
 //	objp points at a boss.  He was presumably just hit and he's supposed to create a bot at the hit location *pos.
-int boss_spew_robot(dxxobject *objp, vms_vector *pos)
+objnum_t boss_spew_robot(dxxobject *objp, vms_vector *pos)
 {
-	int		objnum;
+	objnum_t		objnum;
 	segnum_t segnum;
 	int		boss_index;
 
@@ -1832,7 +1831,7 @@ void init_ai_for_ship(void)
 //	The process of him bringing in a robot takes one second.
 //	Then a robot appears somewhere near the player.
 //	Return objnum if robot successfully created, else return -1
-int gate_in_robot(int type, segnum_t segnum)
+objnum_t gate_in_robot(int type, segnum_t segnum)
 {
 	if (segnum > Highest_segment_index)
 		segnum = Boss_gate_segs[(d_rand() * Num_boss_gate_segs) >> 15];
@@ -1846,7 +1845,7 @@ int gate_in_robot(int type, segnum_t segnum)
 int boss_fits_in_seg(dxxobject *boss_objp, segnum_t segnum)
 {
 	vms_vector	segcenter;
-	int			boss_objnum = boss_objp-Objects;
+	objnum_t			boss_objnum = boss_objp-Objects;
 	int			posnum;
 
 	compute_segment_center(&segcenter, &Segments[segnum]);
@@ -2087,7 +2086,7 @@ void do_boss_stuff(dxxobject *objp, int player_visibility)
 
 #define	BOSS_TO_PLAYER_GATE_DISTANCE	(F1_0*200)
 
-void ai_multi_send_robot_position(int objnum, int force)
+void ai_multi_send_robot_position(objnum_t objnum, int force)
 {
 #ifdef NETWORK
 	if (Game_mode & GM_MULTI)

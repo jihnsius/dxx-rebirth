@@ -297,7 +297,7 @@ static int is_legal_type(int the_type)
 	return (the_type == OBJ_ROBOT) || (the_type == OBJ_CLUTTER);
 }
 
-static int is_legal_type_for_this_window(int objnum)
+static int is_legal_type_for_this_window(objnum_t objnum)
 {
 	if (objnum == -1)
 		return 1;
@@ -307,7 +307,8 @@ static int is_legal_type_for_this_window(int objnum)
 
 static int LocalObjectSelectNextinSegment(void)
 {
-	int	rval, first_obj;
+	int	rval;
+	objnum_t first_obj;
 
 	rval = ObjectSelectNextinSegment();
 	first_obj = Cur_object_index;
@@ -334,7 +335,8 @@ static int LocalObjectSelectNextinSegment(void)
 
 static int LocalObjectSelectNextinMine(void)
 {
-	int	rval, first_obj;
+	int	rval;
+	objnum_t first_obj;
 
 	rval = ObjectSelectNextInMine();
 
@@ -362,7 +364,8 @@ static int LocalObjectSelectNextinMine(void)
 
 static int LocalObjectSelectPrevinMine(void)
 {
-	int	rval, first_obj;
+	int	rval;
+	objnum_t first_obj;
 
 	rval = ObjectSelectPrevInMine();
 

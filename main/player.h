@@ -25,6 +25,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "maths.h"
 #include "vecmat.h"
 #include "weapon.h"
+#include "object.types.h"
 
 #define MAX_PLAYERS 8
 #define MAX_MULTI_PLAYERS MAX_PLAYERS+3
@@ -75,7 +76,7 @@ typedef struct player {
 	char    callsign[CALLSIGN_LEN+1];   // The callsign of this player, for net purposes.
 	ubyte   net_address[6];         // The network address of the player.
 	sbyte   connected;              // Is the player connected or not?
-	int     objnum;                 // What object number this player is. (made an int by mk because it's very often referenced)
+	objnum_t     objnum;                 // What object number this player is. (made an int by mk because it's very often referenced)
 	int     n_packets_got;          // How many packets we got from them
 	int     n_packets_sent;         // How many packets we sent to them
 
@@ -89,7 +90,7 @@ typedef struct player {
 	sbyte   level;                  // Current level player is playing. (must be signed for secret levels)
 	ubyte   laser_level;            // Current level of the laser.
 	sbyte   starting_level;         // What level the player started on.
-	short   killer_objnum;          // Who killed me.... (-1 if no one)
+	objnum_t   killer_objnum;          // Who killed me.... (-1 if no one)
 	ushort  primary_weapon_flags;   // bit set indicates the player has this weapon.
 	ushort  secondary_weapon_flags; // bit set indicates the player has this weapon.
 	ushort  primary_ammo[MAX_PRIMARY_WEAPONS]; // How much ammo of each type.

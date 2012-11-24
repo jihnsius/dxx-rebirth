@@ -510,8 +510,7 @@ static void show_extra_views()
 		{
 			dxxobject *local_player_missile = NULL;
 			dxxobject *other_player_missile = NULL;
-			unsigned i;
-			for (i=0; i<=Highest_object_index; i++)
+			for (objnum_t i=0; i<=Highest_object_index; i++)
 			{
 				dxxobject *o = &Objects[i];
 				if (o->type != OBJ_WEAPON)

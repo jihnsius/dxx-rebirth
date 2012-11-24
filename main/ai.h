@@ -64,14 +64,14 @@ extern vms_vector Believed_player_pos;
 extern segnum_t Believed_player_seg;
 
 void move_towards_segment_center(dxxobject *objp);
-int gate_in_robot(int type, segnum_t segnum);
+objnum_t gate_in_robot(int type, segnum_t segnum);
 void do_ai_movement(dxxobject *objp);
 void ai_move_to_new_segment( dxxobject * obj, short newseg, int first_time );
 // extern void ai_follow_path( object * obj, short newseg, int first_time );
 void ai_recover_from_wall_hit(dxxobject *obj, int segnum);
 void ai_move_one(dxxobject *objp);
 void do_ai_frame(dxxobject *objp);
-void init_ai_object(int objnum, int initial_mode, segnum_t hide_segment);
+void init_ai_object(objnum_t objnum, int initial_mode, segnum_t hide_segment);
 void update_player_awareness(dxxobject *objp, fix new_awareness);
 void create_awareness_event(dxxobject *objp, int type);         // object *objp can create awareness of player, amount based on "type"
 void do_ai_frame_all(void);
@@ -201,15 +201,15 @@ extern int   Escort_kill_object;
 extern ubyte Stolen_items[MAX_STOLEN_ITEMS];
 extern fix64   Escort_last_path_created;
 extern escort_goal_t   Escort_goal_object, Escort_special_goal;
-extern int Escort_goal_index;
+extern objnum_t Escort_goal_index;
 
 void  create_buddy_bot(void);
 
 extern int   Max_escort_length;
 
 
-void  ai_multi_send_robot_position(int objnum, int force);
-int boss_spew_robot(dxxobject *objp, vms_vector *pos);
+void  ai_multi_send_robot_position(objnum_t objnum, int force);
+objnum_t boss_spew_robot(dxxobject *objp, vms_vector *pos);
 void init_ai_for_ship(void);
 void do_boss_dying_frame(dxxobject *objp);
 
@@ -267,7 +267,8 @@ extern awareness_event  Awareness_events[MAX_AWARENESS_EVENTS];
 
 // Index into this array with aip->GOAL_STATE or aip->CURRENT_STATE
 
-extern int Do_ai_flag, Break_on_object;
+extern int Do_ai_flag;
+extern objnum_t Break_on_object;
 
 #endif //ifndef NDEBUG
 
@@ -295,8 +296,8 @@ void init_thief_for_level();
 int ai_save_state(PHYSFS_file * fp);
 int ai_restore_state(PHYSFS_file *fp, int version, int swap);
 
-extern int Buddy_objnum, Buddy_allowed_to_talk;
-extern int Ai_last_missile_camera;
+extern int Buddy_allowed_to_talk;
+extern objnum_t Buddy_objnum, Ai_last_missile_camera;
 
 void start_robot_death_sequence(dxxobject *objp);
 int do_any_robot_dying_frame(dxxobject *objp);

@@ -142,7 +142,7 @@ static const char * get_ai_behavior(int num, char *name)
 //	---------------------------------------------------------------------------------------------------
 static void info_display_object_placement(int show_all)
 {
-	static	int	old_Cur_object_index;
+	static	objnum_t	old_Cur_object_index = object_none;
 	static	int	old_type;
 	static	int	old_movement_type;
 	static	int	old_control_type;
@@ -150,7 +150,7 @@ static void info_display_object_placement(int show_all)
 
 	char		name[30];
 
-	const unsigned coi = Cur_object_index;
+	const objnum_t coi = Cur_object_index;
 	if (coi >= sizeof(Objects) / sizeof(Objects[0]))
 		return;
 	if (init_info || show_all) {

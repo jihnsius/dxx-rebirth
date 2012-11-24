@@ -318,14 +318,15 @@ static void fix_illegal_wall_intersection(dxxobject *obj, vms_vector *origin)
 //Simulate a physics object for this frame
 void do_physics_sim(dxxobject *obj)
 {
-	int ignore_obj_list[MAX_IGNORE_OBJS],n_ignore_objs;
+	objnum_t ignore_obj_list[MAX_IGNORE_OBJS];
+	unsigned n_ignore_objs;
 	segnum_t iseg;
 	int try_again;
 	int fate=0;
 	vms_vector frame_vec;			//movement in this frame
 	vms_vector new_pos,ipos;		//position after this frame
 	int count=0;
-	int objnum;
+	objnum_t objnum;
 	segnum_t WallHitSeg;
 	int WallHitSide;
 	fvi_info hit_info;

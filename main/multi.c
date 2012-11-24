@@ -78,7 +78,7 @@ static void multi_set_robot_ai(void);
 static int  find_goal_texture(ubyte t);
 static void multi_do_capture_bonus(char *buf);
 static void multi_do_orb_bonus(char *buf);
-static void multi_send_drop_flag(int objnum,int seed);
+static void multi_send_drop_flag(objnum_t objnum,int seed);
 static void multi_send_ranking();
 static void multi_do_play_by_play(char *buf);
 static void multi_new_bounty_target( int pnum );
@@ -121,11 +121,11 @@ int multi_message_index = 0;
 
 char multibuf[MAX_MULTI_MESSAGE_LEN+4];            // This is where multiplayer message are built
 
-short remote_to_local[MAX_PLAYERS][MAX_OBJECTS];  // Remote object number for each local object
+objnum_t remote_to_local[MAX_PLAYERS][MAX_OBJECTS];  // Remote object number for each local object
 short local_to_remote[MAX_OBJECTS];
 sbyte object_owner[MAX_OBJECTS];   // Who created each object in my universe, -1 = loaded at start
 
-int   Net_create_objnums[MAX_NET_CREATE_OBJECTS]; // For tracking object creation that will be sent to remote
+objnum_t   Net_create_objnums[MAX_NET_CREATE_OBJECTS]; // For tracking object creation that will be sent to remote
 int   Net_create_loc = 0;       // pointer into previous array
 int   Network_status = 0;
 char  Network_message[MAX_MESSAGE_LEN];
@@ -142,7 +142,7 @@ const char *const GMNamesShrt[9]={"ANRCHY","TEAM","ROBO","COOP","FLAG","HOARD","
 
 int	Network_send_objects = 0;  // Are we in the process of sending objects to a player?
 int	Network_send_object_mode = 0; // What type of objects are we sending, static or dynamic?
-int 	Network_send_objnum = -1;   // What object are we sending next?
+objnum_t 	Network_send_objnum = -1;   // What object are we sending next?
 int     Network_rejoined = 0;       // Did WE rejoin this game?
 int     Network_sending_extras=0;
 int     VerifyPlayerJoined=-1;      // Player (num) to enter game before any ingame/extra stuff is being sent
@@ -282,11 +282,11 @@ void ClipRank (ubyte *rank)
 //  Functions that replace what used to be macros
 //
 
-int objnum_remote_to_local(int remote_objnum, int owner)
+objnum_t objnum_remote_to_local(int remote_objnum, int owner)
 {
 	// Map a remote object number from owner to a local object number
 
-	int result;
+	objnum_t result;
 
 	if ((owner >= N_players) || (owner < -1)) {
 		Int3(); // Illegal!
@@ -309,7 +309,7 @@ int objnum_remote_to_local(int remote_objnum, int owner)
 	return(result);
 }
 
-int objnum_local_to_remote(int local_objnum, sbyte *owner)
+int objnum_local_to_remote(objnum_t local_objnum, sbyte *owner)
 {
 	// Map a local object number to a remote + owner
 
@@ -342,7 +342,7 @@ int objnum_local_to_remote(int local_objnum, sbyte *owner)
 }
 
 void
-map_objnum_local_to_remote(int local_objnum, int remote_objnum, int owner)
+map_objnum_local_to_remote(objnum_t local_objnum, int remote_objnum, int owner)
 {
 	// Add a mapping from a network remote object number to a local one
 
@@ -362,7 +362,7 @@ map_objnum_local_to_remote(int local_objnum, int remote_objnum, int owner)
 }
 
 void
-map_objnum_local_to_local(int local_objnum)
+map_objnum_local_to_local(objnum_t local_objnum)
 {
 	// Add a mapping for our locally created objects
 
@@ -383,7 +383,7 @@ void reset_network_objects()
 	memset(object_owner, -1, MAX_OBJECTS);
 }
 
-int multi_objnum_is_past(int objnum)
+int multi_objnum_is_past(objnum_t objnum)
 {
 	switch (multi_protocol)
 	{
@@ -608,7 +608,7 @@ multi_sort_kill_list(void)
 
 char Multi_killed_yourself=0;
 
-static void multi_compute_kill(int killer, int killed)
+static void multi_compute_kill(objnum_t killer, objnum_t killed)
 {
 	// Figure out the results of a network kills and add it to the
 	// appropriate player's tally.
@@ -1662,7 +1662,7 @@ multi_do_position(char *buf)
 static void
 multi_do_reappear(char *buf)
 {
-	short objnum;
+	objnum_t objnum;
 	ubyte pnum = buf[1];
 
 	objnum = GET_INTEL_SHORT(buf + 2);
@@ -1797,7 +1797,7 @@ multi_do_player_explode(char *buf)
 static void
 multi_do_kill(char *buf)
 {
-	int killer, killed;
+	objnum_t killer, killed;
 	int count = 1;
 	int pnum = (int)(buf[count]);
 	int type = (int)(buf[0]);
@@ -1847,7 +1847,7 @@ multi_do_kill(char *buf)
 static void multi_do_controlcen_destroy(char *buf)
 {
 	sbyte who;
-	short objnum;
+	objnum_t objnum;
 
 	objnum = GET_INTEL_SHORT(buf + 1);
 	who = buf[3];
@@ -1872,7 +1872,7 @@ static void multi_do_controlcen_destroy(char *buf)
 static void
 multi_do_escape(char *buf)
 {
-	int objnum;
+	objnum_t objnum;
 
 	objnum = Players[(int)buf[1]].objnum;
 
@@ -1903,7 +1903,7 @@ static void
 multi_do_remobj(char *buf)
 {
 	short objnum; // which object to remove
-	short local_objnum;
+	objnum_t local_objnum;
 	sbyte obj_owner; // which remote list is it entered in
 
 	objnum = GET_INTEL_SHORT(buf + 1);
@@ -2150,7 +2150,7 @@ multi_do_controlcen_fire(char *buf)
 {
 	vms_vector to_target;
 	char gun_num;
-	short objnum;
+	objnum_t objnum;
 	int count = 1;
 
 	memcpy(&to_target, buf+count, 12);          count += 12;
@@ -2170,7 +2170,7 @@ multi_do_create_powerup(char *buf)
 {
 	segnum_t segnum;
 	short objnum;
-	int my_objnum;
+	objnum_t my_objnum;
 	char pnum;
 	int count = 1;
 	vms_vector new_pos;
@@ -2453,7 +2453,7 @@ multi_process_bigdata(char *buf, int len)
 //          players of something we did.
 //
 
-void multi_send_fire(int laser_gun, int laser_level, int laser_flags, int laser_fired, short laser_track)
+void multi_send_fire(int laser_gun, int laser_level, int laser_flags, int laser_fired, objnum_t laser_track)
 {
 	multi_do_protocol_frame(1, 0); // provoke positional update if possible
 
@@ -2469,7 +2469,7 @@ void multi_send_fire(int laser_gun, int laser_level, int laser_flags, int laser_
 }
 
 void
-multi_send_destroy_controlcen(int objnum, int player)
+multi_send_destroy_controlcen(objnum_t objnum, int player)
 {
 	if (player == Player_num)
 		HUD_init_message(HM_MULTI, "%s", TXT_YOU_DEST_CONTROL);
@@ -2623,7 +2623,7 @@ void multi_powcap_count_powerups_in_mine(void)
 	for (i=0;i<MAX_POWERUP_TYPES;i++)
 		PowerupsInMine[i]=0;
 
-	for (i=0;i<=Highest_object_index;i++)
+	for (objnum_t i=0;i<=Highest_object_index;i++)
 	{
 		if (Objects[i].type==OBJ_POWERUP)
 		{
@@ -2877,7 +2877,7 @@ multi_send_reappear()
 }
 
 void
-multi_send_position(int objnum)
+multi_send_position(objnum_t objnum)
 {
 #ifdef WORDS_BIGENDIAN
 	shortpos sp;
@@ -2905,11 +2905,11 @@ multi_send_position(int objnum)
  * I was killed. If I am host, send this info to everyone and compute kill. If I am just a Client I'll only send the kill but not compute it for me. I (Client) will wait for Host to send me my kill back together with updated game_mode related variables which are important for me to compute consistent kill.
  */
 void
-multi_send_kill(int objnum)
+multi_send_kill(objnum_t objnum)
 {
 	// I died, tell the world.
 
-	int killer_objnum;
+	objnum_t killer_objnum;
 	int count = 0;
 
 	Assert(Objects[objnum].id == Player_num);
@@ -2956,7 +2956,7 @@ multi_send_kill(int objnum)
 }
 
 void
-multi_send_remobj(int objnum)
+multi_send_remobj(objnum_t objnum)
 {
 	// Tell the other guy to remove an object from his list
 
@@ -3096,7 +3096,7 @@ multi_send_create_explosion(int pnum)
 }
 
 void
-multi_send_controlcen_fire(vms_vector *to_goal, int best_gun_num, int objnum)
+multi_send_controlcen_fire(vms_vector *to_goal, int best_gun_num, objnum_t objnum)
 {
 #ifdef WORDS_BIGENDIAN
 	vms_vector swapped_vec;
@@ -3120,7 +3120,7 @@ multi_send_controlcen_fire(vms_vector *to_goal, int best_gun_num, int objnum)
 }
 
 void
-multi_send_create_powerup(int powerup_type, segnum_t segnum, int objnum, vms_vector *pos)
+multi_send_create_powerup(int powerup_type, segnum_t segnum, objnum_t objnum, vms_vector *pos)
 {
 	// Create a powerup on a remote machine, used for remote
 	// placement of used powerups like missiles and cloaking
@@ -3288,7 +3288,6 @@ void multi_prep_level(void)
 	// since the resulting checksum with depend on the value of Player_num
 	// at the time this is called.
 
-	int i;
 	int     cloak_count, inv_count;
 
 	Assert(Game_mode & GM_MULTI);
@@ -3302,7 +3301,7 @@ void multi_prep_level(void)
 
 	multi_consistency_error(1);
 
-	for (i=0;i<MAX_PLAYERS;i++)
+	for (unsigned i=0;i<MAX_PLAYERS;i++)
 	{
 		PKilledFlags[i]=1;
 		multi_sending_message[i] = 0;
@@ -3310,7 +3309,7 @@ void multi_prep_level(void)
 			init_player_stats_new_ship(i);
 	}
 
-	for (i = 0; i < NumNetPlayerPositions; i++)
+	for (unsigned i = 0; i < NumNetPlayerPositions; i++)
 	{
 		if (i != Player_num)
 			Objects[Players[i].objnum].control_type = CT_REMOTE;
@@ -3319,7 +3318,7 @@ void multi_prep_level(void)
 		Netgame.players[i].LastPacketTime = 0;
 	}
 
-	for (i = 0; i < MAX_ROBOTS_CONTROLLED; i++)
+	for (unsigned i = 0; i < MAX_ROBOTS_CONTROLLED; i++)
 	{
 		robot_controlled[i] = -1;
 		robot_agitation[i] = 0;
@@ -3346,9 +3345,9 @@ void multi_prep_level(void)
 
 	inv_count = 0;
 	cloak_count = 0;
-	for (i=0; i<=Highest_object_index; i++)
+	for (objnum_t i=0; i<=Highest_object_index; i++)
 	{
-		int objnum;
+		objnum_t objnum;
 
 		if ((Objects[i].type == OBJ_HOSTAGE) && !(Game_mode & GM_MULTI_COOP))
 		{
@@ -3619,9 +3618,7 @@ static void multi_set_robot_ai(void)
 
 int multi_delete_extra_objects()
 {
-	int i;
 	int nnp=0;
-	dxxobject *objp;
 
 	// Go through the object list and remove any objects not used in
 	// 'Anarchy!' games.
@@ -3629,8 +3626,8 @@ int multi_delete_extra_objects()
 	// This function also prints the total number of available multiplayer
 	// positions in this level, even though this should always be 8 or more!
 
-	objp = Objects;
-	for (i=0;i<=Highest_object_index;i++) {
+	for (objnum_t i=0;i<=Highest_object_index;i++) {
+		dxxobject *objp = &Objects[i];
 		if ((objp->type==OBJ_PLAYER) || (objp->type==OBJ_GHOST))
 			nnp++;
 		else if ((objp->type==OBJ_ROBOT) && (Game_mode & GM_MULTI_ROBOTS))
@@ -3642,7 +3639,6 @@ int multi_delete_extra_objects()
 					object_create_egg(objp);
 			obj_delete(i);
 		}
-		objp++;
 	}
 
 	return nnp;
@@ -3687,7 +3683,7 @@ int multi_all_players_alive()
 	return (1);
 }
 
-void multi_send_drop_weapon (int objnum,int seed)
+void multi_send_drop_weapon (objnum_t objnum,int seed)
 {
 	dxxobject *objp;
 	int count=0;
@@ -3731,9 +3727,10 @@ void multi_send_drop_weapon (int objnum,int seed)
 
 static void multi_do_drop_weapon (char *buf)
 {
-	int pnum,ammo,objnum,remote_objnum,seed;
+	int pnum,ammo,remote_objnum,seed;
 	dxxobject *objp;
 	int powerup_id;
+	objnum_t objnum;
 
 	powerup_id=(int)(buf[1]);
 	pnum = GET_INTEL_SHORT(buf + 2);
@@ -4379,7 +4376,8 @@ static void multi_do_got_orb (char *buf)
 
 static void DropOrb ()
 {
-	int objnum,seed;
+	objnum_t objnum;
+	int seed;
 
 	if (!(Game_mode & GM_HOARD))
 		Int3(); // How did we get here? Get Leighton!
@@ -4415,7 +4413,8 @@ static void DropOrb ()
 
 void DropFlag ()
 {
-	int objnum,seed;
+	objnum_t objnum;
+	int seed;
 
 	if (!(Game_mode & GM_CAPTURE) && !(Game_mode & GM_HOARD))
 		return;
@@ -4452,7 +4451,7 @@ void DropFlag ()
 }
 
 
-static void multi_send_drop_flag (int objnum,int seed)
+static void multi_send_drop_flag (objnum_t objnum,int seed)
 {
 	dxxobject *objp;
 	int count=0;
@@ -4478,9 +4477,10 @@ static void multi_send_drop_flag (int objnum,int seed)
 
 static void multi_do_drop_flag (char *buf)
 {
-	int pnum,ammo,objnum,remote_objnum,seed;
+	int pnum,ammo,remote_objnum,seed;
 	dxxobject *objp;
 	int powerup_id;
+	objnum_t objnum;
 
 	powerup_id=buf[1];
 	pnum = GET_INTEL_SHORT(buf + 2);

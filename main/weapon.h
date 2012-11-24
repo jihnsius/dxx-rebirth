@@ -226,7 +226,7 @@ int pick_up_ammo(int class_flag,int weapon_index,int ammo_count);
 int attempt_to_steal_item(struct dxxobject *objp, int player_num);
 
 //this function is for when the player intentionally drops a powerup
-int spit_powerup(struct dxxobject *spitter, int id, int seed);
+objnum_t spit_powerup(struct dxxobject *spitter, int id, int seed);
 
 #define SMEGA_ID    40
 

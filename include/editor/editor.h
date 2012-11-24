@@ -595,7 +595,7 @@ extern short Cur_object_id;
 
 //	From med.c
 int DisplayCurrentRobotType(void);
-extern short			Cur_object_index;
+extern objnum_t			Cur_object_index;
 
 extern int render_3d_in_big_window;
 void move_object_to_mouse_click(void);

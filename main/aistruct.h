@@ -26,6 +26,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #include "inferno.h"
 #include "polyobj.h"
+#include "object.types.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -148,7 +149,7 @@ typedef struct ai_static {
 	short   path_length;            // Length of hide path.
 	sbyte   cur_path_index;         // Current index in path.
 	sbyte   dying_sound_playing;    // !0 if this robot is playing its dying sound.
-	short   danger_laser_num;
+	objnum_t   danger_laser_num;
 	int     danger_laser_signature;
 	fix64   dying_start_time;       // Time at which this robot started dying.
 } ai_static;

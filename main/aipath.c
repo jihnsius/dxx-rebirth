@@ -994,7 +994,8 @@ void ai_follow_path(dxxobject *objp, int player_visibility, int previous_visibil
 }
 
 typedef struct {
-	short	path_start, objnum;
+	short	path_start;
+	objnum_t objnum;
 } obj_path;
 
 static int path_index_compare(obj_path *i1, obj_path *i2)
@@ -1086,7 +1087,6 @@ void ai_path_garbage_collect(void)
 {
 	int	free_path_index = 0;
 	int	num_path_objects = 0;
-	int	objnum;
 	int	objind;
 	obj_path		object_list[MAX_OBJECTS];
 
@@ -1097,7 +1097,7 @@ void ai_path_garbage_collect(void)
 	Last_frame_garbage_collected = FrameCount;
 
 	//	Create a list of objects which have paths of length 1 or more.
-	for (objnum=0; objnum <= Highest_object_index; objnum++) {
+	for (objnum_t objnum=0; objnum <= Highest_object_index; objnum++) {
 		dxxobject	*objp = &Objects[objnum];
 
 		if ((objp->type == OBJ_ROBOT) && ((objp->control_type == CT_AI) || (objp->control_type == CT_MORPH))) {
@@ -1119,7 +1119,7 @@ void ai_path_garbage_collect(void)
 		int			i;
 		int			old_index;
 
-		objnum = object_list[objind].objnum;
+		objnum_t objnum = object_list[objind].objnum;
 		objp = &Objects[objnum];
 		aip = &objp->ctype.ai_info;
 		old_index = aip->hide_index;
@@ -1133,11 +1133,9 @@ void ai_path_garbage_collect(void)
 
 #ifndef NDEBUG
 	{
-	int i;
-
 	force_dump_ai_objects_all("***** Finish ai_path_garbage_collect *****");
 
-	for (i=0; i<=Highest_object_index; i++) {
+	for (objnum_t i=0; i<=Highest_object_index; i++) {
 		ai_static	*aip = &Objects[i].ctype.ai_info;
 
 		if ((Objects[i].type == OBJ_ROBOT) && (Objects[i].control_type == CT_AI))
@@ -1178,9 +1176,7 @@ void maybe_ai_path_garbage_collect(void)
 //	Should be called at the start of each level.
 void ai_reset_all_paths(void)
 {
-	int	i;
-
-	for (i=0; i<=Highest_object_index; i++)
+	for (objnum_t i=0; i<=Highest_object_index; i++)
 		if (Objects[i].control_type == CT_AI) {
 			Objects[i].ctype.ai_info.hide_index = -1;
 			Objects[i].ctype.ai_info.path_length = 0;

@@ -386,7 +386,7 @@ static void ogl_cache_weapon_textures(int weapon_type)
 
 void ogl_cache_level_textures(void)
 {
-	int side,i;
+	int side;
 	eclip *ec;
 	short tmap1,tmap2;
 	grs_bitmap *bm,*bm2;
@@ -395,6 +395,8 @@ void ogl_cache_level_textures(void)
 
 	ogl_reset_texture_stats_internal();//loading a new lev should reset textures
 
+	{
+		int i;
 	for (i=0,ec=Effects;i<Num_effects;i++,ec++) {
 		ogl_cache_vclipn_textures(Effects[i].dest_vclip);
 		if ((Effects[i].changing_wall_texture == -1) && (Effects[i].changing_object_texture==-1) )
@@ -402,8 +404,10 @@ void ogl_cache_level_textures(void)
 		if (ec->vc.num_frames>max_efx)
 			max_efx=ec->vc.num_frames;
 	}
+	}
 	glmprintf((0,"max_efx:%i\n",max_efx));
 	for (ef=0;ef<max_efx;ef++){
+		int i;
 		for (i=0,ec=Effects;i<Num_effects;i++,ec++) {
 			if ((Effects[i].changing_wall_texture == -1) && (Effects[i].changing_object_texture==-1) )
 				continue;
@@ -449,7 +453,7 @@ void ogl_cache_level_textures(void)
 		ogl_cache_polymodel_textures(Player_ship->model_num);
 		ogl_cache_vclipn_textures(Player_ship->expl_vclip_num);
 
-		for (i=0;i<=Highest_object_index;i++){
+		for (objnum_t i=0;i<=Highest_object_index;i++){
 			if(Objects[i].render_type==RT_POWERUP){
 				ogl_cache_vclipn_textures(Objects[i].rtype.vclip_info.vclip_num);
 				switch (Objects[i].id){

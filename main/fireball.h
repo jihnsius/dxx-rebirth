@@ -49,7 +49,7 @@ dxxobject *object_create_muzzle_flash(segnum_t segnum, vms_vector *position, fix
 
 dxxobject *object_create_badass_explosion(dxxobject *objp, segnum_t segnum,
 		vms_vector *position, fix size, int vclip_type,
-		fix maxdamage, fix maxdistance, fix maxforce, int parent);
+		fix maxdamage, fix maxdistance, fix maxforce, objnum_t parent);
 
 // blows up a badass weapon, creating the badass explosion
 // return the explosion object
@@ -72,7 +72,7 @@ extern void maybe_drop_net_powerup(int powerup_type);
 extern void maybe_replace_powerup_with_energy(dxxobject *del_obj);
 
 extern int get_explosion_vclip(dxxobject *obj, int stage);
-int drop_powerup(object_type_t type, int id, int num, vms_vector *init_vel, vms_vector *pos, segnum_t segnum);
+objnum_t drop_powerup(object_type_t type, int id, int num, vms_vector *init_vel, vms_vector *pos, segnum_t segnum);
 
 // creates afterburner blobs behind the specified object
 void drop_afterburner_blobs(dxxobject *obj, int count, fix size_scale, fix lifetime);

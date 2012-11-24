@@ -69,7 +69,7 @@ int	Automap_test=0;		//	Set to 1 to show wireframe in automap mode.
 
 static void draw_seg_objects(segment *seg)
 {
-	int objnum;
+	objnum_t objnum;
 
 	for (objnum=seg->objects;objnum!=-1;objnum=Objects[objnum].next) {
 		dxxobject *obj = &Objects[objnum];

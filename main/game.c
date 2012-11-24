@@ -1239,7 +1239,7 @@ int Coop_view_player[iwiv_count];
 //returns ptr to escort robot, or NULL
 dxxobject *find_escort()
 {
-	int i;
+	objnum_t i;
 
 	for (i=0; i<=Highest_object_index; i++)
 		if (Objects[i].type == OBJ_ROBOT)
@@ -1739,7 +1739,7 @@ void FireLaser()
 //	-------------------------------------------------------------------------------------------------------
 //	If player is close enough to objnum, which ought to be a powerup, pick it up!
 //	This could easily be made difficulty level dependent.
-static void powerup_grab_cheat(dxxobject *plr, int objnum)
+static void powerup_grab_cheat(dxxobject *plr, objnum_t objnum)
 {
 	fix	powerup_size;
 	fix	player_size;
@@ -1769,7 +1769,7 @@ static void powerup_grab_cheat(dxxobject *plr, int objnum)
 void powerup_grab_cheat_all(void)
 {
 	segment	*segp;
-	int		objnum;
+	objnum_t		objnum;
 
 	segp = &Segments[ConsoleObject->segnum];
 	objnum = segp->objects;
@@ -1816,7 +1816,7 @@ static int mark_player_path_to_segment(segnum_t dstseg)
 
 	for (i=1; i<player_path_length; i++) {
 		segnum_t			segnum;
-		int objnum;
+		objnum_t objnum;
 		vms_vector	seg_center;
 		dxxobject		*obj;
 

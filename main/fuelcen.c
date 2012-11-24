@@ -231,7 +231,7 @@ void trigger_matcen(segnum_t segnum)
 	segment2		*seg2p = &Segment2s[segnum];
 	vms_vector	pos, delta;
 	FuelCenter	*robotcen;
-	int			objnum;
+	objnum_t			objnum;
 
 	Assert(seg2p->special == SEGMENT_IS_ROBOTMAKER);
 	Assert(seg2p->matcen_num < Num_fuelcenters);
@@ -320,7 +320,7 @@ Restart: ;
 
 dxxobject * create_morph_robot( segment *segp, vms_vector *object_pos, int object_id)
 {
-	short		objnum;
+	objnum_t		objnum;
 	dxxobject	*obj;
 	int		default_behavior;
 
@@ -374,7 +374,7 @@ static void robotmaker_proc( FuelCenter * robotcen )
 {
 	fix		dist_to_player;
 	vms_vector	cur_object_loc; //, direction;
-	int		matcen_num, objnum;
+	int		matcen_num;
 	segnum_t segnum;
 	fix		top_time;
 	vms_vector	direction;
@@ -446,11 +446,11 @@ static void robotmaker_proc( FuelCenter * robotcen )
 
 		if (robotcen->Timer > top_time )	{
 			int	count=0;
-			int	i, my_station_num = robotcen-Station;
+			int	my_station_num = robotcen-Station;
 			dxxobject *obj;
 
 			//	Make sure this robotmaker hasn't put out its max without having any of them killed.
-			for (i=0; i<=Highest_object_index; i++)
+			for (objnum_t i=0; i<=Highest_object_index; i++)
 				if (Objects[i].type == OBJ_ROBOT)
 					if ((Objects[i].matcen_creator^0x80) == my_station_num)
 						count++;
@@ -462,7 +462,7 @@ static void robotmaker_proc( FuelCenter * robotcen )
 			//	Whack on any robot or player in the matcen segment.
 			count=0;
 			segnum = robotcen->segnum;
-			for (objnum=Segments[segnum].objects;objnum!=-1;objnum=Objects[objnum].next)	{
+			for (objnum_t objnum=Segments[segnum].objects;objnum!=-1;objnum=Objects[objnum].next)	{
 				count++;
 				if ( count > MAX_OBJECTS )	{
 					Int3();

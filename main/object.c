@@ -83,7 +83,7 @@ ubyte CollisionResult[MAX_OBJECT_TYPES][MAX_OBJECT_TYPES];
 
 dxxobject *ConsoleObject;					//the object that is the player
 
-static short free_obj_list[MAX_OBJECTS];
+static objnum_t free_obj_list[MAX_OBJECTS];
 
 //Data for objects
 
@@ -142,7 +142,7 @@ const char	Object_type_names[MAX_OBJECT_TYPES][9] = {
 //set viewer object to next object in array
 void object_goto_next_viewer()
 {
-	int i, start_obj = 0;
+	objnum_t i, start_obj = 0;
 
 	start_obj = Viewer - Objects;		//get viewer object number
 
@@ -164,9 +164,7 @@ void object_goto_next_viewer()
 
 dxxobject *obj_find_first_of_type (int type)
  {
-  int i;
-
-  for (i=0;i<=Highest_object_index;i++)
+  for (objnum_t i=0;i<=Highest_object_index;i++)
 	if (Objects[i].type==type)
 	 return (&Objects[i]);
   return ((dxxobject *)NULL);
@@ -574,7 +572,7 @@ static void draw_polygon_object(dxxobject *obj)
 //091494: 	}
 //091494: }
 
-int	Player_fired_laser_this_frame=-1;
+objnum_t	Player_fired_laser_this_frame=-1;
 
 
 
@@ -798,12 +796,11 @@ void init_player_object()
 //sets up the free list & init player & whatever else
 void init_objects()
 {
-	int i;
 	segnum_t j;
 
 	collide_init();
 
-	for (i=0;i<MAX_OBJECTS;i++) {
+	for (objnum_t i=0;i<MAX_OBJECTS;i++) {
 		free_obj_list[i] = i;
 		Objects[i].type = OBJ_NONE;
 		Objects[i].segnum = segment_none;
@@ -828,14 +825,12 @@ void init_objects()
 //the free list, then set the apporpriate globals
 void special_reset_objects(void)
 {
-	int i;
-
 	num_objects=MAX_OBJECTS;
 
 	Highest_object_index = 0;
 	Assert(Objects[0].type != OBJ_NONE);		//0 should be used
 
-	for (i=MAX_OBJECTS;i--;)
+	for (objnum_t i=0;i < MAX_OBJECTS; ++i)
 		if (Objects[i].type == OBJ_NONE)
 			free_obj_list[--num_objects] = i;
 		else
@@ -844,7 +839,7 @@ void special_reset_objects(void)
 }
 
 //link the object into the list for its segment
-void obj_link(int objnum,segnum_t segnum)
+void obj_link(objnum_t objnum,segnum_t segnum)
 {
 	dxxobject *obj = &Objects[objnum];
 
@@ -875,7 +870,7 @@ void obj_link(int objnum,segnum_t segnum)
 		Objects[0].prev = -1;
 }
 
-void obj_unlink(int objnum)
+void obj_unlink(objnum_t objnum)
 {
 	dxxobject  *obj = &Objects[objnum];
 	segment *seg = &Segments[obj->segnum];
@@ -899,7 +894,7 @@ void obj_unlink(int objnum)
 int obj_get_signature()
 {
 	static short sig = 0; // Yes! Short! a) We do not need higher values b) the demo system only stores shorts
-	int free = 0, i = 0;
+	int free = 0;
 
 	while (!free)
 	{
@@ -907,7 +902,7 @@ int obj_get_signature()
 		sig++;
 		if (sig < 0)
 			sig = 0;
-		for (i = 0; i < MAX_OBJECTS; i++)
+		for (objnum_t i = 0; i < MAX_OBJECTS; i++)
 		{
 			if ((sig == Objects[i].signature) && (Objects[i].type != OBJ_NONE))
 			{
@@ -927,14 +922,13 @@ int	Unused_object_slots;
 //Generally, obj_create() should be called to get an object, since it
 //fills in important fields and does the linking.
 //returns -1 if no free objects
-int obj_allocate(void)
+objnum_t obj_allocate(void)
 {
-	int objnum;
-
 	if ( num_objects >= MAX_OBJECTS ) {
 		return -1;
 	}
 
+	objnum_t objnum;
 	objnum = free_obj_list[num_objects++];
 
 	if (objnum > Highest_object_index) {
@@ -944,9 +938,8 @@ int obj_allocate(void)
 	}
 
 {
-int	i;
 Unused_object_slots=0;
-for (i=0; i<=Highest_object_index; i++)
+for (objnum_t i=0; i<=Highest_object_index; i++)
 	if (Objects[i].type == OBJ_NONE)
 		Unused_object_slots++;
 }
@@ -956,14 +949,14 @@ for (i=0; i<=Highest_object_index; i++)
 //frees up an object.  Generally, obj_delete() should be called to get
 //rid of an object.  This function deallocates the object entry after
 //the object has been unlinked
-void obj_free(int objnum)
+void obj_free(objnum_t objnum)
 {
 	free_obj_list[--num_objects] = objnum;
 	Assert(num_objects >= 0);
 
 	if (objnum == Highest_object_index)
 	{
-		int o = Highest_object_index;
+		objnum_t o = Highest_object_index;
 		for (;;)
 		{
 			--o;
@@ -981,8 +974,8 @@ void obj_free(int objnum)
 //	Returns number of slots freed.
 int free_object_slots(int num_used)
 {
-	int	i, olind;
-	int	obj_list[MAX_OBJECTS];
+	int	olind;
+	objnum_t	obj_list[MAX_OBJECTS];
 	int	num_already_free, num_to_free, original_num_to_free;
 
 	olind = 0;
@@ -991,7 +984,7 @@ int free_object_slots(int num_used)
 	if (MAX_OBJECTS - num_already_free < num_used)
 		return 0;
 
-	for (i=0; i<=Highest_object_index; i++) {
+	for (objnum_t i=0; i<=Highest_object_index; i++) {
 		if (Objects[i].flags & OF_SHOULD_BE_DEAD) {
 			num_already_free++;
 			if (MAX_OBJECTS - num_already_free < num_used)
@@ -1033,7 +1026,7 @@ int free_object_slots(int num_used)
 		num_to_free = olind;
 	}
 
-	for (i=0; i<num_to_free; i++)
+	for (int i=0; i<num_to_free; i++)
 		if (Objects[obj_list[i]].type == OBJ_DEBRIS) {
 			num_to_free--;
 			Objects[obj_list[i]].flags |= OF_SHOULD_BE_DEAD;
@@ -1042,7 +1035,7 @@ int free_object_slots(int num_used)
 	if (!num_to_free)
 		return original_num_to_free;
 
-	for (i=0; i<num_to_free; i++)
+	for (int i=0; i<num_to_free; i++)
 		if (Objects[obj_list[i]].type == OBJ_FIREBALL  &&  Objects[obj_list[i]].ctype.expl_info.delete_objnum==-1) {
 			num_to_free--;
 			Objects[obj_list[i]].flags |= OF_SHOULD_BE_DEAD;
@@ -1051,7 +1044,7 @@ int free_object_slots(int num_used)
 	if (!num_to_free)
 		return original_num_to_free;
 
-	for (i=0; i<num_to_free; i++)
+	for (int i=0; i<num_to_free; i++)
 		if ((Objects[obj_list[i]].type == OBJ_WEAPON) && (Objects[obj_list[i]].id == FLARE_ID)) {
 			num_to_free--;
 			Objects[obj_list[i]].flags |= OF_SHOULD_BE_DEAD;
@@ -1060,7 +1053,7 @@ int free_object_slots(int num_used)
 	if (!num_to_free)
 		return original_num_to_free;
 
-	for (i=0; i<num_to_free; i++)
+	for (int i=0; i<num_to_free; i++)
 		if ((Objects[obj_list[i]].type == OBJ_WEAPON) && (Objects[obj_list[i]].id != FLARE_ID)) {
 			num_to_free--;
 			Objects[obj_list[i]].flags |= OF_SHOULD_BE_DEAD;
@@ -1074,10 +1067,10 @@ int free_object_slots(int num_used)
 //note that segnum is really just a suggestion, since this routine actually
 //searches for the correct segment
 //returns the object number
-int obj_create(enum object_type_t type,ubyte id,segnum_t segnum,const vms_vector *pos,
+objnum_t obj_create(enum object_type_t type,ubyte id,segnum_t segnum,const vms_vector *pos,
 				const vms_matrix *orient,fix size,ubyte ctype,ubyte mtype,ubyte rtype)
 {
-	int objnum;
+	objnum_t objnum;
 	dxxobject *obj;
 
 	// Some consistency checking. FIXME: Add more debug output here to probably trace all possible occurances back.
@@ -1184,9 +1177,9 @@ int obj_create(enum object_type_t type,ubyte id,segnum_t segnum,const vms_vector
 
 #ifdef EDITOR
 //create a copy of an object. returns new object number
-int obj_create_copy(int objnum, vms_vector *new_pos, segnum_t newsegnum)
+objnum_t obj_create_copy(objnum_t objnum, vms_vector *new_pos, segnum_t newsegnum)
 {
-	int newobjnum;
+	objnum_t newobjnum;
 	dxxobject *obj;
 
 	// Find next free object
@@ -1216,7 +1209,7 @@ int obj_create_copy(int objnum, vms_vector *new_pos, segnum_t newsegnum)
 #endif
 
 //remove object from the world
-void obj_delete(int objnum)
+void obj_delete(objnum_t objnum)
 {
 	int pnum;
 	dxxobject *obj = &Objects[objnum];
@@ -1365,7 +1358,7 @@ void dead_player_frame(void)
 
 		//	If unable to create camera at time of death, create now.
 		if (Dead_player_camera == Viewer_save) {
-			int		objnum;
+			objnum_t		objnum;
 			dxxobject	*player = &Objects[Players[Player_num].objnum];
 
 			objnum = obj_create(OBJ_CAMERA, 0, player->segnum, &player->pos, &player->orient, 0, CT_NONE, MT_NONE, RT_NONE);
@@ -1485,7 +1478,7 @@ short Killed_objnum = -1;
 //	------------------------------------------------------------------------------------------------------------------
 static void start_player_death_sequence(dxxobject *player)
 {
-	int	objnum;
+	objnum_t	objnum;
 
 	Assert(player == ConsoleObject);
 	if ((Player_is_dead != 0) || (Dead_player_camera != NULL))
@@ -1556,9 +1549,9 @@ static void start_player_death_sequence(dxxobject *player)
 //	------------------------------------------------------------------------------------------------------------------
 void obj_delete_all_that_should_be_dead()
 {
-	int i;
+	objnum_t i;
 	dxxobject *objp;
-	int		local_dead_player_object=-1;
+	objnum_t		local_dead_player_object=-1;
 
 	// Move all objects
 	objp = &Objects[0];
@@ -1586,7 +1579,7 @@ void obj_delete_all_that_should_be_dead()
 
 //when an object has moved into a new segment, this function unlinks it
 //from its old segment, and links it into the new segment
-void obj_relink(int objnum,segnum_t newsegnum)
+void obj_relink(objnum_t objnum,segnum_t newsegnum)
 {
 
 	Assert((objnum >= 0) && (objnum <= Highest_object_index));
@@ -1602,7 +1595,7 @@ void obj_relink(int objnum,segnum_t newsegnum)
 void obj_relink_all(void)
 {
 	segnum_t segnum;
-	int objnum;
+	objnum_t objnum;
 	dxxobject *obj;
 	for (segnum=segment_first; segnum <= Highest_segment_index; segnum++)
 		Segments[segnum].objects = -1;
@@ -1837,7 +1830,7 @@ void object_move_one( dxxobject * obj )
 	}
 
 	if ((obj->type == OBJ_WEAPON) && (Weapon_info[obj->id].afterburner_size)) {
-		int	objnum = obj-Objects;
+		objnum_t	objnum = obj-Objects;
 		fix	vel = vm_vec_mag_quick(&obj->mtype.phys_info.velocity);
 		fix	delay, lifetime;
 
@@ -1917,13 +1910,11 @@ void object_move_all()
 //make object array non-sparse
 void compress_objects(void)
 {
-	int start_i;	//,last_i;
-
 	//last_i = find_last_obj(MAX_OBJECTS);
 
 	//	Note: It's proper to do < (rather than <=) Highest_object_index here because we
 	//	are just removing gaps, and the last object can't be a gap.
-	for (start_i=0;start_i<Highest_object_index;start_i++)
+	for (objnum_t start_i=0;start_i<Highest_object_index;start_i++)
 
 		if (Objects[start_i].type == OBJ_NONE) {
 
@@ -1958,13 +1949,11 @@ void compress_objects(void)
 //compressed.  resets free list, marks unused objects as unused
 void reset_objects(int n_objs)
 {
-	int i;
-
 	num_objects = n_objs;
 
 	Assert(num_objects>0);
 
-	for (i=num_objects;i<MAX_OBJECTS;i++) {
+	for (objnum_t i=num_objects;i<MAX_OBJECTS;i++) {
 		free_obj_list[i] = i;
 		memset( &Objects[i], 0, sizeof(dxxobject) );
 		Objects[i].type = OBJ_NONE;
@@ -2006,9 +1995,7 @@ int update_object_seg(dxxobject * obj )
 void
 fix_object_segs()
 {
-	int i;
-
-	for (i=0;i<=Highest_object_index;i++)
+	for (objnum_t i=0;i<=Highest_object_index;i++)
 		if (Objects[i].type != OBJ_NONE)
 			if (update_object_seg(&Objects[i]) == 0) {
 				Int3();
@@ -2055,7 +2042,7 @@ fix_object_segs()
 //if clear_all is set, clear even proximity bombs
 void clear_transient_objects(int clear_all)
 {
-	int objnum;
+	objnum_t objnum;
 	dxxobject *obj;
 
 	for (objnum=0,obj=&Objects[0];objnum<=Highest_object_index;objnum++,obj++)
@@ -2132,9 +2119,9 @@ void obj_detach_all(dxxobject *parent)
 }
 
 //creates a marker object in the world.  returns the object number
-int drop_marker_object(vms_vector *pos,segnum_t segnum,vms_matrix *orient, int marker_num)
+objnum_t drop_marker_object(vms_vector *pos,segnum_t segnum,vms_matrix *orient, int marker_num)
 {
-	int objnum;
+	objnum_t objnum;
 
 	Assert(Marker_model_num != -1);
 
@@ -2169,7 +2156,7 @@ void wake_up_rendered_objects(dxxobject *viewer, int window_num)
 	Ai_last_missile_camera = viewer-Objects;
 
 	for (i=0; i<Window_rendered_data[window_num].num_objects; i++) {
-		int	objnum;
+		objnum_t	objnum;
 		dxxobject *objp;
 		int	fcval = FrameCount & 3;
 

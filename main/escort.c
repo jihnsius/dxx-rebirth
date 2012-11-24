@@ -102,9 +102,10 @@ int	Stolen_item_index;
 fix64	Escort_last_path_created = 0;
 escort_goal_t Escort_goal_object = ESCORT_GOAL_UNSPECIFIED;
 escort_goal_t Escort_special_goal = ESCORT_GOAL_UNSPECIFIED;
-int Escort_goal_index = -1, Buddy_messages_suppressed = 0;
+int Buddy_messages_suppressed = 0;
 fix64	Buddy_sorry_time;
-int	Buddy_objnum, Buddy_allowed_to_talk;
+objnum_t	 Escort_goal_index = -1,Buddy_objnum;
+int Buddy_allowed_to_talk;
 int	Looking_for_marker;
 int	Last_buddy_key;
 
@@ -112,7 +113,6 @@ fix64	Last_buddy_message_time;
 
 void init_buddy_for_level(void)
 {
-	int	i;
 
 	Buddy_allowed_to_talk = 0;
 	Buddy_objnum = -1;
@@ -121,7 +121,7 @@ void init_buddy_for_level(void)
 	Escort_goal_index = -1;
 	Buddy_messages_suppressed = 0;
 
-	for (i=0; i<=Highest_object_index; i++)
+	for (objnum_t i=0; i<=Highest_object_index; i++)
 	{
 		if (Robot_info[Objects[i].id].companion)
 		{
@@ -245,7 +245,6 @@ void create_bfs_list(segnum_t start_seg, segnum_t bfs_list[], int *length, int m
 //	AND he has never yet, since being initialized for level, been allowed to talk.
 static int ok_for_buddy_to_talk(void)
 {
-	int		i;
 	segment	*segp;
 
 	if (Buddy_objnum == -1)
@@ -260,7 +259,7 @@ static int ok_for_buddy_to_talk(void)
 		return 1;
 
 	if ((Objects[Buddy_objnum].type == OBJ_ROBOT) && (Buddy_objnum <= Highest_object_index) && !Robot_info[Objects[Buddy_objnum].id].companion) {
-		for (i=0;; i++)
+		for (objnum_t i=0;; i++)
 		{
 			if (i > Highest_object_index)
 				return 0;
@@ -274,7 +273,7 @@ static int ok_for_buddy_to_talk(void)
 
 	segp = &Segments[Objects[Buddy_objnum].segnum];
 
-	for (i=0; i<MAX_SIDES_PER_SEGMENT; i++) {
+	for (unsigned i=0; i<MAX_SIDES_PER_SEGMENT; i++) {
 		int	wall_num = segp->sides[i].wall_num;
 
 		if (wall_num != -1) {
@@ -322,7 +321,7 @@ void detect_escort_goal_fuelcen_accomplished()
 		record_escort_goal_accomplished();
 }
 
-void detect_escort_goal_accomplished(int index)
+void detect_escort_goal_accomplished(objnum_t index)
 {
 	if (!Buddy_allowed_to_talk)
 		return;
@@ -433,9 +432,8 @@ static void thief_message(const char * format, ... )
 //	Return true if marker #id has been placed.
 static int marker_exists_in_mine(int id)
 {
-	int	i;
 
-	for (i=0; i<=Highest_object_index; i++)
+	for (objnum_t i=0; i<=Highest_object_index; i++)
 		if (Objects[i].type == OBJ_MARKER)
 			if (Objects[i].id == id)
 				return 1;
@@ -453,9 +451,7 @@ void set_escort_special_goal(int special_key)
 	if (!Buddy_allowed_to_talk) {
 		ok_for_buddy_to_talk();
 		if (!Buddy_allowed_to_talk) {
-			int	i;
-
-			for (i=0;; i++)
+			for (objnum_t i=0;; i++)
 			{
 				if (i > Highest_object_index)
 				{
@@ -526,9 +522,7 @@ void set_escort_special_goal(int special_key)
 //	Return id of boss.
 static int get_boss_id(void)
 {
-	int	i;
-
-	for (i=0; i<=Highest_object_index; i++)
+	for (objnum_t i=0; i<=Highest_object_index; i++)
 		if (Objects[i].type == OBJ_ROBOT)
 			if (Robot_info[Objects[i].id].boss_flag)
 				return Objects[i].id;
@@ -539,10 +533,10 @@ static int get_boss_id(void)
 //	-----------------------------------------------------------------------------
 //	Return object index if object of objtype, objid exists in mine, else return -1
 //	"special" is used to find objects spewed by player which is hacked into flags field of powerup.
-static int exists_in_mine_2(segnum_t segnum, int objtype, int objid, int special)
+static objnum_t exists_in_mine_2(segnum_t segnum, int objtype, int objid, int special)
 {
 	if (Segments[segnum].objects != -1) {
-		int		objnum = Segments[segnum].objects;
+		objnum_t		objnum = Segments[segnum].objects;
 
 		while (objnum != -1) {
 			dxxobject	*curobjp = &Objects[objnum];
@@ -605,7 +599,7 @@ static segnum_t exists_fuelcen_in_mine(segnum_t start_seg)
 //	If special == ESCORT_GOAL_PLAYER_SPEW, then looking for any object spewed by player.
 //	-1 means object does not exist in mine.
 //	-2 means object does exist in mine, but buddy-bot can't reach it (eg, behind triggered wall)
-static int exists_in_mine(segnum_t start_seg, int objtype, int objid, int special)
+static objnum_t exists_in_mine(segnum_t start_seg, int objtype, int objid, int special)
 {
 	int	segindex;
 	segnum_t segnum;
@@ -615,7 +609,7 @@ static int exists_in_mine(segnum_t start_seg, int objtype, int objid, int specia
 	create_bfs_list(start_seg, bfs_list, &length, MAX_SEGMENTS);
 
 		for (segindex=0; segindex<length; segindex++) {
-			int	objnum;
+			objnum_t	objnum;
 
 			segnum = bfs_list[segindex];
 
@@ -629,7 +623,7 @@ static int exists_in_mine(segnum_t start_seg, int objtype, int objid, int specia
 	//	See if it's in the mine.  It could be hidden behind a trigger or switch
 	//	which the buddybot doesn't understand.
 		for (segnum=segment_first; segnum<=Highest_segment_index; segnum++) {
-			int	objnum;
+			objnum_t	objnum;
 
 			objnum = exists_in_mine_2(segnum, objtype, objid, special);
 			if (objnum != -1)
@@ -698,7 +692,7 @@ static void say_escort_goal(escort_goal_t goal_num)
 static void escort_create_path_to_goal(dxxobject *objp)
 {
 	segnum_t	goal_seg = segment_none;
-	int			objnum = objp-Objects;
+	objnum_t			objnum = objp-Objects;
 	ai_static	*aip = &objp->ctype.ai_info;
 	ai_local		*ailp = &Ai_local_info[objnum];
 
@@ -880,7 +874,7 @@ fix64	Last_come_back_message_time = 0;
 fix64	Buddy_last_missile_time;
 
 //	-----------------------------------------------------------------------------
-static void bash_buddy_weapon_info(int weapon_objnum)
+static void bash_buddy_weapon_info(objnum_t weapon_objnum)
 {
 	dxxobject	*objp = &Objects[weapon_objnum];
 
@@ -890,13 +884,13 @@ static void bash_buddy_weapon_info(int weapon_objnum)
 }
 
 //	-----------------------------------------------------------------------------
-static int maybe_buddy_fire_mega(int objnum)
+static int maybe_buddy_fire_mega(objnum_t objnum)
 {
 	dxxobject	*objp = &Objects[objnum];
 	dxxobject	*buddy_objp = &Objects[Buddy_objnum];
 	fix		dist, dot;
 	vms_vector	vec_to_robot;
-	int		weapon_objnum;
+	objnum_t		weapon_objnum;
 
 	vm_vec_sub(&vec_to_robot, &buddy_objp->pos, &objp->pos);
 	dist = vm_vec_normalize_quick(&vec_to_robot);
@@ -929,12 +923,12 @@ static int maybe_buddy_fire_mega(int objnum)
 }
 
 //-----------------------------------------------------------------------------
-static int maybe_buddy_fire_smart(int objnum)
+static int maybe_buddy_fire_smart(objnum_t objnum)
 {
 	dxxobject	*objp = &Objects[objnum];
 	dxxobject	*buddy_objp = &Objects[Buddy_objnum];
 	fix		dist;
-	int		weapon_objnum;
+	objnum_t		weapon_objnum;
 
 	dist = vm_vec_dist_quick(&buddy_objp->pos, &objp->pos);
 
@@ -957,8 +951,6 @@ static int maybe_buddy_fire_smart(int objnum)
 //	-----------------------------------------------------------------------------
 static void do_buddy_dude_stuff(void)
 {
-	int	i;
-
 	if (!ok_for_buddy_to_talk())
 		return;
 
@@ -967,7 +959,7 @@ static void do_buddy_dude_stuff(void)
 
 	if (Buddy_last_missile_time + F1_0*2 < GameTime64) {
 		//	See if a robot potentially in view cone
-		for (i=0; i<=Highest_object_index; i++)
+		for (objnum_t i=0; i<=Highest_object_index; i++)
 			if ((Objects[i].type == OBJ_ROBOT) && !Robot_info[Objects[i].id].companion)
 				if (maybe_buddy_fire_mega(i)) {
 					Buddy_last_missile_time = GameTime64;
@@ -975,7 +967,7 @@ static void do_buddy_dude_stuff(void)
 				}
 
 		//	See if a robot near enough that buddy should fire smart missile
-		for (i=0; i<=Highest_object_index; i++)
+		for (objnum_t i=0; i<=Highest_object_index; i++)
 			if ((Objects[i].type == OBJ_ROBOT) && !Robot_info[Objects[i].id].companion)
 				if (maybe_buddy_fire_smart(i)) {
 					Buddy_last_missile_time = GameTime64;
@@ -989,7 +981,7 @@ static void do_buddy_dude_stuff(void)
 //	Called every frame (or something).
 void do_escort_frame(dxxobject *objp, fix dist_to_player, int player_visibility)
 {
-	int			objnum = objp-Objects;
+	objnum_t			objnum = objp-Objects;
 	ai_static	*aip = &objp->ctype.ai_info;
 	ai_local		*ailp = &Ai_local_info[objnum];
 
@@ -1099,7 +1091,7 @@ void invalidate_escort_goal(void)
 //	-------------------------------------------------------------------------------------------------
 void do_snipe_frame(dxxobject *objp, fix dist_to_player, int player_visibility, vms_vector *vec_to_player)
 {
-	int			objnum = objp-Objects;
+	objnum_t			objnum = objp-Objects;
 	ai_local		*ailp = &Ai_local_info[objnum];
 	fix			connected_distance;
 
@@ -1222,7 +1214,7 @@ fix	Thief_wait_times[NDL] = {F1_0*30, F1_0*25, F1_0*20, F1_0*15, F1_0*10};
 //	-------------------------------------------------------------------------------------------------
 void do_thief_frame(dxxobject *objp, fix dist_to_player, int player_visibility, vms_vector *vec_to_player)
 {
-	int			objnum = objp-Objects;
+	objnum_t			objnum = objp-Objects;
 	ai_local		*ailp = &Ai_local_info[objnum];
 	fix			connected_distance;
 
@@ -1701,7 +1693,6 @@ static int escort_menu_handler(window *wind, d_event *event, escort_menu *menu)
 
 void do_escort_menu(void)
 {
-	int	i;
 	int	next_goal;
 	char	goal_str[32];
 	const char *goal_txt;
@@ -1715,7 +1706,7 @@ void do_escort_menu(void)
 		return;
 	}
 
-	for (i=0;; i++) {
+	for (objnum_t i=0;; i++) {
 		if (i > Highest_object_index) {
 		HUD_init_message(HM_DEFAULT, "No Guide-Bot present in mine!");
 		return;

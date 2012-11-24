@@ -65,9 +65,9 @@ fix	Flash_effect=0;
 
 int	PK1=1, PK2=8;
 
-static dxxobject *object_create_explosion_sub(dxxobject *objp, segnum_t segnum, vms_vector * position, fix size, int vclip_type, fix maxdamage, fix maxdistance, fix maxforce, int parent )
+static dxxobject *object_create_explosion_sub(dxxobject *objp, segnum_t segnum, vms_vector * position, fix size, int vclip_type, fix maxdamage, fix maxdistance, fix maxforce, objnum_t parent )
 {
-	int objnum;
+	objnum_t objnum;
 	dxxobject *obj;
 
 	objnum = obj_create( OBJ_FIREBALL,vclip_type,segnum,position,&vmd_identity_matrix,size,
@@ -90,11 +90,10 @@ static dxxobject *object_create_explosion_sub(dxxobject *objp, segnum_t segnum, 
 		fix dist, force;
 		vms_vector pos_hit, vforce;
 		fix damage;
-		int i;
 
 		// -- now legal for badass explosions on a wall. Assert(objp != NULL);
 
-		for (i=0; i<=Highest_object_index; i++ )	{
+		for (objnum_t i=0; i<=Highest_object_index; i++ )	{
 			dxxobject *const obj0p = &Objects[i];
 			sbyte parent_check = 0;
 
@@ -263,7 +262,7 @@ dxxobject *object_create_explosion(segnum_t segnum, vms_vector * position, fix s
 	return object_create_explosion_sub(NULL, segnum, position, size, vclip_type, 0, 0, 0, -1 );
 }
 
-dxxobject *object_create_badass_explosion(dxxobject *objp, segnum_t segnum, vms_vector * position, fix size, int vclip_type, fix maxdamage, fix maxdistance, fix maxforce, int parent )
+dxxobject *object_create_badass_explosion(dxxobject *objp, segnum_t segnum, vms_vector * position, fix size, int vclip_type, fix maxdamage, fix maxdistance, fix maxforce, objnum_t parent )
 {
 	dxxobject	*rval;
 
@@ -329,7 +328,7 @@ dxxobject *explode_badass_player(dxxobject *objp)
 
 static dxxobject *object_create_debris(dxxobject *parent, int subobj_num)
 {
-	int objnum;
+	objnum_t objnum;
 	dxxobject *obj;
 
 	Assert((parent->type == OBJ_ROBOT) || (parent->type == OBJ_PLAYER)  );
@@ -596,7 +595,7 @@ void maybe_drop_net_powerup(int powerup_type)
 {
 	if ((Game_mode & GM_MULTI) && !(Game_mode & GM_MULTI_COOP)) {
 		segnum_t	segnum;
-		int objnum;
+		objnum_t objnum;
 		vms_vector	new_pos;
 
 		if (Game_mode & GM_NETWORK)
@@ -639,7 +638,7 @@ void maybe_drop_net_powerup(int powerup_type)
 //	Return true if current segment contains some object.
 static int segment_contains_object(int obj_type, int obj_id, segnum_t segnum)
 {
-	int	objnum;
+	objnum_t	objnum;
 
 	if (segnum == segment_none)
 		return 0;
@@ -757,9 +756,9 @@ void maybe_replace_powerup_with_energy(dxxobject *del_obj)
 	}
 }
 
-int drop_powerup(object_type_t type, int id, int num, vms_vector *init_vel, vms_vector *pos, segnum_t segnum)
+objnum_t drop_powerup(object_type_t type, int id, int num, vms_vector *init_vel, vms_vector *pos, segnum_t segnum)
 {
-	int		objnum=-1;
+	objnum_t		objnum=-1;
 	dxxobject	*obj;
 	vms_vector	new_velocity, new_pos;
 	fix		old_mag;
@@ -943,9 +942,9 @@ int drop_powerup(object_type_t type, int id, int num, vms_vector *init_vel, vms_
 // ----------------------------------------------------------------------------
 // Returns created object number.
 // If object dropped by player, set flag.
-int object_create_egg(dxxobject *objp)
+objnum_t object_create_egg(dxxobject *objp)
 {
-	int	rval;
+	objnum_t	rval;
 
 	if (!(Game_mode & GM_MULTI) & (objp->type != OBJ_PLAYER))
 	{
@@ -999,7 +998,7 @@ int object_create_egg(dxxobject *objp)
 //	-------------------------------------------------------------------------------------------------------
 //	Put count objects of type type (eg, powerup), id = id (eg, energy) into *objp, then drop them!  Yippee!
 //	Returns created object number.
-int call_object_create_egg(dxxobject *objp, int count, int type, int id)
+objnum_t call_object_create_egg(dxxobject *objp, int count, int type, int id)
 {
 // -- 	if (!(Game_mode & GM_MULTI) && (objp == ConsoleObject))
 // -- 		if (d_rand() < 32767/6) {
@@ -1076,7 +1075,7 @@ void explode_object(dxxobject *hitobj,fix delay_time)
 	if (hitobj->flags & OF_EXPLODING) return;
 
 	if (delay_time) {		//wait a little while before creating explosion
-		int objnum;
+		objnum_t objnum;
 		dxxobject *obj;
 
 		//create a placeholder object to do the delay, with id==-1

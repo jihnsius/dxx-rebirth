@@ -56,12 +56,12 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 dxxobject *Guided_missile[MAX_PLAYERS]={NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL};
 int Guided_missile_sig[MAX_PLAYERS]={-1,-1,-1,-1,-1,-1,-1,-1};
-int Network_laser_track = -1;
+objnum_t Network_laser_track = -1;
 
-int find_homing_object_complete(vms_vector *curpos, dxxobject *tracker, int track_obj_type1, int track_obj_type2);
+static objnum_t find_homing_object_complete(vms_vector *curpos, dxxobject *tracker, int track_obj_type1, int track_obj_type2);
 
 
-int find_homing_object(vms_vector *curpos, dxxobject *tracker);
+static objnum_t find_homing_object(vms_vector *curpos, dxxobject *tracker);
 
 //---------------------------------------------------------------------------------
 // Called by render code.... determines if the laser is from a robot or the
@@ -143,7 +143,7 @@ void Laser_render(dxxobject *obj)
 //	I want you to be able to blow up your own bombs.
 //	AND...Your proximity bombs can blow you up if they're 2.0 seconds or more old.
 //	Changed by MK on 06/06/95: Now must be 4.0 seconds old.  Much valid Net-complaining.
-int laser_are_related( int o1, int o2 )
+int laser_are_related( objnum_t o1, objnum_t o2 )
 {
 	if ( (o1<0) || (o2<0) )
 		return 0;
@@ -219,11 +219,11 @@ static void do_muzzle_stuff(segnum_t segnum, vms_vector *pos)
 }
 
 //creates a weapon object
-int create_weapon_object(int weapon_type,segnum_t segnum,vms_vector *position)
+static objnum_t create_weapon_object(int weapon_type,segnum_t segnum,vms_vector *position)
 {
 	int rtype=-1;
 	fix laser_radius = -1;
-	int objnum;
+	objnum_t objnum;
 	dxxobject *obj;
 
 	switch( Weapon_info[weapon_type].render_type )	{
@@ -312,7 +312,8 @@ int create_weapon_object(int weapon_type,segnum_t segnum,vms_vector *position)
 // Since last omega blob has VERY high velocity it's impossible to ensure a constant travel distance on varying FPS. So delete if they exceed their maximum distance.
 static int omega_cleanup(dxxobject *weapon)
 {
-	int parent_sig = weapon->ctype.laser_info.parent_signature, parent_num = weapon->ctype.laser_info.parent_num;
+	int parent_sig = weapon->ctype.laser_info.parent_signature;
+	objnum_t parent_num = weapon->ctype.laser_info.parent_num;
 
 	if (weapon->type != OBJ_WEAPON || weapon->id != OMEGA_ID)
 		return 0;
@@ -330,7 +331,8 @@ static int omega_cleanup(dxxobject *weapon)
 // Return true if ok to do Omega damage. For Multiplayer games. See comment for omega_cleanup()
 int ok_to_do_omega_damage(dxxobject *weapon)
 {
-	int parent_sig = weapon->ctype.laser_info.parent_signature, parent_num = weapon->ctype.laser_info.parent_num;
+	int parent_sig = weapon->ctype.laser_info.parent_signature;
+	objnum_t parent_num = weapon->ctype.laser_info.parent_num;
 
 	if (weapon->type != OBJ_WEAPON || weapon->id != OMEGA_ID)
 		return 1;
@@ -347,7 +349,8 @@ int ok_to_do_omega_damage(dxxobject *weapon)
 // ---------------------------------------------------------------------------------
 static void create_omega_blobs(segnum_t firing_segnum, vms_vector *firing_pos, vms_vector *goal_pos, dxxobject *parent_objp)
 {
-	int		i = 0, last_created_objnum = -1, num_omega_blobs = 0;
+	int		i = 0, num_omega_blobs = 0;
+	objnum_t last_created_objnum = -1;
 	segnum_t last_segnum;
 	vms_vector	vec_to_goal = { 0, 0, 0 }, omega_delta_vector = { 0, 0, 0 }, blob_pos = { 0, 0, 0 }, perturb_vec = { 0, 0, 0 };
 	fix		dist_to_goal = 0, omega_blob_dist = 0, perturb_array[MAX_OMEGA_BLOBS];
@@ -401,7 +404,7 @@ static void create_omega_blobs(segnum_t firing_segnum, vms_vector *firing_pos, v
 
 	for (i=0; i<num_omega_blobs; i++) {
 		vms_vector	temp_pos = { 0, 0, 0 };
-		int		blob_objnum = -1;
+		objnum_t blob_objnum = -1;
 		segnum_t segnum;
 
 		//	This will put the last blob right at the destination object, causing damage.
@@ -519,7 +522,7 @@ void omega_charge_frame(void)
 //	*pos is the location from which the omega bolt starts
 static void do_omega_stuff(dxxobject *parent_objp, vms_vector *firing_pos, dxxobject *weapon_objp)
 {
-	int			lock_objnum;
+	objnum_t			lock_objnum;
 	segnum_t firing_segnum;
 	vms_vector	goal_pos;
 	int			pnum = parent_objp->id;
@@ -612,9 +615,9 @@ static float weapon_rate_scale(int wp_id)
 // ---------------------------------------------------------------------------------
 // Initializes a laser after Fire is pressed
 //	Returns object number.
-int Laser_create_new( vms_vector * direction, vms_vector * position, segnum_t segnum, int parent, int weapon_type, int make_sound )
+objnum_t Laser_create_new( vms_vector * direction, vms_vector * position, segnum_t segnum, objnum_t parent, int weapon_type, int make_sound )
 {
-	int objnum;
+	objnum_t objnum;
 	dxxobject *obj;
 	fix parent_speed, weapon_speed;
 	fix volume;
@@ -699,12 +702,12 @@ int Laser_create_new( vms_vector * direction, vms_vector * position, segnum_t se
 	//	Assign parent type to highest level creator.  This propagates parent type down from
 	//	the original creator through weapons which create children of their own (ie, smart missile)
 	if (Objects[parent].type == OBJ_WEAPON) {
-		int	highest_parent = parent;
+		objnum_t	highest_parent = parent;
 		int	count;
 
 		count = 0;
 		while ((count++ < 10) && (Objects[highest_parent].type == OBJ_WEAPON)) {
-			int	next_parent;
+			objnum_t	next_parent;
 
 			next_parent = Objects[highest_parent].ctype.laser_info.parent_num;
 			if (Objects[next_parent].signature != Objects[highest_parent].ctype.laser_info.parent_signature)
@@ -807,7 +810,7 @@ int Laser_create_new( vms_vector * direction, vms_vector * position, segnum_t se
 
 //	-----------------------------------------------------------------------------------------------------------
 //	Calls Laser_create_new, but takes care of the segment and point computation for you.
-int Laser_create_new_easy( vms_vector * direction, vms_vector * position, int parent, int weapon_type, int make_sound )
+objnum_t Laser_create_new_easy( vms_vector * direction, vms_vector * position, objnum_t parent, int weapon_type, int make_sound )
 {
 	fvi_query	fq;
 	fvi_info		hit_data;
@@ -878,7 +881,7 @@ fix	Min_trackable_dot = 3*(F1_0 - MIN_TRACKABLE_DOT)/4 + MIN_TRACKABLE_DOT; //MI
 //	Return true if weapon *tracker is able to track object Objects[track_goal], else return false.
 //	In order for the object to be trackable, it must be within a reasonable turning radius for the missile
 //	and it must not be obstructed by a wall.
-static int object_is_trackable(int track_goal, dxxobject *tracker, fix *dot)
+static int object_is_trackable(objnum_t track_goal, dxxobject *tracker, fix *dot)
 {
 	vms_vector	vector_to_goal;
 	dxxobject		*objp;
@@ -924,7 +927,7 @@ static int object_is_trackable(int track_goal, dxxobject *tracker, fix *dot)
 }
 
 //	--------------------------------------------------------------------------------------------
-static int call_find_homing_object_complete(dxxobject *tracker, vms_vector *curpos)
+static objnum_t call_find_homing_object_complete(dxxobject *tracker, vms_vector *curpos)
 {
 	if (Game_mode & GM_MULTI) {
 		if (tracker->ctype.laser_info.parent_type == OBJ_PLAYER) {
@@ -948,11 +951,11 @@ static int call_find_homing_object_complete(dxxobject *tracker, vms_vector *curp
 //	--------------------------------------------------------------------------------------------
 //	Find object to home in on.
 //	Scan list of objects rendered last frame, find one that satisfies function of nearness to center and distance.
-int find_homing_object(vms_vector *curpos, dxxobject *tracker)
+static objnum_t find_homing_object(vms_vector *curpos, dxxobject *tracker)
 {
 	int	i;
 	fix	max_dot = -F1_0*2;
-	int	best_objnum = -1;
+	objnum_t	best_objnum = -1;
 
 	//	Contact Mike: This is a bad and stupid thing.  Who called this routine with an illegal laser type??
 	Assert((Weapon_info[tracker->id].homing_flag) || (tracker->id == OMEGA_ID));
@@ -998,7 +1001,7 @@ int find_homing_object(vms_vector *curpos, dxxobject *tracker)
 			for (i=Window_rendered_data[window_num].num_objects-1; i>=0; i--) {
 				fix			dot; //, dist;
 				vms_vector	vec_to_curobj;
-				int			objnum = Window_rendered_data[window_num].rendered_objects[i];
+				objnum_t			objnum = Window_rendered_data[window_num].rendered_objects[i];
 				dxxobject		*curobjp = &Objects[objnum];
 
 				if (objnum == Players[Player_num].objnum)
@@ -1056,11 +1059,10 @@ int find_homing_object(vms_vector *curpos, dxxobject *tracker)
 //	Can track two kinds of objects.  If you are only interested in one type, set track_obj_type2 to NULL
 //	Always track proximity bombs.  --MK, 06/14/95
 //	Make homing objects not track parent's prox bombs.
-int find_homing_object_complete(vms_vector *curpos, dxxobject *tracker, int track_obj_type1, int track_obj_type2)
+static objnum_t find_homing_object_complete(vms_vector *curpos, dxxobject *tracker, int track_obj_type1, int track_obj_type2)
 {
-	int	objnum;
 	fix	max_dot = -F1_0*2;
-	int	best_objnum = -1;
+	objnum_t	best_objnum = -1;
 	fix	max_trackable_dist;
 	fix	min_trackable_dot;
 
@@ -1075,7 +1077,7 @@ int find_homing_object_complete(vms_vector *curpos, dxxobject *tracker, int trac
 		min_trackable_dot = OMEGA_MIN_TRACKABLE_DOT;
 	}
 
-	for (objnum=0; objnum<=Highest_object_index; objnum++) {
+	for (objnum_t objnum=0; objnum<=Highest_object_index; objnum++) {
 		int			is_proximity = 0;
 		fix			dot, dist;
 		vms_vector	vec_to_curobj;
@@ -1149,7 +1151,7 @@ int find_homing_object_complete(vms_vector *curpos, dxxobject *tracker, int trac
 //	See if legal to keep tracking currently tracked object.  If not, see if another object is trackable.  If not, return -1,
 //	else return object number of tracking object.
 //	Computes and returns a fairly precise dot product.
-static int track_track_goal(int track_goal, dxxobject *tracker, fix *dot)
+static objnum_t track_track_goal(objnum_t track_goal, dxxobject *tracker, fix *dot)
 {
 #ifdef NEWHOMER
 	if (object_is_trackable(track_goal, tracker, dot) && (tracker-Objects)) {
@@ -1219,7 +1221,7 @@ static void Laser_player_fire_spread_delay(dxxobject *obj, int laser_type, int g
 	fvi_info		hit_data;
 	vms_vector	gun_point, *pnt;
 	vms_matrix	m;
-	int			objnum;
+	objnum_t			objnum;
 
 	create_awareness_event(obj, PA_WEAPON_WALL_COLLISION);
 
@@ -1450,7 +1452,7 @@ void Laser_do_weapon_sequence(dxxobject *obj)
 		//	For first 1/2 second of life, missile flies straight.
 		if (obj->ctype.laser_info.creation_time + HOMING_MISSILE_STRAIGHT_TIME < GameTime64) {
 
-			int	track_goal = obj->ctype.laser_info.track_goal;
+			objnum_t	track_goal = obj->ctype.laser_info.track_goal;
 
 			//	If it's time to do tracking, then it's time to grow up, stop bouncing and start exploding!.
 			if ((obj->id == ROBOT_SMART_MINE_HOMING_ID) || (obj->id == ROBOT_SMART_HOMING_ID) || (obj->id == SMART_MINE_HOMING_ID) || (obj->id == PLAYER_SMART_HOMING_ID) || (obj->id == EARTHSHAKER_MEGA_ID)) {
@@ -1677,7 +1679,7 @@ int do_laser_firing_player(void)
 //	Returns number of times a weapon was fired.  This is typically 1, but might be more for low frame rates.
 //	More than one shot is fired with a pseudo-delay so that players on show machines can fire (for themselves
 //	or other players) often enough for things like the vulcan cannon.
-int do_laser_firing(int objnum, int weapon_num, int level, int flags, int nfires)
+int do_laser_firing(objnum_t objnum, int weapon_num, int level, int flags, int nfires)
 {
 	dxxobject	*objp = &Objects[objnum];
 
@@ -1845,9 +1847,9 @@ int do_laser_firing(int objnum, int weapon_num, int level, int flags, int nfires
 
 //	-------------------------------------------------------------------------------------------
 //	if goal_obj == -1, then create random vector
-static int create_homing_missile(dxxobject *objp, int goal_obj, int objtype, int make_sound)
+static objnum_t create_homing_missile(dxxobject *objp, objnum_t goal_obj, int objtype, int make_sound)
 {
-	int			objnum;
+	objnum_t			objnum;
 	vms_vector	vector_to_goal;
 	vms_vector	random_vector;
 	//vms_vector	goal_pos;
@@ -1881,10 +1883,11 @@ static int create_homing_missile(dxxobject *objp, int goal_obj, int objtype, int
 // Create the children of a smart bomb, which is a bunch of homing missiles.
 void create_smart_children(dxxobject *objp, int num_smart_children)
 {
-	int parent_type, parent_num;
-	int numobjs=0, objnum = 0, sel_objnum, last_sel_objnum = -1;
-	int objlist[MAX_OBJDISTS];
+	int parent_type;
+	int numobjs=0;
+	objnum_t sel_objnum, last_sel_objnum = -1, objlist[MAX_OBJDISTS];
 	int blob_id;
+	objnum_t parent_num;
 
 	if (objp->type == OBJ_WEAPON) {
 		parent_type = objp->ctype.laser_info.parent_type;
@@ -1912,7 +1915,7 @@ void create_smart_children(dxxobject *objp, int num_smart_children)
 		if (Game_mode & GM_MULTI)
 			d_srand(8321L);
 
-		for (objnum=0; objnum<=Highest_object_index; objnum++) {
+		for (objnum_t objnum=0; objnum<=Highest_object_index; objnum++) {
 			dxxobject *curobjp = &Objects[objnum];
 
 			if ((((curobjp->type == OBJ_ROBOT) && (!curobjp->ctype.ai_info.CLOAKED)) || (curobjp->type == OBJ_PLAYER)) && (objnum != parent_num)) {

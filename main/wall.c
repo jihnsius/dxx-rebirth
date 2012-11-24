@@ -671,7 +671,7 @@ void wall_close_door_num(int door_num)
 
 }
 
-static int check_poke(int objnum,segnum_t segnum,int side)
+static int check_poke(objnum_t objnum,segnum_t segnum,int side)
 {
 	dxxobject *obj = &Objects[objnum];
 
@@ -689,7 +689,7 @@ static int is_door_free(segment *seg,int side)
 {
 	int Connectside;
 	segment *csegp;
-	int objnum;
+	objnum_t objnum;
 
 	csegp = &Segments[seg->children[side]];
 	Connectside = find_connect_side(seg, csegp);
@@ -1396,7 +1396,7 @@ void add_stuck_object(dxxobject *objp, segnum_t segnum, int sidenum)
 //	Removes up to one/frame.
 void remove_obsolete_stuck_objects(void)
 {
-	int	objnum;
+	int     objnum;
 
 	//	Safety and efficiency code.  If no stuck objects, should never get inside the IF, but this is faster.
 	if (!Num_stuck_objects)
@@ -1480,7 +1480,7 @@ void clear_stuck_objects(void)
 
 	for (i=0; i<MAX_STUCK_OBJECTS; i++) {
 		if (Stuck_objects[i].wallnum != -1) {
-			int	objnum;
+			objnum_t	objnum;
 
 			objnum = Stuck_objects[i].objnum;
 

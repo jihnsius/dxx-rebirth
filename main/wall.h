@@ -95,7 +95,8 @@ extern "C" {
 #define MAX_STUCK_OBJECTS   32
 
 typedef struct stuckobj {
-	short   objnum, wallnum;
+	objnum_t   objnum;
+	short wallnum;
 	int     signature;
 } stuckobj;
 

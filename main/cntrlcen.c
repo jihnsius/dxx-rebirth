@@ -121,7 +121,7 @@ static int calc_best_gun(int num_guns, vms_vector *gun_pos, vms_vector *gun_dir,
 
 }
 
-int	Dead_controlcen_object_num=-1;
+objnum_t	Dead_controlcen_object_num=-1;
 
 //how long to blow up on insane
 int Base_control_center_explosion_time=DEFAULT_CONTROL_CENTER_EXPLOSION_TIME;
@@ -419,11 +419,10 @@ int Reactor_strength=-1;		//-1 mean not set by designer
 //	If this level contains a boss and mode == multiplayer, do control center stuff.
 void init_controlcen_for_level(void)
 {
-	int		i;
 	dxxobject	*objp;
-	int		cntrlcen_objnum=-1, boss_objnum=-1;
+	objnum_t		cntrlcen_objnum=-1, boss_objnum=-1;
 
-	for (i=0; i<=Highest_object_index; i++) {
+	for (objnum_t i=0; i<=Highest_object_index; i++) {
 		objp = &Objects[i];
 		if (objp->type == OBJ_CNTRLCEN)
 		{
@@ -458,7 +457,7 @@ void init_controlcen_for_level(void)
 		//	Compute all gun positions.
 		objp = &Objects[cntrlcen_objnum];
 		N_controlcen_guns = Reactors[objp->id].n_guns;
-		for (i=0; i<N_controlcen_guns; i++)
+		for (unsigned i=0; i<N_controlcen_guns; i++)
 			calc_controlcen_gun_point(&Gun_pos[i], &Gun_dir[i], objp, i);
 		Control_center_present = 1;
 

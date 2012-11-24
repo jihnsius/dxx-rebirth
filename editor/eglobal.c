@@ -86,7 +86,7 @@ int	Lock_view_to_cursegp = 1;		// !0 means whenever cursegp changes, view it
 
 int	Num_tilings = 1;					// Number of tilings per wall
 
-short Cur_object_index = -1;
+objnum_t Cur_object_index = -1;
 
 // The current object type and id
 short Cur_object_type = 4;	// OBJ_PLAYER

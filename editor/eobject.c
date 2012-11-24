@@ -57,7 +57,7 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 static void show_objects_in_segment(segment *sp)
 {
-	short		objid;
+	objnum_t		objid;
 
 	objid = sp->objects;
 	while (objid != -1) {
@@ -66,9 +66,9 @@ static void show_objects_in_segment(segment *sp)
 }
 
 //returns the number of the first object in a segment, skipping the player
-static int get_first_object(segment *seg)
+static objnum_t get_first_object(segment *seg)
 {
-	int id;
+	objnum_t id;
 
 	id = seg->objects;
 
@@ -79,7 +79,7 @@ static int get_first_object(segment *seg)
 }
 
 //returns the number of the next object in a segment, skipping the player
-static int get_next_object(segment *seg,int id)
+static objnum_t get_next_object(segment *seg,objnum_t id)
 {
 	if (id==-1 || (id=Objects[id].next)==-1)
 		return get_first_object(seg);
@@ -108,7 +108,7 @@ static int get_next_object(segment *seg,int id)
 //	------------------------------------------------------------------------------------
 static int place_object(segment *segp, vms_vector *object_pos, short object_type, short object_id)
 {
-        short objnum=0;
+        objnum_t objnum=0;
 	dxxobject *obj;
 	vms_matrix seg_matrix;
 
@@ -265,9 +265,9 @@ static int place_object(segment *segp, vms_vector *object_pos, short object_type
 //	Count number of player objects, return value.
 static int compute_num_players(void)
 {
-	int	i, count = 0;
+	int	count = 0;
 
-	for (i=0; i<=Highest_object_index; i++)
+	for (objnum_t i=0; i<=Highest_object_index; i++)
 		if (Objects[i].type == OBJ_PLAYER)
 			count++;
 
@@ -342,7 +342,8 @@ int ObjectPlaceObject(void)
 //	Place current object at center of current segment.
 int ObjectPlaceObjectTmap(void)
 {
-	int	rval, old_cur_object_index;
+	int	rval;
+	objnum_t old_cur_object_index;
 	vms_vector	cur_object_loc;
 
 	//update_due_to_new_segment();
@@ -362,7 +363,7 @@ int ObjectPlaceObjectTmap(void)
 //	------------------------------------------------------------------------------------------------------
 int ObjectSelectNextinSegment(void)
 {
-	int	id;
+	objnum_t	id;
 	segment *objsegp;
 
 
@@ -444,7 +445,7 @@ int ObjectDelete(void)
 {
 
 	if (Cur_object_index != -1) {
-		int delete_objnum;
+		objnum_t delete_objnum;
 
 		delete_objnum = Cur_object_index;
 
@@ -698,7 +699,7 @@ int	ObjectMoveDown(void)
 
 //	------------------------------------------------------------------------------------------------------
 
-static int rotate_object(short objnum, int p, int b, int h)
+static int rotate_object(objnum_t objnum, int p, int b, int h)
 {
 	dxxobject *obj = &Objects[objnum];
 	vms_angvec ang;
@@ -725,7 +726,7 @@ static int rotate_object(short objnum, int p, int b, int h)
 	return 1;
 }
 
-static void reset_object(short objnum)
+static void reset_object(objnum_t objnum)
 {
 	dxxobject *obj = &Objects[objnum];
 
@@ -793,7 +794,7 @@ int ObjectIncreaseHeadingBig()	{return rotate_object(Cur_object_index, 0, 0, (RO
 //			t = - ----------------------
 //					  VxFx + VyFy + VzFz
 
-static void move_object_to_position(int objnum, vms_vector *newpos)
+static void move_object_to_position(objnum_t objnum, vms_vector *newpos)
 {
 	dxxobject	*objp = &Objects[objnum];
 

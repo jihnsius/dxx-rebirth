@@ -67,3 +67,5 @@ RT_POWERUP     =5,  // a powerup
 RT_MORPH       =6,  // a robot being morphed
 RT_WEAPON_VCLIP=7,  // a weapon that renders as a vclip
 };
+
+typedef short objnum_t;

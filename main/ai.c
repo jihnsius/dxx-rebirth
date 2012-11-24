@@ -275,7 +275,7 @@ static void make_nearby_robot_snipe(void)
 	create_bfs_list(ConsoleObject->segnum, bfs_list, &bfs_length, MNRS_SEG_MAX);
 
 	for (i=0; i<bfs_length; i++) {
-		int objnum = Segments[bfs_list[i]].objects;
+		objnum_t objnum = Segments[bfs_list[i]].objects;
 
 		while (objnum != -1) {
 			dxxobject *objp = &Objects[objnum];
@@ -293,12 +293,12 @@ static void make_nearby_robot_snipe(void)
 	}
 }
 
-int Ai_last_missile_camera = -1;
+objnum_t Ai_last_missile_camera = -1;
 
 // --------------------------------------------------------------------------------------------------------------------
 void do_ai_frame(dxxobject *obj)
 {
-	int         objnum = obj-Objects;
+	objnum_t         objnum = obj-Objects;
 	ai_static   *aip = &obj->ctype.ai_info;
 	ai_local    *ailp = &Ai_local_info[objnum];
 	fix         dist_to_player;
@@ -393,7 +393,7 @@ void do_ai_frame(dxxobject *obj)
 			vis_vec_pos = obj->pos;
 			compute_vis_and_vec(obj, &vis_vec_pos, ailp, &vec_to_player, &player_visibility, robptr, &visibility_and_vec_computed);
 			if (player_visibility) {
-				int ii, min_obj = -1;
+				objnum_t ii, min_obj = -1;
 				fix min_dist = F1_0*200, cur_dist;
 
 				for (ii=0; ii<=Highest_object_index; ii++)
@@ -1406,11 +1406,9 @@ static void process_awareness_events(void)
 // ----------------------------------------------------------------------------------
 static void set_player_awareness_all(void)
 {
-	int i;
-
 	process_awareness_events();
 
-	for (i=0; i<=Highest_object_index; i++)
+	for (objnum_t i=0; i<=Highest_object_index; i++)
 		if (Objects[i].control_type == CT_AI) {
 			if (New_awareness[Objects[i].segnum] > Ai_local_info[i].player_awareness_type) {
 				Ai_local_info[i].player_awareness_type = New_awareness[Objects[i].segnum];
@@ -1464,7 +1462,7 @@ void do_ai_frame_all(void)
 	if (Ai_last_missile_camera > -1) {
 		// Clear if supposed misisle camera is not a weapon, or just every so often, just in case.
 		if (((FrameCount & 0x0f) == 0) || (Objects[Ai_last_missile_camera].type != OBJ_WEAPON)) {
-			int i;
+			objnum_t i;
 
 			Ai_last_missile_camera = -1;
 			for (i=0; i<=Highest_object_index; i++)
@@ -1475,7 +1473,7 @@ void do_ai_frame_all(void)
 
 	// (Moved here from do_boss_stuff() because that only gets called if robot aware of player.)
 	if (Boss_dying) {
-		int i;
+		objnum_t i;
 
 		for (i=0; i<=Highest_object_index; i++)
 			if (Objects[i].type == OBJ_ROBOT)
@@ -1561,7 +1559,7 @@ int ai_save_state(PHYSFS_file *fp)
 	PHYSFS_write(fp, &Ai_initialized, sizeof(int), 1);
 	PHYSFS_write(fp, &Overall_agitation, sizeof(int), 1);
 	//PHYSFS_write(fp, Ai_local_info, sizeof(ai_local) * MAX_OBJECTS, 1);
-	for (i = 0; i < MAX_OBJECTS; i++)
+	for (objnum_t i = 0; i < MAX_OBJECTS; i++)
 	{
 		ai_local_rw *ail_rw;
 		MALLOC(ail_rw, ai_local_rw, 1);
@@ -1657,9 +1655,7 @@ int ai_save_state(PHYSFS_file *fp)
 
 static void ai_local_read_n_swap(ai_local *ail, int n, int swap, PHYSFS_file *fp)
 {
-	int i;
-
-	for (i = 0; i < n; i++, ail++)
+	for (objnum_t i = 0; i < n; i++, ail++)
 	{
 		int j;
 		fix tmptime32 = 0;

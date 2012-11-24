@@ -39,9 +39,9 @@ void define_enum_values<player_object_type_t>(enum_<player_object_type_t>&)
 }
 
 template <typename T>
-static const T& get_range_checked_object(const unsigned objnum, const char *const errmsg)
+static const T& get_range_checked_object(const objnum_t objnum, const char *const errmsg)
 {
-	if (objnum >= sizeof(Objects) / sizeof(Objects[0]) || objnum > static_cast<unsigned>(Highest_object_index))
+	if (static_cast<unsigned>(objnum) >= sizeof(Objects) / sizeof(Objects[0]) || static_cast<unsigned>(objnum) > static_cast<unsigned>(Highest_object_index))
 	{
 		PyErr_SetString(PyExc_IndexError, errmsg);
 		throw_error_already_set();
@@ -50,7 +50,7 @@ static const T& get_range_checked_object(const unsigned objnum, const char *cons
 }
 
 template <typename T, object_type_t type>
-static const T& get_range_checked_typed_object(const unsigned objnum, const char *const idxerrmsg, const char *const typeerrmsg)
+static const T& get_range_checked_typed_object(const objnum_t objnum, const char *const idxerrmsg, const char *const typeerrmsg)
 {
 	const T& r = get_range_checked_object<T>(objnum, idxerrmsg);
 	if (r.type != type)
@@ -71,7 +71,7 @@ const dxxplayer_object& get_player_object(const player& player)
 {
 	static const char idxerrmsg[] = "index out of range for player object";
 	static const char typeerrmsg[] = "unexpected type for player object";
-	const unsigned objnum = player.objnum;
+	const objnum_t objnum = player.objnum;
 	return get_range_checked_typed_object<dxxplayer_object, OBJ_PLAYER>(objnum, idxerrmsg, typeerrmsg);
 }
 

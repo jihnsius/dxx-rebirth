@@ -219,12 +219,12 @@ extern "C" {
 
 extern int GetMyNetRanking();
 extern void ClipRank (ubyte *rank);
-int objnum_remote_to_local(int remote_obj, int owner);
-int objnum_local_to_remote(int local_obj, sbyte *owner);
-void map_objnum_local_to_remote(int local, int remote, int owner);
-void map_objnum_local_to_local(int objnum);
+objnum_t objnum_remote_to_local(int remote_obj, int owner);
+int objnum_local_to_remote(objnum_t local_obj, sbyte *owner);
+void map_objnum_local_to_remote(objnum_t local, int remote, int owner);
+void map_objnum_local_to_local(objnum_t objnum);
 void reset_network_objects();
-int multi_objnum_is_past(int objnum);
+int multi_objnum_is_past(objnum_t objnum);
 void multi_do_ping_frame();
 
 void multi_init_objects(void);
@@ -234,28 +234,28 @@ void multi_do_frame(void);
 
 
 void multi_send_flags(char);
-void multi_send_fire(int laser_gun, int laser_level, int laser_flags, int laser_fired, short laser_track);
-void multi_send_destroy_controlcen(int objnum, int player);
+void multi_send_fire(int laser_gun, int laser_level, int laser_flags, int laser_fired, objnum_t laser_track);
+void multi_send_destroy_controlcen(objnum_t objnum, int player);
 void multi_send_endlevel_start(int);
 void multi_send_player_explode(char type);
 void multi_send_message(void);
-void multi_send_position(int objnum);
+void multi_send_position(objnum_t objnum);
 void multi_send_reappear();
-void multi_send_kill(int objnum);
-void multi_send_remobj(int objnum);
+void multi_send_kill(objnum_t objnum);
+void multi_send_remobj(objnum_t objnum);
 void multi_send_quit(int why);
 void multi_send_door_open(segnum_t segnum, int side,ubyte flag);
 void multi_send_create_explosion(int player_num);
-void multi_send_controlcen_fire(vms_vector *to_target, int gun_num, int objnum);
+void multi_send_controlcen_fire(vms_vector *to_target, int gun_num, objnum_t objnum);
 void multi_send_cloak(void);
 void multi_send_decloak(void);
-void multi_send_create_powerup(int powerup_type, segnum_t segnum, int objnum, vms_vector *pos);
+void multi_send_create_powerup(int powerup_type, segnum_t segnum, objnum_t objnum, vms_vector *pos);
 void multi_send_play_sound(int sound_num, fix volume);
 void multi_send_audio_taunt(int taunt_num);
 void multi_send_score(void);
 void multi_send_trigger(int trigger);
 void multi_send_hostage_door_status(int wallnum);
-void multi_send_drop_weapon (int objnum,int seed);
+void multi_send_drop_weapon (objnum_t objnum,int seed);
 void multi_send_drop_marker (int player,vms_vector position,char messagenum,char text[]);
 void multi_send_guided_info (dxxobject *miss,char);
 void multi_send_bounty( void );
@@ -271,11 +271,11 @@ void multi_send_endlevel_packet();
 void multi_leave_game(void);
 void multi_process_data(char *dat, int len);
 void multi_process_bigdata(char *buf, int len);
-void multi_do_death(int objnum);
+void multi_do_death();
 void multi_send_message_dialog(void);
 int multi_delete_extra_objects(void);
-void multi_make_ghost_player(int objnum);
-void multi_make_player_ghost(int objnum);
+void multi_make_ghost_player(int playernum);
+void multi_make_player_ghost(int playernum);
 void multi_reset_player_object(dxxobject *objp);
 void multi_define_macro(int key);
 void multi_send_macro(int key);
@@ -300,7 +300,7 @@ extern int Network_status;
 // IMPORTANT: These variables needed for player rejoining done by protocol-specific code
 extern int Network_send_objects;
 extern int Network_send_object_mode;
-extern int Network_send_objnum;
+extern objnum_t Network_send_objnum;
 extern int Network_rejoined;
 extern int Network_sending_extras;
 extern int VerifyPlayerJoined;
@@ -311,7 +311,7 @@ extern char multibuf[MAX_MULTI_MESSAGE_LEN+4];
 
 extern int who_killed_controlcen;
 
-extern int Net_create_objnums[MAX_NET_CREATE_OBJECTS];
+extern objnum_t Net_create_objnums[MAX_NET_CREATE_OBJECTS];
 extern int Net_create_loc;
 
 extern short kill_matrix[MAX_PLAYERS][MAX_PLAYERS];

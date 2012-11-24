@@ -45,7 +45,7 @@ typedef struct fvi_info {
 	segnum_t hit_seg;					//what segment hit_pnt is in
 	int hit_side;					//if hit wall, which side
 	segnum_t hit_side_seg;				//what segment the hit side is in
-	int hit_object;				//if object hit, which object
+	objnum_t hit_object;				//if object hit, which object
 	vms_vector hit_wallnorm;	//if hit wall, ptr to its surface normal
 	int n_segs;						//how many segs we went through
 	segnum_t seglist[MAX_FVI_SEGS];	//list of segs vector went through
@@ -63,8 +63,8 @@ typedef struct fvi_query {
 	const vms_vector *p0,*p1;
 	segnum_t startseg;
 	fix rad;
-	short thisobjnum;
-	const int *ignore_obj_list;
+	objnum_t thisobjnum;
+	const objnum_t *ignore_obj_list;
 	int flags;
 } fvi_query;
 

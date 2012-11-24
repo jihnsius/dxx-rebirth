@@ -47,10 +47,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "escort.h"
 
 
-int multi_add_controlled_robot(int objnum, int agitation);
-void multi_send_release_robot(int objnum);
-void multi_delete_controlled_robot(int objnum);
-void multi_send_robot_position_sub(int objnum, int now);
+static int multi_add_controlled_robot(objnum_t objnum, int agitation);
+static void multi_send_release_robot(objnum_t objnum);
+static void multi_delete_controlled_robot(objnum_t objnum);
+static void multi_send_robot_position_sub(objnum_t objnum, int now);
 
 //
 // Code for controlling robots in multiplayer games
@@ -64,7 +64,7 @@ void multi_send_robot_position_sub(int objnum, int now);
 #define MIN_TO_ADD	60
 #define MAX_TO_DELETE	61
 
-int robot_controlled[MAX_ROBOTS_CONTROLLED];
+objnum_t robot_controlled[MAX_ROBOTS_CONTROLLED];
 int robot_agitation[MAX_ROBOTS_CONTROLLED];
 fix64 robot_controlled_time[MAX_ROBOTS_CONTROLLED];
 fix64 robot_last_send_time[MAX_ROBOTS_CONTROLLED];
@@ -83,7 +83,7 @@ sbyte robot_fire_buf[MAX_ROBOTS_CONTROLLED][18+3];
 //}
 
 int
-multi_can_move_robot(int objnum, int agitation)
+multi_can_move_robot(objnum_t objnum, int agitation)
 {
 	// Determine whether or not I am allowed to move this robot.
 	int rval;
@@ -183,15 +183,13 @@ multi_strip_robots(int playernum)
 	// Grab all robots away from a player
 	// (player died or exited the game)
 
-	int i;
-
 	if (Game_mode & GM_MULTI_ROBOTS) {
 
 		if (playernum == Player_num)
-			for (i = 0; i < MAX_ROBOTS_CONTROLLED; i++)
+			for (unsigned i = 0; i < MAX_ROBOTS_CONTROLLED; i++)
 				multi_delete_controlled_robot(robot_controlled[i]);
 
-		for (i = 1; i <= Highest_object_index; i++)
+		for (objnum_t i = 1; i <= Highest_object_index; i++)
 			if ((Objects[i].type == OBJ_ROBOT) && (Objects[i].ctype.ai_info.REMOTE_OWNER == playernum)) {
 				Assert((Objects[i].control_type == CT_AI) || (Objects[i].control_type == CT_NONE) || (Objects[i].control_type == CT_MORPH));
 				Objects[i].ctype.ai_info.REMOTE_OWNER = -1;
@@ -215,8 +213,8 @@ multi_dump_robots(void)
 		return;
 }
 
-int
-multi_add_controlled_robot(int objnum, int agitation)
+static int
+multi_add_controlled_robot(objnum_t objnum, int agitation)
 {
 	int i;
 	int lowest_agitation = 0x7fffffff; // MAX POSITIVE INT
@@ -281,8 +279,8 @@ multi_add_controlled_robot(int objnum, int agitation)
 	return(1);
 }
 
-void
-multi_delete_controlled_robot(int objnum)
+static void
+multi_delete_controlled_robot(objnum_t objnum)
 {
 	int i;
 
@@ -313,7 +311,7 @@ multi_delete_controlled_robot(int objnum)
 }
 
 void
-multi_send_claim_robot(int objnum)
+multi_send_claim_robot(objnum_t objnum)
 {
 	short s;
 
@@ -339,8 +337,8 @@ multi_send_claim_robot(int objnum)
 	multi_send_data(multibuf, 5, 2);
 }
 
-void
-multi_send_release_robot(int objnum)
+static void
+multi_send_release_robot(objnum_t objnum)
 {
 	short s;
 
@@ -405,7 +403,7 @@ multi_send_robot_frame(int sent)
 }
 
 void
-multi_send_robot_position_sub(int objnum, int now)
+multi_send_robot_position_sub(objnum_t objnum, int now)
 {
 	int loc = 0;
 	short s;
@@ -432,7 +430,7 @@ multi_send_robot_position_sub(int objnum, int now)
 }
 
 void
-multi_send_robot_position(int objnum, int force)
+multi_send_robot_position(objnum_t objnum, int force)
 {
 	// Send robot position to other player(s).  Includes a byte
 	// value describing whether or not they fired a weapon
@@ -464,7 +462,7 @@ multi_send_robot_position(int objnum, int force)
 }
 
 void
-multi_send_robot_fire(int objnum, int gun_num, vms_vector *fire)
+multi_send_robot_fire(objnum_t objnum, int gun_num, vms_vector *fire)
 {
 	// Send robot fire event
 	int loc = 0;
@@ -510,7 +508,7 @@ multi_send_robot_fire(int objnum, int gun_num, vms_vector *fire)
 }
 
 void
-multi_send_robot_explode(int objnum, int killer,char isthief)
+multi_send_robot_explode(objnum_t objnum, objnum_t killer,char isthief)
 {
 	// Send robot explosion event to the other players
 
@@ -533,7 +531,7 @@ multi_send_robot_explode(int objnum, int killer,char isthief)
 }
 
 void
-multi_send_create_robot(int station, int objnum, int type)
+multi_send_create_robot(int station, objnum_t objnum, int type)
 {
 	// Send create robot information
 
@@ -551,7 +549,7 @@ multi_send_create_robot(int station, int objnum, int type)
 }
 
 void
-multi_send_boss_actions(int bossobjnum, int action, int secondary, int objnum)
+multi_send_boss_actions(objnum_t bossobjnum, int action, int secondary, objnum_t objnum)
 {
 	// Send special boss behavior information
 
@@ -632,7 +630,8 @@ static multi_send_create_robot_powerups(dxxobject *del_obj)
 void
 multi_do_claim_robot(char *buf)
 {
-	short botnum, remote_botnum;
+	objnum_t botnum;
+	short remote_botnum;
 	char pnum;
 
 	pnum = buf[1];
@@ -668,7 +667,8 @@ multi_do_claim_robot(char *buf)
 void
 multi_do_release_robot(char *buf)
 {
-	short botnum, remote_botnum;
+	objnum_t botnum;
+	short remote_botnum;
 	char pnum;
 
 	pnum = buf[1];
@@ -701,7 +701,8 @@ multi_do_robot_position(char *buf)
 {
 	// Process robot movement sent by another player
 
-	short botnum, remote_botnum;
+	objnum_t botnum;
+	short remote_botnum;
 	char pnum;
 	int loc = 1;
 #ifdef WORDS_BIGENDIAN
@@ -756,7 +757,7 @@ multi_do_robot_fire(char *buf)
 {
 	// Send robot fire event
 	int loc = 1;
-	int botnum;
+	objnum_t botnum;
 	short remote_botnum;
 	int gun_num;
 	vms_vector fire, gun_point;
@@ -798,7 +799,7 @@ multi_do_robot_fire(char *buf)
 }
 
 int
-multi_explode_robot_sub(int botnum, int killer,char isthief)
+multi_explode_robot_sub(objnum_t botnum, objnum_t killer,char isthief)
 {
 	dxxobject *robot;
 
@@ -869,10 +870,11 @@ multi_do_robot_explode(char *buf)
 {
 	// Explode robot controlled by other player
 
-	int botnum;
+	objnum_t botnum;
 	short remote_botnum;
 	int loc = 1;
-	short killer, remote_killer;
+	objnum_t killer;
+	short remote_killer;
 	int rval;
 	char thief;
 
@@ -952,7 +954,7 @@ multi_do_boss_actions(char *buf)
 	// Code to handle remote-controlled boss actions
 
 	dxxobject *boss_obj;
-	int boss_objnum;
+	objnum_t boss_objnum;
 	int pnum;
 	int action, secondary;
 	int loc = 1;
@@ -1058,7 +1060,8 @@ multi_do_create_robot_powerups(char *buf)
 
 	int loc = 1;
 	dxxobject del_obj;
-	int pnum, egg_objnum, i;
+	int pnum, i;
+	objnum_t egg_objnum;
 
 	memset( &del_obj, 0, sizeof(dxxobject) );
 	del_obj.type = OBJ_ROBOT;
@@ -1104,12 +1107,12 @@ multi_do_create_robot_powerups(char *buf)
 }
 
 void
-multi_drop_robot_powerups(int objnum)
+multi_drop_robot_powerups(objnum_t objnum)
 {
 	// Code to handle dropped robot powerups in network mode ONLY!
 
 	dxxobject *del_obj;
-	int egg_objnum = -1;
+	objnum_t egg_objnum = -1;
 	robot_info	*robptr;
 
 	if ((objnum < 0) || (objnum > Highest_object_index))

@@ -123,9 +123,9 @@ extern int newdemo_swap_endian(const char *filename);
 
 extern int newdemo_get_percent_done();
 
-extern void newdemo_record_link_sound_to_object3( int soundno, short objnum, fix max_volume, fix  max_distance, int loop_start, int loop_end );
-extern int newdemo_find_object( int signature );
-extern void newdemo_record_kill_sound_linked_to_object( int objnum );
+extern void newdemo_record_link_sound_to_object3( int soundno, objnum_t objnum, fix max_volume, fix  max_distance, int loop_start, int loop_end );
+extern objnum_t newdemo_find_object( int signature );
+extern void newdemo_record_kill_sound_linked_to_object( objnum_t objnum );
 void newdemo_record_guided_end();
 void newdemo_record_guided_start();
 int newdemo_count_demos();
