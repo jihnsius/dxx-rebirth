@@ -31,7 +31,7 @@ public:
 	typedef unsigned vertices_size_type;
 	typedef unsigned edges_size_type;
 	typedef unsigned degree_size_type;
-	BOOST_STRONG_TYPEDEF(segnum_t, segment_descriptor);
+	typedef segnum_t segment_descriptor;
 	BOOST_STRONG_TYPEDEF(unsigned, side_descriptor);
 	struct vertex_descriptor : boost_int_vertex_descriptor
 	{
@@ -39,7 +39,7 @@ public:
 		vertex_descriptor(const vertex_descriptor& v) : boost_int_vertex_descriptor(v) {}
 		explicit vertex_descriptor(const unsigned u) : boost_int_vertex_descriptor(u) {}
 		vertex_descriptor(const segment_descriptor& v, const side_descriptor& s) :
-			boost_int_vertex_descriptor((static_cast<unsigned>(v) * 8) | (static_cast<unsigned>(s) & 7))
+			boost_int_vertex_descriptor((static_cast<unsigned>(static_cast<segnum_t>(v)) * 8) | (static_cast<unsigned>(s) & 7))
 		{
 		}
 		segment_descriptor extract_segment() const
@@ -129,7 +129,7 @@ struct base_d2segment_adaptor::base_edge_descriptor
 		return dstside;
 	}
 	base_edge_descriptor() :
-		src(vertex_descriptor(segment_descriptor(0), side_descriptor(e_max_sides_per_segment))),
+		src(vertex_descriptor(segment_first, side_descriptor(e_max_sides_per_segment))),
 		dstside(e_max_sides_per_segment)
 	{
 	}

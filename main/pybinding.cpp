@@ -404,7 +404,7 @@ static vms_vector get_player_thrust(const dxxobject& plr)
 	static segnum_t s_target_segnum = segment_none;
 	const segnum_t segnum = get_desired_segment(s_target_segnum, ScriptControls.ship_destination);
 	vms_vector vs;
-	if (segnum == segment_none || static_cast<unsigned>(segnum) > static_cast<unsigned>(Highest_segment_index))
+	if (segnum == segment_none || segnum > Highest_segment_index)
 	{
 		vm_vec_zero(&vs);
 		return vs;
@@ -572,7 +572,7 @@ static int py_get_internal_glow_path(const script_control_info::location& l, con
 	glow_path_cache_t& cache = s_cache[window_num];
 	const segnum_t cseg = cache.dstseg;
 	const segnum_t segnum = get_desired_segment(cache.dstseg, l);
-	if (segnum == segment_none || static_cast<unsigned>(segnum) > static_cast<unsigned>(Highest_segment_index))
+	if (segnum == segment_none || segnum > Highest_segment_index)
 	{
 		cache.srcseg = segment_none;
 		return -2;

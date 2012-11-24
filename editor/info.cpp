@@ -243,7 +243,8 @@ static void info_display_default(int show_all)
 	//--------------- Number of segments ----------------
 
 	if ( old_Num_segments != Num_segments )	{
-		gr_uprintf( 0, 0, "Segments: %4d/%4d", Num_segments, MAX_SEGMENTS );
+		unsigned n = Num_segments;
+		gr_uprintf( 0, 0, "Segments: %4d/%4d", n, MAX_SEGMENTS );
 		old_Num_segments = Num_segments;
 	}
 

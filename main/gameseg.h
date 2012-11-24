@@ -39,7 +39,7 @@ typedef struct segmasks {
 } segmasks;
 
 extern unsigned      Highest_vertex_index;                   // Highest index in Vertices and Vertex_active, an efficiency hack
-extern unsigned      Highest_segment_index;          // Highest index in Segments, an efficiency hack
+extern Highest_segment_index_t      Highest_segment_index;          // Highest index in Segments, an efficiency hack
 
 extern void compute_center_point_on_side(vms_vector *vp,segment *sp,int side);
 extern void compute_segment_center(vms_vector *vp,segment *sp);

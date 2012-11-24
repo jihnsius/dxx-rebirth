@@ -1073,7 +1073,8 @@ window *game_setup(void)
 #ifdef EDITOR
 	if (!Cursegp)
 	{
-		Cursegp = &Segments[segment_first];
+		const segnum_t f = segment_first;
+		Cursegp = &Segments[f];
 		Curside = 0;
 	}
 
@@ -1863,7 +1864,7 @@ int create_special_path(void)
  */
 void flickering_light_read(flickering_light *fl, PHYSFS_file *fp)
 {
-	fl->segnum = PHYSFSX_readShort(fp);
+	fl->segnum = segnum_t(PHYSFSX_readShort(fp));
 	fl->sidenum = PHYSFSX_readShort(fp);
 	fl->mask = PHYSFSX_readInt(fp);
 	fl->timer = PHYSFSX_readFix(fp);

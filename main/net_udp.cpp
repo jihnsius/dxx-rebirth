@@ -4681,7 +4681,7 @@ void net_udp_process_pdata ( ubyte *data, int data_len, struct _sockaddr sender_
 	pd.pos.xo = GET_INTEL_SHORT(&data[len]);							len += 2;
 	pd.pos.yo = GET_INTEL_SHORT(&data[len]);							len += 2;
 	pd.pos.zo = GET_INTEL_SHORT(&data[len]);							len += 2;
-	pd.pos.segment = GET_INTEL_SHORT(&data[len]);							len += 2;
+	pd.pos.segment = segnum_t(GET_INTEL_SHORT(&data[len]));							len += 2;
 	pd.pos.velx = GET_INTEL_SHORT(&data[len]);							len += 2;
 	pd.pos.vely = GET_INTEL_SHORT(&data[len]);							len += 2;
 	pd.pos.velz = GET_INTEL_SHORT(&data[len]);							len += 2;

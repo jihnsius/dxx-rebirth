@@ -1834,7 +1834,7 @@ void validate_segment_all(void)
 
 	#ifdef EDITOR
 	{
-		for (s=Highest_segment_index+1; s<Segments.size(); s++)
+		for (s=Highest_segment_index; ++s<Segments.size(); )
 			if (Segments[s].segnum != segment_none) {
 				Segments[s].segnum = segment_none;
 			}

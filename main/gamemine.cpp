@@ -541,7 +541,7 @@ int load_mine_data(PHYSFS_file *LoadFile)
 	} else {
 		Level_shake_frequency = mine_fileinfo.level_shake_frequency << 12;
 		Level_shake_duration = mine_fileinfo.level_shake_duration << 12;
-		Secret_return_segment = mine_fileinfo.secret_return_segment;
+		Secret_return_segment = segnum_t(mine_fileinfo.secret_return_segment);
 		Secret_return_orient = mine_fileinfo.secret_return_orient;
 	}
 
@@ -695,7 +695,7 @@ int load_mine_data(PHYSFS_file *LoadFile)
 					Error( "Error reading segments in gamemine.c" );
 
 				#ifdef EDITOR
-				Segments[i].segnum = v16_seg.segnum;
+				Segments[i].segnum = segnum_t(v16_seg.segnum);
 				// -- Segments[i].pad = v16_seg.pad;
 				#endif
 
@@ -703,7 +703,7 @@ int load_mine_data(PHYSFS_file *LoadFile)
 					Segments[i].sides[j] = v16_seg.sides[j];
 
 				for (j=0; j<MAX_SIDES_PER_SEGMENT; j++)
-					Segments[i].children[j] = v16_seg.children[j];
+					Segments[i].children[j] = segnum_t(v16_seg.children[j]);
 
 				for (j=0; j<MAX_VERTICES_PER_SEGMENT; j++)
 					Segments[i].verts[j] = v16_seg.verts[j];
@@ -875,7 +875,7 @@ static void read_children(segnum_t segnum,ubyte bit_mask,PHYSFS_file *LoadFile)
 
 	for (bit=0; bit<MAX_SIDES_PER_SEGMENT; bit++) {
 		if (bit_mask & (1 << bit)) {
-			const segnum_t s = PHYSFSX_readShort(LoadFile);
+			const segnum_t s(PHYSFSX_readShort(LoadFile));
 			/*
 			 * Some old levels set the child bit, but then specify a
 			 * child of none.

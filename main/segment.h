@@ -29,6 +29,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #ifdef __cplusplus
 #include <array>
+#include <boost/serialization/strong_typedef.hpp>
 
 // Version 1 - Initial version
 // Version 2 - Mike changed some shorts to bytes in segments, so incompatible!
@@ -66,19 +67,86 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #endif
 
 typedef unsigned vertnum_t;
-typedef unsigned short segnum_t;
 
-#define DECLARE_SEGMENT_INDEX(N,V)	enum { segment_##N = V }
+#define DECLARE_SEGMENT_INDEX(N,V)	DECLARE_TYPESAFE_INDEX(segment,N,V)
 
 DECLARE_SEGMENT_INDEX(first, 0);
 DECLARE_SEGMENT_INDEX(exit, 0xfffe);
 DECLARE_SEGMENT_INDEX(none, 0xffff);
+
+struct Highest_segment_index_t
+{
+	unsigned contained_value;
+	void operator=(const unsigned & rhs) { contained_value = rhs; }
+	operator const unsigned & () const { return contained_value; }
+};
+
+struct Num_segments_t
+{
+	unsigned contained_value;
+	void operator=(const unsigned & rhs) { contained_value = rhs; }
+	operator const unsigned&() const { return contained_value; }
+	Num_segments_t& operator++(int) { contained_value++; return *this; }
+	Num_segments_t& operator--(int) { contained_value--; return *this; }
+};
+
+/*
+ * This is based on BOOST_STRONG_TYPEDEF, but that macro does not permit
+ * sufficient customization for the required use cases.
+ */
+struct segnum_t
+	: boost::totally_ordered1< segnum_t
+		, boost::equality_comparable2< segnum_t, segment_exit_type_t
+			, boost::equality_comparable2< segnum_t, segment_none_type_t
+			>
+		>
+	>
+{
+	enum
+	{
+		segment_first = typesafe_idx_segment::first,
+		segment_exit = typesafe_idx_segment::exit,
+		segment_none = typesafe_idx_segment::none,
+	};
+	unsigned short contained_value;
+	explicit segnum_t(const unsigned short& t_) : contained_value(t_) {};
+	segnum_t() = default;
+	// segnum_t & operator=(const unsigned short & rhs) { contained_value = rhs; return *this; }
+	segnum_t & operator=(const Highest_segment_index_t & rhs) { contained_value = rhs.contained_value; return *this; }
+	operator unsigned short () const { return contained_value; }
+	// operator unsigned short & () { return contained_value; }
+	bool operator==(const segnum_t & rhs) const { return contained_value == rhs.contained_value; }
+	bool operator<(const segnum_t & rhs) const { return (contained_value < rhs.contained_value); }
+	segnum_t& operator++() { ++ contained_value; return *this; }
+	segnum_t& operator++(int) { contained_value ++; return *this; }
+	segnum_t& operator--(int) { contained_value --; return *this; }
+	DEFINE_CONSTRUCT_SPECIAL(segnum_t, segment_first);
+	DEFINE_CONSTRUCT_SPECIAL(segnum_t, segment_exit);
+	DEFINE_CONSTRUCT_SPECIAL(segnum_t, segment_none);
+	DEFINE_COMPARE_SPECIAL(==, segment_exit);
+	DEFINE_COMPARE_SPECIAL(==, segment_none);
+	DEFINE_COMPARE_PASSTHROUGH(<=, Highest_segment_index_t);
+	DEFINE_COMPARE_PASSTHROUGH(>, Highest_segment_index_t);
+	DEFINE_COMPARE_PASSTHROUGH(<, Num_segments_t);
+	DEFINE_COMPARE_PASSTHROUGH(>=, Num_segments_t);
+	template <typename T> segnum_t & operator=(T) = delete;
+	template <typename T> bool operator==(T) const = delete;
+	template <typename T> bool operator!=(T) const = delete;
+	template <typename T> bool operator<=(T) const = delete;
+	template <typename T> bool operator>=(T) const = delete;
+	template <typename T> bool operator<(T) const = delete;
+	template <typename T> bool operator>(T) const = delete;
+} __pack__;
+
+//typedef unsigned short vertnum_t;
 
 // Returns true if segnum references a child, else returns false.
 // Note that -1 means no connection, -2 means a connection to the outside world.
 static inline int IS_CHILD(segnum_t s) {
 	return s != segment_exit && s != segment_none;
 }
+
+template <typename T> static inline int IS_CHILD(T) = delete;
 
 //Structure for storing u,v,light values.
 //NOTE: this structure should be the same as the one in 3d.h
@@ -174,9 +242,6 @@ void get_side_normals(segment *sp, int sidenum, vms_vector * vm1, vms_vector *vm
 //--repair-- 	short   special_segment; // if special_type indicates repair center, this is the base of the repair center
 //--repair-- } lsegment;
 
-template <typename T>
-using segment_array_template_t = std::array<T, MAX_SEGMENTS>;
-
 typedef std::array<segnum_t, MAX_SEGMENTS> group_segment_array_t;
 
 typedef struct {
@@ -187,9 +252,33 @@ typedef struct {
 } group;
 
 template <typename T>
+struct segment_array_template_t
+{
+	typedef std::array<T, MAX_SEGMENTS> array_t;
+	array_t a;
+	typename array_t::reference operator[](segment_first_type_t) { return a[segnum_t::segment_first]; }
+	typename array_t::reference operator[](const segnum_t& s) { return a[s.contained_value]; }
+#ifdef EDITOR
+	/*
+	 * This special case is required to allow some defined(EDITOR) code
+	 * to work.
+	 */
+	typename array_t::reference operator[](const Highest_segment_index_t& s) { return a[s.contained_value]; }
+#endif
+	template <typename U> void operator[](U) = delete;
+	segnum_t idx(typename array_t::const_pointer p) const
+	{
+		return segnum_t(std::distance(a.begin(), p));
+	}
+	typename array_t::reference back() { return a.back(); }
+	Num_segments_t size() const { return Num_segments_t{(unsigned)a.size()}; }
+	void fill(typename array_t::const_reference v) { a.fill(v); }
+};
+
+template <typename T>
 static inline segnum_t operator-(const T *p, const segment_array_template_t<T>& a)
 {
-	return segnum_t(std::distance(a.begin(), p));
+	return a.idx(p);
 }
 
 typedef segment_array_template_t<segment> segment_array_t;
@@ -200,7 +289,7 @@ typedef segment_array_template_t<ubyte> automap_visited_array_t;
 extern vms_vector   Vertices[MAX_VERTICES];
 extern segment_array_t      Segments;
 extern segment2_array_t     Segment2s;
-extern unsigned          Num_segments;
+extern Num_segments_t          Num_segments;
 extern unsigned          Num_vertices;
 
 // Get pointer to the segment2 for the given segment pointer

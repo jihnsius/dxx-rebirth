@@ -26,7 +26,7 @@ void segment2_read(segment2 *s2, PHYSFS_file *fp)
  */
 void delta_light_read(delta_light *dl, PHYSFS_file *fp)
 {
-	dl->segnum = PHYSFSX_readShort(fp);
+	dl->segnum = segnum_t(PHYSFSX_readShort(fp));
 	dl->sidenum = PHYSFSX_readByte(fp);
 	dl->dummy = PHYSFSX_readByte(fp);
 	dl->vert_light[0] = PHYSFSX_readByte(fp);
@@ -41,7 +41,7 @@ void delta_light_read(delta_light *dl, PHYSFS_file *fp)
  */
 void dl_index_read(dl_index *di, PHYSFS_file *fp)
 {
-	di->segnum = PHYSFSX_readShort(fp);
+	di->segnum = segnum_t(PHYSFSX_readShort(fp));
 	di->sidenum = PHYSFSX_readByte(fp);
 	di->count = PHYSFSX_readByte(fp);
 	di->index = PHYSFSX_readShort(fp);

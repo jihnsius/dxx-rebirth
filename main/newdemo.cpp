@@ -393,7 +393,7 @@ static void nd_read_segnum_short(segnum_t *s)
 {
 	short i;
 	nd_read_short(&i);
-	*s = i;
+	*s = segnum_t(i);
 }
 
 static void nd_read_objnum_short(objnum_t *o)
@@ -414,7 +414,7 @@ static void nd_read_segnum_int(segnum_t *s)
 {
 	int i;
 	nd_read_int(&i);
-	*s = i;
+	*s = segnum_t(i);
 }
 
 static void nd_read_objnum_int(objnum_t *s)

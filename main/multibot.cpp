@@ -966,7 +966,7 @@ multi_do_boss_actions(char *buf)
 	action = buf[loc];									loc += 1;
 	secondary = buf[loc];								loc += 1;
 	remote_objnum = GET_INTEL_SHORT(buf + loc);         loc += 2;
-	segnum = GET_INTEL_SHORT(buf + loc);                loc += 2;
+	segnum = segnum_t(GET_INTEL_SHORT(buf + loc));                loc += 2;
 
 	if ((boss_objnum < 0) || (boss_objnum > Highest_object_index))
 	{
@@ -1070,7 +1070,7 @@ multi_do_create_robot_powerups(char *buf)
 	del_obj.contains_count = buf[loc];			loc += 1;
 	del_obj.contains_type = buf[loc];			loc += 1;
 	del_obj.contains_id = buf[loc]; 			loc += 1;
-	del_obj.segnum = GET_INTEL_SHORT(buf + loc);            loc += 2;
+	del_obj.segnum = segnum_t(GET_INTEL_SHORT(buf + loc));            loc += 2;
 	memcpy(&del_obj.pos, buf+loc, sizeof(vms_vector));      loc += 12;
 
 	vm_vec_zero(&del_obj.mtype.phys_info.velocity);

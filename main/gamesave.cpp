@@ -347,7 +347,7 @@ void read_object(dxxobject *obj,PHYSFS_file *f,int version)
 	obj->render_type    = PHYSFSX_readByte(f);
 	obj->flags          = PHYSFSX_readByte(f);
 
-	obj->segnum         = PHYSFSX_readShort(f);
+	obj->segnum         = segnum_t(PHYSFSX_readShort(f));
 	obj->attached_obj   = object_none;
 
 	PHYSFSX_readVector(&obj->pos,f);
@@ -403,7 +403,7 @@ void read_object(dxxobject *obj,PHYSFS_file *f,int version)
 			for (i=0;i<MAX_AI_FLAGS;i++)
 				obj->ctype.ai_info.flags[i]			= PHYSFSX_readByte(f);
 
-			obj->ctype.ai_info.hide_segment			= PHYSFSX_readShort(f);
+			obj->ctype.ai_info.hide_segment			= segnum_t(PHYSFSX_readShort(f));
 			obj->ctype.ai_info.hide_index			= PHYSFSX_readShort(f);
 			obj->ctype.ai_info.path_length			= PHYSFSX_readShort(f);
 			obj->ctype.ai_info.cur_path_index		= PHYSFSX_readShort(f);
@@ -963,7 +963,7 @@ static int load_game_data(PHYSFS_file *LoadFile)
 			Triggers[i].value       = trig.value;
 			Triggers[i].time        = trig.time;
 			for (t=0;t<trig.num_links;t++) {
-				Triggers[i].seg[t] = trig.seg[t];
+				Triggers[i].seg[t] = segnum_t(trig.seg[t]);
 				Triggers[i].side[t] = trig.side[t];
 			}
 		}
@@ -1139,7 +1139,7 @@ static int load_game_data(PHYSFS_file *LoadFile)
 		for (sidenum=0; sidenum<6; sidenum++) {
 			int	wallnum = Segments[Highest_segment_index].sides[sidenum].wall_num;
 			if (wallnum != -1)
-				if ((Walls[wallnum].segnum != Highest_segment_index) || (Walls[wallnum].sidenum != sidenum))
+				if ((Walls[wallnum].segnum != segnum_t(static_cast<unsigned>(Highest_segment_index))) || (Walls[wallnum].sidenum != sidenum))
 					Int3();	//	Error.  Bogus walls in this segment.
 								// Consult Yuan or Mike.
 		}
@@ -1317,7 +1317,7 @@ int load_level(const char * filename_passed)
 		Secret_return_orient.uvec.y = 0;
 		Secret_return_orient.uvec.z = F1_0;
 	} else {
-		Secret_return_segment = PHYSFSX_readInt(LoadFile);
+		Secret_return_segment = segnum_t(PHYSFSX_readInt(LoadFile));
 		Secret_return_orient.rvec.x = PHYSFSX_readInt(LoadFile);
 		Secret_return_orient.rvec.y = PHYSFSX_readInt(LoadFile);
 		Secret_return_orient.rvec.z = PHYSFSX_readInt(LoadFile);

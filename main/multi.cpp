@@ -2099,7 +2099,7 @@ multi_do_door_open(char *buf)
 	wall *w;
 	ubyte flag;
 
-	segnum = GET_INTEL_SHORT(buf + 1);
+	segnum = segnum_t(GET_INTEL_SHORT(buf + 1));
 	side = buf[3];
 	flag= buf[4];
 
@@ -2183,7 +2183,7 @@ multi_do_create_powerup(char *buf)
 
 	pnum = buf[count++];
 	powerup_type = buf[count++];
-	segnum = GET_INTEL_SHORT(buf + count); count += 2;
+	segnum = segnum_t(GET_INTEL_SHORT(buf + count)); count += 2;
 	objnum = GET_INTEL_SHORT(buf + count); count += 2;
 
 	if (segnum > Highest_segment_index) {
@@ -4020,7 +4020,7 @@ static void multi_do_light (char *buf)
 	segnum_t seg;
 	ubyte sides=*(char *)(buf+5);
 
-	seg = GET_INTEL_INT(buf + 1);
+	seg = segnum_t(GET_INTEL_INT(buf + 1));
 	for (i=0;i<6;i++)
 	{
 		if ((sides & (1<<i)))

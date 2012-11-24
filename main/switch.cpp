@@ -610,7 +610,7 @@ void trigger_read(trigger *t, PHYSFS_file *fp)
 	t->value = PHYSFSX_readFix(fp);
 	t->time = PHYSFSX_readFix(fp);
 	for (i=0; i<MAX_WALLS_PER_LINK; i++ )
-		t->seg[i] = PHYSFSX_readShort(fp);
+		t->seg[i] = segnum_t(PHYSFSX_readShort(fp));
 	for (i=0; i<MAX_WALLS_PER_LINK; i++ )
 		t->side[i] = PHYSFSX_readShort(fp);
 }
@@ -625,7 +625,7 @@ static void trigger_swap(trigger *t, int swap)
 	t->value = SWAPINT(t->value);
 	t->time = SWAPINT(t->time);
 	for (i=0; i<MAX_WALLS_PER_LINK; i++ )
-		t->seg[i] = SWAPSHORT(t->seg[i]);
+		t->seg[i] = segnum_t(SWAPSHORT(t->seg[i]));
 	for (i=0; i<MAX_WALLS_PER_LINK; i++ )
 		t->side[i] = SWAPSHORT(t->side[i]);
 }

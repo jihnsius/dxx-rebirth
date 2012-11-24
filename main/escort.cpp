@@ -1203,7 +1203,7 @@ static segnum_t choose_thief_recreation_segment(void)
 	}
 
 	if (segnum == segment_none) {
-		return (d_rand() * Highest_segment_index) >> 15;
+		return segnum_t((d_rand() * Highest_segment_index) >> 15);
 	} else
 		return segnum;
 

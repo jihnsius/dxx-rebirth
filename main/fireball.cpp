@@ -578,7 +578,7 @@ static segnum_t choose_drop_segment()
 				segnum = segment_none;
 		}
 		if (segnum == segment_none) // basically it should be impossible segnum == -1 now... but oh well...
-			segnum = ((d_rand() * Highest_segment_index) >> 15);
+			segnum = segnum_t((d_rand() * Highest_segment_index) >> 15);
 		return segnum;
 	} else
 		return segnum;
@@ -1426,7 +1426,7 @@ static void expl_wall_swap(expl_wall *ew, int swap)
 	if (!swap)
 		return;
 
-	ew->segnum = SWAPINT(ew->segnum);
+	ew->segnum = segnum_t(SWAPINT(ew->segnum));
 	ew->sidenum = SWAPINT(ew->sidenum);
 	ew->time = SWAPINT(ew->time);
 }

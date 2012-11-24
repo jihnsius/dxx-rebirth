@@ -1648,14 +1648,14 @@ static int check_seg_concavity(segment *s)
 //	Find all concave segments and add to list
 void find_concave_segs()
 {
-	segnum_t i;
-	segment *s;
-
 	N_warning_segs = 0;
 
-	for (s=&Segments[segment_first],i=Highest_segment_index;i>=0;s++,i--)
+	for (segnum_t i=segment_first;i<=Highest_segment_index;i++)
+	{
+		segment *s=&Segments[i];
 		if (s->segnum != segment_none)
 			if (check_seg_concavity(s)) Warning_segs[N_warning_segs++]=SEG_PTR_2_NUM(s);
+	}
 
 
 }

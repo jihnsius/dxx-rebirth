@@ -2194,7 +2194,7 @@ void object_rw_swap(object_rw *obj, int swap)
 	obj->signature     = SWAPINT(obj->signature);
 	obj->next          = SWAPSHORT(obj->next);
 	obj->prev          = SWAPSHORT(obj->prev);
-	obj->segnum        = SWAPSHORT(obj->segnum);
+	obj->segnum        = segnum_t(SWAPSHORT(obj->segnum));
 	obj->attached_obj  = SWAPSHORT(obj->attached_obj);
 	obj->pos.x         = SWAPINT(obj->pos.x);
 	obj->pos.y         = SWAPINT(obj->pos.y);
@@ -2266,7 +2266,7 @@ void object_rw_swap(object_rw *obj, int swap)
 			break;
 
 		case CT_AI:
-			obj->ctype.ai_info.hide_segment           = SWAPSHORT(obj->ctype.ai_info.hide_segment);
+			obj->ctype.ai_info.hide_segment           = segnum_t(SWAPSHORT(obj->ctype.ai_info.hide_segment));
 			obj->ctype.ai_info.hide_index             = SWAPSHORT(obj->ctype.ai_info.hide_index);
 			obj->ctype.ai_info.path_length            = SWAPSHORT(obj->ctype.ai_info.path_length);
 			obj->ctype.ai_info.danger_laser_num       = SWAPSHORT(obj->ctype.ai_info.danger_laser_num);

@@ -1616,7 +1616,7 @@ void v16_wall_read(v16_wall *w, PHYSFS_file *fp)
  */
 void v19_wall_read(v19_wall *w, PHYSFS_file *fp)
 {
-	w->segnum = PHYSFSX_readInt(fp);
+	w->segnum = segnum_t(PHYSFSX_readInt(fp));
 	w->sidenum = PHYSFSX_readInt(fp);
 	w->type = PHYSFSX_readByte(fp);
 	w->flags = PHYSFSX_readByte(fp);
@@ -1632,7 +1632,7 @@ void v19_wall_read(v19_wall *w, PHYSFS_file *fp)
  */
 void wall_read(wall *w, PHYSFS_file *fp)
 {
-	w->segnum = PHYSFSX_readInt(fp);
+	w->segnum = segnum_t(PHYSFSX_readInt(fp));
 	w->sidenum = PHYSFSX_readInt(fp);
 	w->hps = PHYSFSX_readFix(fp);
 	w->linked_wall = PHYSFSX_readInt(fp);
@@ -1651,7 +1651,7 @@ static void wall_swap(wall *w, int swap)
 	if (!swap)
 		return;
 
-	w->segnum = SWAPINT(w->segnum);
+	w->segnum = segnum_t(SWAPINT(w->segnum));
 	w->sidenum = SWAPINT(w->sidenum);
 	w->hps = SWAPINT(w->hps);
 	w->linked_wall = SWAPINT(w->linked_wall);

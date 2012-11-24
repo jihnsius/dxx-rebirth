@@ -43,7 +43,7 @@ struct mfi {
 	int     editor_offset;      // Editor specific stuff
 	int     editor_size;
 	int     segment_offset;
-	int     segment_howmany;
+	Num_segments_t     segment_howmany;
 	int     segment_sizeof;
 	int     newseg_verts_offset;
 	int     newseg_verts_howmany;

@@ -57,7 +57,7 @@ struct {
 	int     vertex_howmany;
 	int     vertex_sizeof;
 	int     segment_offset;
-	int     segment_howmany;
+	Num_segments_t     segment_howmany;
 	int     segment_sizeof;
 	int     texture_offset;
 	int     texture_howmany;
@@ -1135,7 +1135,7 @@ static int med_save_group(const char *filename, const vertnum_t *vertex_ids, con
 			found = 0;
 			for (unsigned k=0;k<num_segments;k++)
 				if (tseg.children[j] == segment_ids[k]) {
-					tseg.children[j] = k;
+					tseg.children[j] = segnum_t(k);
 					found = 1;
 					break;
 					}

@@ -119,7 +119,7 @@ static void write_script_attitude_vector(script_control_info::location& l, const
 
 static void write_script_attitude_segment(script_control_info::location& l, const int s)
 {
-	l.segment = s;
+	l.segment = segnum_t(s);
 	l.enable_segment = true;
 }
 
