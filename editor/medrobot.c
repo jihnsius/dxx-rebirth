@@ -70,7 +70,7 @@ typedef struct robot_dialog
 
 static void call_init_ai_object(dxxobject *objp, int behavior)
 {
-	int	hide_segment;
+	segnum_t	hide_segment;
 
 	if (behavior == AIB_STATION)
 		hide_segment = Cursegp-Segments;

@@ -119,14 +119,14 @@ static void warning_printf(PHYSFS_file *my_file, const char * format, ... )
 // ----------------------------------------------------------------------------
 static void write_exit_text(PHYSFS_file *my_file)
 {
-	int	i, j, count;
+	int	j, count;
 
 	PHYSFSX_printf(my_file, "-----------------------------------------------------------------------------\n");
 	PHYSFSX_printf(my_file, "Exit stuff\n");
 
 	//	---------- Find exit triggers ----------
 	count=0;
-	for (i=0; i<Num_triggers; i++)
+	for (int i=0; i<Num_triggers; i++)
 		if (Triggers[i].type == TT_EXIT) {
 			int	count2;
 
@@ -158,7 +158,7 @@ static void write_exit_text(PHYSFS_file *my_file)
 
 	//	---------- Find exit doors ----------
 	count = 0;
-	for (i=segment_first; i<=Highest_segment_index; i++)
+	for (segnum_t i=segment_first; i<=Highest_segment_index; i++)
 		for (j=0; j<MAX_SIDES_PER_SEGMENT; j++)
 			if (Segments[i].children[j] == segment_exit) {
 				PHYSFSX_printf(my_file, "Segment %3i, side %i is an exit door.\n", i, j);
@@ -179,8 +179,9 @@ static void write_key_text(PHYSFS_file *my_file)
 {
 	int	red_count, blue_count, gold_count;
 	int	red_count2, blue_count2, gold_count2;
-	int	blue_segnum=segment_none, blue_sidenum=-1, red_segnum=segment_none, red_sidenum=-1, gold_segnum=segment_none, gold_sidenum=-1;
+	int	blue_sidenum=-1, red_sidenum=-1, gold_sidenum=-1;
 	int	connect_side;
+	segnum_t blue_segnum = segment_none, red_segnum = segment_none, gold_segnum = segment_none;
 
 	PHYSFSX_printf(my_file, "-----------------------------------------------------------------------------\n");
 	PHYSFSX_printf(my_file, "Key stuff:\n");
@@ -311,7 +312,8 @@ static void write_key_text(PHYSFS_file *my_file)
 // ----------------------------------------------------------------------------
 static void write_control_center_text(PHYSFS_file *my_file)
 {
-	int	i, count, objnum, count2;
+	segnum_t	i;
+	int count, objnum, count2;
 
 	PHYSFSX_printf(my_file, "-----------------------------------------------------------------------------\n");
 	PHYSFSX_printf(my_file, "Control Center stuff:\n");
@@ -358,7 +360,8 @@ static void write_fuelcen_text(PHYSFS_file *my_file)
 // ----------------------------------------------------------------------------
 static void write_segment_text(PHYSFS_file *my_file)
 {
-	int	i, objnum;
+	segnum_t	i;
+	int objnum;
 
 	PHYSFSX_printf(my_file, "-----------------------------------------------------------------------------\n");
 	PHYSFSX_printf(my_file, "Segment stuff:\n");
@@ -406,7 +409,8 @@ static void write_matcen_text(PHYSFS_file *my_file)
 	PHYSFSX_printf(my_file, "-----------------------------------------------------------------------------\n");
 	PHYSFSX_printf(my_file, "Materialization centers:\n");
 	for (i=0; i<Num_robot_centers; i++) {
-		int	trigger_count=0, segnum, fuelcen_num;
+		int	trigger_count=0, fuelcen_num;
+		segnum_t segnum;
 
 		PHYSFSX_printf(my_file, "FuelCenter[%02i].Segment = %04i  ", i, Station[i].segnum);
 		PHYSFSX_printf(my_file, "Segment2[%04i].matcen_num = %02i  ", Station[i].segnum, Segment2s[Station[i].segnum].matcen_num);
@@ -438,13 +442,14 @@ static void write_matcen_text(PHYSFS_file *my_file)
 // ----------------------------------------------------------------------------
 static void write_wall_text(PHYSFS_file *my_file)
 {
-	int	i, j;
+	int	j;
 	sbyte wall_flags[MAX_WALLS];
 
 	PHYSFSX_printf(my_file, "-----------------------------------------------------------------------------\n");
 	PHYSFSX_printf(my_file, "Walls:\n");
-	for (i=0; i<Num_walls; i++) {
-		int	segnum, sidenum;
+	for (int i=0; i<Num_walls; i++) {
+		segnum_t	segnum;
+		int sidenum;
 
 		PHYSFSX_printf(my_file, "Wall %03i: seg=%3i, side=%2i, linked_wall=%3i, type=%s, flags=%4x, hps=%3i, trigger=%2i, clip_num=%2i, keys=%2i, state=%i\n", i,
 			Walls[i].segnum, Walls[i].sidenum, Walls[i].linked_wall, Wall_names[Walls[i].type], Walls[i].flags, Walls[i].hps >> 16, Walls[i].trigger, Walls[i].clip_num, Walls[i].keys, Walls[i].state);
@@ -459,10 +464,10 @@ static void write_wall_text(PHYSFS_file *my_file)
 			err_printf(my_file, "Error: Wall %i points at segment %i, side %i, but that segment doesn't point back (it's wall_num = %i)\n", i, segnum, sidenum, Segments[segnum].sides[sidenum].wall_num);
 	}
 
-	for (i=0; i<sizeof(wall_flags)/sizeof(wall_flags[0]); i++)
+	for (unsigned i=0; i<sizeof(wall_flags)/sizeof(wall_flags[0]); i++)
 		wall_flags[i] = 0;
 
-	for (i=segment_first; i<=Highest_segment_index; i++) {
+	for (segnum_t i=segment_first; i<=Highest_segment_index; i++) {
 		segment	*segp = &Segments[i];
 		for (j=0; j<MAX_SIDES_PER_SEGMENT; j++) {
 			side	*sidep = &segp->sides[j];
@@ -742,7 +747,8 @@ int	Ignore_tmap_num2_error;
 // ----------------------------------------------------------------------------
 static void determine_used_textures_level(int load_level_flag, int shareware_flag, int level_num, int *tmap_buf, int *wall_buf, sbyte *level_tmap_buf, int max_tmap)
 {
-	int	segnum, sidenum, objnum=max_tmap;
+	segnum_t	segnum;
+	int sidenum, objnum=max_tmap;
 	int	i, j;
 
 	Assert(shareware_flag != -17);

@@ -49,7 +49,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define REMOVE_EXT(s)  (*(strchr( (s), '.' ))='\0')
 
 fix Level_shake_frequency = 0, Level_shake_duration = 0;
-int Secret_return_segment = 0;
+segnum_t Secret_return_segment;
 vms_matrix Secret_return_orient;
 
 #ifdef EDITOR
@@ -681,7 +681,7 @@ int load_mine_data(PHYSFS_file *LoadFile)
 
 		Highest_segment_index = mine_fileinfo.segment_howmany-1;
 
-		for (int i=segment_first; i< mine_fileinfo.segment_howmany; i++ ) {
+		for (segnum_t i=segment_first; i< mine_fileinfo.segment_howmany; i++ ) {
 
 			// Set the default values for this segment (clear to zero )
 			//memset( &Segments[i], 0, sizeof(segment) );
@@ -763,7 +763,7 @@ int load_mine_data(PHYSFS_file *LoadFile)
 
 
 		if (mine_top_fileinfo.fileinfo_version >= 20)
-			for (int i=segment_first; i<=Highest_segment_index; i++) {
+			for (segnum_t i=segment_first; i<=Highest_segment_index; i++) {
 				PHYSFS_read(LoadFile, &Segment2s[i], sizeof(segment2), 1);
 				fuelcen_activate( &Segments[i], Segment2s[i].special );
 			}
@@ -869,14 +869,19 @@ int load_mine_data(PHYSFS_file *LoadFile)
 
 #define COMPILED_MINE_VERSION 0
 
-static void read_children(int segnum,ubyte bit_mask,PHYSFS_file *LoadFile)
+static void read_children(segnum_t segnum,ubyte bit_mask,PHYSFS_file *LoadFile)
 {
 	int bit;
 
 	for (bit=0; bit<MAX_SIDES_PER_SEGMENT; bit++) {
 		if (bit_mask & (1 << bit)) {
-			const short s = PHYSFSX_readShort(LoadFile);
-			if (!((s < Num_segments)))
+			const segnum_t s = PHYSFSX_readShort(LoadFile);
+			/*
+			 * Some old levels set the child bit, but then specify a
+			 * child of none.
+			 * Newer levels omit the child bit when the child is none.
+			 */
+			if (!((s < Num_segments || s == segment_exit || s == segment_none)))
 				Error("Segment %i side %i has s=%hi at lf=%lx, but Num_segments=%i", segnum, bit, s, (unsigned long)PHYSFS_tell(LoadFile), Num_segments);
 			Segments[segnum].children[bit] = s;
 		} else
@@ -884,20 +889,20 @@ static void read_children(int segnum,ubyte bit_mask,PHYSFS_file *LoadFile)
 	}
 }
 
-static void read_verts(int segnum,PHYSFS_file *LoadFile)
+static void read_verts(segnum_t segnum,PHYSFS_file *LoadFile)
 {
 	int i;
 	// Read short Segments[segnum].verts[MAX_VERTICES_PER_SEGMENT]
 	for (i = 0; i < MAX_VERTICES_PER_SEGMENT; i++)
 	{
-		const short v = PHYSFSX_readShort(LoadFile);
+		const vertnum_t v = PHYSFSX_readShort(LoadFile);
 		if (!((v < Num_vertices)))
 			Error("Segment %i vert %i has v=%hi at lf=%lx, but Num_vertices=%i", segnum, i, v, (unsigned long)PHYSFS_tell(LoadFile), Num_vertices);
 		Segments[segnum].verts[i] = v;
 	}
 }
 
-static void read_special(int segnum,ubyte bit_mask,PHYSFS_file *LoadFile)
+static void read_special(segnum_t segnum,ubyte bit_mask,PHYSFS_file *LoadFile)
 {
 	if (bit_mask & (1 << MAX_SIDES_PER_SEGMENT)) {
 		// Read ubyte	Segment2s[segnum].special
@@ -915,7 +920,8 @@ static void read_special(int segnum,ubyte bit_mask,PHYSFS_file *LoadFile)
 
 int load_mine_data_compiled(PHYSFS_file *LoadFile)
 {
-	int     segnum, sidenum;
+	int     sidenum;
+	segnum_t segnum;
 	ubyte   compiled_version;
 	short   temp_short;
 	ushort  temp_ushort = 0;
@@ -976,7 +982,7 @@ int load_mine_data_compiled(PHYSFS_file *LoadFile)
 	}
 	Assert( Num_segments <= MAX_SEGMENTS );
 
-	for (unsigned i = 0; i < Num_vertices; i++)
+	for (vertnum_t i = 0; i < Num_vertices; i++)
 		PHYSFSX_readVector( &(Vertices[i]), LoadFile);
 
 	for (segnum=segment_first; segnum<Num_segments; segnum++ )	{
@@ -1113,7 +1119,7 @@ int load_mine_data_compiled(PHYSFS_file *LoadFile)
 
 	validate_segment_all();			// Fill in side type and normals.
 
-	for (unsigned i=segment_first; i<Num_segments; i++) {
+	for (segnum_t i=segment_first; i<Num_segments; i++) {
 		if (Gamesave_current_version > 5)
 			segment2_read(&Segment2s[i], LoadFile);
 		fuelcen_activate( &Segments[i], Segment2s[i].special );

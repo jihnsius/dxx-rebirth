@@ -31,7 +31,7 @@ public:
 	typedef unsigned vertices_size_type;
 	typedef unsigned edges_size_type;
 	typedef unsigned degree_size_type;
-	BOOST_STRONG_TYPEDEF(unsigned, segment_descriptor);
+	BOOST_STRONG_TYPEDEF(segnum_t, segment_descriptor);
 	BOOST_STRONG_TYPEDEF(unsigned, side_descriptor);
 	struct vertex_descriptor : boost_int_vertex_descriptor
 	{

@@ -95,7 +95,7 @@ static void draw_line(int pnum0,int pnum1)
 // ----------------------------------------------------------------------------
 static void draw_segment(segment *seg)
 {
-	int	*svp;
+	vertnum_t	*svp;
 	int	nv;
 	g3s_codes cc;
 
@@ -125,7 +125,7 @@ static void draw_segment(segment *seg)
 //for looking for segment under a mouse click
 static void check_segment(segment *seg)
 {
-	int	*svp;
+	vertnum_t	*svp;
 	int	nv;
 	g3s_codes cc;
 
@@ -172,7 +172,7 @@ static void check_segment(segment *seg)
 // ----------------------------------------------------------------------------
 static void draw_seg_side(segment *seg,int side)
 {
-	int	*svp;
+	vertnum_t	*svp;
 	int	nv;
 	g3s_codes cc;
 
@@ -192,7 +192,7 @@ static void draw_seg_side(segment *seg,int side)
 
 static void draw_side_edge(segment *seg,int side,int edge)
 {
-	int	*svp;
+	vertnum_t	*svp;
 	int	nv;
 	g3s_codes cc;
 
@@ -369,7 +369,7 @@ static void add_edge(int v0,int v1,ubyte type)
 //adds a segment's edges to the edge list
 static void add_edges(segment *seg)
 {
-	int	*svp;
+	vertnum_t	*svp;
 	int	nv;
 	g3s_codes cc;
 
@@ -434,7 +434,7 @@ static void add_edges(segment *seg)
 // ----------------------------------------------------------------------------
 static void draw_trigger_side(segment *seg,int side)
 {
-	int	*svp;
+	vertnum_t	*svp;
 	int	nv;
 	g3s_codes cc;
 
@@ -451,7 +451,7 @@ static void draw_trigger_side(segment *seg,int side)
 // ----------------------------------------------------------------------------
 static void draw_wall_side(segment *seg,int side)
 {
-	int	*svp;
+	vertnum_t	*svp;
 	int	nv;
 	g3s_codes cc;
 
@@ -511,7 +511,7 @@ static void draw_special_wall( segment *seg, int side )
 
 // ----------------------------------------------------------------------------------------------------------------
 // Recursively parse mine structure, drawing segments.
-static void draw_mine_sub(int segnum,int depth)
+static void draw_mine_sub(segnum_t segnum,int depth)
 {
 	segment *mine_ptr;
 
@@ -563,7 +563,7 @@ static void draw_mine(segment *mine_ptr,int depth)
 	int	i;
 
 	// clear visited list
-	for (i=0; i<=Highest_segment_index; i++)
+	for (segnum_t i=segment_first; i<=Highest_segment_index; i++)
 		Been_visited[i] = 0;
 
 	edge_list_size = min(Num_segments*12,MAX_EDGES);		//make maybe smaller than max
@@ -588,11 +588,11 @@ static void draw_mine(segment *mine_ptr,int depth)
 //	A segment is drawn if its segnum != -1.
 void draw_mine_all(segment *sp, int automap_flag)
 {
-	int	s;
+	segnum_t	s;
 	int	i;
 
 	// clear visited list
-	for (i=0; i<=Highest_segment_index; i++)
+	for (segnum_t i=segment_first; i<=Highest_segment_index; i++)
 		Been_visited[i] = 0;
 
 	edge_list_size = min(Num_segments*12,MAX_EDGES);		//make maybe smaller than max
@@ -668,7 +668,7 @@ static void draw_group_segments(void)
 
 static void draw_special_segments(void)
 {
-	short seg;
+	segnum_t seg;
 	ubyte color;
 
 	// Highlight matcens, fuelcens, etc.
@@ -729,7 +729,7 @@ void free_vert(int vert_num)
 static void draw_coordinate_axes(void)
 {
 	int			i;
-	int			Axes_verts[16];
+	vertnum_t			Axes_verts[16];
 	vms_vector	tvec,xvec,yvec,zvec;
 
 	for (i=0; i<16; i++)

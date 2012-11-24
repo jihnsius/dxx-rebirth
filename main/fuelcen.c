@@ -89,7 +89,7 @@ char	Special_names[MAX_CENTER_TYPES][11] = {
 // Resets all fuel center info
 void fuelcen_reset()
 {
-	unsigned i;
+	segnum_t i;
 
 	Num_fuelcenters = 0;
 
@@ -104,7 +104,7 @@ void fuelcen_reset()
 static void reset_all_robot_centers() __attribute_used;
 static void reset_all_robot_centers()
 {
-	int i;
+	segnum_t i;
 
 	// Remove all materialization centers
 	for (i=segment_first; i<Num_segments; i++)
@@ -225,7 +225,7 @@ void fuelcen_activate( segment * segp, segment_type_t station_type )
 
 //------------------------------------------------------------
 //	Trigger (enable) the materialization center in segment segnum
-void trigger_matcen(int segnum)
+void trigger_matcen(segnum_t segnum)
 {
 	// -- segment		*segp = &Segments[segnum];
 	segment2		*seg2p = &Segment2s[segnum];
@@ -374,7 +374,8 @@ static void robotmaker_proc( FuelCenter * robotcen )
 {
 	fix		dist_to_player;
 	vms_vector	cur_object_loc; //, direction;
-	int		matcen_num, segnum, objnum;
+	int		matcen_num, objnum;
+	segnum_t segnum;
 	fix		top_time;
 	vms_vector	direction;
 
@@ -810,7 +811,7 @@ void old_matcen_info_read(old_matcen_info *mi, PHYSFS_file *fp)
 	mi->robot_flags = PHYSFSX_readInt(fp);
 	mi->hit_points = PHYSFSX_readFix(fp);
 	mi->interval = PHYSFSX_readFix(fp);
-	mi->segnum = PHYSFSX_readShort(fp);
+	mi->segnum = (segnum_t)PHYSFSX_readShort(fp);
 	mi->fuelcen_num = PHYSFSX_readShort(fp);
 }
 
@@ -823,7 +824,7 @@ void matcen_info_read(matcen_info *mi, PHYSFS_file *fp)
 	mi->robot_flags[1] = PHYSFSX_readInt(fp);
 	mi->hit_points = PHYSFSX_readFix(fp);
 	mi->interval = PHYSFSX_readFix(fp);
-	mi->segnum = PHYSFSX_readShort(fp);
+	mi->segnum = (segnum_t)PHYSFSX_readShort(fp);
 	mi->fuelcen_num = PHYSFSX_readShort(fp);
 }
 
@@ -836,7 +837,7 @@ static void matcen_info_swap(matcen_info *mi, int swap)
 	mi->robot_flags[1] = SWAPINT(mi->robot_flags[1]);
 	mi->hit_points = SWAPINT(mi->hit_points);
 	mi->interval = SWAPINT(mi->interval);
-	mi->segnum = SWAPSHORT(mi->segnum);
+	mi->segnum = (segnum_t)SWAPSHORT(mi->segnum);
 	mi->fuelcen_num = SWAPSHORT(mi->fuelcen_num);
 }
 
@@ -871,7 +872,7 @@ static void fuelcen_swap(FuelCenter *fc, int swap)
 		return;
 
 	fc->Type = SWAPINT(fc->Type);
-	fc->segnum = SWAPINT(fc->segnum);
+	fc->segnum = (segnum_t)SWAPINT(fc->segnum);
 	fc->Capacity = SWAPINT(fc->Capacity);
 	fc->MaxCapacity = SWAPINT(fc->MaxCapacity);
 	fc->Timer = SWAPINT(fc->Timer);

@@ -42,13 +42,13 @@ int Draw_all_segments;   // Set to 1 means draw_world draws all segments in Segm
 sbyte Vertex_active[MAX_VERTICES]; // !0 means vertex is in use, 0 means not in use.
 
 int N_selected_segs = 0;  // Number of segments found at Selected_segs
-short Selected_segs[MAX_SELECTED_SEGS]; // List of segment numbers currently selected
+segnum_t Selected_segs[MAX_SELECTED_SEGS]; // List of segment numbers currently selected
 
 int N_warning_segs = 0;   // Number of segments warning-worthy, such as a concave segment
-short Warning_segs[MAX_WARNING_SEGS]; // List of segment numbers currently selected
+segnum_t Warning_segs[MAX_WARNING_SEGS]; // List of segment numbers currently selected
 
 int N_found_segs = 0;    // Number of segments found with last shift-mouse-click
-short Found_segs[MAX_FOUND_SEGS]; // List of warning-worthy segments
+segnum_t Found_segs[MAX_FOUND_SEGS]; // List of warning-worthy segments
 
 int Show_axes_flag = 0; // 0 = don't show, !0 = do show coordinate axes in *Cursegp orientation
 

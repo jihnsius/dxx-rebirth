@@ -1,5 +1,6 @@
 #pragma once
 #include "vecmat.h"
+#include "segment.h"
 #include <stdint.h>
 #include <boost/noncopyable.hpp>
 #include <array>
@@ -8,7 +9,7 @@ struct script_control_info : boost::noncopyable {
 	struct location : boost::noncopyable
 	{
 		vms_vector pos;
-		uint16_t segment;
+		segnum_t segment;
 		bool enable_position, enable_segment;
 	};
 	/*

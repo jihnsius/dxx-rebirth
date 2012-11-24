@@ -66,7 +66,8 @@ static fix area_on_side(side *sidep)
 static int area_on_all_sides(void) __attribute_used__;
 static int area_on_all_sides(void)
 {
-	int	i,s;
+	segnum_t	i;
+	int s;
 	int	total_area = 0;
 
 	for (i=segment_first; i<=Highest_segment_index; i++) {
@@ -83,7 +84,8 @@ static int area_on_all_sides(void)
 static fix average_connectivity(void) __attribute_unused;
 static fix average_connectivity(void)
 {
-	int	i,s;
+	segnum_t	i;
+	int s;
 	int	total_sides = 0, total_mapped_sides = 0;
 
 	for (i=segment_first; i<=Highest_segment_index; i++) {
@@ -104,13 +106,14 @@ static fix average_connectivity(void)
 //	---------------------------------------------------------------------------------------------
 //	Scan all polys in all segments, return average light value for vnum.
 //	segs = output array for segments containing vertex, terminated by -1.
-static fix get_average_light_at_vertex(int vnum, short *segs)
+static fix get_average_light_at_vertex(int vnum, segnum_t *segs)
 {
-	int	segnum, relvnum, sidenum;
+	segnum_t	segnum;
+	int relvnum, sidenum;
 	fix	total_light;
 	int	num_occurrences;
 //	#ifndef NDEBUG //Removed this ifdef because the version of Assert that I used to get it to compile doesn't work without this symbol. -KRB
-        short   *original_segs;
+        segnum_t   *original_segs;
 
         original_segs = segs;
 //	#endif
@@ -121,7 +124,7 @@ static fix get_average_light_at_vertex(int vnum, short *segs)
 
 	for (segnum=segment_first; segnum<=Highest_segment_index; segnum++) {
 		segment *segp = &Segments[segnum];
-		int *vp = segp->verts;
+		vertnum_t *vp = segp->verts;
 
 		for (relvnum=0; relvnum<MAX_VERTICES_PER_SEGMENT; relvnum++)
 			if (*vp++ == vnum)
@@ -161,7 +164,7 @@ static fix get_average_light_at_vertex(int vnum, short *segs)
 static void set_average_light_at_vertex(int vnum)
 {
 	int	relvnum, sidenum;
-	short	Segment_indices[MAX_LIGHT_SEGS];
+	segnum_t	Segment_indices[MAX_LIGHT_SEGS];
 	int	segind;
 
 	fix average_light;
@@ -173,7 +176,7 @@ static void set_average_light_at_vertex(int vnum)
 
 	segind = 0;
 	while (Segment_indices[segind] != segment_none) {
-		int segnum = Segment_indices[segind++];
+		segnum_t segnum = Segment_indices[segind++];
 
 		segment *segp = &Segments[segnum];
 
@@ -220,11 +223,11 @@ int set_average_light_on_curside(void)
 static void set_average_light_on_all_fast(void) __attribute_unused;
 static void set_average_light_on_all_fast(void)
 {
-	int	s,v,relvnum;
+	int v,relvnum;
 	fix	al;
 	int	alc;
-	int	seglist[MAX_LIGHT_SEGS];
-	int	*segptr;
+	segnum_t	seglist[MAX_LIGHT_SEGS];
+	segnum_t	s, *segptr;
 
 	set_vertex_counts();
 
@@ -274,7 +277,7 @@ static void set_average_light_on_all_fast(void)
 
 			segptr = seglist;
 			while (*segptr != segment_none) {
-				int 		segnum = *segptr++;
+				segnum_t 		segnum = *segptr++;
 				segment	*segp = &Segments[segnum];
 				int		sidenum;
 
@@ -412,7 +415,7 @@ static void compress_uv_coordinates_in_segment(segment *segp)
 static void compress_uv_coordinates_all(void) __attribute_unused;
 static void compress_uv_coordinates_all(void)
 {
-	int	seg;
+	segnum_t	seg;
 
 	for (seg=segment_first; seg<=Highest_segment_index; seg++)
 		if (Segments[seg].segnum != segment_none)
@@ -441,7 +444,7 @@ static void check_lighting_segment(segment *segp)
 static void check_lighting_all(void) __attribute_unused;
 static void check_lighting_all(void)
 {
-	int	seg;
+	segnum_t	seg;
 
 	for (seg=segment_first; seg<=Highest_segment_index; seg++)
 		if (Segments[seg].segnum != segment_none)
@@ -467,7 +470,7 @@ static void assign_default_lighting(segment *segp)
 
 void assign_default_lighting_all(void)
 {
-	int	seg;
+	segnum_t	seg;
 
 	for (seg=segment_first; seg<=Highest_segment_index; seg++)
 		if (Segments[seg].segnum != segment_none)
@@ -1012,7 +1015,7 @@ static void fix_bogus_uvs_seg(segment *segp)
 
 int fix_bogus_uvs_all(void)
 {
-	int	seg;
+	segnum_t	seg;
 
 	for (seg=segment_first; seg<=Highest_segment_index; seg++)
 		if (Segments[seg].segnum != segment_none)
@@ -1145,7 +1148,8 @@ int	Hash_hits=0, Hash_retries=0, Hash_calcs=0;
 static void cast_light_from_side(segment *segp, int light_side, fix light_intensity, int quick_light)
 {
 	vms_vector	segment_center;
-	int			segnum,sidenum,vertnum, lightnum;
+	segnum_t			segnum;
+	int sidenum,vertnum, lightnum;
 
 	compute_segment_center(&segment_center, segp);
 
@@ -1295,7 +1299,8 @@ static void cast_light_from_side(segment *segp, int light_side, fix light_intens
 //	Zero all lighting values.
 static void calim_zero_light_values(void)
 {
-	int	segnum, sidenum, vertnum;
+	segnum_t	segnum;
+	int sidenum, vertnum;
 
 	for (segnum=segment_first; segnum<=Highest_segment_index; segnum++) {
 		segment *segp = &Segments[segnum];
@@ -1315,7 +1320,8 @@ static void calim_zero_light_values(void)
 static void cast_light_from_side_to_center(segment *segp, int light_side, fix light_intensity, int quick_light)
 {
 	vms_vector	segment_center;
-	int			segnum, lightnum;
+	segnum_t			segnum;
+	int lightnum;
 
 	compute_segment_center(&segment_center, segp);
 
@@ -1397,7 +1403,8 @@ static void cast_light_from_side_to_center(segment *segp, int light_side, fix li
 //	Process all lights.
 static void calim_process_all_lights(int quick_light)
 {
-	int	segnum, sidenum;
+	segnum_t	segnum;
+	int sidenum;
 
 	for (segnum=segment_first; segnum<=Highest_segment_index; segnum++) {
 		segment	*segp = &Segments[segnum];
@@ -1491,7 +1498,8 @@ int	Diff_normals=0;
 static void print_normals(void) __attribute_unused;
 static void print_normals(void)
 {
-	int			i,j,s,n,nn;
+	segnum_t			i;
+	int j,s,n,nn;
 	// vms_vector	*normal;
 	int			num_normals=0;
 

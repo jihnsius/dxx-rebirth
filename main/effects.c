@@ -188,7 +188,7 @@ int eclip_read_n(eclip *ec, int n, PHYSFS_file *fp)
 		ec[i].dest_eclip = PHYSFSX_readInt(fp);
 		ec[i].dest_size = PHYSFSX_readFix(fp);
 		ec[i].sound_num = PHYSFSX_readInt(fp);
-		ec[i].segnum = PHYSFSX_readInt(fp);
+		ec[i].segnum = (segnum_t)PHYSFSX_readInt(fp);
 		ec[i].sidenum = PHYSFSX_readInt(fp);
 	}
 	return i;

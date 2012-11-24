@@ -2091,7 +2091,7 @@ multi_do_decloak(char *buf)
 static void
 multi_do_door_open(char *buf)
 {
-	int segnum;
+	segnum_t segnum;
 	sbyte side;
 	segment *seg;
 	wall *w;
@@ -2168,7 +2168,7 @@ multi_do_controlcen_fire(char *buf)
 static void
 multi_do_create_powerup(char *buf)
 {
-	short segnum;
+	segnum_t segnum;
 	short objnum;
 	int my_objnum;
 	char pnum;
@@ -3047,7 +3047,7 @@ multi_send_decloak(void)
 }
 
 void
-multi_send_door_open(int segnum, int side,ubyte flag)
+multi_send_door_open(segnum_t segnum, int side,ubyte flag)
 {
 	// When we open a door make sure everyone else opens that door
 
@@ -3059,7 +3059,7 @@ multi_send_door_open(int segnum, int side,ubyte flag)
 	multi_send_data(multibuf, 5, 2);
 }
 
-void multi_send_door_open_specific(int pnum,int segnum, int side,ubyte flag)
+void multi_send_door_open_specific(int pnum,segnum_t segnum, int side,ubyte flag)
 {
 	// For sending doors only to a specific person (usually when they're joining)
 
@@ -3120,7 +3120,7 @@ multi_send_controlcen_fire(vms_vector *to_goal, int best_gun_num, int objnum)
 }
 
 void
-multi_send_create_powerup(int powerup_type, int segnum, int objnum, vms_vector *pos)
+multi_send_create_powerup(int powerup_type, segnum_t segnum, int objnum, vms_vector *pos)
 {
 	// Create a powerup on a remote machine, used for remote
 	// placement of used powerups like missiles and cloaking
@@ -3530,7 +3530,8 @@ int Goal_blue_segnum,Goal_red_segnum;
 
 void multi_apply_goal_textures()
 {
-	int		i,j,tex;
+	segnum_t		i;
+	int j,tex;
 	segment	*seg;
 	segment2	*seg2;
 
@@ -3997,7 +3998,7 @@ static void multi_do_seismic (char *buf)
 	digi_play_sample (SOUND_SEISMIC_DISTURBANCE_START, F1_0);
 }
 
-void multi_send_light_specific (int pnum,int segnum,ubyte val)
+void multi_send_light_specific (int pnum,segnum_t segnum,ubyte val)
 {
 	int count=1,i;
 
@@ -4018,7 +4019,8 @@ void multi_send_light_specific (int pnum,int segnum,ubyte val)
 
 static void multi_do_light (char *buf)
 {
-	int i, seg;
+	int i;
+	segnum_t seg;
 	ubyte sides=*(char *)(buf+5);
 
 	seg = GET_INTEL_INT(buf + 1);

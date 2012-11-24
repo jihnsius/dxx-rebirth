@@ -218,7 +218,7 @@ int newdemo_get_percent_done()	{
 
 static void my_extract_shortpos(dxxobject *objp, shortpos *spp)
 {
-	int segnum;
+	segnum_t segnum;
 	sbyte *sp;
 
 	sp = spp->bytemat;
@@ -379,11 +379,25 @@ static void nd_read_short(short *s)
 		*s = SWAPSHORT(*s);
 }
 
+static void nd_read_segnum_short(segnum_t *s)
+{
+	short i;
+	nd_read_short(&i);
+	*s = i;
+}
+
 static void nd_read_int(int *i)
 {
 	newdemo_read(i, 4, 1);
 	if (swap_endian)
 		*i = SWAPINT(*i);
+}
+
+static void nd_read_segnum_int(segnum_t *s)
+{
+	int i;
+	nd_read_int(&i);
+	*s = i;
 }
 
 static void nd_read_string(char *str)
@@ -439,7 +453,7 @@ static void nd_read_shortpos(dxxobject *obj)
 	nd_read_short(&(sp.xo));
 	nd_read_short(&(sp.yo));
 	nd_read_short(&(sp.zo));
-	nd_read_short(&(sp.segment));
+	nd_read_segnum_short(&(sp.segment));
 	nd_read_short(&(sp.velx));
 	nd_read_short(&(sp.vely));
 	nd_read_short(&(sp.velz));
@@ -1058,7 +1072,7 @@ void newdemo_record_kill_sound_linked_to_object( int objnum )
 }
 
 
-void newdemo_record_wall_hit_process( int segnum, int side, int damage, int playernum )
+void newdemo_record_wall_hit_process( segnum_t segnum, int side, int damage, int playernum )
 {
 	stop_time();
 	nd_write_byte( ND_EVENT_WALL_HIT_PROCESS );
@@ -1087,7 +1101,7 @@ void newdemo_record_secret_exit_blown(int truth)
 	start_time();
 }
 
-void newdemo_record_trigger( int segnum, int side, int objnum,int shot )
+void newdemo_record_trigger( segnum_t segnum, int side, int objnum,int shot )
 {
 	stop_time();
 	nd_write_byte( ND_EVENT_TRIGGER );
@@ -1116,7 +1130,7 @@ void newdemo_record_morph_frame(morph_data *md)
 	start_time();
 }
 
-void newdemo_record_wall_toggle( int segnum, int side )
+void newdemo_record_wall_toggle( segnum_t segnum, int side )
 {
 	stop_time();
 	nd_write_byte( ND_EVENT_WALL_TOGGLE );
@@ -1219,7 +1233,7 @@ void newdemo_record_player_weapon(int weapon_type, int weapon_num)
 	start_time();
 }
 
-void newdemo_record_effect_blowup(short segment, int side, vms_vector *pnt)
+void newdemo_record_effect_blowup(segnum_t segment, int side, vms_vector *pnt)
 {
 	stop_time();
 	nd_write_byte (ND_EVENT_EFFECT_BLOWUP);
@@ -1403,7 +1417,7 @@ void newdemo_record_secondary_ammo(int new_ammo)
 	start_time();
 }
 
-void newdemo_record_door_opening(int segnum, int side)
+void newdemo_record_door_opening(segnum_t segnum, int side)
 {
 	stop_time();
 	nd_write_byte(ND_EVENT_DOOR_OPENING);
@@ -1707,7 +1721,8 @@ void nd_render_extras (ubyte,dxxobject *);
 
 static int newdemo_read_frame_information(int rewrite)
 {
-	int done, segnum, side, objnum, soundno, angle, volume, i,shot;
+	int done, side, objnum, soundno, angle, volume, i,shot;
+	segnum_t segnum;
 	dxxobject *obj;
 	sbyte c,WhichWindow;
 	dxxobject extraobj;
@@ -1938,10 +1953,11 @@ static int newdemo_read_frame_information(int rewrite)
 			break;
 
 		case ND_EVENT_WALL_HIT_PROCESS: {
-			int player, segnum;
+			int player;
+			segnum_t segnum;
 			fix damage;
 
-			nd_read_int(&segnum);
+			nd_read_segnum_int(&segnum);
 			nd_read_int(&side);
 			nd_read_fix(&damage);
 			nd_read_int(&player);
@@ -1960,7 +1976,7 @@ static int newdemo_read_frame_information(int rewrite)
 		}
 
 		case ND_EVENT_TRIGGER:
-			nd_read_int(&segnum);
+			nd_read_segnum_int(&segnum);
 			nd_read_int(&side);
 			nd_read_int(&objnum);
 			nd_read_int(&shot);
@@ -2041,7 +2057,7 @@ static int newdemo_read_frame_information(int rewrite)
 		}
 
 		case ND_EVENT_WALL_TOGGLE:
-			nd_read_int(&segnum);
+			nd_read_segnum_int(&segnum);
 			nd_read_int(&side);
 			if (nd_playback_v_bad_read) {done = -1; break; }
 			if (rewrite)
@@ -2255,7 +2271,7 @@ static int newdemo_read_frame_information(int rewrite)
 		}
 
 		case ND_EVENT_EFFECT_BLOWUP: {
-			short segnum;
+			segnum_t segnum;
 			sbyte side;
 			vms_vector pnt;
 			dxxobject dummy;
@@ -2265,7 +2281,7 @@ static int newdemo_read_frame_information(int rewrite)
 			//laser is, so create a laser whose parent is the player
 			dummy.ctype.laser_info.parent_type = OBJ_PLAYER;
 
-			nd_read_short(&segnum);
+			nd_read_segnum_short(&segnum);
 			nd_read_byte(&side);
 			nd_read_vector(&pnt);
 			if (rewrite)
@@ -2333,12 +2349,13 @@ static int newdemo_read_frame_information(int rewrite)
 
 
 		case ND_EVENT_WALL_SET_TMAP_NUM1: {
-			short seg, cseg, tmap;
+			segnum_t seg, cseg;
+			short tmap;
 			sbyte side,cside;
 
-			nd_read_short(&seg);
+			nd_read_segnum_short(&seg);
 			nd_read_byte(&side);
-			nd_read_short(&cseg);
+			nd_read_segnum_short(&cseg);
 			nd_read_byte(&cside);
 			nd_read_short( &tmap );
 			if (rewrite)
@@ -2356,12 +2373,13 @@ static int newdemo_read_frame_information(int rewrite)
 		}
 
 		case ND_EVENT_WALL_SET_TMAP_NUM2: {
-			short seg, cseg, tmap;
+			segnum_t seg, cseg;
+			short tmap;
 			sbyte side,cside;
 
-			nd_read_short(&seg);
+			nd_read_segnum_short(&seg);
 			nd_read_byte(&side);
-			nd_read_short(&cseg);
+			nd_read_segnum_short(&cseg);
 			nd_read_byte(&cside);
 			nd_read_short( &tmap );
 			if (rewrite)
@@ -2622,10 +2640,10 @@ static int newdemo_read_frame_information(int rewrite)
 		}
 
 		case ND_EVENT_DOOR_OPENING: {
-			short segnum;
+			segnum_t segnum;
 			sbyte side;
 
-			nd_read_short(&segnum);
+			nd_read_segnum_short(&segnum);
 			nd_read_byte(&side);
 			if (rewrite)
 			{

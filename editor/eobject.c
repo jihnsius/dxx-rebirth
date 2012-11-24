@@ -164,7 +164,7 @@ static int place_object(segment *segp, vms_vector *object_pos, short object_type
 
 			obj->shields = Robot_info[obj->id].strength;
 
-			{	int	hide_segment;
+			{	segnum_t	hide_segment;
 			if (Markedsegp)
 				hide_segment = Markedsegp-Segments;
 			else
@@ -467,7 +467,7 @@ int ObjectDelete(void)
 //	Return value:	0 = in mine, 1 = not in mine
 static int move_object_within_mine(dxxobject * obj, vms_vector *newpos )
 {
-	int segnum;
+	segnum_t segnum;
 
 	for (segnum=segment_first;segnum <= Highest_segment_index; segnum++) {
 		segmasks result = get_seg_masks(&obj->pos, segnum, 0, __FILE__, __LINE__);
@@ -804,7 +804,7 @@ static void move_object_to_position(int objnum, vms_vector *newpos)
 	} else {
 		if (verify_object_seg(&Objects[objnum], newpos)) {
 			int		fate, count;
-			int		viewer_segnum;
+			segnum_t		viewer_segnum;
 			dxxobject	temp_viewer_obj;
 			fvi_query fq;
 			fvi_info	hit_info;
@@ -863,7 +863,7 @@ static void move_object_to_position(int objnum, vms_vector *newpos)
 
 			fate = find_vector_intersection(&fq,&hit_info);
 			if (fate == HIT_WALL) {
-				int	new_segnum;
+				segnum_t	new_segnum;
 
 				objp->pos = hit_info.hit_pnt;
 				new_segnum = find_object_seg(objp);

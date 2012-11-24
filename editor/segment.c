@@ -250,7 +250,7 @@ int ToggleBottom(void)
 // ----------------------------------------------------------------------------
 //	Return a pointer to the list of vertex indices for the current segment in vp and
 //	the number of vertices in *nv.
-void med_get_vertex_list(segment *s,int *nv,int **vp)
+void med_get_vertex_list(segment *s,int *nv,vertnum_t **vp)
 {
 	*vp = s->verts;
 	*nv = MAX_VERTICES_PER_SEGMENT;
@@ -263,7 +263,8 @@ void med_get_vertex_list(segment *s,int *nv,int **vp)
 //	to any other segment.
 static int med_vertex_count(int vi)
 {
-	int		s,v;
+	int		v;
+	segnum_t s;
 	segment	*sp;
 	int		count;
 
@@ -345,9 +346,9 @@ int med_add_vertex(vms_vector *vp)
 // ------------------------------------------------------------------------------------------
 //	Returns the index of a free segment.
 //	Scans the Segments array.
-int get_free_segment_number(void)
+segnum_t get_free_segment_number(void)
 {
-	int	segnum;
+	segnum_t	segnum;
 
 	for (segnum=segment_first; segnum<MAX_SEGMENTS; segnum++)
 		if (Segments[segnum].segnum == segment_none) {
@@ -364,9 +365,9 @@ int get_free_segment_number(void)
 
 // -------------------------------------------------------------------------------
 //	Create a new segment, duplicating exactly, including vertex ids and children, the passed segment.
-int med_create_duplicate_segment(segment *sp)
+segnum_t med_create_duplicate_segment(segment *sp)
 {
-	int	segnum;
+	segnum_t	segnum;
 
 	segnum = get_free_segment_number();
 
@@ -407,7 +408,7 @@ int med_create_duplicate_vertex(vms_vector *vp)
 
 // -------------------------------------------------------------------------------
 //	Set the vertex *vp at index vnum in the global list of vertices, return its index (just for compatibility).
-int med_set_vertex(int vnum,vms_vector *vp)
+int med_set_vertex(vertnum_t vnum,vms_vector *vp)
 {
 	Assert(vnum < MAX_VERTICES);
 
@@ -603,7 +604,7 @@ void	set_matrix_based_on_side(vms_matrix *rotmat,int destside)
 //	-------------------------------------------------------------------------------------
 static void change_vertex_occurrences(int dest, int src)
 {
-	int	g,s,v;
+	int	g,v;
 
 	// Fix vertices in groups
 	for (g=0;g<num_groups;g++)
@@ -612,7 +613,7 @@ static void change_vertex_occurrences(int dest, int src)
 				GroupList[g].vertices[v] = dest;
 
 	// now scan all segments, changing occurrences of src to dest
-	for (s=0; s<=Highest_segment_index; s++)
+	for (segnum_t s=segment_first; s<=Highest_segment_index; s++)
 		if (Segments[s].segnum != segment_none)
 			for (v=0; v<MAX_VERTICES_PER_SEGMENT; v++)
 				if (Segments[s].verts[v] == src)
@@ -653,7 +654,7 @@ static void compress_vertices(void)
 // --------------------------------------------------------------------------------------------------
 static void compress_segments(void)
 {
-	int		hole,seg;
+	segnum_t		hole,seg;
 
 	if (Highest_segment_index == Num_segments - 1)
 		return;
@@ -812,7 +813,7 @@ static int med_attach_segment_rotated(segment *destseg, segment *newseg, int des
 	int			side,v;
 	vms_matrix	rotmat,rotmat1,rotmat2,rotmat3,rotmat4;
 	vms_vector	vr,vc,tvs[4],xlate_vec;
-	int			segnum;
+	segnum_t			segnum;
 	vms_vector	forvec,upvec;
 
 	// Return if already a face attached on this side.
@@ -942,7 +943,7 @@ int med_attach_segment(segment *destseg, segment *newseg, int destside, int news
 // -------------------------------------------------------------------------------
 //	Delete a vertex, sort of.
 //	Decrement the vertex count.  If the count goes to 0, then the vertex is free (has been deleted).
-static void delete_vertex(int v)
+static void delete_vertex(vertnum_t v)
 {
 	Assert(v < MAX_VERTICES);			// abort if vertex is not in array Vertices
 	Assert(Vertex_active[v] >= 1);	// abort if trying to delete a non-existent vertex
@@ -970,7 +971,8 @@ static void update_num_vertices(void)
 //	Set Num_vertices.
 void set_vertex_counts(void)
 {
-	int	s,v;
+	segnum_t	s;
+	int v;
 
 	Num_vertices = 0;
 
@@ -1013,7 +1015,8 @@ static void delete_vertices_in_segment(segment *sp)
 //		1	unable to delete.
 int med_delete_segment(segment *sp)
 {
-	int		s,side,segnum;
+	int		s,side;
+	segnum_t segnum;
 	int 		objnum;
 
 	segnum = sp-Segments;
@@ -1074,7 +1077,7 @@ int med_delete_segment(segment *sp)
 
 	// If we deleted something which was not connected to anything, must now select a new current segment.
 	if (Cursegp == sp)
-		for (s=0; s<MAX_SEGMENTS; s++)
+		for (segnum_t s=segment_first; s<MAX_SEGMENTS; s++)
 			if ((Segments[s].segnum != segment_none) && (s!=segnum) ) {
 				Cursegp = &Segments[s];
 				med_create_new_segment_from_cursegp();
@@ -1277,9 +1280,10 @@ next_side: ;
 int med_form_joint(segment *seg1, int side1, segment *seg2, int side2)
 {
 	const sbyte	*vp1,*vp2;
-	int		bfi,v,s,sv,s1,nv;
+	int		bfi,v,sv,s1,nv;
 	int		lost_vertices[4],remap_vertices[4];
-	int		validation_list[MAX_VALIDATIONS];
+	segnum_t		validation_list[MAX_VALIDATIONS];
+	segnum_t s;
 
 	//	Make sure that neither side is connected.
 	if (IS_CHILD(seg1->children[side1]) || IS_CHILD(seg2->children[side2]))
@@ -1558,7 +1562,7 @@ void med_create_new_segment_from_cursegp(void)
 void init_all_vertices(void)
 {
 	int		v;
-	int	s;
+	segnum_t	s;
 
 	for (v=0; v<sizeof(Vertex_active)/sizeof(Vertex_active[0]); v++)
 		Vertex_active[v] = 0;
@@ -1594,7 +1598,7 @@ void med_copy_segment(segment *dsp,segment *ssp)
 
 // -----------------------------------------------------------------------------
 //	Create coordinate axes in orientation of specified segment, stores vertices at *vp.
-void create_coordinate_axes_from_segment(segment *sp,int *vertnums)
+void create_coordinate_axes_from_segment(segment *sp,vertnum_t *vertnums)
 {
 	vms_matrix	rotmat;
 	vms_vector t;
@@ -1646,7 +1650,7 @@ int check_seg_concavity(segment *s)
 //	Find all concave segments and add to list
 void find_concave_segs()
 {
-	int i;
+	segnum_t i;
 	segment *s;
 
 	N_warning_segs = 0;
@@ -1702,7 +1706,8 @@ void warn_if_concave_segment(segment *s)
 //	Return false if unable to find, in which case adj_sp and adj_side are undefined.
 int med_find_adjacent_segment_side(segment *sp, int side, segment **adj_sp, int *adj_side)
 {
-	int			seg,s,v,vv;
+	segnum_t			seg;
+	int s,v,vv;
 	int			abs_verts[4];
 
 	//	Stuff abs_verts[4] array with absolute vertex indices
@@ -1755,7 +1760,8 @@ int med_find_adjacent_segment_side(segment *sp, int side, segment **adj_sp, int 
 //	Return false if unable to find, in which case adj_sp and adj_side are undefined.
 int med_find_closest_threshold_segment_side(segment *sp, int side, segment **adj_sp, int *adj_side, fix threshold)
 {
-	int			seg,s;
+	segnum_t			seg;
+	int s;
 	vms_vector  vsc, vtc; 		// original segment center, test segment center
 	fix			current_dist, closest_seg_dist;
 
@@ -1791,7 +1797,8 @@ int med_find_closest_threshold_segment_side(segment *sp, int side, segment **adj
 
 void med_check_all_vertices()
 {
-	int		s,v;
+	int		v;
+	segnum_t s;
 	segment	*sp;
 
 	for (s=segment_first; s<Num_segments; s++) {

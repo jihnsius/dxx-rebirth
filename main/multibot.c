@@ -956,7 +956,8 @@ multi_do_boss_actions(char *buf)
 	int pnum;
 	int action, secondary;
 	int loc = 1;
-	short remote_objnum, segnum;
+	short remote_objnum;
+	segnum_t segnum;
 
 	pnum = buf[loc]; 									loc += 1;
 	boss_objnum = GET_INTEL_SHORT(buf + loc);           loc += 2;
@@ -983,7 +984,7 @@ multi_do_boss_actions(char *buf)
 	{
 		case 1: // Teleport
 			{
-				int teleport_segnum;
+				segnum_t teleport_segnum;
 				vms_vector boss_dir;
 
 				if ((secondary < 0) || (secondary > Num_boss_teleport_segs))

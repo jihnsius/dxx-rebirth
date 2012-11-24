@@ -92,7 +92,7 @@ static int check_collision_delayfunc_exec()
 
 //	-------------------------------------------------------------------------------------------------------------
 //	The only reason this routine is called (as of 10/12/94) is so Brain guys can open doors.
-static void collide_robot_and_wall( dxxobject * robot, fix hitspeed, short hitseg, short hitwall, vms_vector * hitpt)
+static void collide_robot_and_wall( dxxobject * robot, fix hitspeed, segnum_t hitseg, short hitwall, vms_vector * hitpt)
 {
 	ai_local		*ailp = &Ai_local_info[robot-Objects];
 
@@ -297,7 +297,7 @@ void bump_one_object(dxxobject *obj0, vms_vector *hit_dir, fix damage)
 
 fix force_force = i2f(50);
 
-static void collide_player_and_wall( dxxobject * playerobj, fix hitspeed, short hitseg, short hitwall, vms_vector * hitpt)
+static void collide_player_and_wall( dxxobject * playerobj, fix hitspeed, segnum_t hitseg, short hitwall, vms_vector * hitpt)
 {
 	fix damage;
 	char ForceFieldHit=0;
@@ -388,7 +388,7 @@ fix64	Last_volatile_scrape_sound_time = 0;
 //see if wall is volatile or water
 //if volatile, cause damage to player
 //returns 1=lava, 2=water
-int check_volatile_wall(dxxobject *obj,int segnum,int sidenum,vms_vector *hitpt)
+int check_volatile_wall(dxxobject *obj,segnum_t segnum,int sidenum,vms_vector *hitpt)
 {
 	fix tmap_num,d,water;
 
@@ -428,7 +428,7 @@ int check_volatile_wall(dxxobject *obj,int segnum,int sidenum,vms_vector *hitpt)
 }
 
 //this gets called when an object is scraping along the wall
-void scrape_player_on_wall(dxxobject *obj, short hitseg, short hitside, vms_vector * hitpt )
+void scrape_player_on_wall(dxxobject *obj, segnum_t hitseg, short hitside, vms_vector * hitpt )
 {
 	int type;
 
@@ -609,7 +609,7 @@ int check_effect_blowup(segment *seg,int side,vms_vector *pnt, dxxobject *blower
 
 // int Show_seg_and_side = 0;
 
-static void collide_weapon_and_wall( dxxobject * weapon, fix hitspeed, short hitseg, short hitwall, vms_vector * hitpt)
+static void collide_weapon_and_wall( dxxobject * weapon, fix hitspeed, segnum_t hitseg, short hitwall, vms_vector * hitpt)
 {
 	segment *seg = &Segments[hitseg];
 	int blew_up;
@@ -859,7 +859,7 @@ static void collide_weapon_and_wall( dxxobject * weapon, fix hitspeed, short hit
 //##	return;
 //##}
 
-static void collide_debris_and_wall( dxxobject * debris, fix hitspeed, short hitseg, short hitwall, vms_vector * hitpt)	{
+static void collide_debris_and_wall( dxxobject * debris, fix hitspeed, segnum_t hitseg, short hitwall, vms_vector * hitpt)	{
 	if (!PERSISTENT_DEBRIS || TmapInfo[Segments[hitseg].sides[hitwall].tmap_num].damage)
 		explode_object(debris,0);
 	return;
@@ -965,7 +965,7 @@ static void collide_robot_and_player( dxxobject * robot, dxxobject * playerobj, 
 
 	if (check_collision_delayfunc_exec())
 	{
-		int	collision_seg = find_point_seg(collision_point, playerobj->segnum);;
+		segnum_t	collision_seg = find_point_seg(collision_point, playerobj->segnum);;
 
 		// added this if to remove the bump sound if it's the thief.
 		// A "steal" sound was added and it was getting obscured by the bump. -AP 10/3/95
@@ -1418,7 +1418,7 @@ static int do_boss_weapon_collision(dxxobject *robot, dxxobject *weapon, vms_vec
 		dot = vm_vec_dot(&tvec1, &robot->orient.fvec);
 		if (dot > Boss_invulnerable_dot) {
 			int	new_obj;
-			int	segnum;
+			segnum_t	segnum;
 
 			segnum = find_point_seg(collision_point, robot->segnum);
 			digi_link_sound_to_pos( SOUND_WEAPON_HIT_DOOR, segnum, 0, collision_point, 0, F1_0);
@@ -1479,7 +1479,7 @@ static int do_boss_weapon_collision(dxxobject *robot, dxxobject *weapon, vms_vec
 			}
 		}
 	} else if ((Weapon_info[weapon->id].matter && Boss_invulnerable_matter[d2_boss_index]) || (!Weapon_info[weapon->id].matter && Boss_invulnerable_energy[d2_boss_index])) {
-		int	segnum;
+		segnum_t	segnum;
 
 		segnum = find_point_seg(collision_point, robot->segnum);
 		digi_link_sound_to_pos( SOUND_WEAPON_HIT_DOOR, segnum, 0, collision_point, 0, F1_0);
@@ -1801,7 +1801,7 @@ void drop_player_eggs(dxxobject *playerobj)
 		//	If the player had smart mines, maybe arm one of them.
 		rthresh = 30000;
 		while ((Players[playerobj->id].secondary_ammo[SMART_MINE_INDEX]%4==1) && (d_rand() < rthresh)) {
-			int			newseg;
+			segnum_t			newseg;
 			vms_vector	tvec;
 
 			make_random_vector(&randvec);
@@ -1818,7 +1818,7 @@ void drop_player_eggs(dxxobject *playerobj)
 		{
 			rthresh = 30000;
 			while ((Players[playerobj->id].secondary_ammo[PROXIMITY_INDEX]%4==1) && (d_rand() < rthresh)) {
-				int			newseg;
+				segnum_t			newseg;
 				vms_vector	tvec;
 
 				make_random_vector(&randvec);
@@ -2551,7 +2551,7 @@ void collide_init()	{
 
 }
 
-void collide_object_with_wall( dxxobject * A, fix hitspeed, short hitseg, short hitwall, vms_vector * hitpt )
+void collide_object_with_wall( dxxobject * A, fix hitspeed, segnum_t hitseg, short hitwall, vms_vector * hitpt )
 {
 
 	switch( A->type )	{

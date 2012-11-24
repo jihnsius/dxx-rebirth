@@ -520,7 +520,7 @@ extern int control_center_triggers_read_n(control_center_triggers *cct, int n, P
 	{
 		cct->num_links = PHYSFSX_readShort(fp);
 		for (j = 0; j < MAX_CONTROLCEN_LINKS; j++)
-			cct->seg[j] = PHYSFSX_readShort(fp);
+			cct->seg[j] = (segnum_t)PHYSFSX_readShort(fp);
 		for (j = 0; j < MAX_CONTROLCEN_LINKS; j++)
 			cct->side[j] = PHYSFSX_readShort(fp);
 	}
@@ -536,7 +536,7 @@ static void control_center_triggers_swap(control_center_triggers *cct, int swap)
 	
 	cct->num_links = SWAPSHORT(cct->num_links);
 	for (i = 0; i < MAX_CONTROLCEN_LINKS; i++)
-		cct->seg[i] = SWAPSHORT(cct->seg[i]);
+		cct->seg[i] = (segnum_t)SWAPSHORT(cct->seg[i]);
 	for (i = 0; i < MAX_CONTROLCEN_LINKS; i++)
 		cct->side[i] = SWAPSHORT(cct->side[i]);
 }

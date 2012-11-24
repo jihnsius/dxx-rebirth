@@ -68,7 +68,7 @@ static void checkforgamext( char * f )
 
 //these variables store the "permanant" player position, which overrides
 //whatever the player's position happens to be when the game is saved
-int Perm_player_segnum=segment_none;		//-1 means position not set
+segnum_t Perm_player_segnum=segment_none;		//-1 means position not set
 vms_vector Perm_player_position;
 vms_matrix Perm_player_orient;
 
@@ -100,7 +100,7 @@ int SaveGameData()
 		int saved_flag;
 		vms_vector save_pos = ConsoleObject->pos;
 		vms_matrix save_orient = ConsoleObject->orient;
-		int save_segnum = ConsoleObject->segnum;
+		segnum_t save_segnum = ConsoleObject->segnum;
 
       checkforgamext(game_filename);
 
@@ -119,7 +119,7 @@ int SaveGameData()
 		}
       saved_flag=save_level(game_filename);
 		if (Perm_player_segnum!=segment_none) {
-			int	found_save_segnum;
+			segnum_t	found_save_segnum;
 
 			if (save_segnum > Highest_segment_index)
 				save_segnum = segment_first;

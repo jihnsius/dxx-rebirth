@@ -608,7 +608,7 @@ void create_small_fireball_on_object(dxxobject *objp, fix size_scale, int sound_
 {
 	fix			size;
 	vms_vector	pos, rand_vec;
-	int			segnum;
+	segnum_t			segnum;
 
 	pos = objp->pos;
 	make_random_vector(&rand_vec);
@@ -799,7 +799,7 @@ void init_player_object()
 void init_objects()
 {
 	int i;
-	unsigned j;
+	segnum_t j;
 
 	collide_init();
 
@@ -844,7 +844,7 @@ void special_reset_objects(void)
 }
 
 //link the object into the list for its segment
-void obj_link(int objnum,int segnum)
+void obj_link(int objnum,segnum_t segnum)
 {
 	dxxobject *obj = &Objects[objnum];
 
@@ -852,7 +852,7 @@ void obj_link(int objnum,int segnum)
 
 	Assert(obj->segnum == segment_none);
 
-	Assert(segnum>=0 && segnum<=Highest_segment_index);
+	Assert(segnum<=Highest_segment_index);
 
 	obj->segnum = segnum;
 
@@ -1074,14 +1074,14 @@ int free_object_slots(int num_used)
 //note that segnum is really just a suggestion, since this routine actually
 //searches for the correct segment
 //returns the object number
-int obj_create(enum object_type_t type,ubyte id,int segnum,const vms_vector *pos,
+int obj_create(enum object_type_t type,ubyte id,segnum_t segnum,const vms_vector *pos,
 				const vms_matrix *orient,fix size,ubyte ctype,ubyte mtype,ubyte rtype)
 {
 	int objnum;
 	dxxobject *obj;
 
 	// Some consistency checking. FIXME: Add more debug output here to probably trace all possible occurances back.
-	if (segnum < 0 || segnum > Highest_segment_index)
+	if (segnum > Highest_segment_index)
 		return -1;
 
 	Assert(ctype <= CT_CNTRLCEN);
@@ -1184,7 +1184,7 @@ int obj_create(enum object_type_t type,ubyte id,int segnum,const vms_vector *pos
 
 #ifdef EDITOR
 //create a copy of an object. returns new object number
-int obj_create_copy(int objnum, vms_vector *new_pos, int newsegnum)
+int obj_create_copy(int objnum, vms_vector *new_pos, segnum_t newsegnum)
 {
 	int newobjnum;
 	dxxobject *obj;
@@ -1586,11 +1586,11 @@ void obj_delete_all_that_should_be_dead()
 
 //when an object has moved into a new segment, this function unlinks it
 //from its old segment, and links it into the new segment
-void obj_relink(int objnum,int newsegnum)
+void obj_relink(int objnum,segnum_t newsegnum)
 {
 
 	Assert((objnum >= 0) && (objnum <= Highest_object_index));
-	Assert((newsegnum <= Highest_segment_index) && (newsegnum >= 0));
+	Assert(newsegnum <= Highest_segment_index);
 
 	obj_unlink(objnum);
 
@@ -1601,7 +1601,7 @@ void obj_relink(int objnum,int newsegnum)
 // for getting out of messed up linking situations (i.e. caused by demo playback)
 void obj_relink_all(void)
 {
-	int segnum;
+	segnum_t segnum;
 	int objnum;
 	dxxobject *obj;
 	for (segnum=segment_first; segnum <= Highest_segment_index; segnum++)
@@ -1653,7 +1653,7 @@ void object_move_one( dxxobject * obj )
 
 	#ifndef DEMO_ONLY
 
-	int	previous_segment = obj->segnum;
+	segnum_t	previous_segment = obj->segnum;
 
 	obj->last_pos = obj->pos;			// Save the current position
 
@@ -1927,7 +1927,7 @@ void compress_objects(void)
 
 		if (Objects[start_i].type == OBJ_NONE) {
 
-			int	segnum_copy;
+			segnum_t	segnum_copy;
 
 			segnum_copy = Objects[Highest_object_index].segnum;
 
@@ -1977,7 +1977,7 @@ void reset_objects(int n_objs)
 }
 
 //Tries to find a segment for an object, using find_point_seg()
-int find_object_seg(dxxobject * obj )
+segnum_t find_object_seg(dxxobject * obj )
 {
 	return find_point_seg(&obj->pos,obj->segnum);
 }
@@ -1988,7 +1988,7 @@ int find_object_seg(dxxobject * obj )
 //callers should generally use find_vector_intersection()
 int update_object_seg(dxxobject * obj )
 {
-	int newseg;
+	segnum_t newseg;
 
 	newseg = find_object_seg(obj);
 
@@ -2132,7 +2132,7 @@ void obj_detach_all(dxxobject *parent)
 }
 
 //creates a marker object in the world.  returns the object number
-int drop_marker_object(vms_vector *pos,int segnum,vms_matrix *orient, int marker_num)
+int drop_marker_object(vms_vector *pos,segnum_t segnum,vms_matrix *orient, int marker_num)
 {
 	int objnum;
 

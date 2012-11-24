@@ -266,7 +266,8 @@ void init_replacements(void)
 
 void do_replacements(void)
 {
-	int	replnum, segnum, sidenum;
+	int	replnum, sidenum;
+	segnum_t segnum;
 
 	med_compress_mine();
 

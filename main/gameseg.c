@@ -83,8 +83,8 @@ void compute_segment_center(vms_vector *vp,segment *sp)
 int find_connect_side(segment *base_seg, segment *con_seg)
 {
 	int	s;
-	short	base_seg_num = base_seg - Segments;
-	short *childs = con_seg->children;
+	segnum_t base_seg_num = base_seg - Segments;
+	segnum_t *childs = con_seg->children;
 
 	for (s=0; s<MAX_SIDES_PER_SEGMENT; s++) {
 		if (*childs++ == base_seg_num)
@@ -117,11 +117,11 @@ int get_num_faces(side *sidep)
 }
 
 // Fill in array with four absolute point numbers for a given side
-void get_side_verts(int *vertlist,int segnum,int sidenum)
+void get_side_verts(int *vertlist,segnum_t segnum,int sidenum)
 {
 	int	i;
 	const sbyte   *sv = Side_to_verts[sidenum];
-	int	*vp = Segments[segnum].verts;
+	const vertnum_t	*vp = Segments[segnum].verts;
 
 	for (i=4; i--;)
 		vertlist[i] = vp[sv[i]];
@@ -140,7 +140,7 @@ void get_side_verts(int *vertlist,int segnum,int sidenum)
 // Note: these are not absolute vertex numbers, but are relative to the segment
 // Note:  for triagulated sides, the middle vertex of each trianle is the one NOT
 //   adjacent on the diagonal edge
-void create_all_vertex_lists(int *num_faces, int *vertices, int segnum, int sidenum)
+void create_all_vertex_lists(int *num_faces, int *vertices, segnum_t segnum, int sidenum)
 {
 	side	*sidep = &Segments[segnum].sides[sidenum];
 	const int  *sv = Side_to_verts_int[sidenum];
@@ -201,7 +201,7 @@ void create_all_vertex_lists(int *num_faces, int *vertices, int segnum, int side
 //	If there is one face, it has 4 vertices.
 //	If there are two faces, they both have three vertices, so face #0 is stored in vertices 0,1,2,
 //	face #1 is stored in vertices 3,4,5.
-void create_all_vertnum_lists(int *num_faces, int *vertnums, int segnum, int sidenum)
+void create_all_vertnum_lists(int *num_faces, int *vertnums, segnum_t segnum, int sidenum)
 {
 	side	*sidep = &Segments[segnum].sides[sidenum];
 
@@ -255,9 +255,9 @@ void create_all_vertnum_lists(int *num_faces, int *vertnums, int segnum, int sid
 
 // -----
 // like create_all_vertex_lists(), but generate absolute point numbers
-void create_abs_vertex_lists(int *num_faces, int *vertices, int segnum, int sidenum, const char *calling_file, int calling_linenum)
+void create_abs_vertex_lists(int *num_faces, int *vertices, segnum_t segnum, int sidenum, const char *calling_file, int calling_linenum)
 {
-	int	*vp = Segments[segnum].verts;
+	const vertnum_t	*vp = Segments[segnum].verts;
 	side	*sidep = &Segments[segnum].sides[sidenum];
 	const int  *sv = Side_to_verts_int[sidenum];
 
@@ -312,7 +312,7 @@ void create_abs_vertex_lists(int *num_faces, int *vertices, int segnum, int side
 
 //returns 3 different bitmasks with info telling if this sphere is in
 //this segment.  See segmasks structure for info on fields  
-segmasks get_seg_masks(const vms_vector *checkp, int segnum, fix rad, const char *calling_file, int calling_linenum)
+segmasks get_seg_masks(const vms_vector *checkp, segnum_t segnum, fix rad, const char *calling_file, int calling_linenum)
 {
 	int			sn,facebit,sidebit;
 	segmasks		masks;
@@ -460,7 +460,7 @@ segmasks get_seg_masks(const vms_vector *checkp, int segnum, fix rad, const char
 //this was converted from get_seg_masks()...it fills in an array of 6
 //elements for the distace behind each side, or zero if not behind
 //only gets centermask, and assumes zero rad
-static ubyte get_side_dists(const vms_vector *checkp,int segnum,fix *side_dists)
+static ubyte get_side_dists(const vms_vector *checkp,segnum_t segnum,fix *side_dists)
 {
 	int			sn,facebit,sidebit;
 	ubyte			mask;
@@ -602,7 +602,7 @@ static ubyte get_side_dists(const vms_vector *checkp,int segnum,fix *side_dists)
 #ifndef NDEBUG
 #ifndef COMPACT_SEGS
 //returns true if errors detected
-static int check_norms(const unsigned line, int segnum,int sidenum,int facenum,int csegnum,int csidenum,int cfacenum)
+static int check_norms(const unsigned line, segnum_t segnum,int sidenum,int facenum,segnum_t csegnum,int csidenum,int cfacenum)
 #define check_norms(A,B,C,D,E,F)	check_norms(__LINE__,(A),(B),(C),(D),(E),(F))
 {
 	vms_vector *n0,*n1;
@@ -632,7 +632,8 @@ static int check_norms(const unsigned line, int segnum,int sidenum,int facenum,i
 //heavy-duty error checking
 int check_segment_connections(void)
 {
-	int segnum,sidenum;
+	segnum_t segnum;
+	int sidenum;
 	int errors=0;
 	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
 
@@ -643,11 +644,12 @@ int check_segment_connections(void)
 
 		for (sidenum=0;sidenum<6;sidenum++) {
 			segment *cseg;
-			int num_faces,csegnum,csidenum,con_num_faces;
+			int num_faces,csidenum,con_num_faces;
 			int vertex_list[6],con_vertex_list[6];
 
 			create_abs_vertex_lists(&num_faces, vertex_list, segnum, sidenum, __FILE__, __LINE__);
 
+			segnum_t csegnum;
 			csegnum = seg->children[sidenum];
 			if (csegnum == segment_none || csegnum == segment_exit)
 				continue;
@@ -746,17 +748,18 @@ int	Doing_lighting_hack_flag=0;
 
 // figure out what seg the given point is in, tracing through segments
 // returns segment number, or -1 if can't find segment
-static int trace_segs(const vms_vector *p0, int oldsegnum, int recursion_count)
+static segnum_t trace_segs(const vms_vector *p0, segnum_t oldsegnum, unsigned recursion_count)
 {
 	int centermask;
 	segment *seg;
 	fix side_dists[6];
 	fix biggest_val;
-	int sidenum, bit, check, biggest_side;
+	int sidenum, bit, biggest_side;
 	static ubyte visited [MAX_SEGMENTS];
+	segnum_t check;
 
 	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
-	Assert((oldsegnum <= Highest_segment_index) && (oldsegnum >= 0));
+	Assert(oldsegnum <= Highest_segment_index);
 
 	if (recursion_count >= Num_segments) {
 		con_printf (CON_DEBUG, "trace_segs: Segment not found\n");
@@ -803,9 +806,9 @@ int	Exhaustive_count=0, Exhaustive_failed_count=0;
 // 2. Recursively trace through attached segments
 // 3. Check all the segmentns
 //Returns segnum if found, or -1
-int find_point_seg(const vms_vector *p,int segnum)
+segnum_t find_point_seg(const vms_vector *p,segnum_t segnum)
 {
-	int newseg;
+	segnum_t newseg;
 
 	//allow segnum==-1, meaning we have no idea what segment point is in
 	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
@@ -960,9 +963,9 @@ static void add_to_fcd_cache(int seg0, int seg1, int depth, fix dist)
 //	Determine whether seg0 and seg1 are reachable in a way that allows sound to pass.
 //	Search up to a maximum depth of max_depth.
 //	Return the distance.
-fix find_connected_distance(vms_vector *p0, int seg0, vms_vector *p1, int seg1, int max_depth, int wid_flag)
+fix find_connected_distance(vms_vector *p0, segnum_t seg0, vms_vector *p1, segnum_t seg1, int max_depth, int wid_flag)
 {
-	int		cur_seg;
+	segnum_t		cur_seg;
 	int		sidenum;
 	int		qtail = 0, qhead = 0;
 	int		i;
@@ -1027,7 +1030,7 @@ fix find_connected_distance(vms_vector *p0, int seg0, vms_vector *p1, int seg1, 
 			int	snum = sidenum;
 
 			if (WALL_IS_DOORWAY(segp, snum) & wid_flag) {
-				int	this_seg = segp->children[snum];
+				segnum_t	this_seg = segp->children[snum];
 
 				if (!visited[this_seg]) {
 					seg_queue[qtail].start = cur_seg;
@@ -1070,7 +1073,7 @@ fcd_done1: ;
 		}
 
 	while (qtail >= 0) {
-		int	parent_seg, this_seg;
+		segnum_t	parent_seg, this_seg;
 
 		this_seg = seg_queue[qtail].end;
 		parent_seg = seg_queue[qtail].start;
@@ -1169,7 +1172,7 @@ void create_shortpos(shortpos *spp, dxxobject *objp, int swap_bytes)
 
 void extract_shortpos(dxxobject *objp, shortpos *spp, int swap_bytes)
 {
-	int	segnum;
+	segnum_t	segnum;
 	sbyte   *sp;
 
 	sp = spp->bytemat;
@@ -1813,7 +1816,7 @@ void validate_segment(segment *sp)
 //	For all used segments (number <= Highest_segment_index), segnum field must be != -1.
 void validate_segment_all(void)
 {
-	int	s;
+	segnum_t	s;
 	Assert(Highest_segment_index < (sizeof(Segments) / sizeof(Segments[0])));
 
 	for (s=segment_first; s<=Highest_segment_index; s++)
@@ -1836,7 +1839,7 @@ void validate_segment_all(void)
 //	------------------------------------------------------------------------------------------------------
 //	Picks a random point in a segment like so:
 //		From center, go up to 50% of way towards any of the 8 vertices.
-void pick_random_point_in_seg(vms_vector *new_pos, int segnum)
+void pick_random_point_in_seg(vms_vector *new_pos, segnum_t segnum)
 {
 	int			vnum;
 	vms_vector	vec2;
@@ -1852,11 +1855,11 @@ void pick_random_point_in_seg(vms_vector *new_pos, int segnum)
 //	----------------------------------------------------------------------------------------------------------
 //	Set the segment depth of all segments from start_seg in *segbuf.
 //	Returns maximum depth value.
-int set_segment_depths(int start_seg, ubyte *segbuf)
+int set_segment_depths(segnum_t start_seg, ubyte *segbuf)
 {
-	int	i, curseg;
+	segnum_t curseg;
 	ubyte	visited[MAX_SEGMENTS];
-	int	queue[MAX_SEGMENTS];
+	segnum_t	queue[MAX_SEGMENTS];
 	int	head, tail;
 	int	depth;
 	int	parent_depth=0;
@@ -1866,7 +1869,7 @@ int set_segment_depths(int start_seg, ubyte *segbuf)
 	tail = 0;
 
 	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
-	for (i=0; i<=Highest_segment_index; i++)
+	for (segnum_t i=segment_first; i<=Highest_segment_index; i++)
 		visited[i] = 0;
 
 	if (segbuf[start_seg] == 0)
@@ -1883,8 +1886,8 @@ int set_segment_depths(int start_seg, ubyte *segbuf)
 		curseg = queue[head++];
 		parent_depth = segbuf[curseg];
 
-		for (i=0; i<MAX_SIDES_PER_SEGMENT; i++) {
-			int	childnum;
+		for (unsigned i=0; i<MAX_SIDES_PER_SEGMENT; i++) {
+			segnum_t	childnum;
 
 			childnum = Segments[curseg].children[i];
 			if (childnum != segment_none)
@@ -1912,7 +1915,8 @@ static void inner_apply_light_to_segment(segment *segp,vms_vector *segment_cente
 {
 	vms_vector	r_segment_center;
 	fix			dist_to_rseg;
-	int 			i,segnum=segp-Segments,sidenum;
+	int 			i,sidenum;
+	segnum_t segnum=segp-Segments;
 	enum
 	{
 		size_changed_segs_array = sizeof((*pchanged_segs)) / sizeof((*pchanged_segs)[0])
@@ -1976,7 +1980,7 @@ static void apply_light_to_segment(segment *segp,vms_vector *segment_center, fix
 
 //update the static_light field in a segment, which is used for object lighting
 //this code is copied from the editor routine calim_process_all_lights()
-static void change_segment_light(int segnum,int sidenum,int dir)
+static void change_segment_light(segnum_t segnum,int sidenum,int dir)
 {
 	segment *segp = &Segments[segnum];
 
@@ -2006,7 +2010,7 @@ static void change_segment_light(int segnum,int sidenum,int dir)
 //	dir = -1 -> subtract light
 //	dir = 17 -> add 17x light
 //	dir =  0 -> you are dumb
-static void change_light(int segnum, int sidenum, int dir)
+static void change_light(segnum_t segnum, int sidenum, int dir)
 {
 	int	j, k;
 	unsigned i;
@@ -2042,7 +2046,7 @@ static void change_light(int segnum, int sidenum, int dir)
 //	Subtract light cast by a light source from all surfaces to which it applies light.
 //	This is precomputed data, stored at static light application time in the editor (the slow lighting function).
 // returns 1 if lights actually subtracted, else 0
-int subtract_light(int segnum, int sidenum)
+int subtract_light(segnum_t segnum, int sidenum)
 {
 	Assert(segnum < sizeof(Light_subtracted) / sizeof(Light_subtracted[0]));
 	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
@@ -2061,7 +2065,7 @@ int subtract_light(int segnum, int sidenum)
 //	This is precomputed data, stored at static light application time in the editor (the slow lighting function).
 //	You probably only want to call this after light has been subtracted.
 // returns 1 if lights actually added, else 0
-int add_light(int segnum, int sidenum)
+int add_light(segnum_t segnum, int sidenum)
 {
 	Assert(segnum < sizeof(Light_subtracted) / sizeof(Light_subtracted[0]));
 	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
@@ -2083,7 +2087,8 @@ ubyte	Light_subtracted[MAX_SEGMENTS];
 //	Parse the Light_subtracted array, turning on or off all lights.
 void apply_all_changed_light(void)
 {
-	int	i,j;
+	segnum_t	i;
+	int j;
 	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
 
 	for (i=segment_first; i<=Highest_segment_index; i++) {
@@ -2128,7 +2133,7 @@ void apply_all_changed_light(void)
 //	to change the status of static light in the mine.
 void clear_light_subtracted(void)
 {
-	int	i;
+	segnum_t	i;
 	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
 
 	for (i=segment_first; i<=Highest_segment_index; i++)
@@ -2140,7 +2145,7 @@ void clear_light_subtracted(void)
 
 //	-----------------------------------------------------------------------------
 //	Do a bfs from segnum, marking slots in marked_segs if the segment is reachable.
-static void ambient_mark_bfs(int segnum, sbyte *marked_segs, int depth)
+static void ambient_mark_bfs(segnum_t segnum, sbyte *marked_segs, int depth)
 {
 	int	i;
 
@@ -2150,7 +2155,7 @@ static void ambient_mark_bfs(int segnum, sbyte *marked_segs, int depth)
 	marked_segs[segnum] = 1;
 
 	for (i=0; i<MAX_SIDES_PER_SEGMENT; i++) {
-		int	child = Segments[segnum].children[i];
+		segnum_t	child = Segments[segnum].children[i];
 
 		if (IS_CHILD(child) && (WALL_IS_DOORWAY(&Segments[segnum],i) & WID_RENDPAST_FLAG) && !marked_segs[child])
 			ambient_mark_bfs(child, marked_segs, depth-1);
@@ -2163,19 +2168,19 @@ static void ambient_mark_bfs(int segnum, sbyte *marked_segs, int depth)
 //	and so should hear ambient gurgles.
 static void set_ambient_sound_flags_common(int tmi_bit, int s2f_bit)
 {
-	int	i, j;
+	int j;
 	sbyte   marked_segs[MAX_SEGMENTS];
 	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
 
 	//	Now, all segments containing ambient lava or water sound makers are flagged.
 	//	Additionally flag all segments which are within range of them.
-	for (i=0; i<=Highest_segment_index; i++) {
+	for (segnum_t i=segment_first; i<=Highest_segment_index; i++) {
 		marked_segs[i] = 0;
 		Segment2s[i].s2_flags &= ~s2f_bit;
 	}
 
 	//	Mark all segments which are sources of the sound.
-	for (i=0; i<=Highest_segment_index; i++) {
+	for (segnum_t i=segment_first; i<=Highest_segment_index; i++) {
 		segment	*segp = &Segments[i];
 		segment2	*seg2p = &Segment2s[i];
 
@@ -2194,7 +2199,7 @@ static void set_ambient_sound_flags_common(int tmi_bit, int s2f_bit)
 	}
 
 	//	Next mark all segments within N segments of a source.
-	for (i=0; i<=Highest_segment_index; i++) {
+	for (segnum_t i=segment_first; i<=Highest_segment_index; i++) {
 		segment2	*seg2p = &Segment2s[i];
 
 		if (seg2p->s2_flags & s2f_bit)
@@ -2202,7 +2207,7 @@ static void set_ambient_sound_flags_common(int tmi_bit, int s2f_bit)
 	}
 
 	//	Now, flip bits in all segments which can hear the ambient sound.
-	for (i=0; i<=Highest_segment_index; i++)
+	for (segnum_t i=segment_first; i<=Highest_segment_index; i++)
 		if (marked_segs[i])
 			Segment2s[i].s2_flags |= s2f_bit;
 

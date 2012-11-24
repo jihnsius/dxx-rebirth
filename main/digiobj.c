@@ -57,7 +57,7 @@ typedef struct sound_object {
 	int			loop_end;		// The end point of the loop
 	union {
 		struct {
-			short			segnum;				// Used if SOF_LINK_TO_POS field is used
+			segnum_t			segnum;				// Used if SOF_LINK_TO_POS field is used
 			short			sidenum;
 			vms_vector	position;
 		} pos;
@@ -112,7 +112,7 @@ static int digi_unxlat_sound(int soundno)
 }
 
 
-static void digi_get_sound_loc( vms_matrix * listener, vms_vector * listener_pos, int listener_seg, vms_vector * sound_pos, int sound_seg, fix max_volume, int *volume, int *pan, fix max_distance )
+static void digi_get_sound_loc( vms_matrix * listener, vms_vector * listener_pos, segnum_t listener_seg, vms_vector * sound_pos, segnum_t sound_seg, fix max_volume, int *volume, int *pan, fix max_distance )
 {
 
 	vms_vector	vector_to_sound;
@@ -407,7 +407,7 @@ int digi_link_sound_to_object( int soundnum, short objnum, int forever, fix max_
 	return digi_link_sound_to_object2( soundnum, objnum, forever, max_volume, 256*F1_0  );
 }
 
-int digi_link_sound_to_pos2( int org_soundnum, short segnum, short sidenum, vms_vector * pos, int forever, fix max_volume, fix max_distance )
+int digi_link_sound_to_pos2( int org_soundnum, segnum_t segnum, short sidenum, vms_vector * pos, int forever, fix max_volume, fix max_distance )
 {
 
 	int i, volume, pan;
@@ -424,7 +424,7 @@ int digi_link_sound_to_pos2( int org_soundnum, short segnum, short sidenum, vms_
 		return -1;
 	}
 
-	if ((segnum<0)||(segnum>Highest_segment_index))
+	if (segnum>Highest_segment_index)
 		return -1;
 
 	if ( !forever ) { 	//&& GameSounds[soundnum - SOUND_OFFSET].length < SOUND_3D_THRESHHOLD)	{
@@ -482,13 +482,13 @@ int digi_link_sound_to_pos2( int org_soundnum, short segnum, short sidenum, vms_
 	return SoundObjects[i].signature;
 }
 
-int digi_link_sound_to_pos( int soundnum, short segnum, short sidenum, vms_vector * pos, int forever, fix max_volume )
+int digi_link_sound_to_pos( int soundnum, segnum_t segnum, short sidenum, vms_vector * pos, int forever, fix max_volume )
 {
 	return digi_link_sound_to_pos2( soundnum, segnum, sidenum, pos, forever, max_volume, F1_0 * 256 );
 }
 
 //if soundnum==-1, kill any sound
-void digi_kill_sound_linked_to_segment( int segnum, int sidenum, int soundnum )
+void digi_kill_sound_linked_to_segment( segnum_t segnum, int sidenum, int soundnum )
 {
 	int i,killed;
 

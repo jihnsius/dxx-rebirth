@@ -87,7 +87,7 @@ extern const char Object_type_names[MAX_OBJECT_TYPES][9];
 typedef struct shortpos {
 	sbyte   bytemat[9];
 	short   xo,yo,zo;
-	short   segment;
+	segnum_t   segment;
 	short   velx, vely, velz;
 } __pack__ shortpos;
 
@@ -191,7 +191,7 @@ typedef struct dxxobject {
 	ubyte   movement_type;  // how this object moves
 	ubyte   render_type;    // how this object renders
 	ubyte   flags;          // misc flags
-	short   segnum;         // segment number containing object
+	segnum_t   segnum;         // segment number containing object
 	short   attached_obj;   // number of attached fireball object
 	vms_vector pos;         // absolute x,y,z coordinate of center of object
 	vms_matrix orient;      // orientation of object in world
@@ -244,7 +244,7 @@ typedef struct object_rw {
 	ubyte   movement_type;  // how this object moves
 	ubyte   render_type;    // how this object renders
 	ubyte   flags;          // misc flags
-	short   segnum;         // segment number containing object
+	segnum_t   segnum;         // segment number containing object
 	short   attached_obj;   // number of attached fireball object
 	vms_vector pos;         // absolute x,y,z coordinate of center of object
 	vms_matrix orient;      // orientation of object in world
@@ -287,7 +287,7 @@ typedef struct object_rw {
 typedef struct obj_position {
 	vms_vector  pos;        // absolute x,y,z coordinate of center of object
 	vms_matrix  orient;     // orientation of object in world
-	short       segnum;     // segment number containing object
+	segnum_t       segnum;     // segment number containing object
 } obj_position;
 
 typedef struct {
@@ -348,29 +348,29 @@ int obj_get_new_seg(dxxobject *obj);
 
 // when an object has moved into a new segment, this function unlinks it
 // from its old segment, and links it into the new segment
-void obj_relink(int objnum,int newsegnum);
+void obj_relink(int objnum,segnum_t newsegnum);
 
 // for getting out of messed up linking situations (i.e. caused by demo playback)
 void obj_relink_all(void);
 
 // move an object from one segment to another. unlinks & relinks
-void obj_set_new_seg(int objnum,int newsegnum);
+void obj_set_new_seg(int objnum,segnum_t newsegnum);
 
 // links an object into a segment's list of objects.
 // takes object number and segment number
-void obj_link(int objnum,int segnum);
+void obj_link(int objnum,segnum_t segnum);
 
 // unlinks an object from a segment's list of objects
 void obj_unlink(int objnum);
 
 // initialize a new object.  adds to the list for the given segment
 // returns the object number
-int obj_create(enum object_type_t type, ubyte id, int segnum, const vms_vector *pos,
+int obj_create(enum object_type_t type, ubyte id, segnum_t segnum, const vms_vector *pos,
                const vms_matrix *orient, fix size,
                ubyte ctype, ubyte mtype, ubyte rtype);
 
 // make a copy of an object. returs num of new object
-int obj_create_copy(int objnum, vms_vector *new_pos, int newsegnum);
+int obj_create_copy(int objnum, vms_vector *new_pos, segnum_t newsegnum);
 
 // remove object from the world
 void obj_delete(int objnum);
@@ -423,7 +423,7 @@ extern int update_object_seg(dxxobject *obj);
 // any segment, returns -1.  Note: This function is defined in
 // gameseg.h, but object.h depends on gameseg.h, and object.h is where
 // object is defined...get it?
-extern int find_object_seg(dxxobject * obj );
+extern segnum_t find_object_seg(dxxobject * obj );
 
 // go through all objects and make sure they have the correct segment
 // numbers used when debugging is on
@@ -478,7 +478,7 @@ void obj_attach(dxxobject *parent,dxxobject *sub);
 void create_small_fireball_on_object(dxxobject *objp, fix size_scale, int sound_flag);
 
 // returns object number
-int drop_marker_object(vms_vector *pos, int segnum, vms_matrix *orient, int marker_num);
+int drop_marker_object(vms_vector *pos, segnum_t segnum, vms_matrix *orient, int marker_num);
 
 void wake_up_rendered_objects(dxxobject *gmissp, int window_num);
 

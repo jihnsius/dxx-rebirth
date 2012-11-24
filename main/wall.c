@@ -671,7 +671,7 @@ void wall_close_door_num(int door_num)
 
 }
 
-static int check_poke(int objnum,int segnum,int side)
+static int check_poke(int objnum,segnum_t segnum,int side)
 {
 	dxxobject *obj = &Objects[objnum];
 
@@ -1119,11 +1119,11 @@ int wall_hit_process(segment *seg, int side, fix damage, int playernum, dxxobjec
 
 //-----------------------------------------------------------------
 // Opens doors/destroys wall/shuts off triggers.
-void wall_toggle(int segnum, int side)
+void wall_toggle(segnum_t segnum, int side)
 {
 	int wall_num;
 
-	if (segnum < 0 || segnum > Highest_segment_index || side < 0 || side >= MAX_SIDES_PER_SEGMENT)
+	if (segnum > Highest_segment_index || side < 0 || side >= MAX_SIDES_PER_SEGMENT)
 	{
 #ifndef NDEBUG
 		Warning("Can't toggle side %d (%i) of\nsegment %d (%i)!\n", side, MAX_SIDES_PER_SEGMENT, segnum, Highest_segment_index);
@@ -1365,7 +1365,7 @@ stuckobj	Stuck_objects[MAX_STUCK_OBJECTS];
 
 //	An object got stuck in a door (like a flare).
 //	Add global entry.
-void add_stuck_object(dxxobject *objp, int segnum, int sidenum)
+void add_stuck_object(dxxobject *objp, segnum_t segnum, int sidenum)
 {
 	int	i;
 	int	wallnum;
@@ -1533,7 +1533,7 @@ static void bng_process_segment(dxxobject *objp, fix damage, segment *segp, int 
 	}
 
 	for (i=0; i<MAX_SIDES_PER_SEGMENT; i++) {
-		int	segnum = segp->children[i];
+		segnum_t	segnum = segp->children[i];
 
 		if (segnum != segment_none) {
 			if (!visited[segnum]) {

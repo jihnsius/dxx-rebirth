@@ -208,7 +208,7 @@ int laser_are_related( int o1, int o2 )
 //--unused-- int Muzzle_scale=2;
 int Laser_offset=0;
 
-static void do_muzzle_stuff(int segnum, vms_vector *pos)
+static void do_muzzle_stuff(segnum_t segnum, vms_vector *pos)
 {
 	Muzzle_data[Muzzle_queue_index].create_time = timer_query();
 	Muzzle_data[Muzzle_queue_index].segnum = segnum;
@@ -219,7 +219,7 @@ static void do_muzzle_stuff(int segnum, vms_vector *pos)
 }
 
 //creates a weapon object
-int create_weapon_object(int weapon_type,int segnum,vms_vector *position)
+int create_weapon_object(int weapon_type,segnum_t segnum,vms_vector *position)
 {
 	int rtype=-1;
 	fix laser_radius = -1;
@@ -345,9 +345,10 @@ int ok_to_do_omega_damage(dxxobject *weapon)
 }
 
 // ---------------------------------------------------------------------------------
-static void create_omega_blobs(int firing_segnum, vms_vector *firing_pos, vms_vector *goal_pos, dxxobject *parent_objp)
+static void create_omega_blobs(segnum_t firing_segnum, vms_vector *firing_pos, vms_vector *goal_pos, dxxobject *parent_objp)
 {
-	int		i = 0, last_segnum = 0, last_created_objnum = -1, num_omega_blobs = 0;
+	int		i = 0, last_created_objnum = -1, num_omega_blobs = 0;
+	segnum_t last_segnum;
 	vms_vector	vec_to_goal = { 0, 0, 0 }, omega_delta_vector = { 0, 0, 0 }, blob_pos = { 0, 0, 0 }, perturb_vec = { 0, 0, 0 };
 	fix		dist_to_goal = 0, omega_blob_dist = 0, perturb_array[MAX_OMEGA_BLOBS];
 
@@ -400,7 +401,8 @@ static void create_omega_blobs(int firing_segnum, vms_vector *firing_pos, vms_ve
 
 	for (i=0; i<num_omega_blobs; i++) {
 		vms_vector	temp_pos = { 0, 0, 0 };
-		int		blob_objnum = -1, segnum = -1;
+		int		blob_objnum = -1;
+		segnum_t segnum;
 
 		//	This will put the last blob right at the destination object, causing damage.
 		if (i == num_omega_blobs-1)
@@ -517,7 +519,8 @@ void omega_charge_frame(void)
 //	*pos is the location from which the omega bolt starts
 static void do_omega_stuff(dxxobject *parent_objp, vms_vector *firing_pos, dxxobject *weapon_objp)
 {
-	int			lock_objnum, firing_segnum;
+	int			lock_objnum;
+	segnum_t firing_segnum;
 	vms_vector	goal_pos;
 	int			pnum = parent_objp->id;
 
@@ -609,7 +612,7 @@ static float weapon_rate_scale(int wp_id)
 // ---------------------------------------------------------------------------------
 // Initializes a laser after Fire is pressed
 //	Returns object number.
-int Laser_create_new( vms_vector * direction, vms_vector * position, int segnum, int parent, int weapon_type, int make_sound )
+int Laser_create_new( vms_vector * direction, vms_vector * position, segnum_t segnum, int parent, int weapon_type, int make_sound )
 {
 	int objnum;
 	dxxobject *obj;
@@ -750,7 +753,7 @@ int Laser_create_new( vms_vector * direction, vms_vector * position, int segnum,
 	//	Don't do for weapons created by weapons.
 	if ((Objects[parent].type == OBJ_PLAYER) && (Weapon_info[weapon_type].render_type != WEAPON_RENDER_NONE) && (weapon_type != FLARE_ID)) {
 		vms_vector	end_pos;
-		int			end_segnum;
+		segnum_t			end_segnum;
 
 	 	vm_vec_scale_add( &end_pos, &obj->pos, direction, Laser_offset+(laser_length/2) );
 		end_segnum = find_point_seg(&end_pos, obj->segnum);
@@ -1209,7 +1212,8 @@ static int track_track_goal(int track_goal, dxxobject *tracker, fix *dot)
 
 static void Laser_player_fire_spread_delay(dxxobject *obj, int laser_type, int gun_num, fix spreadr, fix spreadu, fix delay_time, int make_sound, int harmless)
 {
-	int			LaserSeg, Fate;
+	segnum_t			LaserSeg;
+	int Fate;
 	vms_vector	LaserPos, LaserDir;
 	fvi_query	fq;
 	fvi_info		hit_data;

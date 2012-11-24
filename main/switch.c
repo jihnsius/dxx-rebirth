@@ -111,7 +111,8 @@ static int do_light_on(sbyte trigger_num)
 
 	if (trigger_num != -1) {
 		for (i=0;i<Triggers[trigger_num].num_links;i++) {
-			int segnum,sidenum;
+			segnum_t segnum;
+			int sidenum;
 			segnum = Triggers[trigger_num].seg[i];
 			sidenum = Triggers[trigger_num].side[i];
 
@@ -135,7 +136,8 @@ static int do_light_off(sbyte trigger_num)
 
 	if (trigger_num != -1) {
 		for (i=0;i<Triggers[trigger_num].num_links;i++) {
-			int segnum,sidenum;
+			segnum_t segnum;
+			int sidenum;
 			segnum = Triggers[trigger_num].seg[i];
 			sidenum = Triggers[trigger_num].side[i];
 

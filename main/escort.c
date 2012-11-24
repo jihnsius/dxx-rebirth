@@ -139,7 +139,7 @@ void init_buddy_for_level(void)
 //	-----------------------------------------------------------------------------
 //	See if segment from curseg through sidenum is reachable.
 //	Return true if it is reachable, else return false.
-static int segment_is_reachable(int curseg, int sidenum)
+static int segment_is_reachable(segnum_t curseg, int sidenum)
 {
 	int		wall_num, rval;
 	segment	*segp = &Segments[curseg];
@@ -195,7 +195,7 @@ static int segment_is_reachable(int curseg, int sidenum)
 //	Output:
 //		bfs_list:	array of shorts, each reachable segment.  Includes start segment.
 //		length:		number of elements in bfs_list
-void create_bfs_list(int start_seg, short bfs_list[], int *length, int max_segs)
+void create_bfs_list(segnum_t start_seg, segnum_t bfs_list[], int *length, int max_segs)
 {
 	int	head, tail;
 	sbyte   visited[MAX_SEGMENTS];
@@ -212,14 +212,14 @@ void create_bfs_list(int start_seg, short bfs_list[], int *length, int max_segs)
 
 	while ((head != tail) && (head < max_segs)) {
 		int		i;
-		int		curseg;
+		segnum_t		curseg;
 		segment	*cursegp;
 
 		curseg = bfs_list[tail++];
 		cursegp = &Segments[curseg];
 
 		for (i=0; i<MAX_SIDES_PER_SEGMENT; i++) {
-			int	connected_seg;
+			segnum_t	connected_seg;
 
 			connected_seg = cursegp->children[i];
 
@@ -539,7 +539,7 @@ static int get_boss_id(void)
 //	-----------------------------------------------------------------------------
 //	Return object index if object of objtype, objid exists in mine, else return -1
 //	"special" is used to find objects spewed by player which is hacked into flags field of powerup.
-static int exists_in_mine_2(int segnum, int objtype, int objid, int special)
+static int exists_in_mine_2(segnum_t segnum, int objtype, int objid, int special)
 {
 	if (Segments[segnum].objects != -1) {
 		int		objnum = Segments[segnum].objects;
@@ -579,10 +579,11 @@ static int exists_in_mine_2(int segnum, int objtype, int objid, int special)
 }
 
 //	-----------------------------------------------------------------------------
-static int exists_fuelcen_in_mine(int start_seg)
+static segnum_t exists_fuelcen_in_mine(segnum_t start_seg)
 {
-	int	segindex, segnum;
-	short	bfs_list[MAX_SEGMENTS];
+	int	segindex;
+	segnum_t segnum;
+	segnum_t	bfs_list[MAX_SEGMENTS];
 	int	length;
 
 	create_bfs_list(start_seg, bfs_list, &length, MAX_SEGMENTS);
@@ -604,10 +605,11 @@ static int exists_fuelcen_in_mine(int start_seg)
 //	If special == ESCORT_GOAL_PLAYER_SPEW, then looking for any object spewed by player.
 //	-1 means object does not exist in mine.
 //	-2 means object does exist in mine, but buddy-bot can't reach it (eg, behind triggered wall)
-static int exists_in_mine(int start_seg, int objtype, int objid, int special)
+static int exists_in_mine(segnum_t start_seg, int objtype, int objid, int special)
 {
-	int	segindex, segnum;
-	short	bfs_list[MAX_SEGMENTS];
+	int	segindex;
+	segnum_t segnum;
+	segnum_t	bfs_list[MAX_SEGMENTS];
 	int	length;
 
 	create_bfs_list(start_seg, bfs_list, &length, MAX_SEGMENTS);
@@ -639,9 +641,10 @@ static int exists_in_mine(int start_seg, int objtype, int objid, int special)
 
 //	-----------------------------------------------------------------------------
 //	Return true if it happened, else return false.
-static int find_exit_segment(void)
+static segnum_t find_exit_segment(void)
 {
-	int	i,j;
+	segnum_t	i;
+	int j;
 
 	//	---------- Find exit doors ----------
 	for (i=segment_first; i<=Highest_segment_index; i++)
@@ -694,7 +697,7 @@ static void say_escort_goal(escort_goal_t goal_num)
 //	-----------------------------------------------------------------------------
 static void escort_create_path_to_goal(dxxobject *objp)
 {
-	int	goal_seg = segment_none;
+	segnum_t	goal_seg = segment_none;
 	int			objnum = objp-Objects;
 	ai_static	*aip = &objp->ctype.ai_info;
 	ai_local		*ailp = &Ai_local_info[objnum];
@@ -1173,9 +1176,9 @@ void do_snipe_frame(dxxobject *objp, fix dist_to_player, int player_visibility, 
 
 //	------------------------------------------------------------------------------------------------------
 //	Choose segment to recreate thief in.
-static int choose_thief_recreation_segment(void)
+static segnum_t choose_thief_recreation_segment(void)
 {
-	int	segnum = segment_none;
+	segnum_t	segnum = segment_none;
 	int	cur_drop_depth;
 
 	cur_drop_depth = THIEF_DEPTH;
@@ -1199,7 +1202,7 @@ fix64	Re_init_thief_time = 0x3f000000;
 //	----------------------------------------------------------------------
 void recreate_thief(dxxobject *objp)
 {
-	int			segnum;
+	segnum_t			segnum;
 	vms_vector	center_point;
 	dxxobject		*new_obj;
 

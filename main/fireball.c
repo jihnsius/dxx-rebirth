@@ -65,7 +65,7 @@ fix	Flash_effect=0;
 
 int	PK1=1, PK2=8;
 
-static dxxobject *object_create_explosion_sub(dxxobject *objp, short segnum, vms_vector * position, fix size, int vclip_type, fix maxdamage, fix maxdistance, fix maxforce, int parent )
+static dxxobject *object_create_explosion_sub(dxxobject *objp, segnum_t segnum, vms_vector * position, fix size, int vclip_type, fix maxdamage, fix maxdistance, fix maxforce, int parent )
 {
 	int objnum;
 	dxxobject *obj;
@@ -253,17 +253,17 @@ static dxxobject *object_create_explosion_sub(dxxobject *objp, short segnum, vms
 }
 
 
-dxxobject *object_create_muzzle_flash(short segnum, vms_vector * position, fix size, int vclip_type )
+dxxobject *object_create_muzzle_flash(segnum_t segnum, vms_vector * position, fix size, int vclip_type )
 {
 	return object_create_explosion_sub(NULL, segnum, position, size, vclip_type, 0, 0, 0, -1 );
 }
 
-dxxobject *object_create_explosion(short segnum, vms_vector * position, fix size, int vclip_type )
+dxxobject *object_create_explosion(segnum_t segnum, vms_vector * position, fix size, int vclip_type )
 {
 	return object_create_explosion_sub(NULL, segnum, position, size, vclip_type, 0, 0, 0, -1 );
 }
 
-dxxobject *object_create_badass_explosion(dxxobject *objp, short segnum, vms_vector * position, fix size, int vclip_type, fix maxdamage, fix maxdistance, fix maxforce, int parent )
+dxxobject *object_create_badass_explosion(dxxobject *objp, segnum_t segnum, vms_vector * position, fix size, int vclip_type, fix maxdamage, fix maxdistance, fix maxforce, int parent )
 {
 	dxxobject	*rval;
 
@@ -416,13 +416,13 @@ static int door_is_openable_by_player(segment *segp, int sidenum)
 // --------------------------------------------------------------------------------------------------------------------
 //	Return a segment %i segments away from initial segment.
 //	Returns -1 if can't find a segment that distance away.
-int pick_connected_segment(dxxobject *objp, int max_depth)
+segnum_t pick_connected_segment(dxxobject *objp, int max_depth)
 {
 	int		i;
 	int		cur_depth;
-	int		start_seg;
+	segnum_t		start_seg;
 	int		head, tail;
-	int		seg_queue[QUEUE_SIZE*2];
+	segnum_t		seg_queue[QUEUE_SIZE*2];
 	sbyte   visited[MAX_SEGMENTS];
 	sbyte   depth[MAX_SEGMENTS];
 	sbyte   side_rand[MAX_SIDES_PER_SEGMENT];
@@ -516,13 +516,13 @@ int pick_connected_segment(dxxobject *objp, int max_depth)
 //	For all active net players, try to create a N segment path from the player.  If possible, return that
 //	segment.  If not possible, try another player.  After a few tries, use a random segment.
 //	Don't drop if control center in segment.
-static int choose_drop_segment()
+static segnum_t choose_drop_segment()
 {
 	int	pnum = 0;
-	int	segnum = segment_none;
+	segnum_t	segnum = segment_none;
 	int	cur_drop_depth;
 	int	count;
-	int	player_seg;
+	segnum_t	player_seg;
 	vms_vector tempv,*player_pos;
 
 	d_srand((fix)timer_query());
@@ -556,7 +556,7 @@ static int choose_drop_segment()
 		else {	//don't drop in any children of control centers
 			int i;
 			for (i=0;i<6;i++) {
-				int ch = Segments[segnum].children[i];
+				segnum_t ch = Segments[segnum].children[i];
 				if (IS_CHILD(ch) && Segment2s[ch].special == SEGMENT_IS_CONTROLCEN) {
 					segnum = segment_none;
 					break;
@@ -595,7 +595,8 @@ static int choose_drop_segment()
 void maybe_drop_net_powerup(int powerup_type)
 {
 	if ((Game_mode & GM_MULTI) && !(Game_mode & GM_MULTI_COOP)) {
-		int	segnum, objnum;
+		segnum_t	segnum;
+		int objnum;
 		vms_vector	new_pos;
 
 		if (Game_mode & GM_NETWORK)
@@ -636,7 +637,7 @@ void maybe_drop_net_powerup(int powerup_type)
 
 //	------------------------------------------------------------------------------------------------------
 //	Return true if current segment contains some object.
-static int segment_contains_object(int obj_type, int obj_id, int segnum)
+static int segment_contains_object(int obj_type, int obj_id, segnum_t segnum)
 {
 	int	objnum;
 
@@ -655,7 +656,7 @@ static int segment_contains_object(int obj_type, int obj_id, int segnum)
 }
 
 //	------------------------------------------------------------------------------------------------------
-static int object_nearby_aux(int segnum, int object_type, int object_id, int depth)
+static int object_nearby_aux(segnum_t segnum, int object_type, int object_id, int depth)
 {
 	int	i;
 
@@ -666,7 +667,7 @@ static int object_nearby_aux(int segnum, int object_type, int object_id, int dep
 		return 1;
 
 	for (i=0; i<MAX_SIDES_PER_SEGMENT; i++) {
-		int	seg2 = Segments[segnum].children[i];
+		segnum_t	seg2 = Segments[segnum].children[i];
 
 		if (seg2 != segment_none)
 			if (object_nearby_aux(seg2, object_type, object_id, depth-1))
@@ -756,7 +757,7 @@ void maybe_replace_powerup_with_energy(dxxobject *del_obj)
 	}
 }
 
-int drop_powerup(object_type_t type, int id, int num, vms_vector *init_vel, vms_vector *pos, int segnum)
+int drop_powerup(object_type_t type, int id, int num, vms_vector *init_vel, vms_vector *pos, segnum_t segnum)
 {
 	int		objnum=-1;
 	dxxobject	*obj;
@@ -1267,7 +1268,7 @@ void init_exploding_walls()
 }
 
 //explode the given wall
-void explode_wall(int segnum,int sidenum)
+void explode_wall(segnum_t segnum,int sidenum)
 {
 	int i;
 	vms_vector pos;
@@ -1298,7 +1299,7 @@ void do_exploding_wall_frame()
 	int i;
 
 	for (i=0;i<MAX_EXPLODING_WALLS;i++) {
-		int segnum = expl_wall_list[i].segnum;
+		segnum_t segnum = expl_wall_list[i].segnum;
 
 		if (segnum != segment_none) {
 			int sidenum = expl_wall_list[i].sidenum;
@@ -1400,7 +1401,7 @@ void do_exploding_wall_frame()
 void drop_afterburner_blobs(dxxobject *obj, int count, fix size_scale, fix lifetime)
 {
 	vms_vector pos_left,pos_right;
-	int segnum;
+	segnum_t segnum;
 
 	vm_vec_scale_add(&pos_left, &obj->pos, &obj->orient.fvec, -obj->size);
 	vm_vec_scale_add2(&pos_left, &obj->orient.rvec, -obj->size/4);

@@ -117,7 +117,7 @@ void do_missile_firing(int drop_bomb);
 void net_missile_firing(int player, int weapon, int flags);
 extern int Network_laser_track;
 
-int Laser_create_new(vms_vector * direction, vms_vector * position, int segnum, int parent, int type, int make_sound);
+int Laser_create_new(vms_vector * direction, vms_vector * position, segnum_t segnum, int parent, int type, int make_sound);
 
 // Fires a laser-type weapon (a Primary weapon)
 // Fires from object objnum, weapon type weapon_id.
@@ -138,7 +138,7 @@ int do_laser_firing(int objnum, int weapon_id, int level, int flags, int nfires)
 int Laser_create_new_easy(vms_vector * direction, vms_vector * position, int parent, int weapon_type, int make_sound);
 
 // creates a weapon object
-int create_weapon_object(int weapon_type,int segnum,vms_vector *position);
+int create_weapon_object(int weapon_type,segnum_t segnum,vms_vector *position);
 
 // give up control of the guided missile
 void release_guided_missile(int player_num);
@@ -150,7 +150,7 @@ extern int Muzzle_queue_index;
 
 typedef struct muzzle_info {
 	fix64       create_time;
-	short       segnum;
+	segnum_t       segnum;
 	vms_vector  pos;
 } muzzle_info;
 

@@ -121,14 +121,15 @@ int Ai_info_enabled=0;
 // These globals are set by a call to find_vector_intersection, which is a slow routine,
 // so we don't want to call it again (for this object) unless we have to.
 vms_vector  Hit_pos;
-int         Hit_type, Hit_seg;
+int         Hit_type;
+segnum_t Hit_seg;
 fvi_info    Hit_data;
 
 int             Num_awareness_events = 0;
 awareness_event Awareness_events[MAX_AWARENESS_EVENTS];
 
 vms_vector      Believed_player_pos;
-int             Believed_player_seg;
+segnum_t             Believed_player_seg;
 
 #ifndef NDEBUG
 // Index into this array with ailp->mode
@@ -269,7 +270,7 @@ int ready_to_fire(robot_info *robptr, ai_local *ailp)
 static void make_nearby_robot_snipe(void)
 {
 	int bfs_length, i;
-	short bfs_list[MNRS_SEG_MAX];
+	segnum_t bfs_list[MNRS_SEG_MAX];
 
 	create_bfs_list(ConsoleObject->segnum, bfs_list, &bfs_length, MNRS_SEG_MAX);
 
@@ -1364,7 +1365,7 @@ void create_awareness_event(dxxobject *objp, int type)
 sbyte New_awareness[MAX_SEGMENTS];
 
 // ----------------------------------------------------------------------------------
-static void pae_aux(int segnum, int type, int level)
+static void pae_aux(segnum_t segnum, int type, int level)
 {
 	int j;
 
@@ -1669,7 +1670,7 @@ static void ai_local_read_n_swap(ai_local *ail, int n, int swap, PHYSFS_file *fp
 		ail->mode = PHYSFSX_readSXE32(fp, swap);
 		ail->previous_visibility = PHYSFSX_readSXE32(fp, swap);
 		ail->rapidfire_count = PHYSFSX_readSXE32(fp, swap);
-		ail->goal_segment = PHYSFSX_readSXE32(fp, swap);
+		ail->goal_segment = (segnum_t)PHYSFSX_readSXE32(fp, swap);
 		ail->next_action_time = PHYSFSX_readSXE32(fp, swap);
 		ail->next_fire = PHYSFSX_readSXE32(fp, swap);
 		ail->next_fire2 = PHYSFSX_readSXE32(fp, swap);
@@ -1699,7 +1700,7 @@ static void point_seg_read_n_swap(point_seg *ps, int n, int swap, PHYSFS_file *f
 
 	for (i = 0; i < n; i++, ps++)
 	{
-		ps->segnum = PHYSFSX_readSXE32(fp, swap);
+		ps->segnum = (segnum_t)PHYSFSX_readSXE32(fp, swap);
 		PHYSFSX_readVectorX(fp, &ps->point, swap);
 	}
 }
@@ -1713,7 +1714,7 @@ static void ai_cloak_info_read_n_swap(ai_cloak_info *ci, int n, int swap, PHYSFS
 	{
 		tmptime32 = PHYSFSX_readSXE32(fp, swap);
 		ci->last_time = (fix64)tmptime32;
-		ci->last_segment = PHYSFSX_readSXE32(fp, swap);
+		ci->last_segment = (segnum_t)PHYSFSX_readSXE32(fp, swap);
 		PHYSFSX_readVectorX(fp, &ci->last_position, swap);
 	}
 }
@@ -1784,10 +1785,10 @@ int ai_restore_state(PHYSFS_file *fp, int version, int swap)
 		Num_boss_gate_segs = PHYSFSX_readSXE32(fp, swap);
 
 		for (i = 0; i < Num_boss_gate_segs; i++)
-			Boss_gate_segs[i] = PHYSFSX_readSXE16(fp, swap);
+			Boss_gate_segs[i] = (segnum_t)PHYSFSX_readSXE16(fp, swap);
 
 		for (i = 0; i < Num_boss_teleport_segs; i++)
-			Boss_teleport_segs[i] = PHYSFSX_readSXE16(fp, swap);
+			Boss_teleport_segs[i] = (segnum_t)PHYSFSX_readSXE16(fp, swap);
 	}
 
 	return 1;

@@ -100,7 +100,7 @@ extern char Special_names[MAX_CENTER_TYPES][11];
 // An array of pointers to segments with fuel centers.
 typedef struct FuelCenter {
 	int     Type;
-	int     segnum;
+	segnum_t     segnum;
 	sbyte   Flag;
 	sbyte   Enabled;
 	sbyte   Lives;          // Number of times this can be enabled.
@@ -123,7 +123,7 @@ typedef struct  {
 	int     robot_flags;    // Up to 32 different robots
 	fix     hit_points;     // How hard it is to destroy this particular matcen
 	fix     interval;       // Interval between materialogrifizations
-	short   segnum;         // Segment this is attached to.
+	segnum_t   segnum;         // Segment this is attached to.
 	short   fuelcen_num;    // Index in fuelcen array.
 } __pack__ old_matcen_info;
 
@@ -131,7 +131,7 @@ typedef struct matcen_info {
 	int     robot_flags[2]; // Up to 64 different robots
 	fix     hit_points;     // How hard it is to destroy this particular matcen
 	fix     interval;       // Interval between materialogrifizations
-	short   segnum;         // Segment this is attached to.
+	segnum_t   segnum;         // Segment this is attached to.
 	short   fuelcen_num;    // Index in fuelcen array.
 } __pack__ matcen_info;
 
@@ -141,7 +141,7 @@ extern matcen_info RobotCenters[MAX_ROBOT_CENTERS];
 
 // Called when a materialization center gets triggered by the player
 // flying through some trigger!
-extern void trigger_matcen(int segnum);
+extern void trigger_matcen(segnum_t segnum);
 
 extern void disable_matcens(void);
 

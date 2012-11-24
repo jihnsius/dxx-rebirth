@@ -55,7 +55,7 @@ void render_frame(fix eye_offset, int window_num);  //draws the world into the c
 // cycle the flashing light for when mine destroyed
 void flash_frame();
 
-int find_seg_side_face(short x,short y,int *seg,int *side,int *face,int *poly);
+int find_seg_side_face(short x,short y,segnum_t *seg,int *side,int *face,int *poly);
 
 // these functions change different rendering parameters
 // all return the new value of the parameter
@@ -83,7 +83,7 @@ extern fix Render_zoom;     // the player's zoom factor
 extern unsigned char visited[MAX_SEGMENTS];
 
 extern int N_render_segs;
-extern short Render_list[MAX_RENDER_SEGS];
+extern segnum_t Render_list[MAX_RENDER_SEGS];
 
 #ifdef EDITOR
 extern int Render_only_bottom;
@@ -98,12 +98,12 @@ void render_start_frame(void);
 
 // Given a list of point numbers, rotate any that haven't been rotated
 // this frame
-g3s_codes rotate_list(int nv, int *pointnumlist);
+g3s_codes rotate_list(int nv, vertnum_t *pointnumlist);
 
 // Given a list of point numbers, project any that haven't been projected
-void project_list(int nv, int *pointnumlist);
+void project_list(int nv, vertnum_t *pointnumlist);
 
-extern void render_mine(int start_seg_num, fix eye_offset, int window_num);
+extern void render_mine(segnum_t start_seg_num, fix eye_offset, int window_num);
 
 extern void update_rendered_data(int window_num, dxxobject *viewer, int rear_view_flag, int user);
 

@@ -478,7 +478,8 @@ void update_player_stats()
 //go through this level and start any eclip sounds
 static void set_sound_sources()
 {
-	int segnum,sidenum;
+	segnum_t segnum;
+	int sidenum;
 	segment *seg;
 
 	digi_init_sounds();		//clear old sounds
@@ -493,7 +494,7 @@ static void set_sound_sources()
 				if ((((tm=seg->sides[sidenum].tmap_num2) != 0) && ((ec=TmapInfo[tm&0x3fff].eclip_num)!=-1)) || ((ec=TmapInfo[seg->sides[sidenum].tmap_num].eclip_num)!=-1))
 					if ((sn=Effects[ec].sound_num)!=-1) {
 						vms_vector pnt;
-						int csegnum = seg->children[sidenum];
+						segnum_t csegnum = seg->children[sidenum];
 
 						//check for sound on other side of wall.  Don't add on
 						//both walls if sound travels through wall.  If sound
@@ -572,7 +573,8 @@ static void do_checksum_calc(ubyte *b, int len, unsigned int *s1, unsigned int *
 
 static ushort netmisc_calc_checksum()
 {
-	int i, j, k;
+	segnum_t i;
+	int j, k;
 	unsigned int sum1,sum2;
 	short s;
 	int t;

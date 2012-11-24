@@ -194,14 +194,14 @@ extern	int 		current_group;
 extern	int 		num_groups;
 extern	int		Current_group;
 
-extern	short		Found_segs[MAX_FOUND_SEGS];			// List of segment numbers "found" under cursor click
+extern	segnum_t		Found_segs[MAX_FOUND_SEGS];			// List of segment numbers "found" under cursor click
 extern	int		N_found_segs;			// Number of segments found at Found_segs
 
 extern	int		N_selected_segs;		// Number of segments found at Selected_segs
-extern	short		Selected_segs[MAX_SELECTED_SEGS];		// List of segment numbers currently selected
+extern	segnum_t		Selected_segs[MAX_SELECTED_SEGS];		// List of segment numbers currently selected
 
 extern	int		N_warning_segs;		// Number of segments warning-worthy, such as a concave segment
-extern	short		Warning_segs[MAX_WARNING_SEGS];		// List of warning-worthy segments
+extern	segnum_t		Warning_segs[MAX_WARNING_SEGS];		// List of warning-worthy segments
 
 extern	int		Show_axes_flag;		// 0 = don't show, !0 = do show coordinate axes in *Cursegp orientation
 
@@ -221,7 +221,7 @@ void init_all_vertices(void);
 int is_free_vertex(int vi);
 
 //	Set existing vertex vnum to value *vp.
-int med_set_vertex(int vnum,vms_vector *vp);
+int med_set_vertex(vertnum_t vnum,vms_vector *vp);
 
 void med_combine_duplicate_vertices(sbyte *vlp);
 
@@ -425,7 +425,7 @@ void med_assign_uvs_to_side(segment *con_seg, int con_common_side, segment *base
 void show_matrix(char *s,vms_matrix *mp,int type);
 
 //	Create coordinate axes in orientation of specified segment, stores vertices at *vp.
-void create_coordinate_axes_from_segment(segment *sp,int *vertnums);
+void create_coordinate_axes_from_segment(segment *sp,vertnum_t *vertnums);
 
 //	Scale a segment.  Then, if it is connected to something, rotate it.
 int med_scale_and_rotate_segment(segment *seg, vms_angvec *rot);
@@ -466,12 +466,12 @@ int med_find_closest_threshold_segment_side(segment *sp, int side, segment **adj
 // Select previous segment.
 //	If there is a connection on the side opposite to the current side, then choose that segment.
 // If there is no connecting segment on the opposite face, try any segment.
-void get_previous_segment(int curseg_num, int curside,int *newseg_num, int *newside);
+void get_previous_segment(segnum_t curseg_num, int curside,segnum_t *newseg_num, int *newside);
 
 // Select next segment.
 //	If there is a connection on the current side, then choose that segment.
 // If there is no connecting segment on the current side, try any segment.
-void get_next_segment(int curseg_num, int curside, int *newseg_num, int *newside);
+void get_next_segment(segnum_t curseg_num, int curside, segnum_t *newseg_num, int *newside);
 
 //	Copy texture maps in newseg to nsp.
 void copy_uvs_seg_to_seg(segment *nsp,segment *newseg);
@@ -499,11 +499,11 @@ int med_add_vertex(vms_vector *vp);
 int med_create_duplicate_vertex(vms_vector *vp);
 
 //	Create a new segment, duplicating exactly, including vertex ids and children, the passed segment.
-int med_create_duplicate_segment(segment *sp);
+segnum_t med_create_duplicate_segment(segment *sp);
 
 //	Returns the index of a free segment.
 //	Scans the Segments array.
-int get_free_segment_number(void);
+segnum_t get_free_segment_number(void);
 
 //      Diagnostic message.
 void diagnostic_message(const char *format, ... );

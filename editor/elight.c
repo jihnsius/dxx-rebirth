@@ -145,7 +145,8 @@ static void propagate_light_intensity(segment *segp, int sidenum)
 //	on user-defined light sources.
 int LightAmbientLighting()
 {
-	int seg, side;
+	segnum_t seg;
+	int side;
 
 	for (seg=segment_first; seg<=Highest_segment_index; seg++)
 		for (side=0;side<MAX_SIDES_PER_SEGMENT;side++)

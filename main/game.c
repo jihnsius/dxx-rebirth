@@ -1503,7 +1503,8 @@ int	Slide_segs_computed;
 
 static void compute_slide_segs(void)
 {
-	int	segnum, sidenum;
+	segnum_t	segnum;
+	int sidenum;
 
 	for (segnum=segment_first;segnum<=Highest_segment_index;segnum++) {
 		Slide_segs[segnum] = 0;
@@ -1520,7 +1521,8 @@ static void compute_slide_segs(void)
 //	-----------------------------------------------------------------------------
 void slide_textures(void)
 {
-	int segnum,sidenum,i;
+	segnum_t segnum;
+	int sidenum,i;
 
 	if (!Slide_segs_computed)
 		compute_slide_segs();
@@ -1601,7 +1603,7 @@ void flicker_lights()
 }
 
 //returns ptr to flickering light structure, or NULL if can't find
-flickering_light *find_flicker(int segnum,int sidenum)
+flickering_light *find_flicker(segnum_t segnum,int sidenum)
 {
 	int l;
 	flickering_light *f;
@@ -1618,7 +1620,7 @@ flickering_light *find_flicker(int segnum,int sidenum)
 }
 
 //turn flickering off (because light has been turned off)
-void disable_flicker(int segnum,int sidenum)
+void disable_flicker(segnum_t segnum,int sidenum)
 {
 	flickering_light *f;
 
@@ -1627,7 +1629,7 @@ void disable_flicker(int segnum,int sidenum)
 }
 
 //turn flickering off (because light has been turned on)
-void enable_flicker(int segnum,int sidenum)
+void enable_flicker(segnum_t segnum,int sidenum)
 {
 	flickering_light *f;
 
@@ -1639,7 +1641,7 @@ void enable_flicker(int segnum,int sidenum)
 #ifdef EDITOR
 
 //returns 1 if ok, 0 if error
-int add_flicker(int segnum, int sidenum, fix delay, unsigned long mask)
+int add_flicker(segnum_t segnum, int sidenum, fix delay, unsigned long mask)
 {
 	int l;
 	flickering_light *f;
@@ -1787,7 +1789,7 @@ int	Last_level_path_created = -1;
 //	------------------------------------------------------------------------------------------------------------------
 //	Create path for player from current segment to goal segment.
 //	Return true if path created, else return false.
-static int mark_player_path_to_segment(int dstseg)
+static int mark_player_path_to_segment(segnum_t dstseg)
 {
 	int		i;
 	dxxobject	*objp = ConsoleObject;
@@ -1813,7 +1815,8 @@ static int mark_player_path_to_segment(int dstseg)
 	}
 
 	for (i=1; i<player_path_length; i++) {
-		int			segnum, objnum;
+		segnum_t			segnum;
+		int objnum;
 		vms_vector	seg_center;
 		dxxobject		*obj;
 
@@ -1839,7 +1842,8 @@ static int mark_player_path_to_segment(int dstseg)
 //	Return true if it happened, else return false.
 int create_special_path(void)
 {
-	int	i,j;
+	segnum_t	i;
+	int j;
 
 	//	---------- Find exit doors ----------
 	for (i=segment_first; i<=Highest_segment_index; i++)

@@ -35,7 +35,8 @@ extern "C" {
 
 // data for exploding walls (such as hostage door)
 typedef struct expl_wall {
-	int segnum,sidenum;
+	segnum_t segnum;
+	int sidenum;
 	fix time;
 } expl_wall;
 
@@ -43,10 +44,10 @@ typedef struct expl_wall {
 
 extern expl_wall expl_wall_list[MAX_EXPLODING_WALLS];
 
-dxxobject *object_create_explosion(short segnum, vms_vector *position, fix size, int vclip_type);
-dxxobject *object_create_muzzle_flash(short segnum, vms_vector *position, fix size, int vclip_type);
+dxxobject *object_create_explosion(segnum_t segnum, vms_vector *position, fix size, int vclip_type);
+dxxobject *object_create_muzzle_flash(segnum_t segnum, vms_vector *position, fix size, int vclip_type);
 
-dxxobject *object_create_badass_explosion(dxxobject *objp, short segnum,
+dxxobject *object_create_badass_explosion(dxxobject *objp, segnum_t segnum,
 		vms_vector *position, fix size, int vclip_type,
 		fix maxdamage, fix maxdistance, fix maxforce, int parent);
 
@@ -64,14 +65,14 @@ void do_debris_frame(dxxobject *obj);      // deal with debris for this frame
 
 void draw_fireball(dxxobject *obj);
 
-void explode_wall(int segnum, int sidenum);
+void explode_wall(segnum_t segnum, int sidenum);
 void do_exploding_wall_frame(void);
 void init_exploding_walls(void);
 extern void maybe_drop_net_powerup(int powerup_type);
 extern void maybe_replace_powerup_with_energy(dxxobject *del_obj);
 
 extern int get_explosion_vclip(dxxobject *obj, int stage);
-int drop_powerup(object_type_t type, int id, int num, vms_vector *init_vel, vms_vector *pos, int segnum);
+int drop_powerup(object_type_t type, int id, int num, vms_vector *init_vel, vms_vector *pos, segnum_t segnum);
 
 // creates afterburner blobs behind the specified object
 void drop_afterburner_blobs(dxxobject *obj, int count, fix size_scale, fix lifetime);
@@ -80,7 +81,7 @@ void drop_afterburner_blobs(dxxobject *obj, int count, fix size_scale, fix lifet
  * reads n expl_wall structs from a PHYSFS_file and swaps if specified
  */
 extern void expl_wall_read_n_swap(expl_wall *ew, int n, int swap, PHYSFS_file *fp);
-int pick_connected_segment(dxxobject *objp, int max_depth);
+segnum_t pick_connected_segment(dxxobject *objp, int max_depth);
 extern fix Flash_effect;
 
 #ifdef __cplusplus

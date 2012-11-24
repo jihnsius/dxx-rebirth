@@ -42,13 +42,13 @@ extern "C" {
 typedef struct fvi_info {
 	int hit_type;					//what sort of intersection
 	vms_vector hit_pnt;			//where we hit
-	int hit_seg;					//what segment hit_pnt is in
+	segnum_t hit_seg;					//what segment hit_pnt is in
 	int hit_side;					//if hit wall, which side
-	int hit_side_seg;				//what segment the hit side is in
+	segnum_t hit_side_seg;				//what segment the hit side is in
 	int hit_object;				//if object hit, which object
 	vms_vector hit_wallnorm;	//if hit wall, ptr to its surface normal
 	int n_segs;						//how many segs we went through
-	int seglist[MAX_FVI_SEGS];	//list of segs vector went through
+	segnum_t seglist[MAX_FVI_SEGS];	//list of segs vector went through
 } fvi_info;
 
 //flags for fvi query
@@ -61,7 +61,7 @@ typedef struct fvi_info {
 //this data contains the parms to fvi()
 typedef struct fvi_query {
 	const vms_vector *p0,*p1;
-	int startseg;
+	segnum_t startseg;
 	fix rad;
 	short thisobjnum;
 	const int *ignore_obj_list;
@@ -86,7 +86,7 @@ void find_hitpoint_uv(fix *u,fix *v,fix *l, vms_vector *pnt,segment *seg,int sid
 
 //Returns true if the object is through any walls
 int object_intersects_wall(dxxobject *objp);
-int object_intersects_wall_d(dxxobject *objp,int *hseg,int *hside,int *hface); // same as above but more detailed
+int object_intersects_wall_d(dxxobject *objp,segnum_t *hseg,int *hside,int *hface); // same as above but more detailed
 
 #ifdef __cplusplus
 }

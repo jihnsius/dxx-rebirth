@@ -228,7 +228,7 @@ public:
 	{
 		return g;
 	}
-	int dijkstra_shortest_paths(const dxxobject *viewer, const int segnum)
+	int dijkstra_shortest_paths(const dxxobject *viewer, const segnum_t segnum)
 	{
 		if (!viewer)
 			return -dsp_invalid_viewer;
@@ -356,20 +356,20 @@ void cxx_script_get_player_ship_rotthrust(dxxobject *const obj)
 	psr->z = 0; // dest_angles.b; // always zero anyway
 }
 
-static int16_t get_desired_segment(int16_t& cached_segnum, const script_control_info::location& loc)
+static segnum_t get_desired_segment(segnum_t& cached_segnum, const script_control_info::location& loc)
 {
 	if (loc.enable_segment)
 	{
-		const int requested_segment = loc.segment;
-		if (static_cast<unsigned>(requested_segment) <= static_cast<unsigned>(Highest_segment_index))
+		const segnum_t requested_segment = loc.segment;
+		if (requested_segment <= Highest_segment_index)
 		{
 			cached_segnum = requested_segment;
 			return requested_segment;
 		}
 		return segment_none;
 	}
-	const int cseg = cached_segnum;
-	const int segnum = find_point_seg(&loc.pos, (static_cast<unsigned>(cseg) > static_cast<unsigned>(Highest_segment_index) ? segment_none : cseg));
+	const segnum_t cseg = cached_segnum;
+	const segnum_t segnum = find_point_seg(&loc.pos, (cseg > Highest_segment_index ? static_cast<segnum_t>(segment_none) : cseg));
 	cached_segnum = segnum;
 	return segnum;
 }
@@ -404,8 +404,8 @@ struct thrust_nearest_vertex_visitor_t : pathfinder_t::nearest_vertex_visitor_t<
 
 static vms_vector get_player_thrust(const dxxobject& plr)
 {
-	static int16_t s_target_segnum = segment_none;
-	const int16_t segnum = get_desired_segment(s_target_segnum, ScriptControls.ship_destination);
+	static segnum_t s_target_segnum = segment_none;
+	const segnum_t segnum = get_desired_segment(s_target_segnum, ScriptControls.ship_destination);
 	vms_vector vs;
 	if (segnum == segment_none || static_cast<unsigned>(segnum) > static_cast<unsigned>(Highest_segment_index))
 	{
@@ -535,7 +535,7 @@ protected:
 		const segment_descriptor& sdvdp = vdp.extract_segment();
 		if (sdvd == sdvdp)
 		{
-			if (m_skipped_previous || static_cast<unsigned>(Segments[sdvd].children[WBACK]) != sdvdp)
+			if (m_skipped_previous || Segments[sdvd].children[WBACK] != sdvdp)
 			{
 				m_skipped_previous = 0;
 				return false;
@@ -550,7 +550,7 @@ protected:
 
 struct glow_path_cache_t
 {
-	int16_t dstseg, srcseg;
+	segnum_t dstseg, srcseg;
 	uint16_t count_nodes;
 	std::array<vms_vector, glow_nearest_vertex_visitor_t::vertex_count> nodes;
 };
@@ -573,8 +573,8 @@ static int py_get_internal_glow_path(const script_control_info::location& l, con
 	if (!l.enable_position && !l.enable_segment)
 		return -1;
 	glow_path_cache_t& cache = s_cache[window_num];
-	const int16_t cseg = cache.dstseg;
-	const int16_t segnum = get_desired_segment(cache.dstseg, l);
+	const segnum_t cseg = cache.dstseg;
+	const segnum_t segnum = get_desired_segment(cache.dstseg, l);
 	if (segnum == segment_none || static_cast<unsigned>(segnum) > static_cast<unsigned>(Highest_segment_index))
 	{
 		cache.srcseg = segment_none;

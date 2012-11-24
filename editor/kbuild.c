@@ -118,7 +118,7 @@ int CreateSloppyAdjacentJointsGroup()
 	int		adj_side;
 	segment	*adj_sp;
 	int		num_segs = GroupList[current_group].num_segments;
-	short		*segs = GroupList[current_group].segments;
+	segnum_t		*segs = GroupList[current_group].segments;
 	segment	*segp;
 	int		done_been_a_change = 0;
 	int		segind, sidenum;
@@ -178,7 +178,8 @@ int CreateAdjacentJointsSegment()
 //  ---------- Create a bridge segment between all segment:side and all adjacent segment:side ----------
 int CreateAdjacentJointsAll()
 {
-	int		adj_side,seg,s;
+	int		adj_side,s;
+	segnum_t seg;
 	segment	*adj_sp;
 
 	med_combine_duplicate_vertices(Vertex_active);

@@ -100,13 +100,13 @@ struct mh {
 };
 
 struct me {
-	int current_seg;
+	segnum_t current_seg;
 	int newsegment_offset;
 	int newsegment_size;
 	int Curside;
-	int Markedsegp;
+	segnum_t Markedsegp;
 	int Markedside;
-	int Groupsegp[10];
+	segnum_t Groupsegp[10];
 	int Groupside[10];
 	int num_groups;
 	int current_group;
@@ -127,7 +127,7 @@ int load_mine_data(PHYSFS_file *LoadFile);
 int load_mine_data_compiled(PHYSFS_file *LoadFile);
 
 extern fix Level_shake_frequency, Level_shake_duration;
-extern int Secret_return_segment;
+extern segnum_t Secret_return_segment;
 extern vms_matrix Secret_return_orient;
 
 #define TMAP_NUM_MASK 0x3FFF

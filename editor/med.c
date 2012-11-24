@@ -537,7 +537,7 @@ int SetPlayerFromCursegMinusOne()
 	int i;
 	fix max,view_dist=f1_0*10;
         static int edgenum=0;
-	int newseg;
+	segnum_t newseg;
 
 	view_vec = Cursegp->sides[Curside].normals[0];
 	vm_vec_negate(&view_vec);
@@ -944,7 +944,7 @@ static void subtract_found_segments_from_selected_list(void)
 	int	s,f;
 
 	for (f=0; f<N_found_segs; f++) {
-		int	foundnum = Found_segs[f];
+		segnum_t	foundnum = Found_segs[f];
 
 		for (s=0; s<N_selected_segs; s++) {
 			if (Selected_segs[s] == foundnum) {
@@ -962,7 +962,7 @@ static void add_found_segments_to_selected_list(void) {
 	int	s,f;
 
 	for (f=0; f<N_found_segs; f++) {
-		int	foundnum = Found_segs[f];
+		segnum_t	foundnum = Found_segs[f];
 
 		for (s=0; s<N_selected_segs; s++)
 			if (Selected_segs[s] == foundnum)
@@ -1263,7 +1263,8 @@ int editor_handler(UI_DIALOG *dlg, d_event *event, void *data)
 		(GADGET_PRESSED(LargeViewBox) && render_3d_in_big_window))
 	{
 		int	xcrd,ycrd;
-		int seg,side,face,poly,tmap;
+		int side,face,poly,tmap;
+		segnum_t seg;
 
 		if (render_3d_in_big_window) {
 			xcrd = LargeViewBox->b1_drag_x1;

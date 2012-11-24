@@ -30,7 +30,7 @@ extern "C" {
 
 void collide_init();
 void collide_two_objects(dxxobject * A, dxxobject * B, vms_vector *collision_point);
-void collide_object_with_wall(dxxobject * A, fix hitspeed, short hitseg, short hitwall, vms_vector * hitpt);
+void collide_object_with_wall(dxxobject * A, fix hitspeed, segnum_t hitseg, short hitwall, vms_vector * hitpt);
 extern void apply_damage_to_player(dxxobject *player, dxxobject *killer, fix damage, ubyte possibly_friendly);
 
 // Returns 1 if robot died, else 0.
@@ -43,7 +43,7 @@ extern fix Boss_invulnerable_dot;
 extern void collide_player_and_materialization_center(dxxobject *objp);
 extern void collide_robot_and_materialization_center(dxxobject *objp);
 
-extern void scrape_player_on_wall(dxxobject *obj, short hitseg, short hitwall, vms_vector * hitpt);
+void scrape_player_on_wall(dxxobject *obj, segnum_t hitseg, short hitwall, vms_vector * hitpt);
 
 extern void collide_player_and_nasty_robot(dxxobject * player, dxxobject * robot, vms_vector *collision_point);
 
@@ -58,7 +58,7 @@ void drop_player_eggs(dxxobject *objp);
 
 //see if wall is volatile, and if so, cause damage to player
 //returns true if player is in lava
-int check_volatile_wall(dxxobject *obj,int segnum,int sidenum,vms_vector *hitpt);
+int check_volatile_wall(dxxobject *obj,segnum_t segnum,int sidenum,vms_vector *hitpt);
 extern int Final_boss_is_dead;
 
 #ifdef __cplusplus

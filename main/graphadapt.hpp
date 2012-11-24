@@ -94,8 +94,7 @@ public:
 	weight_map() :
 		m_wmap(Num_segments)
 	{
-		const unsigned numsegments = Num_segments;
-		for (segment_descriptor seg(segment_first); seg != numsegments; ++seg)
+		for (segment_descriptor seg(segment_first); seg < Num_segments; ++seg)
 			compute_segment(seg, m_wmap[seg]);
 	}
 	const per_srcside_t& get_srcside(const per_segment_t& seg, const side_descriptor& srcside) const
@@ -139,7 +138,7 @@ static inline typename boost::graph_traits<dxx_segment_adaptor>::vertex_descript
 	const side_descriptor& dstside = e.extract_dstside();
 	if (srcside != dstside)
 		return vertex_descriptor(srcseg, dstside);
-	const int child = Segments[srcseg].children[dstside];
+	const segnum_t child = Segments[srcseg].children[dstside];
 	if ((static_cast<unsigned>(child) >= static_cast<unsigned>(Num_segments)))
 		/* BUG */
 		return vertex_descriptor(srcseg, dstside);

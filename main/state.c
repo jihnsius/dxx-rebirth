@@ -1001,7 +1001,7 @@ int state_save_all_sub(char *filename, char *desc)
 	PHYSFS_write(fp, Triggers, sizeof(trigger), Num_triggers);
 
 //Save tmap info
-	for (i = 0; i <= Highest_segment_index; i++)
+	for (segnum_t i = segment_first; i <= Highest_segment_index; i++)
 	{
 		for (j = 0; j < 6; j++)
 		{
@@ -1193,7 +1193,8 @@ int state_restore_all(int in_game, int secret_restore, const char *filename_over
 
 int state_restore_all_sub(char *filename, int secret_restore)
 {
-	int version,i, j, segnum, coop_player_got[MAX_PLAYERS], coop_org_objnum;
+	int version,i, j, coop_player_got[MAX_PLAYERS], coop_org_objnum;
+	segnum_t segnum;
 	dxxobject * obj;
 	PHYSFS_file *fp;
 	int swap = 0;	// if file is not endian native, have to swap all shorts and ints
@@ -1446,7 +1447,7 @@ int state_restore_all_sub(char *filename, int secret_restore)
 	trigger_read_n_swap(Triggers, Num_triggers, swap, fp);
 
 	//Restore tmap info (to temp values so we can use compiled-in tmap info to compute static_light
-	for (i=0; i<=Highest_segment_index; i++ )	{
+	for (segnum_t i=segment_first; i<=Highest_segment_index; i++ )	{
 		for (j=0; j<6; j++ )	{
 			Segments[i].sides[j].wall_num = PHYSFSX_readSXE16(fp, swap);
 			TempTmapNum[i][j] = PHYSFSX_readSXE16(fp, swap);
@@ -1559,13 +1560,13 @@ int state_restore_all_sub(char *filename, int secret_restore)
 			PHYSFS_read(fp, Light_subtracted, sizeof(Light_subtracted[0]), MAX_SEGMENTS_ORIGINAL);
 		apply_all_changed_light();
 	} else {
-		int	i;
+		segnum_t	i;
 		for (i=segment_first; i<=Highest_segment_index; i++)
 			Light_subtracted[i] = 0;
 	}
 
 	// static_light should now be computed - now actually set tmap info
-	for (i=0; i<=Highest_segment_index; i++ )	{
+	for (segnum_t i=segment_first; i<=Highest_segment_index; i++ )	{
 		for (j=0; j<6; j++ )	{
 			Segments[i].sides[j].tmap_num=TempTmapNum[i][j];
 			Segments[i].sides[j].tmap_num2=TempTmapNum2[i][j];

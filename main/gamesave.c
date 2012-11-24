@@ -991,7 +991,7 @@ static int load_game_data(PHYSFS_file *LoadFile)
 		else
 			matcen_info_read(&RobotCenters[i], LoadFile);
 			//	Set links in RobotCenters to Station array
-			for (j = 0; j <= Highest_segment_index; j++)
+		for (segnum_t j = segment_first; j <= Highest_segment_index; j++)
 			if (Segment2s[j].special == SEGMENT_IS_ROBOTMAKER)
 				if (Segment2s[j].matcen_num == i)
 					RobotCenters[i].fuelcen_num = Segment2s[j].value;
@@ -1025,7 +1025,7 @@ static int load_game_data(PHYSFS_file *LoadFile)
 	for (unsigned i=0; i<MAX_OBJECTS; i++) {
 		Objects[i].next = Objects[i].prev = -1;
 		if (Objects[i].type != OBJ_NONE) {
-			int objsegnum = Objects[i].segnum;
+			segnum_t objsegnum = Objects[i].segnum;
 
 			if (objsegnum > Highest_segment_index)		//bogus object
 			{
@@ -1042,7 +1042,7 @@ static int load_game_data(PHYSFS_file *LoadFile)
 	clear_transient_objects(1);		//1 means clear proximity bombs
 
 	// Make sure non-transparent doors are set correctly.
-	for (unsigned i=segment_first; i< Num_segments; i++)
+	for (segnum_t i=segment_first; i< Num_segments; i++)
 		for (j=0;j<MAX_SIDES_PER_SEGMENT;j++) {
 			side	*sidep = &Segments[i].sides[j];
 			if ((sidep->wall_num != -1) && (Walls[sidep->wall_num].clip_num != -1)) {
@@ -1096,7 +1096,8 @@ static int load_game_data(PHYSFS_file *LoadFile)
 		for (t=0; t<Num_triggers; t++) {
 			int	l;
 			for (l=0; l<Triggers[t].num_links; l++) {
-				int	seg_num, side_num, wall_num;
+				segnum_t	seg_num;
+				int side_num, wall_num;
 
 				seg_num = Triggers[t].seg[l];
 				side_num = Triggers[t].side[l];
@@ -1121,7 +1122,8 @@ static int load_game_data(PHYSFS_file *LoadFile)
 
 	//fix old wall structs
 	if (game_top_fileinfo_version < 17) {
-		int segnum,sidenum,wallnum;
+		segnum_t segnum;
+		int sidenum,wallnum;
 
 		for (segnum=segment_first; segnum<=Highest_segment_index; segnum++)
 			for (sidenum=0;sidenum<6;sidenum++)
@@ -1825,7 +1827,8 @@ int save_level(const char * filename)
 #ifndef NDEBUG
 void dump_mine_info(void)
 {
-	int	segnum, sidenum;
+	segnum_t	segnum;
+	int sidenum;
 	fix	min_u, max_u, min_v, max_v, min_l, max_l, max_sl;
 
 	min_u = F1_0*1000;

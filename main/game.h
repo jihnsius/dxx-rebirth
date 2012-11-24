@@ -24,6 +24,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "pstypes.h"
 #include "window.h"
 #include "vecmat.h"
+#include "segment.h"
 
 #ifdef NDEBUG
 #define MAXIMUM_FPS 200
@@ -205,7 +206,8 @@ extern void apply_modified_palette(void);
 
 //Flickering light system
 typedef struct  {
-	short segnum, sidenum;
+	segnum_t segnum;
+	short sidenum;
 	unsigned long mask;     // determines flicker pattern
 	fix timer;              // time until next change
 	fix delay;              // time between changes
@@ -217,16 +219,16 @@ extern flickering_light Flickering_lights[MAX_FLICKERING_LIGHTS];
 extern int Num_flickering_lights;
 
 // returns ptr to flickering light structure, or NULL if can't find
-flickering_light *find_flicker(int segnum, int sidenum);
+flickering_light *find_flicker(segnum_t segnum, int sidenum);
 
 // turn flickering off (because light has been turned off)
-void disable_flicker(int segnum, int sidenum);
+void disable_flicker(segnum_t segnum, int sidenum);
 
 // turn flickering off (because light has been turned on)
-void enable_flicker(int segnum, int sidenum);
+void enable_flicker(segnum_t segnum, int sidenum);
 
 // returns 1 if ok, 0 if error
-int add_flicker(int segnum, int sidenum, fix delay, unsigned long mask);
+int add_flicker(segnum_t segnum, int sidenum, fix delay, unsigned long mask);
 
 /*
  * reads a flickering_light structure from a PHYSFS_file

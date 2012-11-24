@@ -66,7 +66,8 @@ static int Current_door_type=1;
 
 typedef struct count_wall {
 	short wallnum;
-	short	segnum,sidenum;
+	segnum_t segnum;
+	short sidenum;
 } count_wall;
 
 // Add a wall (removable 2 sided)
@@ -633,7 +634,7 @@ int wall_restore_all()
 	for (i=0;i<Num_open_doors;i++)
 		wall_close_door_num(i);
 
-	for (i=0;i<Num_segments;i++)
+	for (segnum_t i=segment_first;i<Num_segments;i++)
 		for (j=0;j<MAX_SIDES_PER_SEGMENT;j++) {
 			wall_num = Segments[i].sides[j].wall_num;
 			if (wall_num != -1)
@@ -658,7 +659,7 @@ int wall_remove_side(segment *seg, short side)
 	int Connectside;
 	segment *csegp;
 	int lower_wallnum;
-	int w, s, t, l, t1;
+	int w, t, l, t1;
 
 	if (IS_CHILD(seg->children[side]) && IS_CHILD(seg->sides[side].wall_num)) {
 		csegp = &Segments[seg->children[side]];
@@ -683,7 +684,7 @@ int wall_remove_side(segment *seg, short side)
 
 		Num_walls -= 2;
 
-		for (s=0;s<=Highest_segment_index;s++)
+		for (segnum_t s=segment_first;s<=Highest_segment_index;s++)
 			if (Segments[s].segnum != segment_none)
 			for (w=0;w<MAX_SIDES_PER_SEGMENT;w++)
 				if	(Segments[s].sides[w].wall_num > lower_wallnum+1)
@@ -996,8 +997,9 @@ int wall_unlink_door()
 
 int check_walls()
 {
-	int w, seg, side, wall_count, trigger_count;
+	int w, side, wall_count, trigger_count;
 	int w1;
+	segnum_t seg;
 	count_wall CountedWalls[MAX_WALLS];
 	char Message[DIAGNOSTIC_MESSAGE_MAX];
 	int matcen_num;
@@ -1067,7 +1069,8 @@ int check_walls()
 int delete_all_walls()
 {
 	char Message[DIAGNOSTIC_MESSAGE_MAX];
-	int seg, side;
+	segnum_t seg;
+	int side;
 
 	sprintf( Message, "Are you sure that walls are hosed so\n badly that you want them ALL GONE!?\n");
 	if (ui_messagebox( -2, -2, 2, Message, "YES!", "No" )==1) {
@@ -1116,7 +1119,9 @@ static void copy_old_wall_data_to_new(int owall, int nwall)
 // ------------------------------------------------------------------------------------------------
 void copy_group_walls(int old_group, int new_group)
 {
-	int	i,j,old_seg, new_seg;
+	unsigned i;
+	int	j;
+	segnum_t old_seg, new_seg;
 
 	for (i=0; i<GroupList[old_group].num_segments; i++) {
 		old_seg = GroupList[old_group].segments[i];
@@ -1143,7 +1148,8 @@ int	Validate_walls=1;
 void check_wall_validity(void)
 {
 	int	i, j;
-	int	segnum, sidenum, wall_num;
+	int	sidenum, wall_num;
+	segnum_t segnum;
 	sbyte	wall_flags[MAX_WALLS];
 
 	if (!Validate_walls)
@@ -1169,7 +1175,7 @@ void check_wall_validity(void)
 	for (i=0; i<MAX_WALLS; i++)
 		wall_flags[i] = 0;
 
-	for (i=0; i<=Highest_segment_index; i++) {
+	for (segnum_t i=segment_first; i<=Highest_segment_index; i++) {
 		if (Segments[i].segnum != segment_none)
 			for (j=0; j<MAX_SIDES_PER_SEGMENT; j++) {
 				// Check walls

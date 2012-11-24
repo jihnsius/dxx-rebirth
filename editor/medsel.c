@@ -34,7 +34,7 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "kdefs.h"
 
 typedef struct sort_element {
-	short segnum;
+	segnum_t segnum;
 	fix dist;
 } sort_element;
 
@@ -60,7 +60,7 @@ static fix compute_dist(segment *seg,vms_vector *pos)
 }
 
 //sort a list of segments, in order of closeness to pos
-void sort_seg_list(int n_segs,short *segnumlist,vms_vector *pos)
+void sort_seg_list(int n_segs,segnum_t *segnumlist,vms_vector *pos)
 {
 	int i;
 	sort_element *sortlist;

@@ -33,7 +33,7 @@ static char rcsid[] = "$Id: ksegsel.c,v 1.1.1.1 2006/03/17 19:58:50 zicodxx Exp 
 // Select previous segment.
 //	If there is a connection on the side opposite to the current side, then choose that segment.
 // If there is no connecting segment on the opposite face, try any segment.
-void get_previous_segment(int curseg_num, int curside,int *newseg_num, int *newside)
+void get_previous_segment(segnum_t curseg_num, int curside,segnum_t *newseg_num, int *newside)
 {
 	int     s;
 
@@ -58,7 +58,7 @@ void get_previous_segment(int curseg_num, int curside,int *newseg_num, int *news
 // Select next segment.
 //	If there is a connection on the current side, then choose that segment.
 // If there is no connecting segment on the current side, try any segment.
-void get_next_segment(int curseg_num, int curside, int *newseg_num, int *newside)
+void get_next_segment(segnum_t curseg_num, int curside, segnum_t *newseg_num, int *newside)
 {
 	int	s;
 
@@ -84,7 +84,8 @@ void get_next_segment(int curseg_num, int curside, int *newseg_num, int *newside
 // ---------- select current segment ----------
 int SelectCurrentSegForward()
 {
-	int	newseg_num,newside;
+	segnum_t	newseg_num;
+	int newside;
 
 	get_next_segment(Cursegp-Segments,Curside,&newseg_num,&newside);
 
@@ -105,7 +106,8 @@ int SelectCurrentSegForward()
 // -------------------------------------------------------------------------------------
 int SelectCurrentSegBackward()
 {
-	int	newseg_num,newside;
+	segnum_t	newseg_num;
+	int newside;
 
 	get_previous_segment(Cursegp-Segments,Curside,&newseg_num,&newside);
 

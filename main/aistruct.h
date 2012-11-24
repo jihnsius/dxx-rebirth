@@ -143,7 +143,7 @@ extern "C" {
 typedef struct ai_static {
 	ubyte   behavior;               //
 	sbyte   flags[MAX_AI_FLAGS];    // various flags, meaning defined by constants
-	short   hide_segment;           // Segment to go to for hiding.
+	segnum_t   hide_segment;           // Segment to go to for hiding.
 	short   hide_index;             // Index in Path_seg_points
 	short   path_length;            // Length of hide path.
 	sbyte   cur_path_index;         // Current index in path.
@@ -151,13 +151,13 @@ typedef struct ai_static {
 	short   danger_laser_num;
 	int     danger_laser_signature;
 	fix64   dying_start_time;       // Time at which this robot started dying.
-} __pack__ ai_static;
+} ai_static;
 
 // Same as above but structure Savegames/Multiplayer objects expect
 typedef struct ai_static_rw {
 	ubyte   behavior;               //
 	sbyte   flags[MAX_AI_FLAGS];    // various flags, meaning defined by constants
-	short   hide_segment;           // Segment to go to for hiding.
+	segnum_t   hide_segment;           // Segment to go to for hiding.
 	short   hide_index;             // Index in Path_seg_points
 	short   path_length;            // Length of hide path.
 	sbyte   cur_path_index;         // Current index in path.
@@ -176,7 +176,7 @@ typedef struct ai_local {
 	int        mode;                          // current mode within behavior
 	int        previous_visibility;           // Visibility of player last time we checked.
 	int        rapidfire_count;               // number of shots fired rapidly
-	int        goal_segment;                  // goal segment for current path
+	segnum_t        goal_segment;                  // goal segment for current path
 	fix        next_action_time;              // time in seconds until something happens, mode dependent
 	fix        next_fire;                     // time in seconds until can fire again
 	fix        next_fire2;                    // time in seconds until can fire again from second weapon
@@ -200,7 +200,7 @@ typedef struct ai_local_rw {
 	int        mode;                          // current mode within behavior
 	int        previous_visibility;           // Visibility of player last time we checked.
 	int        rapidfire_count;               // number of shots fired rapidly
-	int        goal_segment;                  // goal segment for current path
+	segnum_t        goal_segment;                  // goal segment for current path
 	fix        next_action_time;              // time in seconds until something happens, mode dependent
 	fix        next_fire;                     // time in seconds until can fire again
 	fix        next_fire2;                    // time in seconds until can fire again from second weapon
@@ -217,24 +217,24 @@ typedef struct ai_local_rw {
 
 typedef struct {
 	fix64       last_time;
-	int         last_segment;
+	segnum_t         last_segment;
 	vms_vector  last_position;
 } ai_cloak_info;
 
 // Same as above but structure Savegames expect
 typedef struct {
 	fix         last_time;
-	int         last_segment;
+	segnum_t         last_segment;
 	vms_vector  last_position;
 } ai_cloak_info_rw;
 
 typedef struct {
-	int         segnum;
+	segnum_t         segnum;
 	vms_vector  point;
 } point_seg;
 
 typedef struct {
-	short       start, end;
+	segnum_t       start, end;
 } seg_seg;
 
 #define MAX_POINT_SEGS  2500

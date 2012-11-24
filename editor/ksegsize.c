@@ -36,17 +36,17 @@ int		Modified_vertex_index = 0;
 // ------------------------------------------------------------------------------------------
 static void validate_modified_segments(void)
 {
-	int	v,w,v0,seg;
+	int	v,w,v0;
 	char	modified_segments[MAX_SEGMENTS];
 
-	for (v=0; v<=Highest_segment_index; v++)
+	for (segnum_t v=0; v<=Highest_segment_index; v++)
 		modified_segments[v] = 0;
 
 	for (v=0; v<Modified_vertex_index; v++) {
 		v0 = Modified_vertices[v];
 
-		for (seg = segment_first; seg <= Highest_segment_index; seg++) {
-			int *vp = Segments[seg].verts;
+		for (segnum_t seg = segment_first; seg <= Highest_segment_index; seg++) {
+			vertnum_t *vp = Segments[seg].verts;
 			if (Segments[seg].segnum != segment_none)
 				for (w=0; w<MAX_VERTICES_PER_SEGMENT; w++)
 					if (*vp++ == v0)
@@ -54,7 +54,7 @@ static void validate_modified_segments(void)
 		}
 	}
 
-	for (v=segment_first; v<=Highest_segment_index; v++)
+	for (segnum_t v=segment_first; v<=Highest_segment_index; v++)
 		if (modified_segments[v]) {
 			int	s;
 

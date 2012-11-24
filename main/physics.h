@@ -36,7 +36,8 @@ extern "C" {
 
 // these global vars are set after a call to do_physics_sim().  Ugly, I know.
 // list of segments went through
-extern int phys_seglist[MAX_FVI_SEGS], n_phys_segs;
+extern segnum_t phys_seglist[MAX_FVI_SEGS];
+extern int n_phys_segs;
 
 // Simulate a physics object for this frame
 void do_physics_sim(dxxobject *obj);

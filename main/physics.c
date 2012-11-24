@@ -178,7 +178,8 @@ static void set_object_turnroll(dxxobject *obj)
 }
 
 //list of segments went through
-int phys_seglist[MAX_FVI_SEGS],n_phys_segs;
+segnum_t phys_seglist[MAX_FVI_SEGS];
+int n_phys_segs;
 
 
 #define MAX_IGNORE_OBJS 100
@@ -305,7 +306,7 @@ static void fix_illegal_wall_intersection(dxxobject *obj, vms_vector *origin)
 	if (!(obj->type == OBJ_PLAYER || obj->type == OBJ_ROBOT))
 		return;
 
-	int hseg = segment_none;
+	segnum_t hseg = segment_none;
 	if ( object_intersects_wall_d(obj,&hseg,&hside,&hface) )
 	{
 		vm_vec_scale_add2(&obj->pos,&Segments[hseg].sides[hside].normals[0],FrameTime*10);
@@ -318,25 +319,26 @@ static void fix_illegal_wall_intersection(dxxobject *obj, vms_vector *origin)
 void do_physics_sim(dxxobject *obj)
 {
 	int ignore_obj_list[MAX_IGNORE_OBJS],n_ignore_objs;
-	int iseg;
+	segnum_t iseg;
 	int try_again;
 	int fate=0;
 	vms_vector frame_vec;			//movement in this frame
 	vms_vector new_pos,ipos;		//position after this frame
 	int count=0;
 	int objnum;
-	int WallHitSeg, WallHitSide;
+	segnum_t WallHitSeg;
+	int WallHitSide;
 	fvi_info hit_info;
 	fvi_query fq;
 	vms_vector save_pos;
-	int save_seg;
+	segnum_t save_seg;
 	fix drag;
 	fix sim_time,old_sim_time;
 	vms_vector start_pos;
 	int obj_stopped=0;
 	fix moved_time;			//how long objected moved before hit something
 	physics_info *pi;
-	int orig_segnum = obj->segnum;
+	segnum_t orig_segnum = obj->segnum;
 	int bounced=0;
 	fix PhysTime = (FrameTime<F1_0/30?F1_0/30:FrameTime);
 
@@ -521,7 +523,7 @@ void do_physics_sim(dxxobject *obj)
 		//if start point not in segment, move object to center of segment
 		if (get_seg_masks(&obj->pos, obj->segnum, 0, __FILE__, __LINE__).centermask !=0 )
 		{
-			int n;
+			segnum_t n;
 
 			if ((n=find_object_seg(obj))==segment_none) {
 				//Int3();
@@ -818,7 +820,7 @@ void do_physics_sim(dxxobject *obj)
 	if (get_seg_masks(&obj->pos, obj->segnum, 0, __FILE__, __LINE__).centermask != 0)
 	{
 		if (find_object_seg(obj)==segment_none) {
-			int n;
+			segnum_t n;
 
 			//Int3();
 			if (obj->type==OBJ_PLAYER && (n=find_point_seg(&obj->last_pos,obj->segnum))!=segment_none) {

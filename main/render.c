@@ -103,7 +103,8 @@ int Window_clip_left,Window_clip_top,Window_clip_right,Window_clip_bot;
 #ifdef EDITOR
 int _search_mode = 0;			//true if looking for curseg,side,face
 short _search_x,_search_y;	//pixel we're looking at
-int found_seg,found_side,found_face,found_poly;
+static segnum_t found_seg;
+int found_side,found_face,found_poly;
 #else
 #define _search_mode 0
 #endif
@@ -201,7 +202,7 @@ void flash_frame()
 //	they are used for our hideously hacked in headlight system.
 //	vp is a pointer to vertex ids.
 //	tmap1, tmap2 are texture map ids.  tmap2 is the pasty one.
-static void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2, uvl *uvlp, int wid_flags)
+static void render_face(segnum_t segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2, uvl *uvlp, int wid_flags)
 {
 	grs_bitmap  *bm;
 #ifdef OGL
@@ -345,7 +346,7 @@ static void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int
 // ----------------------------------------------------------------------------
 //	Only called if editor active.
 //	Used to determine which face was clicked on.
-static void check_face(int segnum, int sidenum, int facenum, int nv, int *vp, int tmap1, int tmap2, uvl *uvlp)
+static void check_face(segnum_t segnum, int sidenum, int facenum, int nv, int *vp, int tmap1, int tmap2, uvl *uvlp)
 {
 	int	i;
 
@@ -743,7 +744,7 @@ void render_start_frame()
 }
 
 //Given a lit of point numbers, rotate any that haven't been rotated this frame
-g3s_codes rotate_list(int nv,int *pointnumlist)
+g3s_codes rotate_list(int nv,vertnum_t *pointnumlist)
 {
 	int i,pnum;
 	g3s_point *pnt;
@@ -783,7 +784,7 @@ g3s_codes rotate_list(int nv,int *pointnumlist)
 }
 
 //Given a lit of point numbers, project any that haven't been projected
-void project_list(int nv,int *pointnumlist)
+void project_list(int nv,vertnum_t *pointnumlist)
 {
 	int i,pnum;
 
@@ -800,7 +801,7 @@ void project_list(int nv,int *pointnumlist)
 
 
 // -----------------------------------------------------------------------------------
-static void render_segment(int segnum, int window_num)
+static void render_segment(segnum_t segnum, int window_num)
 {
 	segment		*seg = &Segments[segnum];
 	g3s_codes 	cc;
@@ -984,7 +985,7 @@ char visited2[MAX_SEGMENTS];
 #endif
 
 unsigned char visited[MAX_SEGMENTS];
-short Render_list[MAX_RENDER_SEGS];
+segnum_t Render_list[MAX_RENDER_SEGS];
 short Seg_depth[MAX_RENDER_SEGS];		//depth for each seg in Render_list
 ubyte processed[MAX_RENDER_SEGS];		//whether each entry has been processed
 int	lcnt_save,scnt_save;
@@ -1052,7 +1053,7 @@ static int find_seg_side(segment *seg,int *verts,int notside)
 	int side0,side1;
 	const int *eptr;
 	int	v0,v1;
-	int	*vp;
+	const vertnum_t	*vp;
 
 //@@	check_check();
 
@@ -1454,7 +1455,7 @@ static void build_object_lists(int n_segs)
 		render_obj_list[nn][0] = -1;
 
 	for (nn=0;nn<n_segs;nn++) {
-		int segnum;
+		segnum_t segnum;
 
 		segnum = Render_list[nn];
 
@@ -1463,7 +1464,8 @@ static void build_object_lists(int n_segs)
 			dxxobject *obj;
 
 			for (objnum=Segments[segnum].objects;objnum!=-1;objnum = obj->next) {
-				int new_segnum,list_pos;
+				segnum_t new_segnum;
+				int list_pos;
 
 				obj = &Objects[objnum];
 
@@ -1492,7 +1494,7 @@ static void build_object_lists(int n_segs)
 								segment *seg = &Segments[new_segnum];
 
 								if (WALL_IS_DOORWAY(seg,sn) & WID_FLY_FLAG) {		//can explosion migrate through
-									int child = seg->children[sn];
+									segnum_t child = seg->children[sn];
 									int checknp;
 
 									for (checknp=list_pos;checknp--;)
@@ -1515,7 +1517,7 @@ static void build_object_lists(int n_segs)
 
 	//now that there's a list for each segment, sort the items in those lists
 	for (nn=0;nn<n_segs;nn++) {
-		int segnum;
+		segnum_t segnum;
 
 		segnum = Render_list[nn];
 
@@ -1790,7 +1792,7 @@ fix Zoom_factor=F1_0;
 //renders onto current canvas
 void render_frame(fix eye_offset, int window_num)
 {
-	int start_seg_num;
+	segnum_t start_seg_num;
 
 	if (Endlevel_sequence) {
 		render_endlevel_frame(eye_offset);
@@ -1886,11 +1888,11 @@ void update_rendered_data(int window_num, dxxobject *viewer, int rear_view_flag,
 
 //build a list of segments to be rendered
 //fills in Render_list & N_render_segs
-static void build_segment_list(int start_seg_num, int window_num)
+static void build_segment_list(segnum_t start_seg_num, int window_num)
 {
 	int	lcnt,scnt,ecnt;
 	int	l,c;
-	int	ch;
+	segnum_t	ch;
 
 	memset(visited, 0, sizeof(visited[0])*(Highest_segment_index+1));
 	memset(render_pos, -1, sizeof(render_pos[0])*(Highest_segment_index+1));
@@ -1926,7 +1928,8 @@ static void build_segment_list(int start_seg_num, int window_num)
 
 		//while (scnt < ecnt) {
 		for (scnt=0;scnt < ecnt;scnt++) {
-			int rotated,segnum;
+			int rotated;
+			segnum_t segnum;
 			rect *check_w;
 			short child_list[MAX_SIDES_PER_SEGMENT];		//list of ordered sides to process
 			int n_children;										//how many sides in child_list
@@ -2126,7 +2129,7 @@ done_list:
 }
 
 //renders onto current canvas
-void render_mine(int start_seg_num,fix eye_offset, int window_num)
+void render_mine(segnum_t start_seg_num,fix eye_offset, int window_num)
 {
 #ifndef NDEBUG
 	int		i;
@@ -2181,7 +2184,7 @@ void render_mine(int start_seg_num,fix eye_offset, int window_num)
 		int i;
 
 		for (i=0;i<N_render_segs;i++) {
-			int segnum;
+			segnum_t segnum;
 
 			segnum = Render_list[i];
 
@@ -2230,7 +2233,7 @@ void render_mine(int start_seg_num,fix eye_offset, int window_num)
 
 #ifndef OGL
 	for (nn=N_render_segs;nn--;) {
-		int segnum;
+		segnum_t segnum;
 		int objnp;
 
 		// Interpolation_method = 0;
@@ -2293,7 +2296,7 @@ void render_mine(int start_seg_num,fix eye_offset, int window_num)
 	// First Pass: render opaque level geometry + transculent level geometry with high Alpha-Test func
 	for (nn=N_render_segs;nn--;)
 	{
-		int segnum;
+		segnum_t segnum;
 
 		segnum = Render_list[nn];
 		Current_seg_depth = Seg_depth[nn];
@@ -2345,7 +2348,7 @@ void render_mine(int start_seg_num,fix eye_offset, int window_num)
 	// Second Pass: Objects
 	for (nn=N_render_segs;nn--;)
 	{
-		int segnum;
+		segnum_t segnum;
 		int objnp;
 
 		segnum = Render_list[nn];
@@ -2405,7 +2408,7 @@ void render_mine(int start_seg_num,fix eye_offset, int window_num)
 	// Third Pass - Render Transculent level geometry with normal Alpha-Func
 	for (nn=N_render_segs;nn--;)
 	{
-		int segnum;
+		segnum_t segnum;
 
 		segnum = Render_list[nn];
 		Current_seg_depth = Seg_depth[nn];
@@ -2467,7 +2470,7 @@ done_rendering:
 //finds what segment is at a given x&y -  seg,side,face are filled in
 //works on last frame rendered. returns true if found
 //if seg<0, then an object was found, and the object number is -seg-1
-int find_seg_side_face(short x,short y,int *seg,int *side,int *face,int *poly)
+int find_seg_side_face(short x,short y,segnum_t *seg,int *side,int *face,int *poly)
 {
 	_search_mode = -1;
 

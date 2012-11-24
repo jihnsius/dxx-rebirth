@@ -1481,7 +1481,8 @@ static void net_udp_send_markers()
 
 static void net_udp_process_monitor_vector(int vector)
 {
-	int i, j;
+	segnum_t i;
+	int j;
 	int count = 0;
 	segment *seg;
 
@@ -1508,7 +1509,7 @@ static void net_udp_process_monitor_vector(int vector)
 
 static int net_udp_create_monitor_vector(void)
 {
-	int i, j, k;
+	int j, k;
 	int num_blown_bitmaps = 0;
 	int monitor_num = 0;
 	#define NUM_BLOWN_BITMAPS 20
@@ -1516,7 +1517,7 @@ static int net_udp_create_monitor_vector(void)
 	int vector = 0;
 	segment *seg;
 
-	for (i=0; i < Num_effects; i++)
+	for (unsigned i=0; i < Num_effects; i++)
 	{
 		if (Effects[i].dest_bm_num > 0) {
 			for (j = 0; j < num_blown_bitmaps; j++)
@@ -1529,7 +1530,7 @@ static int net_udp_create_monitor_vector(void)
 		}
 	}
 
-	for (i=0; i <= Highest_segment_index; i++)
+	for (segnum_t i=segment_first; i <= Highest_segment_index; i++)
 	{
 		int tm, ec;
 		seg = &Segments[i];
@@ -1720,7 +1721,8 @@ void net_udp_read_object_packet( ubyte *data )
 	dxxobject *obj;
 	sbyte obj_owner;
 	static int mode = 0, object_count = 0, my_pnum = 0;
-	int i = 0, segnum = 0, objnum = 0, remote_objnum = 0, nobj = 0, loc = 5;
+	int i = 0, objnum = 0, remote_objnum = 0, nobj = 0, loc = 5;
+	segnum_t segnum;
 
 	nobj = GET_INTEL_INT(data + 1);
 
@@ -4777,7 +4779,7 @@ static void net_udp_send_smash_lights (int pnum)
  {
   // send the lights that have been blown out
 
-  int i;
+  segnum_t i;
 
   pnum=pnum;
 

@@ -101,7 +101,8 @@ typedef struct flythrough_data {
 int Endlevel_sequence = 0;
 
 
-int transition_segnum,exit_segnum;
+segnum_t transition_segnum;
+segnum_t exit_segnum;
 
 dxxobject *endlevel_camera;
 
@@ -180,7 +181,7 @@ static fixang delta_ang(fixang a,fixang b)
 }
 
 //return though which side of seg0 is seg1
-static int matt_find_connect_side(int seg0,int seg1)
+static int matt_find_connect_side(segnum_t seg0,segnum_t seg1)
 {
 	segment *Seg=&Segments[seg0];
 	int i;
@@ -356,12 +357,13 @@ void start_endlevel_sequence()
 void start_rendered_endlevel_sequence()
 {
 #ifndef NDEBUG
-	int last_segnum;
+	segnum_t last_segnum;
 #endif
 	int exit_side,tunnel_length;
 
 	{
-		int segnum,old_segnum,entry_side,i;
+		segnum_t segnum,old_segnum;
+		unsigned entry_side,i;
 
 		//count segments in exit tunnel
 
@@ -371,6 +373,8 @@ void start_rendered_endlevel_sequence()
 		tunnel_length = 0;
 		for (;;) {
 			entry_side = matt_find_connect_side(segnum,old_segnum);
+			if (entry_side >= sizeof(Side_opposite) / sizeof(Side_opposite[0]))
+				break;
 			exit_side = Side_opposite[entry_side];
 			old_segnum = segnum;
 			segnum = Segments[segnum].children[exit_side];
@@ -619,7 +623,7 @@ void do_endlevel_frame()
 		//do explosions chasing player
 		if ((explosion_wait1-=FrameTime) < 0) {
 			vms_vector tpnt;
-			int segnum;
+			segnum_t segnum;
 			static int sound_count;
 
 			vm_vec_scale_add(&tpnt,&ConsoleObject->pos,&ConsoleObject->orient.fvec,-ConsoleObject->size*5);
@@ -1115,7 +1119,7 @@ void draw_stars()
 
 static void endlevel_render_mine(fix eye_offset)
 {
-	int start_seg_num;
+	segnum_t start_seg_num;
 
 	Viewer_eye = Viewer->pos;
 
@@ -1212,7 +1216,7 @@ void do_endlevel_flythrough(int n)
 {
 	dxxobject *obj;
 	segment *pseg;
-	int old_player_seg;
+	segnum_t old_player_seg;
 
 	flydata = &fly_objects[n];
 	obj = flydata->obj;
@@ -1435,9 +1439,10 @@ void load_endlevel_data(int level_num)
 	char filename[13];
 	char line[LINE_LEN],*p;
 	PHYSFS_file *ifile;
-	int var,segnum,sidenum;
+	int var,sidenum;
 	int exit_side = 0;
 	int have_binary = 0;
+	segnum_t segnum;
 
 	endlevel_data_loaded = 0;		//not loaded yet
 

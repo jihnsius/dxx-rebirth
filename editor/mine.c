@@ -549,7 +549,7 @@ static void write_special(segment2 *seg2, ubyte bit_mask, PHYSFS_file *SaveFile)
 // saves compiled mine data to an already-open file...
 int save_mine_data_compiled(PHYSFS_file *SaveFile)
 {
-	short		i, segnum, sidenum;
+	short		i, sidenum;
 	ubyte 	version = COMPILED_MINE_VERSION;
 	ubyte		bit_mask = 0;
 
@@ -584,7 +584,7 @@ int save_mine_data_compiled(PHYSFS_file *SaveFile)
 	for (i = 0; i < Num_vertices; i++)
 		PHYSFSX_writeVector(SaveFile, &(Vertices[i]));
 	
-	for (segnum = segment_first; segnum < Num_segments; segnum++)
+	for (segnum_t segnum = segment_first; segnum < Num_segments; segnum++)
 	{
 		segment *seg = &Segments[segnum];
 		segment2 *seg2 = &Segment2s[segnum];
@@ -680,7 +680,7 @@ int save_mine_data_compiled(PHYSFS_file *SaveFile)
 	}
 
 	if (Gamesave_current_version > 5)
-		for (i = segment_first; i < Num_segments; i++)
+		for (segnum_t i = segment_first; i < Num_segments; i++)
 			segment2_write(&Segment2s[i], SaveFile);
 
 	return 0;

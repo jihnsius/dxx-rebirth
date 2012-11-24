@@ -25,6 +25,7 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #include "pstypes.h"
 #include "vecmat.h"
+#include "segment.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -46,10 +47,10 @@ void digi_close();
 void digi_play_sample( int sndnum, fix max_volume );
 void digi_play_sample_once( int sndnum, fix max_volume );
 int digi_link_sound_to_object( int soundnum, short objnum, int forever, fix max_volume );
-int digi_link_sound_to_pos( int soundnum, short segnum, short sidenum, vms_vector * pos, int forever, fix max_volume );
+int digi_link_sound_to_pos( int soundnum, segnum_t segnum, short sidenum, vms_vector * pos, int forever, fix max_volume );
 // Same as above, but you pass the max distance sound can be heard.  The old way uses f1_0*256 for max_distance.
 int digi_link_sound_to_object2( int soundnum, short objnum, int forever, fix max_volume, fix  max_distance );
-int digi_link_sound_to_pos2( int soundnum, short segnum, short sidenum, vms_vector * pos, int forever, fix max_volume, fix max_distance );
+int digi_link_sound_to_pos2( int soundnum, segnum_t segnum, short sidenum, vms_vector * pos, int forever, fix max_volume, fix max_distance );
 
 int digi_link_sound_to_object3( int org_soundnum, short objnum, int forever, fix max_volume, fix  max_distance, int loop_start, int loop_end );
 
@@ -57,7 +58,7 @@ void digi_play_sample_3d( int soundno, int angle, int volume, int no_dups ); // 
 
 void digi_init_sounds();
 void digi_sync_sounds();
-void digi_kill_sound_linked_to_segment( int segnum, int sidenum, int soundnum );
+void digi_kill_sound_linked_to_segment( segnum_t segnum, int sidenum, int soundnum );
 void digi_kill_sound_linked_to_object( int objnum );
 
 void digi_set_digi_volume( int dvolume );

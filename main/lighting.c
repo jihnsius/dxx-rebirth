@@ -55,7 +55,7 @@ g3s_lrgb Dynamic_light[MAX_VERTICES];
 #define	HEADLIGHT_SCALE		(F1_0*10)
 
 // ----------------------------------------------------------------------------------------------
-static void apply_light(g3s_lrgb obj_light_emission, int obj_seg, vms_vector *obj_pos, int n_render_vertices, int *render_vertices, int *vert_segnum_list, int objnum)
+static void apply_light(g3s_lrgb obj_light_emission, segnum_t obj_seg, vms_vector *obj_pos, int n_render_vertices, vertnum_t *render_vertices, segnum_t *vert_segnum_list, int objnum)
 {
 	int	vv;
 
@@ -71,7 +71,7 @@ static void apply_light(g3s_lrgb obj_light_emission, int obj_seg, vms_vector *ob
 		// for pretty dim sources, only process vertices in object's own segment.
 		//	12/04/95, MK, markers only cast light in own segment.
 		if ((abs(obji_64) <= F1_0*8) || is_marker) {
-			int *vp = Segments[obj_seg].verts;
+			const vertnum_t *vp = Segments[obj_seg].verts;
 
 			for (vv=0; vv<MAX_VERTICES_PER_SEGMENT; vv++) {
 				int			vertnum;
@@ -124,7 +124,8 @@ static void apply_light(g3s_lrgb obj_light_emission, int obj_seg, vms_vector *ob
 					}
 			// -- for (vv=light_frame_count&1; vv<n_render_vertices; vv+=2) {
 			for (vv=0; vv<n_render_vertices; vv++) {
-				int			vertnum, vsegnum;
+				int			vertnum;
+				segnum_t vsegnum;
 				vms_vector	*vertpos;
 				fix			dist;
 				int			apply_light = 0;
@@ -202,7 +203,7 @@ static void apply_light(g3s_lrgb obj_light_emission, int obj_seg, vms_vector *ob
 #define FLASH_SCALE             (3*F1_0/FLASH_LEN_FIXED_SECONDS)
 
 // ----------------------------------------------------------------------------------------------
-static void cast_muzzle_flash_light(int n_render_vertices, int *render_vertices, int *vert_segnum_list)
+static void cast_muzzle_flash_light(int n_render_vertices, vertnum_t *render_vertices, segnum_t *vert_segnum_list)
 {
 	fix64 current_time;
 	int i;
@@ -458,10 +459,11 @@ void set_dynamic_light(void)
 	int	vv;
 	int	objnum;
 	int	n_render_vertices;
-	int	render_vertices[MAX_VERTICES];
-	int	vert_segnum_list[MAX_VERTICES];
+	vertnum_t	render_vertices[MAX_VERTICES];
+	segnum_t	vert_segnum_list[MAX_VERTICES];
 	sbyte   render_vertex_flags[MAX_VERTICES];
-	int	render_seg,segnum, v;
+	int	render_seg, v;
+	segnum_t segnum;
 
 	Num_headlights = 0;
 
@@ -479,9 +481,9 @@ void set_dynamic_light(void)
 	for (render_seg=0; render_seg<N_render_segs; render_seg++) {
 		segnum = Render_list[render_seg];
 		if (segnum != segment_none) {
-			int	*vp = Segments[segnum].verts;
+			vertnum_t	*vp = Segments[segnum].verts;
 			for (v=0; v<MAX_VERTICES_PER_SEGMENT; v++) {
-				int	vnum = vp[v];
+				vertnum_t	vnum = vp[v];
 				if (vnum<0 || vnum>Highest_vertex_index) {
 					Int3();		//invalid vertex number
 					continue;	//ignore it, and go on to next one
@@ -497,7 +499,7 @@ void set_dynamic_light(void)
 	}
 
 	for (vv=0; vv<n_render_vertices; vv++) {
-		int	vertnum;
+		vertnum_t	vertnum;
 
 		vertnum = render_vertices[vv];
 		Assert(vertnum >= 0 && vertnum <= Highest_vertex_index);
@@ -574,11 +576,11 @@ static fix compute_headlight_light_on_object(dxxobject *objp)
 }
 
 //compute the average dynamic light in a segment.  Takes the segment number
-g3s_lrgb compute_seg_dynamic_light(int segnum)
+g3s_lrgb compute_seg_dynamic_light(segnum_t segnum)
 {
 	g3s_lrgb sum, seg_lrgb;
 	segment *seg;
-	int *verts;
+	const vertnum_t *verts;
 
 	seg = &Segments[segnum];
 

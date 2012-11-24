@@ -340,7 +340,7 @@ void paging_touch_all()
 	
 	stop_time();
 
-	for (s=0; s<=Highest_segment_index; s++)	{
+	for (segnum_t s=segment_first; s<=Highest_segment_index; s++)	{
 		paging_touch_segment( &Segments[s] );
 	}	
 	paging_touch_walls();

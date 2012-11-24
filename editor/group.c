@@ -353,7 +353,7 @@ static void med_create_group_rotation_matrix(vms_matrix *result_mat, int delta_f
 
 // -----------------------------------------------------------------------------------------
 // Rotate all vertices and objects in group.
-static void med_rotate_group(vms_matrix *rotmat, short *group_seglist, int group_size, segment *first_seg, int first_side)
+static void med_rotate_group(vms_matrix *rotmat, segnum_t *group_seglist, int group_size, segment *first_seg, int first_side)
 {
 	int			v,s, objnum;
 	sbyte			vertex_list[MAX_VERTICES];
@@ -399,10 +399,10 @@ static void med_rotate_group(vms_matrix *rotmat, short *group_seglist, int group
 
 
 // ------------------------------------------------------------------------------------------------
-static void cgl_aux(segment *segp, short *seglistp, int *num_segs, const short *ignore_list, int num_ignore_segs)
+static void cgl_aux(segment *segp, segnum_t *seglistp, unsigned *num_segs, const segnum_t *ignore_list, int num_ignore_segs)
 {
 	int	i, side;
-	unsigned	curseg = segp-Segments;
+	segnum_t	curseg = segp-Segments;
 
 	if (curseg >= sizeof(Segments) / sizeof(Segments[0]))
 		Int3();
@@ -423,7 +423,7 @@ static void cgl_aux(segment *segp, short *seglistp, int *num_segs, const short *
 
 // ------------------------------------------------------------------------------------------------
 //	Sets Been_visited[n] if n is reachable from segp
-static void create_group_list(segment *segp, short *seglistp, int *num_segs, const short *ignore_list, int num_ignore_segs)
+static void create_group_list(segment *segp, segnum_t *seglistp, unsigned *num_segs, const segnum_t *ignore_list, int num_ignore_segs)
 {
 	unsigned	i;
 
@@ -438,10 +438,10 @@ static void create_group_list(segment *segp, short *seglistp, int *num_segs, con
 #define MXV MAX_VERTICES
 
 // ------------------------------------------------------------------------------------------------
-static void duplicate_group(sbyte *vertex_ids, short *segment_ids, int num_segments)
+static void duplicate_group(sbyte *vertex_ids, segnum_t *segment_ids, int num_segments)
 {
-	int	v,s,ss,new_vertex_id,new_segment_id,sidenum;
-	short	new_segment_ids[MAX_SEGMENTS];
+	int	v,s,ss,new_vertex_id,sidenum;
+	segnum_t	new_segment_id,new_segment_ids[MAX_SEGMENTS];
 	int	new_vertex_ids[MAX_VERTICES];		// If new_vertex_ids[v] != -1, then vertex v has been remapped to new_vertex_ids[v]
 
 	//	duplicate vertices
@@ -480,7 +480,7 @@ static void duplicate_group(sbyte *vertex_ids, short *segment_ids, int num_segme
 	for (s=0; s<num_segments; s++) {
 		segment *sp = &Segments[new_segment_ids[s]];
 		for (sidenum=0; sidenum<MAX_SIDES_PER_SEGMENT; sidenum++) {
-			int seg = sp->children[sidenum];
+			segnum_t seg = sp->children[sidenum];
 			if (IS_CHILD(seg)) {
 				for (ss=0; ss<num_segments; ss++) {
 					if (seg == segment_ids[ss])
@@ -621,7 +621,7 @@ static int med_copy_group(int delta_flag, segment *base_seg, int base_side, segm
 
 	//	Now, translate all object positions.
 	for (s=0; s<GroupList[new_current_group].num_segments; s++) {
-		int	segnum = GroupList[new_current_group].segments[s];
+		segnum_t	segnum = GroupList[new_current_group].segments[s];
 
 		objnum = Segments[segnum].objects;
 
@@ -643,7 +643,7 @@ static int med_copy_group(int delta_flag, segment *base_seg, int base_side, segm
 
 	//	Now, xlate all object positions.
 	for (s=0; s<GroupList[new_current_group].num_segments; s++) {
-		int	segnum = GroupList[new_current_group].segments[s];
+		segnum_t	segnum = GroupList[new_current_group].segments[s];
 		int	objnum = Segments[segnum].objects;
 
 		while (objnum != -1) {
@@ -779,7 +779,7 @@ static int med_move_group(int delta_flag, segment *base_seg, int base_side, segm
 
 	//	Now, move all object positions.
 	for (s=0; s<GroupList[current_group].num_segments; s++) {
-		int	segnum = GroupList[current_group].segments[s];
+		segnum_t	segnum = GroupList[current_group].segments[s];
 		int	objnum = Segments[segnum].objects;
 
 		while (objnum != -1) {
@@ -800,7 +800,7 @@ static int med_move_group(int delta_flag, segment *base_seg, int base_side, segm
 
 	//	Now, rotate all object positions.
 	for (s=0; s<GroupList[current_group].num_segments; s++) {
-		int	segnum = GroupList[current_group].segments[s];
+		segnum_t	segnum = GroupList[current_group].segments[s];
 		int	objnum = Segments[segnum].objects;
 
 		while (objnum != -1) {
@@ -820,9 +820,10 @@ static int med_move_group(int delta_flag, segment *base_seg, int base_side, segm
 
 
 //	-----------------------------------------------------------------------------
-static int place_new_segment_in_world(void)
+static segnum_t place_new_segment_in_world(void)
 {
-	int	v,segnum;
+	int	v;
+	segnum_t segnum;
 
 	segnum = get_free_segment_number();
 
@@ -839,7 +840,7 @@ static int place_new_segment_in_world(void)
 //	Attach segment in the new-fangled way, which is by using the CopyGroup code.
 int AttachSegmentNewAng(vms_angvec *pbh)
 {
-	int			newseg;
+	segnum_t			newseg;
 	vms_matrix	orient_matrix;
 
 	GroupList[current_group].num_segments = 1;
@@ -882,7 +883,7 @@ int AttachSegmentNew(void)
 }
 
 //	-----------------------------------------------------------------------------
-static void save_selected_segs(int *num, short *segs)
+static void save_selected_segs(int *num, segnum_t *segs)
 {
 	int	i;
 
@@ -893,7 +894,7 @@ static void save_selected_segs(int *num, short *segs)
 }
 
 //	-----------------------------------------------------------------------------
-static void restore_selected_segs(int num, short *segs)
+static void restore_selected_segs(int num, segnum_t *segs)
 {
 	int	i;
 
@@ -916,7 +917,7 @@ void validate_selected_segments(void)
 
 
 //	-----------------------------------------------------------------------------
-void delete_segment_from_group(int segment_num, int group_num)
+void delete_segment_from_group(segnum_t segment_num, int group_num)
 {
 	int g, del_seg_index;
 
@@ -940,7 +941,7 @@ void delete_segment_from_group(int segment_num, int group_num)
 
 
 //	-----------------------------------------------------------------------------
-void add_segment_to_group(int segment_num, int group_num)
+void add_segment_to_group(segnum_t segment_num, int group_num)
 {
 	GroupList[group_num].num_segments++;
 	GroupList[group_num].segments[GroupList[group_num].num_segments-1] = segment_num;
@@ -951,11 +952,12 @@ void add_segment_to_group(int segment_num, int group_num)
 //	-----------------------------------------------------------------------------
 int rotate_segment_new(vms_angvec *pbh)
 {
-	int			newseg,baseseg,newseg_side,baseseg_side;
+	segnum_t			newseg,baseseg;
+	int newseg_side,baseseg_side;
 	vms_matrix	orient_matrix,tm1,tm2;
 	int			n_selected_segs_save;
-	short			selected_segs_save[MAX_SEGMENTS];
-	int			child_save;
+	segnum_t			selected_segs_save[MAX_SEGMENTS];
+	segnum_t			child_save;
 	int			current_group_save;
 
         if (!IS_CHILD(Cursegp->children[(int) Side_opposite[Curside]])) {
@@ -1046,13 +1048,13 @@ static char	 current_tmap_list[MAX_TEXTURES][13];
 //	Returns:
 //	 0 = successfully saved.
 //	 1 = unable to save.
-static int med_save_group(const char *filename, int *vertex_ids, short *segment_ids, int num_vertices, int num_segments)
+static int med_save_group(const char *filename, const vertnum_t *vertex_ids, const segnum_t *segment_ids, int num_vertices, unsigned num_segments)
 {
 	PHYSFS_file * SaveFile;
 	int header_offset, editor_offset, vertex_offset, segment_offset, texture_offset;
 	char ErrorMessage[100];
 	int i, j, k;
-	int segnum;
+	segnum_t segnum;
 	segment tseg;
    vms_vector tvert;
 	int found;
@@ -1187,9 +1189,10 @@ static char old_tmap_list[MAX_TEXTURES][13];
 //	Returns:
 //	 0 = successfully loaded.
 //	 1 = unable to load.
-static int med_load_group(const char *filename, int *vertex_ids, short *segment_ids, int *num_vertices, int *num_segments)
+static int med_load_group(const char *filename, vertnum_t *vertex_ids, segnum_t *segment_ids, unsigned *num_vertices, unsigned *num_segments)
 {
-	int segnum, vertnum;
+	segnum_t segnum;
+	int vertnum;
 	char ErrorMessage[200];
 	short tmap_xlate;
         int     translate=0;
@@ -1680,7 +1683,7 @@ int MoveGroup(void)
 //	-----------------------------------------------------------------------------
 int CopyGroup(void)
 {
-	int	attach_seg;
+	segnum_t	attach_seg;
 
 	if (!Groupsegp[current_group]) {
 		editor_status("Error -- Cannot copy group, no group segment.");
@@ -1749,7 +1752,7 @@ int RotateGroup(void)
 int SubtractFromGroup(void)
 {
 	int	x, s, original_group;
-	short	*gp;
+	segnum_t	*gp;
 	int	cur_num_segs;
 
 	if (!Markedsegp) {
@@ -1782,8 +1785,8 @@ int SubtractFromGroup(void)
 	gp = GroupList[current_group].segments;
 	cur_num_segs = GroupList[current_group].num_segments;
 	for (s=0; s<cur_num_segs; s++) {
-		short	*gp1 = GroupList[original_group].segments;
-		short	s0 = gp[s];
+		segnum_t	*gp1 = GroupList[original_group].segments;
+		segnum_t	s0 = gp[s];
 		int	s1;
 
 		for (s1=0; s1<GroupList[original_group].num_segments; s1++)
@@ -1804,7 +1807,7 @@ int SubtractFromGroup(void)
 		Segments[GroupList[current_group].segments[s]].group = current_group;
 	}
 
-	for (s=segment_first; s<=Highest_segment_index; s++) {
+	for (segnum_t s=segment_first; s<=Highest_segment_index; s++) {
 		if (Segments[s].group == current_group) {
 			for (unsigned t=0;; t++)
 			{

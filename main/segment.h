@@ -65,15 +65,18 @@ extern "C" {
 # define MAX_VERTICES           (MAX_SEGMENT_VERTICES)
 #endif
 
+typedef int vertnum_t;
+typedef unsigned short segnum_t;
+
 #define DECLARE_SEGMENT_INDEX(N,V)	enum { segment_##N = V }
 
-DECLARE_SEGMENT_INDEX(exit, -2);
-DECLARE_SEGMENT_INDEX(none, -1);
 DECLARE_SEGMENT_INDEX(first, 0);
+DECLARE_SEGMENT_INDEX(exit, 0xfffe);
+DECLARE_SEGMENT_INDEX(none, 0xffff);
 
 // Returns true if segnum references a child, else returns false.
 // Note that -1 means no connection, -2 means a connection to the outside world.
-static inline int IS_CHILD(int s) {
+static inline int IS_CHILD(segnum_t s) {
 	return s != segment_exit && s != segment_none;
 }
 
@@ -107,11 +110,11 @@ typedef struct side {
 
 typedef struct segment {
 #ifdef EDITOR
-	short   segnum;     // segment number, not sure what it means
+	segnum_t   segnum;     // segment number, not sure what it means
 #endif
 	side    sides[MAX_SIDES_PER_SEGMENT];       // 6 sides
-	short   children[MAX_SIDES_PER_SEGMENT];    // indices of 6 children segments, front, left, top, right, bottom, back
-	int     verts[MAX_VERTICES_PER_SEGMENT];    // vertex ids of 4 front and 4 back vertices
+	segnum_t   children[MAX_SIDES_PER_SEGMENT];    // indices of 6 children segments, front, left, top, right, bottom, back
+	vertnum_t     verts[MAX_VERTICES_PER_SEGMENT];    // vertex ids of 4 front and 4 back vertices
 #ifdef EDITOR
 	short   group;      // group number to which the segment belongs.
 	short   objects;    // pointer to objects in this segment
@@ -174,17 +177,17 @@ void get_side_normals(segment *sp, int sidenum, vms_vector * vm1, vms_vector *vm
 //--repair-- } lsegment;
 
 typedef struct {
-	int     num_segments;
-	int     num_vertices;
-	short   segments[MAX_SEGMENTS];
-	int     vertices[MAX_VERTICES];
+	unsigned     num_segments;
+	unsigned     num_vertices;
+	segnum_t   segments[MAX_SEGMENTS];
+	vertnum_t    vertices[MAX_VERTICES];
 } group;
 
 // Globals from mglobal.c
 extern vms_vector   Vertices[MAX_VERTICES];
 extern segment      Segments[MAX_SEGMENTS];
 extern segment2     Segment2s[MAX_SEGMENTS];
-extern int          Num_segments;
+extern unsigned          Num_segments;
 extern int          Num_vertices;
 
 // Get pointer to the segment2 for the given segment pointer
@@ -199,7 +202,7 @@ extern const char Side_opposite[MAX_SIDES_PER_SEGMENT];                         
 // New stuff, 10/14/95: For shooting out lights and monitors.
 // Light cast upon vert_light vertices in segnum:sidenum by some light
 typedef struct {
-	short   segnum;
+	segnum_t   segnum;
 	sbyte   sidenum;
 	sbyte   dummy;
 	ubyte   vert_light[4];
@@ -207,7 +210,7 @@ typedef struct {
 
 // Light at segnum:sidenum casts light on count sides beginning at index (in array Delta_lights)
 typedef struct {
-	short   segnum;
+	segnum_t   segnum;
 	sbyte   sidenum;
 	sbyte   count;
 	short   index;
@@ -222,8 +225,8 @@ extern dl_index     Dl_indices[MAX_DL_INDICES];
 extern delta_light  Delta_lights[MAX_DELTA_LIGHTS];
 extern int          Num_static_lights;
 
-int subtract_light(int segnum, int sidenum);
-int add_light(int segnum, int sidenum);
+int subtract_light(segnum_t segnum, int sidenum);
+int add_light(segnum_t segnum, int sidenum);
 void restore_all_lights_in_mine(void);
 void clear_light_subtracted(void);
 
@@ -238,7 +241,7 @@ extern ubyte Light_subtracted[MAX_SEGMENTS];
 
 // Return a pointer to the list of vertex indices for the current
 // segment in vp and the number of vertices in *nv.
-void med_get_vertex_list(segment *s,int *nv,int **vp);
+void med_get_vertex_list(segment *s,int *nv,vertnum_t **vp);
 
 // Return a pointer to the list of vertex indices for face facenum in
 // vp and the number of vertices in *nv.
@@ -250,10 +253,10 @@ void med_get_num_faces(segment *s,int *nf);
 void med_validate_segment_side(segment *sp,int side);
 
 // Delete segment from group
-void delete_segment_from_group(int segment_num, int group_num);
+void delete_segment_from_group(segnum_t segment_num, int group_num);
 
 // Add segment to group
-void add_segment_to_group(int segment_num, int group_num);
+void add_segment_to_group(segnum_t segment_num, int group_num);
 
 // Verify that all vertices are legal.
 void med_check_all_vertices();

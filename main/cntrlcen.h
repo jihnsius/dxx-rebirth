@@ -38,7 +38,7 @@ extern "C" {
 
 typedef struct control_center_triggers {
 	short   num_links;
-	short   seg[MAX_CONTROLCEN_LINKS];
+	segnum_t   seg[MAX_CONTROLCEN_LINKS];
 	short   side[MAX_CONTROLCEN_LINKS];
 } __pack__ control_center_triggers;
 

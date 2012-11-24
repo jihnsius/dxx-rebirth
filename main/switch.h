@@ -105,7 +105,7 @@ typedef struct trigger {
 	sbyte   pad;        //keep alignment
 	fix     value;
 	fix     time;
-	short   seg[MAX_WALLS_PER_LINK];
+	segnum_t   seg[MAX_WALLS_PER_LINK];
 	short   side[MAX_WALLS_PER_LINK];
 } __pack__ trigger;
 

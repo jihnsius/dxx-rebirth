@@ -70,7 +70,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #endif
 
 void teleport_boss(dxxobject *objp);
-int boss_fits_in_seg(dxxobject *boss_objp, int segnum);
+int boss_fits_in_seg(dxxobject *boss_objp, segnum_t segnum);
 
 
 enum {
@@ -115,7 +115,7 @@ void ai_init_boss_for_ship(void)
 
 // ---------------------------------------------------------------------------------------------------------------------
 //	initial_mode == -1 means leave mode unchanged.
-void init_ai_object(int objnum, int behavior, int hide_segment)
+void init_ai_object(int objnum, int behavior, segnum_t hide_segment)
 {
 	dxxobject	*objp = &Objects[objnum];
 	ai_static	*aip = &objp->ctype.ai_info;
@@ -238,11 +238,11 @@ static void init_boss_segments(short segptr[], int *num_segs, int size_check, in
 			boss_objnum = i; // if != 1 then there is more than one boss here.
 
 	if (boss_objnum != -1) {
-		int			original_boss_seg;
+		segnum_t			original_boss_seg;
 		vms_vector	original_boss_pos;
 		dxxobject		*boss_objp = &Objects[boss_objnum];
 		int			head, tail;
-		int			seg_queue[QUEUE_SIZE];
+		segnum_t			seg_queue[QUEUE_SIZE];
 		//ALREADY IN RENDER.H sbyte   visited[MAX_SEGMENTS];
 		fix			boss_size_save;
 
@@ -460,7 +460,7 @@ int player_is_visible_from_object(dxxobject *objp, vms_vector *pos, fix field_of
 
 	fq.p0						= pos;
 	if ((pos->x != objp->pos.x) || (pos->y != objp->pos.y) || (pos->z != objp->pos.z)) {
-		int	segnum = find_point_seg(pos, objp->segnum);
+		segnum_t	segnum = find_point_seg(pos, objp->segnum);
 		if (segnum == segment_none) {
 			fq.startseg = objp->segnum;
 			*pos = objp->pos;
@@ -911,7 +911,7 @@ static void ai_fire_laser_at_player(dxxobject *obj, vms_vector *fire_point, int 
 		//	Well, the gun point is in a different segment than the robot's center.
 		//	This is almost always ok, but it is not ok if something solid is in between.
 		int	conn_side;
-		int	gun_segnum = find_point_seg(fire_point, obj->segnum);
+		segnum_t	gun_segnum = find_point_seg(fire_point, obj->segnum);
 
 		//	See if these segments are connected, which should almost always be the case.
 		conn_side = find_connect_side(&Segments[gun_segnum], &Segments[obj->segnum]);
@@ -1474,7 +1474,7 @@ void move_towards_segment_center(dxxobject *objp)
    Bot's should not jump around and maybe even intersect with each other!
    In case it breaks something what I do not see, yet, old code is still there. */
 #if 1
-	int		segnum = objp->segnum;
+	segnum_t		segnum = objp->segnum;
 	vms_vector	vec_to_center, segment_center;
 
 	compute_segment_center(&segment_center, &Segments[segnum]);
@@ -1631,11 +1631,11 @@ int ai_door_is_openable(dxxobject *objp, segment *segp, int sidenum)
 
 //	-----------------------------------------------------------------------------------------------------------
 //	Return side of openable door in segment, if any.  If none, return -1.
-int openable_doors_in_segment(int segnum)
+int openable_doors_in_segment(segnum_t segnum)
 {
 	int	i;
 
-	if ((segnum < 0) || (segnum > Highest_segment_index))
+	if (segnum > Highest_segment_index)
 		return -1;
 
 	for (i=0; i<MAX_SIDES_PER_SEGMENT; i++) {
@@ -1674,7 +1674,7 @@ static int check_object_object_intersection(vms_vector *pos, fix size, segment *
 // --------------------------------------------------------------------------------------------------------------------
 //	Return objnum if object created, else return -1.
 //	If pos == NULL, pick random spot in segment.
-static int create_gated_robot( int segnum, int object_id, vms_vector *pos)
+static int create_gated_robot( segnum_t segnum, int object_id, vms_vector *pos)
 {
 	int		objnum;
 	dxxobject	*objp;
@@ -1775,7 +1775,8 @@ int	Max_spew_bots[NUM_D2_BOSSES] = {2, 1, 2, 3, 3, 3,  3, 3};
 //	objp points at a boss.  He was presumably just hit and he's supposed to create a bot at the hit location *pos.
 int boss_spew_robot(dxxobject *objp, vms_vector *pos)
 {
-	int		objnum, segnum;
+	int		objnum;
+	segnum_t segnum;
 	int		boss_index;
 
 	boss_index = Robot_info[objp->id].boss_flag - BOSS_D2;
@@ -1831,18 +1832,18 @@ void init_ai_for_ship(void)
 //	The process of him bringing in a robot takes one second.
 //	Then a robot appears somewhere near the player.
 //	Return objnum if robot successfully created, else return -1
-int gate_in_robot(int type, int segnum)
+int gate_in_robot(int type, segnum_t segnum)
 {
-	if (segnum < 0)
+	if (segnum > Highest_segment_index)
 		segnum = Boss_gate_segs[(d_rand() * Num_boss_gate_segs) >> 15];
 
-	Assert((segnum >= 0) && (segnum <= Highest_segment_index));
+	Assert(segnum <= Highest_segment_index);
 
 	return create_gated_robot(segnum, type, NULL);
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-int boss_fits_in_seg(dxxobject *boss_objp, int segnum)
+int boss_fits_in_seg(dxxobject *boss_objp, segnum_t segnum)
 {
 	vms_vector	segcenter;
 	int			boss_objnum = boss_objp-Objects;
