@@ -597,7 +597,7 @@ static void ogl_init_font(grs_font * font)
 	th = tw = 0xffff;
 
 	ogl_font_choose_size(font,gap,&tw,&th);
-	data=d_malloc(tw*th);
+	MALLOC(data, ubyte, tw*th);
 	memset(data, TRANSPARENCY_COLOR, tw * th); // map the whole data with transparency so we won't have borders if using gap
 	gr_init_bitmap(&font->ft_parent_bitmap,BM_LINEAR,0,0,tw,th,tw,data);
 	gr_set_transparent(&font->ft_parent_bitmap, 1);
