@@ -89,11 +89,11 @@ char	Special_names[MAX_CENTER_TYPES][11] = {
 // Resets all fuel center info
 void fuelcen_reset()
 {
-	int i;
+	unsigned i;
 
 	Num_fuelcenters = 0;
 
-	for(i=0; i<MAX_SEGMENTS; i++ )
+	for(i=0; i<sizeof(Segment2s)/sizeof(Segment2s[0]); i++ )
 		Segment2s[i].special = SEGMENT_IS_NOTHING;
 
 	Num_robot_centers = 0;

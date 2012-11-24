@@ -1560,10 +1560,10 @@ void init_all_vertices(void)
 	int		v;
 	int	s;
 
-	for (v=0; v<MAX_SEGMENT_VERTICES; v++)
+	for (v=0; v<sizeof(Vertex_active)/sizeof(Vertex_active[0]); v++)
 		Vertex_active[v] = 0;
 
-	for (s=0; s<MAX_SEGMENTS; s++)
+	for (s=0; s<sizeof(Segments)/sizeof(Segments[0]); s++)
 		Segments[s].segnum = -1;
 
 }
