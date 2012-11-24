@@ -1118,9 +1118,6 @@ void find_hitpoint_uv(fix *u,fix *v,fix *l,vms_vector *pnt,segment *seg,int side
 		return;
 	}
 
-	if (segnum==-1)
-		Error("segnum == -1 in find_hitpoint_uv()");
-
 	create_abs_vertex_lists(&num_faces, vertex_list, segnum, sidenum, __FILE__, __LINE__);
 	create_all_vertnum_lists(&num_faces,vertnum_list,segnum,sidenum);
 
