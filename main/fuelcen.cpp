@@ -234,8 +234,7 @@ void trigger_matcen(segnum_t segnum)
 	objnum_t			objnum;
 
 	Assert(seg2p->special == SEGMENT_IS_ROBOTMAKER);
-	Assert(seg2p->matcen_num < Num_fuelcenters);
-	Assert((seg2p->matcen_num >= 0) && (seg2p->matcen_num <= Highest_segment_index));
+	Assert(seg2p->matcen_num < Num_robot_centers);
 
 	robotcen = &Station[RobotCenters[seg2p->matcen_num].fuelcen_num];
 
