@@ -23,8 +23,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define _RENDER_H
 
 #include "3d.h"
+#include "segment.h"
 
-#include "object.h"
+struct dxxobject;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -105,7 +107,7 @@ void project_list(int nv, vertnum_t *pointnumlist);
 
 extern void render_mine(segnum_t start_seg_num, fix eye_offset, int window_num);
 
-extern void update_rendered_data(int window_num, dxxobject *viewer, int rear_view_flag, int user);
+extern void update_rendered_data(int window_num, struct dxxobject *viewer, int rear_view_flag, int user);
 
 extern fix flash_scale;
 extern vms_vector Viewer_eye;

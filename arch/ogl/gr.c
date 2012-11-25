@@ -25,7 +25,6 @@
 #include <errno.h>
 #include <SDL/SDL.h>
 #include "hudmsg.h"
-#include "game.h"
 #include "text.h"
 #include "gr.h"
 #include "gamefont.h"
@@ -40,12 +39,10 @@
 #include "key.h"
 #include "physfsx.h"
 #include "internal.h"
-#include "render.h"
 #include "console.h"
 #include "config.h"
 #include "playsave.h"
 #include "vers_id.h"
-#include "game.h"
 
 #if defined(__APPLE__) && defined(__MACH__)
 #include <OpenGL/glu.h>
