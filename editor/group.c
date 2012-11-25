@@ -1805,13 +1805,16 @@ int SubtractFromGroup(void)
 	}
 
 	for (s=segment_first; s<=Highest_segment_index; s++) {
-		int	t;
 		if (Segments[s].group == current_group) {
-			for (t=0; t<cur_num_segs; t++)
+			for (unsigned t=0;; t++)
+			{
+				if (t==cur_num_segs)
+				{
+					Segments[s].group = -1;
+					break;
+				}
 				if (GroupList[current_group].segments[t] == s)
 					break;
-			if (s == cur_num_segs) {
-				Segments[s].group = -1;
 			}
 		}
 	}
