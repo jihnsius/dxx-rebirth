@@ -1591,7 +1591,6 @@ static void ShowLevelIntro(int level_num)
 	//if shareware, show a briefing?
 
 	if (!(Game_mode & GM_MULTI)) {
-		int i;
 
 		ubyte save_pal[sizeof(gr_palette)];
 
@@ -1611,6 +1610,7 @@ static void ShowLevelIntro(int level_num)
 			}
 			else // full version
 			{
+				unsigned i;
 				for (i=0;i<NUM_INTRO_MOVIES;i++)
 				{
 					if (intro_movie[i].level_num == level_num)
