@@ -649,8 +649,10 @@ int check_segment_connections(void)
 			create_abs_vertex_lists(&num_faces, vertex_list, segnum, sidenum, __FILE__, __LINE__);
 
 			csegnum = seg->children[sidenum];
+			if (csegnum == segment_none || csegnum == segment_exit)
+				continue;
 
-			if (csegnum >= 0) {
+			if (csegnum <= Highest_segment_index) {
 				cseg = &Segments[csegnum];
 				csidenum = find_connect_side(seg,cseg);
 
@@ -723,6 +725,10 @@ int check_segment_connections(void)
 							}
 						}
 					}
+			} else {
+				con_printf(CON_URGENT, "%s:%u: segnum=%i sidenum=%i: csegnum=%u\n", __func__, __LINE__, segnum, sidenum, csegnum);
+				errors = 1;
+				continue;
 			}
 		}
 	}
