@@ -471,9 +471,6 @@ static ubyte get_side_dists(const vms_vector *checkp,int segnum,fix *side_dists)
 	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
 	Assert((segnum <= Highest_segment_index) && (segnum >= 0));
 
-	if (segnum==-1)
-		Error("segnum == -1 in get_seg_dists()");
-
 	seg = &Segments[segnum];
 
 	//check point against each side of segment. return bitmask
