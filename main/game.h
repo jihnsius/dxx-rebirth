@@ -35,8 +35,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 struct dxxobject;
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 extern struct window *Game_wind;
 
@@ -294,8 +292,6 @@ extern ubyte Last_afterburner_state;
 void dump_used_textures_all();
 #endif
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif /* _GAME_H */

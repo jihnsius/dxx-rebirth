@@ -23,8 +23,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define _MULTIBOT_H
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 #define MAX_ROBOTS_CONTROLLED 5
 
@@ -68,8 +66,6 @@ void multi_check_robot_timeout(void);
 
 void multi_robot_request_change(dxxobject *robot, int playernum);
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif /* _MULTIBOT_H */

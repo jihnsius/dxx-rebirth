@@ -27,8 +27,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define MIN_LIGHT_DIST  (F1_0*4)
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 extern fix Beam_brightness;
 extern g3s_lrgb Dynamic_light[MAX_VERTICES];
@@ -55,8 +53,6 @@ void toggle_headlight_active(void);
 void start_lighting_frame(dxxobject *viewer);
 extern dxxobject *old_viewer;
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif /* _LIGHTING_H */

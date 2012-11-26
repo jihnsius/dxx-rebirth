@@ -806,8 +806,6 @@ __extern_always_inline char * dxx_gettext(unsigned idx, const char *fmt)
 #endif
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 void decode_text_line(char *text_line); // decryption for bitmaps.tbl
 void decode_text(char *text, int len);  // decryption for briefings, etc.
@@ -819,8 +817,6 @@ static inline void load_text(void) {}
 static inline void free_text(void) {}
 #endif
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif /* _TEXT_H */

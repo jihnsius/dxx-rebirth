@@ -17,8 +17,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define _RBAUDIO_H
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 #define RBA_MEDIA_CHANGED	-1
 
@@ -63,8 +61,6 @@ unsigned long RBAGetDiscID();
 // List the tracks on the CD
 void RBAList(void);
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif

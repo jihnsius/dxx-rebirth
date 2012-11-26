@@ -31,8 +31,6 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define PCX_ERROR_MEMORY        7
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 // Reads filename into bitmap bmp, and fills in palette.  If bmp->bm_data==NULL,
 // then bmp->bm_data is allocated and the w,h are filled.
@@ -48,8 +46,6 @@ extern int pcx_write_bitmap(const char * filename, grs_bitmap * bmp, ubyte * pal
 
 extern const char *pcx_errormsg(int error_number);
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif

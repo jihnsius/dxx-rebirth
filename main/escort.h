@@ -9,8 +9,6 @@
 #define GUIDEBOT_NAME_LEN 9
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 extern void change_guidebot_name(void);
 extern void do_escort_menu(void);
@@ -23,7 +21,5 @@ void recreate_thief(dxxobject *objp);
 void drop_stolen_items (dxxobject *);
 extern fix64 Buddy_sorry_time;
 
-#ifdef __cplusplus
-}
 #endif
 #endif // _ESCORT_H

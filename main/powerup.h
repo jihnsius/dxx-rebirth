@@ -86,8 +86,6 @@ enum powerup_type_t
 };
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 #define VULCAN_AMMO_MAX             (392*4)
 #define VULCAN_WEAPON_AMMO_AMOUNT   196
@@ -130,8 +128,6 @@ extern void powerup_basic(int redadd, int greenadd, int blueadd, int score, cons
  */
 extern int powerup_type_info_read_n(powerup_type_info *pti, int n, PHYSFS_file *fp);
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif /* _POWERUP_H */

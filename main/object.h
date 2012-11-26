@@ -336,8 +336,6 @@ extern objnum_t Player_fired_laser_this_frame;
  */
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 // do whatever setup needs to be done
 void init_objects();
@@ -494,8 +492,6 @@ void fuelcen_check_for_goal (segment *);
 
 extern int Drop_afterburner_blob_flag;
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif

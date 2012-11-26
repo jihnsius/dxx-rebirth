@@ -41,10 +41,6 @@
 #endif
 
 #ifdef __cplusplus
-#define __apply_c_linkage	extern "C"
-#else
-#define __apply_c_linkage
-#endif
 
 #if defined(__GNUC__) && defined(__OPTIMIZE__)
 #ifdef __INLINE__
@@ -55,10 +51,12 @@
 #define define_interposition_check(A,C,B)
 #endif
 #define CHK_REDIRECT(R,N,A,B)	\
-	__apply_c_linkage R (unchecked_##N) A;	\
+	R (unchecked_##N) A;	\
 	__extern_always_inline R (N) A;	\
 	__extern_always_inline R (N) A	\
 	{ B; }
 #else
-#define CHK_REDIRECT(R,N,A,B)	__apply_c_linkage R unchecked_##N A
+#define CHK_REDIRECT(R,N,A,B)	R unchecked_##N A
+#endif
+
 #endif

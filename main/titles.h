@@ -21,8 +21,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define _TITLES_H
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 extern void show_titles(void);
 extern void show_loading_screen(ubyte *title_pal);
@@ -33,8 +31,6 @@ extern void show_endgame_briefing(void);
 extern void show_order_form(void);
 extern int intro_played;
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif

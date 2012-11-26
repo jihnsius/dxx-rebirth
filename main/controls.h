@@ -23,8 +23,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define _CONTROLS_H
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 extern int Cyberman_installed;	//SWIFT device present
 
@@ -35,8 +33,6 @@ extern ubyte Controls_always_move;
 
 extern fix Afterburner_charge;
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif

@@ -24,8 +24,6 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "compiler.h"
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 int error_init(void (*func)(const char *), const char *fmt,...);    //init error system, set default message, returns 0=ok
 void set_exit_message(const char *fmt,...) __attribute_gcc_format((printf, 1, 2));	//specify message to print at exit
@@ -54,8 +52,6 @@ extern void Debugger(void);	// Avoids some name clashes
 #define Int3() ((void)0)
 #endif
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif /* _ERROR_H */

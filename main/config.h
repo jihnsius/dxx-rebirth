@@ -25,8 +25,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "mission.h"
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 typedef struct Cfg
 {
@@ -67,8 +65,6 @@ extern struct Cfg GameCfg;
 extern int ReadConfigFile(void);
 extern int WriteConfigFile(void);
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif

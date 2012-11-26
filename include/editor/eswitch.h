@@ -27,8 +27,6 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #ifdef EDITOR
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 extern int bind_wall_to_trigger();
 
@@ -41,8 +39,6 @@ extern void close_trigger_window();
 
 extern void do_trigger_window();
 
-#ifdef __cplusplus
-}
 #endif
 #endif
 

@@ -24,8 +24,6 @@
 #define CON_STATE_CLOSED -2
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 typedef struct console_buffer
 {
@@ -47,8 +45,6 @@ static inline int con_priority(int level)
 	})
 void con_showup(void);
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif /* _CONSOLE_H_ */

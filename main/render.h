@@ -28,8 +28,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 struct dxxobject;
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 enum {	MAX_RENDER_SEGS		=	500	};
 enum {	OBJS_PER_SEG		=	5	};
@@ -112,8 +110,6 @@ extern void update_rendered_data(int window_num, struct dxxobject *viewer, int r
 extern fix flash_scale;
 extern vms_vector Viewer_eye;
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif /* _RENDER_H */

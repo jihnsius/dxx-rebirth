@@ -30,8 +30,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define ET_MULTI_SECOND 2   //second part of multi-part explosion
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 // data for exploding walls (such as hostage door)
 typedef struct expl_wall {
@@ -84,8 +82,6 @@ extern void expl_wall_read_n_swap(expl_wall *ew, int n, int swap, PHYSFS_file *f
 segnum_t pick_connected_segment(dxxobject *objp, int max_depth);
 extern fix Flash_effect;
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif /* _FIREBALL_H */

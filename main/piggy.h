@@ -40,8 +40,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define MAX_ALIASES 20
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 typedef struct alias {
 	char alias_name[FILENAME_LEN];
@@ -149,8 +147,6 @@ extern int Num_bitmap_files;
 extern BitmapFile AllBitmaps[ MAX_BITMAP_FILES ];
 extern ubyte bogus_data[64*64];
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif //_PIGGY_H

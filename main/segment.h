@@ -28,8 +28,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "object.types.h"
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 // Version 1 - Initial version
 // Version 2 - Mike changed some shorts to bytes in segments, so incompatible!
@@ -137,7 +135,7 @@ typedef struct segment {
 #define S2F_AMBIENT_WATER   0x01
 #define S2F_AMBIENT_LAVA    0x02
 
-enum segment_type_t
+enum segment_type_t : ubyte
 {
 //values for special field
 	SEGMENT_IS_NOTHING = 0,
@@ -150,10 +148,8 @@ enum segment_type_t
 	MAX_CENTER_TYPES = 7,
 };
 
-typedef enum segment_type_t segment_type_t;
-
 typedef struct segment2 {
-	segment_type_t   special : 8;
+	segment_type_t   special;
 	sbyte   matcen_num;
 	sbyte   value;
 	ubyte   s2_flags;
@@ -281,8 +277,6 @@ void segment2_write(segment2 *s2, PHYSFS_file *fp);
 void delta_light_write(delta_light *dl, PHYSFS_file *fp);
 void dl_index_write(dl_index *di, PHYSFS_file *fp);
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif

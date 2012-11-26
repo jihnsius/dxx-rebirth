@@ -22,16 +22,12 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define _TERRAIN_H
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 void free_light_table();
 void free_height_array();
 void load_terrain(char *filename);
 void render_terrain(vms_vector *org, int org_i, int org_j);
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif /* _TERRAIN_H */

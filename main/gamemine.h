@@ -23,8 +23,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define _GAMEMINE_H
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 #define MINE_VERSION        20  // Current version expected
 #define COMPATIBLE_VERSION  16  // Oldest version that can safely be loaded.
@@ -138,8 +136,6 @@ extern int d1_tmap_num_unique(short d1_tmap_num); //is d1_tmap_num's texture onl
 extern int d1_pig_present;
 extern fix Level_shake_frequency, Level_shake_duration;
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif /* _GAMEMINE_H */

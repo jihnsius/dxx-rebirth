@@ -25,8 +25,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "object.h"
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 //from slew.c
 
@@ -46,8 +44,6 @@ int slew_frame(int dont_check_keys);        // Does slew frame
 
 #endif
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif /* _SLEW_H */

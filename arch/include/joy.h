@@ -12,8 +12,6 @@
 #include <SDL/SDL.h>
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 struct d_event;
 
@@ -34,8 +32,6 @@ void joy_button_handler(SDL_JoyButtonEvent *jbe);
 void joy_hat_handler(SDL_JoyHatEvent *jhe);
 int joy_axis_handler(SDL_JoyAxisEvent *jae);
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif // _JOY_H

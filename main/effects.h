@@ -25,8 +25,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "vclip.h"
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 #define MAX_EFFECTS 110
 
@@ -83,8 +81,6 @@ void restart_effect(int effect_num);
  */
 extern int eclip_read_n(eclip *ec, int n, PHYSFS_file *fp);
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif /* _EFFECTS_H */

@@ -25,8 +25,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "object.h"
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 #define MAX_WALLS               254 // Maximum number of walls
 #define MAX_WALL_ANIMS          60  // Maximum different types of doors
@@ -319,8 +317,6 @@ void init_stuck_objects(void);
 void clear_stuck_objects(void);
 void blast_nearby_glass(dxxobject *objp, fix damage);
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif

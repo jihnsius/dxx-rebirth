@@ -27,8 +27,6 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "gr.h"
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 extern int g3d_interp_outline;      //if on, polygon models outlined in white
 
@@ -218,8 +216,6 @@ void g3_set_special_render(tmap_drawer_type tmap_drawer,flat_drawer_type flat_dr
 extern grs_point blob_vertices[4];
 extern void (*tmap_drawer_ptr)(grs_bitmap *bm,int nv,g3s_point **vertlist);
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif

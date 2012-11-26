@@ -24,8 +24,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "piggy.h"
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 #define MAX_TEXTURES    1200
 
@@ -102,8 +100,6 @@ void bm_read_extra_robots(char *fname,int type);
 extern int Robot_replacements_loaded;
 extern int extra_bitmap_num;
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif /* _BM_H */

@@ -14,8 +14,6 @@
 #include "3d.h"
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 //Object functions:
 
@@ -73,8 +71,6 @@ typedef struct chunk {
 int get_chunks(ubyte *data, ubyte *new_data, chunk *list, int *no);
 #endif //def WORDS_NEED_ALIGNMENT
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif //_INTERP_H

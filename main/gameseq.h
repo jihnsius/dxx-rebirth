@@ -34,8 +34,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define LEVEL_NAME_LEN 36       //make sure this is multiple of 4!
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 // Current_level_num starts at 1 for the first level
 // -1,-2,-3 are secret levels
@@ -122,8 +120,6 @@ extern fix StartingShields;
 extern int	First_secret_visit;
 extern int Do_appearance_effect;
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif /* _GAMESEQ_H */

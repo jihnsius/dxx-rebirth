@@ -125,8 +125,6 @@ extern Mission *Current_mission; // current mission
 #define BIMD2_ENDING_FILE_SHARE		"ending2.txb"
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 //loads the named mission if it exists.
 //Returns true if mission loaded ok, else false.
@@ -142,8 +140,6 @@ void free_mission(void);
 void create_new_mission(void);
 #endif
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif

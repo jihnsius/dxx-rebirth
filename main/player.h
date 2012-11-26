@@ -194,8 +194,6 @@ typedef struct player_ship {
 } player_ship;
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 extern int N_players;   // Number of players ( >1 means a net game, eh?)
 extern int Player_num;  // The player number who is on the console.
@@ -213,8 +211,6 @@ void player_ship_read(player_ship *ps, PHYSFS_file *fp);
 
 void player_rw_swap(player_rw *p, int swap);
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif

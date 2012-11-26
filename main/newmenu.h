@@ -28,8 +28,6 @@ typedef struct newmenu newmenu;
 typedef struct listbox listbox;
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 enum newmenu_type
 {
@@ -243,8 +241,6 @@ static inline void nm_set_item_slider(newmenu_item *ni, const char *text, unsign
 #define BORDERX (15*(SWIDTH/320))
 #define BORDERY (15*(SHEIGHT/200))
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif /* _NEWMENU_H */

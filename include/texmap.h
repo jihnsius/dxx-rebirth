@@ -28,8 +28,6 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "gr.h"
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 #define	NUM_LIGHTING_LEVELS 32
 #define MAX_TMAP_VERTS 25
@@ -119,8 +117,6 @@ extern int Window_clip_left, Window_clip_bot, Window_clip_right, Window_clip_top
 
 extern void init_interface_vars_to_assembler(void);
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif

@@ -23,8 +23,6 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "maths.h"
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 //#define INLINE 1              //are some of these functions inline?
 
@@ -455,8 +453,6 @@ vms_angvec * vm_extract_angles_vector (vms_angvec * a, vms_vector * v);
 //distance is signed, so negative dist is on the back of the plane
 fix vm_dist_to_plane (const vms_vector * checkp, const vms_vector * norm, const vms_vector * planep);
 
-#ifdef __cplusplus
-}
 #endif
 
 //fills in fields of an angle vector

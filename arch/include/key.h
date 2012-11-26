@@ -26,8 +26,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "event.h"
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 #define KEY_BUFFER_SIZE 16
 #define KEY_REPEAT_DELAY 400
@@ -199,8 +197,6 @@ typedef struct key_props {
 
 extern const key_props key_properties[256];
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif

@@ -37,8 +37,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #endif
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 extern int PlayMovie(const char *filename, int allow_abort);
 extern int PlayMovies(int num_files, const char *filename[], int graphmode, int allow_abort);
@@ -55,8 +53,6 @@ void init_extra_robot_movie(char *filename);
 
 extern int MovieHires;      // specifies whether movies use low or high res
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif /* _MOVIE_H */

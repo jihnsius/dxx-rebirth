@@ -161,8 +161,6 @@ typedef struct weapon_info {
 #define NUM_SMART_CHILDREN  6   // Number of smart children created by default.
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 extern weapon_info Weapon_info[MAX_WEAPON_TYPES];
 extern int N_weapon_types;
@@ -252,8 +250,6 @@ void do_seismic_stuff(void);
 extern fix Seismic_tremor_magnitude;
 extern fix64 Seismic_disturbance_start_time, Seismic_disturbance_end_time;
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif

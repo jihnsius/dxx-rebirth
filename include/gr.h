@@ -25,8 +25,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "maths.h"
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 // some defines for transparency and blending
 #define TRANSPARENCY_COLOR   255            // palette entry of transparency color -- 255 on the PC
@@ -467,8 +465,6 @@ void ogl_do_palfx(void);
 void ogl_init_pixel_buffers(int w, int h);
 void ogl_close_pixel_buffers(void);
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif /* def _GR_H */

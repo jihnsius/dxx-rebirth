@@ -21,8 +21,6 @@
 #include "maths.h"
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 typedef enum event_type
 {
@@ -86,8 +84,6 @@ void event_toggle_focus(int activate_focus);
 void event_reset_idle_seconds();
 fix event_get_idle_seconds();
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif

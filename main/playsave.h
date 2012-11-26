@@ -31,8 +31,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define GAME_NAME_LEN   25      // +1 for terminating zero = 26
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 typedef struct hli {
 	char	Shortname[9];
@@ -121,8 +119,6 @@ void write_netgame_profile(netgame_info *ng);
 // selects a given cockpit (or lack of one).
 void select_cockpit(cockpit_mode_t mode);
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif /* _PLAYSAVE_H */

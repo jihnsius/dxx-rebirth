@@ -100,8 +100,6 @@ enum weapon_type_t
 struct dxxobject;
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 extern fix Min_trackable_dot;   //  MIN_TRACKABLE_DOT inversely scaled by FrameTime
 
@@ -162,8 +160,6 @@ void omega_charge_frame(void);
 extern int Missile_gun;
 extern int Proximity_dropped,Smartmines_dropped;
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif /* _LASER_H */

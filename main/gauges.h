@@ -30,8 +30,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "player.h"
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 //from gauges.c
 
@@ -165,8 +163,6 @@ extern const span weapon_window_left[],weapon_window_left_hires[],weapon_window_
 #define RET_COLOR_DEFAULT_B     0
 #define RET_COLOR_DEFAULT_A     0
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif /* _GAUGES_H */

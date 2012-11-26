@@ -40,8 +40,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #endif
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 // Gives state of recorder
 extern int Newdemo_state;
@@ -132,8 +130,6 @@ int newdemo_count_demos();
 void newdemo_strip_frames(char *, int);
 extern ubyte DemoDoRight,DemoDoLeft;
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif // _NEWDEMO_H

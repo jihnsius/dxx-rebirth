@@ -26,8 +26,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "piggy.h"
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 #define VCLIP_SMALL_EXPLOSION       2
 #define VCLIP_PLAYER_HIT            1
@@ -67,8 +65,6 @@ extern void draw_weapon_vclip(dxxobject *obj);
  */
 extern int vclip_read_n(vclip_t *vc, int n, PHYSFS_file *fp);
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif /* _VCLIP_H */

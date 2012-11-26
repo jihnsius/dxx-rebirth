@@ -21,8 +21,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define _MENU_H
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 extern int hide_menus(void);
 extern void show_menus(void);
@@ -49,8 +47,6 @@ extern char *menu_difficulty_text[];
 extern int Escort_view_enabled;
 extern int Cockpit_rear_view;
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif /* _MENU_H */

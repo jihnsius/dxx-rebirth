@@ -3,8 +3,6 @@
 #include "vecmat.h"
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 struct dxxobject;
 
 #ifdef USE_PYTHON
@@ -27,6 +25,4 @@ static inline void scripting_close() {}
 static inline void scripting_input_enter(const char *) {}
 #endif
 
-#ifdef __cplusplus
-}
 #endif

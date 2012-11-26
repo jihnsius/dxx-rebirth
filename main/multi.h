@@ -212,8 +212,6 @@ extern int multi_protocol; // set and determinate used protocol
 extern const char *const multi_allow_powerup_text[MULTI_ALLOW_POWERUP_MAX];
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 // Exported functions
 
@@ -417,8 +415,6 @@ int HoardEquipped();
 void save_hoard_data(void);
 #endif
 
-#ifdef __cplusplus
-}
 #endif
 
 /*

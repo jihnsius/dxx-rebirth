@@ -23,8 +23,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define _GAMESAVE_H
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 void LoadGame(void);
 void SaveGame(void);
@@ -44,8 +42,6 @@ extern void write_game_text_file(const char *filename);
 
 extern int Errors_in_mine;
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif /* _GAMESAVE_H */

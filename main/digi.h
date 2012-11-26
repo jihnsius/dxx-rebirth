@@ -28,8 +28,6 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "segment.h"
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 typedef struct digi_sound       {
         int bits;
@@ -135,8 +133,6 @@ void digi_win32_resume_midi_song();
 void digi_win32_stop_midi_song();
 #endif
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif

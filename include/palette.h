@@ -24,8 +24,6 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define DEFAULT_LEVEL_PALETTE "groupa.256" //don't confuse with D2_DEFAULT_PALETTE
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 extern void gr_palette_set_gamma( int gamma );
 extern int gr_palette_get_gamma();
@@ -39,8 +37,6 @@ extern void init_computed_colors(void);
 extern ubyte gr_palette_gamma;
 extern ubyte gr_current_pal[256*3];
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif

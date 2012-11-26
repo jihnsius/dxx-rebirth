@@ -4,8 +4,6 @@
 #include "maths.h"
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 int digi_audio_init();
 void digi_audio_reset();
@@ -26,8 +24,6 @@ enum
 	digi_max_channels = 16,
 };
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif

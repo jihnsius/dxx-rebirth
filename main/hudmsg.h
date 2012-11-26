@@ -15,8 +15,6 @@
 #define HM_MAYDUPL		8 // messages that might appear once per frame. for these we want to check all messages we have  in queue and supress it if so
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
 extern int HUD_toolong;
 extern void HUD_clear_messages();
@@ -24,8 +22,6 @@ extern void HUD_render_message_frame();
 extern int HUD_init_message(int class_flag, const char * format, ... ) __attribute_gcc_format((printf, 2, 3));
 extern int HUD_init_message_va(int class_flag, const char * format, va_list args) __attribute_gcc_format((printf, 2, 0));
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif
