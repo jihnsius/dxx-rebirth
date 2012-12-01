@@ -98,8 +98,8 @@ dxxobject	Object_minus_one;
 #endif
 
 object_array_t Objects;
-int num_objects=0;
-unsigned Highest_object_index=0;
+Num_objects_t num_objects;
+Highest_object_index_t Highest_object_index;
 int Highest_ever_object_index=0;
 
 // grs_bitmap *robot_bms[MAX_ROBOT_BITMAPS];	//all bitmaps for all robots
@@ -803,7 +803,7 @@ void init_objects()
 
 	collide_init();
 
-	for (objnum_t i=object_first;i<MAX_OBJECTS;i++) {
+	for (objnum_t i=object_first;i<Objects.size();i++) {
 		free_obj_list[i] = i;
 		Objects[i].type = OBJ_NONE;
 		Objects[i].control_type = CT_NONE;
@@ -829,12 +829,12 @@ void init_objects()
 //the free list, then set the apporpriate globals
 void special_reset_objects(void)
 {
-	num_objects=MAX_OBJECTS;
+	num_objects=Objects.size();
 
 	Highest_object_index = 0;
 	Assert(Objects[object_first].type != OBJ_NONE);		//0 should be used
 
-	for (objnum_t i=object_first;i < MAX_OBJECTS; ++i)
+	for (objnum_t i=object_first;i < Objects.size(); ++i)
 		if (Objects[i].type == OBJ_NONE)
 			free_obj_list[--num_objects] = i;
 		else
@@ -846,8 +846,6 @@ void special_reset_objects(void)
 void obj_link(objnum_t objnum,segnum_t segnum)
 {
 	dxxobject *obj = &Objects[objnum];
-
-	Assert(objnum != -1);
 
 	Assert(obj->segnum == segment_none);
 
@@ -864,22 +862,12 @@ void obj_link(objnum_t objnum,segnum_t segnum)
 
 	//list_seg_objects( segnum );
 	//check_duplicate_objects();
-
-	Assert(Objects[object_first].next != object_first);
-	if (Objects[object_first].next == object_first)
-		Objects[object_first].next = object_none;
-
-	Assert(Objects[object_first].prev != object_first);
-	if (Objects[object_first].prev == object_first)
-		Objects[object_first].prev = object_none;
 }
 
 void obj_unlink(objnum_t objnum)
 {
 	dxxobject  *obj = &Objects[objnum];
 	segment *seg = &Segments[obj->segnum];
-
-	Assert(objnum != -1);
 
 	if (obj->prev == object_none)
 		seg->objects = obj->next;
@@ -906,7 +894,7 @@ int obj_get_signature()
 		sig++;
 		if (sig < 0)
 			sig = 0;
-		for (objnum_t i = object_first; i < MAX_OBJECTS; i++)
+		for (objnum_t i = object_first; i < Objects.size(); i++)
 		{
 			if ((sig == Objects[i].signature) && (Objects[i].type != OBJ_NONE))
 			{
@@ -956,7 +944,6 @@ for (objnum_t i=object_first; i<=Highest_object_index; i++)
 void obj_free(objnum_t objnum)
 {
 	free_obj_list[--num_objects] = objnum;
-	Assert(num_objects >= 0);
 
 	if (objnum == Highest_object_index)
 	{
@@ -1218,8 +1205,6 @@ void obj_delete(objnum_t objnum)
 	int pnum;
 	dxxobject *obj = &Objects[objnum];
 
-	Assert(objnum != object_none);
-	Assert(objnum != 0 );
 	Assert(obj->type != OBJ_NONE);
 	Assert(obj != ConsoleObject);
 
@@ -1249,7 +1234,7 @@ void obj_delete(objnum_t objnum)
 
 	obj_unlink(objnum);
 
-	Assert(Objects[object_first].next != 0);
+	Assert(Objects[object_first].next != object_first);
 
 	obj->type = OBJ_NONE;		//unused!
 	obj->control_type = CT_NONE;
@@ -1587,7 +1572,6 @@ void obj_delete_all_that_should_be_dead()
 void obj_relink(objnum_t objnum,segnum_t newsegnum)
 {
 
-	Assert((objnum >= 0) && (objnum <= Highest_object_index));
 	Assert(newsegnum <= Highest_segment_index);
 
 	obj_unlink(objnum);
@@ -1919,7 +1903,7 @@ void compress_objects(void)
 
 	//	Note: It's proper to do < (rather than <=) Highest_object_index here because we
 	//	are just removing gaps, and the last object can't be a gap.
-	for (objnum_t start_i=object_first;start_i<Highest_object_index;start_i++)
+	for (objnum_t start_i=object_first;start_i.strict_less_highest_object(Highest_object_index);start_i++)
 
 		if (Objects[start_i].type == OBJ_NONE) {
 
@@ -1959,7 +1943,7 @@ void reset_objects(int n_objs)
 
 	Assert(num_objects>0);
 
-	for (objnum_t i=num_objects;i<MAX_OBJECTS;i++) {
+	for (objnum_t i=objnum_t::from_num_objects(num_objects);i<Objects.size();i++) {
 		free_obj_list[i] = i;
 		memset( &Objects[i], 0, sizeof(dxxobject) );
 		Objects[i].type = OBJ_NONE;
@@ -2192,8 +2176,8 @@ void object_rw_swap(object_rw *obj, int swap)
 		return;
 
 	obj->signature     = SWAPINT(obj->signature);
-	obj->next          = SWAPSHORT(obj->next);
-	obj->prev          = SWAPSHORT(obj->prev);
+	obj->next          = objnum_t(SWAPSHORT(obj->next));
+	obj->prev          = objnum_t(SWAPSHORT(obj->prev));
 	obj->segnum        = segnum_t(SWAPSHORT(obj->segnum));
 	obj->attached_obj  = SWAPSHORT(obj->attached_obj);
 	obj->pos.x         = SWAPINT(obj->pos.x);
@@ -2259,10 +2243,10 @@ void object_rw_swap(object_rw *obj, int swap)
 		case CT_EXPLOSION:
 			obj->ctype.expl_info.spawn_time    = SWAPINT(obj->ctype.expl_info.spawn_time);
 			obj->ctype.expl_info.delete_time   = SWAPINT(obj->ctype.expl_info.delete_time);
-			obj->ctype.expl_info.delete_objnum = SWAPSHORT(obj->ctype.expl_info.delete_objnum);
-			obj->ctype.expl_info.attach_parent = SWAPSHORT(obj->ctype.expl_info.attach_parent);
-			obj->ctype.expl_info.prev_attach   = SWAPSHORT(obj->ctype.expl_info.prev_attach);
-			obj->ctype.expl_info.next_attach   = SWAPSHORT(obj->ctype.expl_info.next_attach);
+			obj->ctype.expl_info.delete_objnum = objnum_t(SWAPSHORT(obj->ctype.expl_info.delete_objnum));
+			obj->ctype.expl_info.attach_parent = objnum_t(SWAPSHORT(obj->ctype.expl_info.attach_parent));
+			obj->ctype.expl_info.prev_attach   = objnum_t(SWAPSHORT(obj->ctype.expl_info.prev_attach));
+			obj->ctype.expl_info.next_attach   = objnum_t(SWAPSHORT(obj->ctype.expl_info.next_attach));
 			break;
 
 		case CT_AI:

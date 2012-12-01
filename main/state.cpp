@@ -277,14 +277,14 @@ static void state_object_rw_to_object(object_rw *obj_rw, dxxobject *obj)
 	obj->signature     = obj_rw->signature;
 	obj->type          = obj_rw->type;
 	obj->id            = obj_rw->id;
-	obj->next          = obj_rw->next;
-	obj->prev          = obj_rw->prev;
+	obj->next          = objnum_t(obj_rw->next);
+	obj->prev          = objnum_t(obj_rw->prev);
 	obj->control_type  = obj_rw->control_type;
 	obj->movement_type = obj_rw->movement_type;
 	obj->render_type   = obj_rw->render_type;
 	obj->flags         = obj_rw->flags;
 	obj->segnum        = obj_rw->segnum;
-	obj->attached_obj  = obj_rw->attached_obj;
+	obj->attached_obj  = objnum_t(obj_rw->attached_obj);
 	obj->pos.x         = obj_rw->pos.x;
 	obj->pos.y         = obj_rw->pos.y;
 	obj->pos.z         = obj_rw->pos.z;
@@ -341,22 +341,22 @@ static void state_object_rw_to_object(object_rw *obj_rw, dxxobject *obj)
 	{
 		case CT_WEAPON:
 			obj->ctype.laser_info.parent_type      = obj_rw->ctype.laser_info.parent_type;
-			obj->ctype.laser_info.parent_num       = obj_rw->ctype.laser_info.parent_num;
+			obj->ctype.laser_info.parent_num       = objnum_t(obj_rw->ctype.laser_info.parent_num);
 			obj->ctype.laser_info.parent_signature = obj_rw->ctype.laser_info.parent_signature;
 			obj->ctype.laser_info.creation_time    = obj_rw->ctype.laser_info.creation_time;
-			obj->ctype.laser_info.last_hitobj      = obj_rw->ctype.laser_info.last_hitobj;
+			obj->ctype.laser_info.last_hitobj      = objnum_t(obj_rw->ctype.laser_info.last_hitobj);
 			obj->ctype.laser_info.hitobj_list[obj->ctype.laser_info.last_hitobj] = 1; // restore most recent hitobj to hitobj_list
-			obj->ctype.laser_info.track_goal       = obj_rw->ctype.laser_info.track_goal;
+			obj->ctype.laser_info.track_goal       = objnum_t(obj_rw->ctype.laser_info.track_goal);
 			obj->ctype.laser_info.multiplier       = obj_rw->ctype.laser_info.multiplier;
 			break;
 
 		case CT_EXPLOSION:
 			obj->ctype.expl_info.spawn_time    = obj_rw->ctype.expl_info.spawn_time;
 			obj->ctype.expl_info.delete_time   = obj_rw->ctype.expl_info.delete_time;
-			obj->ctype.expl_info.delete_objnum = obj_rw->ctype.expl_info.delete_objnum;
-			obj->ctype.expl_info.attach_parent = obj_rw->ctype.expl_info.attach_parent;
-			obj->ctype.expl_info.prev_attach   = obj_rw->ctype.expl_info.prev_attach;
-			obj->ctype.expl_info.next_attach   = obj_rw->ctype.expl_info.next_attach;
+			obj->ctype.expl_info.delete_objnum = objnum_t(obj_rw->ctype.expl_info.delete_objnum);
+			obj->ctype.expl_info.attach_parent = objnum_t(obj_rw->ctype.expl_info.attach_parent);
+			obj->ctype.expl_info.prev_attach   = objnum_t(obj_rw->ctype.expl_info.prev_attach);
+			obj->ctype.expl_info.next_attach   = objnum_t(obj_rw->ctype.expl_info.next_attach);
 			break;
 
 		case CT_AI:
@@ -370,7 +370,7 @@ static void state_object_rw_to_object(object_rw *obj_rw, dxxobject *obj)
 			obj->ctype.ai_info.path_length            = obj_rw->ctype.ai_info.path_length;
 			obj->ctype.ai_info.cur_path_index         = obj_rw->ctype.ai_info.cur_path_index;
 			obj->ctype.ai_info.dying_sound_playing    = obj_rw->ctype.ai_info.dying_sound_playing;
-			obj->ctype.ai_info.danger_laser_num       = obj_rw->ctype.ai_info.danger_laser_num;
+			obj->ctype.ai_info.danger_laser_num       = objnum_t(obj_rw->ctype.ai_info.danger_laser_num);
 			obj->ctype.ai_info.danger_laser_signature = obj_rw->ctype.ai_info.danger_laser_signature;
 			obj->ctype.ai_info.dying_start_time       = obj_rw->ctype.ai_info.dying_start_time;
 			break;
@@ -484,7 +484,7 @@ static void state_player_rw_to_player(player_rw *pl_rw, player *pl)
 	memcpy(pl->callsign, pl_rw->callsign, CALLSIGN_LEN+1);
 	memcpy(pl->net_address, pl_rw->net_address, 6);
 	pl->connected                 = pl_rw->connected;
-	pl->objnum                    = pl_rw->objnum;
+	pl->objnum                    = objnum_t(pl_rw->objnum);
 	pl->n_packets_got             = pl_rw->n_packets_got;
 	pl->n_packets_sent            = pl_rw->n_packets_sent;
 	pl->flags                     = pl_rw->flags;
@@ -494,7 +494,7 @@ static void state_player_rw_to_player(player_rw *pl_rw, player *pl)
 	pl->level                     = pl_rw->level;
 	pl->laser_level               = pl_rw->laser_level;
 	pl->starting_level            = pl_rw->starting_level;
-	pl->killer_objnum             = pl_rw->killer_objnum;
+	pl->killer_objnum             = objnum_t(pl_rw->killer_objnum);
 	pl->primary_weapon_flags      = pl_rw->primary_weapon_flags;
 	pl->secondary_weapon_flags    = pl_rw->secondary_weapon_flags;
 	for (i = 0; i < MAX_PRIMARY_WEAPONS; i++)
@@ -1477,7 +1477,7 @@ int state_restore_all_sub(char *filename, int secret_restore)
 	Control_center_player_been_seen = PHYSFSX_readSXE32(fp, swap);
 	Control_center_next_fire_time = PHYSFSX_readSXE32(fp, swap);
 	Control_center_present = PHYSFSX_readSXE32(fp, swap);
-	Dead_controlcen_object_num = PHYSFSX_readSXE32(fp, swap);
+	Dead_controlcen_object_num = objnum_t(PHYSFSX_readSXE32(fp, swap));
 	if (Control_center_destroyed)
 		Total_countdown_time = Countdown_timer/F0_5; // we do not need to know this, but it should not be 0 either...
 
@@ -1511,7 +1511,7 @@ int state_restore_all_sub(char *filename, int secret_restore)
 
 	if (version >= 17) {
 		for (i = 0; i < NUM_MARKERS; i++)
-			MarkerObject[i] = PHYSFSX_readSXE32(fp, swap);
+			MarkerObject[i] = objnum_t(PHYSFSX_readSXE32(fp, swap));
 		PHYSFS_read(fp, MarkerOwner, sizeof(MarkerOwner), 1);
 		PHYSFS_read(fp, MarkerMessage, sizeof(MarkerMessage), 1);
 	}

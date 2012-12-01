@@ -400,7 +400,7 @@ static void nd_read_objnum_short(objnum_t *o)
 {
 	short i;
 	nd_read_short(&i);
-	*o = i;
+	*o = objnum_t(i);
 }
 
 static void nd_read_int(int *i)
@@ -421,7 +421,7 @@ static void nd_read_objnum_int(objnum_t *s)
 {
 	int i;
 	nd_read_int(&i);
-	*s = i;
+	*s = objnum_t(i);
 }
 
 static void nd_read_string(char *str)
@@ -3071,7 +3071,7 @@ static void newdemo_back_frames(int frames)
 
 static void interpolate_frame(fix d_play, fix d_recorded)
 {
-	int num_cur_objs;
+	Highest_object_index_t num_cur_objs;
 	fix factor;
 	dxxobject *cur_objs;
 	static fix InterpolStep = fl2f(.01);
@@ -3289,7 +3289,8 @@ void newdemo_playback_one_frame()
 
 				while (nd_recorded_total - nd_playback_total < FrameTime) {
 					dxxobject *cur_objs;
-					int num_objs, level;
+					Highest_object_index_t num_objs;
+					int level;
 
 					num_objs = Highest_object_index;
 					cur_objs = (dxxobject *)d_malloc(sizeof(dxxobject) * (num_objs + 1));

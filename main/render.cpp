@@ -636,8 +636,6 @@ void renderer_t::do_render_object(objnum_t objnum, int window_num)
 	dxxobject *obj = &Objects[objnum];
 	int count = 0;
 
-	Assert(objnum < MAX_OBJECTS);
-
 	#ifndef NDEBUG
 	if (object_rendered[objnum]) {		//already rendered this...
 		Int3();		//get Matt!!!

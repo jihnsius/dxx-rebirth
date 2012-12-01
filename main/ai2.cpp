@@ -321,7 +321,7 @@ void init_ai_objects(void)
 {
 	Point_segs_free_ptr = Point_segs;
 
-	for (objnum_t i=object_first; i<MAX_OBJECTS; i++) {
+	for (objnum_t i=object_first; i<Objects.size(); i++) {
 		dxxobject *objp = &Objects[i];
 
 		if (objp->control_type == CT_AI)

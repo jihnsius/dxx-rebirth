@@ -1,4 +1,6 @@
 #pragma once
+#include <boost/operators.hpp>
+#include <boost/serialization/strong_typedef.hpp>
 
 enum object_type_t
 {
@@ -68,9 +70,78 @@ RT_MORPH       =6,  // a robot being morphed
 RT_WEAPON_VCLIP=7,  // a weapon that renders as a vclip
 };
 
-typedef short objnum_t;
-#define DECLARE_OBJECT_INDEX(N,V)	enum { object_##N = V };
+#define DECLARE_OBJECT_INDEX(N,V)	DECLARE_TYPESAFE_INDEX(object,N,V)
 
 DECLARE_OBJECT_INDEX(first, 0);
-DECLARE_OBJECT_INDEX(none, -1);
-DECLARE_OBJECT_INDEX(guidebot_cannot_reach, -2);
+DECLARE_OBJECT_INDEX(none, 0xffff);
+DECLARE_OBJECT_INDEX(guidebot_cannot_reach, 0xfffe);
+
+struct Highest_object_index_t
+{
+	unsigned contained_value;
+	void operator=(const unsigned & rhs) { contained_value = rhs; }
+	operator const unsigned & () const { return contained_value; }
+	Highest_object_index_t& operator--() { -- contained_value; return *this; }
+};
+
+struct Num_objects_t
+{
+	unsigned contained_value;
+	void operator=(const unsigned & rhs) { contained_value = rhs; }
+	operator const unsigned & () const { return contained_value; }
+	Highest_object_index_t operator--() { -- contained_value; Highest_object_index_t o; o = contained_value; return o; }
+	Highest_object_index_t operator++(int) { Highest_object_index_t o; o = contained_value; contained_value ++; return o; }
+};
+
+BOOST_STRONG_TYPEDEF(unsigned, object_step_interval_t);
+
+/*
+ * This is based on BOOST_STRONG_TYPEDEF, but that macro does not permit
+ * sufficient customization for the required use cases.
+ */
+struct objnum_t
+	: boost::totally_ordered1< objnum_t
+	>
+{
+	enum
+	{
+		object_first = typesafe_idx_object::first,
+		object_none = typesafe_idx_object::none,
+		object_guidebot_cannot_reach = typesafe_idx_object::guidebot_cannot_reach,
+	};
+	unsigned short contained_value;
+	explicit objnum_t(const unsigned short t_) : contained_value(t_) {};
+	objnum_t() = default;
+	objnum_t(const Highest_object_index_t& i) : contained_value(i.contained_value) {}
+	objnum_t & operator=(const Highest_object_index_t & rhs) { contained_value = rhs.contained_value; return *this;}
+	static objnum_t from_num_objects(const Num_objects_t& i) { return objnum_t(i.contained_value); }
+	operator unsigned () const { return contained_value; }
+	bool operator==(const objnum_t & rhs) const { return contained_value == rhs.contained_value; }
+	bool operator<(const objnum_t & rhs) const { return (contained_value < rhs.contained_value); }
+	objnum_t& operator++() { ++ contained_value; return *this; }
+	objnum_t& operator--() { -- contained_value; return *this; }
+	objnum_t operator++(int) { objnum_t o = *this; contained_value ++; return o; }
+	objnum_t operator--(int) { objnum_t o = *this; contained_value --; return o; }
+	objnum_t& operator+=(const object_step_interval_t& i) { contained_value += i; return *this; }
+	DEFINE_CONSTRUCT_SPECIAL(objnum_t, object_first);
+	DEFINE_CONSTRUCT_SPECIAL(objnum_t, object_none);
+	DEFINE_CONSTRUCT_SPECIAL(objnum_t, object_guidebot_cannot_reach);
+	DEFINE_COMPARE_SPECIAL(==, object_none);
+	DEFINE_COMPARE_SPECIAL(!=, object_none);
+	DEFINE_COMPARE_SPECIAL(==, object_first);
+	DEFINE_COMPARE_SPECIAL(!=, object_first);
+	DEFINE_COMPARE_SPECIAL(==, object_guidebot_cannot_reach);
+	DEFINE_COMPARE_PASSTHROUGH(<=, Highest_object_index_t);
+	DEFINE_COMPARE_PASSTHROUGH(==, Highest_object_index_t);
+	DEFINE_COMPARE_PASSTHROUGH(>, Highest_object_index_t);
+	DEFINE_COMPARE_PASSTHROUGH(<, Num_objects_t);
+	DEFINE_COMPARE_PASSTHROUGH(>=, Num_objects_t);
+	bool strict_less_highest_object(const Highest_object_index_t& i) const { return (contained_value < i.contained_value); }
+	template <typename T> objnum_t & operator=(T) = delete;
+	template <typename T> bool operator==(T) const = delete;
+	template <typename T> bool operator!=(T) const = delete;
+	template <typename T> bool operator<=(T) const = delete;
+	template <typename T> bool operator>=(T) const = delete;
+	template <typename T> bool operator>(T) const = delete;
+	template <typename T> bool operator<(T) const = delete;
+};

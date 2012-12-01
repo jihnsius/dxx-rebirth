@@ -278,7 +278,7 @@ static int compute_num_players(void)
 int ObjectMakeCoop(void)
 {
 	Assert(Cur_object_index != object_none);
-	Assert(Cur_object_index < MAX_OBJECTS);
+	Assert(Cur_object_index < Objects.size());
 //	Assert(Objects[Cur_object_index.type == OBJ_PLAYER);
 
 	if (Objects[Cur_object_index].type == OBJ_PLAYER ) {
@@ -400,7 +400,7 @@ int ObjectSelectNextInMine()
 {	int i;
 	for (i=0;i<MAX_OBJECTS;i++) {
 		Cur_object_index++;
-		if (Cur_object_index>= MAX_OBJECTS ) Cur_object_index= object_first;
+		if (Cur_object_index>= Objects.size() ) Cur_object_index= object_first;
 
 		if ((Objects[Cur_object_index ].type != OBJ_NONE) && (Cur_object_index != (ConsoleObject-Objects)) )	{
 			Cursegp = &Segments[Objects[Cur_object_index ].segnum];
@@ -422,7 +422,7 @@ int ObjectSelectPrevInMine()
 	for (i=0;i<MAX_OBJECTS;i++) {
 		Cur_object_index--;
 		if (Cur_object_index == object_none )
-			Cur_object_index = MAX_OBJECTS-1;
+			Cur_object_index = Highest_object_index;
 
 		if ((Objects[Cur_object_index ].type != OBJ_NONE) && (Cur_object_index != (ConsoleObject-Objects)) )	{
 			Cursegp = &Segments[Objects[Cur_object_index ].segnum];

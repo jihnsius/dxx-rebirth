@@ -1726,7 +1726,7 @@ void net_udp_read_object_packet( ubyte *data )
 	for (i = 0; i < nobj; i++)
 	{
 		objnum_t objnum;
-		objnum = GET_INTEL_INT(data + loc);                         loc += 4;
+		objnum = objnum_t(GET_INTEL_INT(data + loc));                         loc += 4;
 		obj_owner = data[loc];                                      loc += 1;
 		remote_objnum = GET_INTEL_INT(data + loc);                  loc += 4;
 
@@ -1766,7 +1766,7 @@ void net_udp_read_object_packet( ubyte *data )
 			{
 				if (mode != 1)
 					Int3(); // SEE ROB
-				objnum = remote_objnum;
+				objnum = objnum_t(remote_objnum);
 			}
 			else {
 				if (mode == 1)
@@ -1781,7 +1781,7 @@ void net_udp_read_object_packet( ubyte *data )
 				if (obj->segnum != segment_none)
 					obj_unlink(objnum);
 				Assert(obj->segnum == segment_none);
-				Assert(objnum < MAX_OBJECTS);
+				Assert(objnum < Objects.size());
 #ifdef WORDS_BIGENDIAN
 				object_rw_swap((object_rw *)&data[loc], 1);
 #endif

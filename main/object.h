@@ -101,12 +101,16 @@ struct object_array_template_t
 {
 	typedef std::array<T, MAX_OBJECTS> array_t;
 	array_t a;
-	T& operator[](const objnum_t& o) { return a[o]; }
+	T& operator[](const objnum_t& o) { Assert(static_cast<unsigned>(o) < a.size()); return a[o.contained_value]; }
+	T& operator[](object_first_type_t) { return a[typesafe_idx_object::first]; }
+	T& operator[](const Highest_object_index_t& i) { return a[i.contained_value]; }
 	void fill(const T& t) { a.fill(t); }
 	objnum_t idx(const T *p) const
 	{
 		return objnum_t(std::distance(a.begin(), p));
 	}
+	template <typename U> void operator[](U) = delete;
+	Num_objects_t size() const { return Num_objects_t{(unsigned)a.size()}; }
 };
 
 template <typename T>
@@ -344,8 +348,8 @@ extern ubyte CollisionResult[MAX_OBJECT_TYPES][MAX_OBJECT_TYPES];
 typedef object_array_template_t<dxxobject> object_array_t;
 
 extern object_array_t Objects;
-extern unsigned Highest_object_index;    // highest objnum
-extern int num_objects;
+extern Highest_object_index_t Highest_object_index;    // highest objnum
+extern Num_objects_t num_objects;
 
 extern char *robot_names[];         // name of each robot
 

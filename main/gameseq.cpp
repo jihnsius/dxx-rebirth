@@ -534,7 +534,7 @@ void create_player_appearance_effect(dxxobject *player_obj)
 #ifndef NDEBUG
 	{
 		objnum_t objnum = player_obj-Objects;
-		if ( (objnum < 0) || (objnum > Highest_object_index) )
+		if ( (objnum > Highest_object_index) )
 			Int3(); // See Rob, trying to track down weird network bug
 	}
 #endif
@@ -613,7 +613,7 @@ static ushort netmisc_calc_checksum()
 			s = INTEL_SHORT(Segments[i].verts[j]);
 			do_checksum_calc((ubyte *)&s, 2, &sum1, &sum2);
 		}
-		t = INTEL_INT(Segments[i].objects);
+		t = INTEL_INT(static_cast<unsigned>(Segments[i].objects));
 		do_checksum_calc((ubyte *)&t, 4, &sum1, &sum2);
 	}
 	sum2 %= 255;

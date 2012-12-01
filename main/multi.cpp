@@ -290,11 +290,11 @@ objnum_t objnum_remote_to_local(int remote_objnum, int owner)
 
 	if ((owner >= N_players) || (owner < -1)) {
 		Int3(); // Illegal!
-		return(remote_objnum);
+		return objnum_t(remote_objnum);
 	}
 
 	if (owner == -1)
-		return(remote_objnum);
+		return objnum_t(remote_objnum);
 
 	if ((remote_objnum < 0) || (remote_objnum >= MAX_OBJECTS))
 		return object_none;
@@ -347,7 +347,7 @@ map_objnum_local_to_remote(objnum_t local_objnum, int remote_objnum, int owner)
 	// Add a mapping from a network remote object number to a local one
 
 	Assert(local_objnum != object_none);
-	Assert(local_objnum < MAX_OBJECTS);
+	Assert(local_objnum < Objects.size());
 	Assert(remote_objnum > -1);
 	Assert(remote_objnum < MAX_OBJECTS);
 	Assert(owner > -1);
@@ -367,7 +367,7 @@ map_objnum_local_to_local(objnum_t local_objnum)
 	// Add a mapping for our locally created objects
 
 	Assert(local_objnum != object_none);
-	Assert(local_objnum < MAX_OBJECTS);
+	Assert(local_objnum < Objects.size());
 
 	object_owner[local_objnum] = Player_num;
 	remote_to_local[Player_num][local_objnum] = local_objnum;
@@ -623,7 +623,7 @@ static void multi_compute_kill(objnum_t killer, objnum_t killed)
 
 	// Both object numbers are localized already!
 
-	if ((killed < 0) || (killed > Highest_object_index) || (killer < 0) || (killer > Highest_object_index))
+	if ((killed > Highest_object_index) || (killer > Highest_object_index))
 	{
 		Int3(); // See Rob, illegal value passed to compute_kill;
 		return;
@@ -1528,7 +1528,7 @@ multi_do_fire(char *buf)
 	weapon = (int)buf[2];
 
 	flags = buf[4];
-	Network_laser_track = GET_INTEL_SHORT(buf + 6);
+	Network_laser_track = objnum_t(GET_INTEL_SHORT(buf + 6));
 
 	Assert (pnum < N_players);
 
@@ -1663,7 +1663,7 @@ multi_do_reappear(char *buf)
 	objnum_t objnum;
 	ubyte pnum = buf[1];
 
-	objnum = GET_INTEL_SHORT(buf + 2);
+	objnum = objnum_t(GET_INTEL_SHORT(buf + 2));
 
 	if (objnum > Highest_object_index)
 	{
@@ -1762,7 +1762,7 @@ multi_do_player_explode(char *buf)
 		s = GET_INTEL_SHORT(buf + count);
 
 		if ((i < Net_create_loc) && (s > 0))
-			map_objnum_local_to_remote((short)Net_create_objnums[i], s, pnum);
+			map_objnum_local_to_remote(Net_create_objnums[i], s, pnum);
 		count += 2;
 	}
 	for (i = remote_created; i < Net_create_loc; i++) {
@@ -1828,7 +1828,7 @@ multi_do_kill(char *buf)
 
 	killed = Players[pnum].objnum;
 	count += 1;
-	killer = GET_INTEL_SHORT(buf + count);
+	killer = objnum_t(GET_INTEL_SHORT(buf + count));
 	if (killer != object_none)
 		killer = objnum_remote_to_local(killer, (sbyte)buf[count+2]);
 	if (!multi_i_am_master())
@@ -1851,7 +1851,7 @@ static void multi_do_controlcen_destroy(char *buf)
 	sbyte who;
 	objnum_t objnum;
 
-	objnum = GET_INTEL_SHORT(buf + 1);
+	objnum = objnum_t(GET_INTEL_SHORT(buf + 1));
 	who = buf[3];
 
 	if (Control_center_destroyed != 1)
@@ -2162,7 +2162,7 @@ multi_do_controlcen_fire(char *buf)
 	to_target.z = (fix)INTEL_INT((int)to_target.z);
 #endif
 	gun_num = buf[count];                       count += 1;
-	objnum = GET_INTEL_SHORT(buf + count);      count += 2;
+	objnum = objnum_t(GET_INTEL_SHORT(buf + count));      count += 2;
 
 	Laser_create_new_easy(&to_target, &Gun_pos[(int)gun_num], objnum, CONTROLCEN_WEAPON_NUM, 1);
 }
@@ -2244,7 +2244,6 @@ multi_do_play_sound(char *buf)
 	if (!Players[pnum].connected)
 		return;
 
-	Assert(Players[pnum].objnum >= 0);
 	Assert(Players[pnum].objnum <= Highest_object_index);
 
 	digi_link_sound_to_object( sound_num, Players[pnum].objnum, 0, volume);
@@ -2592,7 +2591,7 @@ multi_send_player_explode(char type)
 		PUT_INTEL_SHORT(multibuf+count, Net_create_objnums[i]); count += 2;
 
 		// We created these objs so our local number = the network number
-		map_objnum_local_to_local((short)Net_create_objnums[i]);
+		map_objnum_local_to_local(Net_create_objnums[i]);
 	}
 
 	Net_create_loc = 0;
@@ -2994,7 +2993,7 @@ multi_send_remobj(objnum_t objnum)
 
 	multibuf[0] = (char)MULTI_REMOVE_OBJECT;
 
-	remote_objnum = objnum_local_to_remote((short)objnum, &obj_owner);
+	remote_objnum = objnum_local_to_remote(objnum, &obj_owner);
 
 	PUT_INTEL_SHORT(multibuf+1, remote_objnum); // Map to network objnums
 
@@ -3814,8 +3813,7 @@ static void multi_do_guided (char *buf)
 		return;
 	}
 
-
-	if (Guided_missile[(int)pnum]-Objects<0 || Guided_missile[(int)pnum]-Objects > Highest_object_index)
+	if (Guided_missile[(int)pnum]-Objects > Highest_object_index)
 	{
 		Int3();  // Get Jason immediately!
 		return;
@@ -5598,14 +5596,14 @@ void multi_object_rw_to_object(object_rw *obj_rw, dxxobject *obj)
 	obj->signature     = obj_rw->signature;
 	obj->type          = obj_rw->type;
 	obj->id            = obj_rw->id;
-	obj->next          = obj_rw->next;
-	obj->prev          = obj_rw->prev;
+	obj->next          = objnum_t(obj_rw->next);
+	obj->prev          = objnum_t(obj_rw->prev);
 	obj->control_type  = obj_rw->control_type;
 	obj->movement_type = obj_rw->movement_type;
 	obj->render_type   = obj_rw->render_type;
 	obj->flags         = obj_rw->flags;
 	obj->segnum        = obj_rw->segnum;
-	obj->attached_obj  = obj_rw->attached_obj;
+	obj->attached_obj  = objnum_t(obj_rw->attached_obj);
 	obj->pos.x         = obj_rw->pos.x;
 	obj->pos.y         = obj_rw->pos.y;
 	obj->pos.z         = obj_rw->pos.z;
@@ -5662,21 +5660,21 @@ void multi_object_rw_to_object(object_rw *obj_rw, dxxobject *obj)
 	{
 		case CT_WEAPON:
 			obj->ctype.laser_info.parent_type      = obj_rw->ctype.laser_info.parent_type;
-			obj->ctype.laser_info.parent_num       = obj_rw->ctype.laser_info.parent_num;
+			obj->ctype.laser_info.parent_num       = objnum_t(obj_rw->ctype.laser_info.parent_num);
 			obj->ctype.laser_info.parent_signature = obj_rw->ctype.laser_info.parent_signature;
 			obj->ctype.laser_info.creation_time    = obj_rw->ctype.laser_info.creation_time;
-			obj->ctype.laser_info.last_hitobj      = obj_rw->ctype.laser_info.last_hitobj;
-			obj->ctype.laser_info.track_goal       = obj_rw->ctype.laser_info.track_goal;
+			obj->ctype.laser_info.last_hitobj      = objnum_t(obj_rw->ctype.laser_info.last_hitobj);
+			obj->ctype.laser_info.track_goal       = objnum_t(obj_rw->ctype.laser_info.track_goal);
 			obj->ctype.laser_info.multiplier       = obj_rw->ctype.laser_info.multiplier;
 			break;
 
 		case CT_EXPLOSION:
 			obj->ctype.expl_info.spawn_time    = obj_rw->ctype.expl_info.spawn_time;
 			obj->ctype.expl_info.delete_time   = obj_rw->ctype.expl_info.delete_time;
-			obj->ctype.expl_info.delete_objnum = obj_rw->ctype.expl_info.delete_objnum;
-			obj->ctype.expl_info.attach_parent = obj_rw->ctype.expl_info.attach_parent;
-			obj->ctype.expl_info.prev_attach   = obj_rw->ctype.expl_info.prev_attach;
-			obj->ctype.expl_info.next_attach   = obj_rw->ctype.expl_info.next_attach;
+			obj->ctype.expl_info.delete_objnum = objnum_t(obj_rw->ctype.expl_info.delete_objnum);
+			obj->ctype.expl_info.attach_parent = objnum_t(obj_rw->ctype.expl_info.attach_parent);
+			obj->ctype.expl_info.prev_attach   = objnum_t(obj_rw->ctype.expl_info.prev_attach);
+			obj->ctype.expl_info.next_attach   = objnum_t(obj_rw->ctype.expl_info.next_attach);
 			break;
 
 		case CT_AI:
@@ -5690,7 +5688,7 @@ void multi_object_rw_to_object(object_rw *obj_rw, dxxobject *obj)
 			obj->ctype.ai_info.path_length            = obj_rw->ctype.ai_info.path_length;
 			obj->ctype.ai_info.cur_path_index         = obj_rw->ctype.ai_info.cur_path_index;
 			obj->ctype.ai_info.dying_sound_playing    = obj_rw->ctype.ai_info.dying_sound_playing;
-			obj->ctype.ai_info.danger_laser_num       = obj_rw->ctype.ai_info.danger_laser_num;
+			obj->ctype.ai_info.danger_laser_num       = objnum_t(obj_rw->ctype.ai_info.danger_laser_num);
 			obj->ctype.ai_info.danger_laser_signature = obj_rw->ctype.ai_info.danger_laser_signature;
 			obj->ctype.ai_info.dying_start_time       = obj_rw->ctype.ai_info.dying_start_time;
 			break;

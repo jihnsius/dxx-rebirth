@@ -1749,7 +1749,7 @@ int ai_restore_state(PHYSFS_file *fp, int version, int swap)
 		Escort_last_path_created = (fix64)tmptime32;
 		Escort_goal_object = (escort_goal_t)PHYSFSX_readSXE32(fp, swap);
 		Escort_special_goal = (escort_goal_t)PHYSFSX_readSXE32(fp, swap);
-		Escort_goal_index = PHYSFSX_readSXE32(fp, swap);
+		Escort_goal_index = objnum_t(PHYSFSX_readSXE32(fp, swap));
 		PHYSFS_read(fp, &Stolen_items, sizeof(Stolen_items[0]) * MAX_STOLEN_ITEMS, 1);
 	} else {
 		int i;

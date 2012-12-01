@@ -1009,7 +1009,7 @@ void apply_damage_to_controlcen(dxxobject *controlcen, fix damage, objnum_t who)
 
 	//	Only allow a player to damage the control center.
 
-	if ((who < 0) || (who > Highest_object_index))
+	if (who > Highest_object_index)
 		return;
 
 	whotype = Objects[who].type;

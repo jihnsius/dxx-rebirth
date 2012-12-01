@@ -339,7 +339,7 @@ int digi_link_sound_to_object3( int org_soundnum, objnum_t objnum, int forever, 
 		Int3();
 		return -1;
 	}
-	if ((objnum<0)||(objnum>Highest_object_index))
+	if (objnum>Highest_object_index)
 		return -1;
 
 	if ( !forever ) { 		// && GameSounds[soundnum - SOUND_OFFSET].length < SOUND_3D_THRESHHOLD)	{

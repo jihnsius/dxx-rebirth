@@ -934,12 +934,12 @@ int	Super_mines_yes = 1;
 void process_super_mines_frame(void)
 {
 	objnum_t	start;
-	int add;
+	object_step_interval_t add;
 
 	//	If we don't know of there being any super mines in the level, just
 	//	check every 8th object each frame.
 	if (Super_mines_yes == 0) {
-		start = FrameCount & 7;
+		start = objnum_t(FrameCount & 7);
 		add = 8;
 	} else {
 		start = object_first;

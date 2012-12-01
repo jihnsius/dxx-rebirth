@@ -151,7 +151,7 @@ static void info_display_object_placement(int show_all)
 	char		name[30];
 
 	const objnum_t coi = Cur_object_index;
-	if (coi >= sizeof(Objects) / sizeof(Objects[0]))
+	if (coi >= Objects.size())
 		return;
 	if (init_info || show_all) {
 		old_Cur_object_index = object_guidebot_cannot_reach;
@@ -161,7 +161,7 @@ static void info_display_object_placement(int show_all)
 		old_mode = -2;
 	}
 
-	if ( ( coi != (unsigned)old_Cur_object_index) || 
+	if ( ( coi != old_Cur_object_index) || 
 			( Objects[coi].type != old_type) || 
 			( Objects[coi].movement_type != old_movement_type) || 
 			( Objects[coi].control_type != old_control_type) || 

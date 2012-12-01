@@ -420,7 +420,7 @@ void read_object(dxxobject *obj,PHYSFS_file *f,int version)
 
 			obj->ctype.expl_info.spawn_time		= PHYSFSX_readFix(f);
 			obj->ctype.expl_info.delete_time		= PHYSFSX_readFix(f);
-			obj->ctype.expl_info.delete_objnum	= PHYSFSX_readShort(f);
+			obj->ctype.expl_info.delete_objnum	= objnum_t(PHYSFSX_readShort(f));
 			obj->ctype.expl_info.next_attach = obj->ctype.expl_info.prev_attach = obj->ctype.expl_info.attach_parent = object_none;
 
 			break;
@@ -430,7 +430,7 @@ void read_object(dxxobject *obj,PHYSFS_file *f,int version)
 			//do I really need to read these?  Are they even saved to disk?
 
 			obj->ctype.laser_info.parent_type		= PHYSFSX_readShort(f);
-			obj->ctype.laser_info.parent_num		= PHYSFSX_readShort(f);
+			obj->ctype.laser_info.parent_num		= objnum_t(PHYSFSX_readShort(f));
 			obj->ctype.laser_info.parent_signature	= PHYSFSX_readInt(f);
 
 			break;
@@ -623,7 +623,7 @@ void write_object(dxxobject *obj, short version, PHYSFS_file *f)
 
 			PHYSFSX_writeFix(f, obj->ctype.expl_info.spawn_time);
 			PHYSFSX_writeFix(f, obj->ctype.expl_info.delete_time);
-			PHYSFS_writeSLE16(f, obj->ctype.expl_info.delete_objnum);
+			PHYSFS_writeSLE16(f, static_cast<unsigned>(obj->ctype.expl_info.delete_objnum));
 
 			break;
 
@@ -632,7 +632,7 @@ void write_object(dxxobject *obj, short version, PHYSFS_file *f)
 			//do I really need to write these objects?
 
 			PHYSFS_writeSLE16(f, obj->ctype.laser_info.parent_type);
-			PHYSFS_writeSLE16(f, obj->ctype.laser_info.parent_num);
+			PHYSFS_writeSLE16(f, static_cast<unsigned>(obj->ctype.laser_info.parent_num));
 			PHYSFS_writeSLE32(f, obj->ctype.laser_info.parent_signature);
 
 			break;
@@ -722,7 +722,7 @@ static int load_game_data(PHYSFS_file *LoadFile)
 
 	short game_top_fileinfo_version;
 	int object_offset;
-	int gs_num_objects;
+	Num_objects_t gs_num_objects;
 	int num_delta_lights;
 	int trig_size;
 
@@ -1022,7 +1022,7 @@ static int load_game_data(PHYSFS_file *LoadFile)
 
 	reset_objects(gs_num_objects);
 
-	for (objnum_t i=object_first; i<MAX_OBJECTS; i++) {
+	for (objnum_t i=object_first; i<Objects.size(); i++) {
 		Objects[i].next = Objects[i].prev = object_none;
 		if (Objects[i].type != OBJ_NONE) {
 			segnum_t objsegnum = Objects[i].segnum;

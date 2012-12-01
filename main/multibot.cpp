@@ -94,7 +94,7 @@ multi_can_move_robot(objnum_t objnum, int agitation)
 		return 0;
 
 #ifndef NDEBUG
-	if ((objnum < 0) || (objnum > Highest_object_index))
+	if ((objnum > Highest_object_index))
 	{
 		Int3();
 		rval = 0;
@@ -286,7 +286,7 @@ multi_delete_controlled_robot(objnum_t objnum)
 
 	// Delete robot object number objnum from list of controlled robots because it is dead
 
-	if ( (objnum<0) || (objnum>Highest_object_index))	{
+	if ( (objnum>Highest_object_index))	{
 		return;
 	}
 
@@ -315,7 +315,7 @@ multi_send_claim_robot(objnum_t objnum)
 {
 	short s;
 
-	if ((objnum < 0) || (objnum > Highest_object_index))
+	if ((objnum > Highest_object_index))
 	{
 		Int3(); // See rob
 		return;
@@ -342,7 +342,7 @@ multi_send_release_robot(objnum_t objnum)
 {
 	short s;
 
-	if ((objnum < 0) || (objnum > Highest_object_index))
+	if ((objnum > Highest_object_index))
 	{
 		Int3(); // See rob
 		return;
@@ -438,7 +438,7 @@ multi_send_robot_position(objnum_t objnum, int force)
 	if (!(Game_mode & GM_MULTI))
 		return;
 
-	if ((objnum < 0) || (objnum > Highest_object_index))
+	if ((objnum > Highest_object_index))
 	{
 		Int3(); // See rob
 		return;
@@ -543,7 +543,7 @@ multi_send_create_robot(int station, objnum_t objnum, int type)
 	PUT_INTEL_SHORT(multibuf+loc, objnum);                  loc += 2;
 	multibuf[loc] = type;									loc += 1;
 
-	map_objnum_local_to_local((short)objnum);
+	map_objnum_local_to_local(objnum);
 
 	multi_send_data(multibuf, loc, 2);
 }
@@ -639,7 +639,7 @@ multi_do_claim_robot(char *buf)
 	remote_botnum = GET_INTEL_SHORT(buf + 2);
 	botnum = objnum_remote_to_local(remote_botnum, (sbyte)buf[4]);
 
-	if ((botnum > Highest_object_index) || (botnum < 0)) {
+	if ((botnum > Highest_object_index)) {
 		return;
 	}
 
@@ -676,7 +676,7 @@ multi_do_release_robot(char *buf)
 	remote_botnum = GET_INTEL_SHORT(buf + 2);
 	botnum = objnum_remote_to_local(remote_botnum, (sbyte)buf[4]);
 
-	if ((botnum < 0) || (botnum > Highest_object_index)) {
+	if ((botnum > Highest_object_index)) {
 //		Int3(); // See rob
 		return;
 	}
@@ -714,7 +714,7 @@ multi_do_robot_position(char *buf)
 	remote_botnum = GET_INTEL_SHORT(buf + loc);
 	botnum = objnum_remote_to_local(remote_botnum, (sbyte)buf[loc+2]); loc += 3;
 
-	if ((botnum < 0) || (botnum > Highest_object_index)) {
+	if ((botnum > Highest_object_index)) {
 		return;
 	}
 
@@ -962,7 +962,7 @@ multi_do_boss_actions(char *buf)
 	segnum_t segnum;
 
 	pnum = buf[loc]; 									loc += 1;
-	boss_objnum = GET_INTEL_SHORT(buf + loc);           loc += 2;
+	boss_objnum = objnum_t(GET_INTEL_SHORT(buf + loc));           loc += 2;
 	action = buf[loc];									loc += 1;
 	secondary = buf[loc];								loc += 1;
 	remote_objnum = GET_INTEL_SHORT(buf + loc);         loc += 2;
@@ -1099,7 +1099,7 @@ multi_do_create_robot_powerups(char *buf)
 
 		s = GET_INTEL_SHORT(buf + loc);
 		if ( s != -1)
-			map_objnum_local_to_remote((short)Net_create_objnums[i], s, pnum);
+			map_objnum_local_to_remote(Net_create_objnums[i], s, pnum);
 		else
 			Objects[Net_create_objnums[i]].flags |= OF_SHOULD_BE_DEAD; // Delete objects other guy didn't create one of
 		loc += 2;

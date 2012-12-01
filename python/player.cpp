@@ -41,7 +41,7 @@ void define_enum_values<player_object_type_t>(enum_<player_object_type_t>&)
 template <typename T>
 static const T& get_range_checked_object(const objnum_t objnum, const char *const errmsg)
 {
-	if (static_cast<unsigned>(objnum) >= sizeof(Objects) / sizeof(Objects[0]) || static_cast<unsigned>(objnum) > static_cast<unsigned>(Highest_object_index))
+	if (objnum >= Objects.size() || objnum > Highest_object_index)
 	{
 		PyErr_SetString(PyExc_IndexError, errmsg);
 		throw_error_already_set();
