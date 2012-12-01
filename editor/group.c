@@ -1059,7 +1059,7 @@ static int med_save_group(const char *filename, const vertnum_t *vertex_ids, con
 	PHYSFS_file * SaveFile;
 	int header_offset, editor_offset, vertex_offset, segment_offset, texture_offset;
 	char ErrorMessage[100];
-	int i, j, k;
+	int j;
 	segnum_t segnum;
 	segment tseg;
    vms_vector tvert;
@@ -1109,7 +1109,7 @@ static int med_save_group(const char *filename, const vertnum_t *vertex_ids, con
 	// Next 3 vars added 10/07 by JAS
 	if (Groupsegp[current_group]) {
 		segnum = Groupsegp[current_group]-Segments;
-		for (i=0;i<num_segments;i++)
+		for (unsigned i=0;i<num_segments;i++)
 			if (segnum == segment_ids[i])
 				group_editor.Groupsegp = i;
 	}
@@ -1124,7 +1124,7 @@ static int med_save_group(const char *filename, const vertnum_t *vertex_ids, con
 	//===================== SAVE VERTEX INFO ==========================
 
 	vertex_offset = PHYSFS_tell(SaveFile);
-	for (i=0;i<num_vertices;i++) {
+	for (unsigned i=0;i<num_vertices;i++) {
 		tvert = Vertices[vertex_ids[i]];
 		PHYSFS_write( SaveFile, &tvert, sizeof(tvert), 1);
 	}
@@ -1133,12 +1133,12 @@ static int med_save_group(const char *filename, const vertnum_t *vertex_ids, con
 
 
 	segment_offset = PHYSFS_tell(SaveFile);
-	for (i=0;i<num_segments;i++) {
+	for (unsigned i=0;i<num_segments;i++) {
 		tseg = Segments[segment_ids[i]];
 
 		for (j=0;j<6;j++)	{
 			found = 0;
-			for (k=0;k<num_segments;k++)
+			for (unsigned k=0;k<num_segments;k++)
 				if (tseg.children[j] == segment_ids[k]) {
 					tseg.children[j] = k;
 					found = 1;
@@ -1148,7 +1148,7 @@ static int med_save_group(const char *filename, const vertnum_t *vertex_ids, con
 		}
 
 		for (j=0;j<8;j++)
-			for (k=0;k<num_vertices;k++)
+			for (unsigned k=0;k<num_vertices;k++)
 				if (tseg.verts[j] == vertex_ids[k])	{
 					tseg.verts[j] = k;
 					break;
@@ -1162,7 +1162,7 @@ static int med_save_group(const char *filename, const vertnum_t *vertex_ids, con
 
 	texture_offset = PHYSFS_tell(SaveFile);
 
-	for (i=0;i<NumTextures;i++)
+	for (unsigned i=0;i<NumTextures;i++)
 		strncpy(current_tmap_list[i], TmapInfo[i].filename, 13);
 
 	PHYSFS_write( SaveFile, current_tmap_list, 13, NumTextures);
