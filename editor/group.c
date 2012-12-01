@@ -676,7 +676,7 @@ static int med_copy_group(int delta_flag, segment *base_seg, int base_side, segm
 //	If any vertex of base_seg is contained in a segment that is reachable from group_seg, then errror.
 static int med_move_group(int delta_flag, segment *base_seg, int base_side, segment *group_seg, int group_side, const vms_matrix *orient_matrix, int orientation)
 {
-	int			v,vv,s,ss,c,d;
+	int			v,vv,c,d;
 	vms_vector	srcv,destv;
 	segment		*segp, *csegp, *dsegp;
 	sbyte			in_vertex_list[MAX_VERTICES], out_vertex_list[MAX_VERTICES];
@@ -704,13 +704,13 @@ static int med_move_group(int delta_flag, segment *base_seg, int base_side, segm
 	}
 
 	//	Make a list of all vertices in group.
-	for (s=0; s<GroupList[current_group].num_segments; s++)
+	for (unsigned s=0; s<GroupList[current_group].num_segments; s++)
 		for (v=0; v<MAX_VERTICES_PER_SEGMENT; v++)
 			in_vertex_list[Segments[GroupList[current_group].segments[s]].verts[v]] = 1;
 
 	//	For all segments which are not in GroupList[current_group].segments, mark all their vertices in the out list.
-	for (s=segment_first; s<=Highest_segment_index; s++) {
-		for (ss=0;; ss++)
+	for (segnum_t s=segment_first; s<=Highest_segment_index; s++) {
+		for (unsigned ss=0;; ss++)
 		{
 			if (ss == GroupList[current_group].num_segments)
 			{
@@ -737,7 +737,7 @@ static int med_move_group(int delta_flag, segment *base_seg, int base_side, segm
 				in_vertex_list[new_vertex_id] = 1;
 
 				// Create a new vertex and assign all occurrences of vertex v in IN list to new vertex number.
-				for (s=0; s<GroupList[current_group].num_segments; s++) {
+				for (unsigned s=0; s<GroupList[current_group].num_segments; s++) {
 					segment *sp = &Segments[GroupList[current_group].segments[s]];
 					for (vv=0; vv<MAX_VERTICES_PER_SEGMENT; vv++)
 						if (sp->verts[vv] == v)
@@ -745,11 +745,11 @@ static int med_move_group(int delta_flag, segment *base_seg, int base_side, segm
 				}
 			}
 
-	for (s=0;s<GroupList[current_group].num_segments;s++)
+	for (unsigned s=0;s<GroupList[current_group].num_segments;s++)
 		Segments[GroupList[current_group].segments[s]].group = current_group;
 
 	// Breaking connections between segments in the group and segments not in the group.
-	for (s=0; s<GroupList[current_group].num_segments; s++)
+	for (unsigned s=0; s<GroupList[current_group].num_segments; s++)
 		{
 		segp = &Segments[GroupList[current_group].segments[s]];
 		for (c=0; c<MAX_SIDES_PER_SEGMENT; c++)
@@ -784,7 +784,7 @@ static int med_move_group(int delta_flag, segment *base_seg, int base_side, segm
 			vm_vec_sub2(&Vertices[v],&srcv);
 
 	//	Now, move all object positions.
-	for (s=0; s<GroupList[current_group].num_segments; s++) {
+	for (unsigned s=0; s<GroupList[current_group].num_segments; s++) {
 		segnum_t	segnum = GroupList[current_group].segments[s];
 		objnum_t	objnum = Segments[segnum].objects;
 
@@ -805,7 +805,7 @@ static int med_move_group(int delta_flag, segment *base_seg, int base_side, segm
 			vm_vec_add2(&Vertices[v],&destv);
 
 	//	Now, rotate all object positions.
-	for (s=0; s<GroupList[current_group].num_segments; s++) {
+	for (unsigned s=0; s<GroupList[current_group].num_segments; s++) {
 		segnum_t	segnum = GroupList[current_group].segments[s];
 		objnum_t	objnum = Segments[segnum].objects;
 
