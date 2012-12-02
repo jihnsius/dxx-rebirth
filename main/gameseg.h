@@ -135,7 +135,7 @@ extern void pick_random_point_in_seg(vms_vector *new_pos, segnum_t segnum);
 void validate_segment_side(segment *sp, int sidenum);
 int check_segment_connections(void);
 void flush_fcd_cache(void);
-int set_segment_depths(segnum_t start_seg, ubyte *segbuf);
+int set_segment_depths(segnum_t start_seg, automap_visited_array_t &segbuf);
 void apply_all_changed_light(void);
 void	set_ambient_sound_flags(void);
 extern int	Doing_lighting_hack_flag;

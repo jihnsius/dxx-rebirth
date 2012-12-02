@@ -1858,7 +1858,7 @@ void pick_random_point_in_seg(vms_vector *new_pos, segnum_t segnum)
 //	----------------------------------------------------------------------------------------------------------
 //	Set the segment depth of all segments from start_seg in *segbuf.
 //	Returns maximum depth value.
-int set_segment_depths(segnum_t start_seg, ubyte *segbuf)
+int set_segment_depths(segnum_t start_seg, automap_visited_array_t &segbuf)
 {
 	segnum_t curseg;
 	ubyte	visited[MAX_SEGMENTS];

@@ -31,7 +31,7 @@ extern int Automap_active;
 extern char Marker_input[40];
 extern void do_automap(int key_code);
 extern void automap_clear_visited();
-extern ubyte Automap_visited[MAX_SEGMENTS];
+extern automap_visited_array_t Automap_visited;
 void DropBuddyMarker(dxxobject *objp);
 
 #define NUM_MARKERS         16

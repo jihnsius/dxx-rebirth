@@ -192,6 +192,7 @@ static inline segnum_t operator-(const T *p, const segment_array_template_t<T>& 
 
 typedef segment_array_template_t<segment> segment_array_t;
 typedef segment_array_template_t<segment2> segment2_array_t;
+typedef segment_array_template_t<ubyte> automap_visited_array_t;
 
 // Globals from mglobal.c
 extern vms_vector   Vertices[MAX_VERTICES];

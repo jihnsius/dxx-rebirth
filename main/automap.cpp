@@ -176,7 +176,7 @@ static void init_automap_colors(automap *am)
 }
 
 // Segment visited list
-ubyte Automap_visited[MAX_SEGMENTS];
+automap_visited_array_t Automap_visited;
 
 // Map movement defines
 #define PITCH_DEFAULT 9000
@@ -370,7 +370,7 @@ static void ClearMarkers()
 
 void automap_clear_visited()
 {
-	std::fill(Automap_visited, Automap_visited + (sizeof(Automap_visited) / sizeof(Automap_visited[0])), 0);
+	Automap_visited.fill(0);
 		ClearMarkers();
 }
 
@@ -586,7 +586,7 @@ static int automap_key_command(window *wind, d_event *event, automap *am)
 
 #ifndef NDEBUG
 		case KEY_DEBUGGED+KEY_F: 	{
-				std::fill(Automap_visited, Automap_visited + Highest_segment_index + 1, 1);
+				Automap_visited.fill(1);
 				automap_build_edge_list(am);
 				am->max_segments_away = set_segment_depths(Objects[Players[Player_num].objnum].segnum, Automap_visited);
 				am->segment_limit = am->max_segments_away;
