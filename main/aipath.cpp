@@ -276,7 +276,7 @@ int create_path_points(dxxobject *objp, segnum_t start_seg, segnum_t end_seg, po
 	int		qtail = 0, qhead = 0;
 	int		i;
 	segment_array_template_t<sbyte> visited;
-	seg_seg	seg_queue[MAX_SEGMENTS];
+	std::array<seg_seg, MAX_SEGMENTS>	seg_queue;
 	std::array<short, MAX_SEGMENTS>		depth;
 	int		cur_depth;
 	sbyte   random_xlate[MAX_SIDES_PER_SEGMENT];
