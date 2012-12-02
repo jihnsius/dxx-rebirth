@@ -45,7 +45,7 @@ int N_selected_segs = 0;  // Number of segments found at Selected_segs
 std::array<segnum_t, MAX_SELECTED_SEGS> Selected_segs; // List of segment numbers currently selected
 
 int N_warning_segs = 0;   // Number of segments warning-worthy, such as a concave segment
-segnum_t Warning_segs[MAX_WARNING_SEGS]; // List of segment numbers currently selected
+std::array<segnum_t, MAX_WARNING_SEGS> Warning_segs; // List of segment numbers currently selected
 
 int N_found_segs = 0;    // Number of segments found with last shift-mouse-click
 segnum_t Found_segs[MAX_FOUND_SEGS]; // List of warning-worthy segments

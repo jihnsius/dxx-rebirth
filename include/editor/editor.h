@@ -200,7 +200,7 @@ extern	int		N_selected_segs;		// Number of segments found at Selected_segs
 extern	std::array<segnum_t, MAX_SELECTED_SEGS>		Selected_segs;		// List of segment numbers currently selected
 
 extern	int		N_warning_segs;		// Number of segments warning-worthy, such as a concave segment
-extern	segnum_t		Warning_segs[MAX_WARNING_SEGS];		// List of warning-worthy segments
+extern	std::array<segnum_t, MAX_WARNING_SEGS>		Warning_segs;		// List of warning-worthy segments
 
 extern	int		Show_axes_flag;		// 0 = don't show, !0 = do show coordinate axes in *Cursegp orientation
 
