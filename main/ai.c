@@ -303,7 +303,6 @@ void do_ai_frame(dxxobject *obj)
 	ai_local    *ailp = &Ai_local_info[objnum];
 	fix         dist_to_player;
 	vms_vector  vec_to_player;
-	fix         dot;
 	robot_info  *robptr;
 	int         player_visibility=-1;
 	int         obj_ref;
@@ -1014,10 +1013,8 @@ _exit_cheat:
 				// If vec_to_player dot player_rear_vector > 0, behind is goal.
 				// Else choose goal with larger dot from left, right.
 				vms_vector  goal_point, goal_vector, vec_to_goal, rand_vec;
-				fix         dot;
-
-				dot = vm_vec_dot(&ConsoleObject->orient.fvec, &vec_to_player);
-				if (dot > 0) {          // Remember, we're interested in the rear vector dot being < 0.
+				fix fdot = vm_vec_dot(&ConsoleObject->orient.fvec, &vec_to_player);
+				if (fdot > 0) {          // Remember, we're interested in the rear vector dot being < 0.
 					goal_vector = ConsoleObject->orient.fvec;
 					vm_vec_negate(&goal_vector);
 				} else {
@@ -1213,10 +1210,12 @@ _exit_cheat:
 		case AIS_NONE:
 			compute_vis_and_vec(obj, &vis_vec_pos, ailp, &vec_to_player, &player_visibility, robptr, &visibility_and_vec_computed);
 
-			dot = vm_vec_dot(&obj->orient.fvec, &vec_to_player);
-			if (dot >= F1_0/2)
+		{
+			fix fdot = vm_vec_dot(&obj->orient.fvec, &vec_to_player);
+			if (fdot >= F1_0/2)
 				if (aip->GOAL_STATE == AIS_REST)
 					aip->GOAL_STATE = AIS_SRCH;
+		}
 			break;
 		case AIS_REST:
 			if (aip->GOAL_STATE == AIS_REST) {
