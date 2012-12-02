@@ -91,11 +91,11 @@ static dxxobject *object_create_explosion_sub(dxxobject *objp, short segnum, vms
 		vms_vector pos_hit, vforce;
 		fix damage;
 		int i;
-		dxxobject * obj0p = &Objects[0];
 
 		// -- now legal for badass explosions on a wall. Assert(objp != NULL);
 
 		for (i=0; i<=Highest_object_index; i++ )	{
+			dxxobject *const obj0p = &Objects[i];
 			sbyte parent_check = 0;
 
 			//	Weapons used to be affected by badass explosions, but this introduces serious problems.
@@ -245,7 +245,6 @@ static dxxobject *object_create_explosion_sub(dxxobject *objp, short segnum, vms
 					}	// end if (object_to_object_visibility...
 				}	// end if (dist < maxdistance)
 			}
-			obj0p++;
 		}	// end for
 	}	// end if (maxdamage...
 
