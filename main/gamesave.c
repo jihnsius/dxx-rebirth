@@ -718,7 +718,7 @@ void write_object(dxxobject *obj, short version, PHYSFS_file *f)
 // returns 0=everything ok, 1=old version, -1=error
 static int load_game_data(PHYSFS_file *LoadFile)
 {
-	int i,j;
+	int j;
 
 	short game_top_fileinfo_version;
 	int object_offset;
@@ -817,7 +817,7 @@ static int load_game_data(PHYSFS_file *LoadFile)
 		if (PHYSFSX_fseek( LoadFile, object_offset, SEEK_SET ))
 			Error( "Error seeking to object_offset in gamesave.c" );
 
-		for (i = 0; i < gs_num_objects; i++) {
+		for (unsigned i = 0; i < gs_num_objects; i++) {
 
 			read_object(&Objects[i], LoadFile, game_top_fileinfo_version);
 
@@ -829,7 +829,7 @@ static int load_game_data(PHYSFS_file *LoadFile)
 
 	//===================== READ WALL INFO ============================
 
-	for (i = 0; i < Num_walls; i++) {
+	for (unsigned i = 0; i < Num_walls; i++) {
 		if (game_top_fileinfo_version >= 20)
 			wall_read(&Walls[i], LoadFile); // v20 walls and up.
 		else if (game_top_fileinfo_version >= 17) {
@@ -895,7 +895,7 @@ static int load_game_data(PHYSFS_file *LoadFile)
 
 	//==================== READ TRIGGER INFO ==========================
 
-	for (i = 0; i < Num_triggers; i++)
+	for (int i = 0; i < Num_triggers; i++)
 	{
 		if (game_top_fileinfo_version < 31)
 		{
@@ -976,7 +976,7 @@ static int load_game_data(PHYSFS_file *LoadFile)
 
 	//================ READ MATERIALOGRIFIZATIONATORS INFO ===============
 
-	for (i = 0; i < Num_robot_centers; i++) {
+	for (unsigned i = 0; i < Num_robot_centers; i++) {
 		if (game_top_fileinfo_version < 27) {
 			old_matcen_info m;
 			old_matcen_info_read(&m, LoadFile);
@@ -998,7 +998,7 @@ static int load_game_data(PHYSFS_file *LoadFile)
 
 	//================ READ DL_INDICES INFO ===============
 
-	for (i = 0; i < Num_static_lights; i++) {
+	for (unsigned i = 0; i < Num_static_lights; i++) {
 		if (game_top_fileinfo_version < 29) {
 			Int3();	//shouldn't be here!!!
 		} else
@@ -1010,7 +1010,7 @@ static int load_game_data(PHYSFS_file *LoadFile)
 
 	//================ READ DELTA LIGHT INFO ===============
 
-	for (i = 0; i < num_delta_lights; i++) {
+	for (unsigned i = 0; i < num_delta_lights; i++) {
 		if (game_top_fileinfo_version < 29) {
 			;
 		} else
@@ -1021,7 +1021,7 @@ static int load_game_data(PHYSFS_file *LoadFile)
 
 	reset_objects(gs_num_objects);
 
-	for (i=0; i<MAX_OBJECTS; i++) {
+	for (unsigned i=0; i<MAX_OBJECTS; i++) {
 		Objects[i].next = Objects[i].prev = -1;
 		if (Objects[i].type != OBJ_NONE) {
 			int objsegnum = Objects[i].segnum;
@@ -1041,7 +1041,7 @@ static int load_game_data(PHYSFS_file *LoadFile)
 	clear_transient_objects(1);		//1 means clear proximity bombs
 
 	// Make sure non-transparent doors are set correctly.
-	for (i=0; i< Num_segments; i++)
+	for (unsigned i=0; i< Num_segments; i++)
 		for (j=0;j<MAX_SIDES_PER_SEGMENT;j++) {
 			side	*sidep = &Segments[i].sides[j];
 			if ((sidep->wall_num != -1) && (Walls[sidep->wall_num].clip_num != -1)) {
@@ -1061,13 +1061,13 @@ static int load_game_data(PHYSFS_file *LoadFile)
 	Num_open_doors = 0;
 
 	//go through all walls, killing references to invalid triggers
-	for (i=0;i<Num_walls;i++)
+	for (unsigned i=0;i<Num_walls;i++)
 		if (Walls[i].trigger >= Num_triggers) {
 			Walls[i].trigger = -1;	//kill trigger
 		}
 
 	//go through all triggers, killing unused ones
-	for (i=0;i<Num_triggers;) {
+	for (unsigned i=0;i<Num_triggers;) {
 		int w;
 
 		//	Find which wall this trigger is connected to.
@@ -1089,7 +1089,7 @@ static int load_game_data(PHYSFS_file *LoadFile)
 	{
 		int t;
 
-		for (i=0; i<Num_walls; i++)
+		for (unsigned i=0; i<Num_walls; i++)
 			Walls[i].controlling_trigger = -1;
 
 		for (t=0; t<Num_triggers; t++) {
