@@ -47,7 +47,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 //@@vms_vector controlcen_gun_points[MAX_CONTROLCEN_GUNS];
 //@@vms_vector controlcen_gun_dirs[MAX_CONTROLCEN_GUNS];
 
-reactor Reactors[MAX_REACTORS];
+reactor_t Reactors[MAX_REACTORS];
 int Num_reactors=0;
 
 control_center_triggers ControlCenterTriggers;
@@ -66,7 +66,7 @@ void do_countdown_frame();
 //return the position & orientation of a gun on the control center object
 static void calc_controlcen_gun_point(vms_vector *gun_point,vms_vector *gun_dir,dxxobject *obj,int gun_num)
 {
-	reactor *reactor;
+	reactor_t *reactor;
 	vms_matrix m;
 
 	Assert(obj->type == OBJ_CNTRLCEN);
@@ -493,7 +493,7 @@ void special_reactor_stuff(void)
 /*
  * reads n reactor structs from a PHYSFS_file
  */
-extern int reactor_read_n(reactor *r, int n, PHYSFS_file *fp)
+extern int reactor_read_n(reactor_t *r, int n, PHYSFS_file *fp)
 {
 	int i, j;
 

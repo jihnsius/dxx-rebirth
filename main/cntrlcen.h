@@ -44,18 +44,18 @@ typedef struct control_center_triggers {
 
 extern control_center_triggers ControlCenterTriggers;
 
-typedef struct reactor {
+typedef struct reactor_t {
 	int model_num;
 	int n_guns;
 	vms_vector gun_points[MAX_CONTROLCEN_GUNS];
 	vms_vector gun_dirs[MAX_CONTROLCEN_GUNS];
-} __pack__ reactor;
+} __pack__ reactor_t;
 
 #define MAX_REACTORS 7
 
 extern int Num_reactors;
 
-extern reactor Reactors[MAX_REACTORS];
+extern reactor_t Reactors[MAX_REACTORS];
 
 //@@extern int N_controlcen_guns;
 extern int Control_center_been_hit;
@@ -88,7 +88,7 @@ extern int Reactor_strength;
 /*
  * reads n reactor structs from a PHYSFS_file
  */
-extern int reactor_read_n(reactor *r, int n, PHYSFS_file *fp);
+extern int reactor_read_n(reactor_t *r, int n, PHYSFS_file *fp);
 
 /*
  * reads n control_center_triggers structs from a PHYSFS_file
