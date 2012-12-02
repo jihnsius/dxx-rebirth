@@ -1074,10 +1074,10 @@ int state_save_all_sub(char *filename, char *desc)
 	PHYSFS_write(fp, &PaletteBlueAdd, sizeof(int), 1);
 	if ( Highest_segment_index+1 > MAX_SEGMENTS_ORIGINAL )
 	{
-		PHYSFS_write(fp, Light_subtracted, sizeof(Light_subtracted[0]), Highest_segment_index + 1);
+		PHYSFS_write(fp, &Light_subtracted[segment_first], sizeof(Light_subtracted[segment_first]), Highest_segment_index + 1);
 	}
 	else
-		PHYSFS_write(fp, Light_subtracted, sizeof(Light_subtracted[0]), MAX_SEGMENTS_ORIGINAL);
+		PHYSFS_write(fp, &Light_subtracted[segment_first], sizeof(Light_subtracted[segment_first]), MAX_SEGMENTS_ORIGINAL);
 	PHYSFS_write(fp, &First_secret_visit, sizeof(First_secret_visit), 1);
 	PHYSFS_write(fp, &Omega_charge, sizeof(Omega_charge), 1);
 
@@ -1561,16 +1561,14 @@ int state_restore_all_sub(char *filename, int secret_restore)
 	if (version >= 16) {
 		if ( Highest_segment_index+1 > MAX_SEGMENTS_ORIGINAL )
 		{
-			memset(&Light_subtracted, 0, sizeof(Light_subtracted[0])*MAX_SEGMENTS);
-			PHYSFS_read(fp, Light_subtracted, sizeof(Light_subtracted[0]), Highest_segment_index + 1);
+			Light_subtracted.fill(0);
+			PHYSFS_read(fp, &Light_subtracted[segment_first], sizeof(Light_subtracted[segment_first]), Highest_segment_index + 1);
 		}
 		else
-			PHYSFS_read(fp, Light_subtracted, sizeof(Light_subtracted[0]), MAX_SEGMENTS_ORIGINAL);
+			PHYSFS_read(fp, &Light_subtracted[segment_first], sizeof(Light_subtracted[segment_first]), MAX_SEGMENTS_ORIGINAL);
 		apply_all_changed_light();
 	} else {
-		segnum_t	i;
-		for (i=segment_first; i<=Highest_segment_index; i++)
-			Light_subtracted[i] = 0;
+		Light_subtracted.fill(0);
 	}
 
 	// static_light should now be computed - now actually set tmap info

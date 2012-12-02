@@ -240,7 +240,8 @@ int add_light(segnum_t segnum, int sidenum);
 void restore_all_lights_in_mine(void);
 void clear_light_subtracted(void);
 
-extern ubyte Light_subtracted[MAX_SEGMENTS];
+typedef segment_array_template_t<ubyte> light_subtracted_array_t;
+extern light_subtracted_array_t	Light_subtracted;
 
 // ----------------------------------------------------------------------------
 // --------------------- Segment interrogation functions ----------------------

@@ -2051,7 +2051,7 @@ static void change_light(segnum_t segnum, int sidenum, int dir)
 // returns 1 if lights actually subtracted, else 0
 int subtract_light(segnum_t segnum, int sidenum)
 {
-	Assert(segnum < sizeof(Light_subtracted) / sizeof(Light_subtracted[0]));
+	Assert(segnum < Light_subtracted.size());
 	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
 	Assert(segnum <= Highest_segment_index);
 	Assert(sidenum < MAX_SIDES_PER_SEGMENT);
@@ -2070,7 +2070,7 @@ int subtract_light(segnum_t segnum, int sidenum)
 // returns 1 if lights actually added, else 0
 int add_light(segnum_t segnum, int sidenum)
 {
-	Assert(segnum < sizeof(Light_subtracted) / sizeof(Light_subtracted[0]));
+	Assert(segnum < Light_subtracted.size());
 	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
 	Assert(segnum <= Highest_segment_index);
 	Assert(sidenum < MAX_SIDES_PER_SEGMENT);
@@ -2085,7 +2085,7 @@ int add_light(segnum_t segnum, int sidenum)
 
 //	Light_subtracted[i] contains bit indicators for segment #i.
 //	If bit n (1 << n) is set, then side #n in segment #i has had light subtracted from original (editor-computed) value.
-ubyte	Light_subtracted[MAX_SEGMENTS];
+light_subtracted_array_t	Light_subtracted;
 
 //	Parse the Light_subtracted array, turning on or off all lights.
 void apply_all_changed_light(void)
