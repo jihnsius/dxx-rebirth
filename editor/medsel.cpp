@@ -82,7 +82,7 @@ void sort_seg_list(int n_segs,segnum_t *segnumlist,vms_vector *pos)
 
 int SortSelectedList(void)
 {
-	sort_seg_list(N_selected_segs,Selected_segs,&ConsoleObject->pos);
+	sort_seg_list(N_selected_segs,Selected_segs.begin(),&ConsoleObject->pos);
 	editor_status("%i element selected list sorted.",N_selected_segs);
 
 	return 1;

@@ -197,7 +197,7 @@ extern	segnum_t		Found_segs[MAX_FOUND_SEGS];			// List of segment numbers "found
 extern	int		N_found_segs;			// Number of segments found at Found_segs
 
 extern	int		N_selected_segs;		// Number of segments found at Selected_segs
-extern	segnum_t		Selected_segs[MAX_SELECTED_SEGS];		// List of segment numbers currently selected
+extern	std::array<segnum_t, MAX_SELECTED_SEGS>		Selected_segs;		// List of segment numbers currently selected
 
 extern	int		N_warning_segs;		// Number of segments warning-worthy, such as a concave segment
 extern	segnum_t		Warning_segs[MAX_WARNING_SEGS];		// List of warning-worthy segments

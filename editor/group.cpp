@@ -402,7 +402,7 @@ static void med_rotate_group(vms_matrix *rotmat, group_segment_array_t &group_se
 
 
 // ------------------------------------------------------------------------------------------------
-static void cgl_aux(segment *segp, group_segment_array_t &seglistp, unsigned *num_segs, const segnum_t *ignore_list, int num_ignore_segs, been_visited_array_t& Been_visited)
+static void cgl_aux(segment *segp, group_segment_array_t &seglistp, unsigned *num_segs, const std::array<segnum_t, MAX_SELECTED_SEGS> &ignore_list, int num_ignore_segs, been_visited_array_t& Been_visited)
 {
 	int	i, side;
 	segnum_t	curseg = segp-Segments;
@@ -426,7 +426,7 @@ static void cgl_aux(segment *segp, group_segment_array_t &seglistp, unsigned *nu
 
 // ------------------------------------------------------------------------------------------------
 //	Sets Been_visited[n] if n is reachable from segp
-static void create_group_list(segment *segp, group_segment_array_t &seglistp, unsigned *num_segs, const segnum_t *ignore_list, int num_ignore_segs)
+static void create_group_list(segment *segp, group_segment_array_t &seglistp, unsigned *num_segs, const std::array<segnum_t, MAX_SELECTED_SEGS> &ignore_list, int num_ignore_segs)
 {
 	been_visited_array_t Been_visited;
 	Been_visited.fill(0);
