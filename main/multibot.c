@@ -420,9 +420,9 @@ multi_send_robot_position_sub(int objnum, int now)
 
 																		loc += 3;
 #ifndef WORDS_BIGENDIAN
-	create_shortpos((shortpos *)(multibuf+loc), Objects+objnum,0);		loc += sizeof(shortpos);
+	create_shortpos((shortpos *)(multibuf+loc), &Objects[objnum],0);		loc += sizeof(shortpos);
 #else
-	create_shortpos(&sp, Objects+objnum, 1);
+	create_shortpos(&sp, &Objects[objnum], 1);
 	memcpy(&(multibuf[loc]), (ubyte *)(sp.bytemat), 9);
 	loc += 9;
 	memcpy(&(multibuf[loc]), (ubyte *)&(sp.xo), 14);

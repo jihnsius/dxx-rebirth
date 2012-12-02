@@ -260,7 +260,7 @@ int newdemo_find_object( int signature )
 {
 	int i;
 	dxxobject * objp;
-	objp = Objects;
+	objp = &Objects[0];
 	for (i=0; i<=Highest_object_index; i++, objp++ ) {
 		if ( (objp->type != OBJ_NONE) && (objp->signature == signature))
 			return i;

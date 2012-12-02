@@ -4640,7 +4640,7 @@ void net_udp_send_pdata()
 	buf[len] = Players[Player_num].connected;							len++;
 	buf[len] = Objects[Players[Player_num].objnum].render_type;					len++;
 	memset(&pos, 0, sizeof(shortpos));
-	create_shortpos(&pos, Objects+Players[Player_num].objnum, 0);
+	create_shortpos(&pos, &Objects[Players[Player_num].objnum], 0);
 	memcpy(buf + len, &pos.bytemat, 9);								len += 9;
 	PUT_INTEL_SHORT(&buf[len], pos.xo);								len += 2;
 	PUT_INTEL_SHORT(&buf[len], pos.yo);								len += 2;

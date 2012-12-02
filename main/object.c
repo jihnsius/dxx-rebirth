@@ -1561,7 +1561,7 @@ void obj_delete_all_that_should_be_dead()
 	int		local_dead_player_object=-1;
 
 	// Move all objects
-	objp = Objects;
+	objp = &Objects[0];
 
 	for (i=0;i<=Highest_object_index;i++) {
 		if ((objp->type!=OBJ_NONE) && (objp->flags&OF_SHOULD_BE_DEAD) )	{
@@ -1883,7 +1883,7 @@ void object_move_all()
 		ConsoleObject->mtype.phys_info.flags &= ~PF_LEVELLING;
 
 	// Move all objects
-	objp = Objects;
+	objp = &Objects[0];
 
 	#ifndef DEMO_ONLY
 	for (i=0;i<=Highest_object_index;i++) {
