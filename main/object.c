@@ -1708,18 +1708,6 @@ void object_move_one( dxxobject * obj )
 		case CT_WEAPON:		Laser_do_weapon_sequence(obj); break;
 		case CT_EXPLOSION:	do_explosion_sequence(obj); break;
 
-		#ifndef RELEASE
-		case CT_SLEW:
-			if ( keyd_pressed[KEY_PAD5] ) slew_stop( obj );
-			if ( keyd_pressed[KEY_NUMLOCK] ) 		{
-				slew_reset_orient( obj );
-				* (ubyte *) 0x417 &= ~0x20;		//kill numlock
-			}
-			slew_frame(0 );		// Does velocity addition for us.
-			break;
-		#endif
-
-
 //		case CT_FLYTHROUGH:
 //			do_flythrough(obj,0);			// HACK:do_flythrough should operate on an object!!!!
 //			//check_object_seg(obj);
