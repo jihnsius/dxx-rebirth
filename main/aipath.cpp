@@ -277,7 +277,7 @@ int create_path_points(dxxobject *objp, segnum_t start_seg, segnum_t end_seg, po
 	int		i;
 	segment_array_template_t<sbyte> visited;
 	seg_seg	seg_queue[MAX_SEGMENTS];
-	short		depth[MAX_SEGMENTS];
+	std::array<short, MAX_SEGMENTS>		depth;
 	int		cur_depth;
 	sbyte   random_xlate[MAX_SIDES_PER_SEGMENT];
 	point_seg	*original_psegs = psegs;
@@ -301,14 +301,13 @@ if ((objp->type == OBJ_ROBOT) && (objp->ctype.ai_info.behavior == AIB_RUN_FROM))
 //		depth[i] = 0;
 //	}
 	visited.fill(0);
-	memset(depth, 0, sizeof(depth[0])*(Highest_segment_index+1));
+	depth.fill(0);
 
 	//	If there is a segment we're not allowed to visit, mark it.
 	if (avoid_seg != segment_none) {
 		Assert(avoid_seg <= Highest_segment_index);
 		if ((start_seg != avoid_seg) && (end_seg != avoid_seg)) {
 			visited[avoid_seg] = 1;
-			depth[avoid_seg] = 0;
 		}
 	}
 
