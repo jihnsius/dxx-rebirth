@@ -198,11 +198,9 @@ static int segment_is_reachable(segnum_t curseg, int sidenum)
 void create_bfs_list(segnum_t start_seg, segnum_t bfs_list[], unsigned *length, unsigned max_segs)
 {
 	unsigned	head, tail;
-	sbyte   visited[MAX_SEGMENTS];
+	segment_array_template_t<sbyte> visited;
 
-	unsigned s;
-	for (s=0; s<sizeof(visited)/sizeof(visited[0]); s++)
-		visited[s] = 0;
+	visited.fill(0);
 
 	head = 0;
 	tail = 0;
@@ -577,9 +575,9 @@ static segnum_t exists_fuelcen_in_mine(segnum_t start_seg)
 {
 	unsigned	length, segindex;
 	segnum_t segnum;
-	segnum_t	bfs_list[MAX_SEGMENTS];
+	std::array<segnum_t, MAX_SEGMENTS>	bfs_list;
 
-	create_bfs_list(start_seg, bfs_list, &length, MAX_SEGMENTS);
+	create_bfs_list(start_seg, bfs_list.begin(), &length, bfs_list.size());
 
 		for (segindex=0; segindex<length; segindex++) {
 			segnum = bfs_list[segindex];
@@ -602,9 +600,9 @@ static objnum_t exists_in_mine(segnum_t start_seg, int objtype, int objid, int s
 {
 	unsigned	length, segindex;
 	segnum_t segnum;
-	segnum_t	bfs_list[MAX_SEGMENTS];
+	std::array<segnum_t, MAX_SEGMENTS>	bfs_list;
 
-	create_bfs_list(start_seg, bfs_list, &length, MAX_SEGMENTS);
+	create_bfs_list(start_seg, bfs_list.begin(), &length, bfs_list.size());
 
 		for (segindex=0; segindex<length; segindex++) {
 			objnum_t	objnum;
