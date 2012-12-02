@@ -93,7 +93,7 @@ int	N_render_segs;
 fix Render_zoom = 0x9000;					//the player's zoom factor
 
 #ifndef NDEBUG
-ubyte object_rendered[MAX_OBJECTS];
+object_array_template_t<ubyte> object_rendered;
 #endif
 
 #ifdef EDITOR
@@ -2139,9 +2139,6 @@ done_list:
 //renders onto current canvas
 void render_mine(segnum_t start_seg_num,fix eye_offset, int window_num)
 {
-#ifndef NDEBUG
-	int		i;
-#endif
 	int		nn;
 	static fix64 dynlight_time = 0;
 	segment_array_template_t<ubyte> visited;
@@ -2150,8 +2147,7 @@ void render_mine(segnum_t start_seg_num,fix eye_offset, int window_num)
 	Window_rendered_data[window_num].num_objects = 0;
 
 	#ifndef NDEBUG
-	for (i=0;i<=Highest_object_index;i++)
-		object_rendered[i] = 0;
+	object_rendered.fill(0);
 	#endif
 	visited.fill(0);
 

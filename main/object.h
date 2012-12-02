@@ -102,6 +102,7 @@ struct object_array_template_t
 	typedef std::array<T, MAX_OBJECTS> array_t;
 	array_t a;
 	T& operator[](const objnum_t& o) { return a[o]; }
+	void fill(const T& t) { a.fill(t); }
 	objnum_t idx(const T *p) const
 	{
 		return objnum_t(std::distance(a.begin(), p));
