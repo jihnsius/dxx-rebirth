@@ -439,7 +439,8 @@ static void create_group_list(segment *segp, segnum_t *seglistp, unsigned *num_s
 static void duplicate_group(sbyte *vertex_ids, segnum_t *segment_ids, int num_segments)
 {
 	int	s,ss,new_vertex_id,sidenum;
-	segnum_t	new_segment_id,new_segment_ids[MAX_SEGMENTS];
+	segnum_t	new_segment_id;
+	std::array<segnum_t, MAX_SEGMENTS> new_segment_ids;
 	int	new_vertex_ids[MAX_VERTICES];		// If new_vertex_ids[v] != -1, then vertex v has been remapped to new_vertex_ids[v]
 
 	//	duplicate vertices
