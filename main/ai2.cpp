@@ -246,7 +246,7 @@ static void init_boss_segments(segnum_t segptr[], int *num_segs, int size_check,
 		dxxobject		*boss_objp = &Objects[boss_objnum];
 		int			head, tail;
 		segnum_t			seg_queue[QUEUE_SIZE];
-		//ALREADY IN RENDER.H sbyte   visited[MAX_SEGMENTS];
+		segment_array_template_t<sbyte>   visited;
 		fix			boss_size_save;
 
 		boss_size_save = boss_objp->size;
@@ -262,7 +262,7 @@ static void init_boss_segments(segnum_t segptr[], int *num_segs, int size_check,
 		Selected_segs[N_selected_segs++] = original_boss_seg;
 		#endif
 
-		std::fill(visited, visited + Highest_segment_index + 1, 0);
+		visited.fill(0);
 
 		while (tail != head) {
 			int		sidenum;
