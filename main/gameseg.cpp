@@ -1865,7 +1865,7 @@ void pick_random_point_in_seg(vms_vector *new_pos, segnum_t segnum)
 int set_segment_depths(segnum_t start_seg, automap_visited_array_t &segbuf)
 {
 	segnum_t curseg;
-	ubyte	visited[MAX_SEGMENTS];
+	segment_array_template_t<ubyte> visited;
 	segnum_t	queue[MAX_SEGMENTS];
 	int	head, tail;
 	int	depth;
@@ -1876,11 +1876,10 @@ int set_segment_depths(segnum_t start_seg, automap_visited_array_t &segbuf)
 	tail = 0;
 
 	Assert(Highest_segment_index < Segments.size());
-	for (segnum_t i=segment_first; i<=Highest_segment_index; i++)
-		visited[i] = 0;
 
 	if (segbuf[start_seg] == 0)
 		return 1;
+	visited.fill(0);
 
 	queue[tail++] = start_seg;
 	visited[start_seg] = 1;
