@@ -469,7 +469,7 @@ static void write_wall_text(PHYSFS_file *my_file)
 	for (segnum_t i=segment_first; i<=Highest_segment_index; i++) {
 		segment	*segp = &Segments[i];
 		for (j=0; j<MAX_SIDES_PER_SEGMENT; j++) {
-			side	*sidep = &segp->sides[j];
+			side_t	*sidep = &segp->sides[j];
 			if (sidep->wall_num != -1)
 			{
 				if (wall_flags[sidep->wall_num])
@@ -790,7 +790,7 @@ static void determine_used_textures_level(int load_level_flag, int shareware_fla
 		segment	*segp = &Segments[segnum];
 
 		for (sidenum=0; sidenum<MAX_SIDES_PER_SEGMENT; sidenum++) {
-			side	*sidep = &segp->sides[sidenum];
+			side_t	*sidep = &segp->sides[sidenum];
 
 			if (sidep->wall_num != -1) {
 				int clip_num = Walls[sidep->wall_num].clip_num;

@@ -412,7 +412,7 @@ fix	Min_n0_n1_dot	= (F1_0*15/16);
 static void render_side(segment *segp, int sidenum)
 {
 	int		vertnum_list[4];
-	side		*sidep = &segp->sides[sidenum];
+	side_t		*sidep = &segp->sides[sidenum];
 	vms_vector	tvec;
 	fix		v_dot_n0, v_dot_n1;
 	uvl		temp_uvls[3];

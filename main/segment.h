@@ -87,8 +87,8 @@ typedef struct uvl {
 	fix u, v, l;
 } uvl;
 
+typedef struct side_t {
 #ifdef COMPACT_SEGS
-typedef struct side {
 	sbyte   type;           // replaces num_faces and tri_edge, 1 = quad, 2 = 0:2 triangulation, 3 = 1:3 triangulation
 	ubyte   pad;            //keep us longword alligned
 	short   wall_num;
@@ -96,9 +96,7 @@ typedef struct side {
 	short   tmap_num2;
 	uvl     uvls[4];
 	//vms_vector normals[2];  // 2 normals, if quadrilateral, both the same.
-} side;
 #else
-typedef struct side {
 	sbyte   type;           // replaces num_faces and tri_edge, 1 = quad, 2 = 0:2 triangulation, 3 = 1:3 triangulation
 	ubyte   pad;            //keep us longword alligned
 	short   wall_num;
@@ -106,14 +104,14 @@ typedef struct side {
 	short   tmap_num2;
 	uvl     uvls[4];
 	vms_vector normals[2];  // 2 normals, if quadrilateral, both the same.
-} side;
 #endif
+} side_t;
 
 typedef struct segment {
 #ifdef EDITOR
 	segnum_t   segnum;     // segment number, not sure what it means
 #endif
-	side    sides[MAX_SIDES_PER_SEGMENT];       // 6 sides
+	side_t    sides[MAX_SIDES_PER_SEGMENT];       // 6 sides
 	segnum_t   children[MAX_SIDES_PER_SEGMENT];    // indices of 6 children segments, front, left, top, right, bottom, back
 	vertnum_t     verts[MAX_VERTICES_PER_SEGMENT];    // vertex ids of 4 front and 4 back vertices
 #ifdef EDITOR

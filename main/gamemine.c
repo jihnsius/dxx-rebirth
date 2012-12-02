@@ -63,7 +63,7 @@ typedef struct v16_segment {
 	#ifdef EDITOR
 	short   segnum;             // segment number, not sure what it means
 	#endif
-	side    sides[MAX_SIDES_PER_SEGMENT];       // 6 sides
+	side_t    sides[MAX_SIDES_PER_SEGMENT];       // 6 sides
 	short   children[MAX_SIDES_PER_SEGMENT];    // indices of 6 children segments, front, left, top, right, bottom, back
 	short   verts[MAX_VERTICES_PER_SEGMENT];    // vertex ids of 4 front and 4 back vertices
 	#ifdef  EDITOR

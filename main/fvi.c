@@ -93,7 +93,7 @@ int ij_table[3][2] =        {
 #define IT_POINT        3       //touches vertex
 
 //see if a point in inside a face by projecting into 2d
-static uint check_point_to_face(const vms_vector *checkp, side *s,int facenum,int nv,int *vertex_list)
+static uint check_point_to_face(const vms_vector *checkp, side_t *s,int facenum,int nv,int *vertex_list)
 {
 	vms_vector_array *checkp_array;
 	vms_vector_array norm;
@@ -159,7 +159,7 @@ static uint check_point_to_face(const vms_vector *checkp, side *s,int facenum,in
 
 
 //check if a sphere intersects a face
-static int check_sphere_to_face(vms_vector *pnt, side *s,int facenum,int nv,fix rad,int *vertex_list)
+static int check_sphere_to_face(vms_vector *pnt, side_t *s,int facenum,int nv,fix rad,int *vertex_list)
 {
 	vms_vector checkp=*pnt;
 	uint edgemask;
@@ -234,7 +234,7 @@ static int check_line_to_face(vms_vector *newp,const vms_vector *p0,const vms_ve
 {
 	vms_vector checkp;
 	int pli;
-	struct side *s=&seg->sides[side];
+	side_t *s=&seg->sides[side];
 	int vertex_list[6];
 	int num_faces;
 	int vertnum;
@@ -326,7 +326,7 @@ static int special_check_line_to_face(vms_vector *newp,const vms_vector *p0,cons
 	int num_faces,edgenum;
 	uint edgemask;
 	vms_vector *edge_v0,*edge_v1,edge_vec;
-	struct side *s=&seg->sides[side];
+	side_t *s=&seg->sides[side];
 	vms_vector closest_point_edge,closest_point_move;
 
 	//calc some basic stuff
@@ -1106,7 +1106,7 @@ void find_hitpoint_uv(fix *u,fix *v,fix *l,vms_vector *pnt,segment *seg,int side
 	segnum_t segnum = seg-Segments;
 	int num_faces;
 	int biggest,ii,jj;
-	side *side = &seg->sides[sidenum];
+	side_t *side = &seg->sides[sidenum];
 	int vertex_list[6],vertnum_list[6];
  	vec2d p1,vec0,vec1,checkp;	//@@,checkv;
 	uvl uvls[3];
@@ -1187,7 +1187,7 @@ void find_hitpoint_uv(fix *u,fix *v,fix *l,vms_vector *pnt,segment *seg,int side
 int check_trans_wall(vms_vector *pnt,segment *seg,int sidenum,int facenum)
 {
 	grs_bitmap *bm;
-	side *side = &seg->sides[sidenum];
+	side_t *side = &seg->sides[sidenum];
 	int bmx,bmy;
 	fix u,v;
 

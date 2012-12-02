@@ -78,7 +78,7 @@ int	TexFlipY()
 //	-----------------------------------------------------------
 static int DoTexSlideLeft(int value)
 {
-	side	*sidep;
+	side_t	*sidep;
 	uvl	duvl03;
 	fix	dist;
 	const sbyte	*vp;
@@ -118,7 +118,7 @@ int TexSlideLeftBig()
 //	-----------------------------------------------------------
 static int DoTexSlideUp(int value)
 {
-	side	*sidep;
+	side_t	*sidep;
 	uvl	duvl03;
 	fix	dist;
 	const sbyte	*vp;
@@ -160,7 +160,7 @@ int TexSlideUpBig()
 //	-----------------------------------------------------------
 static int DoTexSlideDown(int value)
 {
-	side	*sidep;
+	side_t	*sidep;
 	uvl	duvl03;
 	fix	dist;
 	const sbyte	*vp;
@@ -202,7 +202,7 @@ int TexSlideDownBig()
 void compute_uv_side_center(uvl *uvcenter, segment *segp, int sidenum)
 {
 	int	v;
-	side	*sidep = &segp->sides[sidenum];
+	side_t	*sidep = &segp->sides[sidenum];
 
 	uvcenter->u = 0;
 	uvcenter->v = 0;
@@ -230,7 +230,7 @@ static void rotate_uv_point(uvl *uvrot, fix *rotmat, uvl *uv, uvl *uvcenter)
 void rotate_uv_points_on_side(segment *segp, int sidenum, fix *rotmat, uvl *uvcenter)
 {
 	int	v;
-	side	*sidep = &segp->sides[sidenum];
+	side_t	*sidep = &segp->sides[sidenum];
 	uvl	tuv;
 
 	for (v=0; v<4; v++) {
@@ -288,7 +288,7 @@ int TexRotateLeftBig()
 //	-----------------------------------------------------------
 static int DoTexSlideRight(int value)
 {
-	side	*sidep;
+	side_t	*sidep;
 	uvl	duvl03;
 	fix	dist;
 	const sbyte	*vp;

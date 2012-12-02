@@ -41,7 +41,7 @@ void cast_all_light_in_mine(int quick_flag);
 
 //	---------------------------------------------------------------------------------------------
 //	Returns approximate area of a side
-static fix area_on_side(side *sidep)
+static fix area_on_side(side_t *sidep)
 {
 	fix	du,dv,width,height;
 
@@ -138,7 +138,7 @@ static fix get_average_light_at_vertex(int vnum, segnum_t *segs)
 
 			for (sidenum=0; sidenum < MAX_SIDES_PER_SEGMENT; sidenum++) {
 				if (!IS_CHILD(segp->children[sidenum])) {
-					side	*sidep = &segp->sides[sidenum];
+					side_t	*sidep = &segp->sides[sidenum];
 					const sbyte	*vp = Side_to_verts[sidenum];
 					int	v;
 
@@ -187,7 +187,7 @@ static void set_average_light_at_vertex(int vnum)
 		if (relvnum < MAX_VERTICES_PER_SEGMENT) {
 			for (sidenum=0; sidenum < MAX_SIDES_PER_SEGMENT; sidenum++) {
 				if (!IS_CHILD(segp->children[sidenum])) {
-					side *sidep = &segp->sides[sidenum];
+					side_t *sidep = &segp->sides[sidenum];
 					const sbyte	*vp = Side_to_verts[sidenum];
 					int	v;
 
@@ -253,7 +253,7 @@ static void set_average_light_on_all_fast(void)
 
 						for (si=0; si<MAX_SIDES_PER_SEGMENT; si++) {
 							if (!IS_CHILD(segp->children[si])) {
-								side	*sidep = &segp->sides[si];
+								side_t	*sidep = &segp->sides[si];
 								const sbyte	*vp = Side_to_verts[si];
 								int	vv;
 
@@ -290,7 +290,7 @@ static void set_average_light_on_all_fast(void)
 					int	wid_result;
 					wid_result = WALL_IS_DOORWAY(segp, sidenum);
 					if ((wid_result != WID_FLY_FLAG) && (wid_result != WID_NO_WALL)) {
-						side *sidep = &segp->sides[sidenum];
+						side_t *sidep = &segp->sides[sidenum];
 						const sbyte	*vp = Side_to_verts[sidenum];
 						int	v;
 
@@ -353,7 +353,7 @@ static fix compute_uv_dist(uvl *uv0, uvl *uv1)
 //	---------------------------------------------------------------------------------------------
 //	Given a polygon, compress the uv coordinates so that they are as close to 0 as possible.
 //	Do this by adding a constant u and v to each uv pair.
-static void compress_uv_coordinates(side *sidep)
+static void compress_uv_coordinates(side_t *sidep)
 {
 	int	v;
 	fix	uc, vc;
@@ -379,7 +379,7 @@ static void compress_uv_coordinates(side *sidep)
 }
 
 //	---------------------------------------------------------------------------------------------
-static void compress_uv_coordinates_on_side(side *sidep)
+static void compress_uv_coordinates_on_side(side_t *sidep)
 {
 	compress_uv_coordinates(sidep);
 }
@@ -391,7 +391,7 @@ static void validate_uv_coordinates_on_side(segment *segp, int sidenum)
 //	fix			uv_dist,threed_dist;
 //	vms_vector	tvec;
 //	fix			dist_ratios[MAX_VERTICES_PER_POLY];
-	side			*sidep = &segp->sides[sidenum];
+	side_t			*sidep = &segp->sides[sidenum];
 //	sbyte			*vp = Side_to_verts[sidenum];
 
 //	This next hunk doesn't seem to affect anything. @mk, 02/13/94
@@ -425,7 +425,7 @@ static void compress_uv_coordinates_all(void)
 static void check_lighting_side(segment *sp, int sidenum)
 {
 	int	v;
-	side	*sidep = &sp->sides[sidenum];
+	side_t	*sidep = &sp->sides[sidenum];
 
 	for (v=0; v<4; v++)
 		if ((sidep->uvls[v].l > F1_0*16) || (sidep->uvls[v].l < 0))
@@ -454,7 +454,7 @@ static void check_lighting_all(void)
 static void assign_default_lighting_on_side(segment *segp, int sidenum)
 {
 	int	v;
-	side	*sidep = &segp->sides[sidenum];
+	side_t	*sidep = &segp->sides[sidenum];
 
 	for (v=0; v<4; v++)
 		sidep->uvls[v].l = DEFAULT_LIGHTING;
@@ -492,7 +492,7 @@ static void validate_uv_coordinates(segment *segp)
 static void copy_uvs_from_side_to_faces(segment *segp, int sidenum, uvl uvls[])
 {
 	int	v;
-	side	*sidep = &segp->sides[sidenum];
+	side_t	*sidep = &segp->sides[sidenum];
 
 	for (v=0; v<4; v++)
 		sidep->uvls[v] = uvls[v];
@@ -522,7 +522,7 @@ static fix zhypot(fix a,fix b) {
 void assign_light_to_side(segment *sp, int sidenum)
 {
 	int	v;
-	side	*sidep = &sp->sides[sidenum];
+	side_t	*sidep = &sp->sides[sidenum];
 
 	for (v=0; v<4; v++)
 		sidep->uvls[v].l = DEFAULT_LIGHTING;
@@ -996,7 +996,7 @@ int fix_bogus_uvs_on_side(void)
 
 static void fix_bogus_uvs_on_side1(segment *sp, int sidenum, int uvonly_flag)
 {
-	side	*sidep = &sp->sides[sidenum];
+	side_t	*sidep = &sp->sides[sidenum];
 
 	if ((sidep->uvls[0].u == 0) && (sidep->uvls[1].u == 0) && (sidep->uvls[2].u == 0)) {
 		med_propagate_tmaps_to_back_side(sp, sidenum, uvonly_flag);
@@ -1190,7 +1190,7 @@ static void cast_light_from_side(segment *segp, int light_side, fix light_intens
 			if (dist_to_rseg <= LIGHT_DISTANCE_THRESHOLD) {
 				for (sidenum=0; sidenum<MAX_SIDES_PER_SEGMENT; sidenum++) {
 					if (WALL_IS_DOORWAY(rsegp, sidenum) != WID_NO_WALL) {
-						side			*rsidep = &rsegp->sides[sidenum];
+						side_t			*rsidep = &rsegp->sides[sidenum];
 						vms_vector	*side_normalp = &rsidep->normals[0];	//	kinda stupid? always use vector 0.
 
 						for (vertnum=0; vertnum<4; vertnum++) {
@@ -1305,7 +1305,7 @@ static void calim_zero_light_values(void)
 	for (segnum=segment_first; segnum<=Highest_segment_index; segnum++) {
 		segment *segp = &Segments[segnum];
 		for (sidenum=0; sidenum<MAX_SIDES_PER_SEGMENT; sidenum++) {
-			side	*sidep = &segp->sides[sidenum];
+			side_t	*sidep = &segp->sides[sidenum];
 			for (vertnum=0; vertnum<4; vertnum++)
 				sidep->uvls[vertnum].l = F1_0/64;	// Put a tiny bit of light here.
 		}
@@ -1411,7 +1411,7 @@ static void calim_process_all_lights(int quick_light)
 		for (sidenum=0; sidenum<MAX_SIDES_PER_SEGMENT; sidenum++) {
 			// if (!IS_CHILD(segp->children[sidenum])) {
 			if (WALL_IS_DOORWAY(segp, sidenum) != WID_NO_WALL) {
-				side	*sidep = &segp->sides[sidenum];
+				side_t	*sidep = &segp->sides[sidenum];
 				fix	light_intensity;
 
 				light_intensity = TmapInfo[sidep->tmap_num].lighting + TmapInfo[sidep->tmap_num2 & 0x3fff].lighting;

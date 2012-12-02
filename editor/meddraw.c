@@ -385,7 +385,7 @@ static void add_edges(segment *seg)
 		for (;i<N_EDGES_PER_SEGMENT;i++) edge_flags[i]=ET_NOTEXTANT;
 
 		for (sn=0;sn<MAX_SIDES_PER_SEGMENT;sn++) {
-			side	*sidep = &seg->sides[sn];
+			side_t	*sidep = &seg->sides[sn];
 			int	num_faces, num_vertices;
 			int	vertex_list[6];
 

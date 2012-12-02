@@ -390,7 +390,7 @@ void ogl_cache_level_textures(void)
 	eclip *ec;
 	short tmap1,tmap2;
 	grs_bitmap *bm,*bm2;
-	struct side *sidep;
+	side_t *sidep;
 	unsigned max_efx=0,ef;
 
 	ogl_reset_texture_stats_internal();//loading a new lev should reset textures

@@ -1046,7 +1046,7 @@ static int load_game_data(PHYSFS_file *LoadFile)
 	// Make sure non-transparent doors are set correctly.
 	for (segnum_t i=segment_first; i< Num_segments; i++)
 		for (j=0;j<MAX_SIDES_PER_SEGMENT;j++) {
-			side	*sidep = &Segments[i].sides[j];
+			side_t	*sidep = &Segments[i].sides[j];
 			if ((sidep->wall_num != -1) && (Walls[sidep->wall_num].clip_num != -1)) {
 				if (WallAnims[Walls[sidep->wall_num].clip_num].flags & WCF_TMAP1) {
 					sidep->tmap_num = WallAnims[Walls[sidep->wall_num].clip_num].frames[0];
@@ -1846,7 +1846,7 @@ void dump_mine_info(void)
 	for (segnum=segment_first; segnum<=Highest_segment_index; segnum++) {
 		for (sidenum=0; sidenum<MAX_SIDES_PER_SEGMENT; sidenum++) {
 			int	vertnum;
-			side	*sidep = &Segments[segnum].sides[sidenum];
+			side_t	*sidep = &Segments[segnum].sides[sidenum];
 
 			if (Segment2s[segnum].static_light > max_sl)
 				max_sl = Segment2s[segnum].static_light;

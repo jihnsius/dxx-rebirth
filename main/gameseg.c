@@ -99,7 +99,7 @@ int find_connect_side(segment *base_seg, segment *con_seg)
 
 // -----------------------------------------------------------------------------------
 //	Given a side, return the number of faces
-int get_num_faces(side *sidep)
+int get_num_faces(side_t *sidep)
 {
 	switch (sidep->type) {
 		case SIDE_IS_QUAD:	
@@ -142,7 +142,7 @@ void get_side_verts(int *vertlist,segnum_t segnum,int sidenum)
 //   adjacent on the diagonal edge
 void create_all_vertex_lists(int *num_faces, int *vertices, segnum_t segnum, int sidenum)
 {
-	side	*sidep = &Segments[segnum].sides[sidenum];
+	side_t	*sidep = &Segments[segnum].sides[sidenum];
 	const int  *sv = Side_to_verts_int[sidenum];
 
 	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
@@ -203,7 +203,7 @@ void create_all_vertex_lists(int *num_faces, int *vertices, segnum_t segnum, int
 //	face #1 is stored in vertices 3,4,5.
 void create_all_vertnum_lists(int *num_faces, int *vertnums, segnum_t segnum, int sidenum)
 {
-	side	*sidep = &Segments[segnum].sides[sidenum];
+	side_t	*sidep = &Segments[segnum].sides[sidenum];
 
 	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
 	Assert((segnum <= Highest_segment_index) && (segnum >= 0));
@@ -258,7 +258,7 @@ void create_all_vertnum_lists(int *num_faces, int *vertnums, segnum_t segnum, in
 void create_abs_vertex_lists(int *num_faces, int *vertices, segnum_t segnum, int sidenum, const char *calling_file, int calling_linenum)
 {
 	const vertnum_t	*vp = Segments[segnum].verts;
-	side	*sidep = &Segments[segnum].sides[sidenum];
+	side_t	*sidep = &Segments[segnum].sides[sidenum];
 	const int  *sv = Side_to_verts_int[sidenum];
 
 	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
@@ -335,7 +335,7 @@ segmasks get_seg_masks(const vms_vector *checkp, segnum_t segnum, fix rad, const
 
 	for (sn=0,facebit=sidebit=1;sn<6;sn++,sidebit<<=1) {
 		#ifndef COMPACT_SEGS
-		side	*s = &seg->sides[sn];
+		side_t	*s = &seg->sides[sn];
 		#endif
 		int	side_pokes_out;
 		int	vertnum,fn;
@@ -479,7 +479,7 @@ static ubyte get_side_dists(const vms_vector *checkp,segnum_t segnum,fix *side_d
 
 	for (sn=0,facebit=sidebit=1;sn<6;sn++,sidebit<<=1) {
 		#ifndef COMPACT_SEGS
-		side	*s = &seg->sides[sn];
+		side_t	*s = &seg->sides[sn];
 		#endif
 		int	side_pokes_out;
 		int	fn;
@@ -1361,7 +1361,7 @@ static int check_for_degenerate_segment(segment *sp)
 
 static void add_side_as_quad(segment *sp, int sidenum, vms_vector *normal)
 {
-	side	*sidep = &sp->sides[sidenum];
+	side_t	*sidep = &sp->sides[sidenum];
 
 	sidep->type = SIDE_IS_QUAD;
 
@@ -1431,7 +1431,7 @@ static void add_side_as_2_triangles(segment *sp, int sidenum)
 	fix			dot;
 	vms_vector	vec_13;		//	vector from vertex 1 to vertex 3
 
-	side	*sidep = &sp->sides[sidenum];
+	side_t	*sidep = &sp->sides[sidenum];
 
 	//	Choose how to triangulate.
 	//	If a wall, then
@@ -1554,7 +1554,7 @@ void create_walls_on_side(segment *sp, int sidenum)
 			fix			dist0,dist1;
 			int			s0,s1;
 			int			vertnum;
-			side			*s;
+			side_t			*s;
 
 			create_abs_vertex_lists(&num_faces, vertex_list, sp - Segments, sidenum, __FILE__, __LINE__);
 
@@ -1985,7 +1985,7 @@ static void change_segment_light(segnum_t segnum,int sidenum,int dir)
 	segment *segp = &Segments[segnum];
 
 	if (WALL_IS_DOORWAY(segp, sidenum) & WID_RENDER_FLAG) {
-		side	*sidep = &segp->sides[sidenum];
+		side_t	*sidep = &segp->sides[sidenum];
 		fix	light_intensity;
 
 		light_intensity = TmapInfo[sidep->tmap_num].lighting + TmapInfo[sidep->tmap_num2 & 0x3fff].lighting;
@@ -2185,7 +2185,7 @@ static void set_ambient_sound_flags_common(int tmi_bit, int s2f_bit)
 		segment2	*seg2p = &Segment2s[i];
 
 		for (j=0; j<MAX_SIDES_PER_SEGMENT; j++) {
-			side	*sidep = &segp->sides[j];
+			side_t	*sidep = &segp->sides[j];
 
 			if ((TmapInfo[sidep->tmap_num].flags & tmi_bit) || (TmapInfo[sidep->tmap_num2 & 0x3fff].flags & tmi_bit)) {
 				if (!IS_CHILD(segp->children[j]) || (sidep->wall_num != -1)) {

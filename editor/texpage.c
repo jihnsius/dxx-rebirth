@@ -282,7 +282,7 @@ void do_replacements(void)
 		for (segnum=segment_first; segnum <= Highest_segment_index; segnum++) {
 			segment	*segp=&Segments[segnum];
 			for (sidenum=0; sidenum<MAX_SIDES_PER_SEGMENT; sidenum++) {
-				side	*sidep=&segp->sides[sidenum];
+				side_t	*sidep=&segp->sides[sidenum];
 				if (sidep->tmap_num == old_tmap_num) {
 					sidep->tmap_num = new_tmap_num;
 				}

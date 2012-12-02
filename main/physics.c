@@ -110,7 +110,7 @@ static void do_physics_align_object( dxxobject * obj )
 
 				vm_vec_normalize(&desired_upvec);
 #else
-				side *s = &Segments[obj->segnum].sides[best_side];
+				side_t *s = &Segments[obj->segnum].sides[best_side];
 				desired_upvec.x = (s->normals[0].x + s->normals[1].x) / 2;
 				desired_upvec.y = (s->normals[0].y + s->normals[1].y) / 2;
 				desired_upvec.z = (s->normals[0].z + s->normals[1].z) / 2;
@@ -779,7 +779,7 @@ void do_physics_sim(dxxobject *obj)
 		if (sidenum != -1) {
 
 			if (! (WALL_IS_DOORWAY(&Segments[orig_segnum],sidenum) & WID_FLY_FLAG)) {
-				side *s;
+				side_t *s;
 				int vertnum,num_faces,i;
 				fix dist;
 				int vertex_list[6];

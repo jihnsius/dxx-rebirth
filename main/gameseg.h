@@ -74,7 +74,7 @@ extern void create_abs_vertex_lists(int *num_faces, int *vertices, segnum_t segn
 void create_all_vertnum_lists(int *num_faces, int *vertnums, segnum_t segnum, int sidenum);
 
 //      Given a side, return the number of faces
-extern int get_num_faces(side *sidep);
+extern int get_num_faces(side_t *sidep);
 
 //returns 3 different bitmasks with info telling if this sphere is in
 //this segment.  See segmasks structure for info on fields
