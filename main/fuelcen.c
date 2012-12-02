@@ -375,7 +375,6 @@ static void robotmaker_proc( FuelCenter * robotcen )
 	fix		dist_to_player;
 	vms_vector	cur_object_loc; //, direction;
 	int		matcen_num, segnum, objnum;
-	dxxobject	*obj;
 	fix		top_time;
 	vms_vector	direction;
 
@@ -527,7 +526,7 @@ static void robotmaker_proc( FuelCenter * robotcen )
 				else
 					type = legal_types[(d_rand() * num_types) / 32768];
 
-				obj = create_morph_robot(&Segments[robotcen->segnum], &cur_object_loc, type );
+				dxxobject *obj = create_morph_robot(&Segments[robotcen->segnum], &cur_object_loc, type );
 				if (obj != NULL) {
 #ifndef SHAREWARE
 #ifdef NETWORK
