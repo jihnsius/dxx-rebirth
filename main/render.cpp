@@ -989,7 +989,6 @@ static void draw_window_box(int color,short left,short top,short right,short bot
 char visited2[MAX_SEGMENTS];
 #endif
 
-unsigned char visited[MAX_SEGMENTS];
 segnum_t Render_list[MAX_RENDER_SEGS];
 short Seg_depth[MAX_RENDER_SEGS];		//depth for each seg in Render_list
 ubyte processed[MAX_RENDER_SEGS];		//whether each entry has been processed
@@ -1898,13 +1897,12 @@ void update_rendered_data(int window_num, dxxobject *viewer, int rear_view_flag,
 
 //build a list of segments to be rendered
 //fills in Render_list & N_render_segs
-static void build_segment_list(segnum_t start_seg_num, int window_num)
+static void build_segment_list(segment_array_template_t<ubyte> &visited, segnum_t start_seg_num, int window_num)
 {
 	int	lcnt,scnt,ecnt;
 	int	l,c;
 	segnum_t	ch;
 
-	memset(visited, 0, sizeof(visited[0])*(Highest_segment_index+1));
 	memset(render_pos, -1, sizeof(render_pos[0])*(Highest_segment_index+1));
 	//memset(no_render_flag, 0, sizeof(no_render_flag[0])*(MAX_RENDER_SEGS));
 	memset(processed, 0, sizeof(processed));
@@ -2146,6 +2144,7 @@ void render_mine(segnum_t start_seg_num,fix eye_offset, int window_num)
 #endif
 	int		nn;
 	static fix64 dynlight_time = 0;
+	segment_array_template_t<ubyte> visited;
 
 	//	Initialize number of objects (actually, robots!) rendered this frame.
 	Window_rendered_data[window_num].num_objects = 0;
@@ -2154,6 +2153,7 @@ void render_mine(segnum_t start_seg_num,fix eye_offset, int window_num)
 	for (i=0;i<=Highest_object_index;i++)
 		object_rendered[i] = 0;
 	#endif
+	visited.fill(0);
 
 	//set up for rendering
 
@@ -2177,7 +2177,7 @@ void render_mine(segnum_t start_seg_num,fix eye_offset, int window_num)
 	else
 	#endif
 		//NOTE LINK TO ABOVE!!
-		build_segment_list(start_seg_num, window_num);		//fills in Render_list & N_render_segs
+		build_segment_list(visited, start_seg_num, window_num);		//fills in Render_list & N_render_segs
 
 	//render away
 
@@ -2353,7 +2353,7 @@ void render_mine(segnum_t start_seg_num,fix eye_offset, int window_num)
 		}
 	}
 
-	memset(visited, 0, sizeof(visited[0])*(Highest_segment_index+1));
+	visited.fill(0);
 
 	// Second Pass: Objects
 	for (nn=N_render_segs;nn--;)
@@ -2413,7 +2413,7 @@ void render_mine(segnum_t start_seg_num,fix eye_offset, int window_num)
 		}
 	}
 
-	memset(visited, 0, sizeof(visited[0])*(Highest_segment_index+1));
+	visited.fill(0);
 
 	// Third Pass - Render Transculent level geometry with normal Alpha-Func
 	for (nn=N_render_segs;nn--;)
