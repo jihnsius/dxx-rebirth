@@ -275,7 +275,7 @@ int create_path_points(dxxobject *objp, segnum_t start_seg, segnum_t end_seg, po
 	int		sidenum;
 	int		qtail = 0, qhead = 0;
 	int		i;
-	sbyte   visited[MAX_SEGMENTS];
+	segment_array_template_t<sbyte> visited;
 	seg_seg	seg_queue[MAX_SEGMENTS];
 	short		depth[MAX_SEGMENTS];
 	int		cur_depth;
@@ -300,7 +300,7 @@ if ((objp->type == OBJ_ROBOT) && (objp->ctype.ai_info.behavior == AIB_RUN_FROM))
 //		visited[i] = 0;
 //		depth[i] = 0;
 //	}
-	memset(visited, 0, sizeof(visited[0])*(Highest_segment_index+1));
+	visited.fill(0);
 	memset(depth, 0, sizeof(depth[0])*(Highest_segment_index+1));
 
 	//	If there is a segment we're not allowed to visit, mark it.
