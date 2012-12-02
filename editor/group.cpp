@@ -37,6 +37,8 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "physfsx.h"
 #include "kdefs.h"
 
+typedef std::array<segnum_t, MAX_SEGMENTS> selected_segment_array_t;
+
 void validate_selected_segments(void);
 
 struct {
@@ -885,7 +887,7 @@ int AttachSegmentNew(void)
 }
 
 //	-----------------------------------------------------------------------------
-static void save_selected_segs(int *num, segnum_t *segs)
+static void save_selected_segs(int *num, selected_segment_array_t &segs)
 {
 
 	for (unsigned i=0; i<GroupList[current_group].num_segments; i++)
@@ -895,7 +897,7 @@ static void save_selected_segs(int *num, segnum_t *segs)
 }
 
 //	-----------------------------------------------------------------------------
-static void restore_selected_segs(int num, segnum_t *segs)
+static void restore_selected_segs(int num, selected_segment_array_t &segs)
 {
 
 	for (unsigned i=0; i<GroupList[current_group].num_segments; i++)
@@ -955,7 +957,7 @@ int rotate_segment_new(vms_angvec *pbh)
 	int newseg_side,baseseg_side;
 	vms_matrix	orient_matrix,tm1,tm2;
 	int			n_selected_segs_save;
-	segnum_t			selected_segs_save[MAX_SEGMENTS];
+	selected_segment_array_t			selected_segs_save;
 	segnum_t			child_save;
 	int			current_group_save;
 
