@@ -39,8 +39,8 @@ int FrameCount = 0;
 int FixedStep;		//fixed time bytes stored here
 
 //	This is the global mine which create_new_mine returns.
-segment	Segments[MAX_SEGMENTS];
-segment2	Segment2s[MAX_SEGMENTS];
+segment_array_t	Segments;
+segment2_array_t	Segment2s;
 //lsegment	Lsegments[MAX_SEGMENTS];
 
 // Number of vertices in current mine (ie, Vertices, pointed to by Vp)

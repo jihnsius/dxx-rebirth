@@ -119,7 +119,8 @@ static void reset_all_robot_centers()
 // Turns a segment into a fully charged up fuel center...
 void fuelcen_create( segment *segp)
 {
-	segment2	*seg2p = &Segment2s[segp-Segments];
+	segnum_t segnum = segp-Segments;
+	segment2	*seg2p = &Segment2s[segnum];
 
 	int	station_type;
 
@@ -149,7 +150,7 @@ void fuelcen_create( segment *segp)
 	Station[Num_fuelcenters].Type = station_type;
 	Station[Num_fuelcenters].MaxCapacity = Fuelcen_max_amount;
 	Station[Num_fuelcenters].Capacity = Station[Num_fuelcenters].MaxCapacity;
-	Station[Num_fuelcenters].segnum = seg2p-Segment2s;
+	Station[Num_fuelcenters].segnum = segnum;
 	Station[Num_fuelcenters].Timer = -1;
 	Station[Num_fuelcenters].Flag = 0;
 //	Station[Num_fuelcenters].NextRobotType = -1;
@@ -168,7 +169,8 @@ void fuelcen_create( segment *segp)
 // This function is separate from other fuelcens because we don't want values reset.
 static void matcen_create( segment *segp)
 {
-	segment2	*seg2p = &Segment2s[segp-Segments];
+	segnum_t segnum = segp-Segments;
+	segment2	*seg2p = &Segment2s[segnum];
 
 	int	station_type = seg2p->special;
 
@@ -184,20 +186,20 @@ static void matcen_create( segment *segp)
 	Station[Num_fuelcenters].Capacity = i2f(Difficulty_level + 3);
 	Station[Num_fuelcenters].MaxCapacity = Station[Num_fuelcenters].Capacity;
 
-	Station[Num_fuelcenters].segnum = seg2p-Segment2s;
+	Station[Num_fuelcenters].segnum = segnum;
 	Station[Num_fuelcenters].Timer = -1;
 	Station[Num_fuelcenters].Flag = 0;
 //	Station[Num_fuelcenters].NextRobotType = -1;
 //	Station[Num_fuelcenters].last_created_obj=NULL;
 //	Station[Num_fuelcenters].last_created_sig = -1;
-	compute_segment_center(&Station[Num_fuelcenters].Center, &Segments[seg2p-Segment2s] );
+	compute_segment_center(&Station[Num_fuelcenters].Center, segp );
 
 	seg2p->matcen_num = Num_robot_centers;
 	Num_robot_centers++;
 
 	RobotCenters[seg2p->matcen_num].hit_points = MATCEN_HP_DEFAULT;
 	RobotCenters[seg2p->matcen_num].interval = MATCEN_INTERVAL_DEFAULT;
-	RobotCenters[seg2p->matcen_num].segnum = seg2p-Segment2s;
+	RobotCenters[seg2p->matcen_num].segnum = segnum;
 	RobotCenters[seg2p->matcen_num].fuelcen_num = Num_fuelcenters;
 
 	Num_fuelcenters++;

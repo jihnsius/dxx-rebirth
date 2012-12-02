@@ -28,6 +28,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "object.types.h"
 
 #ifdef __cplusplus
+#include <array>
 
 // Version 1 - Initial version
 // Version 2 - Mike changed some shorts to bytes in segments, so incompatible!
@@ -173,6 +174,9 @@ void get_side_normals(segment *sp, int sidenum, vms_vector * vm1, vms_vector *vm
 //--repair-- 	short   special_segment; // if special_type indicates repair center, this is the base of the repair center
 //--repair-- } lsegment;
 
+template <typename T>
+using segment_array_template_t = std::array<T, MAX_SEGMENTS>;
+
 typedef struct {
 	unsigned     num_segments;
 	unsigned     num_vertices;
@@ -180,10 +184,19 @@ typedef struct {
 	vertnum_t    vertices[MAX_VERTICES];
 } group;
 
+template <typename T>
+static inline segnum_t operator-(const T *p, const segment_array_template_t<T>& a)
+{
+	return segnum_t(std::distance(a.begin(), p));
+}
+
+typedef segment_array_template_t<segment> segment_array_t;
+typedef segment_array_template_t<segment2> segment2_array_t;
+
 // Globals from mglobal.c
 extern vms_vector   Vertices[MAX_VERTICES];
-extern segment      Segments[MAX_SEGMENTS];
-extern segment2     Segment2s[MAX_SEGMENTS];
+extern segment_array_t      Segments;
+extern segment2_array_t     Segment2s;
 extern unsigned          Num_segments;
 extern unsigned          Num_vertices;
 

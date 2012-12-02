@@ -455,7 +455,7 @@ int save_mine_data(PHYSFS_file * SaveFile)
 
 	if (segment_offset != PHYSFS_tell(SaveFile))
 		Error( "OFFSETS WRONG IN MINE.C!" );
-	PHYSFS_write( SaveFile, Segments, sizeof(segment), Num_segments );
+	PHYSFS_write( SaveFile, &Segments[segment_first], sizeof(Segments[segment_first]), Num_segments );
 
 	//===================== SAVE NEWSEGMENT INFO ======================
 

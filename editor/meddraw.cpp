@@ -826,7 +826,7 @@ void draw_world(grs_canvas *screen_canvas,editor_view *v,segment *mine_ptr,int d
 	// Draw all segments or only connected segments.
 	// We might want to draw all segments if we have broken the mine into pieces.
 	if (Draw_all_segments)
-		draw_mine_all(Segments, Automap_test);
+		draw_mine_all(&Segments[segment_first], Automap_test);
 	else
 		draw_mine(mine_ptr,depth);
 
@@ -935,7 +935,7 @@ void find_segments(short x,short y,grs_canvas *screen_canvas,editor_view *v,segm
 	Search_x = x; Search_y = y;
 
 	if (Draw_all_segments)
-		draw_mine_all(Segments, 0);
+		draw_mine_all(&Segments[segment_first], 0);
 	else
 		draw_mine(mine_ptr,depth);
 
