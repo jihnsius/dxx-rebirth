@@ -118,7 +118,7 @@ int CreateSloppyAdjacentJointsGroup()
 	int		adj_side;
 	segment	*adj_sp;
 	unsigned		num_segs = GroupList[current_group].num_segments;
-	segnum_t		*segs = GroupList[current_group].segments;
+	segnum_t		*segs = GroupList[current_group].segments.begin();
 	segment	*segp;
 	int		done_been_a_change = 0;
 	unsigned		segind, sidenum;

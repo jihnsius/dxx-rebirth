@@ -177,10 +177,12 @@ void get_side_normals(segment *sp, int sidenum, vms_vector * vm1, vms_vector *vm
 template <typename T>
 using segment_array_template_t = std::array<T, MAX_SEGMENTS>;
 
+typedef std::array<segnum_t, MAX_SEGMENTS> group_segment_array_t;
+
 typedef struct {
 	unsigned     num_segments;
 	unsigned     num_vertices;
-	segnum_t   segments[MAX_SEGMENTS];
+	group_segment_array_t   segments;
 	vertnum_t    vertices[MAX_VERTICES];
 } group;
 

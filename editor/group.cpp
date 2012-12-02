@@ -355,7 +355,7 @@ static void med_create_group_rotation_matrix(vms_matrix *result_mat, int delta_f
 
 // -----------------------------------------------------------------------------------------
 // Rotate all vertices and objects in group.
-static void med_rotate_group(vms_matrix *rotmat, segnum_t *group_seglist, int group_size, segment *first_seg, int first_side)
+static void med_rotate_group(vms_matrix *rotmat, group_segment_array_t &group_seglist, int group_size, segment *first_seg, int first_side)
 {
 	int			s;
 	objnum_t objnum;
@@ -402,7 +402,7 @@ static void med_rotate_group(vms_matrix *rotmat, segnum_t *group_seglist, int gr
 
 
 // ------------------------------------------------------------------------------------------------
-static void cgl_aux(segment *segp, segnum_t *seglistp, unsigned *num_segs, const segnum_t *ignore_list, int num_ignore_segs, been_visited_array_t& Been_visited)
+static void cgl_aux(segment *segp, group_segment_array_t &seglistp, unsigned *num_segs, const segnum_t *ignore_list, int num_ignore_segs, been_visited_array_t& Been_visited)
 {
 	int	i, side;
 	segnum_t	curseg = segp-Segments;
@@ -426,7 +426,7 @@ static void cgl_aux(segment *segp, segnum_t *seglistp, unsigned *num_segs, const
 
 // ------------------------------------------------------------------------------------------------
 //	Sets Been_visited[n] if n is reachable from segp
-static void create_group_list(segment *segp, segnum_t *seglistp, unsigned *num_segs, const segnum_t *ignore_list, int num_ignore_segs)
+static void create_group_list(segment *segp, group_segment_array_t &seglistp, unsigned *num_segs, const segnum_t *ignore_list, int num_ignore_segs)
 {
 	been_visited_array_t Been_visited;
 	Been_visited.fill(0);
@@ -438,7 +438,7 @@ static void create_group_list(segment *segp, segnum_t *seglistp, unsigned *num_s
 #define MXV MAX_VERTICES
 
 // ------------------------------------------------------------------------------------------------
-static void duplicate_group(sbyte *vertex_ids, segnum_t *segment_ids, int num_segments)
+static void duplicate_group(sbyte *vertex_ids, group_segment_array_t &segment_ids, int num_segments)
 {
 	int	s,ss,new_vertex_id,sidenum;
 	segnum_t	new_segment_id;
@@ -1049,7 +1049,7 @@ static char	 current_tmap_list[MAX_TEXTURES][13];
 //	Returns:
 //	 0 = successfully saved.
 //	 1 = unable to save.
-static int med_save_group(const char *filename, const vertnum_t *vertex_ids, const segnum_t *segment_ids, int num_vertices, unsigned num_segments)
+static int med_save_group(const char *filename, const vertnum_t *vertex_ids, const group_segment_array_t &segment_ids, int num_vertices, unsigned num_segments)
 {
 	PHYSFS_file * SaveFile;
 	int header_offset, editor_offset, vertex_offset, segment_offset, texture_offset;
@@ -1190,7 +1190,7 @@ static char old_tmap_list[MAX_TEXTURES][13];
 //	Returns:
 //	 0 = successfully loaded.
 //	 1 = unable to load.
-static int med_load_group(const char *filename, vertnum_t *vertex_ids, segnum_t *segment_ids, unsigned *num_vertices, unsigned *num_segments)
+static int med_load_group(const char *filename, vertnum_t *vertex_ids, group_segment_array_t &segment_ids, unsigned *num_vertices, unsigned *num_segments)
 {
 	segnum_t segnum;
 	int vertnum;
@@ -1783,10 +1783,10 @@ int SubtractFromGroup(void)
 	create_group_list(Markedsegp, GroupList[current_group].segments, &GroupList[current_group].num_segments, Selected_segs, N_selected_segs);
 
 	//	Now, scan the two groups, forming a group which consists of only those segments common to the two groups.
-	gp = GroupList[current_group].segments;
+	gp = GroupList[current_group].segments.begin();
 	cur_num_segs = GroupList[current_group].num_segments;
 	for (unsigned s=0; s<cur_num_segs; s++) {
-		segnum_t	*gp1 = GroupList[original_group].segments;
+		segnum_t	*gp1 = GroupList[original_group].segments.begin();
 		segnum_t	s0 = gp[s];
 		int	s1;
 
