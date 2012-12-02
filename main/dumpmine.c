@@ -177,7 +177,6 @@ static void write_exit_text(PHYSFS_file *my_file)
 // ----------------------------------------------------------------------------
 static void write_key_text(PHYSFS_file *my_file)
 {
-	int	i;
 	int	red_count, blue_count, gold_count;
 	int	red_count2, blue_count2, gold_count2;
 	int	blue_segnum=segment_none, blue_sidenum=-1, red_segnum=segment_none, red_sidenum=-1, gold_segnum=segment_none, gold_sidenum=-1;
@@ -190,7 +189,7 @@ static void write_key_text(PHYSFS_file *my_file)
 	blue_count = 0;
 	gold_count = 0;
 
-	for (i=0; i<Num_walls; i++) {
+	for (unsigned i=0; i<Num_walls; i++) {
 		if (Walls[i].keys & KEY_BLUE) {
 			PHYSFSX_printf(my_file, "Wall %i (seg=%i, side=%i) is keyed to the blue key.\n", i, Walls[i].segnum, Walls[i].sidenum);
 			if (blue_segnum == segment_none) {
@@ -248,7 +247,7 @@ static void write_key_text(PHYSFS_file *my_file)
 	blue_count2 = 0;
 	gold_count2 = 0;
 
-	for (i=0; i<=Highest_object_index; i++) {
+	for (unsigned i=0; i<=Highest_object_index; i++) {
 		if (Objects[i].type == OBJ_POWERUP)
 			if (Objects[i].id == POW_KEY_BLUE) {
 				PHYSFSX_printf(my_file, "The BLUE key is object %i in segment %i\n", i, Objects[i].segnum);
@@ -909,7 +908,6 @@ static void say_unused_tmaps(PHYSFS_file *my_file, int *tb)
 // ----------------------------------------------------------------------------
 static void say_totals(PHYSFS_file *my_file, const char *level_name)
 {
-	int	i;		//, objnum;
 	int	total_robots = 0;
 	int	objects_processed = 0;
 
@@ -917,7 +915,7 @@ static void say_totals(PHYSFS_file *my_file, const char *level_name)
 
 	PHYSFSX_printf(my_file, "\nLevel %s\n", level_name);
 
-	for (i=0; i<MAX_OBJECTS; i++)
+	for (unsigned i=0; i<MAX_OBJECTS; i++)
 		used_objects[i] = 0;
 
 	while (objects_processed < Highest_object_index+1) {
@@ -944,7 +942,7 @@ static void say_totals(PHYSFS_file *my_file, const char *level_name)
 		objtype = Objects[min_objnum].type;
 		objid = Objects[min_objnum].id;
 
-		for (i=0; i<=Highest_object_index; i++) {
+		for (unsigned i=0; i<=Highest_object_index; i++) {
 			if (!used_objects[i]) {
 
 				if (((Objects[i].type == objtype) && (Objects[i].id == objid)) ||
