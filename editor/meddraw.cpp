@@ -589,7 +589,9 @@ static void draw_mine(segment *mine_ptr,int depth)
 // -----------------------------------------------------------------------------
 //	Draw all segments, ignoring connectivity.
 //	A segment is drawn if its segnum != -1.
-void draw_mine_all(segment *sp, int automap_flag)
+//    segp = pointer to segments array, probably always Segments.
+//    automap_flag = 1 if this render is for the automap, else 0 (for editor)
+static void draw_mine_all(segment *sp, int automap_flag)
 {
 	segnum_t	s;
 	int	i;
