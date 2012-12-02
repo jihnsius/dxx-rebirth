@@ -1361,7 +1361,7 @@ void create_awareness_event(dxxobject *objp, int type)
 	}
 }
 
-sbyte New_awareness[MAX_SEGMENTS];
+static segment_array_template_t<sbyte> New_awareness;
 
 // ----------------------------------------------------------------------------------
 static void pae_aux(segnum_t segnum, int type, int level)
@@ -1392,7 +1392,7 @@ static void process_awareness_events(void)
 	int i;
 
 	if (!(Game_mode & GM_MULTI) || (Game_mode & GM_MULTI_ROBOTS)) {
-		memset(New_awareness, 0, sizeof(New_awareness[0]) * (Highest_segment_index+1));
+		New_awareness.fill(0);
 
 		for (i=0; i<Num_awareness_events; i++)
 			pae_aux(Awareness_events[i].segnum, Awareness_events[i].type, 1);
