@@ -514,7 +514,7 @@ static void draw_special_wall( segment *seg, int side )
 
 // ----------------------------------------------------------------------------------------------------------------
 // Recursively parse mine structure, drawing segments.
-static void draw_mine_sub(segnum_t segnum,int depth)
+static void draw_mine_sub(segnum_t segnum,int depth,been_visited_array_t& Been_visited)
 {
 	segment *mine_ptr;
 
@@ -537,7 +537,7 @@ static void draw_mine_sub(segnum_t segnum,int depth)
 				if (IS_CHILD(mine_ptr->children[side])) {
 					if (mine_ptr->sides[side].wall_num != -1)
 						draw_special_wall(mine_ptr, side);
-					draw_mine_sub(mine_ptr->children[side],depth-1);
+					draw_mine_sub(mine_ptr->children[side],depth-1, Been_visited);
 				}
 			}
 		}
@@ -564,10 +564,10 @@ static void draw_mine_edges(int automap_flag)
 static void draw_mine(segment *mine_ptr,int depth)
 {
 	int	i;
+	been_visited_array_t Been_visited;
 
 	// clear visited list
-	for (segnum_t i=segment_first; i<=Highest_segment_index; i++)
-		Been_visited[i] = 0;
+	Been_visited.fill(0);
 
 	edge_list_size = min(Num_segments*12,MAX_EDGES);		//make maybe smaller than max
 
@@ -580,7 +580,7 @@ static void draw_mine(segment *mine_ptr,int depth)
 
 	n_used = 0;
 
-	draw_mine_sub(SEG_PTR_2_NUM(mine_ptr),depth);
+	draw_mine_sub(SEG_PTR_2_NUM(mine_ptr),depth, Been_visited);
 
 	draw_mine_edges(0);
 
@@ -595,10 +595,6 @@ static void draw_mine_all(segment *sp, int automap_flag)
 {
 	segnum_t	s;
 	int	i;
-
-	// clear visited list
-	for (segnum_t i=segment_first; i<=Highest_segment_index; i++)
-		Been_visited[i] = 0;
 
 	edge_list_size = min(Num_segments*12,MAX_EDGES);		//make maybe smaller than max
 

@@ -27,6 +27,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "ui.h"
 
 #ifdef __cplusplus
+#include <array>
 
 struct window;
 
@@ -549,7 +550,7 @@ extern	int	Lock_view_to_cursegp;			// !0 means whenever cursegp changes, view it
 extern	int	Num_tilings;						// number of tilings/wall
 extern	int	Degenerate_segment_found;
 
-extern  sbyte Been_visited[MAX_SEGMENTS];                   // List of segments visited in a recursive search, if element n set, segment n done been visited
+typedef segment_array_template_t<sbyte> been_visited_array_t;
 
 // Initializes autosave system.
 // Sets global Autosave_count to 0.

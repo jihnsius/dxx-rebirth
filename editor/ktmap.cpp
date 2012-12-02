@@ -144,7 +144,7 @@ static int is_selected_segment(segnum_t segnum)
 //	-------------------------------------------------------------------------------------
 //	Auxiliary function for PropagateTexturesSelected.
 //	Recursive parse.
-static void pts_aux(segment *sp)
+static void pts_aux(segment *sp, been_visited_array_t& Been_visited)
 {
 	int		side;
 
@@ -154,7 +154,7 @@ static void pts_aux(segment *sp)
 		if (IS_CHILD(sp->children[side])) {
 			while ((!Been_visited[sp->children[side]]) && is_selected_segment(sp->children[side])) {
 				med_propagate_tmaps_to_segments(sp,&Segments[sp->children[side]],0);
-				pts_aux(&Segments[sp->children[side]]);
+				pts_aux(&Segments[sp->children[side]], Been_visited);
 			}
 		}
 	}
@@ -165,16 +165,14 @@ static void pts_aux(segment *sp)
 //	until a segment not in Selected_list is reached.
 int PropagateTexturesSelected(void)
 {
-	unsigned		i;
-
    autosave_mine( mine_filename );
    strcpy(undo_status[Autosave_count], "Propogate Textures Selected UNDONE.");
+   been_visited_array_t Been_visited;
+   Been_visited.fill(0);
 
-	for (i=0; i<(sizeof(Been_visited)/sizeof(Been_visited[0])); ++i)
-		Been_visited[i] = 0;	//clear visited list
 	Been_visited[Cursegp-Segments] = 1;
 
-	pts_aux(Cursegp);
+	pts_aux(Cursegp, Been_visited);
 
 	Update_flags |= UF_WORLD_CHANGED;
 

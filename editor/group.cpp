@@ -400,7 +400,7 @@ static void med_rotate_group(vms_matrix *rotmat, segnum_t *group_seglist, int gr
 
 
 // ------------------------------------------------------------------------------------------------
-static void cgl_aux(segment *segp, segnum_t *seglistp, unsigned *num_segs, const segnum_t *ignore_list, int num_ignore_segs)
+static void cgl_aux(segment *segp, segnum_t *seglistp, unsigned *num_segs, const segnum_t *ignore_list, int num_ignore_segs, been_visited_array_t& Been_visited)
 {
 	int	i, side;
 	segnum_t	curseg = segp-Segments;
@@ -418,7 +418,7 @@ static void cgl_aux(segment *segp, segnum_t *seglistp, unsigned *num_segs, const
 
 		for (side=0; side<MAX_SIDES_PER_SEGMENT; side++)
 			if (IS_CHILD(segp->children[side]))
-				cgl_aux(&Segments[segp->children[side]], seglistp, num_segs, ignore_list, num_ignore_segs);
+				cgl_aux(&Segments[segp->children[side]], seglistp, num_segs, ignore_list, num_ignore_segs, Been_visited);
 	}
 }
 
@@ -426,12 +426,9 @@ static void cgl_aux(segment *segp, segnum_t *seglistp, unsigned *num_segs, const
 //	Sets Been_visited[n] if n is reachable from segp
 static void create_group_list(segment *segp, segnum_t *seglistp, unsigned *num_segs, const segnum_t *ignore_list, int num_ignore_segs)
 {
-	unsigned	i;
-
-	for (i=0; i<sizeof(Been_visited)/sizeof(Been_visited[0]); i++)
-		Been_visited[i] = 0;
-
-	cgl_aux(segp, seglistp, num_segs, ignore_list, num_ignore_segs);
+	been_visited_array_t Been_visited;
+	Been_visited.fill(0);
+	cgl_aux(segp, seglistp, num_segs, ignore_list, num_ignore_segs, Been_visited);
 }
 
 
