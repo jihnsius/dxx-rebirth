@@ -62,7 +62,7 @@ void do_powerup_frame(dxxobject *obj)
 {
 	fix fudge;
 	vclip_info *vci = &obj->rtype.vclip_info;
-	vclip *vc = &Vclip[vci->vclip_num];
+	vclip_t *vc = &Vclip[vci->vclip_num];
 	objnum_t objnum = obj-Objects;
 
 	fudge = (FrameTime * (objnum&3)) >> 4;

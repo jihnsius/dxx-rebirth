@@ -52,7 +52,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "paging.h"
 #include "robot.h"
 
-static void paging_touch_vclip( vclip * vc )
+static void paging_touch_vclip( vclip_t * vc )
 {
 	int i;
 

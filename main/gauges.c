@@ -2179,7 +2179,7 @@ static fix static_time__iwi_adjust[iwiv_count];
 #if 0
 static void draw_static(InsetWindowIndex win)
 {
-	vclip *vc = &Vclip[VCLIP_MONITOR_STATIC];
+	vclip_t *vc = &Vclip[VCLIP_MONITOR_STATIC];
 	grs_bitmap *bmp;
 	int framenum;
 	int boxofs = (PlayerCfg.CockpitMode[1]==CM_STATUS_BAR)?SB_PRIMARY_BOX:COCKPIT_PRIMARY_BOX;

@@ -2110,8 +2110,8 @@ void bm_write_all(PHYSFS_file *fp)
 	PHYSFSX_printf(tfile,"Num Sounds = %d, Sounds array = %d, AltSounds array = %d\n",t,t,t);
 
 	PHYSFS_write( fp, &Num_vclips, sizeof(int), 1 );
-	PHYSFS_write( fp, Vclip, sizeof(vclip), Num_vclips );
-	PHYSFSX_printf(tfile, "Num_vclips = %d, Vclip array = %d\n", Num_vclips, (int) sizeof(vclip)*Num_vclips);
+	PHYSFS_write( fp, Vclip, sizeof(vclip_t), Num_vclips );
+	PHYSFSX_printf(tfile, "Num_vclips = %d, Vclip array = %d\n", Num_vclips, (int) sizeof(vclip_t)*Num_vclips);
 
 	PHYSFS_write( fp, &Num_effects, sizeof(int), 1 );
 	PHYSFS_write( fp, Effects, sizeof(eclip), Num_effects );

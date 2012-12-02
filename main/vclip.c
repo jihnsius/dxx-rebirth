@@ -28,7 +28,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 //----------------- Variables for video clips -------------------
 int 					Num_vclips = 0;
-vclip 				Vclip[VCLIP_MAXNUM];		// General purpose vclips.
+vclip_t 				Vclip[VCLIP_MAXNUM];		// General purpose vclips.
 
 //draw an object which renders as a vclip
 void draw_vclip_object(dxxobject *obj,fix timeleft,int lighted, int vclip_num)
@@ -96,7 +96,7 @@ void draw_weapon_vclip(dxxobject *obj)
 /*
  * reads n vclip structs from a PHYSFS_file
  */
-int vclip_read_n(vclip *vc, int n, PHYSFS_file *fp)
+int vclip_read_n(vclip_t *vc, int n, PHYSFS_file *fp)
 {
 	int i, j;
 

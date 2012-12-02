@@ -351,7 +351,7 @@ void ogl_cache_polymodel_textures(int model_num)
 	}
 }
 
-static void ogl_cache_vclip_textures(vclip *vc){
+static void ogl_cache_vclip_textures(vclip_t *vc){
 	unsigned i;
 	for (i=0;i<vc->num_frames;i++){
 		PIGGY_PAGE_IN(vc->frames[i]);

@@ -53,10 +53,10 @@ typedef struct {
 	short           sound_num;
 	bitmap_index    frames[VCLIP_MAX_FRAMES];
 	fix             light_value;
-} __pack__ vclip;
+} __pack__ vclip_t;
 
 extern int Num_vclips;
-extern vclip Vclip[VCLIP_MAXNUM];
+extern vclip_t Vclip[VCLIP_MAXNUM];
 
 // draw an object which renders as a vclip.
 void draw_vclip_object(dxxobject *obj, fix timeleft, int lighted, int vclip_num);
@@ -65,7 +65,7 @@ extern void draw_weapon_vclip(dxxobject *obj);
 /*
  * reads n vclip structs from a PHYSFS_file
  */
-extern int vclip_read_n(vclip *vc, int n, PHYSFS_file *fp);
+extern int vclip_read_n(vclip_t *vc, int n, PHYSFS_file *fp);
 
 #ifdef __cplusplus
 }

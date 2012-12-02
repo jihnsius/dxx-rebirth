@@ -41,7 +41,7 @@ extern "C" {
 #define ECLIP_NUM_FORCE_FIELD 78
 
 typedef struct eclip {
-	vclip   vc;             //imbedded vclip
+	vclip_t   vc;             //imbedded vclip
 	fix     time_left;      //for sequencing
 	unsigned     frame_count;    //for sequencing
 	short   changing_wall_texture;      //Which element of Textures array to replace.
