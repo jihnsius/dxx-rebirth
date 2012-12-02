@@ -68,9 +68,9 @@ int gr_palette_get_gamma()
 }
 
 
-void gr_copy_palette(ubyte *gr_palette, ubyte *pal, int size)
+void gr_copy_palette(ubyte *p, const ubyte *pal, int size)
 {
-	        memcpy(gr_palette, pal, size);
+	        memcpy(p, pal, size);
 
 	        Num_computed_colors = 0;
 }

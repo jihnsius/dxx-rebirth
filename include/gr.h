@@ -243,7 +243,7 @@ void gr_set_bitmap_data(grs_bitmap *bm, unsigned char *data);
 // the palette stays the same until gr_close is called
 
 void gr_use_palette_table(const char * filename );
-void gr_copy_palette(ubyte *gr_palette, ubyte *pal, int size);
+void gr_copy_palette(ubyte *gr_palette, const ubyte *pal, int size);
 
 //=========================================================================
 // Drawing functions:
