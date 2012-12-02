@@ -1479,7 +1479,6 @@ void cast_all_light_in_mine(int quick_flag)
 // 	return timer_get_milliseconds() - start_time;
 // }
 
-vms_vector	Normals[MAX_SEGMENTS*12];
 
 int	Normal_nearness = 4;
 
@@ -1502,6 +1501,7 @@ static void print_normals(void)
 	int j,s,n,nn;
 	// vms_vector	*normal;
 	int			num_normals=0;
+	std::array<vms_vector, MAX_SEGMENTS*12> Normals;
 
 	Total_normals = 0;
 	Diff_normals = 0;
