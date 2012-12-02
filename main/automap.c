@@ -958,7 +958,7 @@ void adjust_segment_limit(automap *am, int SegmentLimit)
 void draw_all_edges(automap *am)
 {
 	g3s_codes cc;
-	int i,j,nbright;
+	int nbright;
 	ubyte nfacing,nnfacing;
 	Edge_info *e;
 	vms_vector *tv1;
@@ -969,7 +969,7 @@ void draw_all_edges(automap *am)
 
 	nbright=0;
 
-	for (i=0; i<=am->highest_edge_index; i++ )	{
+	for (int i=0; i<=am->highest_edge_index; i++ )	{
 		//e = &am->edges[Edge_used_list[i]];
 		e = &am->edges[i];
 		if (!(e->flags & EF_USED)) continue;
@@ -990,7 +990,7 @@ void draw_all_edges(automap *am)
 		if (!cc.uand) {			//all off screen?
 			nfacing = nnfacing = 0;
 			tv1 = &Vertices[e->verts[0]];
-			j = 0;
+			int j = 0;
 			while( j<e->num_faces && (nfacing==0 || nnfacing==0) )	{
 #ifdef COMPACT_SEGS
 				vms_vector temp_v;
@@ -1027,11 +1027,11 @@ void draw_all_edges(automap *am)
 	// Sort the bright ones using a shell sort
 	{
 		int t;
-		int i, j, incr, v1, v2;
+		int j, incr, v1, v2;
 
 		incr = nbright / 2;
 		while( incr > 0 )	{
-			for (i=incr; i<nbright; i++ )	{
+			for (int i=incr; i<nbright; i++ )	{
 				j = i - incr;
 				while (j>=0 )	{
 					// compare element j and j+incr
@@ -1054,7 +1054,7 @@ void draw_all_edges(automap *am)
 	}
 
 	// Draw the bright ones
-	for (i=0; i<nbright; i++ )	{
+	for (int i=0; i<nbright; i++ )	{
 		int color;
 		fix dist;
 		e = &am->edges[am->drawingListBright[i]];
