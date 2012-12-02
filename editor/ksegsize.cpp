@@ -37,10 +37,10 @@ int		Modified_vertex_index = 0;
 static void validate_modified_segments(void)
 {
 	int	v,w,v0;
-	char	modified_segments[MAX_SEGMENTS];
+	segnum_t seg;
+	segment_array_template_t<char> modified_segments;
 
-	for (segnum_t v=0; v<=Highest_segment_index; v++)
-		modified_segments[v] = 0;
+	modified_segments.fill(0);
 
 	for (v=0; v<Modified_vertex_index; v++) {
 		v0 = Modified_vertices[v];
