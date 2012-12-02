@@ -38,7 +38,7 @@ segment *OriginalSeg;
 segment *OriginalMarkedSeg;
 int OriginalSide;
 int OriginalMarkedSide;
-segment *CurveSegs[MAX_SEGMENTS];
+std::array<segment *, MAX_SEGMENTS> CurveSegs;
 int CurveNumSegs;
 const fix Mh[4][4] = { { 2*F1_0, -2*F1_0,  1*F1_0,  1*F1_0 },
                        {-3*F1_0,  3*F1_0, -2*F1_0, -1*F1_0 },
