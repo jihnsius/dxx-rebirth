@@ -2385,7 +2385,7 @@ static void draw_invulnerable_ship()
 }
 
 
-const rgb player_rgb[MAX_PLAYERS] = {
+const rgb_t player_rgb[MAX_PLAYERS] = {
 							{15,15,23},
 							{27,0,0},
 							{0,23,0},
