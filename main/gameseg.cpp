@@ -976,7 +976,7 @@ fix find_connected_distance(vms_vector *p0, segnum_t seg0, vms_vector *p1, segnu
 	int		sidenum;
 	int		qtail = 0, qhead = 0;
 	int		i;
-	sbyte   visited[MAX_SEGMENTS];
+	segment_array_template_t<sbyte> visited;
 	seg_seg	seg_queue[MAX_SEGMENTS];
 	short		depth[MAX_SEGMENTS];
 	int		cur_depth;
@@ -1022,7 +1022,7 @@ fix find_connected_distance(vms_vector *p0, segnum_t seg0, vms_vector *p1, segnu
 
 	num_points = 0;
 
-	memset(visited, 0, Highest_segment_index+1);
+	visited.fill(0);
 	memset(depth, 0, sizeof(depth[0]) * (Highest_segment_index+1));
 
 	cur_seg = seg0;
