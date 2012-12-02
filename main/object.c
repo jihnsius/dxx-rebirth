@@ -71,9 +71,8 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "editor/editor.h"
 #endif
 
-void obj_detach_all(dxxobject *parent);
-void obj_detach_one(dxxobject *sub);
-int free_object_slots(int num_used);
+static void obj_detach_all(dxxobject *parent);
+static void obj_detach_one(dxxobject *sub);
 
 /*
  *  Global variables
@@ -972,7 +971,7 @@ void obj_free(objnum_t objnum)
 //-----------------------------------------------------------------------------
 //	Scan the object list, freeing down to num_used objects
 //	Returns number of slots freed.
-int free_object_slots(int num_used)
+static int free_object_slots(int num_used)
 {
 	int	olind;
 	objnum_t	obj_list[MAX_OBJECTS];
@@ -2081,7 +2080,7 @@ void obj_attach(dxxobject *parent,dxxobject *sub)
 }
 
 //dettaches one object
-void obj_detach_one(dxxobject *sub)
+static void obj_detach_one(dxxobject *sub)
 {
 	Assert(sub->flags & OF_ATTACHED);
 	Assert(sub->ctype.expl_info.attach_parent != object_none);
@@ -2112,7 +2111,7 @@ void obj_detach_one(dxxobject *sub)
 }
 
 //dettaches all objects from this object
-void obj_detach_all(dxxobject *parent)
+static void obj_detach_all(dxxobject *parent)
 {
 	while (parent->attached_obj != object_none)
 		obj_detach_one(&Objects[parent->attached_obj]);

@@ -147,11 +147,11 @@ fix64	Next_flare_fire_time = 0;
 
 //	Function prototypes for GAME.C exclusively.
 
-void GameProcessFrame(void);
-void FireLaser(void);
-void slide_textures(void);
-void powerup_grab_cheat_all(void);
-void game_init_render_sub_buffers(int x, int y, int w, int h);
+static void GameProcessFrame(void);
+static void FireLaser(void);
+static void slide_textures(void);
+static void powerup_grab_cheat_all(void);
+static void game_init_render_sub_buffers(int x, int y, int w, int h);
 
 // text functions
 
@@ -270,7 +270,7 @@ void VR_reset_params()
 	VR_eye_offset_changed = 2;
 }
 
-void game_init_render_sub_buffers( int x, int y, int w, int h )
+static void game_init_render_sub_buffers( int x, int y, int w, int h )
 {
 	gr_clear_canvas(0);
 	gr_init_sub_canvas( &Screen_3d_window, &grd_curscreen->sc_canvas, x, y, w, h );
@@ -577,7 +577,7 @@ static void do_cloak_stuff(void)
 		}
 }
 
-int FakingInvul=0;
+static int FakingInvul=0;
 
 //	------------------------------------------------------------------------------------
 static void do_invulnerable_stuff(void)
@@ -1289,7 +1289,7 @@ void game_leave_menus(void)
 		window_close(wind);
 }
 
-void GameProcessFrame(void)
+static void GameProcessFrame(void)
 {
 	fix player_shields = Players[Player_num].shields;
 	int was_fuelcen_destroyed = Control_center_destroyed;
@@ -1519,7 +1519,7 @@ static void compute_slide_segs(void)
 }
 
 //	-----------------------------------------------------------------------------
-void slide_textures(void)
+static void slide_textures(void)
 {
 	segnum_t segnum;
 	int sidenum,i;
@@ -1686,7 +1686,7 @@ int add_flicker(segnum_t segnum, int sidenum, fix delay, unsigned long mask)
 //	-----------------------------------------------------------------------------
 //	Fire Laser:  Registers a laser fire, and performs special stuff for the fusion
 //				    cannon.
-void FireLaser()
+static void FireLaser()
 {
 
 	Global_laser_firing_count = Controls.fire_primary_state?Weapon_info[Primary_weapon_to_weapon_info[Primary_weapon]].fire_count:0;
@@ -1766,7 +1766,7 @@ static void powerup_grab_cheat(dxxobject *plr, objnum_t objnum)
 //	from player to powerup and player's forward vector.
 //	This has the effect of picking them up more easily left/right and up/down, but not making them disappear
 //	way before the player gets there.
-void powerup_grab_cheat_all(void)
+static void powerup_grab_cheat_all(void)
 {
 	segment	*segp;
 	objnum_t		objnum;
