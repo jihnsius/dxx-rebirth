@@ -417,11 +417,11 @@ segnum_t pick_connected_segment(dxxobject *objp, int max_depth)
 	segnum_t		start_seg;
 	int		head, tail;
 	segnum_t		seg_queue[QUEUE_SIZE*2];
-	sbyte   visited[MAX_SEGMENTS];
+	segment_array_template_t<sbyte> visited;
 	sbyte   depth[MAX_SEGMENTS];
 	sbyte   side_rand[MAX_SIDES_PER_SEGMENT];
 
-	memset(visited, 0, Highest_segment_index+1);
+	visited.fill(0);
 	memset(depth, 0, Highest_segment_index+1);
 	memset(seg_queue,0,QUEUE_SIZE*2);
 
