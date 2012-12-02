@@ -751,14 +751,13 @@ int	Doing_lighting_hack_flag=0;
 
 // figure out what seg the given point is in, tracing through segments
 // returns segment number, or -1 if can't find segment
-static segnum_t trace_segs(const vms_vector *p0, segnum_t oldsegnum, unsigned recursion_count)
+static segnum_t inner_trace_segs(segment_array_template_t<ubyte> &visited, const vms_vector *p0, segnum_t oldsegnum, unsigned recursion_count)
 {
 	int centermask;
 	segment *seg;
 	fix side_dists[6];
 	fix biggest_val;
 	int sidenum, bit, biggest_side;
-	static ubyte visited [MAX_SEGMENTS];
 	segnum_t check;
 
 	Assert(Highest_segment_index < Segments.size());
@@ -768,8 +767,6 @@ static segnum_t trace_segs(const vms_vector *p0, segnum_t oldsegnum, unsigned re
 		con_printf (CON_DEBUG, "trace_segs: Segment not found\n");
 		return segment_none;
 	}
-	if (recursion_count == 0)
-		memset (visited, 0, sizeof (visited));
 	if (visited [oldsegnum])
 		return segment_none;
 	visited [oldsegnum] = 1;
@@ -794,11 +791,18 @@ static segnum_t trace_segs(const vms_vector *p0, segnum_t oldsegnum, unsigned re
 
 			side_dists[biggest_side] = 0;
 			// trace into adjacent segment:
-			check = trace_segs(p0, seg->children[biggest_side], recursion_count + 1);
+			check = inner_trace_segs(visited, p0, seg->children[biggest_side], recursion_count + 1);
 			if (check != segment_none)		//we've found a segment
 				return check;
 	}
 	return segment_none;		//we haven't found a segment
+}
+
+static segnum_t trace_segs(const vms_vector *p0, segnum_t oldsegnum, unsigned recursion_count)
+{
+	segment_array_template_t<ubyte> visited;
+	visited.fill(0);
+	return inner_trace_segs(visited, p0, oldsegnum, recursion_count);
 }
 
 
