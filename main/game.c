@@ -1787,7 +1787,7 @@ int	Last_level_path_created = -1;
 //	------------------------------------------------------------------------------------------------------------------
 //	Create path for player from current segment to goal segment.
 //	Return true if path created, else return false.
-static int mark_player_path_to_segment(int segnum)
+static int mark_player_path_to_segment(int dstseg)
 {
 	int		i;
 	dxxobject	*objp = ConsoleObject;
@@ -1800,7 +1800,7 @@ static int mark_player_path_to_segment(int segnum)
 
 	Last_level_path_created = Current_level_num;
 
-	if (create_path_points(objp, objp->segnum, segnum, Point_segs_free_ptr, &player_path_length, 100, 0, 0, -1) == -1) {
+	if (create_path_points(objp, objp->segnum, dstseg, Point_segs_free_ptr, &player_path_length, 100, 0, 0, -1) == -1) {
 		return 0;
 	}
 
