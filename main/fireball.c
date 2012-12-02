@@ -175,19 +175,15 @@ static dxxobject *object_create_explosion_sub(dxxobject *objp, segnum_t segnum, 
 								}
 
 								if ((objp != NULL) && (Robot_info[obj0p->id].companion) && (!Weapon_info[objp->id].flash)) {
-									int	i, count;
-									char	ouch_str[6*4 + 2];
+									static const char ouch_str[] = "ouch! " "ouch! " "ouch! " "ouch! ";
+									int	count;
 
 									count = f2i(damage/8);
 									if (count > 4)
 										count = 4;
 									else if (count <= 0)
 										count = 1;
-									ouch_str[0] = 0;
-									for (i=0; i<count; i++)
-										strcat(ouch_str, "ouch! ");
-
-									buddy_message("%s", ouch_str);
+									buddy_message("%s", &ouch_str[(4 - count) * 6]);
 								}
 								break;
 								}
