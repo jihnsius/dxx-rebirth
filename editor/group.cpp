@@ -441,11 +441,10 @@ static void duplicate_group(sbyte *vertex_ids, segnum_t *segment_ids, int num_se
 	int	s,ss,new_vertex_id,sidenum;
 	segnum_t	new_segment_id;
 	std::array<segnum_t, MAX_SEGMENTS> new_segment_ids;
-	int	new_vertex_ids[MAX_VERTICES];		// If new_vertex_ids[v] != -1, then vertex v has been remapped to new_vertex_ids[v]
+	std::array<int, MAX_VERTICES> new_vertex_ids;		// If new_vertex_ids[v] != -1, then vertex v has been remapped to new_vertex_ids[v]
 
 	//	duplicate vertices
-	for (unsigned v=0; v<sizeof(new_vertex_ids)/sizeof(new_vertex_ids[0]); v++)
-		new_vertex_ids[v] = -1;
+	new_vertex_ids.fill(-1);
 
 
 	//	duplicate vertices
