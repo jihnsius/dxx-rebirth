@@ -1668,9 +1668,9 @@ static void collide_robot_and_weapon( dxxobject * robot, dxxobject * weapon, vms
 //##	return;
 //##}
 
-static void collide_hostage_and_player( dxxobject * hostage, dxxobject * player, vms_vector *collision_point ) {
+static void collide_hostage_and_player( dxxobject * hostage, dxxobject * plr, vms_vector *collision_point ) {
 	// Give player points, etc.
-	if ( player == ConsoleObject )	{
+	if ( plr == ConsoleObject )	{
 		detect_escort_goal_accomplished(hostage-Objects);
 		add_points_to_score(HOSTAGE_SCORE);
 
