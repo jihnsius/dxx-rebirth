@@ -1504,11 +1504,9 @@ multi_send_message_dialog(void)
 
 
 void
-multi_do_death(int objnum)
+multi_do_death()
 {
 	// Do any miscellaneous stuff for a new network player after death
-
-	objnum = objnum;
 
 	if (!(Game_mode & GM_MULTI_COOP))
 	{

@@ -1340,7 +1340,7 @@ void DoPlayerDead()
 #ifdef NETWORK
 	if ( Game_mode&GM_MULTI )
 	{
-		multi_do_death(Players[Player_num].objnum);
+		multi_do_death();
 	}
 	else
 #endif
