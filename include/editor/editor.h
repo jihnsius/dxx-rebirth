@@ -476,9 +476,6 @@ void get_next_segment(segnum_t curseg_num, int curside, segnum_t *newseg_num, in
 //	Copy texture maps in newseg to nsp.
 void copy_uvs_seg_to_seg(segment *nsp,segment *newseg);
 
-//	Return true if segment is concave.
-int check_seg_concavity(segment *s);
-
 //	Return N_found_segs = number of concave segments in mine.
 //	Segment ids stored at Found_segs
 void find_concave_segs(void);

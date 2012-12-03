@@ -1620,7 +1620,7 @@ void create_coordinate_axes_from_segment(segment *sp,vertnum_t *vertnums)
 
 // -----------------------------------------------------------------------------
 //	Determine if a segment is concave. Returns true if concave
-int check_seg_concavity(segment *s)
+static int check_seg_concavity(segment *s)
 {
 	int sn,vn;
 	vms_vector n0,n1;
