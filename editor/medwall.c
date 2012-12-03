@@ -661,7 +661,7 @@ int wall_remove_side(segment *seg, short side)
 	int lower_wallnum;
 	int w, t, l, t1;
 
-	if (IS_CHILD(seg->children[side]) && IS_CHILD(seg->sides[side].wall_num)) {
+	if (IS_CHILD(seg->children[side]) && IS_WALL(seg->sides[side].wall_num)) {
 		csegp = &Segments[seg->children[side]];
 		Connectside = find_connect_side(seg, csegp);
 

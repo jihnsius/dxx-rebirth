@@ -107,6 +107,10 @@ typedef struct side_t {
 #endif
 } side_t;
 
+static inline int IS_WALL(short w) {
+	return w > -1;
+}
+
 typedef struct segment {
 #ifdef EDITOR
 	segnum_t   segnum;     // segment number, not sure what it means
