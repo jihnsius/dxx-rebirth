@@ -600,7 +600,7 @@ void do_physics_sim(dxxobject *obj)
 				if (obj->type == OBJ_PLAYER)
 					scrape_player_on_wall(obj, WallHitSeg, WallHitSide, &hit_info.hit_pnt );
 
-				Assert( WallHitSeg != segment_none );
+				Assert( WallHitSeg != segment_none && WallHitSeg <= Highest_segment_index );
 				Assert( WallHitSide > -1 );
 
 				if ( !(obj->flags&OF_SHOULD_BE_DEAD) )	{
