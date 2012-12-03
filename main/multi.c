@@ -2355,8 +2355,6 @@ multi_reset_player_object(dxxobject *objp)
 
 	//Init physics for a non-console player
 
-	Assert(objp >= Objects);
-	Assert(objp <= &Objects[Highest_object_index]);
 	Assert((objp->type == OBJ_PLAYER) || (objp->type == OBJ_GHOST));
 
 	vm_vec_zero(&objp->mtype.phys_info.velocity);
