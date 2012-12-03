@@ -966,15 +966,15 @@ int state_save_all_sub(char *filename, char *desc)
 	i = Highest_object_index+1;
 	PHYSFS_write(fp, &i, sizeof(int), 1);
 	//PHYSFS_write(fp, Objects, sizeof(object), i);
+	object_rw *obj_rw;
+	MALLOC(obj_rw, object_rw, 1);
 	for (objnum_t i = object_first; i <= Highest_object_index; i++)
 	{
-		object_rw *obj_rw;
-		MALLOC(obj_rw, object_rw, 1);
 		memset(obj_rw, 0, sizeof(object_rw));
 		state_object_to_object_rw(&Objects[i], obj_rw);
 		PHYSFS_write(fp, obj_rw, sizeof(object_rw), 1);
-		d_free(obj_rw);
 	}
+	d_free(obj_rw);
 
 //Save wall info
 	i = Num_walls;
