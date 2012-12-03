@@ -1375,15 +1375,15 @@ int state_restore_all_sub(char *filename, int secret_restore)
 	i = PHYSFSX_readSXE32(fp, swap);
 	Highest_object_index = i-1;
 	//object_read_n_swap(Objects, i, swap, fp);
+	object_rw *obj_rw;
+	MALLOC(obj_rw, object_rw, 1);
 	for (objnum_t i=object_first; i<=Highest_object_index; i++ )
 	{
-		object_rw *obj_rw;
-		MALLOC(obj_rw, object_rw, 1);
 		PHYSFS_read(fp, obj_rw, sizeof(object_rw), 1);
 		object_rw_swap(obj_rw, swap);
 		state_object_rw_to_object(obj_rw, &Objects[i]);
-		d_free(obj_rw);
 	}
+	d_free(obj_rw);
 
 	for (objnum_t i=object_first; i<=Highest_object_index; i++ )	{
 		obj = &Objects[i];
