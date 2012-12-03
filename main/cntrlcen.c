@@ -121,7 +121,7 @@ static int calc_best_gun(int num_guns, vms_vector *gun_pos, vms_vector *gun_dir,
 
 }
 
-objnum_t	Dead_controlcen_object_num=-1;
+objnum_t	Dead_controlcen_object_num=object_none;
 
 //how long to blow up on insane
 int Base_control_center_explosion_time=DEFAULT_CONTROL_CENTER_EXPLOSION_TIME;
@@ -136,7 +136,7 @@ static const int	Alan_pavlish_reactor_times[NDL] = {90, 60, 45, 35, 30};
 //	Called every frame.  If control center been destroyed, then actually do something.
 void do_controlcen_dead_frame(void)
 {
-	if ((Dead_controlcen_object_num != -1) && (Countdown_seconds_left > 0))
+	if ((Dead_controlcen_object_num != object_none) && (Countdown_seconds_left > 0))
 		if (d_rand() < FrameTime*4)
 			create_small_fireball_on_object(&Objects[Dead_controlcen_object_num], F1_0, 1);
 
@@ -420,20 +420,20 @@ int Reactor_strength=-1;		//-1 mean not set by designer
 void init_controlcen_for_level(void)
 {
 	dxxobject	*objp;
-	objnum_t		cntrlcen_objnum=-1, boss_objnum=-1;
+	objnum_t		cntrlcen_objnum=object_none, boss_objnum=object_none;
 
-	for (objnum_t i=0; i<=Highest_object_index; i++) {
+	for (objnum_t i=object_first; i<=Highest_object_index; i++) {
 		objp = &Objects[i];
 		if (objp->type == OBJ_CNTRLCEN)
 		{
-			if (cntrlcen_objnum != -1)
+			if (cntrlcen_objnum != object_none)
 				;
 			else
 				cntrlcen_objnum = i;
 		}
 
 		if ((objp->type == OBJ_ROBOT) && (Robot_info[objp->id].boss_flag)) {
-			if (boss_objnum != -1)
+			if (boss_objnum != object_none)
 				;
 			else
 				boss_objnum = i;
@@ -441,14 +441,14 @@ void init_controlcen_for_level(void)
 	}
 
 #ifndef NDEBUG
-	if (cntrlcen_objnum == -1) {
-		Dead_controlcen_object_num = -1;
+	if (cntrlcen_objnum == object_none) {
+		Dead_controlcen_object_num = object_none;
 		return;
 	}
 #endif
 
-	if ( (boss_objnum != -1) && !((Game_mode & GM_MULTI) && !(Game_mode & GM_MULTI_ROBOTS)) ) {
-		if (cntrlcen_objnum != -1) {
+	if ( (boss_objnum != object_none) && !((Game_mode & GM_MULTI) && !(Game_mode & GM_MULTI_ROBOTS)) ) {
+		if (cntrlcen_objnum != object_none) {
 			Objects[cntrlcen_objnum].type = OBJ_GHOST;
 			Objects[cntrlcen_objnum].render_type = RT_NONE;
 			Control_center_present = 0;
@@ -479,7 +479,7 @@ void init_controlcen_for_level(void)
 	Control_center_player_been_seen = 0;
 	Control_center_next_fire_time = 0;
 	
-	Dead_controlcen_object_num = -1;
+	Dead_controlcen_object_num = object_none;
 }
 
 void special_reactor_stuff(void)

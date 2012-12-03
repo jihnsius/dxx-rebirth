@@ -720,7 +720,7 @@ int load_mine_data(PHYSFS_file *LoadFile)
 					Error("Unable to read segment %i\n", i);
 			}
 
-			Segments[i].objects = -1;
+			Segments[i].objects = object_none;
 			#ifdef EDITOR
 			Segments[i].group = -1;
 			#endif
@@ -1009,7 +1009,7 @@ int load_mine_data_compiled(PHYSFS_file *LoadFile)
 			}
 		}
 
-		Segments[segnum].objects = -1;
+		Segments[segnum].objects = object_none;
 
 		if (Gamesave_current_version <= 5) { // descent 1 thru d2 SHAREWARE level
 			// Read fix	Segments[segnum].static_light (shift down 5 bits, write as short)

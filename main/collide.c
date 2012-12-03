@@ -1402,7 +1402,7 @@ static int do_boss_weapon_collision(dxxobject *robot, dxxobject *weapon, vms_vec
 		if ((Weapon_info[weapon->id].matter && Boss_spews_bots_matter[d2_boss_index]) || (!Weapon_info[weapon->id].matter && Boss_spews_bots_energy[d2_boss_index])) {
 			if (Boss_spew_more[d2_boss_index])
 				if (d_rand() > 16384) {
-					if (boss_spew_robot(robot, collision_point) != -1)
+					if (boss_spew_robot(robot, collision_point) != object_none)
 						Last_gate_time = GameTime64 - Gate_interval - 1;	//	Force allowing spew of another bot.
 				}
 			boss_spew_robot(robot, collision_point);
@@ -1424,7 +1424,7 @@ static int do_boss_weapon_collision(dxxobject *robot, dxxobject *weapon, vms_vec
 			digi_link_sound_to_pos( SOUND_WEAPON_HIT_DOOR, segnum, 0, collision_point, 0, F1_0);
 			damage_flag = 0;
 
-			if (Buddy_objnum != -1)
+			if (Buddy_objnum != object_none)
 			{
 				if (Last_time_buddy_gave_hint == 0)
 					Last_time_buddy_gave_hint = d_rand()*32 + F1_0*16;
@@ -1454,7 +1454,7 @@ static int do_boss_weapon_collision(dxxobject *robot, dxxobject *weapon, vms_vec
 				new_obj = obj_create(weapon->type, weapon->id, weapon->segnum, &weapon->pos,
 					&weapon->orient, weapon->size, weapon->control_type, weapon->movement_type, weapon->render_type);
 
-				if (new_obj != -1) {
+				if (new_obj != object_none) {
 					vms_vector	vec_to_point;
 					vms_vector	weap_vec;
 					fix			speed;
@@ -1742,7 +1742,7 @@ static objnum_t maybe_drop_primary_weapon_egg(dxxobject *playerobj, int weapon_i
 	if (Players[playerobj->id].primary_weapon_flags & weapon_flag)
 		return call_object_create_egg(playerobj, 1, OBJ_POWERUP, powerup_num);
 	else
-		return -1;
+		return object_none;
 }
 
 static void maybe_drop_secondary_weapon_egg(dxxobject *playerobj, int weapon_index, int count)
@@ -1891,10 +1891,10 @@ void drop_player_eggs(dxxobject *playerobj)
 		if (vulcan_ammo < VULCAN_AMMO_AMOUNT)
 			vulcan_ammo = VULCAN_AMMO_AMOUNT;	//make sure gun has at least as much as a powerup
 		objnum = maybe_drop_primary_weapon_egg(playerobj, VULCAN_INDEX);
-		if (objnum!=-1)
+		if (objnum!=object_none)
 			Objects[objnum].ctype.powerup_info.count = vulcan_ammo;
 		objnum = maybe_drop_primary_weapon_egg(playerobj, GAUSS_INDEX);
-		if (objnum!=-1)
+		if (objnum!=object_none)
 			Objects[objnum].ctype.powerup_info.count = vulcan_ammo;
 
 		//	Drop the rest of the primary weapons
@@ -1906,7 +1906,7 @@ void drop_player_eggs(dxxobject *playerobj)
 		maybe_drop_primary_weapon_egg(playerobj, PHOENIX_INDEX);
 
 		objnum = maybe_drop_primary_weapon_egg(playerobj, OMEGA_INDEX);
-		if (objnum!=-1)
+		if (objnum!=object_none)
 			Objects[objnum].ctype.powerup_info.count = (playerobj->id==Player_num)?Omega_charge:MAX_OMEGA_CHARGE;
 
 		//	Drop the secondary weapons
@@ -2042,7 +2042,7 @@ void apply_damage_to_player(dxxobject *playerobj, dxxobject *killer, fix damage,
 
 			playerobj->flags |= OF_SHOULD_BE_DEAD;
 
-			if (Buddy_objnum != -1)
+			if (Buddy_objnum != object_none)
 				if (killer && (killer->type == OBJ_ROBOT) && (Robot_info[killer->id].companion))
 					Buddy_sorry_time = GameTime64;
 		}
@@ -2132,7 +2132,7 @@ static void collide_player_and_weapon( dxxobject * playerobj, dxxobject * weapon
 	bump_two_objects(playerobj, weapon, 0);	//no damage from bump
 
 	if ( !Weapon_info[weapon->id].damage_radius ) {
-		if ( weapon->ctype.laser_info.parent_num > -1 )
+		if ( weapon->ctype.laser_info.parent_num != object_none )
 			killer = &Objects[weapon->ctype.laser_info.parent_num];
 
 //		if (weapon->id == SMART_HOMING_ID)
@@ -2221,7 +2221,7 @@ void collide_robot_and_materialization_center(dxxobject *objp)
 
 	bump_one_object(objp, &exit_dir, 8*F1_0);
 
-	apply_damage_to_robot( objp, F1_0, -1);
+	apply_damage_to_robot( objp, F1_0, object_none);
 
 	return;
 

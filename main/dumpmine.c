@@ -248,7 +248,7 @@ static void write_key_text(PHYSFS_file *my_file)
 	blue_count2 = 0;
 	gold_count2 = 0;
 
-	for (objnum_t i=0; i<=Highest_object_index; i++) {
+	for (objnum_t i=object_first; i<=Highest_object_index; i++) {
 		if (Objects[i].type == OBJ_POWERUP)
 			if (Objects[i].id == POW_KEY_BLUE) {
 				PHYSFSX_printf(my_file, "The BLUE key is object %i in segment %i\n", i, Objects[i].segnum);
@@ -325,7 +325,7 @@ static void write_control_center_text(PHYSFS_file *my_file)
 			PHYSFSX_printf(my_file, "Segment %3i is a control center.\n", i);
 			objnum_t objnum = Segments[i].objects;
 			count2 = 0;
-			while (objnum != -1) {
+			while (objnum != object_none) {
 				if (Objects[objnum].type == OBJ_CNTRLCEN)
 					count2++;
 				objnum = Objects[objnum].next;
@@ -383,9 +383,9 @@ static void write_segment_text(PHYSFS_file *my_file)
 		objnum_t objnum = Segments[i].objects;
 		PHYSFSX_printf(my_file, "Segment %4i: ", i);
 		depth=0;
-		if (objnum != -1) {
+		if (objnum != object_none) {
 			PHYSFSX_printf(my_file, "Objects: ");
-			while (objnum != -1) {
+			while (objnum != object_none) {
 				PHYSFSX_printf(my_file, "[%8s %8s %3i] ", object_types(objnum), object_ids(objnum), objnum);
 				objnum = Objects[objnum].next;
 				if (depth++ > 30) {
@@ -500,7 +500,7 @@ static void write_player_text(PHYSFS_file *my_file)
 
 	PHYSFSX_printf(my_file, "-----------------------------------------------------------------------------\n");
 	PHYSFSX_printf(my_file, "Players:\n");
-	for (objnum_t i=0; i<=Highest_object_index; i++) {
+	for (objnum_t i=object_first; i<=Highest_object_index; i++) {
 		if (Objects[i].type == OBJ_PLAYER) {
 			num_players++;
 			PHYSFSX_printf(my_file, "Player %2i is object #%3i in segment #%3i.\n", Objects[i].id, i, Objects[i].segnum);
@@ -761,7 +761,7 @@ static void determine_used_textures_level(int load_level_flag, int shareware_fla
 
 
 	//	Process robots.
-	for (objnum_t objnum=0; objnum<=Highest_object_index; objnum++) {
+	for (objnum_t objnum=object_first; objnum<=Highest_object_index; objnum++) {
 		dxxobject *objp = &Objects[objnum];
 
 		if (objp->render_type == RT_POLYOBJ) {
@@ -929,9 +929,9 @@ static void say_totals(PHYSFS_file *my_file, const char *level_name)
 
 		//	Find new min objnum.
 		min_obj_val = 0x7fff0000;
-		min_objnum = -1;
+		min_objnum = object_none;
 
-		for (objnum_t j=0; j<=Highest_object_index; j++) {
+		for (objnum_t j=object_first; j<=Highest_object_index; j++) {
 			if (!used_objects[j] && Objects[j].type!=OBJ_NONE) {
 				cur_obj_val = Objects[j].type * 1000 + Objects[j].id;
 				if (cur_obj_val < min_obj_val) {
@@ -940,7 +940,7 @@ static void say_totals(PHYSFS_file *my_file, const char *level_name)
 				}
 			}
 		}
-		if ((min_objnum == -1) || (Objects[min_objnum].type == 255))
+		if ((min_objnum == object_none) || (Objects[min_objnum].type == 255))
 			break;
 
 		objcount = 0;
@@ -948,7 +948,7 @@ static void say_totals(PHYSFS_file *my_file, const char *level_name)
 		objtype = Objects[min_objnum].type;
 		objid = Objects[min_objnum].id;
 
-		for (objnum_t i=0; i<=Highest_object_index; i++) {
+		for (objnum_t i=object_first; i<=Highest_object_index; i++) {
 			if (!used_objects[i]) {
 
 				if (((Objects[i].type == objtype) && (Objects[i].id == objid)) ||

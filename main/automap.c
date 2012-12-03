@@ -274,7 +274,7 @@ static void DropMarker (int player_marker_num)
 
 	MarkerPoint[marker_num] = playerp->pos;
 
-	if (MarkerObject[marker_num] != -1)
+	if (MarkerObject[marker_num] != object_none)
 		obj_delete(MarkerObject[marker_num]);
 
 	MarkerObject[marker_num] = drop_marker_object(&playerp->pos,playerp->segnum,&playerp->orient,marker_num);
@@ -311,7 +311,7 @@ void DropBuddyMarker(dxxobject *objp)
 static void DrawOneMarker(automap *am, const unsigned i, const int cyc)
 {
 	g3s_point sphere_point;
-	if (MarkerObject[i] != -1) {
+	if (MarkerObject[i] != object_none) {
 		g3_rotate_point(&sphere_point,&Objects[MarkerObject[i]].pos);
 		gr_setcolor (gr_find_closest_color_current(cyc,0,0));
 		g3_draw_sphere(&sphere_point,MARKER_SPHERE_SIZE);
@@ -362,7 +362,7 @@ static void ClearMarkers()
 
 	for (i=0;i<NUM_MARKERS;i++) {
 		MarkerMessage[i][0]=0;
-		MarkerObject[i]=-1;
+		MarkerObject[i]=object_none;
 	}
 }
 
@@ -505,7 +505,7 @@ static void draw_automap(automap *am)
 	}
 #endif
 
-	for (objnum_t o=0;o<=Highest_object_index;o++) {
+	for (objnum_t o=object_first;o<=Highest_object_index;o++) {
 		objp = &Objects[o];
 		switch( objp->type )	{
 		case OBJ_HOSTAGE:
@@ -636,17 +636,17 @@ static int automap_key_command(window *wind, d_event *event, automap *am)
 			}
 
 			{
-				if (MarkerObject[marker_num] != -1)
+				if (MarkerObject[marker_num] != object_none)
 					HighlightMarker=marker_num;
 			}
 			return 1;
 
 		case KEY_D+KEY_CTRLED:
-			if (HighlightMarker > -1 && MarkerObject[HighlightMarker] != -1) {
+			if (HighlightMarker > -1 && MarkerObject[HighlightMarker] != object_none) {
 				gr_set_current_canvas(NULL);
 				if (nm_messagebox( NULL, 2, TXT_YES, TXT_NO, "Delete Marker?" ) == 0) {
 					obj_delete(MarkerObject[HighlightMarker]);
-					MarkerObject[HighlightMarker]=-1;
+					MarkerObject[HighlightMarker]=object_none;
 					MarkerMessage[HighlightMarker][0]=0;
 					HighlightMarker = -1;
 				}
@@ -1428,7 +1428,7 @@ void InitMarkerInput ()
 	maxdrop=MAX_DROP_SINGLE;
 
 	for (i=0;i<maxdrop;i++)
-		if (MarkerObject[(Player_num*2)+i] == -1)		//found free slot!
+		if (MarkerObject[(Player_num*2)+i] == object_none)		//found free slot!
 			break;
 
 	if (i==maxdrop)		//no free slot

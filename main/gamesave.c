@@ -348,7 +348,7 @@ void read_object(dxxobject *obj,PHYSFS_file *f,int version)
 	obj->flags          = PHYSFSX_readByte(f);
 
 	obj->segnum         = PHYSFSX_readShort(f);
-	obj->attached_obj   = -1;
+	obj->attached_obj   = object_none;
 
 	PHYSFSX_readVector(&obj->pos,f);
 	PHYSFSX_readMatrix(&obj->orient,f);
@@ -421,7 +421,7 @@ void read_object(dxxobject *obj,PHYSFS_file *f,int version)
 			obj->ctype.expl_info.spawn_time		= PHYSFSX_readFix(f);
 			obj->ctype.expl_info.delete_time		= PHYSFSX_readFix(f);
 			obj->ctype.expl_info.delete_objnum	= PHYSFSX_readShort(f);
-			obj->ctype.expl_info.next_attach = obj->ctype.expl_info.prev_attach = obj->ctype.expl_info.attach_parent = -1;
+			obj->ctype.expl_info.next_attach = obj->ctype.expl_info.prev_attach = obj->ctype.expl_info.attach_parent = object_none;
 
 			break;
 
@@ -817,7 +817,7 @@ static int load_game_data(PHYSFS_file *LoadFile)
 		if (PHYSFSX_fseek( LoadFile, object_offset, SEEK_SET ))
 			Error( "Error seeking to object_offset in gamesave.c" );
 
-		for (objnum_t i = 0; i < gs_num_objects; i++) {
+		for (objnum_t i = object_first; i < gs_num_objects; i++) {
 
 			read_object(&Objects[i], LoadFile, game_top_fileinfo_version);
 
@@ -1022,8 +1022,8 @@ static int load_game_data(PHYSFS_file *LoadFile)
 
 	reset_objects(gs_num_objects);
 
-	for (objnum_t i=0; i<MAX_OBJECTS; i++) {
-		Objects[i].next = Objects[i].prev = -1;
+	for (objnum_t i=object_first; i<MAX_OBJECTS; i++) {
+		Objects[i].next = Objects[i].prev = object_none;
 		if (Objects[i].type != OBJ_NONE) {
 			segnum_t objsegnum = Objects[i].segnum;
 
@@ -1466,7 +1466,7 @@ int create_new_mine(void)
 
 	strcpy(Current_level_palette, DEFAULT_LEVEL_PALETTE);
 
-	Cur_object_index = -1;
+	Cur_object_index = object_none;
 	reset_objects(1);		//just one object, the player
 
 	num_groups = 0;
@@ -1588,7 +1588,7 @@ static int save_game_data(PHYSFS_file *SaveFile)
 	object_offset = PHYSFS_tell(SaveFile);
 	//fwrite( &Objects, sizeof(object), game_fileinfo.object_howmany, SaveFile );
 	{
-		for (objnum_t i = 0; i <= Highest_object_index; i++)
+		for (objnum_t i = object_first; i <= Highest_object_index; i++)
 			write_object(&Objects[i], game_top_fileinfo_version, SaveFile);
 	}
 

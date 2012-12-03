@@ -1241,7 +1241,7 @@ dxxobject *find_escort()
 {
 	objnum_t i;
 
-	for (i=0; i<=Highest_object_index; i++)
+	for (i=object_first; i<=Highest_object_index; i++)
 		if (Objects[i].type == OBJ_ROBOT)
 			if (Robot_info[Objects[i].id].companion)
 				return &Objects[i];
@@ -1774,7 +1774,7 @@ void powerup_grab_cheat_all(void)
 	segp = &Segments[ConsoleObject->segnum];
 	objnum = segp->objects;
 
-	while (objnum != -1) {
+	while (objnum != object_none) {
 		if (Objects[objnum].type == OBJ_POWERUP)
 			powerup_grab_cheat(ConsoleObject, objnum);
 		objnum = Objects[objnum].next;
@@ -1824,7 +1824,7 @@ static int mark_player_path_to_segment(segnum_t dstseg)
 		seg_center = Point_segs[player_hide_index+i].point;
 
 		objnum = obj_create( OBJ_POWERUP, POW_ENERGY, segnum, &seg_center, &vmd_identity_matrix, Powerup_info[POW_ENERGY].size, CT_POWERUP, MT_NONE, RT_POWERUP);
-		if (objnum == -1) {
+		if (objnum == object_none) {
 			Int3();		//	Unable to drop energy powerup for path
 			return 1;
 		}

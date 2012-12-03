@@ -155,11 +155,11 @@ multi_check_robot_timeout(void)
 		lastcheck = GameTime64;
 		for (i = 0; i < MAX_ROBOTS_CONTROLLED; i++)
 		{
-			if ((robot_controlled[i] != -1) && (robot_last_send_time[i] + ROBOT_TIMEOUT < GameTime64))
+			if ((robot_controlled[i] != object_none) && (robot_last_send_time[i] + ROBOT_TIMEOUT < GameTime64))
 			{
 				if (Objects[robot_controlled[i]].ctype.ai_info.REMOTE_OWNER != Player_num)
 				{
-					robot_controlled[i] = -1;
+					robot_controlled[i] = object_none;
 					Int3(); // Non-terminal but Rob is interesting, step over please...
 					return;
 				}
@@ -189,7 +189,7 @@ multi_strip_robots(int playernum)
 			for (unsigned i = 0; i < MAX_ROBOTS_CONTROLLED; i++)
 				multi_delete_controlled_robot(robot_controlled[i]);
 
-		for (objnum_t i = 1; i <= Highest_object_index; i++)
+		for (objnum_t i = object_first; i <= Highest_object_index; i++)
 			if ((Objects[i].type == OBJ_ROBOT) && (Objects[i].ctype.ai_info.REMOTE_OWNER == playernum)) {
 				Assert((Objects[i].control_type == CT_AI) || (Objects[i].control_type == CT_NONE) || (Objects[i].control_type == CT_MORPH));
 				Objects[i].ctype.ai_info.REMOTE_OWNER = -1;
@@ -234,7 +234,7 @@ multi_add_controlled_robot(objnum_t objnum, int agitation)
 
 	for (i = 0; i < MAX_ROBOTS_CONTROLLED; i++)
 	{
-		if ((robot_controlled[i] == -1) || (Objects[robot_controlled[i]].type != OBJ_ROBOT)) {
+		if ((robot_controlled[i] == object_none) || (Objects[robot_controlled[i]].type != OBJ_ROBOT)) {
 			first_free_robot = i;
 			break;
 		}
@@ -247,7 +247,7 @@ multi_add_controlled_robot(objnum_t objnum, int agitation)
 			break;
 		}
 
-		if ((robot_controlled[i] != -1) && (robot_agitation[i] < lowest_agitation) && (robot_controlled_time[i] + MIN_CONTROL_TIME < GameTime64))
+		if ((robot_controlled[i] != object_none) && (robot_agitation[i] < lowest_agitation) && (robot_controlled_time[i] + MIN_CONTROL_TIME < GameTime64))
 		{
 			lowest_agitation = robot_agitation[i];
 			lowest_agitated_bot = i;
@@ -305,7 +305,7 @@ multi_delete_controlled_robot(objnum_t objnum)
 
 	Objects[objnum].ctype.ai_info.REMOTE_OWNER = -1;
 	Objects[objnum].ctype.ai_info.REMOTE_SLOT_NUM = 0;
-	robot_controlled[i] = -1;
+	robot_controlled[i] = object_none;
 	robot_send_pending[i] = 0;
 	robot_fired[i] = 0;
 }
@@ -377,7 +377,7 @@ multi_send_robot_frame(int sent)
 	for (i = 0; i < MAX_ROBOTS_CONTROLLED; i++)
 	{
 		int sending = (last_sent+1+i)%MAX_ROBOTS_CONTROLLED;
-		if ( (robot_controlled[sending] != -1) && ((robot_send_pending[sending] > sent) || (robot_fired[sending] > sent)) )
+		if ( (robot_controlled[sending] != object_none) && ((robot_send_pending[sending] > sent) || (robot_fired[sending] > sent)) )
 		{
 			if (robot_send_pending[sending])
 			{
@@ -822,7 +822,7 @@ multi_explode_robot_sub(objnum_t botnum, objnum_t killer,char isthief)
 
 	if (Network_send_objects && multi_objnum_is_past(botnum))
 	{
-		Network_send_objnum = -1;
+		Network_send_objnum = object_none;
 	}
 
 	robot = &Objects[botnum];
@@ -1087,7 +1087,7 @@ multi_do_create_robot_powerups(char *buf)
 
 	egg_objnum = object_create_egg(&del_obj);
 
-	if (egg_objnum == -1)
+	if (egg_objnum == object_none)
 		return; // Object buffer full
 
 //	Assert(egg_objnum > -1);
@@ -1112,7 +1112,7 @@ multi_drop_robot_powerups(objnum_t objnum)
 	// Code to handle dropped robot powerups in network mode ONLY!
 
 	dxxobject *del_obj;
-	objnum_t egg_objnum = -1;
+	objnum_t egg_objnum = object_none;
 	robot_info	*robptr;
 
 	if ((objnum < 0) || (objnum > Highest_object_index))
@@ -1173,7 +1173,7 @@ multi_drop_robot_powerups(objnum_t objnum)
 		}
 	}
 
-	if (egg_objnum >= 0) {
+	if (egg_objnum != object_none) {
 		// Transmit the object creation to the other players
 		multi_send_create_robot_powerups(del_obj);
 	}

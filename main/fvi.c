@@ -636,7 +636,7 @@ int find_vector_intersection(const fvi_query *fq,fvi_info *hit_data)
 	fvi_hit_seg = segment_none;
 	fvi_hit_side = -1;
 
-	fvi_hit_object = -1;
+	fvi_hit_object = object_none;
 
 	//check to make sure start point is in seg its supposed to be in
 	//Assert(check_point_in_seg(p0,startseg,0).centermask==0);	//start point not in seg
@@ -648,7 +648,8 @@ int find_vector_intersection(const fvi_query *fq,fvi_info *hit_data)
 		hit_data->hit_type = HIT_BAD_P0;
 		hit_data->hit_pnt = *fq->p0;
 		hit_data->hit_seg = segment_none;
-		hit_data->hit_side = hit_data->hit_object = 0;
+		hit_data->hit_side = 0;
+		hit_data->hit_object = object_none;
 		hit_data->hit_side_seg = segment_none;
 
 		return hit_data->hit_type;
@@ -661,7 +662,8 @@ int find_vector_intersection(const fvi_query *fq,fvi_info *hit_data)
 		hit_data->hit_type = HIT_BAD_P0;
 		hit_data->hit_pnt = *fq->p0;
 		hit_data->hit_seg = fq->startseg;
-		hit_data->hit_side = hit_data->hit_object = 0;
+		hit_data->hit_side = 0;
+		hit_data->hit_object = object_none;
 		hit_data->hit_side_seg = segment_none;
 
 		return hit_data->hit_type;
@@ -746,7 +748,7 @@ if (hit_seg!=segment_none && fq->flags&FQ_GET_SEGLIST)
 
 //	Assert(fvi_hit_seg==-1 || fvi_hit_seg == hit_seg);
 
-	Assert(!(hit_type==HIT_OBJECT && fvi_hit_object==-1));
+	Assert(!(hit_type==HIT_OBJECT && fvi_hit_object==object_none));
 
 	hit_data->hit_type		= hit_type;
 	hit_data->hit_pnt 		= hit_pnt;
@@ -772,7 +774,7 @@ static int obj_in_list(objnum_t objnum,const objnum_t *obj_list)
 {
 	objnum_t t;
 
-	while ((t=*obj_list)!=-1 && t!=objnum) obj_list++;
+	while ((t=*obj_list)!=object_none && t!=objnum) obj_list++;
 
 	return (t==objnum);
 
@@ -808,12 +810,12 @@ static int fvi_sub(vms_vector *intp,segnum_t *ints,const vms_vector *p0,segnum_t
 
 	//first, see if vector hit any objects in this segment
 	if (flags & FQ_CHECK_OBJS)
-		for (objnum_t objnum=seg->objects;objnum!=-1;objnum=Objects[objnum].next)
+		for (objnum_t objnum=seg->objects;objnum!=object_none;objnum=Objects[objnum].next)
 			if (	!(Objects[objnum].flags & OF_SHOULD_BE_DEAD) &&
 				 	!(thisobjnum == objnum ) &&
 				 	(ignore_obj_list==NULL || !obj_in_list(objnum,ignore_obj_list)) &&
 				 	!laser_are_related( objnum, thisobjnum ) &&
-				 	!((thisobjnum  > -1)	&&
+				 	!((thisobjnum  != object_none)	&&
 				  		(CollisionResult[Objects[thisobjnum].type][Objects[objnum].type] == RESULT_NOTHING ) &&
 			 	 		(CollisionResult[Objects[objnum].type][Objects[thisobjnum].type] == RESULT_NOTHING ))) {
 				int fudged_rad = rad;
@@ -843,14 +845,14 @@ static int fvi_sub(vms_vector *intp,segnum_t *ints,const vms_vector *p0,segnum_t
 				if (d)          //we have intersection
 					if (d < closest_d) {
 						fvi_hit_object = objnum;
-						Assert(fvi_hit_object!=-1);
+						Assert(fvi_hit_object!=object_none);
 						closest_d = d;
 						closest_hit_point = hit_point;
 						hit_type=HIT_OBJECT;
 					}
 			}
 
-	if (	(thisobjnum > -1 ) && (CollisionResult[Objects[thisobjnum].type][OBJ_WALL] == RESULT_NOTHING ) )
+	if (	(thisobjnum != object_none ) && (CollisionResult[Objects[thisobjnum].type][OBJ_WALL] == RESULT_NOTHING ) )
 		rad = 0;		//HACK - ignore when edges hit walls
 
 	//now, check segment walls
@@ -1056,7 +1058,7 @@ quit_looking:
 			*ints = hit_seg;
 	}
 
-	Assert(!(hit_type==HIT_OBJECT && fvi_hit_object==-1));
+	Assert(!(hit_type==HIT_OBJECT && fvi_hit_object==object_none));
 
 	return hit_type;
 

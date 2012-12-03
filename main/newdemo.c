@@ -258,12 +258,12 @@ static int newdemo_read( void *buffer, int elsize, int nelem )
 
 objnum_t newdemo_find_object( int signature )
 {
-	for (objnum_t i=0; i<=Highest_object_index; i++) {
+	for (objnum_t i=object_first; i<=Highest_object_index; i++) {
 		dxxobject *objp = &Objects[i];
 		if ( (objp->type != OBJ_NONE) && (objp->signature == signature))
 			return i;
 	}
-	return -1;
+	return object_none;
 }
 
 static int newdemo_write( void *buffer, int elsize, int nelem )
@@ -514,7 +514,7 @@ static void nd_read_object(dxxobject *obj)
 	if ((obj->type == OBJ_ROBOT) && (obj->id == SPECIAL_REACTOR_ROBOT))
 		Int3();
 
-	obj->attached_obj = -1;
+	obj->attached_obj = object_none;
 
 	switch(obj->type) {
 
@@ -618,12 +618,12 @@ static void nd_read_object(dxxobject *obj)
 		nd_read_fix(&(obj->ctype.expl_info.delete_time));
 		nd_read_objnum_short(&(obj->ctype.expl_info.delete_objnum));
 
-		obj->ctype.expl_info.next_attach = obj->ctype.expl_info.prev_attach = obj->ctype.expl_info.attach_parent = -1;
+		obj->ctype.expl_info.next_attach = obj->ctype.expl_info.prev_attach = obj->ctype.expl_info.attach_parent = object_none;
 
 		if (obj->flags & OF_ATTACHED) {     //attach to previous object
 			Assert(prev_obj!=NULL);
 			if (prev_obj->control_type == CT_EXPLOSION) {
-				if (prev_obj->flags & OF_ATTACHED && prev_obj->ctype.expl_info.attach_parent!=-1)
+				if (prev_obj->flags & OF_ATTACHED && prev_obj->ctype.expl_info.attach_parent!=object_none)
 					obj_attach(&Objects[prev_obj->ctype.expl_info.attach_parent],obj);
 				else
 					obj->flags &= ~OF_ATTACHED;
@@ -1757,7 +1757,7 @@ static int newdemo_read_frame_information(int rewrite)
 
 	if (Newdemo_vcr_state != ND_STATE_PAUSED)
 		for (segnum=segment_first; segnum <= Highest_segment_index; segnum++)
-			Segments[segnum].objects = -1;
+			Segments[segnum].objects = object_none;
 
 	reset_objects(1);
 	Players[Player_num].homing_object_dist = -F1_0;
@@ -1828,7 +1828,7 @@ static int newdemo_read_frame_information(int rewrite)
 
 				if (Newdemo_vcr_state != ND_STATE_PAUSED) {
 					segnum = Viewer->segnum;
-					Viewer->next = Viewer->prev = -1;
+					Viewer->next = Viewer->prev = object_none;
 					Viewer->segnum = segment_none;
 
 					// HACK HACK HACK -- since we have multiple level recording, it can be the case
@@ -1845,7 +1845,7 @@ static int newdemo_read_frame_information(int rewrite)
 
 		case ND_EVENT_RENDER_OBJECT:       // Followed by an object structure
 			objnum = obj_allocate();
-			if (objnum==-1)
+			if (objnum==object_none)
 				break;
 			obj = &Objects[objnum];
 			nd_read_object(obj);
@@ -1857,7 +1857,7 @@ static int newdemo_read_frame_information(int rewrite)
 			}
 			if (Newdemo_vcr_state != ND_STATE_PAUSED) {
 				segnum = obj->segnum;
-				obj->next = obj->prev = -1;
+				obj->next = obj->prev = object_none;
 				obj->segnum = segment_none;
 
 				// HACK HACK HACK -- don't render objects is segments greater than Highest_segment_index
@@ -1956,7 +1956,7 @@ static int newdemo_read_frame_information(int rewrite)
 					break;
 				}
 				objnum = newdemo_find_object( signature );
-				if ( objnum > -1 && Newdemo_vcr_state == ND_STATE_PLAYBACK)  {   //  @mk, 2/22/96, John told me to.
+				if ( objnum != object_none && Newdemo_vcr_state == ND_STATE_PLAYBACK)  {   //  @mk, 2/22/96, John told me to.
 					digi_link_sound_to_object3( soundno, objnum, 1, max_volume, max_distance, loop_start, loop_end );
 				}
 			}
@@ -1973,7 +1973,7 @@ static int newdemo_read_frame_information(int rewrite)
 					break;
 				}
 				objnum = newdemo_find_object( signature );
-				if ( objnum > -1 && Newdemo_vcr_state == ND_STATE_PLAYBACK)  {   //  @mk, 2/22/96, John told me to.
+				if ( objnum != object_none && Newdemo_vcr_state == ND_STATE_PLAYBACK)  {   //  @mk, 2/22/96, John told me to.
 					digi_kill_sound_linked_to_object(objnum);
 				}
 			}
@@ -1998,7 +1998,7 @@ static int newdemo_read_frame_information(int rewrite)
 				break;
 			}
 			if (Newdemo_vcr_state != ND_STATE_PAUSED)
-				wall_hit_process(&Segments[segnum], side, damage, player, &(Objects[0]) );
+				wall_hit_process(&Segments[segnum], side, damage, player, &(Objects[object_first]) );
 			break;
 		}
 
@@ -2061,7 +2061,7 @@ static int newdemo_read_frame_information(int rewrite)
 			if (newdemo_read( md->submodel_startpoints, sizeof(md->submodel_startpoints), 1 )!=1) { done=-1; break; }
 #endif
 			objnum = obj_allocate();
-			if (objnum==-1)
+			if (objnum==object_none)
 				break;
 			obj = &Objects[objnum];
 			nd_read_object(obj);
@@ -2075,7 +2075,7 @@ static int newdemo_read_frame_information(int rewrite)
 			if (Newdemo_vcr_state != ND_STATE_PAUSED) {
 				if (Newdemo_vcr_state != ND_STATE_PAUSED) {
 					segnum = obj->segnum;
-					obj->next = obj->prev = -1;
+					obj->next = obj->prev = object_none;
 					obj->segnum = segment_none;
 					obj_link(obj-Objects,segnum);
 				}
@@ -3089,7 +3089,7 @@ static void interpolate_frame(fix d_play, fix d_recorded)
 		Int3();
 		return;
 	}
-	for (objnum_t i = 0; i <= num_cur_objs; i++)
+	for (objnum_t i = object_first; i <= num_cur_objs; i++)
 		memcpy(&(cur_objs[i]), &(Objects[i]), sizeof(cur_objs[i]));
 
 	Newdemo_vcr_state = ND_STATE_PAUSED;
@@ -3104,8 +3104,8 @@ static void interpolate_frame(fix d_play, fix d_recorded)
 	// This interpolating looks just more crappy on high FPS, so let's not even waste performance on it.
 	if (InterpolStep <= 0)
 	{
-		for (objnum_t i = 0; i <= num_cur_objs; i++) {
-			for (objnum_t j = 0; j <= Highest_object_index; j++) {
+		for (objnum_t i = object_first; i <= num_cur_objs; i++) {
+			for (objnum_t j = object_first; j <= Highest_object_index; j++) {
 				if (cur_objs[i].signature == Objects[j].signature) {
 					sbyte render_type = cur_objs[i].render_type;
 					fix delta_x, delta_y, delta_z;
@@ -3166,7 +3166,7 @@ static void interpolate_frame(fix d_play, fix d_recorded)
 		newdemo_stop_playback();
 	Newdemo_vcr_state = ND_STATE_PLAYBACK;
 
-	for (objnum_t i = 0; i <= num_cur_objs; i++)
+	for (objnum_t i = object_first; i <= num_cur_objs; i++)
 		memcpy(&(Objects[i]), &(cur_objs[i]), sizeof(Objects[i]));
 	Highest_object_index = num_cur_objs;
 	d_free(cur_objs);
@@ -3297,7 +3297,7 @@ void newdemo_playback_one_frame()
 						Warning ("Couldn't get %ld bytes for objects in interpolate playback\n", sizeof(dxxobject) * num_objs);
 						break;
 					}
-					for (objnum_t i = 0; i <= num_objs; i++)
+					for (objnum_t i = object_first; i <= num_objs; i++)
 						memcpy(&(cur_objs[i]), &(Objects[i]), sizeof(cur_objs[i]));
 
 					level = Current_level_num;
@@ -3319,7 +3319,7 @@ void newdemo_playback_one_frame()
 					//  interpolated position and orientation can be preserved.
 
 					for (i = 0; i <= num_objs; i++) {
-						for (objnum_t j = 0; j <= Highest_object_index; j++) {
+						for (objnum_t j = object_first; j <= Highest_object_index; j++) {
 							if (cur_objs[i].signature == Objects[j].signature) {
 								memcpy(&(Objects[j].orient), &(cur_objs[i].orient), sizeof(vms_matrix));
 								memcpy(&(Objects[j].pos), &(cur_objs[i].pos), sizeof(vms_vector));
@@ -3608,7 +3608,7 @@ void newdemo_start_playback(const char * filename)
 #endif
 	strncpy(nd_playback_v_save_callsign, Players[Player_num].callsign, CALLSIGN_LEN);
 	Players[Player_num].lives=0;
-	Viewer = ConsoleObject = &Objects[0];   // play properly as if console player
+	Viewer = ConsoleObject = &Objects[object_first];   // play properly as if console player
 
 	if (newdemo_read_demo_start(rnd_demo)) {
 		PHYSFS_close(infile);

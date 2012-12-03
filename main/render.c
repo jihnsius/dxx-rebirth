@@ -671,7 +671,7 @@ static void do_render_object(objnum_t objnum, int window_num)
 
 	if ((count++ > MAX_OBJECTS) || (obj->next == objnum)) {
 		Int3();					// infinite loop detected
-		obj->next = -1;		// won't this clean things up?
+		obj->next = object_none;		// won't this clean things up?
 		return;					// get out of this infinite loop!
 	}
 
@@ -694,7 +694,7 @@ static void do_render_object(objnum_t objnum, int window_num)
 		//NOTE LINK TO ABOVE
 		render_object(obj);
 
-	for (objnum_t n=obj->attached_obj;n!=-1;n=Objects[n].ctype.expl_info.next_attach) {
+	for (objnum_t n=obj->attached_obj;n!=object_none;n=Objects[n].ctype.expl_info.next_attach) {
 
 		Assert(Objects[n].type == OBJ_FIREBALL);
 		Assert(Objects[n].control_type == CT_EXPLOSION);
@@ -826,7 +826,7 @@ static void render_segment(segnum_t segnum, int window_num)
 
 	#ifndef NDEBUG
 	if (!migrate_objects) {
-		for (objnum_t objnum=seg->objects;objnum!=-1;objnum=Objects[objnum].next)
+		for (objnum_t objnum=seg->objects;objnum!=object_none;objnum=Objects[objnum].next)
 			do_render_object(objnum, window_num);
 	}
 	#endif
@@ -1282,7 +1282,7 @@ static void add_obj_to_seglist(objnum_t objnum,int listnum)
 
 		marker = render_obj_list[checkn][i];
 
-		if (marker != -1) {
+		if (marker != object_none) {
 			checkn = -marker;
 			//Assert(checkn < MAX_RENDER_SEGS+N_EXTRA_OBJ_LISTS);
 			if (checkn >= MAX_RENDER_SEGS+N_EXTRA_OBJ_LISTS) {
@@ -1291,7 +1291,7 @@ static void add_obj_to_seglist(objnum_t objnum,int listnum)
 			}
 		}
 
-	} while (marker != -1);
+	} while (marker != object_none);
 
 	//now we have found a slot.  put object in it
 
@@ -1305,7 +1305,7 @@ static void add_obj_to_seglist(objnum_t objnum,int listnum)
 
 		//find an available sublist
 
-		for (lookn=MAX_RENDER_SEGS;render_obj_list[lookn][0]!=-1 && lookn<MAX_RENDER_SEGS+N_EXTRA_OBJ_LISTS;lookn++);
+		for (lookn=MAX_RENDER_SEGS;render_obj_list[lookn][0]!=object_none && lookn<MAX_RENDER_SEGS+N_EXTRA_OBJ_LISTS;lookn++);
 
 		//Assert(lookn<MAX_RENDER_SEGS+N_EXTRA_OBJ_LISTS);
 		if (lookn >= MAX_RENDER_SEGS+N_EXTRA_OBJ_LISTS) {
@@ -1315,7 +1315,7 @@ static void add_obj_to_seglist(objnum_t objnum,int listnum)
 
 		render_obj_list[checkn][i] = -lookn;
 		render_obj_list[lookn][0] = objnum;
-		render_obj_list[lookn][1] = -1;
+		render_obj_list[lookn][1] = object_none;
 
 	}
 
@@ -1451,7 +1451,7 @@ static void build_object_lists(int n_segs)
 	int nn;
 
 	for (nn=0;nn<MAX_RENDER_SEGS+N_EXTRA_OBJ_LISTS;nn++)
-		render_obj_list[nn][0] = -1;
+		render_obj_list[nn][0] = object_none;
 
 	for (nn=0;nn<n_segs;nn++) {
 		segnum_t segnum;
@@ -1461,7 +1461,7 @@ static void build_object_lists(int n_segs)
 		if (segnum != segment_none) {
 			dxxobject *obj;
 
-			for (objnum_t objnum=Segments[segnum].objects;objnum!=-1;objnum = obj->next) {
+			for (objnum_t objnum=Segments[segnum].objects;objnum!=object_none;objnum = obj->next) {
 				segnum_t new_segnum;
 				int list_pos;
 
@@ -1527,7 +1527,7 @@ static void build_object_lists(int n_segs)
 
 			lookn = nn;
 			i = n_sort_items = 0;
-			while ((t=render_obj_list[lookn][i++])!=-1)
+			while ((t=render_obj_list[lookn][i++])!=object_none)
 				if (t<0)
 					{lookn = -t; i=0;}
 				else
@@ -1599,12 +1599,12 @@ static void build_object_lists(int n_segs)
 			lookn = nn;
 			i = 0;
 			n = n_sort_items;
-			while ((t=render_obj_list[lookn][i])!=-1 && n>0)
+			while ((t=render_obj_list[lookn][i])!=object_none && n>0)
 				if (t<0)
 					{lookn = -t; i=0;}
 				else
 					render_obj_list[lookn][i++] = sort_list[--n].objnum;
-			render_obj_list[lookn][i] = -1;	//mark (possibly new) end
+			render_obj_list[lookn][i] = object_none;	//mark (possibly new) end
 		}
 	}
 }
@@ -2268,7 +2268,7 @@ void render_mine(segnum_t start_seg_num,fix eye_offset, int window_num)
 
 				listnum = nn;
 
-				for (objnp=0;render_obj_list[listnum][objnp]!=-1;)	{
+				for (objnp=0;render_obj_list[listnum][objnp]!=object_none;)	{
 					objnum_t ObjNumber = render_obj_list[listnum][objnp];
 
 					if (ObjNumber >= 0) {
@@ -2381,7 +2381,7 @@ void render_mine(segnum_t start_seg_num,fix eye_offset, int window_num)
 
 				listnum = nn;
 
-				for (objnp=0;render_obj_list[listnum][objnp]!=-1;)
+				for (objnp=0;render_obj_list[listnum][objnp]!=object_none;)
 				{
 					objnum_t ObjNumber = render_obj_list[listnum][objnp];
 

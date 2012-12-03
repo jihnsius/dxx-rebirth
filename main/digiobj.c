@@ -604,10 +604,10 @@ void digi_sync_sounds()
 				if ( Newdemo_state == ND_STATE_PLAYBACK )	{
 					objnum_t objnum;
 					objnum = newdemo_find_object( SoundObjects[i].link_type.obj.objsignature );
-					if ( objnum > -1 )	{
+					if ( objnum != object_none )	{
 						objp = &Objects[objnum];
 					} else {
-						objp = &Objects[0];
+						objp = &Objects[object_first];
 					}
 				} else {
 					objp = &Objects[SoundObjects[i].link_type.obj.objnum];

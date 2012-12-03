@@ -943,7 +943,7 @@ int state_save_all_sub(char *filename, char *desc)
 	PHYSFS_write(fp, &cheats.enabled, sizeof(int), 1);
 
 //Finish all morph objects
-	for (objnum_t i=0; i<=Highest_object_index; i++ )	{
+	for (objnum_t i=object_first; i<=Highest_object_index; i++ )	{
 		if ( (Objects[i].type != OBJ_NONE) && (Objects[i].render_type==RT_MORPH))	{
 			morph_data *md;
 			md = find_morph_data(&Objects[i]);
@@ -966,7 +966,7 @@ int state_save_all_sub(char *filename, char *desc)
 	i = Highest_object_index+1;
 	PHYSFS_write(fp, &i, sizeof(int), 1);
 	//PHYSFS_write(fp, Objects, sizeof(object), i);
-	for (objnum_t i = 0; i <= Highest_object_index; i++)
+	for (objnum_t i = object_first; i <= Highest_object_index; i++)
 	{
 		object_rw *obj_rw;
 		MALLOC(obj_rw, object_rw, 1);
@@ -1368,14 +1368,14 @@ int state_restore_all_sub(char *filename, int secret_restore)
 
 	//Clear out all the objects from the lvl file
 	for (segnum=segment_first; segnum <= Highest_segment_index; segnum++)
-		Segments[segnum].objects = -1;
+		Segments[segnum].objects = object_none;
 	reset_objects(1);
 
 	//Read objects, and pop 'em into their respective segments.
 	i = PHYSFSX_readSXE32(fp, swap);
 	Highest_object_index = i-1;
 	//object_read_n_swap(Objects, i, swap, fp);
-	for (objnum_t i=0; i<=Highest_object_index; i++ )
+	for (objnum_t i=object_first; i<=Highest_object_index; i++ )
 	{
 		object_rw *obj_rw;
 		MALLOC(obj_rw, object_rw, 1);
@@ -1385,11 +1385,12 @@ int state_restore_all_sub(char *filename, int secret_restore)
 		d_free(obj_rw);
 	}
 
-	for (objnum_t i=0; i<=Highest_object_index; i++ )	{
+	for (objnum_t i=object_first; i<=Highest_object_index; i++ )	{
 		obj = &Objects[i];
 		obj->rtype.pobj_info.alt_textures = -1;
 		segnum = obj->segnum;
-		obj->next = obj->prev = obj->segnum = -1;
+		obj->next = obj->prev = object_none;
+		obj->segnum = segment_none;
 		if ( obj->type != OBJ_NONE )	{
 			obj_link(i,segnum);
 		}
@@ -1519,7 +1520,7 @@ int state_restore_all_sub(char *filename, int secret_restore)
 		PHYSFS_seek(fp, PHYSFS_tell(fp) + num * (sizeof(vms_vector) + 40));
 
 		for (num=0;num<NUM_MARKERS;num++)
-			MarkerObject[num] = -1;
+			MarkerObject[num] = object_none;
 	}
 
 	if (version>=11) {

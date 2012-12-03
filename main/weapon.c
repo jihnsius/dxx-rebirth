@@ -819,7 +819,7 @@ void rock_the_mine_frame(void)
 					ConsoleObject->mtype.phys_info.rotvel.z += rz;
 
 					//	Shake the buddy!
-					if (Buddy_objnum != -1) {
+					if (Buddy_objnum != object_none) {
 						Objects[Buddy_objnum].mtype.phys_info.rotvel.x += rx*4;
 						Objects[Buddy_objnum].mtype.phys_info.rotvel.z += rz*4;
 					}
@@ -905,7 +905,7 @@ static void seismic_disturbance_frame(void)
 				ConsoleObject->mtype.phys_info.rotvel.z += rz;
 
 				//	Shake the buddy!
-				if (Buddy_objnum != -1) {
+				if (Buddy_objnum != object_none) {
 					Objects[Buddy_objnum].mtype.phys_info.rotvel.x += rx*4;
 					Objects[Buddy_objnum].mtype.phys_info.rotvel.z += rz*4;
 				}
@@ -950,7 +950,7 @@ void process_super_mines_frame(void)
 		start = FrameCount & 7;
 		add = 8;
 	} else {
-		start = 0;
+		start = object_first;
 		add = 1;
 	}
 
@@ -968,7 +968,7 @@ void process_super_mines_frame(void)
 
 				bombpos = &Objects[i].pos;
 
-				for (objnum_t j=0; j<=Highest_object_index; j++) {
+				for (objnum_t j=object_first; j<=Highest_object_index; j++) {
 					if ((Objects[j].type == OBJ_PLAYER) || (Objects[j].type == OBJ_ROBOT)) {
 						fix	dist;
 
@@ -1044,14 +1044,14 @@ objnum_t spit_powerup(dxxobject *spitter, int id,int seed)
 	{
 		if (Net_create_loc >= MAX_NET_CREATE_OBJECTS)
 		{
-			return (-1);
+			return object_none;
 		}
 	}
 #endif
 
 	objnum = obj_create( OBJ_POWERUP, id, spitter->segnum, &new_pos, &vmd_identity_matrix, Powerup_info[id].size, CT_POWERUP, MT_PHYSICS, RT_POWERUP);
 
-	if (objnum < 0 ) {
+	if (objnum == object_none ) {
 		Int3();
 		return objnum;
 	}
@@ -1110,7 +1110,7 @@ void DropCurrentWeapon ()
 
 	objnum = spit_powerup(ConsoleObject,Primary_weapon_to_powerup[Primary_weapon],seed);
 
-   if (objnum<0)
+   if (objnum==object_none)
 		return;
 
 	if (Primary_weapon == VULCAN_INDEX || Primary_weapon == GAUSS_INDEX) {
@@ -1124,7 +1124,7 @@ void DropCurrentWeapon ()
 
 		Players[Player_num].primary_ammo[VULCAN_INDEX] -= ammo;
 
-		if (objnum!=-1)
+		if (objnum!=object_none)
 			Objects[objnum].ctype.powerup_info.count = ammo;
 	}
 
@@ -1132,12 +1132,12 @@ void DropCurrentWeapon ()
 
 		//dropped weapon has current energy
 
-		if (objnum!=-1)
+		if (objnum!=object_none)
 			Objects[objnum].ctype.powerup_info.count = Omega_charge;
 	}
 
 #ifdef NETWORK
-	if ((Game_mode & GM_MULTI) && objnum>-1)
+	if ((Game_mode & GM_MULTI) && objnum!=object_none)
 		multi_send_drop_weapon(objnum,seed);
 #endif
 
@@ -1207,12 +1207,12 @@ void DropSecondaryWeapon ()
 
 	objnum = spit_powerup(ConsoleObject,weapon_drop_id,seed);
 
-   if (objnum<0)
+   if (objnum==object_none)
 		return;
 
 
 #ifdef NETWORK
-	if ((Game_mode & GM_MULTI) && objnum>-1)
+	if ((Game_mode & GM_MULTI) && objnum!=object_none)
 		multi_send_drop_weapon(objnum,seed);
 #endif
 

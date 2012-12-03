@@ -142,7 +142,7 @@ const char *const GMNamesShrt[9]={"ANRCHY","TEAM","ROBO","COOP","FLAG","HOARD","
 
 int	Network_send_objects = 0;  // Are we in the process of sending objects to a player?
 int	Network_send_object_mode = 0; // What type of objects are we sending, static or dynamic?
-objnum_t 	Network_send_objnum = -1;   // What object are we sending next?
+objnum_t 	Network_send_objnum = object_none;   // What object are we sending next?
 int     Network_rejoined = 0;       // Did WE rejoin this game?
 int     Network_sending_extras=0;
 int     VerifyPlayerJoined=-1;      // Player (num) to enter game before any ingame/extra stuff is being sent
@@ -297,13 +297,13 @@ objnum_t objnum_remote_to_local(int remote_objnum, int owner)
 		return(remote_objnum);
 
 	if ((remote_objnum < 0) || (remote_objnum >= MAX_OBJECTS))
-		return(-1);
+		return object_none;
 
 	result = remote_to_local[owner][remote_objnum];
 
-	if (result < 0)
+	if (result == object_none)
 	{
-		return(-1);
+		return object_none;
 	}
 
 	return(result);
@@ -315,7 +315,7 @@ int objnum_local_to_remote(objnum_t local_objnum, sbyte *owner)
 
 	int result;
 
-	if ((local_objnum < 0) || (local_objnum > Highest_object_index)) {
+	if ((local_objnum == object_none) || (local_objnum > Highest_object_index)) {
 		*owner = -1;
 		return(-1);
 	}
@@ -346,7 +346,7 @@ map_objnum_local_to_remote(objnum_t local_objnum, int remote_objnum, int owner)
 {
 	// Add a mapping from a network remote object number to a local one
 
-	Assert(local_objnum > -1);
+	Assert(local_objnum != object_none);
 	Assert(local_objnum < MAX_OBJECTS);
 	Assert(remote_objnum > -1);
 	Assert(remote_objnum < MAX_OBJECTS);
@@ -366,7 +366,7 @@ map_objnum_local_to_local(objnum_t local_objnum)
 {
 	// Add a mapping for our locally created objects
 
-	Assert(local_objnum > -1);
+	Assert(local_objnum != object_none);
 	Assert(local_objnum < MAX_OBJECTS);
 
 	object_owner[local_objnum] = Player_num;
@@ -486,7 +486,7 @@ multi_new_game(void)
 
 	for (i = 0; i < MAX_ROBOTS_CONTROLLED; i++)
 	{
-		robot_controlled[i] = -1;
+		robot_controlled[i] = object_none;
 		robot_agitation[i] = 0;
 		robot_fired[i] = 0;
 	}
@@ -1379,7 +1379,7 @@ static void multi_send_message_end()
 		else
 		{
 			net_destroy_controlcen(NULL);
-			multi_send_destroy_controlcen(-1,Player_num);
+			multi_send_destroy_controlcen(object_none,Player_num);
 		}
 		multi_message_index = 0;
 		multi_sending_message[Player_num] = 0;
@@ -1708,7 +1708,7 @@ multi_do_player_explode(char *buf)
 	// If we are in the process of sending objects to a new player, reset that process
 	if (Network_send_objects)
 	{
-		Network_send_objnum = -1;
+		Network_send_objnum = object_none;
 	}
 #endif
 
@@ -1827,7 +1827,7 @@ multi_do_kill(char *buf)
 	killed = Players[pnum].objnum;
 	count += 1;
 	killer = GET_INTEL_SHORT(buf + count);
-	if (killer > 0)
+	if (killer != object_none)
 		killer = objnum_remote_to_local(killer, (sbyte)buf[count+2]);
 	if (!multi_i_am_master())
 	{
@@ -1862,7 +1862,7 @@ static void multi_do_controlcen_destroy(char *buf)
 		else
 			HUD_init_message(HM_MULTI, "%s", TXT_CONTROL_DESTROYED);
 
-		if (objnum != -1)
+		if (objnum != object_none)
 			net_destroy_controlcen(&Objects[objnum]);
 		else
 			net_destroy_controlcen(NULL);
@@ -1916,7 +1916,7 @@ multi_do_remobj(char *buf)
 
 	local_objnum = objnum_remote_to_local(objnum, obj_owner); // translate to local objnum
 
-	if (local_objnum < 0)
+	if (local_objnum == object_none)
 	{
 		return;
 	}
@@ -1928,7 +1928,7 @@ multi_do_remobj(char *buf)
 
 	if (Network_send_objects && multi_objnum_is_past(local_objnum))
 	{
-		Network_send_objnum = -1;
+		Network_send_objnum = object_none;
 	}
 	if (Objects[local_objnum].type==OBJ_POWERUP)
 		if (Game_mode & GM_NETWORK)
@@ -2199,13 +2199,13 @@ multi_do_create_powerup(char *buf)
 	Net_create_loc = 0;
 	my_objnum = call_object_create_egg(&Objects[Players[(int)pnum].objnum], 1, OBJ_POWERUP, powerup_type);
 
-	if (my_objnum < 0) {
+	if (my_objnum == object_none) {
 		return;
 	}
 
 	if (Network_send_objects && multi_objnum_is_past(my_objnum))
 	{
-		Network_send_objnum = -1;
+		Network_send_objnum = object_none;
 	}
 
 	Objects[my_objnum].pos = new_pos;
@@ -2308,7 +2308,7 @@ static void multi_do_drop_marker (char *buf)
 
 	MarkerPoint[(pnum*2)+mesnum]=position;
 
-	if (MarkerObject[(pnum*2)+mesnum] !=-1 && Objects[MarkerObject[(pnum*2)+mesnum]].type!=OBJ_NONE && MarkerObject[(pnum*2)+mesnum] !=0)
+	if (MarkerObject[(pnum*2)+mesnum] != object_none && Objects[MarkerObject[(pnum*2)+mesnum]].type!=OBJ_NONE && MarkerObject[(pnum*2)+mesnum] !=0)
 		obj_delete(MarkerObject[(pnum*2)+mesnum]);
 
 	MarkerObject[(pnum*2)+mesnum] = drop_marker_object(&position,Objects[Players[Player_num].objnum].segnum,&Objects[Players[Player_num].objnum].orient,(pnum*2)+mesnum);
@@ -2542,7 +2542,7 @@ multi_send_player_explode(char type)
 
 	if (Network_send_objects)
 	{
-		Network_send_objnum = -1;
+		Network_send_objnum = object_none;
 	}
 
 	multi_send_position(Players[Player_num].objnum);
@@ -2583,7 +2583,7 @@ multi_send_player_explode(char type)
 
 	for (i = 0; i < Net_create_loc; i++)
 	{
-		if (Net_create_objnums[i] <= 0) {
+		if (Net_create_objnums[i] == object_none) {
 			Int3(); // Illegal value in created egg object numbers
 			count +=2;
 			continue;
@@ -2623,7 +2623,7 @@ void multi_powcap_count_powerups_in_mine(void)
 	for (i=0;i<MAX_POWERUP_TYPES;i++)
 		PowerupsInMine[i]=0;
 
-	for (objnum_t i=0;i<=Highest_object_index;i++)
+	for (objnum_t i=object_first;i<=Highest_object_index;i++)
 	{
 		if (Objects[i].type==OBJ_POWERUP)
 		{
@@ -2922,7 +2922,7 @@ multi_send_kill(objnum_t objnum)
 							count += 1;
 	multibuf[count] = Player_num;			count += 1;
 
-	if (killer_objnum > -1)
+	if (killer_objnum != object_none)
 	{
 		short s = (short)objnum_local_to_remote(killer_objnum, (sbyte *)&multibuf[count+2]); // do it with variable since INTEL_SHORT won't work on return val from function.
 		PUT_INTEL_SHORT(multibuf+count, s);
@@ -3004,7 +3004,7 @@ multi_send_remobj(objnum_t objnum)
 
 	if (Network_send_objects && multi_objnum_is_past(objnum))
 	{
-		Network_send_objnum = -1;
+		Network_send_objnum = object_none;
 	}
 }
 
@@ -3164,7 +3164,7 @@ multi_send_create_powerup(int powerup_type, segnum_t segnum, objnum_t objnum, vm
 
 	if (Network_send_objects && multi_objnum_is_past(objnum))
 	{
-		Network_send_objnum = -1;
+		Network_send_objnum = object_none;
 	}
 
 	map_objnum_local_to_local(objnum);
@@ -3320,7 +3320,7 @@ void multi_prep_level(void)
 
 	for (unsigned i = 0; i < MAX_ROBOTS_CONTROLLED; i++)
 	{
-		robot_controlled[i] = -1;
+		robot_controlled[i] = object_none;
 		robot_agitation[i] = 0;
 		robot_fired[i] = 0;
 	}
@@ -3345,7 +3345,7 @@ void multi_prep_level(void)
 
 	inv_count = 0;
 	cloak_count = 0;
-	for (objnum_t i=0; i<=Highest_object_index; i++)
+	for (objnum_t i=object_first; i<=Highest_object_index; i++)
 	{
 		objnum_t objnum;
 
@@ -3353,7 +3353,7 @@ void multi_prep_level(void)
 		{
 			objnum = obj_create(OBJ_POWERUP, POW_SHIELD_BOOST, Objects[i].segnum, &Objects[i].pos, &vmd_identity_matrix, Powerup_info[POW_SHIELD_BOOST].size, CT_POWERUP, MT_PHYSICS, RT_POWERUP);
 			obj_delete(i);
-			if (objnum != -1)
+			if (objnum != object_none)
 			{
 				Objects[objnum].rtype.vclip_info.vclip_num = Powerup_info[POW_SHIELD_BOOST].vclip_num;
 				Objects[objnum].rtype.vclip_info.frametime = Vclip[Objects[objnum].rtype.vclip_info.vclip_num].frame_time;
@@ -3626,7 +3626,7 @@ int multi_delete_extra_objects()
 	// This function also prints the total number of available multiplayer
 	// positions in this level, even though this should always be 8 or more!
 
-	for (objnum_t i=0;i<=Highest_object_index;i++) {
+	for (objnum_t i=object_first;i<=Highest_object_index;i++) {
 		dxxobject *objp = &Objects[i];
 		if ((objp->type==OBJ_PLAYER) || (objp->type==OBJ_GHOST))
 			nnp++;
@@ -3744,7 +3744,7 @@ static void multi_do_drop_weapon (char *buf)
 
 	map_objnum_local_to_remote(objnum, remote_objnum, pnum);
 
-	if (objnum!=-1)
+	if (objnum!=object_none)
 		Objects[objnum].ctype.powerup_info.count = ammo;
 
 	if (Game_mode & GM_NETWORK)
@@ -4392,13 +4392,13 @@ static void DropOrb ()
 
 	objnum = spit_powerup(ConsoleObject,POW_HOARD_ORB,seed);
 
-	if (objnum<0)
+	if (objnum == object_none)
 		return;
 
 	HUD_init_message(HM_MULTI, "Orb dropped!");
 	digi_play_sample (SOUND_DROP_WEAPON,F1_0);
 
-	if ((Game_mode & GM_HOARD) && objnum>-1)
+	if ((Game_mode & GM_HOARD) && objnum != object_none)
 		multi_send_drop_flag(objnum,seed);
 
 	Players[Player_num].secondary_ammo[PROXIMITY_INDEX]--;
@@ -4441,10 +4441,10 @@ void DropFlag ()
 	else
 		objnum = spit_powerup(ConsoleObject,POW_FLAG_RED,seed);
 
-	if (objnum<0)
+	if (objnum == object_none)
 		return;
 
-	if ((Game_mode & GM_CAPTURE) && objnum>-1)
+	if ((Game_mode & GM_CAPTURE) && objnum != object_none)
 		multi_send_drop_flag(objnum,seed);
 
 	Players[Player_num].flags &=~(PLAYER_FLAGS_FLAG);
@@ -4494,7 +4494,7 @@ static void multi_do_drop_flag (char *buf)
 
 	map_objnum_local_to_remote(objnum, remote_objnum, pnum);
 
-	if (objnum!=-1)
+	if (objnum!=object_none)
 		Objects[objnum].ctype.powerup_info.count = ammo;
 
 	if (!(Game_mode & GM_HOARD))

@@ -144,7 +144,7 @@ int	First_secret_visit = 1;
 static void verify_console_object()
 {
 	Assert( Player_num > -1 );
-	Assert( Players[Player_num].objnum > -1 );
+	Assert( Players[Player_num].objnum != object_none );
 	ConsoleObject = &Objects[Players[Player_num].objnum];
 	Assert( ConsoleObject->type==OBJ_PLAYER );
 	Assert( ConsoleObject->id==Player_num );
@@ -155,7 +155,7 @@ static int count_number_of_robots()
 	int robot_count;
 
 	robot_count = 0;
-	for (objnum_t i=0;i<=Highest_object_index;i++) {
+	for (objnum_t i=object_first;i<=Highest_object_index;i++) {
 		if (Objects[i].type == OBJ_ROBOT)
 			robot_count++;
 	}
@@ -169,7 +169,7 @@ static int count_number_of_hostages()
 	int count;
 
 	count = 0;
-	for (objnum_t i=0;i<=Highest_object_index;i++) {
+	for (objnum_t i=object_first;i<=Highest_object_index;i++) {
 		if (Objects[i].type == OBJ_HOSTAGE)
 			count++;
 	}
@@ -185,10 +185,10 @@ static gameseq_init_network_players()
 
 	// Initialize network player start locations and object numbers
 
-	ConsoleObject = &Objects[0];
+	ConsoleObject = &Objects[object_first];
 	k = 0;
 	j = 0;
-	for (objnum_t i=0;i<=Highest_object_index;i++) {
+	for (objnum_t i=object_first;i<=Highest_object_index;i++) {
 
 		if (( Objects[i].type==OBJ_PLAYER )	|| (Objects[i].type == OBJ_GHOST) || (Objects[i].type == OBJ_COOP))
 		{
@@ -255,7 +255,7 @@ void init_player_stats_game(ubyte pnum)
 	Players[pnum].time_total = 0;
 	Players[pnum].hours_level = 0;
 	Players[pnum].hours_total = 0;
-	Players[pnum].killer_objnum = -1;
+	Players[pnum].killer_objnum = object_none;
 	Players[pnum].net_killed_total = 0;
 	Players[pnum].net_kills_total = 0;
 	Players[pnum].num_kills_level = 0;
@@ -312,7 +312,7 @@ void init_player_stats_level(int secret_flag)
 	}
 #endif
 
-	Players[Player_num].killer_objnum = -1;
+	Players[Player_num].killer_objnum = object_none;
 
 	Players[Player_num].num_kills_level = 0;
 	Players[Player_num].num_robots_level = count_number_of_robots();
@@ -393,7 +393,7 @@ void init_player_stats_new_ship(ubyte pnum)
 	Players[pnum].energy = INITIAL_ENERGY;
 	Players[pnum].shields = StartingShields;
 	Players[pnum].laser_level = 0;
-	Players[pnum].killer_objnum = -1;
+	Players[pnum].killer_objnum = object_none;
 	Players[pnum].hostages_on_board = 0;
 	for (i=0; i<MAX_PRIMARY_WEAPONS; i++)
 		Players[pnum].primary_ammo[i] = 0;
@@ -721,7 +721,7 @@ void InitPlayerObject()
 		Player_num = 0;
 	}
 
-	Players[Player_num].objnum = 0;
+	Players[Player_num].objnum = object_first;
 
 	ConsoleObject = &Objects[Players[Player_num].objnum];
 
@@ -1566,7 +1566,7 @@ void bash_to_shield (objnum_t i,const char *s)
 void filter_objects_from_level()
  {
 
-  for (objnum_t i=0;i<=Highest_object_index;i++)
+  for (objnum_t i=object_first;i<=Highest_object_index;i++)
 	{
 	 if (Objects[i].type==OBJ_POWERUP)
      if (Objects[i].id==POW_FLAG_RED || Objects[i].id==POW_FLAG_BLUE)
@@ -1760,7 +1760,7 @@ void copy_defaults_to_robot(dxxobject *objp)
 //	This function should be called at level load time.
 void copy_defaults_to_robot_all()
 {
-	for (objnum_t i=0; i<=Highest_object_index; i++)
+	for (objnum_t i=object_first; i<=Highest_object_index; i++)
 		if (Objects[i].type == OBJ_ROBOT)
 			copy_defaults_to_robot(&Objects[i]);
 

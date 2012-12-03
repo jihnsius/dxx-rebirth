@@ -1223,7 +1223,7 @@ static void kill_all_robots(void)
 	//int	boss_index = -1;
 
 	// Kill all bots except for Buddy bot and boss.  However, if only boss and buddy left, kill boss.
-	for (objnum_t i=0; i<=Highest_object_index; i++)
+	for (objnum_t i=object_first; i<=Highest_object_index; i++)
 		if (Objects[i].type == OBJ_ROBOT) {
 			if (!Robot_info[Objects[i].id].companion && !Robot_info[Objects[i].id].boss_flag) {
 				dead_count++;
@@ -1240,7 +1240,7 @@ static void kill_all_robots(void)
 
 	// Toast the buddy if nothing else toasted!
 	if (dead_count == 0)
-		for (objnum_t i=0; i<=Highest_object_index; i++)
+		for (objnum_t i=object_first; i<=Highest_object_index; i++)
 			if (Objects[i].type == OBJ_ROBOT)
 				if (Robot_info[Objects[i].id].companion) {
 					Objects[i].flags |= OF_EXPLODING|OF_SHOULD_BE_DEAD;
@@ -1263,7 +1263,7 @@ static void kill_and_so_forth(void)
 
 	HUD_init_message(HM_DEFAULT, "Killing, awarding, etc.!");
 
-	for (objnum_t i=0; i<=Highest_object_index; i++) {
+	for (objnum_t i=object_first; i<=Highest_object_index; i++) {
 		switch (Objects[i].type) {
 			case OBJ_ROBOT:
 				Objects[i].flags |= OF_EXPLODING|OF_SHOULD_BE_DEAD;
@@ -1299,7 +1299,7 @@ static void kill_all_snipers(void)
 	int     dead_count=0;
 
 	//	Kill all snipers.
-	for (objnum_t i=0; i<=Highest_object_index; i++)
+	for (objnum_t i=object_first; i<=Highest_object_index; i++)
 		if (Objects[i].type == OBJ_ROBOT)
 			if (Objects[i].ctype.ai_info.behavior == AIB_SNIPE) {
 				dead_count++;
@@ -1314,7 +1314,7 @@ static void kill_thief(void)
 {
 
 	//	Kill thief.
-	for (objnum_t i=0; i<=Highest_object_index; i++)
+	for (objnum_t i=object_first; i<=Highest_object_index; i++)
 		if (Objects[i].type == OBJ_ROBOT)
 			if (Robot_info[Objects[i].id].thief) {
 				Objects[i].flags |= OF_EXPLODING|OF_SHOULD_BE_DEAD;
@@ -1327,7 +1327,7 @@ static void kill_buddy(void)
 {
 
 	//	Kill buddy.
-	for (objnum_t i=0; i<=Highest_object_index; i++)
+	for (objnum_t i=object_first; i<=Highest_object_index; i++)
 		if (Objects[i].type == OBJ_ROBOT)
 			if (Robot_info[Objects[i].id].companion) {
 				Objects[i].flags |= OF_EXPLODING|OF_SHOULD_BE_DEAD;
@@ -1882,7 +1882,7 @@ int ReadControls(d_event *event)
 	int key;
 	static ubyte exploding_flag=0;
 
-	Player_fired_laser_this_frame=-1;
+	Player_fired_laser_this_frame=object_none;
 
 	if (Player_exploded) {
 		if (exploding_flag==0)  {

@@ -71,11 +71,11 @@ static void draw_seg_objects(segment *seg)
 {
 	objnum_t objnum;
 
-	for (objnum=seg->objects;objnum!=-1;objnum=Objects[objnum].next) {
+	for (objnum=seg->objects;objnum!=object_none;objnum=Objects[objnum].next) {
 		dxxobject *obj = &Objects[objnum];
 		g3s_point sphere_point;
 
-		if ((obj->type==OBJ_PLAYER) && (objnum > 0 ))
+		if ((obj->type==OBJ_PLAYER) && (objnum != object_none ))
 			gr_setcolor(BM_XRGB( 0,  25, 0  ));
 		else
 			gr_setcolor(obj==ConsoleObject?PLAYER_COLOR:ROBOT_COLOR);

@@ -104,7 +104,7 @@ escort_goal_t Escort_goal_object = ESCORT_GOAL_UNSPECIFIED;
 escort_goal_t Escort_special_goal = ESCORT_GOAL_UNSPECIFIED;
 int Buddy_messages_suppressed = 0;
 fix64	Buddy_sorry_time;
-objnum_t	 Escort_goal_index = -1,Buddy_objnum;
+objnum_t	 Escort_goal_index,Buddy_objnum;
 int Buddy_allowed_to_talk;
 int	Looking_for_marker;
 int	Last_buddy_key;
@@ -115,13 +115,13 @@ void init_buddy_for_level(void)
 {
 
 	Buddy_allowed_to_talk = 0;
-	Buddy_objnum = -1;
+	Buddy_objnum = object_none;
 	Escort_goal_object = ESCORT_GOAL_UNSPECIFIED;
 	Escort_special_goal = ESCORT_GOAL_UNSPECIFIED;
-	Escort_goal_index = -1;
+	Escort_goal_index = object_none;
 	Buddy_messages_suppressed = 0;
 
-	for (objnum_t i=0; i<=Highest_object_index; i++)
+	for (objnum_t i=object_first; i<=Highest_object_index; i++)
 	{
 		if (Robot_info[Objects[i].id].companion)
 		{
@@ -247,7 +247,7 @@ static int ok_for_buddy_to_talk(void)
 {
 	segment	*segp;
 
-	if (Buddy_objnum == -1)
+	if (Buddy_objnum == object_none)
 		return 0;
 
 	if (Objects[Buddy_objnum].type != OBJ_ROBOT) {
@@ -259,7 +259,7 @@ static int ok_for_buddy_to_talk(void)
 		return 1;
 
 	if ((Objects[Buddy_objnum].type == OBJ_ROBOT) && (Buddy_objnum <= Highest_object_index) && !Robot_info[Objects[Buddy_objnum].id].companion) {
-		for (objnum_t i=0;; i++)
+		for (objnum_t i=object_first;; i++)
 		{
 			if (i > Highest_object_index)
 				return 0;
@@ -305,7 +305,7 @@ static void record_escort_goal_accomplished()
 {
 	if (ok_for_buddy_to_talk()) {
 		digi_play_sample_once(SOUND_BUDDY_MET_GOAL, F1_0);
-		Escort_goal_index = -1;
+		Escort_goal_index = object_none;
 		Escort_goal_object = ESCORT_GOAL_UNSPECIFIED;
 		Escort_special_goal = ESCORT_GOAL_UNSPECIFIED;
 		Looking_for_marker = -1;
@@ -433,7 +433,7 @@ static void thief_message(const char * format, ... )
 static int marker_exists_in_mine(int id)
 {
 
-	for (objnum_t i=0; i<=Highest_object_index; i++)
+	for (objnum_t i=object_first; i<=Highest_object_index; i++)
 		if (Objects[i].type == OBJ_MARKER)
 			if (Objects[i].id == id)
 				return 1;
@@ -451,7 +451,7 @@ void set_escort_special_goal(int special_key)
 	if (!Buddy_allowed_to_talk) {
 		ok_for_buddy_to_talk();
 		if (!Buddy_allowed_to_talk) {
-			for (objnum_t i=0;; i++)
+			for (objnum_t i=object_first;; i++)
 			{
 				if (i > Highest_object_index)
 				{
@@ -522,7 +522,7 @@ void set_escort_special_goal(int special_key)
 //	Return id of boss.
 static int get_boss_id(void)
 {
-	for (objnum_t i=0; i<=Highest_object_index; i++)
+	for (objnum_t i=object_first; i<=Highest_object_index; i++)
 		if (Objects[i].type == OBJ_ROBOT)
 			if (Robot_info[Objects[i].id].boss_flag)
 				return Objects[i].id;
@@ -535,10 +535,10 @@ static int get_boss_id(void)
 //	"special" is used to find objects spewed by player which is hacked into flags field of powerup.
 static objnum_t exists_in_mine_2(segnum_t segnum, int objtype, int objid, int special)
 {
-	if (Segments[segnum].objects != -1) {
+	if (Segments[segnum].objects != object_none) {
 		objnum_t		objnum = Segments[segnum].objects;
 
-		while (objnum != -1) {
+		while (objnum != object_none) {
 			dxxobject	*curobjp = &Objects[objnum];
 
 			if (special == ESCORT_GOAL_PLAYER_SPEW) {
@@ -569,7 +569,7 @@ static objnum_t exists_in_mine_2(segnum_t segnum, int objtype, int objid, int sp
 		}
 	}
 
-	return -1;
+	return object_none;
 }
 
 //	-----------------------------------------------------------------------------
@@ -614,7 +614,7 @@ static objnum_t exists_in_mine(segnum_t start_seg, int objtype, int objid, int s
 			segnum = bfs_list[segindex];
 
 			objnum = exists_in_mine_2(segnum, objtype, objid, special);
-			if (objnum != -1)
+			if (objnum != object_none)
 				return objnum;
 
 		}
@@ -626,11 +626,11 @@ static objnum_t exists_in_mine(segnum_t start_seg, int objtype, int objid, int s
 			objnum_t	objnum;
 
 			objnum = exists_in_mine_2(segnum, objtype, objid, special);
-			if (objnum != -1)
+			if (objnum != object_none)
 				return -2;
 		}
 
-	return -1;
+	return object_none;
 }
 
 //	-----------------------------------------------------------------------------
@@ -704,25 +704,25 @@ static void escort_create_path_to_goal(dxxobject *objp)
 	if (Looking_for_marker != -1) {
 
 		Escort_goal_index = exists_in_mine(objp->segnum, OBJ_MARKER, Escort_goal_object-ESCORT_GOAL_MARKER1, -1);
-		if (Escort_goal_index > -1)
+		if (Escort_goal_index != object_none)
 			goal_seg = Objects[Escort_goal_index].segnum;
 	} else {
 		switch (Escort_goal_object) {
 			case ESCORT_GOAL_BLUE_KEY:
 				Escort_goal_index = exists_in_mine(objp->segnum, OBJ_POWERUP, POW_KEY_BLUE, -1);
-				if (Escort_goal_index > -1) goal_seg = Objects[Escort_goal_index].segnum;
+				if (Escort_goal_index != object_none) goal_seg = Objects[Escort_goal_index].segnum;
 				break;
 			case ESCORT_GOAL_GOLD_KEY:
 				Escort_goal_index = exists_in_mine(objp->segnum, OBJ_POWERUP, POW_KEY_GOLD, -1);
-				if (Escort_goal_index > -1) goal_seg = Objects[Escort_goal_index].segnum;
+				if (Escort_goal_index != object_none) goal_seg = Objects[Escort_goal_index].segnum;
 				break;
 			case ESCORT_GOAL_RED_KEY:
 				Escort_goal_index = exists_in_mine(objp->segnum, OBJ_POWERUP, POW_KEY_RED, -1);
-				if (Escort_goal_index > -1) goal_seg = Objects[Escort_goal_index].segnum;
+				if (Escort_goal_index != object_none) goal_seg = Objects[Escort_goal_index].segnum;
 				break;
 			case ESCORT_GOAL_CONTROLCEN:
 				Escort_goal_index = exists_in_mine(objp->segnum, OBJ_CNTRLCEN, -1, -1);
-				if (Escort_goal_index > -1) goal_seg = Objects[Escort_goal_index].segnum;
+				if (Escort_goal_index != object_none) goal_seg = Objects[Escort_goal_index].segnum;
 				break;
 			case ESCORT_GOAL_EXIT:
 				goal_seg = find_exit_segment();
@@ -730,7 +730,7 @@ static void escort_create_path_to_goal(dxxobject *objp)
 				break;
 			case ESCORT_GOAL_ENERGY:
 				Escort_goal_index = exists_in_mine(objp->segnum, OBJ_POWERUP, POW_ENERGY, -1);
-				if (Escort_goal_index > -1) goal_seg = Objects[Escort_goal_index].segnum;
+				if (Escort_goal_index != object_none) goal_seg = Objects[Escort_goal_index].segnum;
 				break;
 			case ESCORT_GOAL_ENERGYCEN:
 				goal_seg = exists_fuelcen_in_mine(objp->segnum);
@@ -738,23 +738,23 @@ static void escort_create_path_to_goal(dxxobject *objp)
 				break;
 			case ESCORT_GOAL_SHIELD:
 				Escort_goal_index = exists_in_mine(objp->segnum, OBJ_POWERUP, POW_SHIELD_BOOST, -1);
-				if (Escort_goal_index > -1) goal_seg = Objects[Escort_goal_index].segnum;
+				if (Escort_goal_index != object_none) goal_seg = Objects[Escort_goal_index].segnum;
 				break;
 			case ESCORT_GOAL_POWERUP:
 				Escort_goal_index = exists_in_mine(objp->segnum, OBJ_POWERUP, -1, -1);
-				if (Escort_goal_index > -1) goal_seg = Objects[Escort_goal_index].segnum;
+				if (Escort_goal_index != object_none) goal_seg = Objects[Escort_goal_index].segnum;
 				break;
 			case ESCORT_GOAL_ROBOT:
 				Escort_goal_index = exists_in_mine(objp->segnum, OBJ_ROBOT, -1, -1);
-				if (Escort_goal_index > -1) goal_seg = Objects[Escort_goal_index].segnum;
+				if (Escort_goal_index != object_none) goal_seg = Objects[Escort_goal_index].segnum;
 				break;
 			case ESCORT_GOAL_HOSTAGE:
 				Escort_goal_index = exists_in_mine(objp->segnum, OBJ_HOSTAGE, -1, -1);
-				if (Escort_goal_index > -1) goal_seg = Objects[Escort_goal_index].segnum;
+				if (Escort_goal_index != object_none) goal_seg = Objects[Escort_goal_index].segnum;
 				break;
 			case ESCORT_GOAL_PLAYER_SPEW:
 				Escort_goal_index = exists_in_mine(objp->segnum, -1, -1, ESCORT_GOAL_PLAYER_SPEW);
-				if (Escort_goal_index > -1) goal_seg = Objects[Escort_goal_index].segnum;
+				if (Escort_goal_index != object_none) goal_seg = Objects[Escort_goal_index].segnum;
 				break;
 			case ESCORT_GOAL_SCRAM:
 				goal_seg = -3;		//	Kinda a hack.
@@ -766,7 +766,7 @@ static void escort_create_path_to_goal(dxxobject *objp)
 				boss_id = get_boss_id();
 				Assert(boss_id != -1);
 				Escort_goal_index = exists_in_mine(objp->segnum, OBJ_ROBOT, boss_id, -1);
-				if (Escort_goal_index > -1) goal_seg = Objects[Escort_goal_index].segnum;
+				if (Escort_goal_index != object_none) goal_seg = Objects[Escort_goal_index].segnum;
 				break;
 			}
 			default:
@@ -777,7 +777,7 @@ static void escort_create_path_to_goal(dxxobject *objp)
 	}
 
 	if ((Escort_goal_index < 0) && (Escort_goal_index != -3)) {	//	I apologize for this statement -- MK, 09/22/95
-		if (Escort_goal_index == -1) {
+		if (Escort_goal_index == object_none) {
 			Last_buddy_message_time = 0;	//	Force this message to get through.
 			buddy_message("No %s in mine.", Escort_goal_text[Escort_goal_object-1]);
 			Looking_for_marker = -1;
@@ -828,11 +828,11 @@ static escort_goal_t escort_set_goal_object(void)
 {
 	if (Escort_special_goal != ESCORT_GOAL_UNSPECIFIED)
 		return ESCORT_GOAL_UNSPECIFIED;
-	else if (!(ConsoleObject->flags & PLAYER_FLAGS_BLUE_KEY) && (exists_in_mine(ConsoleObject->segnum, OBJ_POWERUP, POW_KEY_BLUE, -1) != -1))
+	else if (!(ConsoleObject->flags & PLAYER_FLAGS_BLUE_KEY) && (exists_in_mine(ConsoleObject->segnum, OBJ_POWERUP, POW_KEY_BLUE, -1) != object_none))
 		return ESCORT_GOAL_BLUE_KEY;
-	else if (!(ConsoleObject->flags & PLAYER_FLAGS_GOLD_KEY) && (exists_in_mine(ConsoleObject->segnum, OBJ_POWERUP, POW_KEY_GOLD, -1) != -1))
+	else if (!(ConsoleObject->flags & PLAYER_FLAGS_GOLD_KEY) && (exists_in_mine(ConsoleObject->segnum, OBJ_POWERUP, POW_KEY_GOLD, -1) != object_none))
 		return ESCORT_GOAL_GOLD_KEY;
-	else if (!(ConsoleObject->flags & PLAYER_FLAGS_RED_KEY) && (exists_in_mine(ConsoleObject->segnum, OBJ_POWERUP, POW_KEY_RED, -1) != -1))
+	else if (!(ConsoleObject->flags & PLAYER_FLAGS_RED_KEY) && (exists_in_mine(ConsoleObject->segnum, OBJ_POWERUP, POW_KEY_RED, -1) != object_none))
 		return ESCORT_GOAL_RED_KEY;
 	else if (Control_center_destroyed == 0) {
 		if (Num_boss_teleport_segs)
@@ -916,7 +916,7 @@ static int maybe_buddy_fire_mega(objnum_t objnum)
 
 	weapon_objnum = Laser_create_new_easy( &buddy_objp->orient.fvec, &buddy_objp->pos, objnum, MEGA_ID, 1);
 
-	if (weapon_objnum != -1)
+	if (weapon_objnum != object_none)
 		bash_buddy_weapon_info(weapon_objnum);
 
 	return 1;
@@ -942,7 +942,7 @@ static int maybe_buddy_fire_smart(objnum_t objnum)
 
 	weapon_objnum = Laser_create_new_easy( &buddy_objp->orient.fvec, &buddy_objp->pos, objnum, SMART_ID, 1);
 
-	if (weapon_objnum != -1)
+	if (weapon_objnum != object_none)
 		bash_buddy_weapon_info(weapon_objnum);
 
 	return 1;
@@ -959,7 +959,7 @@ static void do_buddy_dude_stuff(void)
 
 	if (Buddy_last_missile_time + F1_0*2 < GameTime64) {
 		//	See if a robot potentially in view cone
-		for (objnum_t i=0; i<=Highest_object_index; i++)
+		for (objnum_t i=object_first; i<=Highest_object_index; i++)
 			if ((Objects[i].type == OBJ_ROBOT) && !Robot_info[Objects[i].id].companion)
 				if (maybe_buddy_fire_mega(i)) {
 					Buddy_last_missile_time = GameTime64;
@@ -967,7 +967,7 @@ static void do_buddy_dude_stuff(void)
 				}
 
 		//	See if a robot near enough that buddy should fire smart missile
-		for (objnum_t i=0; i<=Highest_object_index; i++)
+		for (objnum_t i=object_first; i<=Highest_object_index; i++)
 			if ((Objects[i].type == OBJ_ROBOT) && !Robot_info[Objects[i].id].companion)
 				if (maybe_buddy_fire_smart(i)) {
 					Buddy_last_missile_time = GameTime64;
@@ -1706,7 +1706,7 @@ void do_escort_menu(void)
 		return;
 	}
 
-	for (objnum_t i=0;; i++) {
+	for (objnum_t i=object_first;; i++) {
 		if (i > Highest_object_index) {
 		HUD_init_message(HM_DEFAULT, "No Guide-Bot present in mine!");
 		return;

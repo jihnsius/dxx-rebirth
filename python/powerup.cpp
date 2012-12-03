@@ -15,7 +15,7 @@ static void script_drop_powerup(powerup_type_t type)
 {
 	const unsigned seed = d_rand();
 	const objnum_t objnum = spit_powerup(ConsoleObject, type, seed);
-	if ((Game_mode & GM_MULTI) && objnum > -1)
+	if ((Game_mode & GM_MULTI) && objnum != object_none)
 		multi_send_drop_weapon(objnum, seed);
 }
 

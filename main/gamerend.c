@@ -510,7 +510,7 @@ static void show_extra_views()
 		{
 			dxxobject *local_player_missile = NULL;
 			dxxobject *other_player_missile = NULL;
-			for (objnum_t i=0; i<=Highest_object_index; i++)
+			for (objnum_t i=object_first; i<=Highest_object_index; i++)
 			{
 				dxxobject *o = &Objects[i];
 				if (o->type != OBJ_WEAPON)
@@ -647,7 +647,7 @@ static void show_one_extra_view(const InsetWindowIndex w)
 			case CV_MARKER: {
 				char label[10];
 				RenderingType=(iwi_value(w) <= 1) ? 5+(iwi_value(w)<<4) : 255;
-				if (Marker_viewer_num[iwi_value(w)] == -1 || MarkerObject[Marker_viewer_num[iwi_value(w)]] == -1) {
+				if (Marker_viewer_num[iwi_value(w)] == -1 || MarkerObject[Marker_viewer_num[iwi_value(w)]] == object_none) {
 					PlayerCfg.Cockpit3DView[iwi_value(w)] = CV_NONE;
 					break;
 				}

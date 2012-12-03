@@ -374,7 +374,7 @@ static void med_rotate_group(vms_matrix *rotmat, segnum_t *group_seglist, int gr
 
 		//	Rotate center of all objects in group.
 		objnum = sp->objects;
-		while (objnum != -1) {
+		while (objnum != object_none) {
 			vms_vector	tv, tv1;
 
 			vm_vec_sub(&tv1,&Objects[objnum].pos,&rotate_center);
@@ -465,8 +465,8 @@ static void duplicate_group(sbyte *vertex_ids, segnum_t *segment_ids, int num_se
 		new_segment_id = med_create_duplicate_segment(&Segments[segment_ids[s]]);
 		new_segment_ids[s] = new_segment_id;
 		objnum = Segments[new_segment_id].objects;
-		Segments[new_segment_id].objects = -1;
-		while (objnum != -1) {
+		Segments[new_segment_id].objects = object_none;
+		while (objnum != object_none) {
 			if (Objects[objnum].type != OBJ_PLAYER) {
 				objnum_t new_obj_id;
 				new_obj_id = obj_create_copy(objnum, &Objects[objnum].pos, new_segment_id);
@@ -626,7 +626,7 @@ static int med_copy_group(int delta_flag, segment *base_seg, int base_side, segm
 
 		objnum = Segments[segnum].objects;
 
-		while (objnum != -1) {
+		while (objnum != object_none) {
 			vm_vec_sub2(&Objects[objnum].pos, &srcv);
 			objnum = Objects[objnum].next;
 		}
@@ -647,7 +647,7 @@ static int med_copy_group(int delta_flag, segment *base_seg, int base_side, segm
 		segnum_t	segnum = GroupList[new_current_group].segments[s];
 		objnum_t	objnum = Segments[segnum].objects;
 
-		while (objnum != -1) {
+		while (objnum != object_none) {
 			vm_vec_add2(&Objects[objnum].pos, &destv);
 			objnum = Objects[objnum].next;
 		}
@@ -783,7 +783,7 @@ static int med_move_group(int delta_flag, segment *base_seg, int base_side, segm
 		segnum_t	segnum = GroupList[current_group].segments[s];
 		objnum_t	objnum = Segments[segnum].objects;
 
-		while (objnum != -1) {
+		while (objnum != object_none) {
 			vm_vec_sub2(&Objects[objnum].pos, &srcv);
 			objnum = Objects[objnum].next;
 		}
@@ -804,7 +804,7 @@ static int med_move_group(int delta_flag, segment *base_seg, int base_side, segm
 		segnum_t	segnum = GroupList[current_group].segments[s];
 		objnum_t	objnum = Segments[segnum].objects;
 
-		while (objnum != -1) {
+		while (objnum != object_none) {
 			vm_vec_add2(&Objects[objnum].pos, &destv);
 			objnum = Objects[objnum].next;
 		}
@@ -1325,7 +1325,7 @@ static int med_load_group(const char *filename, vertnum_t *vertex_ids, segnum_t 
 
 			segment_ids[i] = get_free_segment_number();
 			Segments[segment_ids[i]] = tseg;
-			Segments[segment_ids[i]].objects = -1;
+			Segments[segment_ids[i]].objects = object_none;
 
 			fuelcen_activate(&Segments[segment_ids[i]], Segment2s[segment_ids[i]].special);
 			}

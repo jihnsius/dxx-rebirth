@@ -95,7 +95,7 @@ static void call_init_ai_object(dxxobject *objp, int behavior)
 //-------------------------------------------------------------------------
 static int RobotNextType()
 {
-	if (Cur_object_index > -1 )	{
+	if (Cur_object_index != object_none )	{
 		if ( Objects[Cur_object_index].type == OBJ_ROBOT )	{
 			dxxobject * obj = &Objects[Cur_object_index];
 			obj->id++;
@@ -123,7 +123,7 @@ static int RobotNextType()
 //-------------------------------------------------------------------------
 static int RobotPrevType()
 {
-	if (Cur_object_index > -1 )	{
+	if (Cur_object_index != object_none )	{
 		if ( Objects[Cur_object_index].type == OBJ_ROBOT )	{
 			dxxobject * obj = &Objects[Cur_object_index];
 			if (obj->id == 0 ) 
@@ -183,7 +183,7 @@ int		Cur_goody_count = 0;
 
 static void update_goody_info(void)
 {
-	if (Cur_object_index > -1 )	{
+	if (Cur_object_index != object_none )	{
 		if ( Objects[Cur_object_index].type == OBJ_ROBOT )	{
 			dxxobject * obj = &Objects[Cur_object_index];
 
@@ -299,7 +299,7 @@ static int is_legal_type(int the_type)
 
 static int is_legal_type_for_this_window(objnum_t objnum)
 {
-	if (objnum == -1)
+	if (objnum == object_none)
 		return 1;
 	else
 		return is_legal_type(Objects[objnum].type);
@@ -313,7 +313,7 @@ static int LocalObjectSelectNextinSegment(void)
 	rval = ObjectSelectNextinSegment();
 	first_obj = Cur_object_index;
 
-	if (Cur_object_index != -1) {
+	if (Cur_object_index != object_none) {
 		while (!is_legal_type_for_this_window(Cur_object_index)) {
 			rval = ObjectSelectNextinSegment();
 			if (first_obj == Cur_object_index)
@@ -342,7 +342,7 @@ static int LocalObjectSelectNextinMine(void)
 
 	first_obj = Cur_object_index;
 
-	if (Cur_object_index != -1) {
+	if (Cur_object_index != object_none) {
 		while (!is_legal_type_for_this_window(Cur_object_index)) {
 			ObjectSelectNextInMine();
 			if (Cur_object_index == first_obj)
@@ -371,7 +371,7 @@ static int LocalObjectSelectPrevinMine(void)
 
 	first_obj = Cur_object_index;
 
-	if (Cur_object_index != -1) {
+	if (Cur_object_index != object_none) {
 		while (!is_legal_type_for_this_window(Cur_object_index)) {
 			ObjectSelectPrevInMine();
 			if (first_obj == Cur_object_index)
@@ -397,7 +397,7 @@ static int LocalObjectDelete(void)
 
 	rval = ObjectDelete();
 
-	if (Cur_object_index != -1) {
+	if (Cur_object_index != object_none) {
 		Cur_goody_type = Objects[Cur_object_index].contains_type;
 		Cur_goody_id = Objects[Cur_object_index].contains_id;
 		Cur_goody_count = Objects[Cur_object_index].contains_count;
@@ -510,7 +510,7 @@ int do_robot_dialog()
 
 	r->old_object = -2;		// Set to some dummy value so everything works ok on the first frame.
 
-	if ( Cur_object_index == -1 )
+	if ( Cur_object_index == object_none )
 		LocalObjectSelectNextinMine();
 
 	return 1;
@@ -563,7 +563,7 @@ int robot_dialog_handler(UI_DIALOG *dlg, d_event *event, robot_dialog *r)
 	if (r->old_object != Cur_object_index )	{
 		for (	i=0; i < NUM_BOXES; i++ )
 			ui_radio_set_value(r->initialMode[i], 0);
-		if ( Cur_object_index > -1 ) {
+		if ( Cur_object_index != object_none ) {
 			int	behavior = Objects[Cur_object_index].ctype.ai_info.behavior;
 			if ( !((behavior >= MIN_BEHAVIOR) && (behavior <= MAX_BEHAVIOR))) {
 				Objects[Cur_object_index].ctype.ai_info.behavior = AIB_NORMAL;
@@ -596,7 +596,7 @@ int robot_dialog_handler(UI_DIALOG *dlg, d_event *event, robot_dialog *r)
 		DeltaTime = Temp - r->time;
 		r->time = Temp;
 
-		if (Cur_object_index > -1 )	{
+		if (Cur_object_index != object_none )	{
 			dxxobject *obj = &Objects[Cur_object_index];
 
 			gr_set_current_canvas( r->robotViewBox->canvas );
@@ -616,7 +616,7 @@ int robot_dialog_handler(UI_DIALOG *dlg, d_event *event, robot_dialog *r)
 	//------------------------------------------------------------
 	if (event->type == EVENT_UI_DIALOG_DRAW)
 	{
-		if ((Cur_object_index > -1 ) && (Cur_goody_count > 0))	{
+		if ((Cur_object_index != object_none ) && (Cur_goody_count > 0))	{
 			gr_set_current_canvas( r->containsViewBox->canvas );
 			if ( Cur_goody_id > -1 )
 				draw_object_picture(Cur_goody_id, &r->goody_angles, Cur_goody_type);
@@ -643,7 +643,7 @@ int robot_dialog_handler(UI_DIALOG *dlg, d_event *event, robot_dialog *r)
 		char	id_text[STRING_LENGTH+1];
 		const char *type_text;
 
-		if (Cur_object_index != -1) {
+		if (Cur_object_index != object_none) {
 			Cur_goody_type = Objects[Cur_object_index].contains_type;
 			Cur_goody_id = Objects[Cur_object_index].contains_id;
 			if (Objects[Cur_object_index].contains_count < 0)
@@ -681,7 +681,7 @@ int robot_dialog_handler(UI_DIALOG *dlg, d_event *event, robot_dialog *r)
 		ui_dprintf_at( MainWindow, GOODY_X+108, GOODY_Y+24, "%s", id_text);
 		ui_dprintf_at( MainWindow, GOODY_X+108, GOODY_Y+48, "%i", Cur_goody_count);
 
-		if ( Cur_object_index > -1 )	{
+		if ( Cur_object_index != object_none )	{
 			int	id = Objects[Cur_object_index].id;
 			char	id_text[12];
 			int	i;

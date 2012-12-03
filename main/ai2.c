@@ -224,7 +224,7 @@ void create_buddy_bot(void)
 //	one_wall_hack added by MK, 10/13/95: A mega-hack!  Set to !0 to ignore the
 static void init_boss_segments(short segptr[], int *num_segs, int size_check, int one_wall_hack)
 {
-	objnum_t			boss_objnum=-1;
+	objnum_t			boss_objnum=object_none;
 	objnum_t			i;
 
 	*num_segs = 0;
@@ -233,11 +233,11 @@ static void init_boss_segments(short segptr[], int *num_segs, int size_check, in
 #endif
 
 	//	See if there is a boss.  If not, quick out.
-	for (i=0; i<=Highest_object_index; i++)
+	for (i=object_first; i<=Highest_object_index; i++)
 		if ((Objects[i].type == OBJ_ROBOT) && (Robot_info[Objects[i].id].boss_flag))
 			boss_objnum = i; // if != 1 then there is more than one boss here.
 
-	if (boss_objnum != -1) {
+	if (boss_objnum != object_none) {
 		segnum_t			original_boss_seg;
 		vms_vector	original_boss_pos;
 		dxxobject		*boss_objp = &Objects[boss_objnum];
@@ -320,7 +320,7 @@ void init_ai_objects(void)
 {
 	Point_segs_free_ptr = Point_segs;
 
-	for (objnum_t i=0; i<MAX_OBJECTS; i++) {
+	for (objnum_t i=object_first; i<MAX_OBJECTS; i++) {
 		dxxobject *objp = &Objects[i];
 
 		if (objp->control_type == CT_AI)
@@ -1196,7 +1196,7 @@ void ai_move_relative_to_player(dxxobject *objp, ai_local *ailp, fix dist_to_pla
 	//	See if should take avoidance.
 
 	// New way, green guys don't evade:	if ((robptr->attack_type == 0) && (objp->ctype.ai_info.danger_laser_num != -1)) {
-	if (objp->ctype.ai_info.danger_laser_num != -1) {
+	if (objp->ctype.ai_info.danger_laser_num != object_none) {
 		dobjp = &Objects[objp->ctype.ai_info.danger_laser_num];
 
 		if ((dobjp->type == OBJ_WEAPON) && (dobjp->signature == objp->ctype.ai_info.danger_laser_signature)) {
@@ -1244,7 +1244,7 @@ void ai_move_relative_to_player(dxxobject *objp, ai_local *ailp, fix dist_to_pla
 		return;
 
 	//	If we fall out of above, then no object to be avoided.
-	objp->ctype.ai_info.danger_laser_num = -1;
+	objp->ctype.ai_info.danger_laser_num = object_none;
 
 	//	Green guy selects move around/towards/away based on firing time, not distance.
 	if (robptr->attack_type == 1) {
@@ -1297,7 +1297,7 @@ void make_random_vector(vms_vector *vec)
 }
 
 //	-------------------------------------------------------------------------------------------------------------------
-objnum_t	Break_on_object = -1;
+objnum_t	Break_on_object = object_none;
 
 void do_firing_stuff(dxxobject *obj, int player_visibility, vms_vector *vec_to_player)
 {
@@ -1656,7 +1656,7 @@ static int check_object_object_intersection(vms_vector *pos, fix size, segment *
 
 	//	If this would intersect with another object (only check those in this segment), then try to move.
 	curobjnum = segp->objects;
-	while (curobjnum != -1) {
+	while (curobjnum != object_none) {
 		dxxobject *curobjp = &Objects[curobjnum];
 		if ((curobjp->type == OBJ_PLAYER) || (curobjp->type == OBJ_ROBOT) || (curobjp->type == OBJ_CNTRLCEN)) {
 			if (vm_vec_dist_quick(pos, &curobjp->pos) < size + curobjp->size)
@@ -1685,16 +1685,16 @@ static objnum_t create_gated_robot( segnum_t segnum, int object_id, vms_vector *
 	int		default_behavior;
 
 	if (GameTime64 - Last_gate_time < Gate_interval)
-		return -1;
+		return object_none;
 
-	for (i=0; i<=Highest_object_index; i++)
+	for (i=object_first; i<=Highest_object_index; i++)
 		if (Objects[i].type == OBJ_ROBOT)
 			if (Objects[i].matcen_creator == BOSS_GATE_MATCEN_NUM)
 				count++;
 
 	if (count > 2*Difficulty_level + 6) {
 		Last_gate_time = GameTime64 - 3*Gate_interval/4;
-		return -1;
+		return object_none;
 	}
 
 	compute_segment_center(&object_pos, segp);
@@ -1706,14 +1706,14 @@ static objnum_t create_gated_robot( segnum_t segnum, int object_id, vms_vector *
 	//	See if legal to place object here.  If not, move about in segment and try again.
 	if (check_object_object_intersection(&object_pos, objsize, segp)) {
 		Last_gate_time = GameTime64 - 3*Gate_interval/4;
-		return -1;
+		return object_none;
 	}
 
 	objnum = obj_create(OBJ_ROBOT, object_id, segnum, &object_pos, &vmd_identity_matrix, objsize, CT_AI, MT_PHYSICS, RT_POLYOBJ);
 
-	if ( objnum < 0 ) {
+	if ( objnum == object_none ) {
 		Last_gate_time = GameTime64 - 3*Gate_interval/4;
-		return -1;
+		return object_none;
 	}
 
 	Objects[objnum].lifeleft = F1_0*30;	//	Gated in robots only live 30 seconds.
@@ -1784,13 +1784,13 @@ objnum_t boss_spew_robot(dxxobject *objp, vms_vector *pos)
 
 	segnum = find_point_seg(pos, objp->segnum);
 	if (segnum == segment_none) {
-		return -1;
+		return object_none;
 	}
 
 	objnum = create_gated_robot( segnum, Spew_bots[boss_index][(Max_spew_bots[boss_index] * d_rand()) >> 15], pos);
 
 	//	Make spewed robot come tumbling out as if blasted by a flash missile.
-	if (objnum != -1) {
+	if (objnum != object_none) {
 		dxxobject	*newobjp = &Objects[objnum];
 		int		force_val;
 

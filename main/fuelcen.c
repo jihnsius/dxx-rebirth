@@ -259,7 +259,7 @@ void trigger_matcen(segnum_t segnum)
 	vm_vec_sub(&delta, &Vertices[Segments[segnum].verts[0]], &robotcen->Center);
 	vm_vec_scale_add2(&pos, &delta, F1_0/2);
 	objnum = obj_create( OBJ_LIGHT, 0, segnum, &pos, NULL, 0, CT_LIGHT, MT_NONE, RT_NONE );
-	if (objnum != -1) {
+	if (objnum != object_none) {
 		Objects[objnum].lifeleft = MATCEN_LIFE;
 		Objects[objnum].ctype.light_info.intensity = i2f(8);	//	Light cast by a fuelcen.
 	} else {
@@ -331,7 +331,7 @@ dxxobject * create_morph_robot( segment *segp, vms_vector *object_pos, int objec
 				&vmd_identity_matrix, Polygon_models[Robot_info[object_id].model_num].rad,
 				CT_AI, MT_PHYSICS, RT_POLYOBJ);
 
-	if ( objnum < 0 ) {
+	if ( objnum == object_none ) {
 		Int3();
 		return NULL;
 	}
@@ -450,7 +450,7 @@ static void robotmaker_proc( FuelCenter * robotcen )
 			dxxobject *obj;
 
 			//	Make sure this robotmaker hasn't put out its max without having any of them killed.
-			for (objnum_t i=0; i<=Highest_object_index; i++)
+			for (objnum_t i=object_first; i<=Highest_object_index; i++)
 				if (Objects[i].type == OBJ_ROBOT)
 					if ((Objects[i].matcen_creator^0x80) == my_station_num)
 						count++;
@@ -462,7 +462,7 @@ static void robotmaker_proc( FuelCenter * robotcen )
 			//	Whack on any robot or player in the matcen segment.
 			count=0;
 			segnum = robotcen->segnum;
-			for (objnum_t objnum=Segments[segnum].objects;objnum!=-1;objnum=Objects[objnum].next)	{
+			for (objnum_t objnum=Segments[segnum].objects;objnum!=object_none;objnum=Objects[objnum].next)	{
 				count++;
 				if ( count > MAX_OBJECTS )	{
 					Int3();

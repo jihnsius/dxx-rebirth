@@ -698,11 +698,11 @@ static int is_door_free(segment *seg,int side)
 	//go through each object in each of two segments, and see if
 	//it pokes into the connecting seg
 
-	for (objnum=seg->objects;objnum!=-1;objnum=Objects[objnum].next)
+	for (objnum=seg->objects;objnum!=object_none;objnum=Objects[objnum].next)
 		if (Objects[objnum].type!=OBJ_WEAPON && Objects[objnum].type!=OBJ_FIREBALL && check_poke(objnum,seg-Segments,side))
 			return 0;	//not free
 
-	for (objnum=csegp->objects;objnum!=-1;objnum=Objects[objnum].next)
+	for (objnum=csegp->objects;objnum!=object_none;objnum=Objects[objnum].next)
 		if (Objects[objnum].type!=OBJ_WEAPON && Objects[objnum].type!=OBJ_FIREBALL && check_poke(objnum,csegp-Segments,Connectside))
 			return 0;	//not free
 

@@ -723,7 +723,7 @@ static void compress_segments(void)
 				}	// end for s
 
 				//Update object segment pointers
-				for (objnum_t objnum = sp->objects; objnum != -1; objnum = Objects[objnum].next) {
+				for (objnum_t objnum = sp->objects; objnum != object_none; objnum = Objects[objnum].next) {
 					Assert(Objects[objnum].segnum == seg);
 					Objects[objnum].segnum = hole;
 				}
@@ -829,7 +829,7 @@ static int med_attach_segment_rotated(segment *destseg, segment *newseg, int des
 	nsp2 = &Segment2s[segnum];
 
 	nsp->segnum = segnum;
-	nsp->objects = -1;
+	nsp->objects = object_none;
 	nsp2->matcen_num = -1;
 
 	// Copy group value.
@@ -1083,8 +1083,8 @@ int med_delete_segment(segment *sp)
 			}
 
 	// If deleted segment contains objects, wipe out all objects
-	if (sp->objects != -1) 	{
-		for (objnum_t objnum=sp->objects;objnum!=-1;objnum=Objects[objnum].next) 	{
+	if (sp->objects != object_none) 	{
+		for (objnum_t objnum=sp->objects;objnum!=object_none;objnum=Objects[objnum].next) 	{
 
 			//if an object is in the seg, delete it
 			//if the object is the player, move to new curseg
@@ -1098,7 +1098,7 @@ int med_delete_segment(segment *sp)
 	}
 
 	// Make sure everything deleted ok...
-	Assert( sp->objects==-1 );
+	Assert( sp->objects==object_none );
 
 	// If we are leaving many holes in Segments or Vertices, then compress mine, because it is inefficient to be that way
 //	if ((Highest_segment_index > Num_segments+4) || (Highest_vertex_index > Num_vertices+4*8))
@@ -1365,7 +1365,7 @@ int med_form_bridge_segment(segment *seg1, int side1, segment *seg2, int side2)
 	bs = &Segments[get_free_segment_number()];
 
 	bs->segnum = bs-Segments;
-	bs->objects = -1;
+	bs->objects = object_none;
 
 	// Copy vertices from seg2 into last 4 vertices of bridge segment.
 	sv = Side_to_verts[side2];
@@ -1470,7 +1470,7 @@ void med_create_segment(segment *sp,fix cx, fix cy, fix cz, fix length, fix widt
 	for (f=0; f<MAX_SIDES_PER_SEGMENT; f++)
 		create_walls_on_side(sp,f);
 
-	sp->objects = -1;		//no objects in this segment
+	sp->objects = object_none;		//no objects in this segment
 
 	// Assume nothing special about this segment
 	sp2->special = SEGMENT_IS_NOTHING;
@@ -1527,7 +1527,7 @@ void med_create_new_segment(vms_vector *scale)
 
 	Seg_orientation.p = 0;	Seg_orientation.b = 0;	Seg_orientation.h = 0;
 
-	sp->objects = -1;		//no objects in this segment
+	sp->objects = object_none;		//no objects in this segment
 
 	assign_default_uvs_to_segment(sp);
 

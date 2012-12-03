@@ -277,7 +277,7 @@ static void make_nearby_robot_snipe(void)
 	for (i=0; i<bfs_length; i++) {
 		objnum_t objnum = Segments[bfs_list[i]].objects;
 
-		while (objnum != -1) {
+		while (objnum != object_none) {
 			dxxobject *objp = &Objects[objnum];
 			robot_info *robptr = &Robot_info[objp->id];
 
@@ -293,7 +293,7 @@ static void make_nearby_robot_snipe(void)
 	}
 }
 
-objnum_t Ai_last_missile_camera = -1;
+objnum_t Ai_last_missile_camera = object_none;
 
 // --------------------------------------------------------------------------------------------------------------------
 void do_ai_frame(dxxobject *obj)
@@ -348,7 +348,7 @@ void do_ai_frame(dxxobject *obj)
 	if (!Do_ai_flag)
 		return;
 
-	if (Break_on_object != -1)
+	if (Break_on_object != object_none)
 		if ((obj-Objects) == Break_on_object)
 			Int3(); // Contact Mike: This is a debug break
 #endif
@@ -386,17 +386,17 @@ void do_ai_frame(dxxobject *obj)
 	// -- 		aip->CLOAKED = 0;
 
 	// If only awake because of a camera, make that the believed player position.
-	if ((aip->SUB_FLAGS & SUB_FLAGS_CAMERA_AWAKE) && (Ai_last_missile_camera != -1))
+	if ((aip->SUB_FLAGS & SUB_FLAGS_CAMERA_AWAKE) && (Ai_last_missile_camera != object_none))
 		Believed_player_pos = Objects[Ai_last_missile_camera].pos;
 	else {
 		if (cheats.robotskillrobots) {
 			vis_vec_pos = obj->pos;
 			compute_vis_and_vec(obj, &vis_vec_pos, ailp, &vec_to_player, &player_visibility, robptr, &visibility_and_vec_computed);
 			if (player_visibility) {
-				objnum_t ii, min_obj = -1;
+				objnum_t ii, min_obj = object_none;
 				fix min_dist = F1_0*200, cur_dist;
 
-				for (ii=0; ii<=Highest_object_index; ii++)
+				for (ii=object_first; ii<=Highest_object_index; ii++)
 					if ((Objects[ii].type == OBJ_ROBOT) && (ii != objnum)) {
 						cur_dist = vm_vec_dist_quick(&obj->pos, &Objects[ii].pos);
 
@@ -407,7 +407,7 @@ void do_ai_frame(dxxobject *obj)
 									min_dist = cur_dist;
 								}
 					}
-				if (min_obj != -1) {
+				if (min_obj != object_none) {
 					Believed_player_pos = Objects[min_obj].pos;
 					Believed_player_seg = Objects[min_obj].segnum;
 					vm_vec_normalized_dir_quick(&vec_to_player, &Believed_player_pos, &obj->pos);
@@ -746,7 +746,7 @@ _exit_cheat:
 		compute_vis_and_vec(obj, &vis_vec_pos, ailp, &vec_to_player, &player_visibility, robptr, &visibility_and_vec_computed);
 		do_escort_frame(obj, dist_to_player, player_visibility);
 
-		if (obj->ctype.ai_info.danger_laser_num != -1) {
+		if (obj->ctype.ai_info.danger_laser_num != object_none) {
 			dxxobject *dobjp = &Objects[obj->ctype.ai_info.danger_laser_num];
 
 			if ((dobjp->type == OBJ_WEAPON) && (dobjp->signature == obj->ctype.ai_info.danger_laser_signature)) {
@@ -1408,7 +1408,7 @@ static void set_player_awareness_all(void)
 {
 	process_awareness_events();
 
-	for (objnum_t i=0; i<=Highest_object_index; i++)
+	for (objnum_t i=object_first; i<=Highest_object_index; i++)
 		if (Objects[i].control_type == CT_AI) {
 			if (New_awareness[Objects[i].segnum] > Ai_local_info[i].player_awareness_type) {
 				Ai_local_info[i].player_awareness_type = New_awareness[Objects[i].segnum];
@@ -1459,13 +1459,13 @@ void do_ai_frame_all(void)
 
 	set_player_awareness_all();
 
-	if (Ai_last_missile_camera > -1) {
+	if (Ai_last_missile_camera != object_none) {
 		// Clear if supposed misisle camera is not a weapon, or just every so often, just in case.
 		if (((FrameCount & 0x0f) == 0) || (Objects[Ai_last_missile_camera].type != OBJ_WEAPON)) {
 			objnum_t i;
 
-			Ai_last_missile_camera = -1;
-			for (i=0; i<=Highest_object_index; i++)
+			Ai_last_missile_camera = object_none;
+			for (i=object_first; i<=Highest_object_index; i++)
 				if (Objects[i].type == OBJ_ROBOT)
 					Objects[i].ctype.ai_info.SUB_FLAGS &= ~SUB_FLAGS_CAMERA_AWAKE;
 		}
@@ -1475,7 +1475,7 @@ void do_ai_frame_all(void)
 	if (Boss_dying) {
 		objnum_t i;
 
-		for (i=0; i<=Highest_object_index; i++)
+		for (i=object_first; i<=Highest_object_index; i++)
 			if (Objects[i].type == OBJ_ROBOT)
 				if (Robot_info[Objects[i].id].boss_flag)
 					do_boss_dying_frame(&Objects[i]);
@@ -1490,13 +1490,13 @@ void init_robots_for_level(void)
 	Overall_agitation = 0;
 	Final_boss_is_dead=0;
 
-	Buddy_objnum = -1;
+	Buddy_objnum = object_none;
 	Buddy_allowed_to_talk = 0;
 
 	Boss_invulnerable_dot = F1_0/4 - i2f(Difficulty_level)/8;
 	Boss_dying_start_time = 0;
 
-	Ai_last_missile_camera = -1;
+	Ai_last_missile_camera = object_none;
 }
 
 // Following functions convert ai_local/ai_cloak_info to ai_local/ai_cloak_info_rw to be written to/read from Savegames. Convertin back is not done here - reading is done specifically together with swapping (if necessary). These structs differ in terms of timer values (fix/fix64). as we reset GameTime64 for writing so it can fit into fix it's not necessary to increment savegame version. But if we once store something else into object which might be useful after restoring, it might be handy to increment Savegame version and actually store these new infos.
@@ -1559,7 +1559,7 @@ int ai_save_state(PHYSFS_file *fp)
 	PHYSFS_write(fp, &Ai_initialized, sizeof(int), 1);
 	PHYSFS_write(fp, &Overall_agitation, sizeof(int), 1);
 	//PHYSFS_write(fp, Ai_local_info, sizeof(ai_local) * MAX_OBJECTS, 1);
-	for (objnum_t i = 0; i < MAX_OBJECTS; i++)
+	for (objnum_t i = object_first; i < MAX_OBJECTS; i++)
 	{
 		ai_local_rw *ail_rw;
 		MALLOC(ail_rw, ai_local_rw, 1);
@@ -1655,7 +1655,7 @@ int ai_save_state(PHYSFS_file *fp)
 
 static void ai_local_read_n_swap(ai_local *ail, int n, int swap, PHYSFS_file *fp)
 {
-	for (objnum_t i = 0; i < n; i++, ail++)
+	for (objnum_t i = object_first; i < n; i++, ail++)
 	{
 		int j;
 		fix tmptime32 = 0;
@@ -1759,7 +1759,7 @@ int ai_restore_state(PHYSFS_file *fp, int version, int swap)
 		Escort_last_path_created = 0;
 		Escort_goal_object = ESCORT_GOAL_UNSPECIFIED;
 		Escort_special_goal = ESCORT_GOAL_UNSPECIFIED;
-		Escort_goal_index = -1;
+		Escort_goal_index = object_none;
 
 		for (i=0; i<MAX_STOLEN_ITEMS; i++) {
 			Stolen_items[i] = 255;

@@ -2779,7 +2779,7 @@ void show_HUD_names()
 		objnum_t objnum;
 		if (Newdemo_state == ND_STATE_PLAYBACK) {
 			//if this is a demo, the objnum in the player struct is wrong, so we search the object list for the objnum
-			for (objnum=0;objnum<=Highest_object_index;objnum++)
+			for (objnum=object_first;objnum<=Highest_object_index;objnum++)
 				if (Objects[objnum].type==OBJ_PLAYER && Objects[objnum].id == pnum)
 					break;
 			if (objnum > Highest_object_index)	//not in list, thus not visible

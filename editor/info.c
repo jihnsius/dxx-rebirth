@@ -154,7 +154,7 @@ static void info_display_object_placement(int show_all)
 	if (coi >= sizeof(Objects) / sizeof(Objects[0]))
 		return;
 	if (init_info || show_all) {
-		old_Cur_object_index = -2;
+		old_Cur_object_index = object_guidebot_cannot_reach;
 		old_type = -2;
 		old_movement_type = -2;
 		old_control_type = -2;

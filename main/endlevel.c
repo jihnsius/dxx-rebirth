@@ -309,7 +309,7 @@ void start_endlevel_sequence()
 		return;				//don't start if dead!
 
 	//	Dematerialize Buddy!
-	for (objnum_t i=0; i<=Highest_object_index; i++)
+	for (objnum_t i=object_first; i<=Highest_object_index; i++)
 		if (Objects[i].type == OBJ_ROBOT)
 			if (Robot_info[Objects[i].id].companion) {
 				object_create_explosion(Objects[i].segnum, &Objects[i].pos, F1_0*7/2, VCLIP_POWERUP_DISAPPEARANCE );
@@ -668,7 +668,7 @@ void do_endlevel_frame()
 			fq.p1 = &tpnt;
 			fq.startseg = ConsoleObject->segnum;
 			fq.rad = 0;
-			fq.thisobjnum = 0;
+			fq.thisobjnum = object_first;
 			fq.ignore_obj_list = NULL;
 			fq.flags = 0;
 
@@ -703,7 +703,7 @@ void do_endlevel_frame()
 					                    ConsoleObject->segnum,&ConsoleObject->pos,&ConsoleObject->orient,0,
 					                    CT_NONE,MT_NONE,RT_NONE);
 
-					if (objnum == -1) { //can't get object, so abort
+					if (objnum == object_none) { //can't get object, so abort
 						stop_endlevel_sequence();
 						return;
 					}

@@ -1097,7 +1097,7 @@ void ai_path_garbage_collect(void)
 	Last_frame_garbage_collected = FrameCount;
 
 	//	Create a list of objects which have paths of length 1 or more.
-	for (objnum_t objnum=0; objnum <= Highest_object_index; objnum++) {
+	for (objnum_t objnum=object_first; objnum <= Highest_object_index; objnum++) {
 		dxxobject	*objp = &Objects[objnum];
 
 		if ((objp->type == OBJ_ROBOT) && ((objp->control_type == CT_AI) || (objp->control_type == CT_MORPH))) {
@@ -1135,7 +1135,7 @@ void ai_path_garbage_collect(void)
 	{
 	force_dump_ai_objects_all("***** Finish ai_path_garbage_collect *****");
 
-	for (objnum_t i=0; i<=Highest_object_index; i++) {
+	for (objnum_t i=object_first; i<=Highest_object_index; i++) {
 		ai_static	*aip = &Objects[i].ctype.ai_info;
 
 		if ((Objects[i].type == OBJ_ROBOT) && (Objects[i].control_type == CT_AI))
@@ -1176,7 +1176,7 @@ void maybe_ai_path_garbage_collect(void)
 //	Should be called at the start of each level.
 void ai_reset_all_paths(void)
 {
-	for (objnum_t i=0; i<=Highest_object_index; i++)
+	for (objnum_t i=object_first; i<=Highest_object_index; i++)
 		if (Objects[i].control_type == CT_AI) {
 			Objects[i].ctype.ai_info.hide_index = -1;
 			Objects[i].ctype.ai_info.path_length = 0;

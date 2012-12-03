@@ -1175,7 +1175,7 @@ static void cast_light_from_side(segment *segp, int light_side, fix light_intens
 // -- Old way, before 5/8/95 --		inverse_segment_magnitude = fixdiv(F1_0/5, vm_vec_mag(&vector_to_center));
 // -- Old way, before 5/8/95 --		vm_vec_scale_add(&light_location, &light_location, &vector_to_center, inverse_segment_magnitude);
 
-		for (segnum=0; segnum<=Highest_segment_index; segnum++) {
+		for (segnum=segment_first; segnum<=Highest_segment_index; segnum++) {
 			segment		*rsegp = &Segments[segnum];
 			vms_vector	r_segment_center;
 			fix			dist_to_rseg;
@@ -1255,7 +1255,7 @@ static void cast_light_from_side(segment *segp, int light_side, fix light_intens
 												fq.startseg				= segp-Segments;
 												fq.p1						= &vert_location;
 												fq.rad					= 0;
-												fq.thisobjnum			= -1;
+												fq.thisobjnum			= object_none;
 												fq.ignore_obj_list	= NULL;
 												fq.flags					= 0;
 
@@ -1363,7 +1363,7 @@ static void cast_light_from_side_to_center(segment *segp, int light_side, fix li
 						fq.startseg				= segp-Segments;
 						fq.p1						= &r_segment_center;
 						fq.rad					= 0;
-						fq.thisobjnum			= -1;
+						fq.thisobjnum			= object_none;
 						fq.ignore_obj_list	= NULL;
 						fq.flags					= 0;
 

@@ -69,3 +69,7 @@ RT_WEAPON_VCLIP=7,  // a weapon that renders as a vclip
 };
 
 typedef short objnum_t;
+#define DECLARE_OBJECT_INDEX(N,V)	enum { object_##N = V };
+
+DECLARE_OBJECT_INDEX(first, 0);
+DECLARE_OBJECT_INDEX(none, -1);

@@ -1413,7 +1413,7 @@ static void net_udp_welcome_player(UDP_sequence_packet *their)
 	UDP_sync_player = *their;
 	UDP_sync_player.player.connected = player_num;
 	Network_send_objects = 1;
-	Network_send_objnum = -1;
+	Network_send_objnum = object_none;
 	Netgame.players[player_num].LastPacketTime = timer_query();
 
 	net_udp_send_objects();
@@ -1472,9 +1472,9 @@ static void net_udp_send_markers()
 
   for (i = 0; i < N_players; i++)
    {
-    if (MarkerObject[(i*2)]!=-1)
+    if (MarkerObject[(i*2)]!=object_none)
      multi_send_drop_marker (i,MarkerPoint[(i*2)],0,MarkerMessage[i*2]);
-    if (MarkerObject[(i*2)+1]!=-1)
+    if (MarkerObject[(i*2)+1]!=object_none)
      multi_send_drop_marker (i,MarkerPoint[(i*2)+1],1,MarkerMessage[(i*2)+1]);
    }
  }
@@ -1572,7 +1572,7 @@ static void net_udp_stop_resync(UDP_sequence_packet *their)
 		Network_sending_extras=0;
 		Network_rejoined=0;
 		Player_joining_extras=-1;
-		Network_send_objnum = -1;
+		Network_send_objnum = object_none;
 	}
 }
 
@@ -1609,14 +1609,14 @@ void net_udp_send_objects(void)
 	object_buffer[0] = UPID_OBJECT_DATA;
 	loc = 5;
 
-	if (Network_send_objnum == -1)
+	if (Network_send_objnum == object_none)
 	{
 		obj_count = 0;
 		Network_send_object_mode = 0;
 		PUT_INTEL_INT(object_buffer+loc, -1);                       loc += 4;
 		object_buffer[loc] = player_num;                            loc += 1;
 		/* Placeholder for remote_objnum, not used here */          loc += 4;
-		Network_send_objnum = 0;
+		Network_send_objnum = object_first;
 		obj_count_frame = 1;
 	}
 
@@ -1666,7 +1666,7 @@ void net_udp_send_objects(void)
 	{
 		if (Network_send_object_mode == 0)
 		{
-			Network_send_objnum = 0;
+			Network_send_objnum = object_first;
 			Network_send_object_mode = 1; // go to next mode
 		}
 		else
@@ -1685,7 +1685,7 @@ void net_udp_send_objects(void)
 			net_udp_send_rejoin_sync(player_num);
 
 			// Turn off send object mode
-			Network_send_objnum = -1;
+			Network_send_objnum = object_none;
 			Network_send_objects = 0;
 			obj_count = 0;
 
@@ -1704,7 +1704,7 @@ static int net_udp_verify_objects(int remote, int local)
 	if ((remote-local) > 10)
 		return(2);
 
-	for (objnum_t i = 0; i <= Highest_object_index; i++)
+	for (objnum_t i = object_first; i <= Highest_object_index; i++)
 	{
 		if ((Objects[i].type == OBJ_PLAYER) || (Objects[i].type == OBJ_GHOST))
 			nplayers++;
@@ -1734,7 +1734,7 @@ void net_udp_read_object_packet( ubyte *data )
 		obj_owner = data[loc];                                      loc += 1;
 		remote_objnum = GET_INTEL_INT(data + loc);                  loc += 4;
 
-		if (objnum == -1)
+		if (objnum == object_none)
 		{
 			// Clear object array
 			init_objects();
@@ -1744,7 +1744,7 @@ void net_udp_read_object_packet( ubyte *data )
 			mode = 1;
 			object_count = 0;
 		}
-		else if (objnum == -2)
+		else if (objnum == object_guidebot_cannot_reach)
 		{
 			// Special debug checksum marker for entire send
 			if (mode == 1)
@@ -1780,7 +1780,7 @@ void net_udp_read_object_packet( ubyte *data )
 				}
 				objnum = obj_allocate();
 			}
-			if (objnum != -1) {
+			if (objnum != object_none) {
 				obj = &Objects[objnum];
 				if (obj->segnum != segment_none)
 					obj_unlink(objnum);
@@ -1792,9 +1792,9 @@ void net_udp_read_object_packet( ubyte *data )
 				multi_object_rw_to_object((object_rw *)&data[loc], obj);
 				loc += sizeof(object_rw);
 				segnum = obj->segnum;
-				obj->next = obj->prev = -1;
+				obj->next = obj->prev = object_none;
 				obj->segnum = segment_none;
-				obj->attached_obj = -1;
+				obj->attached_obj = object_none;
 				if (segnum != segment_none)
 					obj_link(obj-Objects,segnum);
 				if (obj_owner == my_pnum)

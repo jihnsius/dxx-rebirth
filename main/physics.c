@@ -455,7 +455,7 @@ void do_physics_sim(dxxobject *obj)
 
 		vm_vec_add(&new_pos,&obj->pos,&frame_vec);
 
-		ignore_obj_list[n_ignore_objs] = -1;
+		ignore_obj_list[n_ignore_objs] = object_none;
 
 		fq.p0						= &obj->pos;
 		fq.startseg				= obj->segnum;
@@ -672,7 +672,7 @@ void do_physics_sim(dxxobject *obj)
 				// Mark the hit object so that on a retry the fvi code
 				// ignores this object.
 
-				Assert(hit_info.hit_object != -1);
+				Assert(hit_info.hit_object != object_none);
 
 				//	Calculcate the hit point between the two objects.
 				{	vms_vector	*ppos0, *ppos1, pos_hit;
