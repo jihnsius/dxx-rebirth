@@ -281,7 +281,6 @@ static void blast_blastable_wall(segment *seg, int side)
 void wall_destroy(segment *seg, int side)
 {
 	Assert(seg->sides[side].wall_num != -1);
-	Assert(seg-Segments != 0);
 
 	if (Walls[seg->sides[side].wall_num].type == WALL_BLASTABLE)
 		blast_blastable_wall( seg, side );
@@ -414,8 +413,6 @@ void wall_open_door(segment *seg, int side)
 	else
 		con_printf(CON_URGENT, "Illegal Connectside %i in wall_open_door. Trying to hop over. Please check your level!\n", side);
 
-	Assert( seg-Segments != -1);
-
 	if (Newdemo_state == ND_STATE_RECORDING) {
 		newdemo_record_door_opening(seg-Segments, side);
 	}
@@ -525,8 +522,6 @@ void start_wall_cloak(segment *seg, int side)
 	d->front_wallnum = seg->sides[side].wall_num;
 	d->back_wallnum = cwall_num;
 
-	Assert( seg-Segments != -1);
-
 	Assert(w->linked_wall == -1);
 
 	if ( Newdemo_state != ND_STATE_PLAYBACK ) {
@@ -611,8 +606,6 @@ void start_wall_decloak(segment *seg, int side)
 
 	d->front_wallnum = seg->sides[side].wall_num;
 	d->back_wallnum = csegp->sides[Connectside].wall_num;
-
-	Assert( seg-Segments != -1);
 
 	Assert(w->linked_wall == -1);
 
@@ -776,8 +769,6 @@ void wall_close_door(segment *seg, int side)
 
 	d->front_wallnum[0] = seg->sides[side].wall_num;
 	d->back_wallnum[0] = cwall_num;
-
-	Assert( seg-Segments != -1);
 
 	if (Newdemo_state == ND_STATE_RECORDING) {
 		newdemo_record_door_opening(seg-Segments, side);
@@ -1034,8 +1025,6 @@ int wall_hit_process(segment *seg, int side, fix damage, int playernum, dxxobjec
 {
 	wall	*w;
 	fix	show_message;
-
-	Assert (seg-Segments != -1);
 
 	// If it is not a "wall" then just return.
 	if ( seg->sides[side].wall_num < 0 )
