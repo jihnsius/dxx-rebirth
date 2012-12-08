@@ -125,6 +125,14 @@ static inline void guarded_py_call(const F& f)
 	guarded_py_call(f, [](){});
 }
 
+template <typename... Args>
+static void py_call_maybe_null_object(object& m, const char *f, Args&&... args)
+{
+	object o{getattr(m, f, object())};
+	if (!o.is_none())
+		o(std::forward<Args>(args)...);
+}
+
 void scripting_init()
 {
 	if (GameArg.SysNoPython)
@@ -145,15 +153,8 @@ void scripting_init()
 
 void cxx_script_hook_controls()
 {
-	ScriptControls.ship_orientation.enable_position = false;
-	ScriptControls.guided_destination.enable_position = false;
-	ScriptControls.ship_destination.enable_position = false;
-	ScriptControls.guided_destination.enable_segment = false;
-	ScriptControls.ship_destination.enable_segment = false;
 	guarded_py_call([]() {
-		object& __main__ = gpy__main__;
-		object nsmain{getattr(__main__, "__dict__")};
-		exec("if control_hook is not None:\n\tcontrol_hook()\n", nsmain, dict());
+		py_call_maybe_null_object(gpy__main__, "control_hook");
 	});
 }
 

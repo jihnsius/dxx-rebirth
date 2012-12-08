@@ -106,6 +106,14 @@ static void write_script_attitude_segment(const int s)
 	l.enable_segment = true;
 }
 
+template <script_control_info::location script_control_info::*L>
+static void clear_script_attitude()
+{
+	script_control_info::location& l = ScriptControls.*L;
+	l.enable_position = false;
+	l.enable_segment = false;
+}
+
 template <script_control_info::location script_control_info::*L, typename T>
 static void define_script_input_xyz(class_<T>& so)
 {
@@ -114,6 +122,7 @@ static void define_script_input_xyz(class_<T>& so)
 	so.add_static_property("z", &read_script_attitude_control<L, &vms_vector::z>, &write_script_attitude_control<L, &vms_vector::z>);
 	so.add_static_property("v", &read_script_attitude_vector<L>, &write_script_attitude_vector<L>);
 	so.add_static_property("s", &read_script_attitude_segment<L>, &write_script_attitude_segment<L>);
+	so.def("clear", &clear_script_attitude<L>);
 }
 
 static void define_script_input_class(class_<tag_script_input>& si)
