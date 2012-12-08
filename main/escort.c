@@ -712,7 +712,6 @@ static void escort_create_path_to_goal(dxxobject *objp)
 				if (Escort_goal_index > -1) goal_seg = Objects[Escort_goal_index].segnum;
 				break;
 			case ESCORT_GOAL_EXIT:
-			case ESCORT_GOAL_EXIT2:
 				goal_seg = find_exit_segment();
 				Escort_goal_index = goal_seg;
 				break;

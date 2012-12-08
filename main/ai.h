@@ -167,7 +167,6 @@ typedef struct awareness_event {
 #define ESCORT_GOAL_HOSTAGE     11
 #define ESCORT_GOAL_PLAYER_SPEW 12
 #define ESCORT_GOAL_SCRAM       13
-#define ESCORT_GOAL_EXIT2       14
 #define ESCORT_GOAL_BOSS        15
 #define ESCORT_GOAL_MARKER1     16
 #define ESCORT_GOAL_MARKER2     17
