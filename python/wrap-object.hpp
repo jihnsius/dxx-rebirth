@@ -50,6 +50,6 @@ static void define_common_object_exports(boost::python::object& __main__, const 
 	enum_<typename T::subtype_t> e(N_type);
 	define_enum_values(e);
 	class_<T, bases<dxxobject>, boost::noncopyable> c(N, no_init);
-	c.add_property("subtype", &CT::template get_contained_value<typename T::subtype_t, ubyte, &T::id>);
+	c.add_property("type", &CT::template get_contained_value<typename T::subtype_t, ubyte, &T::id>);
 	setattr(__main__, N, define_class_properties(c));
 }
