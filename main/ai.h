@@ -149,36 +149,37 @@ typedef struct awareness_event {
 #define AIS_MAX 8
 #define AIE_MAX 4
 
-#define ESCORT_GOAL_UNSPECIFIED -1
-
-#define ESCORT_GOAL_UNSPECIFIED -1
-#define ESCORT_GOAL_BLUE_KEY    1
-#define ESCORT_GOAL_GOLD_KEY    2
-#define ESCORT_GOAL_RED_KEY     3
-#define ESCORT_GOAL_CONTROLCEN  4
-#define ESCORT_GOAL_EXIT        5
+enum escort_goal_t
+{
+	ESCORT_GOAL_UNSPECIFIED = -1,
+	ESCORT_GOAL_BLUE_KEY = 1,
+	ESCORT_GOAL_GOLD_KEY = 2,
+	ESCORT_GOAL_RED_KEY = 3,
+	ESCORT_GOAL_CONTROLCEN = 4,
+	ESCORT_GOAL_EXIT = 5,
 
 // Custom escort goals.
-#define ESCORT_GOAL_ENERGY      6
-#define ESCORT_GOAL_ENERGYCEN   7
-#define ESCORT_GOAL_SHIELD      8
-#define ESCORT_GOAL_POWERUP     9
-#define ESCORT_GOAL_ROBOT       10
-#define ESCORT_GOAL_HOSTAGE     11
-#define ESCORT_GOAL_PLAYER_SPEW 12
-#define ESCORT_GOAL_SCRAM       13
-#define ESCORT_GOAL_BOSS        15
-#define ESCORT_GOAL_MARKER1     16
-#define ESCORT_GOAL_MARKER2     17
-#define ESCORT_GOAL_MARKER3     18
-#define ESCORT_GOAL_MARKER4     19
-#define ESCORT_GOAL_MARKER5     20
-#define ESCORT_GOAL_MARKER6     21
-#define ESCORT_GOAL_MARKER7     22
-#define ESCORT_GOAL_MARKER8     23
-#define ESCORT_GOAL_MARKER9     24
+	ESCORT_GOAL_ENERGY = 6,
+	ESCORT_GOAL_ENERGYCEN = 7,
+	ESCORT_GOAL_SHIELD = 8,
+	ESCORT_GOAL_POWERUP = 9,
+	ESCORT_GOAL_ROBOT = 10,
+	ESCORT_GOAL_HOSTAGE = 11,
+	ESCORT_GOAL_PLAYER_SPEW = 12,
+	ESCORT_GOAL_SCRAM = 13,
+	ESCORT_GOAL_BOSS = 15,
+	ESCORT_GOAL_MARKER1 = 16,
+	ESCORT_GOAL_MARKER2 = 17,
+	ESCORT_GOAL_MARKER3 = 18,
+	ESCORT_GOAL_MARKER4 = 19,
+	ESCORT_GOAL_MARKER5 = 20,
+	ESCORT_GOAL_MARKER6 = 21,
+	ESCORT_GOAL_MARKER7 = 22,
+	ESCORT_GOAL_MARKER8 = 23,
+	ESCORT_GOAL_MARKER9 = 24,
+};
 
-#define MAX_ESCORT_GOALS        25
+typedef enum escort_goal_t escort_goal_t;
 
 #define MAX_ESCORT_DISTANCE     (F1_0*80)
 #define MIN_ESCORT_DISTANCE     (F1_0*40)
@@ -199,7 +200,8 @@ typedef struct awareness_event {
 extern int   Escort_kill_object;
 extern ubyte Stolen_items[MAX_STOLEN_ITEMS];
 extern fix64   Escort_last_path_created;
-extern int   Escort_goal_object, Escort_special_goal, Escort_goal_index;
+extern escort_goal_t   Escort_goal_object, Escort_special_goal;
+extern int Escort_goal_index;
 
 void  create_buddy_bot(void);
 
