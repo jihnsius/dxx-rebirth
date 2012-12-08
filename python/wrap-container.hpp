@@ -157,3 +157,18 @@ struct container_lookup_tmpl
 		return C;
 	}
 };
+
+template <typename T, unsigned N, typename U, U& C>
+struct strict_container_lookup_tmpl
+{
+	enum
+	{
+		array_size = N,
+	};
+	typedef T value_type;
+	typedef std::array<value_type, array_size> array_type;
+	static const array_type& container()
+	{
+		return C.a;
+	}
+};

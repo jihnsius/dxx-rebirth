@@ -8,4 +8,5 @@ void define_player_module(boost::python::object& __main__, boost::python::scope&
 void define_powerup_module(boost::python::object& __main__, boost::python::scope& scope_dxx);
 void define_reactor_module(boost::python::object& __main__, boost::python::scope& scope_dxx);
 void define_robot_module(boost::python::object& __main__, boost::python::scope& scope_dxx);
+void define_segment_module(boost::python::object& __main__, boost::python::scope& scope_dxx);
 void define_weapon_module(boost::python::object& __main__, boost::python::scope& scope_dxx);

@@ -307,6 +307,7 @@ if use_python != '':
 		'python/powerup.cpp',
 		'python/reactor.cpp',
 		'python/robot.cpp',
+		'python/segment.cpp',
 		'python/traceback.cpp',
 		'python/weapon.cpp',
 		])

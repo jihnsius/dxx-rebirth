@@ -81,6 +81,7 @@ static void define_dxx_modules(object& __main__)
 		);
 	define_reactor_module(__main__, scope_dxx);
 	define_robot_module(__main__, scope_dxx);
+	define_segment_module(__main__, scope_dxx);
 	define_weapon_module(__main__, scope_dxx);
 	define_player_module(__main__, scope_dxx);
 	define_powerup_module(__main__, scope_dxx);
