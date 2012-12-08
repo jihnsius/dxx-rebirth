@@ -103,5 +103,5 @@ void define_object_base_class(scope& s)
 		.add_property("lifeleft", &dxxobject::lifeleft)
 		.def("passable_direct_path", &check_exists_passable_direct_path, return_internal_reference<>())
 		;
-	define_common_container_exports<object_container>(s, "object_container_base", "object_container", "objects");
+	define_common_container_exports<object_container>(s, "object_container", "objects");
 }

@@ -28,6 +28,14 @@ static void define_common_container_exports(scope& s, boost::python::class_<CT, 
 }
 
 template <typename CT>
+static void define_common_container_exports(scope& s, const char *N_container, const char *Ns)
+{
+	using namespace boost::python;
+	class_<CT> c(N_container, no_init);
+	define_common_container_exports(s, c, Ns);
+}
+
+template <typename CT>
 static void define_common_container_exports(scope& s, const char *N_container_base, const char *N_container, const char *Ns)
 {
 	using namespace boost::python;

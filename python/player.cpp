@@ -149,7 +149,7 @@ void define_player_module(object& __main__, scope& scope_dxx)
 		.add_property("headlight_on", &get_player_misc_flag<PLAYER_FLAGS_HEADLIGHT_ON>, &set_player_headlight)
 		;
 	DEFINE_COMMON_CONTAINER_EXPORTS(player_object);
-	define_common_container_exports<player_container>(scope_dxx, "player_container_base", "player_container", "players");
+	define_common_container_exports<player_container>(scope_dxx, "player_container", "players");
 }
 
 static player& get_local_player()
