@@ -599,7 +599,7 @@ fix fuelcen_give_fuel(segment *segp, fix MaxAmountCanTake )
 	if ( (segp) && (seg2p->special==SEGMENT_IS_FUELCEN) )	{
 		fix amount;
 
-		detect_escort_goal_accomplished(-4);	//	UGLY! Hack! -4 means went through fuelcen.
+		detect_escort_goal_fuelcen_accomplished();
 
 //		if (Station[segp->value].MaxCapacity<=0)	{
 //			HUD_init_message(HM_DEFAULT, "Fuelcenter %d is destroyed.", segp->value );
