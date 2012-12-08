@@ -1139,7 +1139,7 @@ static void move_around_player(dxxobject *objp, vms_vector *vec_to_player, int f
 	pptr->velocity.z += evade_vector.z;
 
 	speed = vm_vec_mag_quick(&pptr->velocity);
-	if ((objp-Objects != 1) && (speed > robptr->max_speed[Difficulty_level])) {
+	if (speed > robptr->max_speed[Difficulty_level]) {
 		pptr->velocity.x = (pptr->velocity.x*3)/4;
 		pptr->velocity.y = (pptr->velocity.y*3)/4;
 		pptr->velocity.z = (pptr->velocity.z*3)/4;
