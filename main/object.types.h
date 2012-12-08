@@ -73,3 +73,4 @@ typedef short objnum_t;
 
 DECLARE_OBJECT_INDEX(first, 0);
 DECLARE_OBJECT_INDEX(none, -1);
+DECLARE_OBJECT_INDEX(guidebot_cannot_reach, -2);

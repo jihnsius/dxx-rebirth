@@ -590,9 +590,9 @@ static segnum_t exists_fuelcen_in_mine(segnum_t start_seg)
 
 		for (segnum=segment_first; segnum<=Highest_segment_index; segnum++)
 			if (Segment2s[segnum].special == SEGMENT_IS_FUELCEN)
-				return -2;
+				return segment_exit;
 
-	return -1;
+	return segment_none;
 }
 
 //	Return nearest object of interest.
@@ -627,7 +627,7 @@ static objnum_t exists_in_mine(segnum_t start_seg, int objtype, int objid, int s
 
 			objnum = exists_in_mine_2(segnum, objtype, objid, special);
 			if (objnum != object_none)
-				return -2;
+				return object_guidebot_cannot_reach;
 		}
 
 	return object_none;
@@ -781,7 +781,7 @@ static void escort_create_path_to_goal(dxxobject *objp)
 			Last_buddy_message_time = 0;	//	Force this message to get through.
 			buddy_message("No %s in mine.", Escort_goal_text[Escort_goal_object-1]);
 			Looking_for_marker = -1;
-		} else if (Escort_goal_index == -2) {
+		} else if (Escort_goal_index == object_guidebot_cannot_reach) {
 			Last_buddy_message_time = 0;	//	Force this message to get through.
 			buddy_message("Can't reach %s.", Escort_goal_text[Escort_goal_object-1]);
 			Looking_for_marker = -1;
