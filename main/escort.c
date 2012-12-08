@@ -337,26 +337,24 @@ if ((Escort_special_goal == -1) && (Escort_goal_index == index)) {
 	return;
 }
 
-if ((Escort_goal_index <= ESCORT_GOAL_RED_KEY) && (index >= 0)) {
 	if (Objects[index].type == OBJ_POWERUP)  {
 		if (Objects[index].id == POW_KEY_BLUE) {
-			if (Escort_goal_index == ESCORT_GOAL_BLUE_KEY) {
+			if (Escort_goal_object == ESCORT_GOAL_BLUE_KEY) {
 				record_escort_goal_accomplished();
 				return;
 			}
 		} else if (Objects[index].id == POW_KEY_GOLD) {
-			if (Escort_goal_index == ESCORT_GOAL_GOLD_KEY) {
+			if (Escort_goal_object == ESCORT_GOAL_GOLD_KEY) {
 				record_escort_goal_accomplished();
 				return;
 			}
 		} else if (Objects[index].id == POW_KEY_RED) {
-			if (Escort_goal_index == ESCORT_GOAL_RED_KEY) {
+			if (Escort_goal_object == ESCORT_GOAL_RED_KEY) {
 				record_escort_goal_accomplished();
 				return;
 			}
 		}
 	}
-}
 	if (Escort_special_goal != -1)
 	{
 		if (Escort_special_goal == ESCORT_GOAL_ENERGYCEN) {
