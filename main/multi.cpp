@@ -1667,7 +1667,7 @@ multi_do_reappear(char *buf)
 
 	if (objnum > Highest_object_index)
 	{
-		con_printf(CON_URGENT, "%s: invalid object %u from player %u", __func__, objnum, pnum);
+		con_printf(CON_URGENT, "%s: invalid object %u from player %u", __func__, static_cast<unsigned>(objnum), pnum);
 		return;
 	}
 	if (pnum != Objects[objnum].id)

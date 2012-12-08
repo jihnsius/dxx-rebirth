@@ -772,7 +772,7 @@ multi_do_robot_fire(char *buf)
 	fire.y = (fix)INTEL_INT((int)fire.y);
 	fire.z = (fix)INTEL_INT((int)fire.z);
 
-	if ((botnum < 0) || (botnum > Highest_object_index) || (Objects[botnum].type != OBJ_ROBOT) || (Objects[botnum].flags & OF_EXPLODING))
+	if ((botnum > Highest_object_index) || (Objects[botnum].type != OBJ_ROBOT) || (Objects[botnum].flags & OF_EXPLODING))
 	{
 		return;
 	}
@@ -805,7 +805,7 @@ multi_explode_robot_sub(objnum_t botnum, objnum_t killer,char isthief)
 
 	killer = killer;
 
-	if ((botnum < 0) || (botnum > Highest_object_index)) { // Objnum in range?
+	if ((botnum > Highest_object_index)) { // Objnum in range?
 		Int3(); // See rob
 		return 0;
 	}
@@ -885,7 +885,7 @@ multi_do_robot_explode(char *buf)
 	botnum = objnum_remote_to_local(remote_botnum, (sbyte)buf[loc+2]); loc += 3;
    thief=buf[loc];
 
-	if ((botnum < 0) || (botnum > Highest_object_index)) {
+	if ((botnum > Highest_object_index)) {
 		return;
 	}
 
@@ -968,7 +968,7 @@ multi_do_boss_actions(char *buf)
 	remote_objnum = GET_INTEL_SHORT(buf + loc);         loc += 2;
 	segnum = segnum_t(GET_INTEL_SHORT(buf + loc));                loc += 2;
 
-	if ((boss_objnum < 0) || (boss_objnum > Highest_object_index))
+	if ((boss_objnum > Highest_object_index))
 	{
 		Int3();  // See Rob
 		return;
@@ -1115,7 +1115,7 @@ multi_drop_robot_powerups(objnum_t objnum)
 	objnum_t egg_objnum = object_none;
 	robot_info	*robptr;
 
-	if ((objnum < 0) || (objnum > Highest_object_index))
+	if ((objnum > Highest_object_index))
 	{
 		Int3();  // See rob
 		return;

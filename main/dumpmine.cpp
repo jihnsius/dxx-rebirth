@@ -251,17 +251,17 @@ static void write_key_text(PHYSFS_file *my_file)
 	for (objnum_t i=object_first; i<=Highest_object_index; i++) {
 		if (Objects[i].type == OBJ_POWERUP)
 			if (Objects[i].id == POW_KEY_BLUE) {
-				PHYSFSX_printf(my_file, "The BLUE key is object %i in segment %u\n", i, static_cast<unsigned>(Objects[i].segnum));
+				PHYSFSX_printf(my_file, "The BLUE key is object %u in segment %u\n", static_cast<unsigned>(i), static_cast<unsigned>(Objects[i].segnum));
 				blue_count2++;
 			}
 		if (Objects[i].type == OBJ_POWERUP)
 			if (Objects[i].id == POW_KEY_RED) {
-				PHYSFSX_printf(my_file, "The RED key is object %i in segment %u\n", i, static_cast<unsigned>(Objects[i].segnum));
+				PHYSFSX_printf(my_file, "The RED key is object %u in segment %u\n", static_cast<unsigned>(i), static_cast<unsigned>(Objects[i].segnum));
 				red_count2++;
 			}
 		if (Objects[i].type == OBJ_POWERUP)
 			if (Objects[i].id == POW_KEY_GOLD) {
-				PHYSFSX_printf(my_file, "The GOLD key is object %i in segment %u\n", i, static_cast<unsigned>(Objects[i].segnum));
+				PHYSFSX_printf(my_file, "The GOLD key is object %u in segment %u\n", static_cast<unsigned>(i), static_cast<unsigned>(Objects[i].segnum));
 				gold_count2++;
 			}
 
@@ -269,15 +269,15 @@ static void write_key_text(PHYSFS_file *my_file)
 			if (Objects[i].contains_type == OBJ_POWERUP) {
 				switch (Objects[i].contains_id) {
 					case POW_KEY_BLUE:
-						PHYSFSX_printf(my_file, "The BLUE key is contained in object %i (a %s %s) in segment %u\n", i, Object_type_names[Objects[i].type], Robot_names[Objects[i].id], static_cast<unsigned>(Objects[i].segnum));
+						PHYSFSX_printf(my_file, "The BLUE key is contained in object %u (a %s %s) in segment %u\n", static_cast<unsigned>(i), Object_type_names[Objects[i].type], Robot_names[Objects[i].id], static_cast<unsigned>(Objects[i].segnum));
 						blue_count2 += Objects[i].contains_count;
 						break;
 					case POW_KEY_GOLD:
-						PHYSFSX_printf(my_file, "The GOLD key is contained in object %i (a %s %s) in segment %u\n", i, Object_type_names[Objects[i].type], Robot_names[Objects[i].id], static_cast<unsigned>(Objects[i].segnum));
+						PHYSFSX_printf(my_file, "The GOLD key is contained in object %u (a %s %s) in segment %u\n", static_cast<unsigned>(i), Object_type_names[Objects[i].type], Robot_names[Objects[i].id], static_cast<unsigned>(Objects[i].segnum));
 						gold_count2 += Objects[i].contains_count;
 						break;
 					case POW_KEY_RED:
-						PHYSFSX_printf(my_file, "The RED key is contained in object %i (a %s %s) in segment %u\n", i, Object_type_names[Objects[i].type], Robot_names[Objects[i].id], static_cast<unsigned>(Objects[i].segnum));
+						PHYSFSX_printf(my_file, "The RED key is contained in object %u (a %s %s) in segment %u\n", static_cast<unsigned>(i), Object_type_names[Objects[i].type], Robot_names[Objects[i].id], static_cast<unsigned>(Objects[i].segnum));
 						red_count2 += Objects[i].contains_count;
 						break;
 					default:
@@ -386,7 +386,7 @@ static void write_segment_text(PHYSFS_file *my_file)
 		if (objnum != object_none) {
 			PHYSFSX_printf(my_file, "Objects: ");
 			while (objnum != object_none) {
-				PHYSFSX_printf(my_file, "[%8s %8s %3i] ", object_types(objnum), object_ids(objnum), objnum);
+				PHYSFSX_printf(my_file, "[%8s %8s %3u] ", object_types(objnum), object_ids(objnum), static_cast<unsigned>(objnum));
 				objnum = Objects[objnum].next;
 				if (depth++ > 30) {
 					PHYSFSX_printf(my_file, "\nAborted after %i links\n", depth);
@@ -503,7 +503,7 @@ static void write_player_text(PHYSFS_file *my_file)
 	for (objnum_t i=object_first; i<=Highest_object_index; i++) {
 		if (Objects[i].type == OBJ_PLAYER) {
 			num_players++;
-			PHYSFSX_printf(my_file, "Player %2i is object #%3i in segment #%3u.\n", Objects[i].id, i, static_cast<unsigned>(Objects[i].segnum));
+			PHYSFSX_printf(my_file, "Player %2i is object #%3i in segment #%3u.\n", Objects[i].id, static_cast<unsigned>(i), static_cast<unsigned>(Objects[i].segnum));
 		}
 	}
 

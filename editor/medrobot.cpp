@@ -692,7 +692,7 @@ int robot_dialog_handler(UI_DIALOG *, d_event *event, robot_dialog *r)
 
 			strncpy(id_text, Robot_names[id], strlen(Robot_names[id]));
 
-			ui_dprintf_at( MainWindow, 12,  6, "Robot: %3d ", Cur_object_index );
+			ui_dprintf_at( MainWindow, 12,  6, "Robot: %3u ", static_cast<unsigned>(Cur_object_index) );
 			ui_dprintf_at( MainWindow, 12, 22, "   Id: %3d", id);
 			ui_dprintf_at( MainWindow, 12, 38, " Name: %8s", id_text);
 

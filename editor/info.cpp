@@ -167,7 +167,7 @@ static void info_display_object_placement(int show_all)
 			( Objects[coi].control_type != old_control_type) || 
 			( Objects[coi].ctype.ai_info.behavior != old_mode) ) {
 
-		gr_uprintf( 0, 0, "Object id: %4d\n", Cur_object_index);
+		gr_uprintf( 0, 0, "Object id: %4u\n", static_cast<unsigned>(Cur_object_index));
 		gr_uprintf( 0, 16, "Type: %s\n", get_object_type(Objects[Cur_object_index].type , name));
 		gr_uprintf( 0, 32, "Movmnt: %s\n", get_movement_type(Objects[Cur_object_index].movement_type, name));
 		gr_uprintf( 0, 48, "Cntrl: %s\n", get_control_type(Objects[Cur_object_index].control_type, name));
@@ -258,7 +258,7 @@ static void info_display_default(int show_all)
 	//---------------- Number of objects -----------------
 	
 	if ( old_Num_objects != num_objects )	{
-		gr_uprintf( 0, 32, "Objs: %3d/%3d", num_objects, MAX_OBJECTS );
+		gr_uprintf( 0, 32, "Objs: %3u/%3u", static_cast<unsigned>(num_objects), static_cast<unsigned>(Objects.size()) );
 		old_Num_objects = num_objects;
 	}
 

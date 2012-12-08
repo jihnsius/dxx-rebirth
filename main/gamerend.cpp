@@ -297,8 +297,7 @@ static void draw_window_label()
 
 		gr_set_curfont(GAME_FONT);
 		gr_set_fontcolor(BM_XRGB(31,0,0),-1);
-		objnum_t i=Viewer-Objects;
-		gr_printf( 0x8000, (SHEIGHT/10), "%li: %s [%s] View - %s",i, viewer_name, viewer_id, control_name );
+		gr_printf( 0x8000, (SHEIGHT/10), "%u: %s [%s] View - %s",static_cast<unsigned>(Viewer-Objects), viewer_name, viewer_id, control_name );
 
 	}
 }

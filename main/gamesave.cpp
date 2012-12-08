@@ -1029,7 +1029,7 @@ static int load_game_data(PHYSFS_file *LoadFile)
 
 			if (objsegnum > Highest_segment_index)		//bogus object
 			{
-				Warning("Object %u is in non-existent segment %u, highest=%u", i, static_cast<unsigned>(objsegnum), static_cast<unsigned>(Highest_segment_index));
+				Warning("Object %u is in non-existent segment %u, highest=%u", static_cast<unsigned>(i), static_cast<unsigned>(objsegnum), static_cast<unsigned>(Highest_segment_index));
 				Objects[i].type = OBJ_NONE;
 			}
 			else {

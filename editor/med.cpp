@@ -1284,7 +1284,7 @@ int editor_handler(UI_DIALOG *, d_event *event, void *)
 			if (obj != object_none) {							//found an object
 
 				Cur_object_index = obj;
-				editor_status("Object %d selected.",Cur_object_index);
+				editor_status("Object %d selected.",static_cast<unsigned>(Cur_object_index));
 
 				Update_flags |= UF_ED_STATE_CHANGED;
 			}

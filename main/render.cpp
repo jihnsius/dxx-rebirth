@@ -1492,8 +1492,8 @@ void renderer_t::build_object_lists(int n_segs)
 							for (ii=0;ii<SORT_LIST_SIZE;ii++) {
 								objnum_t objnum = sort_list[ii].objnum;
 
-								PHYSFSX_printf(tfile,"Obj %3d  Type = %2d  Id = %2d  Dist = %08x  Segnum = %3u\n",
-									objnum,Objects[objnum].type,Objects[objnum].id,sort_list[ii].dist,static_cast<unsigned>(Objects[objnum].segnum));
+								PHYSFSX_printf(tfile,"Obj %3u  Type = %2d  Id = %2d  Dist = %08x  Segnum = %3u\n",
+									static_cast<unsigned>(objnum),Objects[objnum].type,Objects[objnum].id,sort_list[ii].dist,static_cast<unsigned>(Objects[objnum].segnum));
 							}
 							PHYSFS_close(tfile);
 						}
