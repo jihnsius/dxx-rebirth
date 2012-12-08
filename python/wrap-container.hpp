@@ -11,16 +11,21 @@ using boost::python::scope;
 	DEFINE_COMMON_OBJECT_EXPORTS(N)	\
 	define_common_container_exports<N##_container>(scope_dxx, #N "_container_base", #N "_container", #N "s")
 
+template <typename CT, class X1, class X2, class X3>
+static void define_specific_container_exports(scope&, const char *, boost::python::class_<CT, X1, X2, X3>&) {}
+
 template <typename CT>
 static void define_common_container_exports(scope& s, const char *N_container_base, const char *N_container, const char *Ns)
 {
 	using namespace boost::python;
 	class_<typename CT::base_container>(N_container_base, no_init);
-	class_<CT, bases<typename CT::base_container>>(N_container, no_init)
+	class_<CT, bases<typename CT::base_container>> c(N_container, no_init);
+	c
 		.def("__setattr__", &refuse_setattr<CT>)
 		.def("__getitem__", &CT::container_getitem, return_internal_reference<>())
 		.def("__iter__", range<return_internal_reference<>>(&CT::begin, &CT::end))
 		.def("__len__", &CT::size);
+	define_specific_container_exports(s, Ns, c);
 	setattr(s, Ns, CT());
 }
 
