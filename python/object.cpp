@@ -79,6 +79,22 @@ static dxxobject *check_exists_passable_direct_path(const dxxobject& src, const 
 	return &Objects[hit_data.hit_object];
 }
 
+static void warp_object_to_segnum(dxxobject& o, const segnum_t& segnum)
+{
+	if (segnum > Highest_segment_index)
+	{
+		PyErr_SetString(PyExc_IndexError, "illegal destination segment");
+		throw_error_already_set();
+	}
+	compute_segment_center(&o.pos, &Segments[segnum]);
+	obj_relink(&o-Objects,segnum);
+}
+
+static void warp_object_to_segment(dxxobject& o, const segment& seg)
+{
+	warp_object_to_segnum(o, &seg - Segments);
+}
+
 void define_object_base_class(scope& s)
 {
 	enum_<object_type_t> e("object_type");
@@ -102,6 +118,8 @@ void define_object_base_class(scope& s)
 		.add_property("contains_count", &dxxobject::contains_count)
 		.add_property("lifeleft", &dxxobject::lifeleft)
 		.def("passable_direct_path", &check_exists_passable_direct_path, return_internal_reference<>())
+		.def("warp", &warp_object_to_segnum)
+		.def("warp", &warp_object_to_segment)
 		;
 	define_common_container_exports<object_container>(s, "object_container", "objects");
 }
