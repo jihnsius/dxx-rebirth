@@ -1890,7 +1890,7 @@ int set_segment_depths(segnum_t start_seg, ubyte *segbuf)
 			segnum_t	childnum;
 
 			childnum = Segments[curseg].children[i];
-			if (childnum != segment_none)
+			if (childnum != segment_none && childnum != segment_exit)
 				if (segbuf[childnum])
 					if (!visited[childnum]) {
 						visited[childnum] = 1;
