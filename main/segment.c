@@ -14,7 +14,7 @@
  */
 void segment2_read(segment2 *s2, PHYSFS_file *fp)
 {
-	s2->special = PHYSFSX_readByte(fp);
+	s2->special = (segment_type_t)PHYSFSX_readByte(fp);
 	s2->matcen_num = PHYSFSX_readByte(fp);
 	s2->value = PHYSFSX_readByte(fp);
 	s2->s2_flags = PHYSFSX_readByte(fp);

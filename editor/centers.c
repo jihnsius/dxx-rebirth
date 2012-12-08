@@ -173,7 +173,7 @@ int centers_dialog_handler(UI_DIALOG *dlg, d_event *event, centers_dialog *c)
 			{
 				fuelcen_delete(Cursegp);
 				Update_flags |= UF_WORLD_CHANGED;
-				fuelcen_activate( Cursegp, i );
+				fuelcen_activate( Cursegp, (segment_type_t)i );
 			}
 			rval = 1;
 		}

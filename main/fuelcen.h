@@ -60,7 +60,7 @@ int create_matcen( segment * segp );
 void fuelcen_create( segment * segp);
 // Makes a fuel center active... needs to be called when
 // a segment is loaded from disk.
-void fuelcen_activate( segment * segp, int station_type );
+void fuelcen_activate( segment * segp, segment_type_t station_type );
 // Deletes a segment as a fuel center.
 void fuelcen_delete( segment * segp );
 

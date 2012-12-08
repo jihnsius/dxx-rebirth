@@ -676,6 +676,13 @@ static void draw_special_segments(void)
 		if (Segments[seg].segnum != segment_none)
 			switch(Segment2s[seg].special)
 			{
+			default:
+			case SEGMENT_IS_NOTHING:
+			case SEGMENT_IS_REPAIRCEN:
+			case SEGMENT_IS_GOAL_BLUE:
+			case SEGMENT_IS_GOAL_RED:
+			case MAX_CENTER_TYPES:
+				break;
 			case SEGMENT_IS_FUELCEN:
 				color = BM_XRGB( 29, 27, 13 );
 				gr_setcolor(color);

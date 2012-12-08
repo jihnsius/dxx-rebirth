@@ -133,23 +133,28 @@ typedef struct segment {
 #define S2F_AMBIENT_WATER   0x01
 #define S2F_AMBIENT_LAVA    0x02
 
+enum segment_type_t
+{
+//values for special field
+	SEGMENT_IS_NOTHING = 0,
+	SEGMENT_IS_FUELCEN = 1,
+	SEGMENT_IS_REPAIRCEN = 2,
+	SEGMENT_IS_CONTROLCEN = 3,
+	SEGMENT_IS_ROBOTMAKER = 4,
+	SEGMENT_IS_GOAL_BLUE = 5,
+	SEGMENT_IS_GOAL_RED = 6,
+	MAX_CENTER_TYPES = 7,
+};
+
+typedef enum segment_type_t segment_type_t;
+
 typedef struct segment2 {
-	ubyte   special;
+	segment_type_t   special : 8;
 	sbyte   matcen_num;
 	sbyte   value;
 	ubyte   s2_flags;
 	fix     static_light;
 } segment2;
-
-//values for special field
-#define SEGMENT_IS_NOTHING      0
-#define SEGMENT_IS_FUELCEN      1
-#define SEGMENT_IS_REPAIRCEN    2
-#define SEGMENT_IS_CONTROLCEN   3
-#define SEGMENT_IS_ROBOTMAKER   4
-#define SEGMENT_IS_GOAL_BLUE    5
-#define SEGMENT_IS_GOAL_RED     6
-#define MAX_CENTER_TYPES        7
 
 #ifdef COMPACT_SEGS
 void get_side_normal(segment *sp, int sidenum, int normal_num, vms_vector * vm );

@@ -708,7 +708,7 @@ int load_mine_data(PHYSFS_file *LoadFile)
 				for (j=0; j<MAX_VERTICES_PER_SEGMENT; j++)
 					Segments[i].verts[j] = v16_seg.verts[j];
 
-				Segment2s[i].special = v16_seg.special;
+				Segment2s[i].special = (segment_type_t)v16_seg.special;
 				Segment2s[i].value = v16_seg.value;
 				Segment2s[i].s2_flags = 0;
 				Segment2s[i].matcen_num = v16_seg.matcen_num;
@@ -901,13 +901,13 @@ static void read_special(int segnum,ubyte bit_mask,PHYSFS_file *LoadFile)
 {
 	if (bit_mask & (1 << MAX_SIDES_PER_SEGMENT)) {
 		// Read ubyte	Segment2s[segnum].special
-		Segment2s[segnum].special = PHYSFSX_readByte(LoadFile);
+		Segment2s[segnum].special = (segment_type_t)PHYSFSX_readByte(LoadFile);
 		// Read byte	Segment2s[segnum].matcen_num
 		Segment2s[segnum].matcen_num = PHYSFSX_readByte(LoadFile);
 		// Read short	Segment2s[segnum].value
 		Segment2s[segnum].value = PHYSFSX_readShort(LoadFile);
 	} else {
-		Segment2s[segnum].special = 0;
+		Segment2s[segnum].special = SEGMENT_IS_NOTHING;
 		Segment2s[segnum].matcen_num = -1;
 		Segment2s[segnum].value = 0;
 	}

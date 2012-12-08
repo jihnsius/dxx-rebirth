@@ -205,7 +205,7 @@ static void matcen_create( segment *segp)
 
 //------------------------------------------------------------
 // Adds a segment that already is a special type into the Station array.
-void fuelcen_activate( segment * segp, int station_type )
+void fuelcen_activate( segment * segp, segment_type_t station_type )
 {
 	segment2	*seg2p = &Segment2s[segp-Segments];
 
@@ -278,7 +278,7 @@ void fuelcen_delete( segment * segp )
 
 Restart: ;
 
-	seg2p->special = 0;
+	seg2p->special = SEGMENT_IS_NOTHING;
 
 	for (i=0; i<Num_fuelcenters; i++ )	{
 		if ( Station[i].segnum == segp-Segments )	{

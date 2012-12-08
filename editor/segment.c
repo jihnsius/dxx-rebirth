@@ -1471,7 +1471,7 @@ void med_create_segment(segment *sp,fix cx, fix cy, fix cz, fix length, fix widt
 	sp->objects = -1;		//no objects in this segment
 
 	// Assume nothing special about this segment
-	sp2->special = 0;
+	sp2->special = SEGMENT_IS_NOTHING;
 	sp2->value = 0;
 	sp2->static_light = 0;
 	sp2->matcen_num = -1;
@@ -1530,7 +1530,7 @@ void med_create_new_segment(vms_vector *scale)
 	assign_default_uvs_to_segment(sp);
 
 	// Assume nothing special about this segment
-	sp2->special = 0;
+	sp2->special = SEGMENT_IS_NOTHING;
 	sp2->value = 0;
 	sp2->static_light = 0;
 	sp2->matcen_num = -1;
