@@ -1795,15 +1795,17 @@ int SubtractFromGroup(void)
 		segnum_t	s0 = gp[s];
 		int	s1;
 
-		for (s1=0; s1<GroupList[original_group].num_segments; s1++)
+		for (s1=0;; s1++) {
+		//	If current segment was not found in both lists, remove it by copying the last segment over
+		//	it and decreasing the number of segments.
+			if (s1 == GroupList[original_group].num_segments) {
+				gp[s] = gp[cur_num_segs];
+				cur_num_segs--;
+				break;
+			}
 			if (gp1[s1] == s0)
 				break;				// If break executed, then segment found in both lists.
 
-		//	If current segment was not found in both lists, remove it by copying the last segment over
-		//	it and decreasing the number of segments.
-		if (s1 == GroupList[original_group].num_segments) {
-			gp[s] = gp[cur_num_segs];
-			cur_num_segs--;
 		}
 	}
 
