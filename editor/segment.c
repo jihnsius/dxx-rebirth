@@ -306,7 +306,7 @@ static int vnear(vms_vector *vp1, vms_vector *vp2)
 // vertices have been looked at without a match.  If no match, add a new vertex.
 int med_add_vertex(vms_vector *vp)
 {
-	int	v,free_index;
+	unsigned	free_index;
 	int	count;					// number of used vertices found, for loops exits when count == Num_vertices
 
 //	set_vertex_counts();
@@ -315,7 +315,7 @@ int med_add_vertex(vms_vector *vp)
 
 	count = 0;
 	free_index = -1;
-	for (v=0; (v < MAX_SEGMENT_VERTICES) && (count < Num_vertices); v++)
+	for (unsigned v=0; (v < MAX_SEGMENT_VERTICES) && (count < Num_vertices); v++)
 		if (Vertex_active[v]) {
 			count++;
 			if (vnear(vp,&Vertices[v])) {
@@ -668,7 +668,7 @@ static void compress_segments(void)
 				;
 
 			if (seg > hole) {
-				int		f,g,l,s,t,w;
+				int		f,g,l,t,w;
 				segment	*sp;
 
 				// Ok, hole is the index of a hole, seg is the index of a segment which follows it.
@@ -684,7 +684,7 @@ static void compress_segments(void)
 
 				// Fix segments in groups
 				for (g=0;g<num_groups;g++)
-					for (s=0; s<GroupList[g].num_segments; s++)
+					for (unsigned s=0; s<GroupList[g].num_segments; s++)
 						if (GroupList[g].segments[s] == seg)
 							GroupList[g].segments[s] = hole;
 
@@ -708,7 +708,7 @@ static void compress_segments(void)
 							Triggers[t].seg[l] = hole;
 
 				sp = &Segments[hole];
-				for (s=0; s<MAX_SIDES_PER_SEGMENT; s++) {
+				for (unsigned s=0; s<MAX_SIDES_PER_SEGMENT; s++) {
 					if (IS_CHILD(sp->children[s])) {
 						segment *csegp;
 						csegp = &Segments[sp->children[s]];
@@ -1334,7 +1334,7 @@ int med_form_joint(segment *seg1, int side1, segment *seg2, int side2)
 
 	// validate all segments
 	validate_segment_side(seg1,side1);
-	for (s=0; s<nv; s++) {
+	for (int s=0; s<nv; s++) {
 		validate_segment(&Segments[validation_list[s]]);
 		remap_side_uvs(&Segments[validation_list[s]],remap_vertices);	// remap uv coordinates on sides which were reshaped (ie, have a vertex in lost_vertices)
 		warn_if_concave_segment(&Segments[validation_list[s]]);
