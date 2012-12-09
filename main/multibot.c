@@ -549,7 +549,7 @@ multi_send_create_robot(int station, objnum_t objnum, int type)
 }
 
 void
-multi_send_boss_actions(objnum_t bossobjnum, int action, int secondary, objnum_t objnum)
+multi_send_boss_actions(objnum_t bossobjnum, int action, int secondary)
 {
 	// Send special boss behavior information
 
@@ -560,9 +560,9 @@ multi_send_boss_actions(objnum_t bossobjnum, int action, int secondary, objnum_t
 	PUT_INTEL_SHORT(multibuf+loc, bossobjnum);              loc += 2; // We won't network map this objnum since it's the boss
 	multibuf[loc] = (sbyte)action;                          loc += 1; // What is the boss doing?
 	multibuf[loc] = (sbyte)secondary;                       loc += 1; // More info for what he is doing
-	PUT_INTEL_SHORT(multibuf+loc, objnum);                  loc += 2; // Objnum of object created by gate-in action
+	PUT_INTEL_SHORT(multibuf+loc, 0);                  loc += 2; // Objnum of object created by gate-in action
 	if (action == 3) {
-		PUT_INTEL_SHORT(multibuf+loc, Objects[objnum].segnum); loc += 2; // Segment number object created in (for gate only)
+		PUT_INTEL_SHORT(multibuf+loc, 0); loc += 2; // Segment number object created in (for gate only)
 	}
 	else
 																		loc += 2; // Dummy

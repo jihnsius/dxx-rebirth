@@ -38,7 +38,7 @@ void multi_send_robot_fire(objnum_t objnum, int gun_num, vms_vector *fire);
 void multi_send_claim_robot(objnum_t objnum);
 void multi_send_robot_explode(objnum_t,objnum_t,char);
 void multi_send_create_robot(int robotcen, objnum_t objnum, int type);
-void multi_send_boss_actions(objnum_t bossobjnum, int action, int secondary, objnum_t objnum);
+void multi_send_boss_actions(objnum_t bossobjnum, int action, int secondary);
 int multi_send_robot_frame(int sent);
 
 void multi_do_robot_explode(char *buf);

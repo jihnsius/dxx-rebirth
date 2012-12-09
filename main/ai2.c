@@ -1882,7 +1882,7 @@ void teleport_boss(dxxobject *objp)
 
 #ifdef NETWORK
 	if (Game_mode & GM_MULTI)
-		multi_send_boss_actions(objp-Objects, 1, rand_segnum, 0);
+		multi_send_boss_actions(objp-Objects, 1, rand_segnum);
 #endif
 
 	compute_segment_center(&objp->pos, &Segments[rand_segnum]);
@@ -2076,7 +2076,7 @@ void do_boss_stuff(dxxobject *objp, int player_visibility)
 				objp->ctype.ai_info.CLOAKED = 1;
 #ifdef NETWORK
 				if (Game_mode & GM_MULTI)
-					multi_send_boss_actions(objp-Objects, 2, 0, 0);
+					multi_send_boss_actions(objp-Objects, 2, 0);
 #endif
 			}
 		}
