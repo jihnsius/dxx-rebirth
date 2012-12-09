@@ -26,6 +26,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "maths.h"
 #include "vecmat.h"
 #include "object.types.h"
+#include "dxxerror.h"
 
 #ifdef __cplusplus
 #include <array>
@@ -257,7 +258,7 @@ struct segment_array_template_t
 	typedef std::array<T, MAX_SEGMENTS> array_t;
 	array_t a;
 	typename array_t::reference operator[](segment_first_type_t) { return a[segnum_t::segment_first]; }
-	typename array_t::reference operator[](const segnum_t& s) { return a[s.contained_value]; }
+	typename array_t::reference operator[](const segnum_t& s) { Assert(s < size()); return a[s.contained_value]; }
 #ifdef EDITOR
 	/*
 	 * This special case is required to allow some defined(EDITOR) code
