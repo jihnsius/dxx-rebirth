@@ -54,7 +54,7 @@ struct mfi {
 	int     group_howmany;
 	int     group_sizeof;
 	int     vertex_offset;
-	int     vertex_howmany;
+	unsigned     vertex_howmany;
 	int     vertex_sizeof;
 	int     texture_offset;
 	int     texture_howmany;

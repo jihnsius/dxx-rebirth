@@ -651,7 +651,7 @@ int load_mine_data(PHYSFS_file *LoadFile)
 		if (PHYSFSX_fseek( LoadFile, mine_fileinfo.vertex_offset, SEEK_SET ))
 			Error( "Error seeking to vertex_offset in gamemine.c" );
 
-		for (int i=0; i< mine_fileinfo.vertex_howmany; i++ )
+		for (unsigned i=0; i< mine_fileinfo.vertex_howmany; i++ )
 		{
 			// Set the default values for this vertex
 			Vertices[i].x = 1;

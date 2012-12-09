@@ -66,7 +66,7 @@ extern "C" {
 # define MAX_VERTICES           (MAX_SEGMENT_VERTICES)
 #endif
 
-typedef int vertnum_t;
+typedef unsigned vertnum_t;
 typedef unsigned short segnum_t;
 
 #define DECLARE_SEGMENT_INDEX(N,V)	enum { segment_##N = V }
@@ -189,7 +189,7 @@ extern vms_vector   Vertices[MAX_VERTICES];
 extern segment      Segments[MAX_SEGMENTS];
 extern segment2     Segment2s[MAX_SEGMENTS];
 extern unsigned          Num_segments;
-extern int          Num_vertices;
+extern unsigned          Num_vertices;
 
 // Get pointer to the segment2 for the given segment pointer
 #define s2s2(segp) (&Segment2s[(segp) - Segments])

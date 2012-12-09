@@ -40,7 +40,7 @@ typedef struct segmasks {
    sbyte centermask;   //which sides center point is on back of (6 bits)
 } segmasks;
 
-extern int      Highest_vertex_index;                   // Highest index in Vertices and Vertex_active, an efficiency hack
+extern unsigned      Highest_vertex_index;                   // Highest index in Vertices and Vertex_active, an efficiency hack
 extern unsigned      Highest_segment_index;          // Highest index in Segments, an efficiency hack
 
 extern void compute_center_point_on_side(vms_vector *vp,segment *sp,int side);
