@@ -99,7 +99,7 @@ dxxobject	Object_minus_one;
 
 dxxobject Objects[MAX_OBJECTS];
 int num_objects=0;
-int Highest_object_index=0;
+unsigned Highest_object_index=0;
 int Highest_ever_object_index=0;
 
 // grs_bitmap *robot_bms[MAX_ROBOT_BITMAPS];	//all bitmaps for all robots

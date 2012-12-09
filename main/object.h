@@ -313,7 +313,7 @@ extern ubyte CollisionResult[MAX_OBJECT_TYPES][MAX_OBJECT_TYPES];
 // ie CollisionResult[a][b]==  what happens to a when it collides with b
 
 extern dxxobject Objects[MAX_OBJECTS];
-extern int Highest_object_index;    // highest objnum
+extern unsigned Highest_object_index;    // highest objnum
 extern int num_objects;
 
 extern char *robot_names[];         // name of each robot
