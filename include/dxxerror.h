@@ -20,7 +20,6 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #ifndef _ERROR_H
 #define _ERROR_H
 
-#include <stdio.h>
 #include "compiler.h"
 
 #ifdef __cplusplus
