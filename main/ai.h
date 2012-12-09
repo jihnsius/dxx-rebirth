@@ -289,7 +289,7 @@ void move_away_from_player(dxxobject *objp, vms_vector *vec_to_player, int attac
 void move_towards_vector(dxxobject *objp, vms_vector *vec_goal, int dot_based);
 void init_ai_frame(void);
 
-void create_bfs_list(segnum_t start_seg, segnum_t bfs_list[], int *length, int max_segs);
+void create_bfs_list(segnum_t start_seg, segnum_t bfs_list[], unsigned *length, unsigned max_segs);
 void init_thief_for_level();
 
 

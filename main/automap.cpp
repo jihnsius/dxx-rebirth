@@ -441,7 +441,7 @@ static void name_frame(automap *am)
 
 static void draw_automap(automap *am)
 {
-	int i;
+	unsigned i;
 	int color;
 	dxxobject * objp;
 	g3s_point sphere_point;

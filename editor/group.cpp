@@ -921,7 +921,7 @@ void validate_selected_segments(void)
 //	-----------------------------------------------------------------------------
 void delete_segment_from_group(segnum_t segment_num, int group_num)
 {
-	int g, del_seg_index;
+	unsigned g, del_seg_index;
 
 	for (g=0;; g++)
 	{
@@ -1696,7 +1696,7 @@ int CopyGroup(void)
 	//	If so, it must not be in the group for group copy to be legal.
 	attach_seg = Groupsegp[current_group]->children[Groupside[current_group]];
 	if (attach_seg != segment_none) {
-		int	i;
+		unsigned	i;
 
 		for (i=0; i<GroupList[current_group].num_segments; i++)
 			if (GroupList[current_group].segments[i] == attach_seg)
@@ -1755,7 +1755,7 @@ int SubtractFromGroup(void)
 {
 	int	x, original_group;
 	segnum_t	*gp;
-	int	cur_num_segs;
+	unsigned	cur_num_segs;
 
 	if (!Markedsegp) {
 		editor_status("Error -- Cannot create group, no marked segment.");
@@ -1848,7 +1848,7 @@ int SubtractFromGroup(void)
 //	without passing through current segment.
 int CreateGroup(void)
 {
-	int x;
+	unsigned x;
 
 	if (!Markedsegp) {
 		editor_status("Error -- Cannot create group, no marked segment.");

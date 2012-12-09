@@ -658,7 +658,7 @@ static void draw_warning_segments(void)
 
 static void draw_group_segments(void)
 {
-	int	s;
+	unsigned	s;
 
 	if (current_group > -1) {
 		gr_setcolor(GROUP_COLOR);

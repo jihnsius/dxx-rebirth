@@ -269,7 +269,7 @@ int ready_to_fire(robot_info *robptr, ai_local *ailp)
 #define	MNRS_SEG_MAX	70
 static void make_nearby_robot_snipe(void)
 {
-	int bfs_length, i;
+	unsigned bfs_length, i;
 	segnum_t bfs_list[MNRS_SEG_MAX];
 
 	create_bfs_list(ConsoleObject->segnum, bfs_list, &bfs_length, MNRS_SEG_MAX);

@@ -381,7 +381,7 @@ segnum_t med_create_duplicate_segment(segment *sp)
 //	This is the same as med_add_vertex, except that it does not search for the presence of the vertex.
 int med_create_duplicate_vertex(vms_vector *vp)
 {
-	int	free_index;
+	unsigned	free_index;
 
 	Assert(Num_vertices < MAX_SEGMENT_VERTICES);
 

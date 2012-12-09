@@ -195,9 +195,9 @@ static int segment_is_reachable(segnum_t curseg, int sidenum)
 //	Output:
 //		bfs_list:	array of shorts, each reachable segment.  Includes start segment.
 //		length:		number of elements in bfs_list
-void create_bfs_list(segnum_t start_seg, segnum_t bfs_list[], int *length, int max_segs)
+void create_bfs_list(segnum_t start_seg, segnum_t bfs_list[], unsigned *length, unsigned max_segs)
 {
-	int	head, tail;
+	unsigned	head, tail;
 	sbyte   visited[MAX_SEGMENTS];
 
 	unsigned s;
@@ -575,10 +575,9 @@ static objnum_t exists_in_mine_2(segnum_t segnum, int objtype, int objid, int sp
 //	-----------------------------------------------------------------------------
 static segnum_t exists_fuelcen_in_mine(segnum_t start_seg)
 {
-	int	segindex;
+	unsigned	length, segindex;
 	segnum_t segnum;
 	segnum_t	bfs_list[MAX_SEGMENTS];
-	int	length;
 
 	create_bfs_list(start_seg, bfs_list, &length, MAX_SEGMENTS);
 
@@ -601,10 +600,9 @@ static segnum_t exists_fuelcen_in_mine(segnum_t start_seg)
 //	-2 means object does exist in mine, but buddy-bot can't reach it (eg, behind triggered wall)
 static objnum_t exists_in_mine(segnum_t start_seg, int objtype, int objid, int special)
 {
-	int	segindex;
+	unsigned	length, segindex;
 	segnum_t segnum;
 	segnum_t	bfs_list[MAX_SEGMENTS];
-	int	length;
 
 	create_bfs_list(start_seg, bfs_list, &length, MAX_SEGMENTS);
 

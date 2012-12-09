@@ -515,7 +515,7 @@ static segnum_t choose_drop_segment()
 	int	pnum = 0;
 	segnum_t	segnum = segment_none;
 	int	cur_drop_depth;
-	int	count;
+	unsigned	count;
 	segnum_t	player_seg;
 	vms_vector tempv,*player_pos;
 

@@ -914,7 +914,7 @@ static void say_unused_tmaps(PHYSFS_file *my_file, int *tb)
 static void say_totals(PHYSFS_file *my_file, const char *level_name)
 {
 	int	total_robots = 0;
-	int	objects_processed = 0;
+	unsigned	objects_processed = 0;
 
 	int	used_objects[MAX_OBJECTS];
 
