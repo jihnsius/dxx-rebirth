@@ -299,7 +299,7 @@ void DropBuddyMarker(dxxobject *objp)
 
 	MarkerPoint[marker_num] = objp->pos;
 
-	if (MarkerObject[marker_num] != -1 && MarkerObject[marker_num] !=0)
+	if (MarkerObject[marker_num] != object_none)
 		obj_delete(MarkerObject[marker_num]);
 
 	MarkerObject[marker_num] = drop_marker_object(&objp->pos, objp->segnum, &objp->orient, marker_num);
