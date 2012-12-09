@@ -164,8 +164,6 @@ int Gamesave_num_players=0;
 int N_save_pof_names;
 char Save_pof_names[MAX_POLYGON_MODELS][FILENAME_LEN];
 
-void check_and_fix_matrix(vms_matrix *m);
-
 static void verify_object( dxxobject * obj )	{
 
 	obj->lifeleft = IMMORTAL_TIME;		//all loaded object are immortal, for now
