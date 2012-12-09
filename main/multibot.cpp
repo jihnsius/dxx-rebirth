@@ -995,7 +995,7 @@ multi_do_boss_actions(char *buf)
 					return;
 				}
 				teleport_segnum = Boss_teleport_segs[secondary];
-				if ((teleport_segnum < 0) || (teleport_segnum > Highest_segment_index))
+				if (teleport_segnum > Highest_segment_index)
 				{
 					Int3();  // See Rob
 					return;
@@ -1031,7 +1031,7 @@ multi_do_boss_actions(char *buf)
 		case 3: // Gate in robots!
 			{
 				// Do some validity checking
-				if ( (remote_objnum >= MAX_OBJECTS) || (remote_objnum < 0) || (segnum < 0) || (segnum > Highest_segment_index) )
+				if ( (remote_objnum >= MAX_OBJECTS) || (remote_objnum < 0) || (segnum > Highest_segment_index) )
 				{
 					Int3(); // See Rob, bad data in boss gate action message
 					return;

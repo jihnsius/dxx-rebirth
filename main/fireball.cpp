@@ -493,7 +493,7 @@ segnum_t pick_connected_segment(dxxobject *objp, int max_depth)
 			}
 		}
 
-		if ((seg_queue[tail] < 0) || (seg_queue[tail] > Highest_segment_index)) {
+		if (seg_queue[tail] > Highest_segment_index) {
 			// -- Int3();	//	Something bad has happened.  Queue is trashed.  --MK, 12/13/94
 			return segment_none;
 		}

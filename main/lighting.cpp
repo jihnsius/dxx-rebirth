@@ -487,7 +487,7 @@ void set_dynamic_light(void)
 			vertnum_t	*vp = Segments[segnum].verts;
 			for (v=0; v<MAX_VERTICES_PER_SEGMENT; v++) {
 				vertnum_t	vnum = vp[v];
-				if (vnum<0 || vnum>Highest_vertex_index) {
+				if (vnum>Highest_vertex_index) {
 					Int3();		//invalid vertex number
 					continue;	//ignore it, and go on to next one
 				}
@@ -505,7 +505,7 @@ void set_dynamic_light(void)
 		vertnum_t	vertnum;
 
 		vertnum = render_vertices[vv];
-		Assert(vertnum >= 0 && vertnum <= Highest_vertex_index);
+		Assert(vertnum <= Highest_vertex_index);
 		if ((vertnum ^ light_frame_count) & 1)
 			Dynamic_light[vertnum].r = Dynamic_light[vertnum].g = Dynamic_light[vertnum].b = 0;
 	}

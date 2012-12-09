@@ -149,7 +149,7 @@ void create_all_vertex_lists(int *num_faces, int *vertices, segnum_t segnum, int
 	const int  *sv = Side_to_verts_int[sidenum];
 
 	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
-	Assert((segnum <= Highest_segment_index) && (segnum >= 0));
+	Assert(segnum <= Highest_segment_index);
 	Assert((sidenum >= 0) && (sidenum < 6));
 
 	switch (sidep->type) {
@@ -209,7 +209,7 @@ void create_all_vertnum_lists(int *num_faces, int *vertnums, segnum_t segnum, in
 	side_t	*sidep = &Segments[segnum].sides[sidenum];
 
 	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
-	Assert((segnum <= Highest_segment_index) && (segnum >= 0));
+	Assert(segnum <= Highest_segment_index);
 
 	switch (sidep->type) {
 		case SIDE_IS_QUAD:
@@ -265,7 +265,7 @@ void create_abs_vertex_lists(int *num_faces, int *vertices, segnum_t segnum, int
 	const int  *sv = Side_to_verts_int[sidenum];
 
 	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
-	Assert((segnum <= Highest_segment_index) && (segnum >= 0));
+	Assert(segnum <= Highest_segment_index);
 	
 	switch (sidep->type) {
 		case SIDE_IS_QUAD:
@@ -324,11 +324,11 @@ segmasks get_seg_masks(const vms_vector *checkp, segnum_t segnum, fix rad, const
 	segment		*seg;
 	extern int Current_level_num;
 
-	if (segnum < 0 || segnum > Highest_segment_index)
+	if (segnum > Highest_segment_index)
 		Error("segnum == %i (%i) in get_seg_masks() \ncheckp: %i,%i,%i, rad: %i \nfrom file: %s, line: %i \nMission: %s (%i) \nPlease report this bug.\n",segnum,Highest_segment_index,checkp->x,checkp->y,checkp->z,rad,calling_file,calling_linenum, Current_mission_filename, Current_level_num);
 
 	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
-	Assert((segnum <= Highest_segment_index) && (segnum >= 0));
+	Assert(segnum <= Highest_segment_index);
 
 	seg = &Segments[segnum];
 
@@ -472,7 +472,7 @@ static ubyte get_side_dists(const vms_vector *checkp,segnum_t segnum,fix *side_d
 	segment		*seg;
 
 	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
-	Assert((segnum <= Highest_segment_index) && (segnum >= 0));
+	Assert(segnum <= Highest_segment_index);
 
 	seg = &Segments[segnum];
 
@@ -815,7 +815,7 @@ segnum_t find_point_seg(const vms_vector *p,segnum_t segnum)
 
 	//allow segnum==-1, meaning we have no idea what segment point is in
 	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
-	Assert((segnum <= Highest_segment_index) && (segnum >= segment_none));
+	Assert((segnum <= Highest_segment_index) || (segnum == segment_none));
 
 	if (segnum != segment_none) {
 		newseg = trace_segs(p, segnum, 0);
@@ -1203,7 +1203,7 @@ void extract_shortpos(dxxobject *objp, shortpos *spp, int swap_bytes)
 	segnum = spp->segment;
 
 	Assert(Highest_segment_index < sizeof(Segments) / sizeof(Segments[0]));
-	Assert((segnum >= 0) && (segnum <= Highest_segment_index));
+	Assert(segnum <= Highest_segment_index);
 
 	objp->pos.x = (spp->xo << RELPOS_PRECISION) + Vertices[Segments[segnum].verts[0]].x;
 	objp->pos.y = (spp->yo << RELPOS_PRECISION) + Vertices[Segments[segnum].verts[0]].y;
@@ -2031,7 +2031,7 @@ static void change_light(segnum_t segnum, int sidenum, int dir)
 				for (k=0; k<4; k++) {
 					fix	dl,new_l;
 					dl = dir * dlp->vert_light[k] * DL_SCALE;
-					Assert((dlp->segnum >= 0) && (dlp->segnum <= Highest_segment_index));
+					Assert(dlp->segnum <= Highest_segment_index);
 					Assert((dlp->sidenum >= 0) && (dlp->sidenum < MAX_SIDES_PER_SEGMENT));
 					new_l = (Segments[dlp->segnum].sides[dlp->sidenum].uvls[k].l += dl);
 					if (new_l < 0)

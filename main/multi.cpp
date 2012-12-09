@@ -2103,7 +2103,7 @@ multi_do_door_open(char *buf)
 	side = buf[3];
 	flag= buf[4];
 
-	if ((segnum < 0) || (segnum > Highest_segment_index) || (side < 0) || (side > 5))
+	if (segnum > Highest_segment_index || (side < 0) || (side > 5))
 	{
 		Int3();
 		return;
@@ -2186,7 +2186,7 @@ multi_do_create_powerup(char *buf)
 	segnum = GET_INTEL_SHORT(buf + count); count += 2;
 	objnum = GET_INTEL_SHORT(buf + count); count += 2;
 
-	if ((segnum < 0) || (segnum > Highest_segment_index)) {
+	if (segnum > Highest_segment_index) {
 		Int3();
 		return;
 	}
