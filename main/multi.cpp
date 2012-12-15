@@ -2310,7 +2310,7 @@ static void multi_do_drop_marker (char *buf)
 
 	MarkerPoint[(pnum*2)+mesnum]=position;
 
-	if (MarkerObject[(pnum*2)+mesnum] != object_none && Objects[MarkerObject[(pnum*2)+mesnum]].type!=OBJ_NONE && MarkerObject[(pnum*2)+mesnum] !=0)
+	if (MarkerObject[(pnum*2)+mesnum] != object_none && Objects[MarkerObject[(pnum*2)+mesnum]].type!=OBJ_NONE)
 		obj_delete(MarkerObject[(pnum*2)+mesnum]);
 
 	MarkerObject[(pnum*2)+mesnum] = drop_marker_object(&position,Objects[Players[Player_num].objnum].segnum,&Objects[Players[Player_num].objnum].orient,(pnum*2)+mesnum);
