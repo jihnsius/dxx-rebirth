@@ -32,7 +32,7 @@ using boost::python::enum_;
 #define DEFINE_COMMON_OBJECT_EXPORTS(N)	\
 	define_common_object_exports<dxx##N, N##_container>(__main__, #N, #N "_type");	\
 
-struct container_lookup_object : public container_lookup_tmpl<dxxobject, MAX_OBJECTS, Objects> {};
+struct container_lookup_object : public strict_container_lookup_tmpl<dxxobject, MAX_OBJECTS, object_array_t, Objects> {};
 
 template <typename E>
 static void define_enum_values(enum_<E>&);

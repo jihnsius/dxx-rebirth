@@ -96,6 +96,24 @@ typedef struct shortpos {
 #define MATRIX_PRECISION    9
 #define MATRIX_MAX          0x7f    // This is based on MATRIX_PRECISION, 9 => 0x7f
 
+template <typename T>
+struct object_array_template_t
+{
+	typedef std::array<T, MAX_OBJECTS> array_t;
+	array_t a;
+	T& operator[](const objnum_t& o) { return a[o]; }
+	objnum_t idx(const T *p) const
+	{
+		return objnum_t(std::distance(a.begin(), p));
+	}
+};
+
+template <typename T>
+static inline objnum_t operator-(const T *p, const object_array_template_t<T>& a)
+{
+	return a.idx(p);
+}
+
 // information for physics sim for an object
 typedef struct physics_info {
 	vms_vector  velocity;   // velocity vector of this object
@@ -313,7 +331,9 @@ extern int Object_next_signature;   // The next signature for the next newly cre
 extern ubyte CollisionResult[MAX_OBJECT_TYPES][MAX_OBJECT_TYPES];
 // ie CollisionResult[a][b]==  what happens to a when it collides with b
 
-extern dxxobject Objects[MAX_OBJECTS];
+typedef object_array_template_t<dxxobject> object_array_t;
+
+extern object_array_t Objects;
 extern unsigned Highest_object_index;    // highest objnum
 extern int num_objects;
 
