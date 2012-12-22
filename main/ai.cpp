@@ -29,7 +29,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "3d.h"
 
 #include "object.h"
-#include "render.h"
 #include "dxxerror.h"
 #include "ai.h"
 #include "laser.h"

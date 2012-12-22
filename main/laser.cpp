@@ -35,7 +35,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "key.h"
 #include "texmap.h"
 #include "textures.h"
-#include "render.h"
 #include "vclip.h"
 #include "fireball.h"
 #include "polyobj.h"

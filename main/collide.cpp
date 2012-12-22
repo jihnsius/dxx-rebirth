@@ -35,7 +35,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "object.h"
 #include "physics.h"
 #include "slew.h"
-#include "render.h"
 #include "wall.h"
 #include "vclip.h"
 #include "polyobj.h"
