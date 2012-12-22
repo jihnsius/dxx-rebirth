@@ -106,18 +106,21 @@ extern vms_vector Viewer_eye;
 #ifdef DEFINE_RENDERER_STRUCT
 #include "object.h"
 #include <array>
+#include <vector>
+#include <map>
 
 struct renderer_t
 {
 	typedef std::array<segnum_t, MAX_RENDER_SEGS> render_list_t;
+	typedef std::vector<objnum_t> object_list_t;
 	int	N_render_segs;
 #ifndef NDEBUG
 	object_array_template_t<ubyte> object_rendered;
 	segment_array_template_t<char> visited2;
 #endif
 	segment_array_template_t<ubyte> visited;
-	std::array<objnum_t, OBJS_PER_SEG> render_obj_list[MAX_RENDER_SEGS+N_EXTRA_OBJ_LISTS];
 	render_list_t Render_list;
+	std::map<render_list_t::size_type, object_list_t> render_obj_map;
 	std::array<ubyte, MAX_RENDER_SEGS> processed;		//whether each entry has been processed
 	segment_array_template_t<short> render_pos;	//where in render_list does this segment appear?
 	renderer_t()

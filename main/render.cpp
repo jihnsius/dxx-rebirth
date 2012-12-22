@@ -1260,58 +1260,9 @@ static int sort_seg_children(segment *seg,int n_children,short *child_list)
 
 void renderer_t::add_obj_to_seglist(objnum_t objnum,int listnum)
 {
-	int i,checkn;
-	objnum_t marker;
-
-	checkn = listnum;
-
 	//first, find a slot
-
-	do {
-
-		for (i=0;render_obj_list[checkn][i] >= 0;i++);
-
-		Assert(i < OBJS_PER_SEG);
-
-		marker = render_obj_list[checkn][i];
-
-		if (marker != object_none) {
-			checkn = -marker;
-			//Assert(checkn < MAX_RENDER_SEGS+N_EXTRA_OBJ_LISTS);
-			if (checkn >= MAX_RENDER_SEGS+N_EXTRA_OBJ_LISTS) {
-				Int3();
-				return;
-			}
-		}
-
-	} while (marker != object_none);
-
 	//now we have found a slot.  put object in it
-
-	if (i != OBJS_PER_SEG-1) {
-
-		render_obj_list[checkn][i] = objnum;
-		render_obj_list[checkn][i+1] = -1;
-	}
-	else {				//chain to additional list
-		int lookn;
-
-		//find an available sublist
-
-		for (lookn=MAX_RENDER_SEGS;render_obj_list[lookn][0]!=object_none && lookn<MAX_RENDER_SEGS+N_EXTRA_OBJ_LISTS;lookn++);
-
-		//Assert(lookn<MAX_RENDER_SEGS+N_EXTRA_OBJ_LISTS);
-		if (lookn >= MAX_RENDER_SEGS+N_EXTRA_OBJ_LISTS) {
-			Int3();
-			return;
-		}
-
-		render_obj_list[checkn][i] = -lookn;
-		render_obj_list[lookn][0] = objnum;
-		render_obj_list[lookn][1] = object_none;
-
-	}
-
+	render_obj_map[listnum].push_back(objnum);
 }
 #ifdef __sun__
 // the following is a drop-in replacement for the broken libc qsort on solaris
@@ -1447,9 +1398,6 @@ void renderer_t::build_object_lists(int n_segs)
 {
 	int nn;
 
-	for (nn=0;nn<MAX_RENDER_SEGS+N_EXTRA_OBJ_LISTS;nn++)
-		render_obj_list[nn][0] = object_none;
-
 	for (nn=0;nn<n_segs;nn++) {
 		segnum_t segnum;
 
@@ -1517,17 +1465,15 @@ void renderer_t::build_object_lists(int n_segs)
 		segnum = Render_list[nn];
 
 		if (segnum != segment_none) {
-			int lookn,i,n;
-			objnum_t t;
+			int lookn,n;
 
 			//first count the number of objects & copy into sort list
 
 			lookn = nn;
-			i = n_sort_items = 0;
-			while ((t=render_obj_list[lookn][i++])!=object_none)
-				if (t<0)
-					{lookn = -t; i=0;}
-				else
+			n_sort_items = 0;
+			object_list_t& o = render_obj_map[lookn];
+			for (const objnum_t& t : o)
+			{
 					if (n_sort_items < SORT_LIST_SIZE-1) {		//add if room
 						sort_list[n_sort_items].objnum = t;
 						//NOTE: maybe use depth, not dist - quicker computation
@@ -1580,6 +1526,7 @@ void renderer_t::build_object_lists(int n_segs)
 
 						Int3();	//still couldn't find a slot
 					}
+			}
 
 
 			//now call qsort
@@ -1594,14 +1541,10 @@ void renderer_t::build_object_lists(int n_segs)
 			//now copy back into list
 
 			lookn = nn;
-			i = 0;
 			n = n_sort_items;
-			while ((t=render_obj_list[lookn][i])!=object_none && n>0)
-				if (t<0)
-					{lookn = -t; i=0;}
-				else
-					render_obj_list[lookn][i++] = sort_list[--n].objnum;
-			render_obj_list[lookn][i] = object_none;	//mark (possibly new) end
+			o.clear();
+			for (; n -- > 0;)
+				o.push_back(sort_list[n].objnum);
 		}
 	}
 }
@@ -2262,21 +2205,8 @@ void renderer_t::render_mine(segnum_t start_seg_num,fix eye_offset, int window_n
 
 				listnum = nn;
 
-				for (objnp=0;render_obj_list[listnum][objnp]!=object_none;)	{
-					objnum_t ObjNumber = render_obj_list[listnum][objnp];
-
-					if (ObjNumber >= 0) {
+				for (const objnum_t& ObjNumber : render_obj_map[listnum])
 						do_render_object(ObjNumber, window_num);	// note link to above else
-						objnp++;
-					}
-					else {
-
-						listnum = -ObjNumber;
-						objnp = 0;
-
-					}
-
-				}
 
 				Max_linear_depth = save_linear_depth;
 
@@ -2342,7 +2272,6 @@ void renderer_t::render_mine(segnum_t start_seg_num,fix eye_offset, int window_n
 	for (nn=N_render_segs;nn--;)
 	{
 		segnum_t segnum;
-		int objnp;
 
 		segnum = Render_list[nn];
 		Current_seg_depth = Seg_depth[nn];
@@ -2375,21 +2304,9 @@ void renderer_t::render_mine(segnum_t start_seg_num,fix eye_offset, int window_n
 
 				listnum = nn;
 
-				for (objnp=0;render_obj_list[listnum][objnp]!=object_none;)
+				for (const objnum_t& ObjNumber : render_obj_map[listnum])
 				{
-					objnum_t ObjNumber = render_obj_list[listnum][objnp];
-
-					if (ObjNumber >= 0)
-					{
 						do_render_object(ObjNumber, window_num);	// note link to above else
-						objnp++;
-					}
-					else
-					{
-						listnum = -ObjNumber;
-						objnp = 0;
-
-					}
 				}
 				Max_linear_depth = save_linear_depth;
 			}
