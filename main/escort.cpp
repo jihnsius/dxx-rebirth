@@ -1058,13 +1058,15 @@ void do_escort_frame(dxxobject *objp, fix dist_to_player, int player_visibility)
 		Escort_last_path_created = GameTime64;
 	}
 
-	if ((Escort_special_goal != ESCORT_GOAL_SCRAM) && time_to_visit_player(objp, ailp, aip)) {
+	if ((Escort_special_goal != ESCORT_GOAL_SCRAM) &&
+		time_to_visit_player(objp, ailp, aip)) {
 		int	max_len;
 
 		Buddy_last_player_path_created = GameTime64;
 		ailp->mode = AIM_GOTO_PLAYER;
 		if (!player_visibility) {
-			if ((Last_come_back_message_time + F1_0 < GameTime64) || (Last_come_back_message_time > GameTime64)) {
+			if ((Last_come_back_message_time + F1_0 < GameTime64) ||
+				(Last_come_back_message_time > GameTime64)) {
 				buddy_message("Coming back to get you.");
 				Last_come_back_message_time = GameTime64;
 			}
@@ -1079,7 +1081,8 @@ void do_escort_frame(dxxobject *objp, fix dist_to_player, int player_visibility)
 	}	else if (GameTime64 - Buddy_last_seen_player > MAX_ESCORT_TIME_AWAY) {
 		//	This is to prevent buddy from looking for a goal, which he will do because we only allow path creation once/second.
 		return;
-	} else if ((ailp->mode == AIM_GOTO_PLAYER) && (dist_to_player < MIN_ESCORT_DISTANCE)) {
+	} else if ((ailp->mode == AIM_GOTO_PLAYER) &&
+			   (dist_to_player < MIN_ESCORT_DISTANCE)) {
 		Escort_goal_object = escort_set_goal_object();
 		ailp->mode = AIM_GOTO_OBJECT;		//	May look stupid to be before path creation, but ai_door_is_openable uses mode to determine what doors can be got through
 		escort_create_path_to_goal(objp);
@@ -1089,7 +1092,8 @@ void do_escort_frame(dxxobject *objp, fix dist_to_player, int player_visibility)
 		}
 		ailp->mode = AIM_GOTO_OBJECT;
 	} else if (Escort_goal_object == ESCORT_GOAL_UNSPECIFIED) {
-		if ((ailp->mode != AIM_GOTO_PLAYER) || (dist_to_player < MIN_ESCORT_DISTANCE)) {
+		if ((ailp->mode != AIM_GOTO_PLAYER) ||
+			(dist_to_player < MIN_ESCORT_DISTANCE)) {
 			Escort_goal_object = escort_set_goal_object();
 			ailp->mode = AIM_GOTO_OBJECT;		//	May look stupid to be before path creation, but ai_door_is_openable uses mode to determine what doors can be got through
 			escort_create_path_to_goal(objp);
@@ -1282,11 +1286,14 @@ void do_thief_frame(dxxobject *objp, fix dist_to_player, int player_visibility, 
 			if (ailp->next_action_time < 0) {
 				ailp->mode = AIM_THIEF_WAIT;
 				ailp->next_action_time = Thief_wait_times[Difficulty_level];
-			} else if ((dist_to_player < F1_0*100) || player_visibility || (ailp->player_awareness_type >= PA_PLAYER_COLLISION)) {
+			} else if ((dist_to_player < F1_0*100) || player_visibility ||
+					   (ailp->player_awareness_type >= PA_PLAYER_COLLISION)) {
 				ai_follow_path(objp, player_visibility, player_visibility, vec_to_player);
-				if ((dist_to_player < F1_0*100) || (ailp->player_awareness_type >= PA_PLAYER_COLLISION)) {
+				if ((dist_to_player < F1_0*100) ||
+					(ailp->player_awareness_type >= PA_PLAYER_COLLISION)) {
 					ai_static	*aip = &objp->ctype.ai_info;
-					if (((aip->cur_path_index <=1) && (aip->PATH_DIR == -1)) || ((aip->cur_path_index >= aip->path_length-1) && (aip->PATH_DIR == 1))) {
+					if (((aip->cur_path_index <=1) && (aip->PATH_DIR == -1)) ||
+						((aip->cur_path_index >= aip->path_length-1) && (aip->PATH_DIR == 1))) {
 						ailp->player_awareness_type = 0;
 						create_n_segment_path(objp, 10, ConsoleObject->segnum);
 
