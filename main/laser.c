@@ -1159,8 +1159,6 @@ static int track_track_goal(int track_goal, dxxobject *tracker, fix *dot)
 	} else if ((((tracker-Objects) ^ FrameCount) % 4) == 0)
 #endif
 	{
-		int	rval = -2;
-
 		//	If player fired missile, then search for an object, if not, then give up.
 		if (Objects[tracker->ctype.laser_info.parent_num].type == OBJ_PLAYER) {
 			int	goal_type;
@@ -1170,22 +1168,22 @@ static int track_track_goal(int track_goal, dxxobject *tracker, fix *dot)
 				if (Game_mode & GM_MULTI)
 				{
 					if (Game_mode & GM_MULTI_COOP)
-						rval = find_homing_object_complete( &tracker->pos, tracker, OBJ_ROBOT, -1);
+						return find_homing_object_complete( &tracker->pos, tracker, OBJ_ROBOT, -1);
 					else if (Game_mode & GM_MULTI_ROBOTS)		//	Not cooperative, if robots, track either robot or player
-						rval = find_homing_object_complete( &tracker->pos, tracker, OBJ_PLAYER, OBJ_ROBOT);
+						return find_homing_object_complete( &tracker->pos, tracker, OBJ_PLAYER, OBJ_ROBOT);
 					else		//	Not cooperative and no robots, track only a player
-						rval = find_homing_object_complete( &tracker->pos, tracker, OBJ_PLAYER, -1);
+						return find_homing_object_complete( &tracker->pos, tracker, OBJ_PLAYER, -1);
 				}
 				else
-					rval = find_homing_object_complete(&tracker->pos, tracker, OBJ_PLAYER, OBJ_ROBOT);
+					return find_homing_object_complete(&tracker->pos, tracker, OBJ_PLAYER, OBJ_ROBOT);
 			}
 			else
 			{
 				goal_type = Objects[tracker->ctype.laser_info.track_goal].type;
 				if ((goal_type == OBJ_PLAYER) || (goal_type == OBJ_ROBOT))
-					rval = find_homing_object_complete(&tracker->pos, tracker, goal_type, -1);
+					return find_homing_object_complete(&tracker->pos, tracker, goal_type, -1);
 				else
-					rval = -1;
+					return -1;
 			}
 		}
 		else {
@@ -1195,16 +1193,14 @@ static int track_track_goal(int track_goal, dxxobject *tracker, fix *dot)
 				goal2_type = OBJ_ROBOT;
 
 			if (track_goal == -1)
-				rval = find_homing_object_complete(&tracker->pos, tracker, OBJ_PLAYER, goal2_type);
+				return find_homing_object_complete(&tracker->pos, tracker, OBJ_PLAYER, goal2_type);
 			else {
 				goal_type = Objects[tracker->ctype.laser_info.track_goal].type;
-				rval = find_homing_object_complete(&tracker->pos, tracker, goal_type, goal2_type);
+				return find_homing_object_complete(&tracker->pos, tracker, goal_type, goal2_type);
 			}
 		}
-
-		Assert(rval != -2);		//	This means it never got set which is bad!  Contact Mike.
-		return rval;
 	}
+	else
 
 	return -1;
 }
