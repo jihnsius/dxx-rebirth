@@ -77,6 +77,17 @@ void python_exception::set_description(const object& value)
 	set_string(m_exception_description, value);
 }
 
+template <typename T, typename U>
+static T extract_default(const object& o, U none, U badcheck)
+{
+	if (o.is_none())
+		return none;
+	const extract<T> e{o};
+	if (!e.check())
+		return badcheck;
+	return e();
+}
+
 void python_exception::set_traceback(object traceback, const object& None)
 {
 	for (; ! traceback.is_none(); traceback = getattr(traceback, "tb_next", None))
@@ -87,22 +98,9 @@ void python_exception::set_traceback(object traceback, const object& None)
 		const object code{getattr(frame, "f_code", None)};
 		if (code.is_none())
 			return;
-		const unsigned lineno{({
-			const object olineno{getattr(traceback, "tb_lineno", None)};
-			olineno.is_none()
-				? 0
-				: ({ extract<unsigned> es{olineno};
-					es.check() ? es() : 0;
-			});
-		})};
+		const unsigned lineno = extract_default<unsigned>(getattr(traceback, "tb_lineno", None), 0, 0);
 		const auto as = [&code, &None](const char *attr) -> std::string {
-			const object o{getattr(code, attr, None)};
-			if (o.is_none())
-				return "";
-			const extract<std::string> es(o);
-			if (!es.check())
-				return "";
-			return es();
+			return extract_default<std::string>(getattr(code, attr, None), "", "");
 		};
 		m_tbframes.emplace_back(lineno, as("co_filename"), as("co_name"));
 	}
