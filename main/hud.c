@@ -110,6 +110,9 @@ void HUD_render_message_frame()
 			gr_set_fontcolor( HUD_color, -1);
 
 			if (i == startmsg && strlen(HUD_messages[i].umessage) > 38)
+#ifdef OGL
+				if (!GameArg.OglFixedFont)
+#endif
 				HUD_toolong = 1;
 			gr_string(0x8000,y, &HUD_messages[i].umessage[0] );
 			y += LINE_SPACING;
