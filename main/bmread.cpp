@@ -349,11 +349,11 @@ static int get_texture(char *name)
 	strcpy(short_name,name);
 	REMOVE_DOTS(short_name);
 	for (i=0;i<texture_count;i++)
-		if (!stricmp(TmapInfo[i].filename,short_name))
+		if (!stricmp(&TmapInfo[i].filename[0],short_name))
 			break;
 	if (i==texture_count) {
 		Textures[texture_count] = bm_load_sub(0, name);
-		strcpy( TmapInfo[texture_count].filename, short_name);
+		strcpy(&TmapInfo[texture_count].filename[0], short_name);
 		texture_count++;
 		Assert(texture_count < MAX_TEXTURES);
 		NumTextures = texture_count;
@@ -672,8 +672,8 @@ static void set_lighting_flag(sbyte *bp)
 
 static void set_texture_name(char *name)
 {
-	strcpy ( TmapInfo[texture_count].filename, name );
-	REMOVE_DOTS(TmapInfo[texture_count].filename);
+	strcpy (&TmapInfo[texture_count].filename[0], name );
+	REMOVE_DOTS(&TmapInfo[texture_count].filename[0]);
 }
 
 static void bm_read_eclip(int skip)
@@ -697,11 +697,11 @@ static void bm_read_eclip(int skip)
 		strcpy(short_name,dest_bm);
 		REMOVE_DOTS(short_name);
 		for (i=0;i<texture_count;i++)
-			if (!stricmp(TmapInfo[i].filename,short_name))
+			if (!stricmp(&TmapInfo[i].filename[0],short_name))
 				break;
 		if (i==texture_count) {
 			Textures[texture_count] = bm_load_sub(skip, dest_bm);
-			strcpy( TmapInfo[texture_count].filename, short_name);
+			strcpy(&TmapInfo[texture_count].filename[0], short_name);
 			texture_count++;
 			Assert(texture_count < MAX_TEXTURES);
 			NumTextures = texture_count;
@@ -910,7 +910,7 @@ static void bm_read_wclip(int skip)
 			set_lighting_flag(&GameBitmaps[bm[clip_count].index].bm_flags);
 			WallAnims[clip_num].frames[clip_count] = texture_count;
 			REMOVE_DOTS(arg);
-			sprintf( TmapInfo[texture_count].filename, "%s#%d", arg, clip_count);
+			snprintf(&TmapInfo[texture_count].filename[0], sizeof(TmapInfo[texture_count].filename), "%s#%d", arg, clip_count);
 			Assert(texture_count < MAX_TEXTURES);
 			texture_count++;
 			NumTextures = texture_count;

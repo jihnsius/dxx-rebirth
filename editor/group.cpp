@@ -1036,8 +1036,6 @@ int RotateSegmentNew(vms_angvec *pbh)
 	return rval;
 }
 
-static char	 current_tmap_list[MAX_TEXTURES][13];
-
 // -----------------------------------------------------------------------------
 // Save mine will:
 // 1. Write file info, header info, editor info, vertex data, segment data,
@@ -1084,7 +1082,7 @@ static int med_save_group(const char *filename, const vertnum_t *vertex_ids, con
 	group_fileinfo.segment_sizeof    =   sizeof(segment);
 	group_fileinfo.texture_offset    =   -1;
 	group_fileinfo.texture_howmany   =   0;
-	group_fileinfo.texture_sizeof    =   13;  // num characters in a name
+	group_fileinfo.texture_sizeof    =   sizeof(tmap_info::filename_t);  // num characters in a name
 
 	// Write the fileinfo
 	PHYSFS_write( SaveFile, &group_fileinfo, sizeof(group_fileinfo), 1);
@@ -1157,10 +1155,15 @@ static int med_save_group(const char *filename, const vertnum_t *vertex_ids, con
 
 	texture_offset = PHYSFS_tell(SaveFile);
 
-	for (unsigned i=0;i<NumTextures;i++)
-		strncpy(current_tmap_list[i], TmapInfo[i].filename, 13);
+	std::array<tmap_info::filename_t, MAX_TEXTURES> current_tmap_list;
+	static_assert(sizeof(current_tmap_list)==sizeof(tmap_info::filename_t)*MAX_TEXTURES, "sizeof(current_tmap_list)==sizeof(tmap_info::filename_t)*MAX_TEXTURES");
 
-	PHYSFS_write( SaveFile, current_tmap_list, 13, NumTextures);
+	for (unsigned i=0;i<NumTextures;i++)
+		current_tmap_list[i] = TmapInfo[i].filename;
+	for (unsigned i=NumTextures;i<current_tmap_list.size();i++)
+		current_tmap_list[i].fill(0);
+
+	PHYSFS_write( SaveFile, &current_tmap_list, 13, NumTextures);
 
 	//============= REWRITE FILE INFO, TO SAVE OFFSETS ===============
 
@@ -1385,9 +1388,9 @@ static int med_load_group(const char *filename, vertnum_t *vertex_ids, group_seg
 	// Remove all the file extensions in the textures list
 
 	for (i=0;i<NumTextures;i++)	{
-		temptr = strchr(TmapInfo[i].filename, '.');
+		temptr = strchr(&TmapInfo[i].filename[0], '.');
 		if (temptr) *temptr = '\0';
-		hashtable_insert( &ht, TmapInfo[i].filename, i );
+		hashtable_insert( &ht, &TmapInfo[i].filename[0], i );
 	}
 
 	// For every texture, search through the texture list

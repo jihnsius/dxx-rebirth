@@ -24,6 +24,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "piggy.h"
 
 #ifdef __cplusplus
+#include <array>
 
 #define MAX_TEXTURES    1200
 
@@ -44,7 +45,9 @@ typedef struct {
 	short   destroyed; //bitmap to show when destroyed, or -1
 	short   slide_u,slide_v;    //slide rates of texture, stored in 8:8 fix
 	#ifdef EDITOR
-	char    filename[13];       //used by editor to remap textures
+	typedef std::array<char, 13> filename_t;
+	static_assert(sizeof(filename_t)==13, "sizeof(filename_t)==13");
+	filename_t    filename;       //used by editor to remap textures
 	char    pad2[3];
 	#endif
 } __pack__ tmap_info;

@@ -46,8 +46,6 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 int CreateDefaultNewSegment();
 int save_mine_data(PHYSFS_file * SaveFile);
 
-static char	 current_tmap_list[MAX_TEXTURES][13];
-
 int	New_file_format_save = 1;
 
 // Converts descent 2 texture numbers back to descent 1 texture numbers.
@@ -360,8 +358,11 @@ int save_mine_data(PHYSFS_file * SaveFile)
 	med_compress_mine();
 	warn_if_concave_segments();
 	
+	std::array<tmap_info::filename_t, MAX_TEXTURES> current_tmap_list;
 	for (i=0;i<NumTextures;i++)
-		strncpy(current_tmap_list[i], TmapInfo[i].filename, 13);
+		current_tmap_list[i] = TmapInfo[i].filename;
+	for (i=NumTextures;i<current_tmap_list.size();i++)
+		current_tmap_list[i].fill(0);
 
 	//=================== Calculate offsets into file ==================
 
@@ -443,7 +444,7 @@ int save_mine_data(PHYSFS_file * SaveFile)
 
 	if (texture_offset != PHYSFS_tell(SaveFile))
 		Error( "OFFSETS WRONG IN MINE.C!" );
-	PHYSFS_write( SaveFile, current_tmap_list, 13, NumTextures );
+	PHYSFS_write( SaveFile, &current_tmap_list, 13, NumTextures );
 	
 	//===================== SAVE VERTEX INFO ==========================
 
