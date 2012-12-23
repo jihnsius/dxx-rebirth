@@ -17,6 +17,8 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
  *
  */
 
+#define DEFINE_RENDERER_STRUCT
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -88,13 +90,7 @@ dxxobject * Viewer = NULL;
 
 vms_vector Viewer_eye;  //valid during render
 
-int	N_render_segs;
-
 fix Render_zoom = 0x9000;					//the player's zoom factor
-
-#ifndef NDEBUG
-object_array_template_t<ubyte> object_rendered;
-#endif
 
 #ifdef EDITOR
 int	Render_only_bottom=0;
@@ -632,7 +628,7 @@ static void render_object_search(dxxobject *obj)
 #endif
 
 
-static void do_render_object(objnum_t objnum, int window_num)
+void renderer_t::do_render_object(objnum_t objnum, int window_num)
 {
 	#ifdef EDITOR
 	int save_3d_outline=0;
@@ -807,7 +803,7 @@ void project_list(int nv,vertnum_t *pointnumlist)
 
 
 // -----------------------------------------------------------------------------------
-static void render_segment(segnum_t segnum, int window_num)
+void renderer_t::render_segment(segnum_t segnum, int window_num)
 {
 	segment		*seg = &Segments[segnum];
 	g3s_codes 	cc;
@@ -985,20 +981,11 @@ static void draw_window_box(int color,short left,short top,short right,short bot
 }
 #endif
 
-#ifndef NDEBUG
-char visited2[MAX_SEGMENTS];
-#endif
-
-segnum_t Render_list[MAX_RENDER_SEGS];
 short Seg_depth[MAX_RENDER_SEGS];		//depth for each seg in Render_list
-ubyte processed[MAX_RENDER_SEGS];		//whether each entry has been processed
 int	lcnt_save,scnt_save;
 //@@short *persp_ptr;
-short render_pos[MAX_SEGMENTS];	//where in render_list does this segment appear?
 //ubyte no_render_flag[MAX_RENDER_SEGS];
 rect render_windows[MAX_RENDER_SEGS];
-
-static objnum_t render_obj_list[MAX_RENDER_SEGS+N_EXTRA_OBJ_LISTS][OBJS_PER_SEG];
 
 //for objects
 
@@ -1271,7 +1258,7 @@ static int sort_seg_children(segment *seg,int n_children,short *child_list)
 	return count;
 }
 
-static void add_obj_to_seglist(objnum_t objnum,int listnum)
+void renderer_t::add_obj_to_seglist(objnum_t objnum,int listnum)
 {
 	int i,checkn;
 	objnum_t marker;
@@ -1456,7 +1443,7 @@ static int sort_func(const sort_item *a,const sort_item *b)
 	return delta_dist;	//return distance
 }
 
-static void build_object_lists(int n_segs)
+void renderer_t::build_object_lists(int n_segs)
 {
 	int nn;
 
@@ -1897,18 +1884,18 @@ void update_rendered_data(int window_num, dxxobject *viewer, int rear_view_flag,
 
 //build a list of segments to be rendered
 //fills in Render_list & N_render_segs
-static void build_segment_list(segment_array_template_t<ubyte> &visited, segnum_t start_seg_num, int window_num)
+void renderer_t::build_segment_list(segnum_t start_seg_num, int window_num)
 {
 	int	lcnt,scnt,ecnt;
 	int	l,c;
 	segnum_t	ch;
 
-	memset(render_pos, -1, sizeof(render_pos[0])*(Highest_segment_index+1));
+	render_pos.fill(-1);
 	//memset(no_render_flag, 0, sizeof(no_render_flag[0])*(MAX_RENDER_SEGS));
-	memset(processed, 0, sizeof(processed));
+	processed.fill(0);
 
 	#ifndef NDEBUG
-	memset(visited2, 0, sizeof(visited2[0])*(Highest_segment_index+1));
+	visited2.fill(0);
 	#endif
 
 	lcnt = scnt = 0;
@@ -2139,17 +2126,17 @@ done_list:
 //renders onto current canvas
 void render_mine(segnum_t start_seg_num,fix eye_offset, int window_num)
 {
+	renderer_t r;
+	r.render_mine(start_seg_num, eye_offset, window_num);
+}
+
+void renderer_t::render_mine(segnum_t start_seg_num,fix eye_offset, int window_num)
+{
 	int		nn;
 	static fix64 dynlight_time = 0;
-	segment_array_template_t<ubyte> visited;
 
 	//	Initialize number of objects (actually, robots!) rendered this frame.
 	Window_rendered_data[window_num].num_objects = 0;
-
-	#ifndef NDEBUG
-	object_rendered.fill(0);
-	#endif
-	visited.fill(0);
 
 	//set up for rendering
 
@@ -2173,7 +2160,7 @@ void render_mine(segnum_t start_seg_num,fix eye_offset, int window_num)
 	else
 	#endif
 		//NOTE LINK TO ABOVE!!
-		build_segment_list(visited, start_seg_num, window_num);		//fills in Render_list & N_render_segs
+		build_segment_list(start_seg_num, window_num);		//fills in Render_list & N_render_segs
 
 	//render away
 

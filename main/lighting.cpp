@@ -17,6 +17,8 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
  *
  */
 
+#define DEFINE_RENDERER_STRUCT
+
 #include <stdio.h>
 #include <string.h>	// for memset()
 
@@ -458,7 +460,7 @@ static g3s_lrgb compute_light_emission(objnum_t objnum)
 }
 
 // ----------------------------------------------------------------------------------------------
-void set_dynamic_light(void)
+void renderer_t::set_dynamic_light()
 {
 	int	vv;
 	int	n_render_vertices;

@@ -78,9 +78,6 @@ int toggle_show_only_curside(void);
 // should access Render_viewer_object members.
 extern fix Render_zoom;     // the player's zoom factor
 
-extern int N_render_segs;
-extern segnum_t Render_list[MAX_RENDER_SEGS];
-
 #ifdef EDITOR
 extern int Render_only_bottom;
 #endif
@@ -105,6 +102,40 @@ extern void update_rendered_data(int window_num, struct dxxobject *viewer, int r
 
 extern fix flash_scale;
 extern vms_vector Viewer_eye;
+
+#ifdef DEFINE_RENDERER_STRUCT
+#include "object.h"
+#include <array>
+
+struct renderer_t
+{
+	typedef std::array<segnum_t, MAX_RENDER_SEGS> render_list_t;
+	int	N_render_segs;
+#ifndef NDEBUG
+	object_array_template_t<ubyte> object_rendered;
+	segment_array_template_t<char> visited2;
+#endif
+	segment_array_template_t<ubyte> visited;
+	std::array<objnum_t, OBJS_PER_SEG> render_obj_list[MAX_RENDER_SEGS+N_EXTRA_OBJ_LISTS];
+	render_list_t Render_list;
+	std::array<ubyte, MAX_RENDER_SEGS> processed;		//whether each entry has been processed
+	segment_array_template_t<short> render_pos;	//where in render_list does this segment appear?
+	renderer_t()
+	{
+#ifndef NDEBUG
+		object_rendered.fill(0);
+#endif
+		visited.fill(0);
+	}
+	void add_obj_to_seglist(objnum_t objnum,int listnum);
+	void do_render_object(objnum_t objnum, int window_num);
+	void render_segment(segnum_t segnum, int window_num);
+	void build_segment_list(segnum_t start_seg_num, int window_num);
+	void build_object_lists(int n_segs);
+	void set_dynamic_light();
+	void render_mine(segnum_t start_seg_num,fix eye_offset, int window_num);
+};
+#endif
 
 #endif
 

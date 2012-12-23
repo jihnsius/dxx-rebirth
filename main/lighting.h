@@ -31,8 +31,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 extern fix Beam_brightness;
 extern g3s_lrgb Dynamic_light[MAX_VERTICES];
 
-extern void set_dynamic_light(void);
-
 // Compute the lighting from the headlight for a given vertex on a face.
 // Takes:
 //  point - the 3d coords of the point
