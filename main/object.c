@@ -802,6 +802,7 @@ void init_objects()
 	for (objnum_t i=object_first;i<MAX_OBJECTS;i++) {
 		free_obj_list[i] = i;
 		Objects[i].type = OBJ_NONE;
+		Objects[i].control_type = CT_NONE;
 		Objects[i].segnum = segment_none;
 	}
 
@@ -1247,6 +1248,7 @@ void obj_delete(objnum_t objnum)
 	Assert(Objects[object_first].next != 0);
 
 	obj->type = OBJ_NONE;		//unused!
+	obj->control_type = CT_NONE;
 	obj->signature = -1;
 	obj->segnum=segment_none;				// zero it!
 
@@ -1931,6 +1933,7 @@ void compress_objects(void)
 			#endif
 
 			Objects[Highest_object_index].type = OBJ_NONE;
+			Objects[Highest_object_index].control_type = CT_NONE;
 
 			obj_link(start_i,segnum_copy);
 
