@@ -769,8 +769,10 @@ static void escort_create_path_to_goal(dxxobject *objp)
 				break;
 			case ESCORT_GOAL_EXIT:
 				goal_seg = find_exit_segment();
-				Escort_goal_index = goal_seg;
-				break;
+				escort_go_to_goal(objp, aip, goal_seg);
+				ailp->mode = AIM_GOTO_OBJECT;
+				say_escort_goal(Escort_goal_object);
+				return;
 			case ESCORT_GOAL_ENERGY:
 				Escort_goal_index = exists_in_mine(objp->segnum, OBJ_POWERUP, POW_ENERGY, -1);
 				if (Escort_goal_index != object_none) goal_seg = Objects[Escort_goal_index].segnum;
@@ -805,8 +807,7 @@ static void escort_create_path_to_goal(dxxobject *objp)
 				if (Escort_goal_index != object_none) goal_seg = Objects[Escort_goal_index].segnum;
 				break;
 			case ESCORT_GOAL_SCRAM:
-				goal_seg = -3;		//	Kinda a hack.
-				Escort_goal_index = goal_seg;
+				Escort_goal_index = object_first;
 				break;
 			case ESCORT_GOAL_BOSS: {
 				int	boss_id;
