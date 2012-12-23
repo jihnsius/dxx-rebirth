@@ -1491,7 +1491,7 @@ void init_robots_for_level(void)
 	Overall_agitation = 0;
 	Final_boss_is_dead=0;
 
-	Buddy_objnum = 0;
+	Buddy_objnum = -1;
 	Buddy_allowed_to_talk = 0;
 
 	Boss_invulnerable_dot = F1_0/4 - i2f(Difficulty_level)/8;
