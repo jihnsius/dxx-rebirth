@@ -93,7 +93,7 @@ void fuelcen_reset()
 
 	Num_fuelcenters = 0;
 
-	for(i=segment_first; i<sizeof(Segment2s)/sizeof(Segment2s[0]); i++ )
+	for(i=segment_first; i<Segment2s.size(); i++ )
 		Segment2s[i].special = SEGMENT_IS_NOTHING;
 
 	Num_robot_centers = 0;

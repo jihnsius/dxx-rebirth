@@ -556,7 +556,7 @@ int save_mine_data_compiled(PHYSFS_file *SaveFile)
 	med_compress_mine();
 	warn_if_concave_segments();
 
-	if (Highest_segment_index >= MAX_SEGMENTS) {
+	if (Highest_segment_index >= Segments.size()) {
 		char	message[128];
 		sprintf(message, "Error: Too many segments (%i > %i) for game (not editor)", Highest_segment_index+1, MAX_SEGMENTS);
 		ui_messagebox( -2, -2, 1, message, "Ok" );

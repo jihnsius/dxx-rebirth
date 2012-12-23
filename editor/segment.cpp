@@ -270,7 +270,7 @@ static int med_vertex_count(int vi)
 
 	count = 0;
 
-	for (s=segment_first; s<MAX_SEGMENTS; s++) {
+	for (s=segment_first; s<Segments.size(); s++) {
 		sp = &Segments[s];
 		if (sp->segnum != segment_none)
 			for (v=0; v<MAX_VERTICES_PER_SEGMENT; v++)
@@ -350,7 +350,7 @@ segnum_t get_free_segment_number(void)
 {
 	segnum_t	segnum;
 
-	for (segnum=segment_first; segnum<MAX_SEGMENTS; segnum++)
+	for (segnum=segment_first; segnum<Segments.size(); segnum++)
 		if (Segments[segnum].segnum == segment_none) {
 			Num_segments++;
 			if (segnum > Highest_segment_index)
@@ -1075,7 +1075,7 @@ int med_delete_segment(segment *sp)
 
 	// If we deleted something which was not connected to anything, must now select a new current segment.
 	if (Cursegp == sp)
-		for (segnum_t s=segment_first; s<MAX_SEGMENTS; s++)
+		for (segnum_t s=segment_first; s<Segments.size(); s++)
 			if ((Segments[s].segnum != segment_none) && (s!=segnum) ) {
 				Cursegp = &Segments[s];
 				med_create_new_segment_from_cursegp();
@@ -1565,7 +1565,7 @@ void init_all_vertices(void)
 	for (v=0; v<sizeof(Vertex_active)/sizeof(Vertex_active[0]); v++)
 		Vertex_active[v] = 0;
 
-	for (s=segment_first; s<sizeof(Segments)/sizeof(Segments[0]); s++)
+	for (s=segment_first; s<Segments.size(); s++)
 		Segments[s].segnum = segment_none;
 
 }

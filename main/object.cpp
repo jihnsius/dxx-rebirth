@@ -810,7 +810,7 @@ void init_objects()
 		Objects[i].segnum = segment_none;
 	}
 
-	for (j=segment_first;j<sizeof(Segments)/sizeof(Segments[0]);j++)
+	for (j=segment_first;j<Segments.size();j++)
 		Segments[j].objects = object_none;
 
 	ConsoleObject = Viewer = &Objects[object_first];

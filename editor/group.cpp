@@ -407,7 +407,7 @@ static void cgl_aux(segment *segp, segnum_t *seglistp, unsigned *num_segs, const
 	int	i, side;
 	segnum_t	curseg = segp-Segments;
 
-	if (curseg >= sizeof(Segments) / sizeof(Segments[0]))
+	if (curseg >= Segments.size())
 		Int3();
 
 	for (i=0; i<num_ignore_segs; i++)

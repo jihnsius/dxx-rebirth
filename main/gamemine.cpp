@@ -666,7 +666,7 @@ int load_mine_data(PHYSFS_file *LoadFile)
 	//==================== READ SEGMENT INFO ===========================
 
 	// New check added to make sure we don't read in too many segments.
-	if ( mine_fileinfo.segment_howmany > MAX_SEGMENTS ) {
+	if ( mine_fileinfo.segment_howmany > Segments.size() ) {
 		mine_fileinfo.segment_howmany = MAX_SEGMENTS;
 		mine_fileinfo.segment2_howmany = MAX_SEGMENTS;
 	}
@@ -976,11 +976,10 @@ int load_mine_data_compiled(PHYSFS_file *LoadFile)
 		Num_segments = PHYSFSX_readShort(LoadFile);
 	else
 		Num_segments = PHYSFSX_readInt(LoadFile);
-	if (((unsigned)Num_segments) >= sizeof(Segments) / sizeof(Segments[0]))
+	if (!(Num_segments < Segments.size()))
 	{
 		return -1;
 	}
-	Assert( Num_segments <= MAX_SEGMENTS );
 
 	for (vertnum_t i = 0; i < Num_vertices; i++)
 		PHYSFSX_readVector( &(Vertices[i]), LoadFile);
