@@ -283,6 +283,7 @@ typedef struct object_rw {
 	short   pad2;
 #endif
 } __pack__ object_rw;
+static_assert(sizeof(object_rw) == 264, "sizeof(object_rw)");
 
 typedef struct obj_position {
 	vms_vector  pos;        // absolute x,y,z coordinate of center of object
