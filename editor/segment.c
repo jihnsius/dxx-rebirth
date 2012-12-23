@@ -1429,7 +1429,7 @@ void med_create_segment(segment *sp,fix cx, fix cy, fix cz, fix length, fix widt
 
 	Num_segments++;
 
-	sp->segnum = 1;						// What to put here?  I don't know.
+	sp->segnum = sp-Segments;						// What to put here?  I don't know.
 	sp2 = &Segment2s[sp->segnum];
 
 	// Form connections to children, of which it has none.
@@ -1496,7 +1496,7 @@ void med_create_new_segment(vms_vector *scale)
 	width = scale->x;
 	height = scale->y;
 
-	sp->segnum = 1;						// What to put here?  I don't know.
+	sp->segnum = sp-Segments;						// What to put here?  I don't know.
 	sp2 = &Segment2s[sp->segnum];
 
 	//	Create relative-to-center vertices, which are the points on the box defined by length, width, height
