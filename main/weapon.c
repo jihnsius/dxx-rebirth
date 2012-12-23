@@ -745,8 +745,11 @@ int pick_up_ammo(int class_flag,int weapon_index,int ammo_count)
 		supposed_weapon=SUPER_LASER_INDEX;  // allotment for stupid way of doing super laser
 
 
-	if (((Controls.fire_primary_state && PlayerCfg.NoFireAutoselect)?0:1) && Players[Player_num].primary_weapon_flags&(1<<weapon_index) && weapon_index>Primary_weapon && old_ammo==0 &&
-		POrderList(weapon_index)<cutpoint && POrderList(weapon_index)<POrderList(supposed_weapon))
+	if (((Controls.fire_primary_state && PlayerCfg.NoFireAutoselect)?0:1) &&
+		Players[Player_num].primary_weapon_flags&(1<<weapon_index) &&
+		weapon_index>Primary_weapon && old_ammo==0 &&
+		POrderList(weapon_index)<cutpoint &&
+		POrderList(weapon_index)<POrderList(supposed_weapon))
 		select_weapon(weapon_index,0,0,1);
 
 	return ammo_count;	//return amount used
