@@ -344,11 +344,12 @@ static int udp_general_packet_ready(int socknum)
 // Gets some text. Returns 0 if nothing on there.
 static int udp_receive_packet(int socknum, ubyte *text, int len, struct _sockaddr *sender_addr)
 {
-	unsigned int clen = sizeof (struct _sockaddr), msglen = 0;
+	unsigned int clen = sizeof (struct _sockaddr);
 
 	if (UDP_Socket[socknum] == -1)
 		return -1;
 
+	ssize_t msglen = 0;
 	if (udp_general_packet_ready(socknum))
 	{
 		msglen = dxx_recvfrom (UDP_Socket[socknum], text, len, 0, (struct sockaddr *)sender_addr, &clen);
