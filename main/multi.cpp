@@ -69,6 +69,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #endif
 #include "automap.h"
 #include "physfsx.h"
+#include "pybinding.h"
 
 static void multi_reset_object_texture(dxxobject *objp);
 static void multi_send_play_by_play(int num,int spnum,int dpnum);
@@ -671,6 +672,7 @@ static void multi_compute_kill(objnum_t killer, objnum_t killed)
 		}
 		else
 			HUD_init_message(HM_MULTI, "%s %s %s.", killed_name, TXT_WAS, TXT_KILLED_BY_NONPLAY );
+		py_notify_player_death_reactor(killed_pnum, killer);
 		return;
 	}
 
@@ -682,6 +684,7 @@ static void multi_compute_kill(objnum_t killer, objnum_t killed)
 				HUD_init_message(HM_MULTI, "You were killed by a mine!");
 			else
 				HUD_init_message(HM_MULTI, "%s was killed by a mine!",killed_name);
+			py_notify_player_death_mine(killed_pnum, killer);
 		}
 		else
 		{
@@ -692,6 +695,7 @@ static void multi_compute_kill(objnum_t killer, objnum_t killed)
 			}
 			else
 				HUD_init_message(HM_MULTI, "%s %s %s.", killed_name, TXT_WAS, TXT_KILLED_BY_ROBOT );
+			py_notify_player_death_robot(killed_pnum, killer);
 		}
 		Players[killed_pnum].net_killed_total++;
 		return;
@@ -705,6 +709,7 @@ static void multi_compute_kill(objnum_t killer, objnum_t killed)
 		sprintf(killer_name, "%s", Players[killer_pnum].callsign);
 
 	// Beyond this point, it was definitely a player-player kill situation
+	py_notify_player_death_player(killed_pnum, killer_pnum);
 
 	if ((killer_pnum < 0) || (killer_pnum >= N_players))
 		Int3(); // See rob, tracking down bug with kill HUD messages

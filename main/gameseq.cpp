@@ -106,6 +106,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "segment.h"
 #include "gameseg.h"
 #include "physfsx.h"
+#include "pybinding.h"
 
 
 void StartNewLevelSecret(int level_num, int page_in_textures);
@@ -528,6 +529,7 @@ fix flash_dist=fl2f(.9);
 //create flash for player appearance
 void create_player_appearance_effect(dxxobject *player_obj)
 {
+	py_notify_create_player_appearance_effect(player_obj);
 	vms_vector pos;
 	dxxobject *effect_obj;
 

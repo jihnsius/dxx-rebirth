@@ -50,6 +50,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "vers_id.h"
 #include "newdemo.h"
 #include "gauges.h"
+#include "pybinding.h"
 
 //version 5  ->  6: added new highest level information
 //version 6  ->  7: stripped out the old saved_game array.
@@ -657,6 +658,7 @@ int read_player_file()
 	strcat(filename, ".plx");
 	read_player_d2x(filename);
 	kc_set_controls();
+	py_notify_read_player_file();
 
 	return EZERO;
 

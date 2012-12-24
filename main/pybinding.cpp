@@ -13,7 +13,10 @@
 #include "../python/defmodules.hpp"
 #include "../python/exception.hpp"
 #include "../python/wrap-object.hpp"
+#include "../python/player.hpp"
 #include "../python/pretty.hpp"
+#include "../python/reactor.hpp"
+#include "../python/robot.hpp"
 #include "../python/script-controls.hpp"
 #include "pybinding.h"
 #include "kconfig.h"
@@ -624,6 +627,69 @@ void py_load_level_hit()
 	guarded_py_call([](){
 		g_wmap.reset();
 		py_call_maybe_null_object(gpy__main__, "notify_load_level");
+	});
+}
+
+void py_notify_read_player_file()
+{
+	guarded_py_call([]() {
+		py_call_maybe_null_object(gpy__main__, "notify_read_player_file");
+	});
+}
+
+void py_notify_create_player_appearance_effect(dxxobject *player_obj)
+{
+	guarded_py_call([player_obj]() {
+		py_call_maybe_null_object(gpy__main__, "notify_create_player_appearance_effect", boost::ref(static_cast<dxxplayer_object &>(*player_obj)));
+	});
+}
+
+void py_notify_player_join(unsigned pnum)
+{
+	guarded_py_call([pnum]() {
+		py_call_maybe_null_object(gpy__main__, "notify_player_join", boost::ref(Players[pnum]));
+	});
+}
+
+void py_notify_player_death_reactor(unsigned killed_pnum, objnum_t killer)
+{
+	guarded_py_call([killed_pnum, killer]() {
+		py_call_maybe_null_object(gpy__main__, "notify_player_death_reactor", boost::ref(Players[killed_pnum]), boost::ref(static_cast<dxxreactor &>(Objects[killer])));
+	});
+}
+
+void py_notify_player_death_mine(unsigned killed_pnum, objnum_t killer)
+{
+	guarded_py_call([killed_pnum, killer]() {
+		py_call_maybe_null_object(gpy__main__, "notify_player_death_mine", boost::ref(Players[killed_pnum]), boost::ref(Objects[killer]));
+	});
+}
+
+void py_notify_player_death_robot(unsigned killed_pnum, objnum_t killer)
+{
+	guarded_py_call([killed_pnum, killer]() {
+		py_call_maybe_null_object(gpy__main__, "notify_player_death_robot", boost::ref(Players[killed_pnum]), boost::ref(static_cast<dxxrobot &>(Objects[killer])));
+	});
+}
+
+void py_notify_player_death_player(unsigned killed_pnum, unsigned killer_pnum)
+{
+	guarded_py_call([killed_pnum, killer_pnum]() {
+		py_call_maybe_null_object(gpy__main__, "notify_player_death_player", boost::ref(Players[killed_pnum]), boost::ref(Players[killer_pnum]));
+	});
+}
+
+void py_notify_player_ship_destroyed()
+{
+	guarded_py_call([](){
+		py_call_maybe_null_object(gpy__main__, "notify_player_ship_destroyed");
+	});
+}
+
+void py_notify_start_endlevel_sequence()
+{
+	guarded_py_call([](){
+		py_call_maybe_null_object(gpy__main__, "notify_start_endlevel_sequence");
 	});
 }
 #endif

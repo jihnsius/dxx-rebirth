@@ -68,6 +68,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #endif
 #include "physfsx.h"
 #include "robot.h"
+#include "pybinding.h"
 
 #ifdef EDITOR
 #include "editor/editor.h"
@@ -291,6 +292,7 @@ int endlevel_movie_played = MOVIE_NOT_PLAYED;
 
 void start_endlevel_sequence()
 {
+	py_notify_start_endlevel_sequence();
 
 
 	reset_rear_view(); //turn off rear view if set - NOTE: make sure this happens before we pause demo recording!!

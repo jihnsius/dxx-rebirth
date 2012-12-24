@@ -56,6 +56,7 @@
 #include "config.h"
 #include "vers_id.h"
 #include "u_mem.h"
+#include "pybinding.h"
 
 // Prototypes
 void net_udp_init();
@@ -1262,6 +1263,7 @@ static net_udp_new_player(UDP_sequence_packet *their)
 	ClipRank (&their->player.rank);
 
 	HUD_init_message(HM_MULTI, "%s'%s'(%i) %s\n",PlayerCfg.NoRankings ? "" : RankStrings[their->player.rank],their->player.callsign, pnum, TXT_JOINING);
+	py_notify_player_join(pnum);
 
 	multi_make_ghost_player(pnum);
 

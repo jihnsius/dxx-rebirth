@@ -70,6 +70,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #ifdef EDITOR
 #include "editor/editor.h"
 #endif
+#include "pybinding.h"
 
 #include <algorithm>
 using std::min;
@@ -1394,6 +1395,7 @@ void dead_player_frame(void)
 
 		if (time_dead > DEATH_SEQUENCE_EXPLODE_TIME) {
 			if (!Player_exploded) {
+				py_notify_player_ship_destroyed();
 
 			if (Players[Player_num].hostages_on_board > 1)
 				HUD_init_message(HM_DEFAULT, TXT_SHIP_DESTROYED_2, Players[Player_num].hostages_on_board);
