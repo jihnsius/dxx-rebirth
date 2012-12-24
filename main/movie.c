@@ -81,6 +81,8 @@ char movielib_files[5][FILENAME_LEN] = {"intro","other","robots","oem"};
 char movielib_files[4][FILENAME_LEN] = {"intro","other","robots"};
 #endif
 
+#undef FILENAME_LEN
+#define FILENAME_LEN	256
 #define N_MOVIE_LIBS (sizeof(movielib_files) / sizeof(*movielib_files))
 #define N_BUILTIN_MOVIE_LIBS (N_MOVIE_LIBS - 1)
 #define EXTRA_ROBOT_LIB N_BUILTIN_MOVIE_LIBS
@@ -682,7 +684,7 @@ static void init_movie(const char *movielib, int required)
 {
 	char filename[FILENAME_LEN];
 
-	sprintf(filename, "%s-%s.mvl", movielib, GameArg.GfxMovieHires?"h":"l");
+	snprintf(filename, sizeof(filename), "%s-%s.mvl", movielib, GameArg.GfxMovieHires?"h":"l");
 
 	if (!PHYSFSX_contfile_init(filename, 0))
 	{
