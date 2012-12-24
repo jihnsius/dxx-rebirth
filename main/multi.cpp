@@ -283,7 +283,7 @@ void ClipRank (ubyte *rank)
 //  Functions that replace what used to be macros
 //
 
-objnum_t objnum_remote_to_local(int remote_objnum, int owner)
+objnum_t objnum_remote_to_local(unsigned remote_objnum, int owner)
 {
 	// Map a remote object number from owner to a local object number
 
@@ -297,7 +297,7 @@ objnum_t objnum_remote_to_local(int remote_objnum, int owner)
 	if (owner == -1)
 		return objnum_t(remote_objnum);
 
-	if ((remote_objnum < 0) || (remote_objnum >= MAX_OBJECTS))
+	if ((remote_objnum >= MAX_OBJECTS))
 		return object_none;
 
 	result = remote_to_local[owner][remote_objnum];

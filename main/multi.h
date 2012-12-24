@@ -217,7 +217,7 @@ extern const char *const multi_allow_powerup_text[MULTI_ALLOW_POWERUP_MAX];
 
 extern int GetMyNetRanking();
 extern void ClipRank (ubyte *rank);
-objnum_t objnum_remote_to_local(int remote_obj, int owner);
+objnum_t objnum_remote_to_local(unsigned remote_obj, int owner);
 int objnum_local_to_remote(objnum_t local_obj, sbyte *owner);
 void map_objnum_local_to_remote(objnum_t local, int remote, int owner);
 void map_objnum_local_to_local(objnum_t objnum);
