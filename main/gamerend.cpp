@@ -443,8 +443,13 @@ static const char *get_missile_name(const unsigned laser_type)
 	}
 }
 
+static int allow_show_player_view(int player)
+{
+	return (player!=-1 && Players[player].connected && ((Game_mode & GM_MULTI_COOP) || ((Game_mode & GM_TEAM) && (get_team(player) == get_team(Player_num)))));
+}
+
 static void show_one_extra_view(const InsetWindowIndex w);
-static void show_extra_views()
+void show_extra_views()
 {
 	int did_missile_view=0;
 	int save_newdemo_state = Newdemo_state;
@@ -579,6 +584,29 @@ static void show_extra_views()
 		}
 	}
 
+	if (Automap_active)
+	{
+		for (unsigned u = iwiv_count - !!did_missile_view; u -- != iwiv_0;)
+		{
+			if (PlayerCfg.Cockpit3DView[u] != CV_NONE && (PlayerCfg.Cockpit3DView[u] != CV_COOP || !allow_show_player_view(Coop_view_player[u])))
+				continue;
+			const char *callsign = "";
+			if (Viewer == ConsoleObject)
+				callsign = "SHIP";
+			else
+			{
+				for (unsigned p = 0; p != N_players; ++p)
+					if (Viewer == &Objects[Players[p].objnum])
+					{
+						callsign = Players[p].callsign;
+						break;
+					}
+			}
+			do_cockpit_window_view(iwi_instance(u),Viewer,0,WBU_COOP,callsign);
+			break;
+		}
+	}
+
 	for (w=iwiv_0;w<iwiv_count;w++) {
 		const struct InsetWindowIndex iw = iwi_instance(w);
 
@@ -627,7 +655,7 @@ static void show_one_extra_view(const InsetWindowIndex w)
 
 	         RenderingType=255; // don't handle coop stuff
 
-				if (player!=-1 && Players[player].connected && ((Game_mode & GM_MULTI_COOP) || ((Game_mode & GM_TEAM) && (get_team(player) == get_team(Player_num)))))
+				if (allow_show_player_view(player))
 				{
 					dxxobject *inset_viewer = &Objects[Players[Coop_view_player[iwi_value(w)]].objnum];
 					const char *callsign = Players[Coop_view_player[iwi_value(w)]].callsign;

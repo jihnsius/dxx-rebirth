@@ -233,6 +233,7 @@ void flickering_light_read(flickering_light *fl, PHYSFS_file *fp);
 void flickering_light_write(flickering_light *fl, PHYSFS_file *fp);
 
 
+void show_extra_views();
 void game_render_frame_mono(int flip);
 void game_leave_menus(void);
 

@@ -559,6 +559,8 @@ static void draw_automap(automap *am)
 		FixedStepCalc();
 	}
 	am->t1 = am->t2;
+	gr_set_current_canvas(NULL);
+	show_extra_views();
 }
 
 #define MAP_BACKGROUND_FILENAME ((HIRESMODE && PHYSFSX_exists("mapb.pcx",1))?"MAPB.PCX":"MAP.PCX")
