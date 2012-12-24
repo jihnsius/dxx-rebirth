@@ -1,6 +1,9 @@
 #include <boost/python/class.hpp>
+#include <boost/python/def.hpp>
 #include <boost/python/scope.hpp>
 #include "kconfig.h"
+#include "playsave.h"
+#include "gauges.h"
 #include "script-controls.hpp"
 #include "wrap-container.hpp"
 #include "wrap-object.hpp"
@@ -169,18 +172,117 @@ static void define_script_input_class(class_<script_control_info, boost::noncopy
 	freeze_attributes(si);
 }
 
+static void check_player_index_valid(unsigned ip)
+{
+	if (ip >= MAX_PLAYERS)
+	{
+		PyErr_SetString(PyExc_IndexError, "player index above maximum");
+		boost::python::throw_error_already_set();
+	}
+}
+
+static void check_player_index_used(unsigned ip)
+{
+	if (ip >= N_players)
+	{
+		PyErr_SetString(PyExc_IndexError, "player index not in use");
+		boost::python::throw_error_already_set();
+	}
+}
+
+static unsigned check_inset_window_index(unsigned which)
+{
+	if (which >= sizeof(PlayerCfg.Cockpit3DView) / sizeof(PlayerCfg.Cockpit3DView[0]))
+	{
+		PyErr_SetString(PyExc_IndexError, "invalid inset window");
+		boost::python::throw_error_already_set();
+	}
+	return which;
+}
+
+static unsigned check_inset_window_index(script_control_info::per_inset_window& w)
+{
+	return check_inset_window_index(&w - &ScriptControls.inset[0]);
+}
+
+static void set_main_view_to_player_idx(unsigned ip)
+{
+	check_player_index_used(ip);
+	const objnum_t objnum = Players[ip].objnum;
+	if (objnum > Highest_object_index)
+		return;
+	Viewer = &Objects[objnum];
+}
+
+static void set_main_view_to_player_ref(const player& o)
+{
+	set_main_view_to_player_idx(&o - Players);
+}
+
+static cockpit_view_t get_view_type(script_control_info::per_inset_window& w)
+{
+	return PlayerCfg.Cockpit3DView[check_inset_window_index(w)];
+}
+
+static unsigned set_view_to_value(script_control_info::per_inset_window& w, cockpit_view_t value)
+{
+	const unsigned which = check_inset_window_index(w);
+	PlayerCfg.Cockpit3DView[which] = value;
+	return which;
+}
+
+static object get_view_player(script_control_info::per_inset_window& w)
+{
+	const unsigned which = check_inset_window_index(w);
+	if (PlayerCfg.Cockpit3DView[which] != CV_COOP || Coop_view_player[which] >= N_players)
+		return object();
+	return object(boost::ref(Players[which]));
+}
+
+template <cockpit_view_t cv>
+static void set_view_to_cockpit_view(script_control_info::per_inset_window& w)
+{
+	set_view_to_value(w, cv);
+}
+
+static void set_view_to_player_idx(script_control_info::per_inset_window& w, unsigned ip)
+{
+	check_player_index_valid(ip);
+	Coop_view_player[set_view_to_value(w, CV_COOP)] = ip;
+}
+
+static void set_view_to_player_ref(script_control_info::per_inset_window& w, const player& o)
+{
+	set_view_to_player_idx(w, &o - Players);
+}
+
 static void define_output_class()
 {
 	struct tag_output {};
 	scope s(class_<tag_output, boost::noncopyable>("output", no_init));
+	enum_<cockpit_view_t>("view_type")
+		.value("none", CV_NONE)
+		.value("escort", CV_ESCORT)
+		.value("rear", CV_REAR)
+		.value("coop", CV_COOP)
+		.value("marker", CV_MARKER)
+		;
 	{
 		struct tag_main_window {};
 		scope mw(class_<tag_main_window, boost::noncopyable>("main", no_init));
 		define_script_input_xyz<&script_control_info::glow_main>(mw, "glow");
+		def("set_view_player", set_main_view_to_player_ref);
+		def("set_view_player", set_main_view_to_player_idx);
 	}
 	class_<script_control_info::per_inset_window, boost::noncopyable> piw("_per_inset_window", no_init);
 	piw
 		.add_property("glow", &script_control_info::per_inset_window::glow)
+		.add_property("view_type", get_view_type)
+		.def("get_view_player", get_view_player)
+		.def("set_view_none", set_view_to_cockpit_view<CV_NONE>)
+		.def("set_view_rear", set_view_to_cockpit_view<CV_REAR>)
+		.def("set_view_player", set_view_to_player_ref)
+		.def("set_view_player", set_view_to_player_idx)
 		;
 	freeze_attributes(piw);
 	class_<inset_window_container> iwc("inset", no_init);
