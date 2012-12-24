@@ -1265,6 +1265,7 @@ int editor_handler(UI_DIALOG *dlg, d_event *event, void *data)
 		int	xcrd,ycrd;
 		int side,face,poly,tmap;
 		segnum_t seg;
+		objnum_t obj;
 
 		if (render_3d_in_big_window) {
 			xcrd = LargeViewBox->b1_drag_x1;
@@ -1277,18 +1278,17 @@ int editor_handler(UI_DIALOG *dlg, d_event *event, void *data)
 
 		//Int3();
 
-		if (find_seg_side_face(xcrd,ycrd,&seg,&side,&face,&poly)) {
+		if (find_seg_side_face(xcrd,ycrd,&seg,&obj,&side,&face,&poly)) {
 
 
-			if (seg<0) {							//found an object
+			if (obj != object_none) {							//found an object
 
-				Cur_object_index = -seg-1;
+				Cur_object_index = obj;
 				editor_status("Object %d selected.",Cur_object_index);
 
 				Update_flags |= UF_ED_STATE_CHANGED;
 			}
-			else {
-
+			else if (seg != segment_none) {
 				//	See if either shift key is down and, if so, assign texture map
 				if (keyd_pressed[KEY_LSHIFT] || keyd_pressed[KEY_RSHIFT]) {
 					Cursegp = &Segments[seg];

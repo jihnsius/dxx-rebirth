@@ -55,7 +55,7 @@ void render_frame(fix eye_offset, int window_num);  //draws the world into the c
 // cycle the flashing light for when mine destroyed
 void flash_frame();
 
-int find_seg_side_face(short x,short y,segnum_t *seg,int *side,int *face,int *poly);
+int find_seg_side_face(short x,short y,segnum_t *seg,objnum_t *obj,int *side,int *face,int *poly);
 
 // these functions change different rendering parameters
 // all return the new value of the parameter

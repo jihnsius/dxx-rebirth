@@ -104,6 +104,7 @@ int Window_clip_left,Window_clip_top,Window_clip_right,Window_clip_bot;
 int _search_mode = 0;			//true if looking for curseg,side,face
 short _search_x,_search_y;	//pixel we're looking at
 static segnum_t found_seg;
+static objnum_t found_obj;
 int found_side,found_face,found_poly;
 #else
 #define _search_mode 0
@@ -393,6 +394,7 @@ static void check_face(segnum_t segnum, int sidenum, int facenum, int nv, int *v
 
 		if (gr_ugpixel(&grd_curcanv->cv_bitmap,_search_x,_search_y) == 1) {
 			found_seg = segnum;
+			found_obj = object_none;
 			found_side = sidenum;
 			found_face = facenum;
 		}
@@ -619,7 +621,8 @@ static void render_object_search(dxxobject *obj)
 	if (changed) {
 		if (obj->segnum != segment_none)
 			Cursegp = &Segments[obj->segnum];
-		found_seg = -(obj-Objects+1);
+		found_seg = segment_none;
+		found_obj = obj-Objects;
 	}
 }
 #endif
@@ -2469,13 +2472,14 @@ done_rendering:
 //finds what segment is at a given x&y -  seg,side,face are filled in
 //works on last frame rendered. returns true if found
 //if seg<0, then an object was found, and the object number is -seg-1
-int find_seg_side_face(short x,short y,segnum_t *seg,int *side,int *face,int *poly)
+int find_seg_side_face(short x,short y,segnum_t *seg,objnum_t *obj,int *side,int *face,int *poly)
 {
 	_search_mode = -1;
 
 	_search_x = x; _search_y = y;
 
 	found_seg = segment_none;
+	found_obj = object_none;
 
 	if (render_3d_in_big_window) {
 		gr_set_current_canvas(LargeView.ev_canv);
@@ -2490,11 +2494,12 @@ int find_seg_side_face(short x,short y,segnum_t *seg,int *side,int *face,int *po
 	_search_mode = 0;
 
 	*seg = found_seg;
+	*obj = found_obj;
 	*side = found_side;
 	*face = found_face;
 	*poly = found_poly;
 
-	return (found_seg!=segment_none);
+	return (found_seg!=segment_none || found_obj != object_none);
 
 }
 
