@@ -1037,7 +1037,7 @@ void apply_damage_to_controlcen(dxxobject *controlcen, fix damage, objnum_t who)
 	if ( controlcen->shields >= 0 )
 		controlcen->shields -= damage;
 
-	if ( (controlcen->shields < 0) && !(controlcen->flags&(OF_EXPLODING|OF_DESTROYED)) ) {
+	if ( !(controlcen->shields >= 0) && !(controlcen->flags&(OF_EXPLODING|OF_DESTROYED)) ) {
 
 		do_controlcen_destroyed_stuff(controlcen);
 
