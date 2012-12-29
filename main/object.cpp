@@ -1464,8 +1464,6 @@ void dead_player_frame(void)
 		time_dead = 0;
 }
 
-int Killed_in_frame = -1;
-short Killed_objnum = -1;
 
 //	------------------------------------------------------------------------------------------------------------------
 static void start_player_death_sequence(dxxobject *player)
@@ -1484,8 +1482,6 @@ static void start_player_death_sequence(dxxobject *player)
 	if (!(Game_mode & GM_MULTI))
 		HUD_clear_messages();
 
-	Killed_in_frame = FrameCount;
-	Killed_objnum = player-Objects;
 	Death_sequence_aborted = 0;
 
 	#ifdef NETWORK

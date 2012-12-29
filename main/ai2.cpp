@@ -1367,9 +1367,6 @@ void do_ai_robot_hit(dxxobject *objp, int type)
 }
 #ifndef NDEBUG
 int	Do_ai_flag=1;
-int	Cvv_test=0;
-int	Cvv_last_time[MAX_OBJECTS];
-int	Gun_point_hack=0;
 #endif
 
 int		Robot_sound_volume=DEFAULT_ROBOT_SOUND_VOLUME;
