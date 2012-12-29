@@ -1233,7 +1233,7 @@ void recreate_thief(dxxobject *objp)
 //	----------------------------------------------------------------------------
 #define	THIEF_ATTACK_TIME		(F1_0*10)
 
-fix	Thief_wait_times[NDL] = {F1_0*30, F1_0*25, F1_0*20, F1_0*15, F1_0*10};
+static const fix	Thief_wait_times[NDL] = {F1_0*30, F1_0*25, F1_0*20, F1_0*15, F1_0*10};
 
 //	-------------------------------------------------------------------------------------------------
 void do_thief_frame(dxxobject *objp, fix dist_to_player, int player_visibility, vms_vector *vec_to_player)
