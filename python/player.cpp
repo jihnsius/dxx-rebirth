@@ -147,6 +147,7 @@ void define_player_module(object& __main__, scope& scope_dxx)
 		.add_property("has_afterburner", &get_player_misc_flag<PLAYER_FLAGS_AFTERBURNER>)
 		.add_property("has_headlight", &get_player_misc_flag<PLAYER_FLAGS_HEADLIGHT>)
 		.add_property("headlight_on", &get_player_misc_flag<PLAYER_FLAGS_HEADLIGHT_ON>, &set_player_headlight)
+		.def("__eq__", &equal_internal_reference<player, player>)
 		;
 	DEFINE_COMMON_CONTAINER_EXPORTS(player_object);
 	define_common_container_exports<player_container>(scope_dxx, "player_container", "players");

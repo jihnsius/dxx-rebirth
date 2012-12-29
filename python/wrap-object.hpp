@@ -43,6 +43,12 @@ static class_<T, X1, X2, X3>& define_class_properties(class_<T, X1, X2, X3>& c)
 	return c;
 }
 
+template <typename T1, typename T2>
+static int equal_internal_reference(const T1& a, const T2& b)
+{
+	return &a == &b;
+}
+
 template <typename T, typename CT>
 static void define_common_object_exports(boost::python::object& __main__, const char *N, const char *N_type)
 {
@@ -50,6 +56,11 @@ static void define_common_object_exports(boost::python::object& __main__, const 
 	enum_<typename T::subtype_t> e(N_type);
 	define_enum_values(e);
 	class_<T, bases<dxxobject>, boost::noncopyable> c(N, no_init);
+	c
+		.def("__eq__", &equal_internal_reference<T, T>)
+		.def("__eq__", &equal_internal_reference<T, dxxobject>)
+		.def("__eq__", &equal_internal_reference<dxxobject, T>)
+		;
 	c.add_property("type", &CT::template get_contained_value<typename T::subtype_t, ubyte, &T::id>);
 	setattr(__main__, N, define_class_properties(c));
 }
