@@ -1080,7 +1080,8 @@ static void collide_player_and_marker( dxxobject * marker, dxxobject * playerobj
 
 		if (Game_mode & GM_MULTI)
 		{
-			drawn = HUD_init_message(HM_DEFAULT|HM_MAYDUPL, "MARKER %s: %s",Players[marker->id/2].callsign,MarkerMessage[marker->id]);
+			unsigned p = marker->id/2;
+			drawn = HUD_init_message(HM_DEFAULT|HM_MAYDUPL, "MARKER %s: %s",(p >= N_players)?"":Players[p].callsign,MarkerMessage[marker->id]);
 		}
 		else
 		{
