@@ -331,7 +331,6 @@ static int Pigfile_initialized=0;
 #define PIGFILE_VERSION         2
 
 
-int request_cd(void);
 
 
 //initialize a pigfile, reading headers
