@@ -572,10 +572,9 @@ multi_sort_kill_list(void)
 	// Sort the kills list each time a new kill is added
 
 	int kills[MAX_PLAYERS];
-	int i;
 	int changed = 1;
 
-	for (i = 0; i < MAX_PLAYERS; i++)
+	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{
 		if (Game_mode & GM_MULTI_COOP)
 			kills[i] = Players[i].score;
@@ -590,17 +589,17 @@ multi_sort_kill_list(void)
 		else
 			kills[i] = Players[i].net_kills_total;
 	}
+	if (N_players < 2)
+		return;
 
 	while (changed)
 	{
 		changed = 0;
-		for (i = 0; i < N_players-1; i++)
+		for (int i = 0; i < N_players-1; i++)
 		{
 			if (kills[sorted_kills[i]] < kills[sorted_kills[i+1]])
 			{
-				changed = sorted_kills[i];
-				sorted_kills[i] = sorted_kills[i+1];
-				sorted_kills[i+1] = changed;
+				std::swap(sorted_kills[i], sorted_kills[i+1]);
 				changed = 1;
 			}
 		}
