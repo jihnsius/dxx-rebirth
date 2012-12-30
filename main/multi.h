@@ -333,7 +333,7 @@ extern char Network_message[MAX_MESSAGE_LEN];
 extern int Network_message_reciever;
 
 // Which player 'owns' each local object for network purposes
-extern sbyte object_owner[MAX_OBJECTS];
+extern object_array_template_t<sbyte> object_owner;
 
 extern int multi_quit_game;
 

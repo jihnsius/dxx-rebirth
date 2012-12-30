@@ -124,7 +124,7 @@ char multibuf[MAX_MULTI_MESSAGE_LEN+4];            // This is where multiplayer 
 
 objnum_t remote_to_local[MAX_PLAYERS][MAX_OBJECTS];  // Remote object number for each local object
 short local_to_remote[MAX_OBJECTS];
-sbyte object_owner[MAX_OBJECTS];   // Who created each object in my universe, -1 = loaded at start
+object_array_template_t<sbyte> object_owner;   // Who created each object in my universe, -1 = loaded at start
 
 objnum_t   Net_create_objnums[MAX_NET_CREATE_OBJECTS]; // For tracking object creation that will be sent to remote
 int   Net_create_loc = 0;       // pointer into previous array
@@ -381,7 +381,7 @@ void reset_network_objects()
 {
 	memset(local_to_remote, -1, MAX_OBJECTS*sizeof(short));
 	memset(remote_to_local, -1, MAX_PLAYERS*MAX_OBJECTS*sizeof(short));
-	memset(object_owner, -1, MAX_OBJECTS);
+	object_owner.fill(-1);
 }
 
 int multi_objnum_is_past(objnum_t objnum)
