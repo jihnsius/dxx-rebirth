@@ -75,7 +75,7 @@ using std::max;
 
 ubyte (*ogl_pal)[256*3]=&gr_palette;
 
-int last_width=-1,last_height=-1;
+unsigned last_width,last_height;
 int GL_TEXTURE_2D_enabled=-1;
 GLfloat ogl_maxanisotropy = 0;
 

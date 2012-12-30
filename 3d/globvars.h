@@ -22,7 +22,7 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #define MAX_POINTS_IN_POLY 100
 
-extern int Canvas_width,Canvas_height;	//the actual width & height
+extern unsigned Canvas_width,Canvas_height;	//the actual width & height
 extern fix Canv_w2,Canv_h2;				//fixed-point width,height/2
 
 #ifdef __powerc
