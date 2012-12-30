@@ -624,7 +624,7 @@ g3s_lrgb compute_seg_dynamic_light(segnum_t segnum)
 	return seg_lrgb;
 }
 
-g3s_lrgb object_light[MAX_OBJECTS];
+static object_array_template_t<g3s_lrgb> object_light;
 static object_array_template_t<int> object_sig;
 dxxobject *old_viewer;
 int reset_lighting_hack;
