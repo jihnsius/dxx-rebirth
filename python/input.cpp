@@ -4,6 +4,7 @@
 #include "kconfig.h"
 #include "playsave.h"
 #include "gauges.h"
+#include "hudmsg.h"
 #include "script-controls.hpp"
 #include "wrap-container.hpp"
 #include "wrap-object.hpp"
@@ -256,8 +257,26 @@ static void set_view_to_player_ref(script_control_info::per_inset_window& w, con
 	set_view_to_player_idx(w, &o - Players);
 }
 
+static void pyprint_norm(const char *s)
+{
+	con_printf(CON_NORMAL, "%s\n", s);
+}
+
+static void pyprint_prio(int prio, const char *s)
+{
+	con_printf(prio, "%s\n", s);
+}
+
+static void pyprint_hudnorm(const char *s)
+{
+	HUD_init_message(HM_DEFAULT, "%s", s);
+}
+
 static void define_output_class()
 {
+	def("cprint", pyprint_norm);
+	def("cprint", pyprint_prio);
+	def("hprint", pyprint_hudnorm);
 	struct tag_output {};
 	scope s(class_<tag_output, boost::noncopyable>("output", no_init));
 	enum_<cockpit_view_t>("view_type")
