@@ -163,6 +163,15 @@ typedef struct explosion_info {
     objnum_t   next_attach;        // next explosion in attach list
 } explosion_info;
 
+typedef struct explosion_info_rw {
+    fix     spawn_time;         // when lifeleft is < this, spawn another
+    fix     delete_time;        // when to delete object
+    short   delete_objnum;      // and what object to delete
+    short   attach_parent;      // explosion is attached to this object
+    short   prev_attach;        // previous explosion in attach list
+    short   next_attach;        // next explosion in attach list
+} __pack__ explosion_info_rw;
+
 typedef struct light_info {
     fix     intensity;          // how bright the light is
 } __pack__ light_info;
@@ -286,7 +295,7 @@ typedef struct object_rw {
 	// control info, determined by CONTROL_TYPE
 	union {
 		laser_info_rw   laser_info;
-		explosion_info  expl_info;      // NOTE: debris uses this also
+		explosion_info_rw  expl_info;      // NOTE: debris uses this also
 		ai_static_rw    ai_info;
 		struct light_info      light_info;     // why put this here?  Didn't know what else to do with it.
 		powerup_info_rw powerup_info;
