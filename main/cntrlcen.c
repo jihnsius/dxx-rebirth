@@ -52,7 +52,7 @@ int Num_reactors=0;
 
 control_center_triggers ControlCenterTriggers;
 
-int	N_controlcen_guns;
+static unsigned	N_controlcen_guns;
 int	Control_center_been_hit;
 int	Control_center_player_been_seen;
 int	Control_center_next_fire_time;
