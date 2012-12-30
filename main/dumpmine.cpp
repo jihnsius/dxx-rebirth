@@ -528,15 +528,16 @@ static void write_trigger_text(PHYSFS_file *my_file)
 			PHYSFSX_printf(my_file, "[%03u:%i] ", static_cast<unsigned>(Triggers[i].seg[j]), Triggers[i].side[j]);
 
 		//	Find which wall this trigger is connected to.
-		for (w=0; w<Num_walls; w++)
-			if (Walls[w].trigger == i)
+		for (w=0;; w++) {
+			if (w>=Num_walls) {
+				err_printf(my_file, "\nError: Trigger %i is not connected to any wall, so it can never be triggered.\n", i);
 				break;
-
-		if (w == Num_walls)
-			err_printf(my_file, "\nError: Trigger %i is not connected to any wall, so it can never be triggered.\n", i);
-		else
-			PHYSFSX_printf(my_file, "Attached to seg:side = %u:%i, wall %i\n", static_cast<unsigned>(Walls[w].segnum), Walls[w].sidenum, Segments[Walls[w].segnum].sides[Walls[w].sidenum].wall_num);
-
+			}
+			if (Walls[w].trigger == i) {
+				PHYSFSX_printf(my_file, "Attached to seg:side = %u:%i, wall %i\n", static_cast<unsigned>(Walls[w].segnum), Walls[w].sidenum, Segments[Walls[w].segnum].sides[Walls[w].sidenum].wall_num);
+				break;
+			}
+		}
 	}
 
 }
