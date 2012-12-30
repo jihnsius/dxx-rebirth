@@ -22,6 +22,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <array>
 
 #include "pstypes.h"
 #include "inferno.h"
@@ -444,12 +445,11 @@ int load_mine_data(PHYSFS_file *LoadFile)
 	char 	*temptr;
 	int	mine_start = PHYSFS_tell(LoadFile);
 	char old_tmap_list[MAX_TEXTURES][FILENAME_LEN];
-	short tmap_times_used[MAX_TEXTURES];
+	std::array<short, MAX_TEXTURES> tmap_times_used;
 
 	fuelcen_reset();
 
-	for (unsigned i=0; i<sizeof(tmap_times_used)/sizeof(tmap_times_used[0]); i++ )
-		tmap_times_used[i] = 0;
+	tmap_times_used.fill(0);
 
 	#ifdef EDITOR
 	// Create a new mine to initialize things.
