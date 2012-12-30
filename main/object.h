@@ -154,7 +154,7 @@ typedef struct laser_info {
 	int     parent_signature;   // The object's parent's signature...
 	fix64   creation_time;      // Absolute time of creation.
 	objnum_t   last_hitobj;        // For persistent weapons (survive object collision), object it most recently hit.
-	ubyte   hitobj_list[MAX_OBJECTS]; // list of all objects persistent weapon has already damaged (useful in case it's in contact with two objects at the same time)
+	object_array_template_t<ubyte>   hitobj_list; // list of all objects persistent weapon has already damaged (useful in case it's in contact with two objects at the same time)
 	objnum_t   track_goal;         // Object this object is tracking.
 	fix     multiplier;         // Power if this is a fusion bolt (or other super weapon to be added).
 } laser_info;
