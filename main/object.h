@@ -129,7 +129,21 @@ typedef struct physics_info {
 	vms_vector  rotvel;     // rotational velecity (angles)
 	vms_vector  rotthrust;  // rotational acceleration
 	fixang      turnroll;   // rotation caused by turn banking
-	ushort      flags;      // misc physics flags
+	union {
+		ushort      flags;      // misc physics flags
+		struct {
+			ubyte flag_turnroll : 1,
+				  flag_levelling : 1,
+				  flag_bounce : 1,
+				  flag_wiggle : 1,
+				  flag_stick : 1,
+				  flag_persistent : 1,
+				  flag_uses_thrust : 1,
+				  flag_bounced_once : 1,
+				  flag_free_spinning : 1,
+				  flag_bounces_twice : 1;
+		};
+	};
 } __pack__ physics_info;
 
 // stuctures for different kinds of simulation
