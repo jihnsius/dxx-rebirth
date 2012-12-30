@@ -189,7 +189,7 @@ static int nd_record_v_recordframe = 1;
 static fix64 nd_record_v_recordframe_last_time = 0;
 static int nd_record_v_juststarted = 0;
 static sbyte nd_record_v_no_space;
-static sbyte nd_record_v_objs[MAX_OBJECTS];
+static object_array_template_t<sbyte> nd_record_v_objs;
 static sbyte nd_record_v_viewobjs[MAX_OBJECTS];
 static sbyte nd_record_v_rendering[32];
 static int nd_record_v_player_energy = -1;
@@ -978,9 +978,9 @@ void newdemo_record_start_frame(fix frame_time )
 
 		for (i=0;i<MAX_OBJECTS;i++)
 		{
-			nd_record_v_objs[i]=0;
 			nd_record_v_viewobjs[i]=0;
 		}
+		nd_record_v_objs.fill(0);
 		for (i=0;i<32;i++)
 			nd_record_v_rendering[i]=0;
 
