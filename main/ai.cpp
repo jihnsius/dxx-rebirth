@@ -1407,7 +1407,7 @@ static void set_player_awareness_all(void)
 	process_awareness_events();
 
 	for (objnum_t i=object_first; i<=Highest_object_index; i++)
-		if (Objects[i].control_type == CT_AI) {
+		if (Objects[i].type == OBJ_ROBOT && Objects[i].control_type == CT_AI) {
 			if (New_awareness[Objects[i].segnum] > Ai_local_info[i].player_awareness_type) {
 				Ai_local_info[i].player_awareness_type = New_awareness[Objects[i].segnum];
 				Ai_local_info[i].player_awareness_time = PLAYER_AWARENESS_INITIAL_TIME;
