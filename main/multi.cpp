@@ -448,7 +448,7 @@ multi_endlevel_score(void)
 
 	for (i=0;i<MAX_POWERUP_TYPES;i++)
 	{
-		MaxPowerupsAllowed[i]=0;
+		MaxPowerupsAllowed[i]=60;
 		PowerupsInMine[i]=0;
 	}
 }
@@ -494,7 +494,7 @@ multi_new_game(void)
 
 	for (i=0;i<MAX_POWERUP_TYPES;i++)
 	{
-		MaxPowerupsAllowed[i]=0;
+		MaxPowerupsAllowed[i]=60;
 		PowerupsInMine[i]=0;
 	}
 

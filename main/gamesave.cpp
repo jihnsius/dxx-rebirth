@@ -1202,7 +1202,7 @@ int load_level(const char * filename_passed)
 	 {
 	  for (i=0;i<MAX_POWERUP_TYPES;i++)
 		{
-			MaxPowerupsAllowed[i]=0;
+			MaxPowerupsAllowed[i]=60;
 			PowerupsInMine[i]=0;
 		}
 	 }
