@@ -1628,7 +1628,7 @@ static spin_object(dxxobject *obj)
 int Drop_afterburner_blob_flag;		//ugly hack
 
 //	Time at which this object last created afterburner blobs.
-fix64	Last_afterburner_time[MAX_OBJECTS];
+static object_array_template_t<fix64>	Last_afterburner_time;
 
 //--------------------------------------------------------------------
 //move an object for the current frame
