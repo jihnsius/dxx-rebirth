@@ -410,6 +410,13 @@ static void nd_read_int(int *i)
 		*i = SWAPINT(*i);
 }
 
+static void nd_read_uint(unsigned *i)
+{
+	newdemo_read(i, 4, 1);
+	if (swap_endian)
+		*i = SWAPINT(*i);
+}
+
 static void nd_read_segnum_int(segnum_t *s)
 {
 	int i;
@@ -2806,7 +2813,7 @@ static int newdemo_read_frame_information(int rewrite)
 
 			if (nd_playback_v_juststarted)
 			{
-				nd_read_int (&Num_walls);
+				nd_read_uint (&Num_walls);
 				if (rewrite)
 					nd_write_int (Num_walls);
 				for (i=0;i<Num_walls;i++)    // restore the walls

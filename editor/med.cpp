@@ -1093,7 +1093,7 @@ int editor_handler(UI_DIALOG *, d_event *event, void *)
 	if (event->type == EVENT_IDLE)
 	{
 		check_wall_validity();
-		Assert(Num_walls>=0);
+		Assert(Num_walls<=MAX_WALLS);
 
 		if (Gameview_lockstep) {
 			static segment *old_cursegp=NULL;

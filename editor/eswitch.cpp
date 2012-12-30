@@ -236,13 +236,13 @@ int remove_trigger_num(int trigger_num)
 {
 	if (trigger_num != -1)
 	{
-		int t, w;
+		int t;
 	
 		Num_triggers--;
 		for (t = trigger_num; t < Num_triggers; t++)
 			Triggers[t] = Triggers[t + 1];
 	
-		for (w = 0; w < Num_walls; w++)
+		for (unsigned w = 0; w < Num_walls; w++)
 		{
 			if (Walls[w].trigger == trigger_num)
 				Walls[w].trigger = -1;	// a trigger can be shared by multiple walls

@@ -60,7 +60,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define	BOSS_LOCKED_DOOR_SIDE	5
 
 wall Walls[MAX_WALLS];					// Master walls array
-int Num_walls=0;							// Number of walls
+unsigned Num_walls;							// Number of walls
 
 wclip WallAnims[MAX_WALL_ANIMS];		// Wall animations
 int Num_wall_anims;
@@ -1143,13 +1143,7 @@ void wall_toggle(segnum_t segnum, int side)
 // Tidy up Walls array for load/save purposes.
 void reset_walls()
 {
-	int i;
-
-	if (Num_walls < 0) {
-		return;
-	}
-
-	for (i=Num_walls;i<MAX_WALLS;i++) {
+	for (unsigned i=Num_walls;i<MAX_WALLS;i++) {
 		Walls[i].type = WALL_NORMAL;
 		Walls[i].flags = 0;
 		Walls[i].hps = 0;

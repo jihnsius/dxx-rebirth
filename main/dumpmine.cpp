@@ -137,7 +137,7 @@ static void write_exit_text(PHYSFS_file *my_file)
 
 			//	Find wall pointing to this trigger.
 			count2 = 0;
-			for (j=0; j<Num_walls; j++)
+			for (unsigned j=0; j<Num_walls; j++)
 				if (Walls[j].trigger == i) {
 					count2++;
 					PHYSFSX_printf(my_file, "Exit trigger %i is in segment %hu, on side %i, bound to wall %i\n", i, static_cast<unsigned short>(Walls[j].segnum), Walls[j].sidenum, j);
@@ -446,7 +446,7 @@ static void write_wall_text(PHYSFS_file *my_file)
 
 	PHYSFSX_printf(my_file, "-----------------------------------------------------------------------------\n");
 	PHYSFSX_printf(my_file, "Walls:\n");
-	for (int i=0; i<Num_walls; i++) {
+	for (unsigned i=0; i<Num_walls; i++) {
 		segnum_t	segnum;
 		int sidenum;
 
@@ -459,7 +459,7 @@ static void write_wall_text(PHYSFS_file *my_file)
 		segnum = Walls[i].segnum;
 		sidenum = Walls[i].sidenum;
 
-		if (Segments[segnum].sides[sidenum].wall_num != i)
+		if (Segments[segnum].sides[sidenum].wall_num != static_cast<int>(i))
 			err_printf(my_file, "Error: Wall %i points at segment %u, side %i, but that segment doesn't point back (it's wall_num = %i)\n", i, static_cast<unsigned>(segnum), sidenum, Segments[segnum].sides[sidenum].wall_num);
 	}
 
@@ -516,7 +516,7 @@ static void write_player_text(PHYSFS_file *my_file)
 // ----------------------------------------------------------------------------
 static void write_trigger_text(PHYSFS_file *my_file)
 {
-	int	i, j, w;
+	int	i, j;
 
 	PHYSFSX_printf(my_file, "-----------------------------------------------------------------------------\n");
 	PHYSFSX_printf(my_file, "Triggers:\n");
@@ -528,7 +528,7 @@ static void write_trigger_text(PHYSFS_file *my_file)
 			PHYSFSX_printf(my_file, "[%03u:%i] ", static_cast<unsigned>(Triggers[i].seg[j]), Triggers[i].side[j]);
 
 		//	Find which wall this trigger is connected to.
-		for (w=0;; w++) {
+		for (unsigned w=0;; w++) {
 			if (w>=Num_walls) {
 				err_printf(my_file, "\nError: Trigger %i is not connected to any wall, so it can never be triggered.\n", i);
 				break;

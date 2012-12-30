@@ -222,7 +222,7 @@ static void info_display_default(int show_all)
 	static int old_Curside = -1;
 	static int old_Cursegp_num_for_verts = -1;
 	static int old_CurrentTexture = -1;
-	static int old_Num_walls = -1;
+	static unsigned old_Num_walls = -1;
 	static int old_Num_triggers = -1;
 
 	if (init_info | show_all) {
@@ -287,7 +287,7 @@ static void info_display_default(int show_all)
 
 	if ( old_Num_walls != Num_walls ) {
 //		gr_uprintf( 0, 96, "Walls/Links %d/%d", Num_walls, Num_links );
-		gr_uprintf( 0, 96, "Walls %3d", Num_walls );
+		gr_uprintf( 0, 96, "Walls %3u", Num_walls );
 		old_Num_walls = Num_walls;
 	}
 

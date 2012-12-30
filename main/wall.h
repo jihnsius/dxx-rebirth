@@ -186,7 +186,7 @@ extern char Wall_names[7][10];
 #define WALL_IS_DOORWAY(seg,side) (((seg)->children[(side)] == segment_none) ? WID_RENDER_FLAG : ((seg)->children[(side)] == segment_exit) ? WID_EXTERNAL_FLAG : ((seg)->sides[(side)].wall_num == -1) ? (WID_FLY_FLAG|WID_RENDPAST_FLAG) : wall_is_doorway((seg), (side)))
 
 extern wall Walls[MAX_WALLS];           // Master walls array
-extern int Num_walls;                   // Number of walls
+extern unsigned Num_walls;                   // Number of walls
 
 extern active_door ActiveDoors[MAX_DOORS];  //  Master doors array
 extern int Num_open_doors;              // Number of open doors
