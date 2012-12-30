@@ -75,7 +75,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 // ---------- John: These variables must be saved as part of gamesave. --------
 int             Ai_initialized = 0;
 int             Overall_agitation;
-ai_local        Ai_local_info[MAX_OBJECTS];
+object_array_template_t<ai_local>        Ai_local_info;
 point_seg       Point_segs[MAX_POINT_SEGS];
 point_seg       *Point_segs_free_ptr = Point_segs;
 ai_cloak_info   Ai_cloak_info[MAX_AI_CLOAK_INFO];
@@ -1558,7 +1558,7 @@ int ai_save_state(PHYSFS_file *fp)
 	PHYSFS_write(fp, &Ai_initialized, sizeof(int), 1);
 	PHYSFS_write(fp, &Overall_agitation, sizeof(int), 1);
 	//PHYSFS_write(fp, Ai_local_info, sizeof(ai_local) * MAX_OBJECTS, 1);
-	for (objnum_t i = object_first; i < MAX_OBJECTS; i++)
+	for (objnum_t i = object_first; i < Ai_local_info.size(); i++)
 	{
 		ai_local_rw *ail_rw;
 		MALLOC(ail_rw, ai_local_rw, 1);
@@ -1652,10 +1652,11 @@ int ai_save_state(PHYSFS_file *fp)
 	return 1;
 }
 
-static void ai_local_read_n_swap(ai_local *ail, int n, int swap, PHYSFS_file *fp)
+static void ai_local_read_n_swap(object_array_template_t<ai_local> &aila, int swap, PHYSFS_file *fp)
 {
-	for (objnum_t i = object_first; i < n; i++, ail++)
+	for (objnum_t i = object_first; i < aila.size(); i++)
 	{
+		ai_local *ail = &aila[i];
 		int j;
 		fix tmptime32 = 0;
 
@@ -1720,7 +1721,7 @@ int ai_restore_state(PHYSFS_file *fp, int version, int swap)
 
 	Ai_initialized = PHYSFSX_readSXE32(fp, swap);
 	Overall_agitation = PHYSFSX_readSXE32(fp, swap);
-	ai_local_read_n_swap(Ai_local_info, MAX_OBJECTS, swap, fp);
+	ai_local_read_n_swap(Ai_local_info, swap, fp);
 	point_seg_read_n_swap(Point_segs, MAX_POINT_SEGS, swap, fp);
 	ai_cloak_info_read_n_swap(Ai_cloak_info, MAX_AI_CLOAK_INFO, swap, fp);
 	tmptime32 = PHYSFSX_readSXE32(fp, swap);

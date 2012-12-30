@@ -223,7 +223,7 @@ extern segnum_t Boss_gate_segs[MAX_BOSS_TELEPORT_SEGS];
 // --------- John: These variables must be saved as part of gamesave. ---------
 extern int              Ai_initialized;
 extern int              Overall_agitation;
-extern ai_local         Ai_local_info[MAX_OBJECTS];
+extern object_array_template_t<ai_local>         Ai_local_info;
 extern point_seg        Point_segs[MAX_POINT_SEGS];
 extern point_seg        *Point_segs_free_ptr;
 extern ai_cloak_info    Ai_cloak_info[MAX_AI_CLOAK_INFO];
