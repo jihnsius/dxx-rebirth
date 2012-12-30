@@ -916,12 +916,11 @@ static void say_totals(PHYSFS_file *my_file, const char *level_name)
 	int	total_robots = 0;
 	unsigned	objects_processed = 0;
 
-	int	used_objects[MAX_OBJECTS];
+	object_array_template_t<ubyte> used_objects;
 
 	PHYSFSX_printf(my_file, "\nLevel %s\n", level_name);
 
-	for (unsigned i=0; i<MAX_OBJECTS; i++)
-		used_objects[i] = 0;
+	used_objects.fill(0);
 
 	while (objects_processed <= Highest_object_index) {
 		int	objtype, objid, objcount, cur_obj_val, min_obj_val;
