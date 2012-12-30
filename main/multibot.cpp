@@ -377,7 +377,7 @@ multi_send_robot_frame(int sent)
 	for (i = 0; i < MAX_ROBOTS_CONTROLLED; i++)
 	{
 		int sending = (last_sent+1+i)%MAX_ROBOTS_CONTROLLED;
-		if ( (robot_controlled[sending] != object_none) && ((robot_send_pending[sending] > sent) || (robot_fired[sending] > sent)) )
+		if ( (robot_controlled[sending] != object_none) && Objects[robot_controlled[sending]].type == OBJ_ROBOT && ((robot_send_pending[sending] > sent) || (robot_fired[sending] > sent)) )
 		{
 			if (robot_send_pending[sending])
 			{
