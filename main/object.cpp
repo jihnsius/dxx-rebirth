@@ -87,7 +87,7 @@ ubyte CollisionResult[MAX_OBJECT_TYPES][MAX_OBJECT_TYPES];
 
 dxxobject *ConsoleObject;					//the object that is the player
 
-static objnum_t free_obj_list[MAX_OBJECTS];
+static object_array_template_t<objnum_t> free_obj_list;
 
 //Data for objects
 
