@@ -1152,16 +1152,9 @@ static objnum_t find_homing_object_complete(vms_vector *curpos, dxxobject *track
 //	Computes and returns a fairly precise dot product.
 static objnum_t track_track_goal(objnum_t track_goal, dxxobject *tracker, fix *dot)
 {
-#ifdef NEWHOMER
-	if (object_is_trackable(track_goal, tracker, dot) && (tracker-Objects)) {
+	if (object_is_trackable(track_goal, tracker, dot)) {
 		return track_goal;
-	} else if (tracker-Objects)
-#else
-	//	Every 8 frames for each object, scan all objects.
-	if (object_is_trackable(track_goal, tracker, dot) && ((((tracker-Objects) ^ FrameCount) % 8) != 0)) {
-		return track_goal;
-	} else if ((((tracker-Objects) ^ FrameCount) % 4) == 0)
-#endif
+	} else
 	{
 		//	If player fired missile, then search for an object, if not, then give up.
 		if (Objects[tracker->ctype.laser_info.parent_num].type == OBJ_PLAYER) {
@@ -1204,9 +1197,6 @@ static objnum_t track_track_goal(objnum_t track_goal, dxxobject *tracker, fix *d
 			}
 		}
 	}
-	else
-
-	return object_none;
 }
 
 //-------------- Initializes a laser after Fire is pressed -----------------
