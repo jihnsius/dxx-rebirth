@@ -24,7 +24,7 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #ifdef __cplusplus
 
-int error_init(void (*func)(const char *), const char *fmt,...);    //init error system, set default message, returns 0=ok
+int error_init(void (*func)(const char *), const char *fmt,...) __attribute_gcc_format((printf, 2, 3));    //init error system, set default message, returns 0=ok
 void set_exit_message(const char *fmt,...) __attribute_gcc_format((printf, 1, 2));	//specify message to print at exit
 void Warning(const char *fmt,...) __attribute_gcc_format((printf, 1, 2));				//print out warning message to user
 void set_warn_func(void (*f)(const char *s));//specifies the function to call with warning messages
