@@ -502,7 +502,7 @@ segnum_t med_create_duplicate_segment(segment *sp);
 segnum_t get_free_segment_number(void);
 
 //      Diagnostic message.
-void diagnostic_message(const char *format, ... );
+#define diagnostic_message editor_status
 
 //      Status Icon.
 void print_status_icon( char icon[1], int position );
