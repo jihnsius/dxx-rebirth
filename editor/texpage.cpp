@@ -52,7 +52,6 @@ int TextureMetals = 202;
 static int TexturePage = 0;
 
 static grs_canvas * TmapnameCanvas;
-static char tmap_filename[13];
 
 static void texpage_print_name( char name[13] ) 
 {
@@ -68,14 +67,10 @@ static void texpage_print_name( char name[13] )
     gr_string( 0, 0, name );			  
 }
 
-static void texpage_display_name( char *format, ... ) 
+static void texpage_display_name( const char *name) 
 {
-	va_list ap;
-
-	va_start(ap, format);
-   vsprintf(tmap_filename, format, ap);
-	va_end(ap);
-
+	char tmap_filename[13];
+	strcpy(tmap_filename, name);
    texpage_print_name(tmap_filename);
 }
 
