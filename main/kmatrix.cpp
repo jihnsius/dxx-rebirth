@@ -61,7 +61,7 @@ void kmatrix_phallic ();
 void kmatrix_redraw_coop();
 fix64 StartAbortMenuTime;
 
-static void kmatrix_draw_item( int  i, int *sorted )
+static void kmatrix_draw_item( int  i, const int *sorted )
 {
 	int j, x, y;
 	char temp[10];
@@ -111,7 +111,7 @@ static void kmatrix_draw_item( int  i, int *sorted )
 	gr_printf( x ,y,"%4d/%s",Players[sorted[i]].net_kills_total,temp);
 }
 
-static void kmatrix_draw_coop_item( int  i, int *sorted )
+static void kmatrix_draw_coop_item( int  i, const int *sorted )
 {
 	int  x, y;
 
@@ -125,7 +125,7 @@ static void kmatrix_draw_coop_item( int  i, int *sorted )
 	gr_printf( x, y, "%d", Players[sorted[i]].net_killed_total);
 }
 
-static void kmatrix_draw_names(int *sorted)
+static void kmatrix_draw_names(const int *sorted)
 {
 	int j, x, color;
 
@@ -151,7 +151,7 @@ static void kmatrix_draw_names(int *sorted)
 	gr_string( x, FSPACY(40), "K/E");
 }
 
-static void kmatrix_draw_coop_names(int *sorted)
+static void kmatrix_draw_coop_names(const int *sorted)
 {
 	sorted=sorted;
 
