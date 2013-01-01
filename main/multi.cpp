@@ -3527,8 +3527,6 @@ int multi_level_sync(void)
 	}
 }
 
-int Goal_blue_segnum,Goal_red_segnum;
-
 void multi_apply_goal_textures()
 {
 	segnum_t		i;
@@ -3544,7 +3542,6 @@ void multi_apply_goal_textures()
 		if (seg2->special==SEGMENT_IS_GOAL_BLUE)
 		{
 
-			Goal_blue_segnum = i;
 
 			if (Game_mode & GM_HOARD)
 				tex=find_goal_texture (TMI_GOAL_HOARD);
@@ -3565,7 +3562,6 @@ void multi_apply_goal_textures()
 
 		if (seg2->special==SEGMENT_IS_GOAL_RED)
 		{
-			Goal_red_segnum = i;
 
 			// Make both textures the same if Hoard mode
 
