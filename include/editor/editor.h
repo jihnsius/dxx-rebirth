@@ -509,7 +509,7 @@ void print_status_icon( char icon[1], int position );
 void clear_status_icon( char icon[1], int position );
 
 //      Editor status message.
-void editor_status(const char *format, ... );
+void editor_status(const char *format, ... ) __attribute_gcc_format((printf, 1, 2));
 
 // Variables in editor.c that the k*.c files need
 
