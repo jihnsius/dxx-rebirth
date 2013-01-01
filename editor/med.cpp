@@ -90,7 +90,7 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 //char *undo_status[128];
 
-int initializing;
+static int initializing;
 
 //these are instances of canvases, pointed to by variables below
 grs_canvas _canv_editor_game;		//the game on the editor screen
@@ -115,7 +115,6 @@ int	Large_view_index = -1;
 
 UI_GADGET_USERBOX * GameViewBox;
 UI_GADGET_USERBOX * LargeViewBox;
-UI_GADGET_USERBOX * GroupViewBox;
 
 #if ORTHO_VIEWS
 UI_GADGET_USERBOX * TopViewBox;
@@ -123,15 +122,13 @@ UI_GADGET_USERBOX * FrontViewBox;
 UI_GADGET_USERBOX * RightViewBox;
 #endif
 
-UI_GADGET_ICON * ViewIcon;
-UI_GADGET_ICON * AllIcon;
-UI_GADGET_ICON * AxesIcon;
-UI_GADGET_ICON * ChaseIcon;
-UI_GADGET_ICON * OutlineIcon;
-UI_GADGET_ICON * LockIcon;
+static UI_GADGET_ICON * ViewIcon;
+static UI_GADGET_ICON * AllIcon;
+static UI_GADGET_ICON * AxesIcon;
+static UI_GADGET_ICON * ChaseIcon;
+static UI_GADGET_ICON * OutlineIcon;
+static UI_GADGET_ICON * LockIcon;
 //-NOLIGHTICON- UI_GADGET_ICON * LightIcon;
-
-UI_EVENT * DemoBuffer = NULL;
 
 //grs_canvas * BigCanvas[2];
 //int CurrentBigCanvas = 0;
@@ -771,7 +768,6 @@ void init_editor_screen()
 	ui_gadget_calc_keys(EditorWindow);	//make tab work for all windows
 
 	GameViewBox	= ui_add_gadget_userbox( EditorWindow, GAMEVIEW_X, GAMEVIEW_Y, GAMEVIEW_W, GAMEVIEW_H );
-//	GroupViewBox	= ui_add_gadget_userbox( EditorWindow,GVIEW_X,GVIEW_Y,GVIEW_W,GVIEW_H);
 
 //	GameViewBox->when_tab = GameViewBox->when_btab = (UI_GADGET *) LargeViewBox;
 //	LargeViewBox->when_tab = LargeViewBox->when_btab = (UI_GADGET *) GameViewBox;
@@ -1193,7 +1189,6 @@ int editor_handler(UI_DIALOG *, d_event *event, void *)
 	}
 
 //		if (EditorWindow->keyboard_focus_gadget == (UI_GADGET *)GameViewBox) current_view=NULL;
-//		if (EditorWindow->keyboard_focus_gadget == (UI_GADGET *)GroupViewBox) current_view=NULL;
 
 	new_cv = current_view;
 

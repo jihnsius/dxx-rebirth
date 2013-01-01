@@ -606,7 +606,6 @@ extern grs_canvas *Canv_editor_game; //the game on the editor screen
 extern UI_DIALOG * EditorWindow;
 
 extern UI_GADGET_USERBOX * GameViewBox;
-extern UI_GADGET_USERBOX * GroupViewBox;
 
 void med_point_2_vec(grs_canvas *canv,vms_vector *v,short sx,short sy);
 

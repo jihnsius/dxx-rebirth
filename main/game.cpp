@@ -1277,7 +1277,7 @@ static void do_ambient_sounds()
 }
 
 // -- extern void lightning_frame(void);
-void flicker_lights();
+static void flicker_lights();
 
 void game_leave_menus(void)
 {
@@ -1569,7 +1569,7 @@ flickering_light Flickering_lights[MAX_FLICKERING_LIGHTS];
 
 int Num_flickering_lights=0;
 
-void flicker_lights()
+static void flicker_lights()
 {
 	int l;
 	flickering_light *f;

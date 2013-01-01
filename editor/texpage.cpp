@@ -213,8 +213,8 @@ typedef struct replacement {
 	int	enew, old;
 } replacement;
 
-replacement Replacement_list[MAX_REPLACEMENTS];
-int	Num_replacements=0;
+static replacement Replacement_list[MAX_REPLACEMENTS];
+static int	Num_replacements=0;
 
 int texpage_do(d_event *event)
 {
