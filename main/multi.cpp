@@ -1117,8 +1117,6 @@ multi_define_macro(int key)
 
 }
 
-char feedback_result[200];
-
 static void
 multi_message_feedback(void)
 {
@@ -1128,6 +1126,7 @@ multi_message_feedback(void)
 
 	if (!( ((colon = strstr(Network_message, ": ")) == NULL) || (colon-Network_message < 1) || (colon-Network_message > CALLSIGN_LEN) ))
 	{
+		char feedback_result[200];
 		sprintf(feedback_result, "%s ", TXT_MESSAGE_SENT_TO);
 		if ((Game_mode & GM_TEAM) && (atoi(Network_message) > 0) && (atoi(Network_message) < 3))
 		{
