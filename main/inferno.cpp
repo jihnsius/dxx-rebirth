@@ -101,6 +101,8 @@ char copyright[] = "DESCENT II  COPYRIGHT (C) 1994-1996 PARALLAX SOFTWARE CORPOR
 #include "physfsx.h"
 #include "cxxconsole.h"
 
+#include <algorithm>
+
 //Current version number
 
 char desc_id_exit_num = 0;
@@ -437,42 +439,23 @@ int main(int argc, char *argv[])
 	if (GameArg.EdiAutoLoad) {
 		strcpy(Auto_file, GameArg.EdiAutoLoad);
 		strcpy(Players[0].callsign, "dummy");
+		strcpy((char *)&Level_names[0], Auto_file);
+		LoadLevel(1, 1);
 	} else
 	#endif
 	{
 		if(GameArg.SysPilot)
 		{
-			char filename[32] = "";
-			int j;
-
-			if (GameArg.SysUsePlayersDir)
-				strcpy(filename, "Players/");
-			strncat(filename, GameArg.SysPilot, 12);
-			filename[8 + 12] = '\0';	// unfortunately strncat doesn't put the terminating 0 on the end if it reaches 'n'
-			for (j = GameArg.SysUsePlayersDir? 8 : 0; filename[j] != '\0'; j++) {
-				switch (filename[j]) {
-					case ' ':
-						filename[j] = '\0';
-				}
-			}
-			if(!strstr(filename,".plr")) // if player hasn't specified .plr extension in argument, add it
-				strcat(filename,".plr");
-			if(PHYSFSX_exists(filename,0))
-			{
-				strcpy(strstr(filename,".plr"),"\0");
-				strcpy(Players[Player_num].callsign, GameArg.SysUsePlayersDir? &filename[8] : filename);
-				read_player_file();
-			}
+			size_t s = strlen(GameArg.SysPilot);
+			if (s > 4 && !strcmp(GameArg.SysPilot + s - 4, ".plr"))
+				s -= 4;
+			s = std::min(s, sizeof(Players[Player_num].callsign) - 1);
+			memcpy(&Players[Player_num].callsign[0], GameArg.SysPilot, s);
+			Players[Player_num].callsign[s] = 0;
+			read_player_file();
 		}
 	}
 
-#ifdef EDITOR
-	if (GameArg.EdiAutoLoad) {
-		strcpy((char *)&Level_names[0], Auto_file);
-		LoadLevel(1, 1);
-	}
-	else
-#endif
 	{
 		Game_mode = GM_GAME_OVER;
 		DoMenu();
