@@ -809,7 +809,6 @@ void update_cockpits()
 	bm=&GameBitmaps[cockpit_bitmap[PlayerCfg.CockpitMode[1]+(HIRESMODE?(Num_cockpits/2):0)].index];
 
 	//Redraw the on-screen cockpit bitmaps
-	if (VR_render_mode != VR_NONE )	return;
 
 	switch( PlayerCfg.CockpitMode[1] )	{
 		case CM_FULL_COCKPIT:
@@ -866,7 +865,6 @@ void game_render_frame()
 
 	play_homing_warning();
 
-	if (VR_render_mode == VR_NONE )
 		game_render_frame_mono(GameArg.DbgUseDoubleBuffer);
 
 	FrameCount++;

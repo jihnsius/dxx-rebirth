@@ -111,18 +111,6 @@ int	Mark_count = 0;                 // number of debugging marks set
 static fix64 last_timer_value=0;
 fix ThisLevelTime=0;
 
-fix			VR_eye_width = F1_0;
-int			VR_render_mode = VR_NONE;
-int			VR_low_res = 3; // Default to low res
-int 			VR_show_hud = 1;
-int			VR_sensitivity = 1; // 0 - 2
-
-//NEWVR
-int			VR_eye_offset		 = 0;
-int			VR_eye_switch		 = 0;
-int			VR_eye_offset_changed = 0;
-int			VR_use_reg_code 	= 0;
-
 grs_canvas	Screen_3d_window;							// The rectangle for rendering the mine to
 grs_canvas	*VR_offscreen_buffer	= NULL;		// The offscreen data buffer
 grs_canvas	VR_render_buffer[2];					//  Two offscreen buffers for left/right eyes.
@@ -193,7 +181,7 @@ void init_cockpit()
 	if (Screen_mode != SCREEN_GAME)
 		return;
 
-	if (( Screen_mode == SCREEN_EDITOR ) || ( VR_render_mode != VR_NONE ))
+	if (( Screen_mode == SCREEN_EDITOR ))
 		PlayerCfg.CockpitMode[1] = CM_FULL_SCREEN;
 
 #ifndef OGL
@@ -262,14 +250,6 @@ void reset_cockpit()
 	last_drawn_cockpit = -1;
 }
 
-//NEWVR
-void VR_reset_params()
-{
-	VR_eye_width = VR_SEPARATION;
-	VR_eye_offset = VR_PIXEL_SHIFT;
-	VR_eye_offset_changed = 2;
-}
-
 static void game_init_render_sub_buffers( int x, int y, int w, int h )
 {
 	gr_clear_canvas(0);
@@ -280,24 +260,13 @@ static void game_init_render_sub_buffers( int x, int y, int w, int h )
 
 
 // Sets up the canvases we will be rendering to
-void game_init_render_buffers(int render_w, int render_h, int render_method )
+void game_init_render_buffers(int render_w, int render_h)
 {
-	VR_reset_params();
-
-	VR_render_mode 	=	render_method;
-
 	if (VR_offscreen_buffer) {
 		gr_free_canvas(VR_offscreen_buffer);
 	}
 
-	if ( (VR_render_mode==VR_AREA_DET) || (VR_render_mode==VR_INTERLACED ) )	{
-		if ( render_h*2 < 200 )
-			VR_offscreen_buffer = gr_create_canvas( render_w, 200 );
-		else
-			VR_offscreen_buffer = gr_create_canvas( render_w, render_h*2 );
-		gr_init_sub_canvas( &VR_render_buffer[0], VR_offscreen_buffer, 0, 0, render_w, render_h );
-		gr_init_sub_canvas( &VR_render_buffer[1], VR_offscreen_buffer, 0, render_h, render_w, render_h );
-	} else {
+	{
 		if ( render_h < 200 )
 			VR_offscreen_buffer = gr_create_canvas( render_w, 200 );
 		else
@@ -490,9 +459,6 @@ void move_player_2_segment(segment *seg,int side)
 
 }
 
-void do_photos();
-void level_with_floor();
-
 #ifndef OGL
 void save_screen_shot(int automap_flag)
 {
@@ -550,7 +516,6 @@ void fly_init(dxxobject *obj)
 	vm_vec_zero(&obj->mtype.phys_info.rotthrust);
 }
 
-void test_anim_states();
 
 
 //	------------------------------------------------------------------------------------
@@ -607,8 +572,6 @@ fix Last_afterburner_charge = 0;
 
 #define AFTERBURNER_LOOP_START	((GameArg.SndDigiSampleRate==SAMPLE_RATE_22K)?32027:(32027/2))		//20098
 #define AFTERBURNER_LOOP_END		((GameArg.SndDigiSampleRate==SAMPLE_RATE_22K)?48452:(48452/2))		//25776
-
-int	Ab_scale = 4;
 
 static void do_afterburner_stuff(void)
 {
