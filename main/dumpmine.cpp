@@ -923,7 +923,7 @@ static void say_totals(PHYSFS_file *my_file, const char *level_name)
 	for (unsigned i=0; i<MAX_OBJECTS; i++)
 		used_objects[i] = 0;
 
-	while (objects_processed < Highest_object_index+1) {
+	while (objects_processed <= Highest_object_index) {
 		int	objtype, objid, objcount, cur_obj_val, min_obj_val;
 		objnum_t min_objnum;
 
