@@ -333,9 +333,9 @@ int UndoCommand()
     if (Lock_view_to_cursegp)
 		set_view_target_from_segment(Cursegp);
     if (u == 0) {
-        if (Autosave_count==9) diagnostic_message(undo_status[0]);
+        if (Autosave_count==9) diagnostic_message("%s", undo_status[0]);
             else
-                diagnostic_message(undo_status[Autosave_count+1]);
+                diagnostic_message("%s", undo_status[Autosave_count+1]);
         }
         else
 	 if (u == 1) diagnostic_message("Can't Undo.");
