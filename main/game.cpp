@@ -1014,8 +1014,6 @@ void game_disable_cheats()
 //	game_setup()
 // ----------------------------------------------------------------------------
 
-int game_handler(window *wind, d_event *event, void *data);
-
 window *game_setup(void)
 {
 	window *game_wind;
@@ -1065,8 +1063,6 @@ window *game_setup(void)
 
 	return game_wind;
 }
-
-void game_render_frame();
 
 window *Game_wind = NULL;
 
