@@ -49,7 +49,6 @@
 	__errordecl(__trap_bad_argument_##A##_##B, #A #C #B);	\
 	if (__builtin_constant_p(A C B) && A C B) __trap_bad_argument_##A##_##B()
 #endif
-#define CHK_REDIRECT(R,N,A,B)	R unchecked_##N A
 #endif
 #ifndef define_interposition_check
 #define define_interposition_check(A,C,B)
