@@ -91,6 +91,7 @@ struct Num_segments_t
 	Num_segments_t& operator--(int) { contained_value--; return *this; }
 };
 
+#ifdef DXX_USE_STRICT_TYPESAFE
 /*
  * This is based on BOOST_STRONG_TYPEDEF, but that macro does not permit
  * sufficient customization for the required use cases.
@@ -138,6 +139,9 @@ struct segnum_t
 	template <typename T> bool operator<(T) const = delete;
 	template <typename T> bool operator>(T) const = delete;
 } __pack__;
+#else
+typedef unsigned short segnum_t;
+#endif
 
 //typedef unsigned short vertnum_t;
 
@@ -257,8 +261,11 @@ struct segment_array_template_t
 {
 	typedef std::array<T, MAX_SEGMENTS> array_t;
 	array_t a;
+#ifdef DXX_USE_STRICT_TYPESAFE
 	typename array_t::reference operator[](segment_first_type_t) { return a[segnum_t::segment_first]; }
-	typename array_t::reference operator[](const segnum_t& s) { Assert(s < size()); return a[s.contained_value]; }
+	template <typename U> void operator[](U) = delete;
+#endif
+	typename array_t::reference operator[](const segnum_t& s) { Assert(s < size()); return a[s]; }
 #ifdef EDITOR
 	/*
 	 * This special case is required to allow some defined(EDITOR) code
@@ -266,7 +273,6 @@ struct segment_array_template_t
 	 */
 	typename array_t::reference operator[](const Highest_segment_index_t& s) { return a[s.contained_value]; }
 #endif
-	template <typename U> void operator[](U) = delete;
 	segnum_t idx(typename array_t::const_pointer p) const
 	{
 		return segnum_t(std::distance(a.begin(), p));

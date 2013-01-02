@@ -15,6 +15,7 @@
  */
 #if (__GNUC__ == 4 && __GNUC_MINOR__ >= 7) || (__GNUC__ > 4)
 #define COPY_WORDS_ALIGNED
+#define DXX_HAVE_CXX11_EXPLICIT_DEFAULT
 #endif
 #else
 #define __noreturn
@@ -42,6 +43,13 @@
 #endif
 
 #ifdef __cplusplus
+
+#if defined(DXX_HAVE_CXX11_EXPLICIT_DEFAULT)
+/*
+ * Strict checking requires C++11 features first supported in gcc 4.7.
+ */
+#define DXX_USE_STRICT_TYPESAFE
+#endif
 
 #if defined(__GNUC__) && defined(__OPTIMIZE__)
 #ifdef __INLINE__

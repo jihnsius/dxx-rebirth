@@ -4,7 +4,11 @@
 
 #ifdef __cplusplus
 struct dxxobject;
+#ifdef DXX_USE_STRICT_TYPESAFE
 struct objnum_t;
+#else
+typedef unsigned short objnum_t;
+#endif
 
 #ifdef USE_PYTHON
 void cxx_script_get_guided_missile_rotang(vms_angvec *);

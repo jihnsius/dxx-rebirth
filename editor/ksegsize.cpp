@@ -37,7 +37,6 @@ int		Modified_vertex_index = 0;
 static void validate_modified_segments(void)
 {
 	int	v,w,v0;
-	segnum_t seg;
 	segment_array_template_t<char> modified_segments;
 
 	modified_segments.fill(0);

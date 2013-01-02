@@ -1901,7 +1901,7 @@ void compress_objects(void)
 
 	//	Note: It's proper to do < (rather than <=) Highest_object_index here because we
 	//	are just removing gaps, and the last object can't be a gap.
-	for (objnum_t start_i=object_first;start_i.strict_less_highest_object(Highest_object_index);start_i++)
+	for (objnum_t start_i=object_first;strict_less_highest_object(start_i, Highest_object_index);start_i++)
 
 		if (Objects[start_i].type == OBJ_NONE) {
 
@@ -1941,7 +1941,7 @@ void reset_objects(int n_objs)
 
 	Assert(num_objects>0);
 
-	for (objnum_t i=objnum_t::from_num_objects(num_objects);i<Objects.size();i++) {
+	for (objnum_t i=objnum_t_from_num_objects(num_objects);i<Objects.size();i++) {
 		free_obj_list[i] = i;
 		memset( &Objects[i], 0, sizeof(dxxobject) );
 		Objects[i].type = OBJ_NONE;

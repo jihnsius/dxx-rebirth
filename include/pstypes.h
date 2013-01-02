@@ -88,6 +88,7 @@ defined(__LITTLE_ENDIAN__)	// from physfs_internal.h
 # define PACKAGE_STRING "d2x"
 #endif
 
+#ifdef DXX_USE_STRICT_TYPESAFE
 #define DECLARE_TYPESAFE_INDEX(B,N,V)	\
 	namespace typesafe_idx_##B { struct N##_t; enum { N = V }; }	\
 	void B##_##N(typesafe_idx_##B::N##_t);	\
@@ -97,6 +98,10 @@ defined(__LITTLE_ENDIAN__)	// from physfs_internal.h
 	C & operator=(T##_type_t) { contained_value = T; return *this; }
 #define DEFINE_COMPARE_SPECIAL(OP,T)	bool operator OP(T##_type_t) const { return (contained_value OP T); }
 #define DEFINE_COMPARE_PASSTHROUGH(OP,T)	bool operator OP(const T& t) const { return (contained_value OP t.contained_value); }
+#else
+#define DECLARE_TYPESAFE_INDEX(B,N,V)	\
+	enum { B##_##N = V }
+#endif
 
 #endif //_TYPES_H
 

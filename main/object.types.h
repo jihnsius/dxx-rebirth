@@ -95,6 +95,7 @@ struct Num_objects_t
 
 BOOST_STRONG_TYPEDEF(unsigned, object_step_interval_t);
 
+#ifdef DXX_USE_STRICT_TYPESAFE
 /*
  * This is based on BOOST_STRONG_TYPEDEF, but that macro does not permit
  * sufficient customization for the required use cases.
@@ -114,7 +115,6 @@ struct objnum_t
 	objnum_t() = default;
 	objnum_t(const Highest_object_index_t& i) : contained_value(i.contained_value) {}
 	objnum_t & operator=(const Highest_object_index_t & rhs) { contained_value = rhs.contained_value; return *this;}
-	static objnum_t from_num_objects(const Num_objects_t& i) { return objnum_t(i.contained_value); }
 	operator unsigned () const { return contained_value; }
 	bool operator==(const objnum_t & rhs) const { return contained_value == rhs.contained_value; }
 	bool operator<(const objnum_t & rhs) const { return (contained_value < rhs.contained_value); }
@@ -136,7 +136,6 @@ struct objnum_t
 	DEFINE_COMPARE_PASSTHROUGH(>, Highest_object_index_t);
 	DEFINE_COMPARE_PASSTHROUGH(<, Num_objects_t);
 	DEFINE_COMPARE_PASSTHROUGH(>=, Num_objects_t);
-	bool strict_less_highest_object(const Highest_object_index_t& i) const { return (contained_value < i.contained_value); }
 	template <typename T> objnum_t & operator=(T) = delete;
 	template <typename T> bool operator==(T) const = delete;
 	template <typename T> bool operator!=(T) const = delete;
@@ -145,3 +144,9 @@ struct objnum_t
 	template <typename T> bool operator>(T) const = delete;
 	template <typename T> bool operator<(T) const = delete;
 };
+static inline bool strict_less_highest_object(const objnum_t& o, const Highest_object_index_t& i) { return (o.contained_value < i.contained_value); }
+#else
+typedef unsigned short objnum_t;
+static inline bool strict_less_highest_object(const objnum_t& o, const Highest_object_index_t& i) { return (o < i.contained_value); }
+#endif
+static inline objnum_t objnum_t_from_num_objects(const Num_objects_t& i) { return objnum_t(i.contained_value); }

@@ -67,9 +67,11 @@ static void define_enum_values(enum_<segment_type_t>& e)
 		.value("goal_red", SEGMENT_IS_GOAL_RED);
 }
 
+#ifdef DXX_USE_STRICT_TYPESAFE
 static str pretty(const segnum_t& segnum) {
 	return (boost::format("{%u} <dxx.segnum at %p>") % segnum.contained_value % &segnum).str().c_str();
 }
+#endif
 
 void define_segment_module(object&, scope& s)
 {
@@ -82,7 +84,9 @@ void define_segment_module(object&, scope& s)
 		.add_property("idx", &get_segment_index)
 		;
 	define_common_container_exports<segment_container>(s, "segment_container", "segments");
+#ifdef DXX_USE_STRICT_TYPESAFE
 	class_<segnum_t>("segnum", init<const unsigned short&>())
 		.def("__str__", &pretty);
 		;
+#endif
 }
