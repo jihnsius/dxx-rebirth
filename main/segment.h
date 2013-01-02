@@ -138,7 +138,7 @@ struct segnum_t
 	template <typename T> bool operator>=(T) const = delete;
 	template <typename T> bool operator<(T) const = delete;
 	template <typename T> bool operator>(T) const = delete;
-} __pack__;
+};
 #else
 typedef unsigned short segnum_t;
 #endif
