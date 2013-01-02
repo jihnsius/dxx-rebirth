@@ -38,6 +38,7 @@
 
 #ifdef _MSC_VER
 # define inline __inline
+# define __func__ __FUNCTION__
 #endif
 
 #ifdef __cplusplus
