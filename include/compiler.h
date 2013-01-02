@@ -16,6 +16,7 @@
 #if (__GNUC__ == 4 && __GNUC_MINOR__ >= 7) || (__GNUC__ > 4)
 #define COPY_WORDS_ALIGNED
 #define DXX_HAVE_CXX11_EXPLICIT_DEFAULT
+#define DXX_HAVE_CXX11_EXPLICIT_DELETE
 #endif
 #else
 #define __noreturn
@@ -44,7 +45,8 @@
 
 #ifdef __cplusplus
 
-#if defined(DXX_HAVE_CXX11_EXPLICIT_DEFAULT)
+#if defined(DXX_HAVE_CXX11_EXPLICIT_DEFAULT) && \
+	defined(DXX_HAVE_CXX11_EXPLICIT_DELETE)
 /*
  * Strict checking requires C++11 features first supported in gcc 4.7.
  */
