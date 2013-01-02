@@ -38,11 +38,11 @@ static inline int con_priority(int level)
 {
 	return (level <= ((int)g_DbgVerbose));
 }
-#define con_printf(L,F,...)	({	\
+#define con_printf(L,F,...)	{	\
 	const int __cp_level = (L);	\
 	if (con_priority(__cp_level))	\
 		(con_printf)(__cp_level, (F), ## __VA_ARGS__ );	\
-	})
+	}
 void con_showup(void);
 
 #endif
