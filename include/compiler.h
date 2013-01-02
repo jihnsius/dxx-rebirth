@@ -47,16 +47,20 @@
 #define define_interposition_check(A,C,B)	\
 	__errordecl(__trap_bad_argument_##A##_##B, #A #C #B);	\
 	if (__builtin_constant_p(A C B) && A C B) __trap_bad_argument_##A##_##B()
-#else
+#endif
+#define CHK_REDIRECT(R,N,A,B)	R unchecked_##N A
+#endif
+#ifndef define_interposition_check
 #define define_interposition_check(A,C,B)
 #endif
+#ifndef __extern_always_inline
+#define __extern_always_inline static inline
+#endif
+
 #define CHK_REDIRECT(R,N,A,B)	\
 	R (unchecked_##N) A;	\
 	__extern_always_inline R (N) A;	\
 	__extern_always_inline R (N) A	\
 	{ B; }
-#else
-#define CHK_REDIRECT(R,N,A,B)	R unchecked_##N A
-#endif
 
 #endif
