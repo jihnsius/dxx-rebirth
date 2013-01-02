@@ -1204,7 +1204,7 @@ void extract_shortpos(dxxobject *objp, shortpos *spp, int swap_bytes)
 		spp->velz = INTEL_SHORT(spp->velz);
 	}
 
-	segnum = spp->segment;
+	segnum = segnum_t(spp->segment);
 
 	Assert(Highest_segment_index < Segments.size());
 	Assert(segnum <= Highest_segment_index);

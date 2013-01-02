@@ -156,7 +156,7 @@ typedef struct ai_static {
 typedef struct ai_static_rw {
 	ubyte   behavior;               //
 	sbyte   flags[MAX_AI_FLAGS];    // various flags, meaning defined by constants
-	segnum_t   hide_segment;           // Segment to go to for hiding.
+	short   hide_segment;           // Segment to go to for hiding.
 	short   hide_index;             // Index in Path_seg_points
 	short   path_length;            // Length of hide path.
 	sbyte   cur_path_index;         // Current index in path.

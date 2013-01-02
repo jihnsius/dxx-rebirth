@@ -87,7 +87,7 @@ extern const char Object_type_names[MAX_OBJECT_TYPES][9];
 typedef struct shortpos {
 	sbyte   bytemat[9];
 	short   xo,yo,zo;
-	segnum_t   segment;
+	short   segment;
 	short   velx, vely, velz;
 } __pack__ shortpos;
 
@@ -290,7 +290,7 @@ typedef struct object_rw {
 	ubyte   movement_type;  // how this object moves
 	ubyte   render_type;    // how this object renders
 	ubyte   flags;          // misc flags
-	segnum_t   segnum;         // segment number containing object
+	short   segnum;         // segment number containing object
 	short   attached_obj;   // number of attached fireball object
 	vms_vector pos;         // absolute x,y,z coordinate of center of object
 	vms_matrix orient;      // orientation of object in world

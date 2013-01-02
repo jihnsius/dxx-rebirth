@@ -283,7 +283,7 @@ static void state_object_rw_to_object(object_rw *obj_rw, dxxobject *obj)
 	obj->movement_type = obj_rw->movement_type;
 	obj->render_type   = obj_rw->render_type;
 	obj->flags         = obj_rw->flags;
-	obj->segnum        = obj_rw->segnum;
+	obj->segnum        = segnum_t(obj_rw->segnum);
 	obj->attached_obj  = objnum_t(obj_rw->attached_obj);
 	obj->pos.x         = obj_rw->pos.x;
 	obj->pos.y         = obj_rw->pos.y;
@@ -365,7 +365,7 @@ static void state_object_rw_to_object(object_rw *obj_rw, dxxobject *obj)
 			obj->ctype.ai_info.behavior               = obj_rw->ctype.ai_info.behavior;
 			for (i = 0; i < MAX_AI_FLAGS; i++)
 				obj->ctype.ai_info.flags[i]       = obj_rw->ctype.ai_info.flags[i];
-			obj->ctype.ai_info.hide_segment           = obj_rw->ctype.ai_info.hide_segment;
+			obj->ctype.ai_info.hide_segment           = segnum_t(obj_rw->ctype.ai_info.hide_segment);
 			obj->ctype.ai_info.hide_index             = obj_rw->ctype.ai_info.hide_index;
 			obj->ctype.ai_info.path_length            = obj_rw->ctype.ai_info.path_length;
 			obj->ctype.ai_info.cur_path_index         = obj_rw->ctype.ai_info.cur_path_index;

@@ -234,7 +234,7 @@ static void my_extract_shortpos(dxxobject *objp, shortpos *spp)
 	objp->orient.uvec.z = *sp++ << MATRIX_PRECISION;
 	objp->orient.fvec.z = *sp++ << MATRIX_PRECISION;
 
-	segnum = spp->segment;
+	segnum = segnum_t(spp->segment);
 	objp->segnum = segnum;
 
 	objp->pos.x = (spp->xo << RELPOS_PRECISION) + Vertices[Segments[segnum].verts[0]].x;
@@ -484,7 +484,7 @@ static void nd_read_shortpos(dxxobject *obj)
 	nd_read_short(&(sp.xo));
 	nd_read_short(&(sp.yo));
 	nd_read_short(&(sp.zo));
-	nd_read_segnum_short(&(sp.segment));
+	nd_read_short(&(sp.segment));
 	nd_read_short(&(sp.velx));
 	nd_read_short(&(sp.vely));
 	nd_read_short(&(sp.velz));
