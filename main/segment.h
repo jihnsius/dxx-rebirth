@@ -277,7 +277,7 @@ struct segment_array_template_t
 #endif
 	segnum_t idx(typename array_t::const_pointer p) const
 	{
-		return segnum_t(std::distance(a.begin(), p));
+		return segnum_t(std::distance(&*a.begin(), p));
 	}
 	typename array_t::reference back() { return a.back(); }
 	Num_segments_t size() const { return Num_segments_t{(unsigned)a.size()}; }

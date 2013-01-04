@@ -110,7 +110,7 @@ struct object_array_template_t
 	void fill(const T& t) { a.fill(t); }
 	objnum_t idx(const T *p) const
 	{
-		return objnum_t(std::distance(a.begin(), p));
+		return objnum_t(std::distance(&*a.begin(), p));
 	}
 	Num_objects_t size() const { return Num_objects_t{(unsigned)a.size()}; }
 };
