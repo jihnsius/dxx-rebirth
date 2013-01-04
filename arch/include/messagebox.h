@@ -10,9 +10,9 @@
 #define _MESSAGEBOX_H
 
 // Display a warning in a messagebox
-extern void msgbox_warning(char *message);
+extern void msgbox_warning(const char *message);
 
 // Display an error in a messagebox
-extern void msgbox_error(char *message);
+extern void msgbox_error(const char *message);
 
 #endif
