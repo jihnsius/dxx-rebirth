@@ -1136,6 +1136,9 @@
     <ClInclude Include="..\..\texmap\texmapl.h">
       <Filter>texmap</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\arch\win32\include\precomp.h">
+      <Filter>arch\win32\include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="..\..\arch\win32\d2xr.res">

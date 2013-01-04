@@ -300,6 +300,7 @@
     <ClInclude Include="..\..\2d\clip.h" />
     <ClInclude Include="..\..\3d\clipper.h" />
     <ClInclude Include="..\..\3d\globvars.h" />
+    <ClInclude Include="..\..\arch\win32\include\precomp.h" />
     <ClInclude Include="..\..\arch\win32\include\resource.h" />
     <ClInclude Include="..\..\include\3d.h" />
     <ClInclude Include="..\..\include\args.h" />
