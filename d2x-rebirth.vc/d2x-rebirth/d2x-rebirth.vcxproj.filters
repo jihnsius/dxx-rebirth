@@ -1,0 +1,1168 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="2d">
+      <UniqueIdentifier>{c756c71d-896b-40a5-acc5-415799c49b63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3d">
+      <UniqueIdentifier>{7f0ce126-0b3b-4163-b5a4-dfea14bf06c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="arch">
+      <UniqueIdentifier>{1ec98906-f554-416e-a653-c17fa3fbbd56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="iff">
+      <UniqueIdentifier>{bc3d890e-4e18-4825-b682-06b8f18b6792}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libmve">
+      <UniqueIdentifier>{2bbcfef6-53ef-4513-a1f3-03b5d934dba7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="main">
+      <UniqueIdentifier>{37735f10-6bba-4906-b394-67cb24a930c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="maths">
+      <UniqueIdentifier>{da9823da-7a50-4761-9917-e2e3290e7d73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mem">
+      <UniqueIdentifier>{2cddfc70-7169-482b-89fe-c148291a1c24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="misc">
+      <UniqueIdentifier>{0ee01b1a-29b4-4564-bc10-89e71fbfadca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui">
+      <UniqueIdentifier>{3cd46203-168a-4080-b2e1-a755385f5201}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="texmap">
+      <UniqueIdentifier>{3a93d100-64ac-4005-aa92-178c22e8838e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="arch\sdl">
+      <UniqueIdentifier>{3cc51f45-c927-4a2b-a4d7-64af650c441d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="arch\win32">
+      <UniqueIdentifier>{bef53a08-be41-4b9a-aca7-a3be2f427332}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="arch\win32\include">
+      <UniqueIdentifier>{765d47d6-da82-449b-bdda-0e6e986b2b9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="iff\archive">
+      <UniqueIdentifier>{f91a4a1f-df3f-4147-aa77-fcc4dabeacda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{2ed15205-3a07-48fb-a327-46ccb8343040}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\editor">
+      <UniqueIdentifier>{825cfca0-0839-47a4-a23a-2c75f2ce13b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="editor">
+      <UniqueIdentifier>{2e8ef587-a176-4270-8081-b5c2ab6939cb}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\2d\2dsline.cpp">
+      <Filter>2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\2d\bitblt.cpp">
+      <Filter>2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\2d\bitmap.cpp">
+      <Filter>2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\2d\box.cpp">
+      <Filter>2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\2d\canvas.cpp">
+      <Filter>2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\2d\circle.cpp">
+      <Filter>2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\2d\disc.cpp">
+      <Filter>2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\2d\font.cpp">
+      <Filter>2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\2d\gpixel.cpp">
+      <Filter>2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\2d\line.cpp">
+      <Filter>2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\2d\palette.cpp">
+      <Filter>2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\2d\pcx.cpp">
+      <Filter>2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\2d\pixel.cpp">
+      <Filter>2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\2d\poly.cpp">
+      <Filter>2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\2d\rect.cpp">
+      <Filter>2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\2d\rle.cpp">
+      <Filter>2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\2d\scale.c">
+      <Filter>2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\2d\scalec.cpp">
+      <Filter>2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\2d\tmerge.c">
+      <Filter>2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3d\clipper.cpp">
+      <Filter>3d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3d\draw.cpp">
+      <Filter>3d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3d\globvars.cpp">
+      <Filter>3d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3d\instance.cpp">
+      <Filter>3d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3d\interp.cpp">
+      <Filter>3d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3d\matrix.cpp">
+      <Filter>3d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3d\points.cpp">
+      <Filter>3d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3d\rod.cpp">
+      <Filter>3d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3d\setup.cpp">
+      <Filter>3d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\arch\win32\messagebox.cpp">
+      <Filter>arch\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\arch\sdl\digi.cpp">
+      <Filter>arch\sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\arch\sdl\digi_audio.cpp">
+      <Filter>arch\sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\arch\sdl\digi_mixer.cpp">
+      <Filter>arch\sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\arch\sdl\digi_mixer_music.cpp">
+      <Filter>arch\sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\arch\sdl\event.cpp">
+      <Filter>arch\sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\arch\sdl\gr.cpp">
+      <Filter>arch\sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\arch\sdl\init.cpp">
+      <Filter>arch\sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\arch\sdl\joy.cpp">
+      <Filter>arch\sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\arch\sdl\jukebox.cpp">
+      <Filter>arch\sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\arch\sdl\key.cpp">
+      <Filter>arch\sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\arch\sdl\mouse.cpp">
+      <Filter>arch\sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\arch\sdl\rbaudio.cpp">
+      <Filter>arch\sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\arch\sdl\timer.cpp">
+      <Filter>arch\sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\arch\sdl\window.cpp">
+      <Filter>arch\sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\iff\iff.cpp">
+      <Filter>iff</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\iff\archive\iff8bpp.c">
+      <Filter>iff\archive</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\iff\archive\iff15bpp.c">
+      <Filter>iff\archive</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\iff\archive\iffmike.c">
+      <Filter>iff\archive</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\iff\archive\ifftest.c">
+      <Filter>iff\archive</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\iff\archive\ifftestv.c">
+      <Filter>iff\archive</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\autosave.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\centers.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\curves.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\eglobal.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\ehostage.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\elight.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\eobject.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\eswitch.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\fixseg.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\func.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\group.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\info.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\kbuild.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\kcurve.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\kfuncs.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\kgame.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\kgroup.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\khelp.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\kmine.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\ksegmove.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\ksegsel.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\ksegsize.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\ktmap.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\kview.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\macro.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\med.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\meddraw.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\medmisc.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\medrobot.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\medsel.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\medwall.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\mine.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\objpage.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\segment.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\seguvs.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\texpage.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\editor\texture.cpp">
+      <Filter>editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libmve\decoder8.cpp">
+      <Filter>libmve</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libmve\decoder16.cpp">
+      <Filter>libmve</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libmve\mve_audio.cpp">
+      <Filter>libmve</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libmve\mve_main.c">
+      <Filter>libmve</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libmve\mvelib.cpp">
+      <Filter>libmve</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libmve\mveplay.cpp">
+      <Filter>libmve</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\ai.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\ai2.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\aipath.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\automap.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\bm.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\bmread.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\cntrlcen.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\collide.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\config.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\console.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\controls.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\credits.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\cxxconsole.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\digiobj.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\dumpmine.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\effects.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\endlevel.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\escort.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\fireball.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\fuelcen.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\fvi.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\game.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\gamecntl.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\gamefont.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\gamemine.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\gamepal.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\gamerend.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\gamesave.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\gameseg.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\gameseq.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\gauges.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\hostage.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\hud.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\inferno.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\kconfig.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\kmatrix.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\laser.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\lighting.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\menu.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\mglobal.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\mission.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\morph.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\movie.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\multi.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\multibot.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\net_udp.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\newdemo.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\newmenu.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\object.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\paging.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\physics.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\piggy.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\player.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\playsave.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\polyobj.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\powerup.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\pybinding.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\render.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\robot.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\scores.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\segment.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\slew.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\songs.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\state.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\switch.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\terrain.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\texmerge.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\text.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\titles.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\vclip.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\vers_id.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\wall.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\weapon.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\maths\fixc.cpp">
+      <Filter>maths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\maths\rand.cpp">
+      <Filter>maths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\maths\tables.cpp">
+      <Filter>maths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\maths\vecmat.cpp">
+      <Filter>maths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mem\mem.cpp">
+      <Filter>mem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\misc\args.cpp">
+      <Filter>misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\misc\byteswap.c">
+      <Filter>misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\misc\dl_list.cpp">
+      <Filter>misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\misc\error.cpp">
+      <Filter>misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\misc\errtest.c">
+      <Filter>misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\misc\hash.cpp">
+      <Filter>misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\misc\hmp.cpp">
+      <Filter>misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\misc\ignorecase.cpp">
+      <Filter>misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\misc\parsarg.c">
+      <Filter>misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\misc\parstest.c">
+      <Filter>misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\misc\physfsrwops.cpp">
+      <Filter>misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\misc\physfsx.cpp">
+      <Filter>misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\misc\pngfile.c">
+      <Filter>misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\misc\strio.cpp">
+      <Filter>misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\misc\strutil.cpp">
+      <Filter>misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\texmap\ntmap.cpp">
+      <Filter>texmap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\texmap\scanline.cpp">
+      <Filter>texmap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ui\barbox.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ui\button.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ui\checkbox.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ui\dialog.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ui\file.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ui\gadget.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ui\icon.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ui\inputbox.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ui\keypad.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ui\keypress.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ui\keytrap.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ui\listbox.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ui\menu.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ui\menubar.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ui\message.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ui\number.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ui\popup.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ui\radio.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ui\scroll.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ui\ui.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ui\uidraw.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ui\userbox.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\arch\win32\precomp.cpp">
+      <Filter>arch\win32</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\2d\bitmap.h">
+      <Filter>2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\2d\clip.h">
+      <Filter>2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3d\clipper.h">
+      <Filter>3d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3d\globvars.h">
+      <Filter>3d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\arch\win32\include\resource.h">
+      <Filter>arch\win32\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\3d.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\args.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\byteswap.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\checker.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\compiler.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\console.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\d_glob.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\d_io.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\dl_list.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\dxxerror.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\func.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\gr.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\grdef.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hash.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hmp.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\i86.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\iff.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\ignorecase.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\internal.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\interp.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\libmve.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\loadgl.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\makesig.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\maths.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\ogl_init.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\pa_enabl.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\palette.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\pcx.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\physfsrwops.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\physfsx.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\pngfile.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\pstypes.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\rbaudio.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\rle.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\strio.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\strutil.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\texmap.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\timer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\u_dpmi.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\u_mem.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\ui.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\vecmat.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\vecmat.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\editor\centers.h">
+      <Filter>include\editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\editor\editor.h">
+      <Filter>include\editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\editor\ehostage.h">
+      <Filter>include\editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\editor\eobject.h">
+      <Filter>include\editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\editor\eswitch.h">
+      <Filter>include\editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\editor\info.h">
+      <Filter>include\editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\editor\kdefs.h">
+      <Filter>include\editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\editor\kfuncs.h">
+      <Filter>include\editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\editor\macro.h">
+      <Filter>include\editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\editor\meddraw.h">
+      <Filter>include\editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\editor\medlisp.h">
+      <Filter>include\editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\editor\medmisc.h">
+      <Filter>include\editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\editor\medrobot.h">
+      <Filter>include\editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\editor\medsel.h">
+      <Filter>include\editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\editor\medwall.h">
+      <Filter>include\editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\editor\objpage.h">
+      <Filter>include\editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\editor\seguvs.h">
+      <Filter>include\editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\editor\texpage.h">
+      <Filter>include\editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libmve\decoders.h">
+      <Filter>libmve</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libmve\mve_audio.h">
+      <Filter>libmve</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libmve\mvelib.h">
+      <Filter>libmve</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\ai.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\aistruct.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\automap.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\bm.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\bmread.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\cntrlcen.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\collide.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\config.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\controls.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\credits.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\cxxconsole.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\desc_id.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\digi.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\effects.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\endlevel.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\escort.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\fireball.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\fuelcen.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\fvi.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\game.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\gamefont.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\gamemine.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\gamepal.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\gamesave.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\gameseg.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\gameseq.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\gamestat.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\gauges.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\graphadapt.hpp">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\hostage.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\hudmsg.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\inferno.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\kconfig.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\kmatrix.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\laser.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\lighting.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\menu.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\mission.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\morph.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\movie.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\multi.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\multibot.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\net_udp.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\newdemo.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\newmenu.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\object.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\object.types.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\paging.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\physics.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\piggy.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\player.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\playsave.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\polyobj.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\powerup.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\pybinding.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\render.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\robot.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\scores.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\screens.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\segment.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\segpoint.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\slew.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\songs.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\sounds.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\state.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\switch.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\terrain.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\texmerge.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\text.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\textures.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\titles.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\tmplgraphadapt.hpp">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\vclip.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\vers_id.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\wall.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\weapon.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\misc\dos_disk.h">
+      <Filter>misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\misc\parsarg.h">
+      <Filter>misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\texmap\scanline.h">
+      <Filter>texmap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\texmap\texmapl.h">
+      <Filter>texmap</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="..\..\arch\win32\d2xr.res">
+      <Filter>arch\win32</Filter>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\include\d1x.xpm">
+      <Filter>include</Filter>
+    </None>
+    <None Include="..\..\include\descent.xpm">
+      <Filter>include</Filter>
+    </None>
+    <None Include="..\..\include\psmacros.inc">
+      <Filter>include</Filter>
+    </None>
+    <None Include="..\..\include\pstypes.inc">
+      <Filter>include</Filter>
+    </None>
+    <None Include="..\..\main\descent.cfg">
+      <Filter>main</Filter>
+    </None>
+    <None Include="..\..\main\inferno.ini">
+      <Filter>main</Filter>
+    </None>
+    <None Include="..\..\main\link.bat">
+      <Filter>main</Filter>
+    </None>
+  </ItemGroup>
+</Project>
