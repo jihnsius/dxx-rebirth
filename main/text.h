@@ -21,6 +21,13 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #ifndef _TEXT_H
 #define _TEXT_H
 
+#if !defined(__GNUC__)
+/*
+ * Only gcc understands the syntax used for builtin string lookup.
+ */
+#define SUPPORT_MULTIPLE_LANGUAGES
+#endif
+
 #ifdef SUPPORT_MULTIPLE_LANGUAGES
 //Array of pointers to text
 extern char *Text_string[N_TEXT_STRINGS];
