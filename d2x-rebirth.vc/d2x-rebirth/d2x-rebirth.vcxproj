@@ -53,6 +53,7 @@
       <ForcedIncludeFiles>..\arch\win32\include\precomp.h</ForcedIncludeFiles>
       <PrecompiledHeaderFile>..\arch\win32\include\precomp.h</PrecompiledHeaderFile>
       <AdditionalOptions>/J %(AdditionalOptions)</AdditionalOptions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -64,7 +65,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>MinSpace</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;WIN32_LEAN_AND_MEAN;RELEASE;_WINDOWS;PROGRAM_NAME="D2X-Rebirth";D2XMAJORi=0;D2XMINORi=57;D2XMICROi=3;NETWORK;_REENTRANT;OGL;NO_ASM;USE_SDLMIXER;OGL;EDITOR;IPv6;USE_UDP;HAVE_STRUCT_TIMEVAL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -72,6 +73,7 @@
       <ForcedIncludeFiles>..\arch\win32\include\precomp.h</ForcedIncludeFiles>
       <PrecompiledHeaderFile>..\arch\win32\include\precomp.h</PrecompiledHeaderFile>
       <AdditionalOptions>/J %(AdditionalOptions)</AdditionalOptions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
