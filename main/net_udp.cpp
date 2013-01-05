@@ -133,7 +133,11 @@ static ssize_t dxx_sendto(int sockfd, const void *msg, int len, unsigned int fla
 
 static ssize_t dxx_recvfrom(int sockfd, void *buf, int len, unsigned int flags, struct sockaddr *from, unsigned int *fromlen)
 {
+#ifdef _WIN32
+	ssize_t rv = recvfrom(sockfd, (char *)buf, len, flags, from, (int*)fromlen);
+#else
 	ssize_t rv = recvfrom(sockfd, (char *)buf, len, flags, from, fromlen);
+#endif
 
 	UDP_num_recvfrom++;
 	UDP_len_recvfrom += rv;
