@@ -123,7 +123,7 @@ int ReadConfigFile()
 		return 1;
 	}
 
-	const int max_len = PHYSFS_fileLength(infile); // to be fully safe, assume the whole cfg consists of one big line
+	const int max_len = (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT)PHYSFS_fileLength(infile); // to be fully safe, assume the whole cfg consists of one big line
 	MALLOC(line, char, max_len);
 	while (!PHYSFS_eof(infile))
 	{

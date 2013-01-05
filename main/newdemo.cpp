@@ -206,10 +206,10 @@ void newdemo_record_oneframeevent_update();
 
 int newdemo_get_percent_done()	{
 	if ( Newdemo_state == ND_STATE_PLAYBACK ) {
-		return (PHYSFS_tell(infile) * 100) / nd_playback_v_demosize;
+		return ((PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT) PHYSFS_tell(infile) * 100) / nd_playback_v_demosize;
 	}
 	if ( Newdemo_state == ND_STATE_RECORDING ) {
-		return PHYSFS_tell(outfile);
+		return (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT) PHYSFS_tell(outfile);
 	}
 	return 0;
 }
@@ -2967,7 +2967,7 @@ void newdemo_goto_end(int to_rewrite)
 	PHYSFSX_fseek(infile, -2 - byte_count, SEEK_CUR);
 
 	nd_read_short(&frame_length);
-	loc = PHYSFS_tell(infile);
+	loc = (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT) PHYSFS_tell(infile);
 	if (Newdemo_game_mode & GM_MULTI)
 	{
 		nd_read_byte(&cloaked);
@@ -3623,7 +3623,7 @@ void newdemo_start_playback(const char * filename)
 	Game_mode = GM_NORMAL;
 	Newdemo_state = ND_STATE_PLAYBACK;
 	Newdemo_vcr_state = ND_STATE_PLAYBACK;
-	nd_playback_v_demosize = PHYSFS_fileLength(infile);
+	nd_playback_v_demosize = (PHYSFSX_UNSAFE_TRUNCATE_TO_UNSIGNED) PHYSFS_fileLength(infile);
 	nd_playback_v_bad_read = 0;
 	nd_playback_v_at_eof = 0;
 	nd_playback_v_framecount = 0;
@@ -3675,7 +3675,7 @@ int newdemo_swap_endian(const char *filename)
 	if (infile==NULL)
 		goto read_error;
 
-	nd_playback_v_demosize = PHYSFS_fileLength(infile);	// should be exactly the same size
+	nd_playback_v_demosize = (PHYSFSX_UNSAFE_TRUNCATE_TO_UNSIGNED) PHYSFS_fileLength(infile);	// should be exactly the same size
 	outfile = PHYSFSX_openWriteBuffered(DEMO_FILENAME);
 	if (outfile==NULL)
 	{

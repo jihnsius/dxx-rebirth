@@ -99,7 +99,7 @@ void gr_use_palette_table(const char * filename )
 		      ">.\n",
 		      filename);
 
-	fsize	= PHYSFS_fileLength( fp );
+	fsize	= (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT)PHYSFS_fileLength( fp );
 	Assert( fsize == 9472 );
 	(void)fsize;
 	PHYSFS_read( fp, gr_palette, 256*3, 1 );

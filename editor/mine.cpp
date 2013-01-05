@@ -366,7 +366,7 @@ int save_mine_data(PHYSFS_file * SaveFile)
 
 	//=================== Calculate offsets into file ==================
 
-	header_offset = PHYSFS_tell(SaveFile) + sizeof(mine_fileinfo);
+	header_offset = (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT)PHYSFS_tell(SaveFile) + sizeof(mine_fileinfo);
 	editor_offset = header_offset + sizeof(mine_header);
 	texture_offset = editor_offset + sizeof(mine_editor);
 	vertex_offset  = texture_offset + (13*NumTextures);
@@ -643,7 +643,7 @@ int save_mine_data_compiled(PHYSFS_file *SaveFile)
 		for (sidenum = 0; sidenum < MAX_SIDES_PER_SEGMENT; sidenum++)
 		{
 			if (bit_mask & (1 << sidenum))
-				PHYSFSX_writeU8(SaveFile, seg->sides[sidenum].wall_num);
+				PHYSFSX_writeU8(SaveFile, (PHYSFS_uint8)seg->sides[sidenum].wall_num);
 		}
 
 		for (sidenum = 0; sidenum < MAX_SIDES_PER_SEGMENT; sidenum++)

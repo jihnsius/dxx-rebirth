@@ -568,11 +568,11 @@ int init_subtitles(const char *filename)
 		have_binary = 1;
 	}
 
-	size = PHYSFS_fileLength(ifile);
+	size = (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT) PHYSFS_fileLength(ifile);
 
 	MALLOC (subtitle_raw_data, char, size+1);
 
-	read_count = PHYSFS_read(ifile, subtitle_raw_data, 1, size);
+	read_count = (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT) PHYSFS_read(ifile, subtitle_raw_data, 1, size);
 
 	PHYSFS_close(ifile);
 

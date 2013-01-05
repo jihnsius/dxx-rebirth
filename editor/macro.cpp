@@ -36,6 +36,7 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "medlisp.h"
 #include "kdefs.h"
 #include "u_mem.h"
+#include "physfsx.h"
 
 #define MAX_NUM_EVENTS 10000
 
@@ -126,7 +127,7 @@ int MacroLoad()
 			return 0;
 		if (RecordBuffer)
 			d_free( RecordBuffer );
-		length = PHYSFS_fileLength(fp);
+		length = (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT)PHYSFS_fileLength(fp);
 		RecordBuffer = d_malloc(length);
 		if (!RecordBuffer)
 			return 0;

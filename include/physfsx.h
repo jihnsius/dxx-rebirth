@@ -51,6 +51,11 @@ static inline PHYSFS_sint64 PHYSFSX_read_chatty(const char *func,unsigned line,P
 #include "byteswap.h"
 #include "compiler.h"
 
+typedef int PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT;
+typedef long PHYSFSX_UNSAFE_TRUNCATE_TO_LONG;
+typedef unsigned PHYSFSX_UNSAFE_TRUNCATE_TO_UNSIGNED;
+typedef unsigned PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_UINT;
+
 #ifdef __cplusplus
 
 extern void PHYSFSX_init(int argc, char *argv[]);
@@ -87,19 +92,19 @@ static inline void PHYSFSX_readAngleVecX(PHYSFS_file *file, vms_angvec *v, int s
 	v->h = PHYSFSX_readSXE16(file, swap);
 }
 
-static inline int PHYSFSX_writeU8(PHYSFS_file *file, PHYSFS_uint8 val)
+static inline PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT PHYSFSX_writeU8(PHYSFS_file *file, PHYSFS_uint8 val)
 {
-	return PHYSFS_write(file, &val, 1, 1);
+	return (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT)PHYSFS_write(file, &val, 1, 1);
 }
 
-static inline int PHYSFSX_writeString(PHYSFS_file *file, const char *s)
+static inline PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT PHYSFSX_writeString(PHYSFS_file *file, const char *s)
 {
-	return PHYSFS_write(file, s, 1, strlen(s) + 1);
+	return (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT)PHYSFS_write(file, s, 1, strlen(s) + 1);
 }
 
-static inline int PHYSFSX_puts(PHYSFS_file *file, const char *s)
+static inline PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT PHYSFSX_puts(PHYSFS_file *file, const char *s)
 {
-	return PHYSFS_write(file, s, 1, strlen(s));
+	return (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT)PHYSFS_write(file, s, 1, strlen(s));
 }
 
 static inline int PHYSFSX_putc(PHYSFS_file *file, int c)
@@ -138,7 +143,7 @@ static inline int PHYSFSX_fseek(const char *func,unsigned line,PHYSFS_file *fp, 
 static inline int PHYSFSX_fseek(PHYSFS_file *fp, long int offset, int where)
 #endif
 {
-	int c, goal_position;
+	PHYSFS_sint64 c, goal_position;
 	PHYSFSX_CHATTY_PRE_TELL(fp);
 
 	switch(where)
@@ -215,16 +220,20 @@ static inline char * (PHYSFSX_fgets)(char *buf, size_t n, PHYSFS_file *const fp)
 	return buf;
 }
 
-static inline int PHYSFSX_printf(PHYSFS_file *file, const char *format, ...) __attribute_gcc_format((printf, 2, 3));
-static inline int PHYSFSX_printf(PHYSFS_file *file, const char *format, ...)
+static inline PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT PHYSFSX_printf(PHYSFS_file *file, const char *format, ...) __attribute_gcc_format((printf, 2, 3));
+static inline PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT PHYSFSX_printf(PHYSFS_file *file, const char *format, ...)
 {
 	char buffer[1024];
 	va_list args;
 
 	va_start(args, format);
+#ifdef _WIN32
+	StringCbVPrintfA(buffer, sizeof(buffer), format, args);
+#else
 	vsnprintf(buffer, sizeof(buffer), format, args);
+#endif
 
-	return PHYSFSX_puts(file, buffer);
+	return (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT)PHYSFSX_puts(file, buffer);
 }
 
 #define PHYSFSX_writeFix	PHYSFS_writeSLE32

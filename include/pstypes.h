@@ -54,10 +54,6 @@ typedef unsigned int uint;
 #define max(a,b) (((a)<(b))?(b):(a))
 #endif
 
-#ifndef PATH_MAX
-#define PATH_MAX 4096
-#endif
-
 #ifndef bool
 //define a boolean
 typedef ubyte bool;
@@ -67,6 +63,16 @@ typedef ubyte bool;
 #define NULL 0
 #endif
 #endif
+
+
+#ifndef PATH_MAX
+#ifdef _WIN32
+#define PATH_MAX 260
+#else
+#define PATH_MAX 4096
+#endif
+#endif
+
 
 // the following stuff has nothing to do with types but needed everywhere,
 // and since this file is included everywhere, it's here.

@@ -380,9 +380,9 @@ void piggy_init_pigfile(const char *filename)
 
 	header_size = N_bitmaps * sizeof(DiskBitmapHeader);
 
-	data_start = header_size + PHYSFS_tell(Piggy_fp);
+	data_start = (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT) header_size + PHYSFS_tell(Piggy_fp);
 #ifdef EDITOR
-	data_size = PHYSFS_fileLength(Piggy_fp) - data_start;
+	data_size = (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT) PHYSFS_fileLength(Piggy_fp) - data_start;
 #endif
 	Num_bitmap_files = 1;
 
@@ -489,7 +489,7 @@ void piggy_new_pigfile(char *pigname)
 
 		header_size = N_bitmaps * sizeof(DiskBitmapHeader);
 
-		data_start = header_size + PHYSFS_tell(Piggy_fp);
+		data_start = header_size + (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT) PHYSFS_tell(Piggy_fp);
 
 		for (i=1; i<=N_bitmaps; i++ )
 		{
@@ -773,7 +773,7 @@ int read_hamfile()
 		PHYSFSX_fseek(ham_fp, sound_offset, SEEK_SET);
 		N_sounds = PHYSFSX_readInt(ham_fp);
 
-		sound_start = PHYSFS_tell(ham_fp);
+		sound_start = (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT) PHYSFS_tell(ham_fp);
 
 		header_size = N_sounds * sizeof(DiskSoundHeader);
 
@@ -830,7 +830,7 @@ static int read_sndfile()
 
 	N_sounds = PHYSFSX_readInt(snd_fp);
 
-	sound_start = PHYSFS_tell(snd_fp);
+	sound_start = (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT) PHYSFS_tell(snd_fp);
 	header_size = N_sounds*sizeof(DiskSoundHeader);
 
 	//Read sounds
@@ -1016,7 +1016,7 @@ void piggy_bitmap_page_in( bitmap_index bitmap )
 		gr_set_bitmap_flags(bmp, GameBitmapFlags[i]);
 
 		if ( bmp->bm_flags & BM_FLAG_RLE )      {
-			int zsize = 0, pigsize = PHYSFS_fileLength(Piggy_fp);
+			int zsize = 0, pigsize = (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT) PHYSFS_fileLength(Piggy_fp);
 			descent_critical_error = 0;
 			zsize = PHYSFSX_readInt(Piggy_fp);
 			if ( descent_critical_error )   {
@@ -1066,7 +1066,7 @@ void piggy_bitmap_page_in( bitmap_index bitmap )
 			}
 
 		} else {
-			int pigsize = PHYSFS_fileLength(Piggy_fp);
+			int pigsize = (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT) PHYSFS_fileLength(Piggy_fp);
 			// GET JOHN NOW IF YOU GET THIS ASSERT!!!
 			Assert( Piggy_bitmap_cache_next+(bmp->bm_h*bmp->bm_w) < Piggy_bitmap_cache_size );
 			if ( Piggy_bitmap_cache_next+(bmp->bm_h*bmp->bm_w) >= Piggy_bitmap_cache_size ) {
@@ -1184,7 +1184,7 @@ static void piggy_write_pigfile(const char *filename)
 	PHYSFS_write( pig_fp, &Num_bitmap_files, sizeof(int), 1 );
 	Num_bitmap_files++;
 
-	bitmap_data_start = PHYSFS_tell(pig_fp);
+	bitmap_data_start = (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT) PHYSFS_tell(pig_fp);
 	bitmap_data_start += (Num_bitmap_files - 1) * sizeof(DiskBitmapHeader);
 	data_offset = bitmap_data_start;
 
@@ -1224,7 +1224,7 @@ static void piggy_write_pigfile(const char *filename)
 
 		if (fp1)
 			PHYSFSX_printf( fp1, "BMP: %s, size %d bytes", AllBitmaps[i].name, bmp->bm_rowsize * bmp->bm_h );
-		org_offset = PHYSFS_tell(pig_fp);
+		org_offset = (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT) PHYSFS_tell(pig_fp);
 		bmh.offset = data_offset - bitmap_data_start;
 		PHYSFSX_fseek( pig_fp, data_offset, SEEK_SET );
 
@@ -1305,7 +1305,7 @@ void piggy_dump_all()
 		write_int(HAMFILE_VERSION,ham_fp);
 
 		bm_write_all(ham_fp);
-		xlat_offset = PHYSFS_tell(ham_fp);
+		xlat_offset = (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT) PHYSFS_tell(ham_fp);
 		PHYSFS_write( ham_fp, GameBitmapXlat, sizeof(ushort)*MAX_BITMAP_FILES, 1 );
 		//Dump bitmaps
 
@@ -1334,7 +1334,7 @@ void piggy_dump_all()
 
 		PHYSFS_write( ham_fp, &Num_sound_files, sizeof(int), 1 );
 
-		sound_data_start = PHYSFS_tell(ham_fp);
+		sound_data_start = (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT) PHYSFS_tell(ham_fp);
 		sound_data_start += Num_sound_files*sizeof(DiskSoundHeader);
 		data_offset = sound_data_start;
 
@@ -1512,7 +1512,7 @@ void load_bitmap_replacements(char *level_name)
 		for (i = 0; i < n_bitmaps; i++)
 			indices[i] = PHYSFSX_readShort(ifile);
 
-		bitmap_data_size = PHYSFS_fileLength(ifile) - PHYSFS_tell(ifile) - sizeof(DiskBitmapHeader) * n_bitmaps;
+		bitmap_data_size = (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT) PHYSFS_fileLength(ifile) - (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT) PHYSFS_tell(ifile) - sizeof(DiskBitmapHeader) * n_bitmaps;
 		MALLOC( Bitmap_replacement_data, ubyte, bitmap_data_size );
 
 		for (i=0;i<n_bitmaps;i++) {
