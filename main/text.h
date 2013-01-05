@@ -28,11 +28,6 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define SUPPORT_MULTIPLE_LANGUAGES
 #endif
 
-#ifdef SUPPORT_MULTIPLE_LANGUAGES
-//Array of pointers to text
-extern char *Text_string[N_TEXT_STRINGS];
-#endif
-
 //Symbolic constants for all the strings
 
 #define TXT_NEW_GAME            dxx_gettext(0, "New game")
@@ -669,6 +664,11 @@ extern char *Text_string[N_TEXT_STRINGS];
 //the commandline help used to be.  Add new things there
 
 #define N_TEXT_STRINGS          649
+
+#ifdef SUPPORT_MULTIPLE_LANGUAGES
+//Array of pointers to text
+extern char *Text_string[N_TEXT_STRINGS];
+#endif
 
 #ifdef __GNUC__
 __extern_always_inline char * dxx_gettext(unsigned idx, const char *fmt) __attribute__((format_arg(2)));

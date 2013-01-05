@@ -31,6 +31,9 @@ static char rcsid[] = "$Id: text.c,v 1.1.1.1 2006/03/17 19:56:37 zicodxx Exp $";
 #include "inferno.h"
 #include "text.h"
 #include "args.h"
+#ifdef SUPPORT_MULTIPLE_LANGUAGES
+#include "physfsx.h"
+#endif
 
 #define SHAREWARE_TEXTSIZE  14677
 
@@ -97,7 +100,7 @@ void load_text()
 	PHYSFS_file *ifile;
 	int len,i, have_binary = 0;
 	char *tptr;
-	char *filename="descent.tex";
+	const char *filename="descent.tex";
 
 	if (GameArg.DbgAltTex)
 		filename = GameArg.DbgAltTex;
@@ -182,12 +185,11 @@ void load_text()
 		}
 
           switch(i) {
-				  char *extra;
 				  char *str;
 				  
 			  case 350:
-				  extra = "\n<Ctrl-C> converts format\nIntel <-> PowerPC";
-				  str = d_malloc(strlen(Text_string[i]) + strlen(extra) + 1);
+				  static const char extra[] = "\n<Ctrl-C> converts format\nIntel <-> PowerPC";
+				  MALLOC(str, char, strlen(Text_string[i]) + strlen(extra) + 1);
 				  if (!str)
 					  break;
 				  strcpy(str, Text_string[i]);
