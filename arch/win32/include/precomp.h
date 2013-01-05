@@ -28,6 +28,10 @@
 #define strdup _strdup
 #define stricmp _stricmp
 #define strcasecmp _stricmp
+#define strupr _strupr
+#define strlwr _strlwr
+#define strrev _strrev
+#define strnicmp _strnicmp
 
 #include <algorithm>
 #include <array>
