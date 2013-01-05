@@ -140,7 +140,7 @@ static int (PCX_PHYSFS_read)(const char *func, const unsigned line, struct PCX_P
 		{
 			return 0;
 		}
-		int result = PHYSFS_read(pcxphysfs->PCXfile, pcxphysfs->buffer + pcxlen, sizeof(pcxphysfs->buffer[0]), (sizeof(pcxphysfs->buffer) / sizeof(pcxphysfs->buffer[0])) - pcxlen);
+		int result = (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT)PHYSFS_read(pcxphysfs->PCXfile, pcxphysfs->buffer + pcxlen, sizeof(pcxphysfs->buffer[0]), (sizeof(pcxphysfs->buffer) / sizeof(pcxphysfs->buffer[0])) - pcxlen);
 		if (result <= 0)
 		{
 			fprintf(stderr, "%s:%u:%u: size=%u len=%u result=%i\n", func, line, __LINE__, size, pcxlen, result);
@@ -289,7 +289,7 @@ int pcx_write_bitmap(const char * filename, grs_bitmap * bmp, ubyte * palette )
 	for (i=0; i<768; i++ )
 		palette[i] <<= 2;
 
-	retval = PHYSFS_write(PCXfile, palette, 768, 1);
+	retval = (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT)PHYSFS_write(PCXfile, palette, 768, 1);
 
 	for (i=0; i<768; i++ )
 		palette[i] >>= 2;

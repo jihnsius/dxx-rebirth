@@ -147,7 +147,7 @@ static int parse_body(PHYSFS_file *ifile,long len,iff_bitmap_header *bmheader)
         width=0;
         depth=0;
 
-	end_pos = PHYSFS_tell(ifile) + len;
+	end_pos = (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT)PHYSFS_tell(ifile) + len;
 	if (len&1)
 		end_pos++;
 
@@ -242,7 +242,7 @@ static int parse_delta(PHYSFS_file *ifile,long len,iff_bitmap_header *bmheader)
 {
 	unsigned char  *p=bmheader->raw_data;
 	int y;
-	long chunk_end = PHYSFS_tell(ifile) + len;
+	long chunk_end = (PHYSFSX_UNSAFE_TRUNCATE_TO_LONG)PHYSFS_tell(ifile) + len;
 
 	PHYSFSX_fseek(ifile, 4, SEEK_CUR);		//longword, seems to be equal to 4.  Don't know what it is
 
@@ -322,7 +322,7 @@ static int iff_parse_ilbm_pbm(PHYSFS_file *ifile,long form_type,iff_bitmap_heade
 	int sig,len;
 	long start_pos,end_pos;
 
-	start_pos = PHYSFS_tell(ifile);
+	start_pos = (PHYSFSX_UNSAFE_TRUNCATE_TO_LONG)PHYSFS_tell(ifile);
 	end_pos = start_pos-4+form_len;
 
 			if (form_type == pbm_sig)
@@ -750,7 +750,7 @@ static int write_body(PHYSFS_file *ofile,iff_bitmap_header *bitmap_header,int co
 	long save_pos;
 
 	put_sig(body_sig,ofile);
-	save_pos = PHYSFS_tell(ofile);
+	save_pos = (PHYSFSX_UNSAFE_TRUNCATE_TO_LONG)PHYSFS_tell(ofile);
 	PHYSFS_writeSBE32(ofile, len);
 
     //if (! (new_span = d_malloc(bitmap_header->w+(bitmap_header->w/128+2)*2))) return IFF_NO_MEM;
@@ -846,7 +846,7 @@ static int write_pbm(PHYSFS_file *ofile,iff_bitmap_header *bitmap_header,int com
 	long save_pos;
 
 	put_sig(form_sig,ofile);
-	save_pos = PHYSFS_tell(ofile);
+	save_pos = (PHYSFSX_UNSAFE_TRUNCATE_TO_LONG)PHYSFS_tell(ofile);
 	PHYSFS_writeSBE32(ofile, pbm_size+8);
 	put_sig(pbm_sig,ofile);
 
@@ -954,7 +954,7 @@ int iff_read_animbrush(const char *ifilename,grs_bitmap **bm_list,unsigned max_b
 	if ((form_type == pbm_sig) || (form_type == ilbm_sig))
 		ret = IFF_FORM_BITMAP;
 	else if (form_type == anim_sig) {
-		int anim_end = PHYSFS_tell(ifile) + form_len - 4;
+		int anim_end = (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT)PHYSFS_tell(ifile) + form_len - 4;
 
 		while (PHYSFS_tell(ifile) < anim_end && *n_bitmaps < max_bitmaps) {
 

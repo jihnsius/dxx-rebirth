@@ -89,12 +89,12 @@ int mix_play_file(char *filename, int loop, void (*hook_finished_track)())
 		filehandle = PHYSFS_openRead(filename);
 		if (filehandle != NULL)
 		{
-			unsigned len = PHYSFS_fileLength(filehandle);
+			unsigned len = (unsigned)(PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT)PHYSFS_fileLength(filehandle);
 			unsigned char *p = (unsigned char *)d_realloc(current_music_hndlbuf, sizeof(char)*len);
 			if (p)
 			{
 			current_music_hndlbuf = p;
-			bufsize = PHYSFS_read(filehandle, current_music_hndlbuf, sizeof(char), len);
+			bufsize = (unsigned int)(PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT)PHYSFS_read(filehandle, current_music_hndlbuf, sizeof(char), len);
 			rw = SDL_RWFromConstMem(current_music_hndlbuf,bufsize*sizeof(char));
 			current_music = Mix_LoadMUS_RW(rw);
 			}

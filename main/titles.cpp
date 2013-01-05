@@ -460,7 +460,7 @@ static int load_screen_text(char *filename, char **buf)
 	if ((tfile = PHYSFSX_openReadBuffered(filename)) == NULL)
 		return (0);
 
-	len = PHYSFS_fileLength(tfile);
+	len = (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT) PHYSFS_fileLength(tfile);
 	MALLOC(*buf, char, len+1);
 	for (x=0, i=0; i < len; i++, x++) {
 		PHYSFS_read(tfile,*buf+x,1,1);

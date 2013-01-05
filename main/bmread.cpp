@@ -295,7 +295,7 @@ static int ds_load(int skip, char * filename )	{
 	cfp = PHYSFSX_openReadBuffered(rawname);
 
 	if (cfp!=NULL) {
-		n.length	= PHYSFS_fileLength( cfp );
+		n.length	= (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT)PHYSFS_fileLength( cfp );
 		MALLOC( n.data, ubyte, n.length );
 		PHYSFS_read( cfp, n.data, 1, n.length );
 		PHYSFS_close(cfp);

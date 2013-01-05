@@ -5100,7 +5100,7 @@ void init_hoard_data()
 	n_orb_frames = PHYSFSX_readShort(ifile);
 	orb_w = PHYSFSX_readShort(ifile);
 	orb_h = PHYSFSX_readShort(ifile);
-	save_pos = PHYSFS_tell(ifile);
+	save_pos = (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT) PHYSFS_tell(ifile);
 	PHYSFSX_fseek(ifile,sizeof(palette)+n_orb_frames*orb_w*orb_h,SEEK_CUR);
 	n_goal_frames = PHYSFSX_readShort(ifile);
 	PHYSFSX_fseek(ifile,save_pos,SEEK_SET);
@@ -5267,7 +5267,7 @@ void save_hoard_data(void)
 
 		ifile = PHYSFS_openRead(sounds[i]);
 		Assert(ifile != NULL);
-		size = PHYSFS_fileLength(ifile);
+		size = (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT) PHYSFS_fileLength(ifile);
 		MALLOC(buf, ubyte, size);
 		PHYSFS_read(ifile, buf, size, 1);
 		PHYSFS_writeULE32(ofile, size);

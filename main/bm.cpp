@@ -532,7 +532,7 @@ int load_exit_models()
 		int hamsize;
 
 		exit_hamfile = PHYSFSX_openReadBuffered(D1_PIGFILE);
-		hamsize = PHYSFS_fileLength(exit_hamfile);
+		hamsize = (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT)PHYSFS_fileLength(exit_hamfile);
 		switch (hamsize) { //total hack for loading models
 		case D1_PIGSIZE:
 			offset = 91848;     /* and 92582  */

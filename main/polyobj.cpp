@@ -282,7 +282,7 @@ static polymodel *read_model_file(polymodel *pm,const char *filename,robot_info 
 	Assert(PHYSFS_fileLength(ifile) <= MODEL_BUF_SIZE);
 
 	Pof_addr = 0;
-	Pof_file_end = PHYSFS_read(ifile, model_buf, 1, PHYSFS_fileLength(ifile));
+	Pof_file_end = (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT) PHYSFS_read(ifile, model_buf, 1, PHYSFS_fileLength(ifile));
 	PHYSFS_close(ifile);
 
 	id = pof_read_int(model_buf);
@@ -465,7 +465,7 @@ int read_model_guns(char *filename,vms_vector *gun_points, vms_vector *gun_dirs,
 	Assert(PHYSFS_fileLength(ifile) <= MODEL_BUF_SIZE);
 
 	Pof_addr = 0;
-	Pof_file_end = PHYSFS_read(ifile, model_buf, 1, PHYSFS_fileLength(ifile));
+	Pof_file_end = (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT) PHYSFS_read(ifile, model_buf, 1, PHYSFS_fileLength(ifile));
 	PHYSFS_close(ifile);
 
 	id = pof_read_int(model_buf);

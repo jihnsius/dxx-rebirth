@@ -31,6 +31,7 @@ static char rcsid[] = "$Id: text.c,v 1.1.1.1 2006/03/17 19:56:37 zicodxx Exp $";
 #include "inferno.h"
 #include "text.h"
 #include "args.h"
+#include "physfsx.h"
 
 #define SHAREWARE_TEXTSIZE  14677
 

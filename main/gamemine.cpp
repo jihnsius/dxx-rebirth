@@ -443,7 +443,7 @@ int load_mine_data(PHYSFS_file *LoadFile)
 	short tmap_xlate;
 	int 	translate;
 	char 	*temptr;
-	int	mine_start = PHYSFS_tell(LoadFile);
+	int	mine_start = (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT)PHYSFS_tell(LoadFile);
 	char old_tmap_list[MAX_TEXTURES][FILENAME_LEN];
 	std::array<short, MAX_TEXTURES> tmap_times_used;
 

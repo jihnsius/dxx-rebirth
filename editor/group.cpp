@@ -1093,7 +1093,7 @@ static int med_save_group(const char *filename, const vertnum_t *vertex_ids, con
 	group_header.num_segments        =   num_segments;
 
 	// Write the editor info
-	header_offset = PHYSFS_tell(SaveFile);
+	header_offset = (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT)PHYSFS_tell(SaveFile);
 	PHYSFS_write( SaveFile, &group_header, sizeof(group_header), 1);
 
 	//===================== SAVE EDITOR INFO ==========================
@@ -1110,13 +1110,13 @@ static int med_save_group(const char *filename, const vertnum_t *vertex_ids, con
 		group_editor.Groupsegp      	=   0;
 	group_editor.Groupside		 =   Groupside[current_group];
 
-	editor_offset = PHYSFS_tell(SaveFile);
+	editor_offset = (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT)PHYSFS_tell(SaveFile);
 	PHYSFS_write( SaveFile, &group_editor, sizeof(group_editor), 1);
 
 
 	//===================== SAVE VERTEX INFO ==========================
 
-	vertex_offset = PHYSFS_tell(SaveFile);
+	vertex_offset = (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT)PHYSFS_tell(SaveFile);
 	for (unsigned i=0;i<num_vertices;i++) {
 		tvert = Vertices[vertex_ids[i]];
 		PHYSFS_write( SaveFile, &tvert, sizeof(tvert), 1);
@@ -1125,7 +1125,7 @@ static int med_save_group(const char *filename, const vertnum_t *vertex_ids, con
 	//===================== SAVE SEGMENT INFO =========================
 
 
-	segment_offset = PHYSFS_tell(SaveFile);
+	segment_offset = (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT)PHYSFS_tell(SaveFile);
 	for (unsigned i=0;i<num_segments;i++) {
 		tseg = Segments[segment_ids[i]];
 
@@ -1153,7 +1153,7 @@ static int med_save_group(const char *filename, const vertnum_t *vertex_ids, con
 
 	//===================== SAVE TEXTURE INFO ==========================
 
-	texture_offset = PHYSFS_tell(SaveFile);
+	texture_offset = (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT)PHYSFS_tell(SaveFile);
 
 	std::array<tmap_info::filename_t, MAX_TEXTURES> current_tmap_list;
 	static_assert(sizeof(current_tmap_list)==sizeof(tmap_info::filename_t)*MAX_TEXTURES, "sizeof(current_tmap_list)==sizeof(tmap_info::filename_t)*MAX_TEXTURES");
