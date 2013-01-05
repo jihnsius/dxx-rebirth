@@ -41,6 +41,12 @@
 #include <SDL/SDL_mixer.h>
 #include <digi_audio.h>
 
+#undef min
+#undef max
+
+using std::min;
+using std::max;
+
 typedef LONG_PTR ssize_t;
 
 #pragma warning(disable:4244) // warning C4244: '=': conversion from 'type1' to 'type2', possible loss of data

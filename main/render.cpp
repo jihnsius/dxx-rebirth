@@ -351,6 +351,9 @@ static void check_face(segnum_t segnum, int sidenum, int facenum, int nv, int *v
 {
 	int	i;
 
+	tmap1;
+	tmp2;
+
 	if (_search_mode) {
 		int save_lighting;
 #ifndef OGL

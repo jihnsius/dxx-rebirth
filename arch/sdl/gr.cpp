@@ -132,7 +132,7 @@ int gr_set_mode(u_int32_t mode)
 	grd_curscreen->sc_w = w;
 	grd_curscreen->sc_h = h;
 	grd_curscreen->sc_aspect = fixdiv(grd_curscreen->sc_w*GameCfg.AspectX,grd_curscreen->sc_h*GameCfg.AspectY);
-	gr_init_canvas(&grd_curscreen->sc_canvas, canvas->pixels, BM_LINEAR, w, h);
+	gr_init_canvas(&grd_curscreen->sc_canvas, (unsigned char *)canvas->pixels, BM_LINEAR, w, h);
 	window_update_canvases();
 	gr_set_current_canvas(NULL);
 
@@ -186,11 +186,13 @@ int gr_init(int mode)
 	if (GameArg.SysNoBorders)
 		sdl_video_flags|=SDL_NOFRAME;
 
+#ifndef OGL
 	if (GameArg.DbgSdlHWSurface)
 		sdl_video_flags|=SDL_HWSURFACE;
 
 	if (GameArg.DbgSdlASyncBlit)
 		sdl_video_flags|=SDL_ASYNCBLIT;
+#endif
 
 	// Set the mode.
 	if ((retcode=gr_set_mode(mode)))

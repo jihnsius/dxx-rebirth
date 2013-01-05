@@ -2588,7 +2588,7 @@ static unsigned show_player_score_with_position(const unsigned player_num, const
 		 * If self, then rotate relative to special.
 		 * Else, rotate relative to object.
 		 */
-		if (Player_num == player_num)
+		if (Player_num == (int)player_num)
 			return 0;
 		g3s_point player_point;
 		g3_rotate_point(&player_point, vvop);

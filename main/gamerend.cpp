@@ -510,7 +510,7 @@ void show_extra_views()
 			Guided_missile[Player_num] = NULL;
 		}
 
-		unsigned other_player_missile_player_idx = ~0;
+		unsigned other_player_missile_player_idx = (unsigned)~0;
 		if (!Missile_viewer || Missile_viewer->type != OBJ_WEAPON || Missile_viewer->ctype.laser_info.parent_num != Players[Player_num].objnum)
 		{
 			dxxobject *local_player_missile = NULL;
@@ -539,7 +539,7 @@ void show_extra_views()
 				}
 				if (other_player_missile)
 					continue;
-				unsigned iplr = 0;
+				int iplr = 0;
 				for (; iplr < N_players; ++iplr)
 				{
 					if (iplr == Player_num)
@@ -594,7 +594,7 @@ void show_extra_views()
 				callsign = "SHIP";
 			else
 			{
-				for (unsigned p = 0; p != N_players; ++p)
+				for (int p = 0; p != N_players; ++p)
 					if (Viewer == &Objects[Players[p].objnum])
 					{
 						callsign = Players[p].callsign;

@@ -1141,7 +1141,7 @@ void DropSecondaryWeapon ()
 {
 	objnum_t objnum;
 	int seed;
-	ubyte weapon_drop_id=-1;
+	ubyte weapon_drop_id=(ubyte)-1;
 	ushort sub_ammo=0;
 
 	if (num_objects >= MAX_USED_OBJECTS)
