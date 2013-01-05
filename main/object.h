@@ -392,19 +392,12 @@ extern objnum_t Player_fired_laser_this_frame;
 // do whatever setup needs to be done
 void init_objects();
 
-// returns segment number object is in.  Searches out from object's current
-// seg, so this shouldn't be called if the object has "jumped" to a new seg
-int obj_get_new_seg(dxxobject *obj);
-
 // when an object has moved into a new segment, this function unlinks it
 // from its old segment, and links it into the new segment
 void obj_relink(objnum_t objnum,segnum_t newsegnum);
 
 // for getting out of messed up linking situations (i.e. caused by demo playback)
 void obj_relink_all(void);
-
-// move an object from one segment to another. unlinks & relinks
-void obj_set_new_seg(int objnum,segnum_t newsegnum);
 
 // links an object into a segment's list of objects.
 // takes object number and segment number
