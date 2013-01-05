@@ -1756,7 +1756,7 @@ int RotateGroup(void)
 int SubtractFromGroup(void)
 {
 	int	x, original_group;
-	segnum_t	*gp;
+	group_segment_array_t::iterator gp;
 	unsigned	cur_num_segs;
 
 	if (!Markedsegp) {
@@ -1789,7 +1789,7 @@ int SubtractFromGroup(void)
 	gp = GroupList[current_group].segments.begin();
 	cur_num_segs = GroupList[current_group].num_segments;
 	for (unsigned s=0; s<cur_num_segs; s++) {
-		segnum_t	*gp1 = GroupList[original_group].segments.begin();
+		group_segment_array_t::iterator gp1 = GroupList[original_group].segments.begin();
 		segnum_t	s0 = gp[s];
 		int	s1;
 
