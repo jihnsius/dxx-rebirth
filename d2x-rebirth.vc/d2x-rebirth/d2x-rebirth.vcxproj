@@ -46,7 +46,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;WIN32_LEAN_AND_MEAN;_WINDOWS;PROGRAM_NAME="D2X-Rebirth";D2XMAJORi=0;D2XMINORi=57;D2XMICROi=3;NETWORK;_REENTRANT;OGL;NO_ASM;USE_SDLMIXER;OGL;EDITOR;IPv6;USE_UDP;HAVE_STRUCT_TIMEVAL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\include;..\..\include\editor;..\..\arch\include;..\..\arch\win32;..\..\main;..\external\include;..\external\include\physfs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -63,7 +63,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <Optimization>MinSpace</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
