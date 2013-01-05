@@ -19,9 +19,9 @@
 #include "args.h"
 #include "config.h"
 
-int sdl_video_flags = SDL_SWSURFACE | SDL_HWPALETTE | SDL_DOUBLEBUF;
-SDL_Surface *screen,*canvas;
-int gr_installed = 0;
+static int sdl_video_flags = SDL_SWSURFACE | SDL_HWPALETTE | SDL_DOUBLEBUF;
+static SDL_Surface *screen,*canvas;
+static int gr_installed = 0;
 
 void gr_flip()
 {
