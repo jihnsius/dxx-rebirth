@@ -577,7 +577,7 @@ static segnum_t exists_fuelcen_in_mine(segnum_t start_seg)
 	segnum_t segnum;
 	std::array<segnum_t, MAX_SEGMENTS>	bfs_list;
 
-	create_bfs_list(start_seg, bfs_list.begin(), &length, bfs_list.size());
+	create_bfs_list(start_seg, &*bfs_list.begin(), &length, bfs_list.size());
 
 		for (segindex=0; segindex<length; segindex++) {
 			segnum = bfs_list[segindex];
@@ -602,7 +602,7 @@ static objnum_t exists_in_mine(segnum_t start_seg, int objtype, int objid, int s
 	segnum_t segnum;
 	std::array<segnum_t, MAX_SEGMENTS>	bfs_list;
 
-	create_bfs_list(start_seg, bfs_list.begin(), &length, bfs_list.size());
+	create_bfs_list(start_seg, &*bfs_list.begin(), &length, bfs_list.size());
 
 		for (segindex=0; segindex<length; segindex++) {
 			objnum_t	objnum;
