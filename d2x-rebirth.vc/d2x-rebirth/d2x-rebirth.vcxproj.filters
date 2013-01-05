@@ -618,9 +618,6 @@
     <ClCompile Include="..\..\texmap\scanline.cpp">
       <Filter>texmap</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ui\barbox.cpp">
-      <Filter>ui</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\ui\button.cpp">
       <Filter>ui</Filter>
     </ClCompile>
@@ -661,9 +658,6 @@
       <Filter>ui</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ui\message.cpp">
-      <Filter>ui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ui\number.cpp">
       <Filter>ui</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ui\popup.cpp">
