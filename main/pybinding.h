@@ -30,7 +30,7 @@ void scripting_close();
 void scripting_input_enter(const char *);
 #else
 static inline void cxx_script_get_guided_missile_rotang(vms_angvec *) {}
-static inline void cxx_script_get_player_ship_rotthrust(vms_vector *) {}
+static inline void cxx_script_get_player_ship_rotthrust(dxxobject *) {}
 static inline unsigned cxx_script_get_player_ship_vecthrust(dxxobject *, fix) { return 0; }
 static inline void cxx_script_hook_controls() {}
 static inline void py_load_level_hit() {}
