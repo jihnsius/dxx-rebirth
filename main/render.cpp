@@ -347,12 +347,9 @@ static void render_face(segnum_t segnum, int sidenum, int nv, int *vp, int tmap1
 // ----------------------------------------------------------------------------
 //	Only called if editor active.
 //	Used to determine which face was clicked on.
-static void check_face(segnum_t segnum, int sidenum, int facenum, int nv, int *vp, int tmap1 __attribute_unused, int tmap2 __attribute_unused, uvl *uvlp)
+static void check_face(segnum_t segnum, int sidenum, int facenum, int nv, int *vp, int /* tmap1 */, int /* tmap2 */, uvl *uvlp)
 {
 	int	i;
-
-	tmap1;
-	tmp2;
 
 	if (_search_mode) {
 		int save_lighting;
