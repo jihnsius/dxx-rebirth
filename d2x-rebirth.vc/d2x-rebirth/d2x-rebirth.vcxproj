@@ -52,6 +52,7 @@
       <AdditionalIncludeDirectories>..\..\include;..\..\include\editor;..\..\arch\include;..\..\arch\win32;..\..\main;..\external\include;..\external\include\physfs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>..\arch\win32\include\precomp.h</ForcedIncludeFiles>
       <PrecompiledHeaderFile>..\arch\win32\include\precomp.h</PrecompiledHeaderFile>
+      <AdditionalOptions>/J %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -70,6 +71,7 @@
       <AdditionalIncludeDirectories>..\..\include;..\..\include\editor;..\..\arch\include;..\..\arch\win32;..\..\main;..\external\include;..\external\include\physfs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>..\arch\win32\include\precomp.h</ForcedIncludeFiles>
       <PrecompiledHeaderFile>..\arch\win32\include\precomp.h</PrecompiledHeaderFile>
+      <AdditionalOptions>/J %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
