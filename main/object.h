@@ -377,7 +377,6 @@ extern dxxobject *ConsoleObject;       // pointer to the object that is the play
 extern dxxobject *Viewer;              // which object we are seeing from
 extern dxxobject *Dead_player_camera;
 
-extern dxxobject Follow;
 extern int Player_is_dead;          // !0 means player is dead!
 extern int Player_exploded;
 extern int Player_eggs_dropped;
