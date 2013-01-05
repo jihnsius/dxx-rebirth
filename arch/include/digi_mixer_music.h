@@ -16,4 +16,8 @@ void mix_resume_music();
 void mix_pause_resume_music();
 void mix_free_music();
 
+#ifdef _WIN32
+int digi_win32_play_midi_song( char * filename, int loop );
+#endif
+
 #endif
