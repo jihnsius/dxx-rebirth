@@ -128,7 +128,7 @@ int MacroLoad()
 		if (RecordBuffer)
 			d_free( RecordBuffer );
 		length = (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT)PHYSFS_fileLength(fp);
-		RecordBuffer = d_malloc(length);
+		RecordBuffer = (UI_EVENT *)d_malloc(length);
 		if (!RecordBuffer)
 			return 0;
 
