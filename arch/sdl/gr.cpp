@@ -4,6 +4,7 @@
  *
  */
 
+#include <algorithm>
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
@@ -277,8 +278,7 @@ void gr_palette_step_up( int r, int g, int b )
 	SDL_SetColors(canvas, colors, 0, 256);
 }
 
-#undef min
-static inline int min(int x, int y) { return x < y ? x : y; }
+using std::min;
 
 void gr_palette_load( ubyte *pal )
 {
