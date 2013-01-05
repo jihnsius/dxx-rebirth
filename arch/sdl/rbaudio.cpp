@@ -158,6 +158,8 @@ void RBASetVolume(int volume)
 		con_printf(CON_CRITICAL, "CDROMVOLCTRL ioctl failed\n");
 		return;
 	}
+#else
+	volume;
 #endif
 }
 
