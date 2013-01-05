@@ -354,17 +354,24 @@ int main(int argc, char *argv[])
 	if (! PHYSFSX_contfile_init("descent2.hog", 1)) {
 		if (! PHYSFSX_contfile_init("d2demo.hog", 1))
 		{
-			Error("Could not find a valid hog file (descent2.hog or d2demo.hog)\nPossible locations are:\n"
 #if defined(__unix__) && !defined(__APPLE__)
-			      "\t$HOME/.d2x-rebirth\n"
+#define error_text_hog_location_path	\
+			      "\t$HOME/.d2x-rebirth\n"	\
 			      "\t" SHAREPATH "\n"
 #else
+#define error_text_hog_location_path	\
 				  "\tDirectory containing D2X\n"
 #endif
-				  "\tIn a subdirectory called 'Data'\n"
 #if (defined(__APPLE__) && defined(__MACH__)) || defined(macintosh)
+#define error_text_hog_resources_bundle	\
 				  "\tIn 'Resources' inside the application bundle\n"
+#else
+#define error_text_hog_resources_bundle
 #endif
+			Error("Could not find a valid hog file (descent2.hog or d2demo.hog)\nPossible locations are:\n"
+				  error_text_hog_location_path
+				  "\tIn a subdirectory called 'Data'\n"
+				  error_text_hog_resources_bundle
 				  "Or use the -hogdir option to specify an alternate location.");
 		}
 	}
