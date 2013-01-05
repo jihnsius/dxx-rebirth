@@ -280,7 +280,11 @@ struct segment_array_template_t
 		return segnum_t(std::distance(&*a.begin(), p));
 	}
 	typename array_t::reference back() { return a.back(); }
-	Num_segments_t size() const { return Num_segments_t{(unsigned)a.size()}; }
+	Num_segments_t size() const {
+		Num_segments_t n;
+		n.contained_value = (unsigned)a.size();
+		return n;
+	}
 	void fill(typename array_t::const_reference v) { a.fill(v); }
 };
 

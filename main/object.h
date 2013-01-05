@@ -112,7 +112,11 @@ struct object_array_template_t
 	{
 		return objnum_t(std::distance(&*a.begin(), p));
 	}
-	Num_objects_t size() const { return Num_objects_t{(unsigned)a.size()}; }
+	Num_objects_t size() const {
+		Num_objects_t n;
+		n.contained_value = (unsigned)a.size();
+		return n;
+	}
 };
 
 template <typename T>
