@@ -369,9 +369,6 @@
     <ClCompile Include="..\..\main\credits.cpp">
       <Filter>main</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\main\cxxconsole.cpp">
-      <Filter>main</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\main\digiobj.cpp">
       <Filter>main</Filter>
     </ClCompile>
@@ -918,9 +915,6 @@
       <Filter>main</Filter>
     </ClInclude>
     <ClInclude Include="..\..\main\credits.h">
-      <Filter>main</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\main\cxxconsole.h">
       <Filter>main</Filter>
     </ClInclude>
     <ClInclude Include="..\..\main\desc_id.h">

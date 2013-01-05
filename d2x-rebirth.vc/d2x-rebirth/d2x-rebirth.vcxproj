@@ -193,7 +193,6 @@
     <ClCompile Include="..\..\main\console.cpp" />
     <ClCompile Include="..\..\main\controls.cpp" />
     <ClCompile Include="..\..\main\credits.cpp" />
-    <ClCompile Include="..\..\main\cxxconsole.cpp" />
     <ClCompile Include="..\..\main\digiobj.cpp" />
     <ClCompile Include="..\..\main\dumpmine.cpp" />
     <ClCompile Include="..\..\main\effects.cpp" />
@@ -378,7 +377,6 @@
     <ClInclude Include="..\..\main\config.h" />
     <ClInclude Include="..\..\main\controls.h" />
     <ClInclude Include="..\..\main\credits.h" />
-    <ClInclude Include="..\..\main\cxxconsole.h" />
     <ClInclude Include="..\..\main\desc_id.h" />
     <ClInclude Include="..\..\main\digi.h" />
     <ClInclude Include="..\..\main\effects.h" />
