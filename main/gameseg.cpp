@@ -87,7 +87,7 @@ int find_connect_side(segment *base_seg, segment *con_seg)
 {
 	int	s;
 	segnum_t base_seg_num = base_seg - Segments;
-	segnum_t *childs = con_seg->children;
+	segment_children_array_t::iterator childs = con_seg->children.begin();
 
 	for (s=0; s<MAX_SIDES_PER_SEGMENT; s++) {
 		if (*childs++ == base_seg_num)
