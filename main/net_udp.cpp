@@ -133,11 +133,16 @@ static ssize_t dxx_sendto(int sockfd, const void *msg, int len, unsigned int fla
 
 static ssize_t dxx_recvfrom(int sockfd, void *buf, int len, unsigned int flags, struct sockaddr *from, unsigned int *fromlen)
 {
+	unsigned int fromsize = *fromlen;
+
 #ifdef _WIN32
 	ssize_t rv = recvfrom(sockfd, (char *)buf, len, flags, from, (int*)fromlen);
 #else
 	ssize_t rv = recvfrom(sockfd, (char *)buf, len, flags, from, fromlen);
 #endif
+
+	if (rv > 0)
+		memset((unsigned char *)from + *fromlen, 0, fromsize - *fromlen);
 
 	UDP_num_recvfrom++;
 	UDP_len_recvfrom += rv;
@@ -189,6 +194,7 @@ static int udp_dns_filladdr(const char *host, int port, struct _sockaddr *sAddr 
 
 	// Now copy it over
 	memcpy( sAddr, result->ai_addr, result->ai_addrlen );
+	memset( (unsigned char *)&sAddr + result->ai_addrlen, 0, sizeof(sAddr) - result->ai_addrlen );
 
 	/* WARNING:  NERDY CONTENT
 	 *
@@ -222,9 +228,10 @@ static void udp_close_socket(int socknum)
 }
 
 // Open socket
-static int udp_open_socket(int socknum, int port)
+static int udp_open_socket(int socknum, int port, int af = _pf)
 {
 	int bcast = 1;
+	int sinlen;
 
 	// close stale socket
 	if( UDP_Socket[socknum] != -1 )
@@ -236,26 +243,39 @@ static int udp_open_socket(int socknum, int port)
 
 	memset( &sAddr, '\0', sizeof( sAddr ) );
 
-	if ((UDP_Socket[socknum] = socket (_af, SOCK_DGRAM, 0)) < 0) {
+	if ((UDP_Socket[socknum] = socket (af, SOCK_DGRAM, 0)) < 0) {
 		con_printf(CON_URGENT,"udp_open_socket: socket creation failed\n");
 		nm_messagebox(TXT_ERROR,1,TXT_OK,"Could not create socket");
 		return -1;
 	}
 
 #ifdef IPv6
-	sAddr.sin6_family = _pf; // host byte order
-	sAddr.sin6_port = htons (port); // short, network byte order
-	sAddr.sin6_flowinfo = 0;
-	sAddr.sin6_addr = in6addr_any; // automatically fill with my IP
-	sAddr.sin6_scope_id = 0;
+	if (af == AF_INET6) {
+		sAddr.sin6_family = af; // host byte order
+		sAddr.sin6_port = htons (port); // short, network byte order
+		sAddr.sin6_flowinfo = 0;
+		sAddr.sin6_addr = in6addr_any; // automatically fill with my IP
+		sAddr.sin6_scope_id = 0;
+		sinlen = sizeof(sockaddr_in6);
+	}
+	else {
+		sockaddr_in *sin = (sockaddr_in *)&sAddr;
+
+		sin->sin_family = af; // host byte order
+		sin->sin_port = htons (port); // short, network byte order
+		sin->sin_addr.s_addr = INADDR_ANY; // automatically fill with my IP
+		memset (&(sin->sin_zero), '\0', 8); // zero the rest of the struct
+		sinlen = sizeof(sockaddr_in);
+	}
 #else
-	sAddr.sin_family = _pf; // host byte order
+	sAddr.sin_family = af; // host byte order
 	sAddr.sin_port = htons (port); // short, network byte order
 	sAddr.sin_addr.s_addr = INADDR_ANY; // automatically fill with my IP
 	memset (&(sAddr.sin_zero), '\0', 8); // zero the rest of the struct
+	sinlen = sizeof(sockaddr_in);
 #endif
 
-	if (bind (UDP_Socket[socknum], (struct sockaddr *) &sAddr, sizeof (sAddr)) < 0)
+	if (bind (UDP_Socket[socknum], (struct sockaddr *) &sAddr, sinlen) < 0)
 	{
 		con_printf(CON_URGENT,"udp_open_socket: bind name to socket failed\n");
 		nm_messagebox(TXT_ERROR,1,TXT_OK,"Could not bind name to socket");
@@ -272,7 +292,7 @@ static int udp_open_socket(int socknum, int port)
 	memset(cport,'\0',sizeof(char)*6);
 
 	hints.ai_flags = AI_PASSIVE;
-	hints.ai_family = _pf;
+	hints.ai_family = af;
 	hints.ai_socktype = SOCK_DGRAM;
 
 	ai_family_ = 0;
@@ -284,7 +304,7 @@ static int udp_open_socket(int socknum, int port)
 		sres = res;
 		while ((ai_family_ == 0) && (sres))
 		{
-			if (sres->ai_family == _pf || _pf == PF_UNSPEC)
+			if (sres->ai_family == af || af == PF_UNSPEC)
 				ai_family_ = sres->ai_family;
 			else
 				sres = sres->ai_next;
@@ -294,7 +314,7 @@ static int udp_open_socket(int socknum, int port)
 			sres = res;
 
 		ai_family_ = sres->ai_family;
-		if (ai_family_ != _pf && _pf != PF_UNSPEC)
+		if (ai_family_ != af && af != PF_UNSPEC)
 		{
 			// ai_family is not identic
 			freeaddrinfo (res);
@@ -358,9 +378,6 @@ static int udp_receive_packet(int socknum, ubyte *text, int len, struct _sockadd
 	if (udp_general_packet_ready(socknum))
 	{
 		msglen = dxx_recvfrom (UDP_Socket[socknum], text, len, 0, (struct sockaddr *)sender_addr, &clen);
-
-		if (msglen < 0)
-			return 0;
 
 		if ((msglen >= 0) && (msglen < len))
 			text[msglen] = 0;
@@ -608,13 +625,6 @@ static int manual_join_game_handler(newmenu *menu, d_event *event, direct_join *
 				return 1;
 			}
 
-			sockres = udp_open_socket(0, atoi(UDP_MyPort));
-
-			if (sockres != 0)
-			{
-				return 1;
-			}
-
 			// Resolve address
 			if (udp_dns_filladdr(dj->addrbuf, atoi(dj->portbuf), &dj->host_addr) < 0)
 			{
@@ -622,6 +632,26 @@ static int manual_join_game_handler(newmenu *menu, d_event *event, direct_join *
 			}
 			else
 			{
+				int af;
+
+				if (
+#if IPv6
+					((af = dj->host_addr.sin6_family) != AF_INET && dj->host_addr.sin6_family != AF_INET6)
+#else
+					((af = dj->host_addr.sin_family) != AF_INET))
+#endif
+					)
+				{
+					return 1;
+				}
+
+				sockres = udp_open_socket(0, atoi(UDP_MyPort), af);
+
+				if (sockres != 0)
+				{
+					return 1;
+				}
+
 				multi_new_game();
 				N_players = 0;
 				change_playernum_to(1);
