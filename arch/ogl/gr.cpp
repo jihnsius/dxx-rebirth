@@ -736,14 +736,14 @@ void gr_palette_step_up(int r, int g, int b)
 
 static void gr_palette_copy( palette_array_t &d, const palette_array_t &s )
 {
-	int i;
-
-	for (i=0; i<768; i++ )
-	{
-		d[i] = s[i];
-		if (d[i] > 63)
-			d[i] = 63;
-	}
+	auto a = [](rgb_t c) {
+		const ubyte bound = 63;
+		c.r = std::min(c.r, bound);
+		c.g = std::min(c.g, bound);
+		c.b = std::min(c.b, bound);
+		return c;
+	};
+	std::transform(s.begin(), s.end(), d.begin(), a);
 }
 
 void gr_palette_load( palette_array_t &pal )

@@ -1074,7 +1074,7 @@ grs_font * gr_init_font( const char * fontname )
 		ubyte colormap[256];
 		int freq[256];
 
-		PHYSFS_read(fontfile,palette,3,256);		//read the palette
+		PHYSFS_read(fontfile,&palette[0],sizeof(palette[0]),palette.size());		//read the palette
 
 		build_colormap_good( palette, colormap, freq );
 
@@ -1164,7 +1164,7 @@ void gr_remap_font( grs_font *font, char * fontname, char *font_data )
 		ubyte colormap[256];
 		int freq[256];
 
-		PHYSFS_read(fontfile,palette,3,256);		//read the palette
+		PHYSFS_read(fontfile,&palette[0],sizeof(palette[0]),palette.size());		//read the palette
 		build_colormap_good( palette, colormap, freq );
 
 		colormap[TRANSPARENCY_COLOR] = TRANSPARENCY_COLOR;              // changed from colormap[255] = 255 to this for macintosh

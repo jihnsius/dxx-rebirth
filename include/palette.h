@@ -24,7 +24,15 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define DEFAULT_LEVEL_PALETTE "groupa.256" //don't confuse with D2_DEFAULT_PALETTE
 
 #ifdef __cplusplus
-typedef ubyte palette_array_t[256*3];
+#include <array>
+
+typedef struct {
+	ubyte r,g,b;
+} rgb_t;
+
+static inline bool operator==(const rgb_t &a, const rgb_t &b) { return a.r == b.r && a.g == b.g && a.b == b.b; }
+
+struct palette_array_t : public std::array<rgb_t, 256> {};
 
 extern void gr_palette_set_gamma( int gamma );
 extern int gr_palette_get_gamma();

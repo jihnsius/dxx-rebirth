@@ -965,7 +965,7 @@ int iff_read_animbrush(const char *ifilename,grs_bitmap **bm_list,unsigned max_b
 			MALLOC(bm_list[*n_bitmaps] , grs_bitmap, 1 );
 			bm_list[*n_bitmaps]->bm_data = NULL;
 
-			ret = iff_parse_bitmap(ifile,bm_list[*n_bitmaps],form_type,*n_bitmaps>0?NULL:(signed char *)palette,prev_bm);
+			ret = iff_parse_bitmap(ifile,bm_list[*n_bitmaps],form_type,*n_bitmaps>0?NULL:(signed char *)&palette[0],prev_bm);
 
 			if (ret != IFF_NO_ERROR)
 				goto done;

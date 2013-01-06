@@ -70,7 +70,7 @@ int gr_palette_get_gamma()
 
 void gr_copy_palette(palette_array_t &p, const palette_array_t &pal)
 {
-	        memcpy(p, pal, sizeof(p));
+	p = pal;
 
 	        Num_computed_colors = 0;
 }
@@ -102,7 +102,7 @@ void gr_use_palette_table(const char * filename )
 	fsize	= (PHYSFSX_UNSAFE_TRUNCATE_TO_32BIT_INT)PHYSFS_fileLength( fp );
 	Assert( fsize == 9472 );
 	(void)fsize;
-	PHYSFS_read( fp, gr_palette, 256*3, 1 );
+	PHYSFS_read( fp, &gr_palette[0], sizeof(gr_palette[0]), gr_palette.size() );
 	PHYSFS_read( fp, gr_fade_table, 256*34, 1 );
 	PHYSFS_close(fp);
 
@@ -184,7 +184,7 @@ int gr_find_closest_color( int r, int g, int b )
 //	g &= 63;
 //	b &= 63;
 
-	best_value = SQUARE(r-gr_palette[0])+SQUARE(g-gr_palette[1])+SQUARE(b-gr_palette[2]);
+	best_value = SQUARE(r-gr_palette[0].r)+SQUARE(g-gr_palette[0].g)+SQUARE(b-gr_palette[0].b);
 	best_index = 0;
 	if (best_value==0) {
 		add_computed_color(r, g, b, best_index);
@@ -193,8 +193,8 @@ int gr_find_closest_color( int r, int g, int b )
 	j=0;
 	// only go to 255, 'cause we dont want to check the transparent color.
 	for (i=1; i<254; i++ )	{
-		j += 3;
-		value = SQUARE(r-gr_palette[j])+SQUARE(g-gr_palette[j+1])+SQUARE(b-gr_palette[j+2]);
+		++j;
+		value = SQUARE(r-gr_palette[j].r)+SQUARE(g-gr_palette[j].g)+SQUARE(b-gr_palette[j].b);
 		if ( value < best_value )	{
 			if (value==0) {
 				add_computed_color(r, g, b, i);
@@ -223,7 +223,7 @@ int gr_find_closest_color_current( int r, int g, int b )
 //	g &= 63;
 //	b &= 63;
 
-	best_value = SQUARE(r-gr_current_pal[0])+SQUARE(g-gr_current_pal[1])+SQUARE(b-gr_current_pal[2]);
+	best_value = SQUARE(r-gr_palette[0].r)+SQUARE(g-gr_palette[0].g)+SQUARE(b-gr_palette[0].b);
 	best_index = 0;
 	if (best_value==0)
  		return best_index;
@@ -231,8 +231,8 @@ int gr_find_closest_color_current( int r, int g, int b )
 	j=0;
 	// only go to 255, 'cause we dont want to check the transparent color.
 	for (i=1; i<254; i++ )	{
-		j += 3;
-		value = SQUARE(r-gr_current_pal[j])+SQUARE(g-gr_current_pal[j+1])+SQUARE(b-gr_current_pal[j+2]);
+		++j;
+		value = SQUARE(r-gr_palette[j].r)+SQUARE(g-gr_palette[j].g)+SQUARE(b-gr_palette[j].b);
 		if ( value < best_value )	{
 			if (value==0)
 				return i;
@@ -249,11 +249,11 @@ void gr_make_cthru_table(ubyte * table, ubyte r, ubyte g, ubyte b )
 	ubyte r1, g1, b1;
 
 	for (i=0; i<256; i++ )	{
-		r1 = gr_palette[i*3+0] + r;
+		r1 = gr_palette[i].r + r;
 		if ( r1 > 63 ) r1 = 63;
-		g1 = gr_palette[i*3+1] + g;
+		g1 = gr_palette[i].g + g;
 		if ( g1 > 63 ) g1 = 63;
-		b1 = gr_palette[i*3+2] + b;
+		b1 = gr_palette[i].b + b;
 		if ( b1 > 63 ) b1 = 63;
 		table[i] = gr_find_closest_color( r1, g1, b1 );
 	}
@@ -270,9 +270,9 @@ void gr_make_blend_table(ubyte *blend_table, ubyte r, ubyte g, ubyte b)
 		alpha = 1.0 - (float)j / ((float)GR_FADE_LEVELS - 1);
 		for (i = 0; i < 255; i++)
 		{
-			r1 = (ubyte)((1.0 - alpha) * (float)gr_palette[i * 3 + 0] + (alpha * (float)r));
-			g1 = (ubyte)((1.0 - alpha) * (float)gr_palette[i * 3 + 1] + (alpha * (float)g));
-			b1 = (ubyte)((1.0 - alpha) * (float)gr_palette[i * 3 + 2] + (alpha * (float)b));
+			r1 = (ubyte)((1.0 - alpha) * (float)gr_palette[i].r + (alpha * (float)r));
+			g1 = (ubyte)((1.0 - alpha) * (float)gr_palette[i].g + (alpha * (float)g));
+			b1 = (ubyte)((1.0 - alpha) * (float)gr_palette[i].b + (alpha * (float)b));
 			blend_table[i + j * 256] = gr_find_closest_color(r1, g1, b1);
 		}
 		blend_table[i + j * 256] = 255; // leave white alone
