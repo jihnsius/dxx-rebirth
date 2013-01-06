@@ -55,6 +55,9 @@
     <Filter Include="editor">
       <UniqueIdentifier>{2e8ef587-a176-4270-8081-b5c2ab6939cb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="arch\ogl">
+      <UniqueIdentifier>{33fb9112-e436-47f8-b336-d442c199bf65}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\2d\2dsline.cpp">
@@ -151,9 +154,6 @@
       <Filter>arch\sdl</Filter>
     </ClCompile>
     <ClCompile Include="..\..\arch\sdl\event.cpp">
-      <Filter>arch\sdl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\arch\sdl\gr.cpp">
       <Filter>arch\sdl</Filter>
     </ClCompile>
     <ClCompile Include="..\..\arch\sdl\init.cpp">
@@ -638,6 +638,12 @@
     </ClCompile>
     <ClCompile Include="..\..\arch\win32\precomp.cpp">
       <Filter>arch\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\arch\ogl\gr.cpp">
+      <Filter>arch\ogl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\arch\ogl\ogl.cpp">
+      <Filter>arch\ogl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -54,12 +54,11 @@
       <PrecompiledHeaderFile>..\arch\win32\include\precomp.h</PrecompiledHeaderFile>
       <AdditionalOptions>/J %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <CompileAs>Default</CompileAs>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;..\external\lib\i386\physfs.lib;..\external\lib\i386\SDL.lib;..\external\lib\i386\SDL_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;ws2_32.lib;winmm.lib;..\external\lib\i386\physfs.lib;..\external\lib\i386\SDL.lib;..\external\lib\i386\SDL_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -75,15 +74,14 @@
       <PrecompiledHeaderFile>..\arch\win32\include\precomp.h</PrecompiledHeaderFile>
       <AdditionalOptions>/J %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <CompileAs>Default</CompileAs>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <SetChecksum>true</SetChecksum>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;..\external\lib\i386\physfs.lib;..\external\lib\i386\SDL.lib;..\external\lib\i386\SDL_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;ws2_32.lib;winmm.lib;..\external\lib\i386\physfs.lib;..\external\lib\i386\SDL.lib;..\external\lib\i386\SDL_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -113,12 +111,16 @@
     <ClCompile Include="..\..\3d\points.cpp" />
     <ClCompile Include="..\..\3d\rod.cpp" />
     <ClCompile Include="..\..\3d\setup.cpp" />
+    <ClCompile Include="..\..\arch\ogl\gr.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)\gr_ogl.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)\gr_ogl.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\arch\ogl\ogl.cpp" />
     <ClCompile Include="..\..\arch\sdl\digi.cpp" />
     <ClCompile Include="..\..\arch\sdl\digi_audio.cpp" />
     <ClCompile Include="..\..\arch\sdl\digi_mixer.cpp" />
     <ClCompile Include="..\..\arch\sdl\digi_mixer_music.cpp" />
     <ClCompile Include="..\..\arch\sdl\event.cpp" />
-    <ClCompile Include="..\..\arch\sdl\gr.cpp" />
     <ClCompile Include="..\..\arch\sdl\init.cpp" />
     <ClCompile Include="..\..\arch\sdl\joy.cpp" />
     <ClCompile Include="..\..\arch\sdl\jukebox.cpp" />
@@ -165,7 +167,10 @@
     <ClCompile Include="..\..\editor\medwall.cpp" />
     <ClCompile Include="..\..\editor\mine.cpp" />
     <ClCompile Include="..\..\editor\objpage.cpp" />
-    <ClCompile Include="..\..\editor\segment.cpp" />
+    <ClCompile Include="..\..\editor\segment.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)\segment_editor.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)\segment_editor.obj</ObjectFileName>
+    </ClCompile>
     <ClCompile Include="..\..\editor\seguvs.cpp" />
     <ClCompile Include="..\..\editor\texpage.cpp" />
     <ClCompile Include="..\..\editor\texture.cpp" />
@@ -275,7 +280,10 @@
     <ClCompile Include="..\..\ui\keypress.cpp" />
     <ClCompile Include="..\..\ui\keytrap.cpp" />
     <ClCompile Include="..\..\ui\listbox.cpp" />
-    <ClCompile Include="..\..\ui\menu.cpp" />
+    <ClCompile Include="..\..\ui\menu.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)\menu_ui.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)\menu_ui.obj</ObjectFileName>
+    </ClCompile>
     <ClCompile Include="..\..\ui\menubar.cpp" />
     <ClCompile Include="..\..\ui\message.cpp" />
     <ClCompile Include="..\..\ui\popup.cpp" />
