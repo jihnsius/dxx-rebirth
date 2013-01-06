@@ -1344,7 +1344,7 @@ static void net_udp_welcome_player(UDP_sequence_packet *their)
 
 	for (i = 0; i < N_players; i++)
 	{
-		if ((!strcasecmp(Players[i].callsign, their->player.callsign )) && !memcmp((struct _sockaddr *)&their->player.protocol.udp.addr, (struct _sockaddr *)&Netgame.players[i].protocol.udp.addr, sizeof(struct _sockaddr)))
+		if ((!strcasecmp(Players[i].callsign, their->player.callsign )) && their->player.protocol.udp.addr == Netgame.players[i].protocol.udp.addr)
 		{
 			player_num = i;
 			break;
@@ -1597,7 +1597,7 @@ static int net_udp_create_monitor_vector(void)
 
 static void net_udp_stop_resync(UDP_sequence_packet *their)
 {
-	if ( (!memcmp((struct _sockaddr *)&UDP_sync_player.player.protocol.udp.addr, (struct _sockaddr *)&their->player.protocol.udp.addr, sizeof(struct _sockaddr))) &&
+	if ( (UDP_sync_player.player.protocol.udp.addr == their->player.protocol.udp.addr) &&
 		(!stricmp(UDP_sync_player.player.callsign, their->player.callsign)) )
 	{
 		Network_send_objects = 0;
@@ -1925,7 +1925,7 @@ static void net_udp_add_player(UDP_sequence_packet *p)
 
 	for (i=0; i<N_players; i++ )
 	{
-		if ( !memcmp( (struct _sockaddr *)&Netgame.players[i].protocol.udp.addr, (struct _sockaddr *)&p->player.protocol.udp.addr, sizeof(struct _sockaddr)))
+		if ( Netgame.players[i].protocol.udp.addr == p->player.protocol.udp.addr)
 		{
 			Netgame.players[i].LastPacketTime = timer_query();
 			return;		// already got them
@@ -1960,7 +1960,7 @@ static void net_udp_remove_player(UDP_sequence_packet *p)
 	pn = -1;
 	for (i=0; i<N_players; i++ )
 	{
-		if (!memcmp((struct _sockaddr *)&Netgame.players[i].protocol.udp.addr, (struct _sockaddr *)&p->player.protocol.udp.addr, sizeof(struct _sockaddr)))
+		if (Netgame.players[i].protocol.udp.addr == p->player.protocol.udp.addr)
 		{
 			pn = i;
 			break;
@@ -1998,7 +1998,7 @@ void net_udp_dump_player(struct _sockaddr dump_addr, int why)
 
 	if (multi_i_am_master())
 		for (i = 1; i < N_players; i++)
-			if (!memcmp((struct _sockaddr *)&dump_addr, (struct _sockaddr *)&Netgame.players[i].protocol.udp.addr, sizeof(struct _sockaddr)))
+			if (Netgame.players[i].protocol.udp.addr == dump_addr)
 				multi_disconnect_player(i);
 }
 
@@ -2228,7 +2228,7 @@ void net_udp_send_game_info(struct _sockaddr sender_addr, ubyte info_upid)
 			memcpy(&buf[len], Netgame.players[i].callsign, CALLSIGN_LEN+1); 	len += CALLSIGN_LEN+1;
 			buf[len] = Netgame.players[i].connected;				len++;
 			buf[len] = Netgame.players[i].rank;					len++;
-			if (!memcmp((struct _sockaddr *)&sender_addr, (struct _sockaddr *)&Netgame.players[i].protocol.udp.addr, sizeof(struct _sockaddr)))
+			if (sender_addr == Netgame.players[i].protocol.udp.addr)
 				buf[len] = 1;
 			else
 				buf[len] = 0;
@@ -2505,7 +2505,7 @@ void net_udp_process_game_info(ubyte *data, int data_len, struct _sockaddr game_
 static void net_udp_process_dump(ubyte *data, int len, struct _sockaddr sender_addr)
 {
 	// Our request for join was denied.  Tell the user why.
-	if (memcmp((struct _sockaddr *)&sender_addr,(struct _sockaddr *)&Netgame.players[0].protocol.udp.addr,sizeof(struct _sockaddr)))
+	if (!(sender_addr == Netgame.players[0].protocol.udp.addr))
 		return;
 
 	switch (data[1])
@@ -2543,7 +2543,7 @@ static void net_udp_process_request(UDP_sequence_packet *their)
 	int i;
 
 	for (i = 0; i < N_players; i++)
-		if (!memcmp((struct _sockaddr *)&their->player.protocol.udp.addr, (struct _sockaddr *)&Netgame.players[i].protocol.udp.addr, sizeof(struct _sockaddr)) && (!strcasecmp(their->player.callsign, Netgame.players[i].callsign)))
+		if (their->player.protocol.udp.addr == Netgame.players[i].protocol.udp.addr && (!strcasecmp(their->player.callsign, Netgame.players[i].callsign)))
 		{
 			Players[i].connected = CONNECT_PLAYING;
 			Netgame.players[i].LastPacketTime = timer_query();
@@ -2602,13 +2602,13 @@ static void net_udp_process_packet(ubyte *data, struct _sockaddr sender_addr, in
 			net_udp_process_game_info(data, length, sender_addr, 1);
 			break;
 		case UPID_DUMP:
-			if (multi_i_am_master() || memcmp((struct _sockaddr *)&Netgame.players[0].protocol.udp.addr, (struct _sockaddr *)&sender_addr, sizeof(struct _sockaddr)) || length != UPID_DUMP_SIZE)
+			if (multi_i_am_master() || !(Netgame.players[0].protocol.udp.addr == sender_addr) || length != UPID_DUMP_SIZE)
 				break;
 			if ((Network_status == NETSTAT_WAITING) || (Network_status == NETSTAT_PLAYING))
 				net_udp_process_dump(data, length, sender_addr);
 			break;
 		case UPID_ADDPLAYER:
-			if (multi_i_am_master() || memcmp((struct _sockaddr *)&Netgame.players[0].protocol.udp.addr, (struct _sockaddr *)&sender_addr, sizeof(struct _sockaddr)) || length != UPID_SEQUENCE_SIZE)
+			if (multi_i_am_master() || !(Netgame.players[0].protocol.udp.addr == sender_addr) || length != UPID_SEQUENCE_SIZE)
 				break;
 			net_udp_receive_sequence_packet(data, &their, sender_addr);
 			net_udp_new_player(&their);
@@ -2709,7 +2709,7 @@ void net_udp_read_endlevel_packet( ubyte *data, int data_len, struct _sockaddr s
 	{
 		ubyte pnum = data[1];
 
-		if (memcmp((struct _sockaddr *)&Netgame.players[pnum].protocol.udp.addr, (struct _sockaddr *)&sender_addr, sizeof(struct _sockaddr)))
+		if (!(Netgame.players[pnum].protocol.udp.addr == sender_addr))
 			return;
 
 		len += 2;
@@ -2732,7 +2732,7 @@ void net_udp_read_endlevel_packet( ubyte *data, int data_len, struct _sockaddr s
 	}
 	else
 	{
-		if (memcmp((struct _sockaddr *)&Netgame.players[0].protocol.udp.addr, (struct _sockaddr *)&sender_addr, sizeof(struct _sockaddr)))
+		if (!(Netgame.players[0].protocol.udp.addr == sender_addr))
 			return;
 
 		len++;
@@ -4316,12 +4316,12 @@ int net_udp_noloss_validate_mdata(uint32_t pkt_num, ubyte sender_pnum, struct _s
 	// Check if this comes from a valid IP
 	if (multi_i_am_master())
 	{
-		if (memcmp((struct _sockaddr *)&sender_addr, (struct _sockaddr *)&Netgame.players[sender_pnum].protocol.udp.addr, sizeof(struct _sockaddr)))
+		if (!(sender_addr == Netgame.players[sender_pnum].protocol.udp.addr))
 			return 0;
 	}
 	else
 	{
-		if (memcmp((struct _sockaddr *)&sender_addr, (struct _sockaddr *)&Netgame.players[0].protocol.udp.addr, sizeof(struct _sockaddr)))
+		if (!(sender_addr == Netgame.players[0].protocol.udp.addr))
 			return 0;
 	}
 
@@ -4592,14 +4592,14 @@ void net_udp_process_mdata (ubyte *data, int data_len, struct _sockaddr sender_a
 	// Check if it came from valid IP
 	if (multi_i_am_master())
 	{
-		if (memcmp((struct _sockaddr *)&sender_addr, (struct _sockaddr *)&Netgame.players[pnum].protocol.udp.addr, sizeof(struct _sockaddr)))
+		if (!(sender_addr == Netgame.players[pnum].protocol.udp.addr))
 		{
 			return;
 		}
 	}
 	else
 	{
-		if (memcmp((struct _sockaddr *)&sender_addr, (struct _sockaddr *)&Netgame.players[0].protocol.udp.addr, sizeof(struct _sockaddr)))
+		if (!(sender_addr == Netgame.players[0].protocol.udp.addr))
 		{
 			return;
 		}
@@ -4707,7 +4707,7 @@ void net_udp_process_pdata ( ubyte *data, int data_len, struct _sockaddr sender_
 	if (data_len > sizeof(UDP_frame_info))
 		return;
 
-	if (memcmp((struct _sockaddr *)&sender_addr, (struct _sockaddr *)&Netgame.players[((multi_i_am_master())?(data[len]):(0))].protocol.udp.addr, sizeof(struct _sockaddr)))
+	if (!(sender_addr == Netgame.players[((multi_i_am_master())?(data[len]):(0))].protocol.udp.addr))
 		return;
 
 	pd.Player_num = data[len];									len++;
@@ -4870,7 +4870,7 @@ void net_udp_process_ping(ubyte *data, int data_len, struct _sockaddr sender_add
 	ubyte buf[UPID_PONG_SIZE];
 	int i, len = 0;
 
-	if (memcmp((struct _sockaddr *)&Netgame.players[0].protocol.udp.addr, (struct _sockaddr *)&sender_addr, sizeof(struct _sockaddr)))
+	if (!(Netgame.players[0].protocol.udp.addr == sender_addr))
 		return;
 
 										len++; // Skip UPID byte;
@@ -4893,7 +4893,7 @@ void net_udp_process_pong(ubyte *data, int data_len, struct _sockaddr sender_add
 	fix64 client_pong_time = 0;
 	int i = 0;
 
-	if (memcmp((struct _sockaddr *)&sender_addr, (struct _sockaddr *)&Netgame.players[data[1]].protocol.udp.addr, sizeof(struct _sockaddr)))
+	if (!(sender_addr == Netgame.players[data[1]].protocol.udp.addr))
 		return;
 
 	if (data[1] >= MAX_PLAYERS || data[1] < 1)
