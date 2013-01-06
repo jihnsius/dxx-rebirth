@@ -1093,11 +1093,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="..\..\arch\win32\d2xr.res">
-      <Filter>arch\win32</Filter>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\..\include\d1x.xpm">
       <Filter>include</Filter>
     </None>
@@ -1119,5 +1114,9 @@
     <None Include="..\..\main\link.bat">
       <Filter>main</Filter>
     </None>
+    <None Include="..\..\d2x-rebirth.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="d2x-rebirth.rc" />
   </ItemGroup>
 </Project>
