@@ -105,13 +105,7 @@
     <ClCompile Include="..\..\2d\rle.cpp">
       <Filter>2d</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\2d\scale.c">
-      <Filter>2d</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\2d\scalec.cpp">
-      <Filter>2d</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\2d\tmerge.c">
       <Filter>2d</Filter>
     </ClCompile>
     <ClCompile Include="..\..\3d\clipper.cpp">
@@ -188,21 +182,6 @@
     </ClCompile>
     <ClCompile Include="..\..\iff\iff.cpp">
       <Filter>iff</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\iff\archive\iff8bpp.c">
-      <Filter>iff\archive</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\iff\archive\iff15bpp.c">
-      <Filter>iff\archive</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\iff\archive\iffmike.c">
-      <Filter>iff\archive</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\iff\archive\ifftest.c">
-      <Filter>iff\archive</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\iff\archive\ifftestv.c">
-      <Filter>iff\archive</Filter>
     </ClCompile>
     <ClCompile Include="..\..\editor\autosave.cpp">
       <Filter>editor</Filter>
@@ -322,9 +301,6 @@
       <Filter>libmve</Filter>
     </ClCompile>
     <ClCompile Include="..\..\libmve\mve_audio.cpp">
-      <Filter>libmve</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\libmve\mve_main.c">
       <Filter>libmve</Filter>
     </ClCompile>
     <ClCompile Include="..\..\libmve\mvelib.cpp">
@@ -567,16 +543,10 @@
     <ClCompile Include="..\..\misc\args.cpp">
       <Filter>misc</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\misc\byteswap.c">
-      <Filter>misc</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\misc\dl_list.cpp">
       <Filter>misc</Filter>
     </ClCompile>
     <ClCompile Include="..\..\misc\error.cpp">
-      <Filter>misc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\misc\errtest.c">
       <Filter>misc</Filter>
     </ClCompile>
     <ClCompile Include="..\..\misc\hash.cpp">
@@ -588,19 +558,10 @@
     <ClCompile Include="..\..\misc\ignorecase.cpp">
       <Filter>misc</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\misc\parsarg.c">
-      <Filter>misc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\misc\parstest.c">
-      <Filter>misc</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\misc\physfsrwops.cpp">
       <Filter>misc</Filter>
     </ClCompile>
     <ClCompile Include="..\..\misc\physfsx.cpp">
-      <Filter>misc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\misc\pngfile.c">
       <Filter>misc</Filter>
     </ClCompile>
     <ClCompile Include="..\..\misc\strio.cpp">
@@ -1113,9 +1074,6 @@
       <Filter>main</Filter>
     </ClInclude>
     <ClInclude Include="..\..\misc\dos_disk.h">
-      <Filter>misc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\misc\parsarg.h">
       <Filter>misc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\texmap\scanline.h">

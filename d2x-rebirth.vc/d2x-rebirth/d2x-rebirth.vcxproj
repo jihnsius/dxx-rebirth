@@ -54,6 +54,7 @@
       <PrecompiledHeaderFile>..\arch\win32\include\precomp.h</PrecompiledHeaderFile>
       <AdditionalOptions>/J %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <CompileAs>Default</CompileAs>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -74,6 +75,7 @@
       <PrecompiledHeaderFile>..\arch\win32\include\precomp.h</PrecompiledHeaderFile>
       <AdditionalOptions>/J %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <CompileAs>Default</CompileAs>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -101,9 +103,7 @@
     <ClCompile Include="..\..\2d\poly.cpp" />
     <ClCompile Include="..\..\2d\rect.cpp" />
     <ClCompile Include="..\..\2d\rle.cpp" />
-    <ClCompile Include="..\..\2d\scale.c" />
     <ClCompile Include="..\..\2d\scalec.cpp" />
-    <ClCompile Include="..\..\2d\tmerge.c" />
     <ClCompile Include="..\..\3d\clipper.cpp" />
     <ClCompile Include="..\..\3d\draw.cpp" />
     <ClCompile Include="..\..\3d\globvars.cpp" />
@@ -169,18 +169,12 @@
     <ClCompile Include="..\..\editor\seguvs.cpp" />
     <ClCompile Include="..\..\editor\texpage.cpp" />
     <ClCompile Include="..\..\editor\texture.cpp" />
-    <ClCompile Include="..\..\iff\archive\iff15bpp.c" />
-    <ClCompile Include="..\..\iff\archive\iff8bpp.c" />
-    <ClCompile Include="..\..\iff\archive\iffmike.c" />
-    <ClCompile Include="..\..\iff\archive\ifftest.c" />
-    <ClCompile Include="..\..\iff\archive\ifftestv.c" />
     <ClCompile Include="..\..\iff\iff.cpp" />
     <ClCompile Include="..\..\libmve\decoder16.cpp" />
     <ClCompile Include="..\..\libmve\decoder8.cpp" />
     <ClCompile Include="..\..\libmve\mvelib.cpp" />
     <ClCompile Include="..\..\libmve\mveplay.cpp" />
     <ClCompile Include="..\..\libmve\mve_audio.cpp" />
-    <ClCompile Include="..\..\libmve\mve_main.c" />
     <ClCompile Include="..\..\main\ai.cpp" />
     <ClCompile Include="..\..\main\ai2.cpp" />
     <ClCompile Include="..\..\main\aipath.cpp" />
@@ -259,18 +253,13 @@
     <ClCompile Include="..\..\maths\vecmat.cpp" />
     <ClCompile Include="..\..\mem\mem.cpp" />
     <ClCompile Include="..\..\misc\args.cpp" />
-    <ClCompile Include="..\..\misc\byteswap.c" />
     <ClCompile Include="..\..\misc\dl_list.cpp" />
     <ClCompile Include="..\..\misc\error.cpp" />
-    <ClCompile Include="..\..\misc\errtest.c" />
     <ClCompile Include="..\..\misc\hash.cpp" />
     <ClCompile Include="..\..\misc\hmp.cpp" />
     <ClCompile Include="..\..\misc\ignorecase.cpp" />
-    <ClCompile Include="..\..\misc\parsarg.c" />
-    <ClCompile Include="..\..\misc\parstest.c" />
     <ClCompile Include="..\..\misc\physfsrwops.cpp" />
     <ClCompile Include="..\..\misc\physfsx.cpp" />
-    <ClCompile Include="..\..\misc\pngfile.c" />
     <ClCompile Include="..\..\misc\strio.cpp" />
     <ClCompile Include="..\..\misc\strutil.cpp" />
     <ClCompile Include="..\..\texmap\ntmap.cpp" />
@@ -443,7 +432,6 @@
     <ClInclude Include="..\..\main\wall.h" />
     <ClInclude Include="..\..\main\weapon.h" />
     <ClInclude Include="..\..\misc\dos_disk.h" />
-    <ClInclude Include="..\..\misc\parsarg.h" />
     <ClInclude Include="..\..\texmap\scanline.h" />
     <ClInclude Include="..\..\texmap\texmapl.h" />
   </ItemGroup>
