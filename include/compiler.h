@@ -68,6 +68,10 @@
 #define __extern_always_inline static inline
 #endif
 
+#ifndef DECLSPEC_NORETURN
+#define DECLSPEC_NORETURN
+#endif
+
 #define CHK_REDIRECT(R,N,A,B)	\
 	R (unchecked_##N) A;	\
 	__extern_always_inline R (N) A;	\
