@@ -1470,8 +1470,14 @@ void renderer_t::build_object_lists(int n_segs)
 			lookn = nn;
 			n_sort_items = 0;
 			object_list_t& o = render_obj_map[lookn];
-			for (const objnum_t& t : o)
+			/*
+			 * Workaround for lack of range-based for support in VS2010.
+			 */
+			auto rombegin = o.begin();
+			auto romend = o.end();
+			for (auto romiter = rombegin; romiter != romend; ++romiter)
 			{
+				const objnum_t& t = *romiter;
 					if (n_sort_items < SORT_LIST_SIZE-1) {		//add if room
 						sort_list[n_sort_items].objnum = t;
 						//NOTE: maybe use depth, not dist - quicker computation
@@ -2203,8 +2209,16 @@ void renderer_t::render_mine(segnum_t start_seg_num,fix eye_offset, int window_n
 
 				listnum = nn;
 
-				for (const objnum_t& ObjNumber : render_obj_map[listnum])
+				/*
+				 * Workaround for lack of range-based for support in VS2010.
+				 */
+				object_list_t& o = render_obj_map[listnum];
+				auto rombegin = o.begin();
+				auto romend = o.end();
+				for (auto romiter = rombegin; romiter != romend; ++romiter) {
+					const objnum_t& ObjNumber = *romiter;
 						do_render_object(ObjNumber, window_num);	// note link to above else
+				}
 
 				Max_linear_depth = save_linear_depth;
 
