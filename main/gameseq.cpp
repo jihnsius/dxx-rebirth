@@ -1594,7 +1594,7 @@ static void ShowLevelIntro(int level_num)
 
 	if (!(Game_mode & GM_MULTI)) {
 
-		ubyte save_pal[sizeof(gr_palette)];
+		palette_array_t save_pal;
 
 		memcpy(save_pal,gr_palette,sizeof(gr_palette));
 

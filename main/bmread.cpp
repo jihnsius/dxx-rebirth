@@ -177,7 +177,7 @@ static bitmap_index bm_load_sub(int skip, char * filename )
 {
 	bitmap_index bitmap_num;
 	grs_bitmap * n;
-	ubyte newpal[256*3];
+	palette_array_t newpal;
 	int iff_error;		//reference parm to avoid warning message
 	char fname[20];
 
@@ -195,7 +195,7 @@ static bitmap_index bm_load_sub(int skip, char * filename )
 	}
 
 	MALLOC( n, grs_bitmap, 1 );
-	iff_error = iff_read_bitmap(filename,n,BM_LINEAR,newpal);
+	iff_error = iff_read_bitmap(filename,n,BM_LINEAR,&newpal);
 	n->bm_handle=0;
 	if (iff_error != IFF_NO_ERROR)		{
 		Error("File <%s> - IFF error: %s, line %d",filename,iff_errormsg(iff_error),linenum);
@@ -219,7 +219,7 @@ static void ab_load(int skip, const char * filename, bitmap_index bmp[], unsigne
 	bitmap_index bi;
 	int i;
 	int iff_error;		//reference parm to avoid warning message
-	ubyte newpal[768];
+	palette_array_t newpal;
 	char fname[20];
 	char tempname[20];
 

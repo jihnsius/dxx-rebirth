@@ -734,7 +734,7 @@ void gr_palette_step_up(int r, int g, int b)
 	}
 }
 
-static void gr_palette_copy( ubyte *d, const ubyte *s )
+static void gr_palette_copy( palette_array_t &d, const palette_array_t &s )
 {
 	int i;
 
@@ -746,7 +746,7 @@ static void gr_palette_copy( ubyte *d, const ubyte *s )
 	}
 }
 
-void gr_palette_load( ubyte *pal )
+void gr_palette_load( palette_array_t &pal )
 {
 	gr_palette_copy(gr_current_pal, pal);
 
@@ -754,7 +754,7 @@ void gr_palette_load( ubyte *pal )
 	init_computed_colors();
 }
 
-void gr_palette_read(ubyte * pal)
+void gr_palette_read(palette_array_t &pal)
 {
 	gr_palette_copy(pal, gr_current_pal);
 }

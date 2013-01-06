@@ -208,7 +208,7 @@ static int start_endlevel_movie()
 {
 	char movie_name[] = "esa.mve";
 	int r;
-	ubyte save_pal[768];
+	palette_array_t save_pal;
 
 	//Assert(PLAYING_BUILTIN_MISSION); //only play movie for built-in mission
 
@@ -1511,14 +1511,14 @@ try_again:
 
 			case 0: {						//ground terrain
 				int iff_error;
-				ubyte pal[768];
+				palette_array_t pal;
 
 				if (terrain_bm_instance.bm_data)
 					d_free(terrain_bm_instance.bm_data);
 
 				Assert(terrain_bm_instance.bm_data == NULL);
 
-				iff_error = iff_read_bitmap(p,&terrain_bm_instance,BM_LINEAR,pal);
+				iff_error = iff_read_bitmap(p,&terrain_bm_instance,BM_LINEAR,&pal);
 				if (iff_error != IFF_NO_ERROR) {
 					con_printf(CON_DEBUG, "Can't load exit terrain from file %s: IFF error: %s\n",
                                                 p, iff_errormsg(iff_error));
@@ -1552,12 +1552,12 @@ try_again:
 
 			case 4: {						//planet bitmap
 				int iff_error;
-				ubyte pal[768];
+				palette_array_t pal;
 
 				if (satellite_bm_instance.bm_data)
 					d_free(satellite_bm_instance.bm_data);
 
-				iff_error = iff_read_bitmap(p,&satellite_bm_instance,BM_LINEAR,pal);
+				iff_error = iff_read_bitmap(p,&satellite_bm_instance,BM_LINEAR,&pal);
 				if (iff_error != IFF_NO_ERROR) {
 					con_printf(CON_DEBUG, "Can't load exit satellite from file %s: IFF error: %s\n",
                                                 p, iff_errormsg(iff_error));

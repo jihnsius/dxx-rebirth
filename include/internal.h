@@ -43,7 +43,7 @@ extern unsigned last_width,last_height;
 //MSVC seems to have problems with inline funcs not being found during linking
 void ogl_swap_buffers_internal(void);
 
-extern ubyte (*ogl_pal)[256*3];
+extern palette_array_t *ogl_pal;
 
 //whee
 //#define PAL2Tr(c) ((gr_palette[c*3]+gr_palette_gamma)/63.0)

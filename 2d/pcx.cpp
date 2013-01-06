@@ -109,9 +109,9 @@ struct PCX_PHYSFS_file
 	ubyte buffer[4096];
 };
 
-static int pcx_read_bitmap_file(struct PCX_PHYSFS_file *const pcxphysfs, grs_bitmap * bmp,int bitmap_type ,ubyte * palette);
+static int pcx_read_bitmap_file(struct PCX_PHYSFS_file *const pcxphysfs, grs_bitmap * bmp,int bitmap_type ,palette_array_t &palette);
 
-int pcx_read_bitmap(const char * filename, grs_bitmap * bmp,int bitmap_type ,ubyte * palette )
+int pcx_read_bitmap(const char * filename, grs_bitmap * bmp,int bitmap_type ,palette_array_t &palette )
 {
 	struct PCX_PHYSFS_file pcxphysfs;
 	int result;
@@ -154,7 +154,7 @@ static int (PCX_PHYSFS_read)(const char *func, const unsigned line, struct PCX_P
 	return 1;
 }
 
-static int pcx_read_bitmap_file(struct PCX_PHYSFS_file *const pcxphysfs, grs_bitmap * bmp,int bitmap_type ,ubyte * palette)
+static int pcx_read_bitmap_file(struct PCX_PHYSFS_file *const pcxphysfs, grs_bitmap * bmp,int bitmap_type ,palette_array_t &palette)
 {
 	PCXHeader header;
 	int i, row, col, count, xsize, ysize;

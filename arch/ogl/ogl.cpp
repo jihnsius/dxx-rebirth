@@ -73,7 +73,7 @@ using std::max;
 #define sinf(a) sin(a)
 #endif
 
-ubyte (*ogl_pal)[256*3]=&gr_palette;
+palette_array_t *ogl_pal = &gr_palette;
 
 unsigned last_width,last_height;
 int GL_TEXTURE_2D_enabled=-1;

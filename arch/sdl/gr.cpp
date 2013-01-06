@@ -280,7 +280,7 @@ void gr_palette_step_up( int r, int g, int b )
 
 using std::min;
 
-void gr_palette_load( ubyte *pal )
+void gr_palette_load( palette_array_t &pal )
 {
 	int i, j;
 	SDL_Palette *palette;

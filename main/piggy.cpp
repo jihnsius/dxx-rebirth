@@ -551,7 +551,7 @@ void piggy_new_pigfile(char *pigname)
 				unsigned fnum;
 				grs_bitmap * bm[MAX_BITMAPS_PER_BRUSH];
 				int iff_error;          //reference parm to avoid warning message
-				ubyte newpal[768];
+				palette_array_t newpal;
 				char basename[FILENAME_LEN];
 				unsigned nframes;
 
@@ -608,7 +608,7 @@ void piggy_new_pigfile(char *pigname)
 			else {          //this is a BBM
 
 				grs_bitmap * n;
-				ubyte newpal[256*3];
+				palette_array_t newpal;
 				int iff_error;
 				char bbmname[FILENAME_LEN];
 				int SuperX;
@@ -616,7 +616,7 @@ void piggy_new_pigfile(char *pigname)
 				MALLOC( n, grs_bitmap, 1 );
 
 				sprintf( bbmname, "%s.bbm", AllBitmaps[i].name );
-				iff_error = iff_read_bitmap(bbmname,n,BM_LINEAR,newpal);
+				iff_error = iff_read_bitmap(bbmname,n,BM_LINEAR,&newpal);
 
 				n->bm_handle=0;
 				if (iff_error != IFF_NO_ERROR)          {
@@ -1555,7 +1555,7 @@ void load_bitmap_replacements(char *level_name)
 /* calculate table to translate d1 bitmaps to current palette,
  * return -1 on error
  */
-static int get_d1_colormap( ubyte *d1_palette, ubyte *colormap )
+static int get_d1_colormap( palette_array_t &d1_palette, ubyte *colormap )
 {
 	int freq[256];
 	PHYSFS_file * palette_file = PHYSFSX_openReadBuffered(D1_PALETTE);
@@ -1576,7 +1576,7 @@ static void bitmap_read_d1( grs_bitmap *bitmap, /* read into this bitmap */
                      int bitmap_data_start, /* specific to file */
                      DiskBitmapHeader *bmh, /* header info for bitmap */
                      ubyte **next_bitmap, /* where to write it (if 0, use malloc) */
-		     ubyte *d1_palette, /* what palette the bitmap has */
+					 palette_array_t &d1_palette, /* what palette the bitmap has */
                      ubyte *colormap) /* how to translate bitmap's colors */
 {
 	int zsize, pigsize = PHYSFS_fileLength(d1_Piggy_fp);
@@ -1796,7 +1796,7 @@ void load_d1_bitmap_replacements()
 	short d1_index, d2_index;
 	ubyte* next_bitmap;
 	ubyte colormap[256];
-	ubyte d1_palette[256*3];
+	palette_array_t d1_palette;
 	char *p;
 	int pigsize;
 
@@ -1910,7 +1910,7 @@ bitmap_index read_extra_bitmap_d1_pig(char *name)
 		int pig_data_start, bitmap_header_start, bitmap_data_start;
 		int i, N_bitmaps;
 		ubyte colormap[256];
-		ubyte d1_palette[256*3];
+		palette_array_t d1_palette;
 		int pigsize;
 
 		d1_Piggy_fp = PHYSFSX_openReadBuffered(D1_PIGFILE);
