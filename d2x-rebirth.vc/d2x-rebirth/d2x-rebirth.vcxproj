@@ -525,6 +525,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\d2x-rebirth.bmp" />
+    <None Include="..\..\d2x-rebirth.ico" />
     <None Include="..\..\include\d1x.xpm" />
     <None Include="..\..\include\descent.xpm" />
     <None Include="..\..\include\psmacros.inc" />
@@ -534,7 +535,7 @@
     <None Include="..\..\main\link.bat" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="d2x-rebirth.rc" />
+    <ResourceCompile Include="..\..\arch\win32\d2xr.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1114,9 +1114,16 @@
     <None Include="..\..\main\link.bat">
       <Filter>main</Filter>
     </None>
-    <None Include="..\..\d2x-rebirth.bmp" />
+    <None Include="..\..\d2x-rebirth.bmp">
+      <Filter>arch\win32</Filter>
+    </None>
+    <None Include="..\..\d2x-rebirth.ico">
+      <Filter>arch\win32</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="d2x-rebirth.rc" />
+    <ResourceCompile Include="..\..\arch\win32\d2xr.rc">
+      <Filter>arch\win32</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
