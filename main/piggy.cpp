@@ -25,6 +25,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "strutil.h"
 #include "inferno.h"
 #include "gr.h"
+#include "../2d/bitmap.h"
 #include "grdef.h"
 #include "u_mem.h"
 #include "iff.h"
