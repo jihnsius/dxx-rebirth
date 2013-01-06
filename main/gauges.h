@@ -94,8 +94,8 @@ struct InsetWindowIndex
 	unsigned _value;
 };
 
-#define iwi_instance(V)	({ const struct InsetWindowIndex __iwi_inst = {(V)}; __iwi_inst; })
-#define iwi_value(V)	({	(V)._value; })
+static inline InsetWindowIndex iwi_instance(unsigned V) { InsetWindowIndex i = {V}; return i; }
+static inline unsigned iwi_value(const InsetWindowIndex& V) { return V._value; }
 
 enum InsetWindowIndexValue
 {
