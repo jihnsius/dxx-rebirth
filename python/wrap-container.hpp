@@ -45,7 +45,7 @@ static void define_common_container_exports(scope& s, const char *N_container_ba
 }
 
 template <typename iterator>
-static typename iterator::reference getitem(const iterator& ib, const iterator& ie, const char *const errmsg, const size_t idx)
+static typename std::iterator_traits<iterator>::reference getitem(const iterator& ib, const iterator& ie, const char *const errmsg, const size_t idx)
 {
 	iterator ii = ib;
 	for (size_t i = idx; ii != ie; --i, ++ii)
