@@ -45,7 +45,7 @@ static void define_common_container_exports(scope& s, const char *N_container_ba
 }
 
 template <typename iterator>
-static typename std::iterator_traits<iterator>::reference getitem(const iterator& ib, const iterator& ie, const char *const errmsg, const size_t idx)
+static typename std::iterator_traits<iterator>::reference getitem(const iterator& ib, const iterator& ie, const char *const errmsg, const size_t idx, std::bidirectional_iterator_tag)
 {
 	iterator ii = ib;
 	for (size_t i = idx; ii != ie; --i, ++ii)
@@ -57,6 +57,28 @@ static typename std::iterator_traits<iterator>::reference getitem(const iterator
 	boost::python::throw_error_already_set();
 	// Unreached
 	return *ii;
+}
+
+template <typename iterator>
+static typename std::iterator_traits<iterator>::reference getitem(const iterator& ib, const iterator& ie, const char *const errmsg, const size_t idx, std::random_access_iterator_tag)
+{
+	ptrdiff_t d = std::distance(ib, ie);
+	if (d > idx)
+	{
+		iterator ii = ib;
+		std::advance(ii, idx);
+		return *ii;
+	}
+	PyErr_SetString(PyExc_IndexError, errmsg);
+	boost::python::throw_error_already_set();
+	// Unreached
+	return *ie;
+}
+
+template <typename iterator>
+static typename std::iterator_traits<iterator>::reference getitem(const iterator& ib, const iterator& ie, const char *const errmsg, const size_t idx)
+{
+	return getitem(ib, ie, errmsg, idx, typename std::iterator_traits<iterator>::iterator_category());
 }
 
 template <typename D, typename C, typename Derived, bool filter>
@@ -114,6 +136,15 @@ struct wrap_container_tmpl
 		const_random_iterator operator+(size_type s) const
 		{
 			return const_random_iterator(this->p + s);
+		}
+		const_random_iterator& operator+=(size_type s)
+		{
+			this->p += s;
+			return *this;
+		}
+		typename std::iterator<std::random_access_iterator_tag, const D>::difference_type operator-(const const_random_iterator& that) const
+		{
+			return this->p - that.p;
 		}
 	};
 	typedef typename std::conditional<filter, const_bidirectional_iterator, const_random_iterator>::type const_iterator;
