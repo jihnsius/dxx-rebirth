@@ -111,7 +111,7 @@ static uint check_point_to_face(const vms_vector *checkp, side_t *s,int facenum,
 	#ifdef COMPACT_SEGS
 		get_side_normal(sp, s-sp->sides, facenum, (vms_vector *)&norm );
 	#else
-		memcpy( &norm, &s->normals[facenum], sizeof(vms_vector_array));
+		norm = s->normals[facenum];
 	#endif
 	checkp_array = (vms_vector_array *)checkp;
 
@@ -1129,7 +1129,7 @@ void find_hitpoint_uv(fix *u,fix *v,fix *l,vms_vector *pnt,segment *seg,int side
 	#ifdef COMPACT_SEGS
 		get_side_normal(seg, sidenum, facenum, (vms_vector *)&normal_array );
 	#else
-		memcpy( &normal_array, &side->normals[facenum], sizeof(vms_vector_array) );
+		normal_array = side->normals[facenum];
 	#endif
   	biggest = 0;
 

@@ -658,7 +658,7 @@ static int manual_join_game_handler(newmenu *menu, d_event *event, direct_join *
 				dj->start_time = timer_query();
 				dj->last_time = 0;
 
-				memcpy((struct _sockaddr *)&Netgame.players[0].protocol.udp.addr, (struct _sockaddr *)&dj->host_addr, sizeof(struct _sockaddr));
+				Netgame.players[0].protocol.udp.addr = dj->host_addr;
 
 				dj->connecting = 1;
 				nm_set_item_text(&items[6], "Connecting...");
@@ -843,8 +843,7 @@ static int net_udp_list_join_poll( newmenu *menu, d_event *event, direct_join *d
 				change_playernum_to(1);
 				dj->start_time = timer_query();
 				dj->last_time = 0;
-				memcpy((struct _sockaddr *)&dj->host_addr, (struct _sockaddr *)&Active_udp_games[(citem+(NLPage*UDP_NETGAMES_PPAGE))-4].game_addr, sizeof(struct _sockaddr));
-				memcpy((struct _sockaddr *)&Netgame.players[0].protocol.udp.addr, (struct _sockaddr *)&dj->host_addr, sizeof(struct _sockaddr));
+				Netgame.players[0].protocol.udp.addr = dj->host_addr = Active_udp_games[(citem+(NLPage*UDP_NETGAMES_PPAGE))-4].game_addr;
 				dj->connecting = 1;
 				return 1;
 			}
@@ -1057,7 +1056,7 @@ static void net_udp_receive_sequence_packet(ubyte *data, UDP_sequence_packet *se
 	memcpy (&(seq->player.rank),&(data[len]),1);			len++;
 
 	if (multi_i_am_master())
-		memcpy(&seq->player.protocol.udp.addr, (struct _sockaddr *)&sender_addr, sizeof(struct _sockaddr));
+		seq->player.protocol.udp.addr = sender_addr;
 }
 
 void net_udp_init()
@@ -1273,7 +1272,7 @@ static net_udp_new_player(UDP_sequence_packet *their)
 
 	memcpy(Players[pnum].callsign, their->player.callsign, CALLSIGN_LEN+1);
 	memcpy(Netgame.players[pnum].callsign, their->player.callsign, CALLSIGN_LEN+1);
-	memcpy(&Netgame.players[pnum].protocol.udp.addr, &their->player.protocol.udp.addr, sizeof(struct _sockaddr));
+	Netgame.players[pnum].protocol.udp.addr = their->player.protocol.udp.addr;
 
 	ClipRank (&their->player.rank);
 	Netgame.players[pnum].rank=their->player.rank;
@@ -1939,7 +1938,7 @@ static void net_udp_add_player(UDP_sequence_packet *p)
 
 	ClipRank (&p->player.rank);
 	memcpy( Netgame.players[N_players].callsign, p->player.callsign, CALLSIGN_LEN+1 );
-	memcpy( (struct _sockaddr *)&Netgame.players[N_players].protocol.udp.addr, (struct _sockaddr *)&p->player.protocol.udp.addr, sizeof(struct _sockaddr) );
+	Netgame.players[N_players].protocol.udp.addr = p->player.protocol.udp.addr;
 	Netgame.players[N_players].rank=p->player.rank;
 	Netgame.players[N_players].connected = CONNECT_PLAYING;
 	Players[N_players].KillGoalCount=0;
@@ -1973,7 +1972,7 @@ static void net_udp_remove_player(UDP_sequence_packet *p)
 	for (i=pn; i<N_players-1; i++ )
 	{
 		memcpy( Netgame.players[i].callsign, Netgame.players[i+1].callsign, CALLSIGN_LEN+1 );
-		memcpy( (struct _sockaddr *)&Netgame.players[i].protocol.udp.addr, (struct _sockaddr *)&Netgame.players[i+1].protocol.udp.addr, sizeof(struct _sockaddr) );
+		Netgame.players[i].protocol.udp.addr = Netgame.players[i+1].protocol.udp.addr;
 		Netgame.players[i].rank=Netgame.players[i+1].rank;
 		ClipRank (&Netgame.players[i].rank);
 	}
@@ -2360,7 +2359,7 @@ void net_udp_process_game_info(ubyte *data, int data_len, struct _sockaddr game_
 	{
 		UDP_netgame_info_lite recv_game;
 
-		memcpy(&recv_game, &game_addr, sizeof(struct _sockaddr));
+		recv_game.game_addr = game_addr;
 												len++; // skip UPID byte
 		recv_game.program_iver[0] = GET_INTEL_SHORT(&(data[len]));			len += 2;
 		recv_game.program_iver[1] = GET_INTEL_SHORT(&(data[len]));			len += 2;
@@ -2393,7 +2392,7 @@ void net_udp_process_game_info(ubyte *data, int data_len, struct _sockaddr game_
 			return;
 		}
 
-		memcpy(&Active_udp_games[i], &recv_game, sizeof(UDP_netgame_info_lite));
+		Active_udp_games[i] = recv_game;
 
 		// See if this is really a Hoard game
 		// If so, adjust all the data accordingly
@@ -2420,13 +2419,13 @@ void net_udp_process_game_info(ubyte *data, int data_len, struct _sockaddr game_
 		{
 			// Delete this game
 			for (j = i; j < num_active_udp_games-1; j++)
-				memcpy(&Active_udp_games[j], &Active_udp_games[j+1], sizeof(UDP_netgame_info_lite));
+				Active_udp_games[j] = Active_udp_games[j+1];
 			num_active_udp_games--;
 		}
 	}
 	else
 	{
-		memcpy((struct _sockaddr *)&Netgame.players[0].protocol.udp.addr, (struct _sockaddr *)&game_addr, sizeof(struct _sockaddr));
+		Netgame.players[0].protocol.udp.addr = game_addr;
 
 												len++; // skip UPID byte
 		Netgame.protocol.udp.program_iver[0] = GET_INTEL_SHORT(&(data[len]));		len += 2;

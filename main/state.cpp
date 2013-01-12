@@ -1628,7 +1628,7 @@ int state_restore_all_sub(char *filename, int secret_restore)
 			obj = &Objects[restore_players[i].objnum];
 			if (restore_players[i].connected == CONNECT_PLAYING && obj->type == OBJ_PLAYER)
 			{
-				memcpy(&restore_objects[i], obj, sizeof(dxxobject));
+				restore_objects[i] = *obj;
 				obj->type = OBJ_GHOST;
 				multi_reset_player_object(obj);
 			}
@@ -1643,7 +1643,7 @@ int state_restore_all_sub(char *filename, int secret_restore)
 					dxxobject *obj;
 					objnum_t sav_objnum = Players[i].objnum;
 
-					memcpy(&Players[i], &restore_players[j], sizeof(player));
+					Players[i] = restore_players[j];
 					Players[i].objnum = sav_objnum;
 
 					coop_player_got[i] = 1;
