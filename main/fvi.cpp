@@ -786,7 +786,7 @@ static int fvi_sub(vms_vector *intp,segnum_t *ints,const vms_vector *p0,segnum_t
 	//@@int sidemask;				//mask of sides - can be on back of face but not side
 	int centermask;			//where the center point is
 	segmasks masks;
-	vms_vector hit_point,closest_hit_point = { 0, 0, 0 }; 	//where we hit
+	vms_vector hit_point,closest_hit_point = ZERO_VECTOR; 	//where we hit
 	fix d,closest_d=0x7fffffff;					//distance to hit point
 	int hit_type=HIT_NONE;							//what sort of hit
 	segnum_t hit_seg=segment_none;

@@ -567,7 +567,7 @@ static int py_get_internal_glow_path(const script_control_info::location& l, con
 {
 	static glow_path_cache_t s_cache[MAX_RENDERED_WINDOWS] = {
 #define BOOST_PP_LOCAL_LIMITS (0,MAX_RENDERED_WINDOWS-1)
-#define BOOST_PP_LOCAL_MACRO(N)	{segment_none, segment_none, 0, {{{0, 0, 0}, {0, 0, 0}, {0, 0, 0}}}},
+#define BOOST_PP_LOCAL_MACRO(N)	{segment_none, segment_none, 0, {{ZERO_VECTOR, ZERO_VECTOR, ZERO_VECTOR}}},
 #include BOOST_PP_LOCAL_ITERATE()
 	};
 	if (!l.enable_position && !l.enable_segment)
