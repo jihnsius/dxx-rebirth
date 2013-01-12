@@ -29,17 +29,19 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 //The basic fixed-point vector.  Access elements by name or position
 typedef struct vms_vector
 {
-	fix x, y, z;
+	union {
+		struct {
+			fix x, y, z;
+		};
+		struct {
+			fix xyz[3];
+		};
+	};
 }
 __pack__ vms_vector;
+static_assert(sizeof(vms_vector) == sizeof(fix)*3, "sizeof(vms_vector) is wrong");
 
-
-typedef struct vms_vector_array
-{
-	fix xyz[3];
-}
-__pack__ vms_vector_array;
-
+typedef vms_vector vms_vector_array;
 
 //Short vector, used for pre-rotation points.
 //Access elements by name or position
@@ -128,8 +130,8 @@ extern const vms_matrix vmd_identity_matrix;
 
 //Here's a handy constant
 
-#define ZERO_VECTOR {0,0,0}
-#define IDENTITY_MATRIX { {f1_0,0,0}, {0,f1_0,0}, {0,0,f1_0} }
+#define ZERO_VECTOR {{{0,0,0}}}
+#define IDENTITY_MATRIX { {{{f1_0,0,0}}}, {{{0,f1_0,0}}}, {{{0,0,f1_0}}} }
 
 //#define vm_vec_make(v,_x,_y,_z) (((v)->x=(_x), (v)->y=(_y), (v)->z=(_z)), (v))
 
