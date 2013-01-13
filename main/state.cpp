@@ -1032,7 +1032,10 @@ int state_save_all_sub(char *filename, char *desc)
 	PHYSFS_write(fp, &Control_center_player_been_seen, sizeof(int), 1);
 	PHYSFS_write(fp, &Control_center_next_fire_time, sizeof(int), 1);
 	PHYSFS_write(fp, &Control_center_present, sizeof(int), 1);
-	PHYSFS_write(fp, &Dead_controlcen_object_num, sizeof(int), 1);
+	{
+		int dead_controlcen_object_num = Dead_controlcen_object_num;
+		PHYSFS_write(fp, &dead_controlcen_object_num, sizeof(dead_controlcen_object_num), 1);
+	}
 
 // Save the AI state
 	ai_save_state( fp );
