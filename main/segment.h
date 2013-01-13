@@ -151,9 +151,7 @@ static inline int IS_CHILD(segnum_t s) {
 	return s != segment_exit && s != segment_none;
 }
 
-#ifdef DXX_HAVE_CXX11_EXPLICIT_DELETE
-template <typename T> static inline int IS_CHILD(T) = delete;
-#endif
+template <typename T> int IS_CHILD(T) DXX_CXX11_EXPLICIT_DELETE;
 
 //Structure for storing u,v,light values.
 //NOTE: this structure should be the same as the one in 3d.h
