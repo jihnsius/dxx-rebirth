@@ -1778,13 +1778,13 @@ void do_sound_menu()
 		return;
 
 	opt_sm_digivol = nitems;
-	nm_set_item_slider(&m[nitems], TXT_FX_VOLUME, GameCfg.DigiVolume, 0, 8);
+	nm_set_item_slider(&m[nitems++], TXT_FX_VOLUME, GameCfg.DigiVolume, 0, 8);
 
 	opt_sm_musicvol = nitems;
-	nm_set_item_slider(&m[nitems], "music volume", GameCfg.MusicVolume, 0, 8);
+	nm_set_item_slider(&m[nitems++], "music volume", GameCfg.MusicVolume, 0, 8);
 
 	opt_sm_revstereo = nitems;
-	nm_set_item_checkbox(&m[nitems], TXT_REVERSE_STEREO, GameCfg.ReverseStereo);
+	nm_set_item_checkbox(&m[nitems++], TXT_REVERSE_STEREO, GameCfg.ReverseStereo);
 
 	nm_set_item_text(& m[nitems++], "");
 
@@ -1815,7 +1815,7 @@ void do_sound_menu()
 #endif
 
 	opt_sm_redbook_playorder = nitems;
-	nm_set_item_checkbox(&m[nitems], "force descent ][ cd track order", GameCfg.OrigTrackOrder);
+	nm_set_item_checkbox(&m[nitems++], "force descent ][ cd track order", GameCfg.OrigTrackOrder);
 
 #ifdef USE_SDLMIXER
 	nm_set_item_text(& m[nitems++], "");
