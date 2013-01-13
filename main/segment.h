@@ -160,21 +160,15 @@ typedef struct uvl {
 } uvl;
 
 typedef struct side_t {
-#ifdef COMPACT_SEGS
 	sbyte   type;           // replaces num_faces and tri_edge, 1 = quad, 2 = 0:2 triangulation, 3 = 1:3 triangulation
 	ubyte   pad;            //keep us longword alligned
 	short   wall_num;
 	short   tmap_num;
 	short   tmap_num2;
 	uvl     uvls[4];
+#ifdef COMPACT_SEGS
 	//vms_vector normals[2];  // 2 normals, if quadrilateral, both the same.
 #else
-	sbyte   type;           // replaces num_faces and tri_edge, 1 = quad, 2 = 0:2 triangulation, 3 = 1:3 triangulation
-	ubyte   pad;            //keep us longword alligned
-	short   wall_num;
-	short   tmap_num;
-	short   tmap_num2;
-	uvl     uvls[4];
 	vms_vector normals[2];  // 2 normals, if quadrilateral, both the same.
 #endif
 } side_t;
