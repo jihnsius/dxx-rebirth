@@ -1566,7 +1566,13 @@ int ai_save_state(PHYSFS_file *fp)
 		PHYSFS_write(fp, ail_rw, sizeof(ai_local_rw), 1);
 		d_free(ail_rw);
 	}
-	PHYSFS_write(fp, Point_segs, sizeof(point_seg) * MAX_POINT_SEGS, 1);
+	for (i = 0; i < MAX_POINT_SEGS; ++i)
+	{
+		point_seg_rw seg_rw;
+		seg_rw.segnum = Point_segs[i].segnum;
+		seg_rw.point = Point_segs[i].point;
+		PHYSFS_write(fp, &seg_rw, sizeof(seg_rw), 1);
+	}
 	//PHYSFS_write(fp, Ai_cloak_info, sizeof(ai_cloak_info) * MAX_AI_CLOAK_INFO, 1);
 	for (i = 0; i < MAX_AI_CLOAK_INFO; i++)
 	{

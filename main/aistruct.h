@@ -199,7 +199,7 @@ typedef struct ai_local_rw {
 	int        mode;                          // current mode within behavior
 	int        previous_visibility;           // Visibility of player last time we checked.
 	int        rapidfire_count;               // number of shots fired rapidly
-	segnum_t        goal_segment;                  // goal segment for current path
+	int        goal_segment;                  // goal segment for current path
 	fix        next_action_time;              // time in seconds until something happens, mode dependent
 	fix        next_fire;                     // time in seconds until can fire again
 	fix        next_fire2;                    // time in seconds until can fire again from second weapon
@@ -223,7 +223,7 @@ typedef struct {
 // Same as above but structure Savegames expect
 typedef struct {
 	fix         last_time;
-	segnum_t         last_segment;
+	int         last_segment;
 	vms_vector  last_position;
 } ai_cloak_info_rw;
 
@@ -231,6 +231,11 @@ typedef struct {
 	segnum_t         segnum;
 	vms_vector  point;
 } point_seg;
+
+typedef struct {
+	int segnum;
+	vms_vector point;
+} point_seg_rw;
 
 typedef struct {
 	segnum_t       start, end;
