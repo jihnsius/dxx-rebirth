@@ -24,7 +24,6 @@ void net_udp_dump_player(struct _sockaddr dump_addr, int why);
 void net_udp_disconnect_player(int playernum);
 int net_udp_level_sync();
 void net_udp_send_mdata_direct(ubyte *data, int data_len, int pnum, int priority);
-void net_udp_send_netgame_update();
 
 #endif
 
