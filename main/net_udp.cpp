@@ -93,20 +93,20 @@ static void net_udp_noloss_process_queue(fix64 time);
 static void net_udp_send_extras ();
 
 // Variables
-int UDP_num_sendto = 0, UDP_len_sendto = 0, UDP_num_recvfrom = 0, UDP_len_recvfrom = 0;
-UDP_mdata_info		UDP_MData;
-UDP_sequence_packet UDP_Seq;
-UDP_mdata_store UDP_mdata_queue[UDP_MDATA_STOR_QUEUE_SIZE];
-UDP_mdata_recv UDP_mdata_got[MAX_PLAYERS];
-UDP_sequence_packet UDP_sync_player; // For rejoin object syncing
-UDP_netgame_info_lite Active_udp_games[UDP_MAX_NETGAMES];
-int num_active_udp_games = 0;
-int num_active_udp_changed = 0;
+static int UDP_num_sendto = 0, UDP_len_sendto = 0, UDP_num_recvfrom = 0, UDP_len_recvfrom = 0;
+static UDP_mdata_info		UDP_MData;
+static UDP_sequence_packet UDP_Seq;
+static UDP_mdata_store UDP_mdata_queue[UDP_MDATA_STOR_QUEUE_SIZE];
+static UDP_mdata_recv UDP_mdata_got[MAX_PLAYERS];
+static UDP_sequence_packet UDP_sync_player; // For rejoin object syncing
+static UDP_netgame_info_lite Active_udp_games[UDP_MAX_NETGAMES];
+static int num_active_udp_games = 0;
+static int num_active_udp_changed = 0;
 static int UDP_Socket[3] = { -1, -1, -1 };
 static char UDP_MyPort[6] = "";
-struct _sockaddr GBcast; // global Broadcast address clients and hosts will use for lite_info exchange over LAN
+static struct _sockaddr GBcast; // global Broadcast address clients and hosts will use for lite_info exchange over LAN
 #ifdef IPv6
-struct _sockaddr GMcast_v6; // same for IPv6-only
+static struct _sockaddr GMcast_v6; // same for IPv6-only
 #endif
 #ifdef USE_TRACKER
 struct _sockaddr TrackerSocket;
