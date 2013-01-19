@@ -310,8 +310,6 @@ extern int Network_player_added;
 
 extern char multibuf[MAX_MULTI_MESSAGE_LEN+4];
 
-extern int who_killed_controlcen;
-
 extern objnum_t Net_create_objnums[MAX_NET_CREATE_OBJECTS];
 extern int Net_create_loc;
 
