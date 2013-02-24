@@ -3094,7 +3094,7 @@ static void interpolate_frame(fix d_play, fix d_recorded)
 		return;
 	}
 	for (objnum_t i = object_first; i <= num_cur_objs; i++)
-		memcpy(&(cur_objs[i]), &(Objects[i]), sizeof(cur_objs[i]));
+		cur_objs[i] = Objects[i];
 
 	Newdemo_vcr_state = ND_STATE_PAUSED;
 	if (newdemo_read_frame_information(0) == -1) {
@@ -3171,7 +3171,7 @@ static void interpolate_frame(fix d_play, fix d_recorded)
 	Newdemo_vcr_state = ND_STATE_PLAYBACK;
 
 	for (objnum_t i = object_first; i <= num_cur_objs; i++)
-		memcpy(&(Objects[i]), &(cur_objs[i]), sizeof(Objects[i]));
+		Objects[i] = cur_objs[i];
 	Highest_object_index = num_cur_objs;
 	d_free(cur_objs);
 }
@@ -3303,7 +3303,7 @@ void newdemo_playback_one_frame()
 						break;
 					}
 					for (objnum_t i = object_first; i <= num_objs; i++)
-						memcpy(&(cur_objs[i]), &(Objects[i]), sizeof(cur_objs[i]));
+						cur_objs[i] = Objects[i];
 
 					level = Current_level_num;
 					if (newdemo_read_frame_information(0) == -1) {
@@ -3326,8 +3326,8 @@ void newdemo_playback_one_frame()
 					for (i = 0; i <= num_objs; i++) {
 						for (objnum_t j = object_first; j <= Highest_object_index; j++) {
 							if (cur_objs[i].signature == Objects[j].signature) {
-								memcpy(&(Objects[j].orient), &(cur_objs[i].orient), sizeof(vms_matrix));
-								memcpy(&(Objects[j].pos), &(cur_objs[i].pos), sizeof(vms_vector));
+								Objects[j].orient = cur_objs[i].orient;
+								Objects[j].pos = cur_objs[i].pos;
 								break;
 							}
 						}
@@ -3806,11 +3806,11 @@ void nd_render_extras (ubyte which,dxxobject *obj)
 
 	if (w)
 	{
-		memcpy (&DemoRightExtra,obj,sizeof(dxxobject));  DemoDoRight=type;
+		DemoRightExtra = *obj;  DemoDoRight=type;
 	}
 	else
 	{
-		memcpy (&DemoLeftExtra,obj,sizeof(dxxobject)); DemoDoLeft=type;
+		DemoLeftExtra = *obj; DemoDoLeft=type;
 	}
 
 }

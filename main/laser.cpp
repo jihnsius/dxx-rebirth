@@ -351,7 +351,7 @@ static void create_omega_blobs(segnum_t firing_segnum, vms_vector *firing_pos, v
 	int		i = 0, num_omega_blobs = 0;
 	objnum_t last_created_objnum = object_none;
 	segnum_t last_segnum;
-	vms_vector	vec_to_goal = { 0, 0, 0 }, omega_delta_vector = { 0, 0, 0 }, blob_pos = { 0, 0, 0 }, perturb_vec = { 0, 0, 0 };
+	vms_vector	vec_to_goal = ZERO_VECTOR, omega_delta_vector = ZERO_VECTOR, blob_pos = ZERO_VECTOR, perturb_vec = ZERO_VECTOR;
 	fix		dist_to_goal = 0, omega_blob_dist = 0, perturb_array[MAX_OMEGA_BLOBS];
 
 	memset(&perturb_array, 0, sizeof(fix)*MAX_OMEGA_BLOBS);
@@ -402,7 +402,7 @@ static void create_omega_blobs(segnum_t firing_segnum, vms_vector *firing_pos, v
 	Doing_lighting_hack_flag = 1;	//	Ugly, but prevents blobs which are probably outside the mine from killing framerate.
 
 	for (i=0; i<num_omega_blobs; i++) {
-		vms_vector	temp_pos = { 0, 0, 0 };
+		vms_vector	temp_pos = ZERO_VECTOR;
 		objnum_t blob_objnum = object_none;
 		segnum_t segnum;
 
@@ -412,7 +412,7 @@ static void create_omega_blobs(segnum_t firing_segnum, vms_vector *firing_pos, v
 
 		//	Every so often, re-perturb blobs
 		if ((i % 4) == 3) {
-			vms_vector temp_vec = { 0, 0, 0 };
+			vms_vector temp_vec = ZERO_VECTOR;
 
 			make_random_vector(&temp_vec);
 			vm_vec_scale_add2(&perturb_vec, &temp_vec, F1_0/4);

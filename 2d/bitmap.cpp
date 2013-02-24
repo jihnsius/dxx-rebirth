@@ -187,20 +187,20 @@ void gr_set_super_transparent (grs_bitmap *pbm, int bTransparent)
 	}
 }
 
-void build_colormap_good( ubyte * palette, ubyte * colormap, int * freq )
+void build_colormap_good( palette_array_t &palette, ubyte * colormap, int * freq )
 {
 	int i, r, g, b;
 
 	for (i=0; i<256; i++ )	{
-		r = *palette++;
-		g = *palette++;
-		b = *palette++;
+		r = palette[i].r;
+		g = palette[i].g;
+		b = palette[i].b;
  		*colormap++ = gr_find_closest_color( r, g, b );
 		*freq++ = 0;
 	}
 }
 
-void gr_remap_bitmap( grs_bitmap * bmp, ubyte * palette, int transparent_color, int super_transparent_color )
+void gr_remap_bitmap( grs_bitmap * bmp, palette_array_t &palette, int transparent_color, int super_transparent_color )
 {
 	ubyte colormap[256];
 	int freq[256];
@@ -226,7 +226,7 @@ void gr_remap_bitmap( grs_bitmap * bmp, ubyte * palette, int transparent_color, 
 		gr_set_super_transparent (bmp, 0);
 }
 
-void gr_remap_bitmap_good( grs_bitmap * bmp, ubyte * palette, int transparent_color, int super_transparent_color )
+void gr_remap_bitmap_good( grs_bitmap * bmp, palette_array_t &palette, int transparent_color, int super_transparent_color )
 {
 	ubyte colormap[256];
 	int freq[256];

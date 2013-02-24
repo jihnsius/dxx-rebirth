@@ -4,6 +4,7 @@
  *
  */
 
+#include <algorithm>
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
@@ -277,25 +278,26 @@ void gr_palette_step_up( int r, int g, int b )
 	SDL_SetColors(canvas, colors, 0, 256);
 }
 
-#undef min
-static inline int min(int x, int y) { return x < y ? x : y; }
+using std::min;
 
-void gr_palette_load( ubyte *pal )
+void gr_palette_load( palette_array_t &pal )
 {
 	int i, j;
 	SDL_Palette *palette;
 	SDL_Color colors[256];
 	ubyte gamma[64];
 
-	if (memcmp(pal,gr_current_pal,768))
+	if (pal != gr_current_pal)
 		SDL_FillRect(canvas, NULL, SDL_MapRGB(canvas->format, 0, 0, 0));
 
-	for (i=0; i<768; i++ )
-	{
-		gr_current_pal[i] = pal[i];
-		if (gr_current_pal[i] > 63)
-			gr_current_pal[i] = 63;
-	}
+	auto a = [](rgb_t c) {
+		const ubyte bound = 63;
+		c.r = std::min(c.r, bound);
+		c.g = std::min(c.g, bound);
+		c.b = std::min(c.b, bound);
+		return c;
+	};
+	std::transform(pal.begin(), pal.end(), gr_current_pal.begin(), a);
 
 	if (canvas == NULL)
 		return;
@@ -311,11 +313,12 @@ void gr_palette_load( ubyte *pal )
 	for (i = 0, j = 0; j < 256; j++)
 	{
 		int c;
-		c = gr_find_closest_color(gamma[gr_palette[j*3]],gamma[gr_palette[j*3+1]],gamma[gr_palette[j*3+2]]);
+		c = gr_find_closest_color(gamma[gr_palette[j].r],gamma[gr_palette[j].g],gamma[gr_palette[j].b]);
 		gr_fade_table[14*256+j] = c;
-		colors[j].r = (min(gr_current_pal[i++] + gr_palette_gamma, 63)) * 4;
-		colors[j].g = (min(gr_current_pal[i++] + gr_palette_gamma, 63)) * 4;
-		colors[j].b = (min(gr_current_pal[i++] + gr_palette_gamma, 63)) * 4;
+		colors[j].r = (min(gr_current_pal[i].r + gr_palette_gamma, 63)) * 4;
+		colors[j].g = (min(gr_current_pal[i].g + gr_palette_gamma, 63)) * 4;
+		colors[j].b = (min(gr_current_pal[i].b + gr_palette_gamma, 63)) * 4;
+		i++;
 	}
 
 	SDL_SetColors(canvas, colors, 0, 256);

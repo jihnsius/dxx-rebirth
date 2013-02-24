@@ -584,7 +584,7 @@ static int iff_parse_bitmap(PHYSFS_file *ifile, grs_bitmap *bm, int bitmap_type,
 }
 
 //returns error codes - see IFF.H.  see GR.H for bitmap_type
-int iff_read_bitmap(const char *ifilename,grs_bitmap *bm,int bitmap_type,ubyte *palette)
+int iff_read_bitmap(const char *ifilename,grs_bitmap *bm,int bitmap_type,palette_array_t *palette)
 {
 	int ret;			//return code
 	PHYSFS_file *ifile;
@@ -928,7 +928,7 @@ int iff_write_bitmap(char *ofilename,grs_bitmap *bm,ubyte *palette)
 
 //read in many brushes.  fills in array of pointers, and n_bitmaps.
 //returns iff error codes
-int iff_read_animbrush(const char *ifilename,grs_bitmap **bm_list,unsigned max_bitmaps,unsigned *n_bitmaps,ubyte *palette)
+int iff_read_animbrush(const char *ifilename,grs_bitmap **bm_list,unsigned max_bitmaps,unsigned *n_bitmaps,palette_array_t &palette)
 {
 	int ret = IFF_NO_ERROR;			//return code
 	PHYSFS_file *ifile;
@@ -965,7 +965,7 @@ int iff_read_animbrush(const char *ifilename,grs_bitmap **bm_list,unsigned max_b
 			MALLOC(bm_list[*n_bitmaps] , grs_bitmap, 1 );
 			bm_list[*n_bitmaps]->bm_data = NULL;
 
-			ret = iff_parse_bitmap(ifile,bm_list[*n_bitmaps],form_type,*n_bitmaps>0?NULL:(signed char *)palette,prev_bm);
+			ret = iff_parse_bitmap(ifile,bm_list[*n_bitmaps],form_type,*n_bitmaps>0?NULL:(signed char *)&palette[0],prev_bm);
 
 			if (ret != IFF_NO_ERROR)
 				goto done;

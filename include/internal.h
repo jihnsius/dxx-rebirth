@@ -43,7 +43,7 @@ extern unsigned last_width,last_height;
 //MSVC seems to have problems with inline funcs not being found during linking
 void ogl_swap_buffers_internal(void);
 
-extern ubyte (*ogl_pal)[256*3];
+extern palette_array_t *ogl_pal;
 
 //whee
 //#define PAL2Tr(c) ((gr_palette[c*3]+gr_palette_gamma)/63.0)
@@ -52,12 +52,12 @@ extern ubyte (*ogl_pal)[256*3];
 //#define PAL2Tr(c) ((gr_palette[c*3])/63.0)
 //#define PAL2Tg(c) ((gr_palette[c*3+1])/63.0)
 //#define PAL2Tb(c) ((gr_palette[c*3+2])/63.0)
-#define CPAL2Tr(c) ((gr_current_pal[c*3])/63.0)
-#define CPAL2Tg(c) ((gr_current_pal[c*3+1])/63.0)
-#define CPAL2Tb(c) ((gr_current_pal[c*3+2])/63.0)
-#define PAL2Tr(c) (((*ogl_pal)[c*3])/63.0)
-#define PAL2Tg(c) (((*ogl_pal)[c*3+1])/63.0)
-#define PAL2Tb(c) (((*ogl_pal)[c*3+2])/63.0)
+#define CPAL2Tr(c) ((gr_current_pal[c].r)/63.0)
+#define CPAL2Tg(c) ((gr_current_pal[c].g)/63.0)
+#define CPAL2Tb(c) ((gr_current_pal[c].b)/63.0)
+#define PAL2Tr(c) (((*ogl_pal)[c].r)/63.0)
+#define PAL2Tg(c) (((*ogl_pal)[c].g)/63.0)
+#define PAL2Tb(c) (((*ogl_pal)[c].b)/63.0)
 //inline GLfloat PAL2Tr(int c);
 //inline GLfloat PAL2Tg(int c);
 //inline GLfloat PAL2Tb(int c);

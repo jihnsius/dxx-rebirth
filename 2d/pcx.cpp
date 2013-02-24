@@ -29,6 +29,7 @@ COPYRIGHT 1993-1998 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #ifdef OGL
 #include "palette.h"
 #endif
+#include <algorithm>
 
 int pcx_encode_byte(ubyte byt, ubyte cnt, PHYSFS_file *fid);
 int pcx_encode_line(ubyte *inBuff, int inLen, PHYSFS_file *fp);
@@ -109,9 +110,9 @@ struct PCX_PHYSFS_file
 	ubyte buffer[4096];
 };
 
-static int pcx_read_bitmap_file(struct PCX_PHYSFS_file *const pcxphysfs, grs_bitmap * bmp,int bitmap_type ,ubyte * palette);
+static int pcx_read_bitmap_file(struct PCX_PHYSFS_file *const pcxphysfs, grs_bitmap * bmp,int bitmap_type ,palette_array_t &palette);
 
-int pcx_read_bitmap(const char * filename, grs_bitmap * bmp,int bitmap_type ,ubyte * palette )
+int pcx_read_bitmap(const char * filename, grs_bitmap * bmp,int bitmap_type ,palette_array_t &palette )
 {
 	struct PCX_PHYSFS_file pcxphysfs;
 	int result;
@@ -154,7 +155,7 @@ static int (PCX_PHYSFS_read)(const char *func, const unsigned line, struct PCX_P
 	return 1;
 }
 
-static int pcx_read_bitmap_file(struct PCX_PHYSFS_file *const pcxphysfs, grs_bitmap * bmp,int bitmap_type ,ubyte * palette)
+static int pcx_read_bitmap_file(struct PCX_PHYSFS_file *const pcxphysfs, grs_bitmap * bmp,int bitmap_type ,palette_array_t &palette)
 {
 	PCXHeader header;
 	int i, row, col, count, xsize, ysize;
@@ -224,20 +225,17 @@ static int pcx_read_bitmap_file(struct PCX_PHYSFS_file *const pcxphysfs, grs_bit
 	}
 
 	// Read the extended palette at the end of PCX file
-	if ( palette != NULL )	{
 		// Read in a character which should be 12 to be extended palette file
 		if (PCX_PHYSFS_read(pcxphysfs, &data, 1) == 1)	{
 			if ( data == 12 )	{
-				if (PCX_PHYSFS_read(pcxphysfs, palette, 768) != 1)	{
+				if (PCX_PHYSFS_read(pcxphysfs, reinterpret_cast<ubyte *>(&palette[0]), palette.size() * sizeof(palette[0])) != 1)	{
 					return PCX_ERROR_READING;
 				}
-				for (i=0; i<768; i++ )
-					palette[i] >>= 2;
+				std::for_each(palette.begin(), palette.end(), [](rgb_t& c) { c.r >>= 2; c.g >>= 2; c.b >>= 2; });
 			}
 		} else {
 			return PCX_ERROR_NO_PALETTE;
 		}
-	}
 	return PCX_ERROR_NONE;
 }
 

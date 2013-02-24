@@ -1416,15 +1416,15 @@ int HandleTestKey(int key)
 			break;
 	case KEY_Q + KEY_SHIFTED + KEY_DEBUGGED:
 		{
-			char pal_save[768];
-			memcpy(pal_save,gr_palette,768);
+			palette_array_t save_pal;
+			save_pal = gr_palette;
 			init_subtitles("end.tex");	//ingore errors
 			PlayMovie ("end.mve",MOVIE_ABORT_ON);
 			close_subtitles();
 			Screen_mode = -1;
 			set_screen_mode(SCREEN_GAME);
 			reset_cockpit();
-			memcpy(gr_palette,pal_save,768);
+			gr_palette = save_pal;
 			gr_palette_load(gr_palette);
 			break;
 		}

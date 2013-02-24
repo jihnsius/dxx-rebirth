@@ -58,6 +58,7 @@
 #endif
 
 #include <algorithm>
+using std::min;
 using std::max;
 
 #ifdef OGLES
@@ -733,33 +734,29 @@ void gr_palette_step_up(int r, int g, int b)
 	}
 }
 
-#undef min
-static inline int min(int x, int y) { return x < y ? x : y; }
-
-void gr_palette_load( ubyte *pal )
+static void gr_palette_copy( palette_array_t &d, const palette_array_t &s )
 {
-	int i;
+	auto a = [](rgb_t c) {
+		const ubyte bound = 63;
+		c.r = std::min(c.r, bound);
+		c.g = std::min(c.g, bound);
+		c.b = std::min(c.b, bound);
+		return c;
+	};
+	std::transform(s.begin(), s.end(), d.begin(), a);
+}
 
-	for (i=0; i<768; i++ )
-	{
-		gr_current_pal[i] = pal[i];
-		if (gr_current_pal[i] > 63)
-			gr_current_pal[i] = 63;
-	}
+void gr_palette_load( palette_array_t &pal )
+{
+	gr_palette_copy(gr_current_pal, pal);
 
 	gr_palette_step_up(0, 0, 0); // make ogl_setbrightness_internal get run so that menus get brightened too.
 	init_computed_colors();
 }
 
-void gr_palette_read(ubyte * pal)
+void gr_palette_read(palette_array_t &pal)
 {
-	int i;
-	for (i=0; i<768; i++ )
-	{
-		pal[i]=gr_current_pal[i];
-		if (pal[i] > 63)
-			pal[i] = 63;
-	}
+	gr_palette_copy(pal, gr_current_pal);
 }
 
 #define GL_BGR_EXT 0x80E0

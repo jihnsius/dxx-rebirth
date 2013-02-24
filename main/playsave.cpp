@@ -83,7 +83,7 @@ int new_player_config()
 {
 	InitWeaponOrdering (); //setup default weapon priorities
 	PlayerCfg.ControlType=0; // Assume keyboard
-	memcpy(PlayerCfg.KeySettings, DefaultKeySettings, sizeof(DefaultKeySettings));
+	PlayerCfg.KeySettings = DefaultKeySettings;
 	memcpy(PlayerCfg.KeySettingsD2X, DefaultKeySettingsD2X, sizeof(DefaultKeySettingsD2X));
 	kc_set_controls();
 
@@ -791,14 +791,14 @@ int write_player_file()
 		ubyte old_avg_joy_sensitivity = 8;
 		control_type_dos = PlayerCfg.ControlType;
 
-		if (PHYSFS_write(file, PlayerCfg.KeySettings[0], sizeof(PlayerCfg.KeySettings[0]), 1) != 1)
+		if (PHYSFS_write(file, &PlayerCfg.KeySettings[0], PlayerCfg.KeySettings[0].size(), 1) != 1)
 			goto write_player_file_failed;
-		if (PHYSFS_write(file, PlayerCfg.KeySettings[1], sizeof(PlayerCfg.KeySettings[1]), 1) != 1)
+		if (PHYSFS_write(file, &PlayerCfg.KeySettings[1], PlayerCfg.KeySettings[1].size(), 1) != 1)
 			goto write_player_file_failed;
 		for (i = 0; i < MAX_CONTROLS*3; i++)
 			if (PHYSFS_write(file, "0", sizeof(ubyte), 1) != 1) // Skip obsolete Flightstick/Thrustmaster/Gravis map fields
 				goto write_player_file_failed;
-		if (PHYSFS_write(file, PlayerCfg.KeySettings[2], sizeof(PlayerCfg.KeySettings[2]), 1) != 1)
+		if (PHYSFS_write(file, &PlayerCfg.KeySettings[2], PlayerCfg.KeySettings[2].size(), 1) != 1)
 			goto write_player_file_failed;
 		for (i = 0; i < MAX_CONTROLS*2; i++)
 			if (PHYSFS_write(file, "0", sizeof(ubyte), 1) != 1) // Skip obsolete Cyberman/Winjoy map fields

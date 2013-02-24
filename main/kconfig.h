@@ -30,6 +30,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "mouse.h"
 
 #ifdef __cplusplus
+#include <array>
 
 typedef struct _control_info {
 	fix pitch_time;
@@ -74,12 +75,14 @@ typedef struct _control_info {
 #define NUM_MOUSE_CONTROLS  30
 #define MAX_CONTROLS        60		// there are actually 48, so this leaves room for more
 
+typedef std::array<std::array<ubyte, MAX_CONTROLS>, 3> KeySettings_t;
+
 extern control_info Controls;
 extern void kconfig_read_controls(d_event *event, int automap_flag);
 extern void kconfig(int n, const char *title);
 
 extern const ubyte DefaultKeySettingsD2X[MAX_D2X_CONTROLS];
-extern const ubyte DefaultKeySettings[3][MAX_CONTROLS];
+extern const KeySettings_t DefaultKeySettings;
 
 extern void kc_set_controls();
 

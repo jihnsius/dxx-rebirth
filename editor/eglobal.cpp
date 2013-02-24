@@ -56,7 +56,6 @@ int Show_axes_flag = 0; // 0 = don't show, !0 = do show coordinate axes in *Curs
 uint        Update_flags = UF_ALL;  //force total redraw
 int         Funky_chase_mode = 0;
 vms_angvec  Seg_orientation = {0,0,0};
-vms_vector  Seg_scale = {F1_0*20,F1_0*20,F1_0*20};
 int         mine_changed = 0;
 int         ModeFlag;
 editor_view *current_view;
@@ -64,7 +63,7 @@ editor_view *current_view;
 int         SegSizeMode = 1; // Mode = 0/1 = not/is legal to move bound vertices, 
 
 //the view for the different windows.
-editor_view LargeView = {0,1, NULL, i2f(100),{{f1_0,0,0},{0,f1_0,0},{0,0,f1_0}},f1_0};
+editor_view LargeView = {0,1, NULL, i2f(100),IDENTITY_MATRIX,f1_0};
 #if ORTHO_VIEWS
 editor_view TopView   = {1,1, NULL, i2f(100),{{f1_0,0,0},{0,0,-f1_0},{0,f1_0,0}},f1_0};
 editor_view FrontView = {2,1, NULL, i2f(100),{{f1_0,0,0},{0,f1_0,0},{0,0,f1_0}},f1_0};

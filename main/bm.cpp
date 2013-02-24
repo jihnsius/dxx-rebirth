@@ -425,13 +425,13 @@ static bitmap_index read_extra_bitmap_iff(const char * filename )
 {
 	bitmap_index bitmap_num;
 	grs_bitmap * n = &GameBitmaps[extra_bitmap_num];
-	ubyte newpal[256*3];
+	palette_array_t newpal;
 	int iff_error;		//reference parm to avoid warning message
 
 	bitmap_num.index = 0;
 
 	//MALLOC( new, grs_bitmap, 1 );
-	iff_error = iff_read_bitmap(filename,n,BM_LINEAR,newpal);
+	iff_error = iff_read_bitmap(filename,n,BM_LINEAR,&newpal);
 	n->bm_handle=0;
 	if (iff_error != IFF_NO_ERROR)		{
 		con_printf(CON_DEBUG, "Error loading exit model bitmap <%s> - IFF error: %s\n", filename, iff_errormsg(iff_error));
@@ -618,9 +618,9 @@ void compute_average_rgb(grs_bitmap *bm, fix *rgb)
 		for (y = 0; y < bm->bm_w; y++)
 		{
 			color = buf[i++];
-			t_rgb[0] = gr_palette[color*3];
-			t_rgb[1] = gr_palette[color*3+1];
-			t_rgb[2] = gr_palette[color*3+2];
+			t_rgb[0] = gr_palette[color].r;
+			t_rgb[1] = gr_palette[color].g;
+			t_rgb[2] = gr_palette[color].b;
 			if (!(color == TRANSPARENCY_COLOR || (t_rgb[0] == t_rgb[1] && t_rgb[0] == t_rgb[2])))
 			{
 				rgb[0] += t_rgb[0];

@@ -620,8 +620,8 @@ static int state_get_savegame_filename(char * fname, char * dsc, const char * ca
 					sc_bmp[i] = gr_create_bitmap(THUMBNAIL_W,THUMBNAIL_H );
 					PHYSFS_read(fp, sc_bmp[i]->bm_data, THUMBNAIL_W * THUMBNAIL_H, 1);
 					if (version >= 9) {
-						ubyte pal[256*3];
-						PHYSFS_read(fp, pal, 3, 256);
+						palette_array_t pal;
+						PHYSFS_read(fp, &pal[0], sizeof(pal[0]), pal.size());
 						gr_remap_bitmap_good( sc_bmp[i], pal, -1, -1 );
 					}
 					nsaves++;
@@ -827,7 +827,6 @@ int state_save_all_sub(char *filename, char *desc)
 	int i,j;
 	PHYSFS_file *fp;
 	grs_canvas * cnv;
-	ubyte *pal;
 	char mission_filename[9];
 #ifdef OGL
 	GLint gl_draw_buffer;
@@ -895,13 +894,12 @@ int state_save_all_sub(char *filename, char *desc)
 		}
 		d_free(buf);
 #endif
-		pal = gr_palette;
 
 		PHYSFS_write(fp, cnv->cv_bitmap.bm_data, THUMBNAIL_W * THUMBNAIL_H, 1);
 
 		gr_set_current_canvas(cnv_save);
 		gr_free_canvas( cnv );
-		PHYSFS_write(fp, pal, 3, 256);
+		PHYSFS_write(fp, &gr_palette[0], sizeof(gr_palette[0]), gr_palette.size());
 	}
 	else
 	{
@@ -1630,7 +1628,7 @@ int state_restore_all_sub(char *filename, int secret_restore)
 			obj = &Objects[restore_players[i].objnum];
 			if (restore_players[i].connected == CONNECT_PLAYING && obj->type == OBJ_PLAYER)
 			{
-				memcpy(&restore_objects[i], obj, sizeof(dxxobject));
+				restore_objects[i] = *obj;
 				obj->type = OBJ_GHOST;
 				multi_reset_player_object(obj);
 			}
@@ -1645,7 +1643,7 @@ int state_restore_all_sub(char *filename, int secret_restore)
 					dxxobject *obj;
 					objnum_t sav_objnum = Players[i].objnum;
 
-					memcpy(&Players[i], &restore_players[j], sizeof(player));
+					Players[i] = restore_players[j];
 					Players[i].objnum = sav_objnum;
 
 					coop_player_got[i] = 1;

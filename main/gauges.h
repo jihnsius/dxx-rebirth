@@ -69,10 +69,6 @@ extern void update_laser_weapon_info(void);
 extern void play_homing_warning(void);
 extern void show_HUD_names();
 
-typedef struct {
-	ubyte r,g,b;
-} rgb_t;
-
 extern const rgb_t player_rgb[MAX_PLAYERS];
 
 enum weapon_box_user_t

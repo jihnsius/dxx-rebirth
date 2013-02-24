@@ -84,7 +84,7 @@ void HUD_render_message_frame()
 			for (j = i; j < HUD_nmessages; j++)
 			{
 				if (j+1 < HUD_nmessages)
-					memcpy(&HUD_messages[j], &HUD_messages[j+1], sizeof(struct hudmsg));
+					HUD_messages[j] = HUD_messages[j+1];
 				else
 					memset(&HUD_messages[j], 0, sizeof(struct hudmsg));
 			}
@@ -165,7 +165,7 @@ int HUD_init_message_va(int class_flag, const char * format, va_list args)
 		HUD_nmessages = HUD_MAX_NUM_STOR; // unnecessary but just in case it might be bigger... which is impossible
 		for (i = 0; i < HUD_nmessages-1; i++) 
 		{
-			memcpy(&HUD_messages[i], &HUD_messages[i+1], sizeof(struct hudmsg));
+			HUD_messages[i] = HUD_messages[i+1];
 		}
 	}
 	else

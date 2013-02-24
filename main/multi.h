@@ -44,6 +44,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include <stdint.h>
 #include <sys/time.h>
 #endif
+#include <cstring>
 
 #ifdef IPv6
 #define _sockaddr sockaddr_in6
@@ -55,6 +56,8 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define _pf PF_INET
 #endif
 #endif
+
+static inline bool operator==(const _sockaddr &a, const _sockaddr &b) { return !memcmp(&a, &b, sizeof(a)); }
 
 // PROTOCOL VARIABLES AND DEFINES
 extern int multi_protocol; // set and determinate used protocol
@@ -306,8 +309,6 @@ extern int Player_joining_extras;
 extern int Network_player_added;
 
 extern char multibuf[MAX_MULTI_MESSAGE_LEN+4];
-
-extern int who_killed_controlcen;
 
 extern objnum_t Net_create_objnums[MAX_NET_CREATE_OBJECTS];
 extern int Net_create_loc;

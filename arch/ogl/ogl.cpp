@@ -73,7 +73,7 @@ using std::max;
 #define sinf(a) sin(a)
 #endif
 
-ubyte (*ogl_pal)[256*3]=&gr_palette;
+palette_array_t *ogl_pal = &gr_palette;
 
 unsigned last_width,last_height;
 int GL_TEXTURE_2D_enabled=-1;
@@ -1406,14 +1406,14 @@ static void ogl_filltexbuf(unsigned char *data, GLubyte *texp, int truewidth, un
 						(*(texp++))=255;
 						break;
 					case GL_RGB:
-						(*(texp++)) = (*ogl_pal)[c * 3] * 4;
-						(*(texp++)) = (*ogl_pal)[c * 3 + 1] * 4;
-						(*(texp++)) = (*ogl_pal)[c * 3 + 2] * 4;
+						(*(texp++)) = (*ogl_pal)[c].r * 4;
+						(*(texp++)) = (*ogl_pal)[c].g * 4;
+						(*(texp++)) = (*ogl_pal)[c].b * 4;
 						break;
 					case GL_RGBA:
-						(*(texp++))=(*ogl_pal)[c*3]*4;
-						(*(texp++))=(*ogl_pal)[c*3+1]*4;
-						(*(texp++))=(*ogl_pal)[c*3+2]*4;
+						(*(texp++))=(*ogl_pal)[c].r*4;
+						(*(texp++))=(*ogl_pal)[c].g*4;
+						(*(texp++))=(*ogl_pal)[c].b*4;
 						(*(texp++))=255;//not transparent
 						break;
 #ifndef OGLES

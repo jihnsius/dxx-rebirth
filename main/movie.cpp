@@ -167,15 +167,15 @@ int PlayMovie(const char *filename, int must_have)
 static void MovieShowFrame(ubyte *buf, int dstx, int dsty, int bufw, int bufh, int sw, int sh)
 {
 	grs_bitmap source_bm;
-	static ubyte old_pal[768];
+	static palette_array_t old_pal;
 	float scale = 1.0;
 
-	if (memcmp(old_pal,gr_palette,768))
+	if (old_pal != gr_palette)
 	{
-		memcpy(old_pal,gr_palette,768);
+		old_pal = gr_palette;
 		return;
 	}
-	memcpy(old_pal,gr_palette,768);
+	old_pal = gr_palette;
 
 	source_bm.bm_x = source_bm.bm_y = 0;
 	source_bm.bm_w = source_bm.bm_rowsize = bufw;
@@ -228,13 +228,13 @@ static void MovieSetPalette(unsigned char *p, unsigned start, unsigned count)
 	Assert(start>=1 && start+count-1<=254);
 
 	//Set color 0 to be black
-	gr_palette[0] = gr_palette[1] = gr_palette[2] = 0;
+	gr_palette[0].r = gr_palette[0].g = gr_palette[0].b = 0;
 
 	//Set color 255 to be our subtitle color
-	gr_palette[765] = gr_palette[766] = gr_palette[767] = 50;
+	gr_palette[255].r = gr_palette[255].g = gr_palette[255].b = 50;
 
 	//movie libs palette into our array
-	memcpy(gr_palette+start*3,p+start*3,count*3);
+	memcpy(&gr_palette[start],p+start*3,count*3);
 }
 
 
@@ -362,7 +362,7 @@ static int RunMovie(char *filename, int , int must_have,int dx,int dy)
 	int aborted = 0;
 	int reshow = 0;
 #ifdef OGL
-	ubyte pal_save[768];
+	palette_array_t pal_save;
 #endif
 
 	MALLOC(m, movie, 1);
@@ -405,8 +405,7 @@ static int RunMovie(char *filename, int , int must_have,int dx,int dy)
 
 #ifdef OGL
 	set_screen_mode(SCREEN_MOVIE);
-	gr_copy_palette(pal_save, gr_palette, 768);
-	memset(gr_palette, 0, 768);
+	gr_copy_palette(pal_save, gr_palette);
 	gr_palette_load(gr_palette);
 #else
 	gr_set_mode(SM((hires_flag?640:320),(hires_flag?480:200)));
@@ -444,7 +443,7 @@ static int RunMovie(char *filename, int , int must_have,int dx,int dy)
 
 	Screen_mode=-1;  //force reset of screen mode
 #ifdef OGL
-	gr_copy_palette(gr_palette, pal_save, 768);
+	gr_copy_palette(gr_palette, pal_save);
 	gr_palette_load(pal_save);
 #endif
 

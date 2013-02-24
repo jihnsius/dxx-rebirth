@@ -151,9 +151,7 @@ static inline int IS_CHILD(segnum_t s) {
 	return s != segment_exit && s != segment_none;
 }
 
-#ifdef DXX_HAVE_CXX11_EXPLICIT_DELETE
-template <typename T> static inline int IS_CHILD(T) = delete;
-#endif
+template <typename T> int IS_CHILD(T) DXX_CXX11_EXPLICIT_DELETE;
 
 //Structure for storing u,v,light values.
 //NOTE: this structure should be the same as the one in 3d.h
@@ -162,21 +160,15 @@ typedef struct uvl {
 } uvl;
 
 typedef struct side_t {
-#ifdef COMPACT_SEGS
 	sbyte   type;           // replaces num_faces and tri_edge, 1 = quad, 2 = 0:2 triangulation, 3 = 1:3 triangulation
 	ubyte   pad;            //keep us longword alligned
 	short   wall_num;
 	short   tmap_num;
 	short   tmap_num2;
 	uvl     uvls[4];
+#ifdef COMPACT_SEGS
 	//vms_vector normals[2];  // 2 normals, if quadrilateral, both the same.
 #else
-	sbyte   type;           // replaces num_faces and tri_edge, 1 = quad, 2 = 0:2 triangulation, 3 = 1:3 triangulation
-	ubyte   pad;            //keep us longword alligned
-	short   wall_num;
-	short   tmap_num;
-	short   tmap_num2;
-	uvl     uvls[4];
 	vms_vector normals[2];  // 2 normals, if quadrilateral, both the same.
 #endif
 } side_t;
@@ -185,12 +177,29 @@ static inline int IS_WALL(short w) {
 	return w > -1;
 }
 
+typedef int sidenum_t;
+
+template <typename T>
+struct segment_side_array_template_t
+{
+	typedef std::array<T, MAX_SIDES_PER_SEGMENT> array_t;
+	typedef typename array_t::iterator iterator;
+	array_t a;
+	typename array_t::const_reference operator[](const sidenum_t& s) const { Assert(s < size()); return a[s]; }
+	typename array_t::reference operator[](const sidenum_t& s) { Assert(s < size()); return a[s]; }
+	iterator begin() { return a.begin(); }
+	unsigned size() const { return (unsigned)a.size(); }
+	void fill(typename array_t::const_reference v) { a.fill(v); }
+};
+
+struct segment_children_array_t : public segment_side_array_template_t<segnum_t> {};
+
 typedef struct segment {
 #ifdef EDITOR
 	segnum_t   segnum;     // segment number, not sure what it means
 #endif
 	side_t    sides[MAX_SIDES_PER_SEGMENT];       // 6 sides
-	segnum_t   children[MAX_SIDES_PER_SEGMENT];    // indices of 6 children segments, front, left, top, right, bottom, back
+	segment_children_array_t   children;    // indices of 6 children segments, front, left, top, right, bottom, back
 	vertnum_t     verts[MAX_VERTICES_PER_SEGMENT];    // vertex ids of 4 front and 4 back vertices
 #ifdef EDITOR
 	short   group;      // group number to which the segment belongs.

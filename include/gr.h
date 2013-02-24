@@ -25,6 +25,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "maths.h"
 
 #ifdef __cplusplus
+#include "palette.h"
 
 // some defines for transparency and blending
 #define TRANSPARENCY_COLOR   255            // palette entry of transparency color -- 255 on the PC
@@ -241,7 +242,7 @@ void gr_set_bitmap_data(grs_bitmap *bm, unsigned char *data);
 // the palette stays the same until gr_close is called
 
 void gr_use_palette_table(const char * filename );
-void gr_copy_palette(ubyte *gr_palette, const ubyte *pal, int size);
+void gr_copy_palette(palette_array_t &gr_palette, const palette_array_t &pal);
 
 //=========================================================================
 // Drawing functions:
@@ -394,7 +395,7 @@ void gr_snow_out(int num_dots);
 
 void test_rotate_bitmap(void);
 
-extern ubyte gr_palette[256*3];
+extern palette_array_t gr_palette;
 extern ubyte gr_fade_table[256*GR_FADE_LEVELS];
 extern ubyte gr_inverse_table[32*32*32];
 
@@ -412,13 +413,11 @@ extern ushort gr_fade_table_selector;
 //			gr_remap_bitmap( new, newpal, iff_transparent_color );
 //		else
 //			gr_remap_bitmap( new, newpal, -1 );
-void gr_remap_bitmap( grs_bitmap * bmp, ubyte * palette, int transparent_color, int super_transparent_color );
+void gr_remap_bitmap( grs_bitmap * bmp, palette_array_t &palette, int transparent_color, int super_transparent_color );
 
 // Same as above, but searches using gr_find_closest_color which uses
 // 18-bit accurracy instead of 15bit when translating colors.
-void gr_remap_bitmap_good( grs_bitmap * bmp, ubyte * palette, int transparent_color, int super_transparent_color );
-
-void build_colormap_good( ubyte * palette, ubyte * colormap, int * freq );
+void gr_remap_bitmap_good( grs_bitmap * bmp, palette_array_t &palette, int transparent_color, int super_transparent_color );
 
 void gr_palette_step_up( int r, int g, int b );
 

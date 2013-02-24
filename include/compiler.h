@@ -46,6 +46,18 @@
 
 #ifdef __cplusplus
 
+#ifdef DXX_HAVE_CXX11_EXPLICIT_DEFAULT
+#define DXX_CXX11_EXPLICIT_DEFAULT = default
+#else
+#define DXX_CXX11_EXPLICIT_DEFAULT
+#endif
+
+#ifdef DXX_HAVE_CXX11_EXPLICIT_DELETE
+#define DXX_CXX11_EXPLICIT_DELETE = delete
+#else
+#define DXX_CXX11_EXPLICIT_DELETE
+#endif
+
 #if defined(DXX_HAVE_CXX11_EXPLICIT_DEFAULT) && \
 	defined(DXX_HAVE_CXX11_EXPLICIT_DELETE)
 /*
