@@ -34,11 +34,11 @@ static int file_sort_func(char **e0, char **e1)
 
 char **file_getdirlist(int *NumDirs, const char *dir)
 {
-	char	path[PATH_MAX];
-	char	**list = PHYSFS_enumerateFiles(dir);
-	char	**i, **j = list;
-	char	*test_filename;
-	unsigned		test_max;
+	char		path[PATH_MAX];
+	char		**list = PHYSFS_enumerateFiles(dir);
+	char		**i, **j = list;
+	char		*test_filename;
+	unsigned	test_max;
 
 	if (!list)
 		return NULL;
@@ -262,13 +262,13 @@ static int browser_handler(UI_DIALOG *dlg, d_event *event, file_browser *b)
 
 int ui_get_filename( char * filename, const char * filespec, const char * message  )
 {
-	char		InputText[PATH_MAX];
-	char		*p;
-	int			i;
-	file_browser		*b;
-	UI_DIALOG	*dlg;
-	window		*wind;
-	int			rval = 0;
+	char			InputText[PATH_MAX];
+	char			*p;
+	int				i;
+	file_browser	*b;
+	UI_DIALOG		*dlg;
+	window			*wind;
+	int				rval = 0;
 
 	MALLOC(b, file_browser, 1);
 	if (!b)
