@@ -325,7 +325,7 @@ static void con_input_seek_down_key()
 	g_con_history_browse = !!history_pos;
 }
 
-#if !DXX_HAVE_ISBLANK
+#ifndef DXX_HAVE_ISBLANK
 inline static int isblank(int c)
 {
 	return c == ' ' || c == '\t';
