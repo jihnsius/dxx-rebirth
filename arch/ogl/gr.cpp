@@ -736,7 +736,7 @@ void gr_palette_step_up(int r, int g, int b)
 
 static void gr_palette_copy( palette_array_t &d, const palette_array_t &s )
 {
-	auto a = [](rgb_t c) {
+	auto a = [](rgb_t c) -> rgb_t {
 		const ubyte bound = 63;
 		c.r = std::min(c.r, bound);
 		c.g = std::min(c.g, bound);
