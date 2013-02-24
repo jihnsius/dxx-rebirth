@@ -97,7 +97,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>EDITOR;WIN32;_DEBUG;WIN32_LEAN_AND_MEAN;_WINDOWS;PROGRAM_NAME="D2X-Rebirth";D2XMAJORi=0;D2XMINORi=57;D2XMICROi=3;NETWORK;_REENTRANT;OGL;NO_ASM;USE_SDLMIXER;OGL;EDITOR;IPv6;USE_UDP;HAVE_STRUCT_TIMEVAL;DISABLE_CXX_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;WIN32_LEAN_AND_MEAN;_WINDOWS;PROGRAM_NAME="D2X-Rebirth";D2XMAJORi=0;D2XMINORi=57;D2XMICROi=3;NETWORK;_REENTRANT;OGL;NO_ASM;USE_SDLMIXER;OGL;EDITOR;IPv6;USE_UDP;HAVE_STRUCT_TIMEVAL;DISABLE_CXX_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\include;..\..\include\editor;..\..\arch\include;..\..\arch\win32;..\..\main;..\external\include;..\external\include\physfs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>..\arch\win32\include\precomp.h</ForcedIncludeFiles>
       <PrecompiledHeaderFile>..\arch\win32\include\precomp.h</PrecompiledHeaderFile>
@@ -117,7 +117,7 @@
       <Optimization>MinSpace</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>EDITOR;WIN32;NDEBUG;WIN32_LEAN_AND_MEAN;RELEASE;_WINDOWS;PROGRAM_NAME="D2X-Rebirth";D2XMAJORi=0;D2XMINORi=57;D2XMICROi=3;NETWORK;_REENTRANT;OGL;NO_ASM;USE_SDLMIXER;OGL;EDITOR;IPv6;USE_UDP;HAVE_STRUCT_TIMEVAL;DISABLE_CXX_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;RELEASE;WIN32;WIN32_LEAN_AND_MEAN;_WINDOWS;PROGRAM_NAME="D2X-Rebirth";D2XMAJORi=0;D2XMINORi=57;D2XMICROi=3;NETWORK;_REENTRANT;OGL;NO_ASM;USE_SDLMIXER;OGL;EDITOR;IPv6;USE_UDP;HAVE_STRUCT_TIMEVAL;DISABLE_CXX_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\include;..\..\include\editor;..\..\arch\include;..\..\arch\win32;..\..\main;..\external\include;..\external\include\physfs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>..\arch\win32\include\precomp.h</ForcedIncludeFiles>
       <PrecompiledHeaderFile>..\arch\win32\include\precomp.h</PrecompiledHeaderFile>
@@ -140,7 +140,7 @@
       <Optimization>MinSpace</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>EDITOR;WIN32;NDEBUG;WIN32_LEAN_AND_MEAN;RELEASE;_WINDOWS;PROGRAM_NAME="D2X-Rebirth";D2XMAJORi=0;D2XMINORi=57;D2XMICROi=3;NETWORK;_REENTRANT;OGL;NO_ASM;USE_SDLMIXER;OGL;EDITOR;IPv6;USE_UDP;HAVE_STRUCT_TIMEVAL;DISABLE_CXX_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;RELEASE;WIN32;WIN32_LEAN_AND_MEAN;_WINDOWS;PROGRAM_NAME="D2X-Rebirth";D2XMAJORi=0;D2XMINORi=57;D2XMICROi=3;NETWORK;_REENTRANT;OGL;NO_ASM;USE_SDLMIXER;OGL;EDITOR;IPv6;USE_UDP;HAVE_STRUCT_TIMEVAL;DISABLE_CXX_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\include;..\..\include\editor;..\..\arch\include;..\..\arch\win32;..\..\main;..\external\include;..\external\include\physfs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>..\arch\win32\include\precomp.h</ForcedIncludeFiles>
       <PrecompiledHeaderFile>..\arch\win32\include\precomp.h</PrecompiledHeaderFile>
