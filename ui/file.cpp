@@ -108,7 +108,7 @@ char **file_getfilelist(int *NumFiles, const char *filespec, const char *dir)
 	return list;
 }
 
-typedef struct browser
+typedef struct file_browser
 {
 	char		view_dir[PATH_MAX];
 	char		*filename;
@@ -122,9 +122,9 @@ typedef struct browser
 	UI_GADGET_INPUTBOX	*user_file;
 	int			num_files, num_dirs;
 	char		spaces[35];
-} browser;
+} file_browser;
 
-static int browser_handler(UI_DIALOG *dlg, d_event *event, browser *b)
+static int browser_handler(UI_DIALOG *dlg, d_event *event, file_browser *b)
 {
 	int rval = 0;
 
@@ -265,12 +265,12 @@ int ui_get_filename( char * filename, const char * filespec, const char * messag
 	char		InputText[PATH_MAX];
 	char		*p;
 	int			i;
-	browser		*b;
+	file_browser		*b;
 	UI_DIALOG	*dlg;
 	window		*wind;
 	int			rval = 0;
 
-	MALLOC(b, browser, 1);
+	MALLOC(b, file_browser, 1);
 	if (!b)
 		return 0;
 	
@@ -285,7 +285,7 @@ int ui_get_filename( char * filename, const char * filespec, const char * messag
 		strcpy(b->view_dir, "");
 		strcpy(InputText, filename);
 	}
-
+	
 	b->filename_list = file_getfilelist(&b->num_files, filespec, b->view_dir);
 	if (!b->filename_list)
 	{
