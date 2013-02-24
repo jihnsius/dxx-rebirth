@@ -17,6 +17,7 @@
 #define COPY_WORDS_ALIGNED
 #define DXX_HAVE_CXX11_EXPLICIT_DEFAULT
 #define DXX_HAVE_CXX11_EXPLICIT_DELETE
+#define DXX_HAVE_ISBLANK
 #endif
 #else
 #define __noreturn

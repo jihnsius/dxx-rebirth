@@ -2,6 +2,7 @@
 #include <cctype>
 #include <deque>
 #include <vector>
+#include <functional>
 
 #include <boost/iterator/reverse_iterator.hpp>
 #ifdef unix
@@ -28,6 +29,7 @@ enum
 
 typedef std::vector<char> input_container_t;
 typedef std::deque<input_container_t> old_input_container_t;
+typedef const std::pair<const input_container_t::iterator, const input_container_t::iterator> input_iter_pair_t;
 
 static old_input_container_t g_con_history;
 static input_container_t g_con_input_buffer;
@@ -323,6 +325,13 @@ static void con_input_seek_down_key()
 	g_con_history_browse = !!history_pos;
 }
 
+#if !DXX_HAVE_ISBLANK
+inline static int isblank(int c)
+{
+	return c == ' ' || c == '\t';
+}
+#endif
+
 static void con_input_kill_word()
 {
 	unsigned con_input_position = g_con_input_position;
@@ -334,14 +343,14 @@ static void con_input_kill_word()
 	const input_container_t::iterator ib = g_con_input_buffer.begin();
 	const input_container_t::iterator ie = ib + std::min(con_input_position, size);
 	input_container_t::iterator ii = ie - 1;
-	const auto ap_alnum = [](const unsigned c) -> int { return isalnum(c) || isblank(c); };
-	const auto ap_noalnum = [](const unsigned c) -> int { return !isalnum(c); };
+	std::function<int(const unsigned)> ap_alnum = [](const unsigned c) -> int { return isalnum(c) || isblank(c); };
+	std::function<int(const unsigned)> ap_noalnum = [](const unsigned c) -> int { return !isalnum(c); };
 	const auto a = isalnum(static_cast<unsigned>(*ii))
 		? ap_alnum
 		: ap_noalnum;
 	typedef boost::reverse_iterator<input_container_t::iterator> reverse_iterator;
 	ii = std::find_if(reverse_iterator(ii), reverse_iterator(ib), a).base();
-	con_input_kill_range(g_con_kill_buffer, g_con_input_buffer, {ib, ii});
+	con_input_kill_range(g_con_kill_buffer, g_con_input_buffer, input_iter_pair_t(ib, ii));
 	g_con_input_position -= std::distance(ib, ii);
 }
 
@@ -356,7 +365,7 @@ static void con_input_ctrl_key(const char key)
 			con_input_seek_end_key();
 			break;
 		case 'k':
-			con_input_kill_range(g_con_kill_buffer, g_con_input_buffer, {g_con_input_buffer.begin() + g_con_input_position, g_con_input_buffer.end()});
+			con_input_kill_range(g_con_kill_buffer, g_con_input_buffer, input_iter_pair_t(g_con_input_buffer.begin() + g_con_input_position, g_con_input_buffer.end()));
 			break;
 		case 't':
 			{
@@ -376,7 +385,7 @@ static void con_input_ctrl_key(const char key)
 		case 'u':
 			{
 				const auto begin = g_con_input_buffer.begin();
-				con_input_kill_range(g_con_kill_buffer, g_con_input_buffer, {begin, begin + g_con_input_position});
+				con_input_kill_range(g_con_kill_buffer, g_con_input_buffer, input_iter_pair_t(begin, begin + g_con_input_position));
 				g_con_input_position = 0;
 			}
 			break;
