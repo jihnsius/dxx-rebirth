@@ -2581,6 +2581,7 @@ static unsigned show_player_score_with_position(const unsigned player_num, const
 		return 0;
 	const vms_vector *vvop = &Objects[objnum_of_player_num].pos;
 	fix dx, dy, dz;
+	vms_vector v;
 	if (coop_position_relative == 0)
 		// relative
 	{
@@ -2603,7 +2604,10 @@ static unsigned show_player_score_with_position(const unsigned player_num, const
 		dy = vvop->y;
 		dz = vvop->z;
 	}
-	gr_printf(x1,y,"%-6d X:%-4d Y:%-4d Z:%-4d",Players[player_num].score, dx >> 16, dy >> 16, dz >> 16);
+
+	vm_vec_sub(&v, &Viewer->pos, vvop);
+	gr_printf(x1,y,"%-6d D:%-4d X:%-4d Y:%-4d Z:%-4d",Players[player_num].score, vm_vec_mag(&v) >> 16, dx >> 16, dy >> 16, dz >> 16);
+
 	return 1;
 }
 
