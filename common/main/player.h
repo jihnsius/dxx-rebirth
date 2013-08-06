@@ -53,6 +53,12 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define PLAYER_FLAGS_AMMO_RACK      128     // Player has ammo rack
 #define PLAYER_FLAGS_CONVERTER      256     // Player has energy->shield converter
 #endif
+
+// jinx 02-06-13 spec flags start
+#define PLAYER_FLAGS_SPECTATING_ME	32 // jinx 02-03-13 spec
+#define PLAYER_FLAGS_SPECTATING		512		// jinx 01-28-13 spec
+// jinx 02-06-13 spec flags end
+
 #define PLAYER_FLAGS_QUAD_LASERS    1024    // Player shoots 4 at once
 #define PLAYER_FLAGS_CLOAKED        2048    // Player is cloaked for awhile
 #if defined(DXX_BUILD_DESCENT_II)
@@ -93,6 +99,9 @@ typedef struct player {
 	//  -- make sure you're 4 byte aligned now!
 
 	// Game data
+	
+	uint spec_flags;			// jinx 08-06-13 spec
+	
 	uint    flags;                  // Powerup flags, see below...
 	fix     energy;                 // Amount of energy remaining.
 	fix     shields;                // shields remaining (protection)

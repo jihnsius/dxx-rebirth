@@ -843,11 +843,11 @@ int is_door_free(segment *seg,int side)
 	//it pokes into the connecting seg
 
 	for (objnum=seg->objects;objnum!=-1;objnum=Objects[objnum].next)
-		if (Objects[objnum].type!=OBJ_WEAPON && Objects[objnum].type!=OBJ_FIREBALL && check_poke(objnum,seg-Segments,side))
+		if (Objects[objnum].type!=OBJ_WEAPON && Objects[objnum].type!=OBJ_FIREBALL && check_poke(objnum,seg-Segments,side) && Objects[objnum].type != OBJ_CAMERA)		// jinx 02-01-13 spec
 			return 0;	//not free
 
 	for (objnum=csegp->objects;objnum!=-1;objnum=Objects[objnum].next)
-		if (Objects[objnum].type!=OBJ_WEAPON && Objects[objnum].type!=OBJ_FIREBALL && check_poke(objnum,csegp-Segments,Connectside))
+		if (Objects[objnum].type!=OBJ_WEAPON && Objects[objnum].type!=OBJ_FIREBALL && check_poke(objnum,csegp-Segments,Connectside) && Objects[objnum].type != OBJ_CAMERA)		// jinx 02-01-13 spec
 			return 0;	//not free
 
 	return 1; 	//doorway is free!

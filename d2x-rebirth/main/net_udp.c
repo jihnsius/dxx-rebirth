@@ -1617,10 +1617,10 @@ void net_udp_send_objects(void)
 	
 	for (i = Network_send_objnum; i <= Highest_object_index; i++)
 	{
-		if ((Objects[i].type != OBJ_POWERUP) && (Objects[i].type != OBJ_PLAYER) &&
+		if ((Objects[i].type != OBJ_CAMERA) && (Objects[i].type != OBJ_POWERUP) && (Objects[i].type != OBJ_PLAYER) &&
 				(Objects[i].type != OBJ_CNTRLCEN) && (Objects[i].type != OBJ_GHOST) &&
 				(Objects[i].type != OBJ_ROBOT) && (Objects[i].type != OBJ_HOSTAGE) &&
-				!(Objects[i].type==OBJ_WEAPON && Objects[i].id==PMINE_ID))
+				!(Objects[i].type==OBJ_WEAPON && Objects[i].id==PMINE_ID))		// jinx 02-09-13 spec
 			continue;
 		if ((Network_send_object_mode == 0) && ((object_owner[i] != -1) && (object_owner[i] != player_num)))
 			continue;
@@ -1882,7 +1882,7 @@ void net_udp_resend_sync_due_to_packet_loss()
 char * net_udp_get_player_name( int objnum )
 {
 	if ( objnum < 0 ) return NULL; 
-	if ( Objects[objnum].type != OBJ_PLAYER ) return NULL;
+		if ((Objects[objnum].type != OBJ_PLAYER) && (Objects[objnum].type != OBJ_CAMERA)) return NULL;			// jinx 02-09-13 spec
 	if ( Objects[objnum].id >= MAX_PLAYERS ) return NULL;
 	if ( Objects[objnum].id >= N_players ) return NULL;
 	
@@ -4833,6 +4833,9 @@ void net_udp_read_pdata_packet(UDP_frame_info *pd)
 		extract_quaternionpos(TheirObj, &pd->ptype.qpp, 0);
 	if (TheirObj->movement_type == MT_PHYSICS)
 		set_thrust_from_velocity(TheirObj);
+		
+	if (Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING && (!in_free) && (TheirPlayernum == piggy_num))	// jinx spec 08-05-13
+		//calculate_rotation_interpolation(original_orient, TheirObj);
 }
 
 void net_udp_send_smash_lights (int pnum) 

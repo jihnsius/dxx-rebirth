@@ -709,7 +709,7 @@ void nd_write_object(object *obj)
 	nd_write_short(shortsig);
 	nd_write_shortpos(obj);
 
-	if ((obj->type != OBJ_HOSTAGE) && (obj->type != OBJ_ROBOT) && (obj->type != OBJ_PLAYER) && (obj->type != OBJ_POWERUP) && (obj->type != OBJ_CLUTTER)) {
+	if ((obj->type != OBJ_CAMERA) && (obj->type != OBJ_HOSTAGE) && (obj->type != OBJ_ROBOT) && (obj->type != OBJ_PLAYER) && (obj->type != OBJ_POWERUP) && (obj->type != OBJ_CLUTTER)) {		// jinx 02-10-13 spec
 		nd_write_byte(obj->control_type);
 		nd_write_byte(obj->movement_type);
 		nd_write_fix(obj->size);

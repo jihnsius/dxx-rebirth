@@ -1652,7 +1652,14 @@ void render_frame(fix eye_offset, int window_num)
   
 	g3_start_frame();
 
-	Viewer_eye = Viewer->pos;
+	if ((!(Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING)) || ((Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING) && (in_free == 1)))		// jinx 02-01-13 spec
+		Viewer_eye = Viewer->pos;
+		
+	if ((Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING) && (in_free == 0))
+	{
+		Viewer_eye = Objects[Players[piggy_num].objnum].pos;		// jinx 02-06-13 spec
+		Viewer->orient = Objects[Players[piggy_num].objnum].orient;
+	}
 
 //	if (Viewer->type == OBJ_PLAYER && (PlayerCfg.CockpitMode[1]!=CM_REAR_VIEW))
 //		vm_vec_scale_add2(&Viewer_eye,&Viewer->orient.fvec,(Viewer->size*3)/4);

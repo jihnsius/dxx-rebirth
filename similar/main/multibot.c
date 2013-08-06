@@ -100,7 +100,9 @@ multi_can_move_robot(int objnum, int agitation)
 
 	if (Player_exploded)
 		return 0;
-
+	
+	if (Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING)	
+		return 0;		// jinx 02-01-13 spec
 #ifndef NDEBUG
 	if ((objnum < 0) || (objnum > Highest_object_index))
 	{	

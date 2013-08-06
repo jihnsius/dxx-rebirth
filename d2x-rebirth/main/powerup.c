@@ -230,7 +230,7 @@ int do_powerup(object *obj)
 	int special_used=0;		//for when hitting vulcan cannon gets vulcan ammo
 	int id=obj->id;
 
-	if ((Player_is_dead) || (ConsoleObject->type == OBJ_GHOST) || (Players[Player_num].shields < 0))
+	if ((Player_is_dead) || (ConsoleObject->type == OBJ_GHOST) || (Players[Player_num].shields < 0) || (Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING))	// jinx 01-25-13 spec
 		return 0;
 
 	if ((obj->ctype.powerup_info.flags & PF_SPAT_BY_PLAYER) && obj->ctype.powerup_info.creation_time>0 && GameTime64<obj->ctype.powerup_info.creation_time+i2f(2))
@@ -251,7 +251,7 @@ int do_powerup(object *obj)
 		{
 			if (i == Player_num || Players[i].connected != CONNECT_PLAYING)
 				continue;
-			if (Objects[Players[i].objnum].type == OBJ_GHOST || Players[i].shields < 0)
+			if (Objects[Players[i].objnum].type == OBJ_GHOST || Players[i].shields < 0 || Objects[Players[i].objnum].type == OBJ_CAMERA)	// jinx 01-25-13 spec
 				continue;
 			if (mydist > vm_vec_normalized_dir(&tvec, &obj->pos, &Objects[Players[i].objnum].pos))
 				return 0;

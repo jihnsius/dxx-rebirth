@@ -725,7 +725,21 @@ void render_object(object *obj)
 
 	if ( obj == Viewer )
 		return;
-
+		
+	if ((Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING) && (in_free == 0))		// jinx 08-05-13 spec
+		if (obj == &Objects[Players[piggy_num].objnum]) 
+			return;
+			
+	for (int i = 0; i <= N_players; i++)
+		if ((obj == &Objects[Players[i].objnum]) && Players[i].spec_flags & PLAYER_FLAGS_SPECTATING)
+			return;
+	
+	if (obj->type == OBJ_PLAYER)
+		for (int i = 0; i <= N_players; i++)
+			if (obj == &Objects[Players[i].objnum])
+				if (Players[i].spec_flags & PLAYER_FLAGS_SPECTATING)
+					return;
+		
 	if ( obj->type==OBJ_NONE )
 	{
 		#ifndef NDEBUG
@@ -2495,8 +2509,8 @@ void object_rw_swap(object_rw *obj, int swap)
 		case RT_NONE: // HACK below
 		{
 			int i;
-			if (obj->render_type == RT_NONE && obj->type != OBJ_GHOST) // HACK: when a player is dead or not connected yet, clients still expect to get polyobj data - even if render_type == RT_NONE at this time.
-				break;
+			if (obj->render_type == RT_NONE && obj->type != OBJ_GHOST && obj->type != OBJ_CAMERA) // HACK: when a player is dead or not connected yet, clients still expect to get polyobj data - even if render_type == RT_NONE at this time.
+				break;	// jinx 01-25-13 spec
 			obj->rtype.pobj_info.model_num                = SWAPINT(obj->rtype.pobj_info.model_num);
 			for (i=0;i<MAX_SUBMODELS;i++)
 			{

@@ -23,6 +23,8 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include <time.h>
 #include <ctype.h>
 
+#include "spec.h"
+
 #include "u_mem.h"
 #include "strutil.h"
 #include "game.h"
@@ -457,6 +459,8 @@ multi_new_game(void)
 		Players[i].flags = 0;
 		Players[i].KillGoalCount=0;
 		multi_sending_message[i] = 0;
+		
+		Players[i].spec_flags &= ~PLAYER_FLAGS_SPECTATING;	// jinx 08-06-13 spec
 	}
 
 	for (i = 0; i < MAX_ROBOTS_CONTROLLED; i++)
@@ -558,11 +562,18 @@ multi_sort_kill_list(void)
 		{
 			if (Players[i].net_killed_total+Players[i].net_kills_total==0)
 				kills[i]=-1;  // always draw the ones without any ratio last
+			else if (Players[i].spec_flags & PLAYER_FLAGS_SPECTATING)		// jinx 02-09-13 spec
+				kills[i]=-1;
 			else
 				kills[i]=(int)((float)((float)Players[i].net_kills_total/((float)Players[i].net_killed_total+(float)Players[i].net_kills_total))*100.0);
 		}
 		else
-			kills[i] = Players[i].net_kills_total;
+		{
+			if (Players[i].spec_flags & PLAYER_FLAGS_SPECTATING)		// jinx 02-09-13 spec
+				kills[i] = -1;
+			else
+				kills[i] = Players[i].net_kills_total;
+		}
 	}
 
 	while (changed)
@@ -938,14 +949,18 @@ multi_leave_game(void)
 	if (Game_mode & GM_NETWORK)
 	{
 		Net_create_loc = 0;
-		multi_send_position(Players[Player_num].objnum);
-		multi_powcap_cap_objects();
-		if (!Player_eggs_dropped)
+		if (!(Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING))
 		{
-			drop_player_eggs(ConsoleObject);
-			Player_eggs_dropped = 1;
+			multi_send_position(Players[Player_num].objnum);
+			multi_powcap_cap_objects();
+			if (!Player_eggs_dropped)
+			{
+				drop_player_eggs(ConsoleObject);
+				Player_eggs_dropped = 1;
+			}
+			multi_send_player_explode(MULTI_PLAYER_DROP);
 		}
-		multi_send_player_explode(MULTI_PLAYER_DROP);
+		Players[Player_num].spec_flags &= ~PLAYER_FLAGS_SPECTATING;		// jinx 01-26-13 spec
 	}
 
 	multi_send_quit(MULTI_QUIT);
@@ -1950,6 +1965,9 @@ void multi_disconnect_player(int pnum)
 
 	if (Players[pnum].connected == CONNECT_PLAYING)
 	{
+		if ((Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING) && (!in_free) && (piggy_num == pnum))
+			switch_between_piggies();		// jinx 08-05-13 spec
+		
 		digi_play_sample( SOUND_HUD_MESSAGE, F1_0 );
 		HUD_init_message(HM_MULTI,  "%s %s", Players[pnum].callsign, TXT_HAS_LEFT_THE_GAME);
 
@@ -1972,7 +1990,7 @@ void multi_disconnect_player(int pnum)
 			
 			/* Make sure they're valid: Don't check against kill flags,
 				* just in case everyone's dead! */
-			while( !Players[n].connected )
+			while( !Players[new].connected || (Players[new].spec_flags & PLAYER_FLAGS_SPECTATING))
 				n = d_rand() % MAX_PLAYERS;
 			
 			/* Select new target */
@@ -2020,6 +2038,9 @@ void multi_disconnect_player(int pnum)
 	{
 		HUD_init_message_literal(HM_MULTI, "You are the only person remaining in this netgame");
 	}
+	
+	Players[pnum].spec_flags &= ~PLAYER_FLAGS_SPECTATING;		// jinx 02-06-13 spec
+	Players[pnum].spec_flags &= ~PLAYER_FLAGS_SPECTATING_ME;
 }
 
 void
@@ -2332,7 +2353,7 @@ multi_reset_player_object(object *objp)
 
 	Assert(objp >= Objects);
 	Assert(objp <= Objects+Highest_object_index);
-	Assert((objp->type == OBJ_PLAYER) || (objp->type == OBJ_GHOST));
+	Assert((objp->type == OBJ_PLAYER) || (objp->type == OBJ_GHOST) || (objp->type == OBJ_CAMERA));	// jinx 01-26-13 spec
 
 	vm_vec_zero(&objp->mtype.phys_info.velocity);
 	vm_vec_zero(&objp->mtype.phys_info.thrust);
@@ -2362,7 +2383,7 @@ multi_reset_player_object(object *objp)
 
 	objp->flags = 0;
 
-	if (objp->type == OBJ_GHOST)
+	if ((objp->type == OBJ_GHOST) || (objp->type == OBJ_CAMERA))		// jinx 01-25-13 spec
 		objp->render_type = RT_NONE;
 
 }
@@ -4065,6 +4086,8 @@ void multi_send_flags (char pnum)
 	PUT_INTEL_INT(multibuf+2, Players[(int)pnum].flags);
  
 	multi_send_data(multibuf, 6, 2);
+	
+	if (spec) multi_send_spec_flags (pnum);
 }
 
 void multi_send_drop_blobs (char pnum)
@@ -5451,6 +5474,10 @@ multi_process_data(const ubyte *buf, int len)
 			multi_do_kill(buf); break;
 		case MULTI_KILL_CLIENT:
 			multi_do_kill(buf); break;
+		case MULTI_DO_SPEC_STATUS:
+			if (!Endlevel_sequence) multi_do_spec_status(buf);	break;		// jinx 01-28-13 spec
+		case MULTI_SPEC_FLAGS:
+			if (!Endlevel_sequence) multi_do_spec_flags(buf); break;
 		default:
 			Int3();
 	}
@@ -5588,8 +5615,8 @@ void multi_object_to_object_rw(object *obj, object_rw *obj_rw)
 		case RT_NONE: // HACK below
 		{
 			int i;
-			if (obj->render_type == RT_NONE && obj->type != OBJ_GHOST) // HACK: when a player is dead or not connected yet, clients still expect to get polyobj data - even if render_type == RT_NONE at this time.
-				break;
+			if (obj->render_type == RT_NONE && (obj->type != OBJ_GHOST && obj->type != OBJ_CAMERA)) // HACK: when a player is dead or not connected yet, clients still expect to get polyobj data - even if render_type == RT_NONE at this time.
+				break;		// jinx 01-25-13 spec
 			obj_rw->rtype.pobj_info.model_num                = obj->rtype.pobj_info.model_num;
 			for (i=0;i<MAX_SUBMODELS;i++)
 			{
@@ -5740,8 +5767,8 @@ void multi_object_rw_to_object(object_rw *obj_rw, object *obj)
 		case RT_NONE: // HACK below
 		{
 			int i;
-			if (obj->render_type == RT_NONE && obj->type != OBJ_GHOST) // HACK: when a player is dead or not connected yet, clients still expect to get polyobj data - even if render_type == RT_NONE at this time.
-				break;
+			if (obj->render_type == RT_NONE && (obj->type != OBJ_GHOST && obj->type != OBJ_CAMERA)) // HACK: when a player is dead or not connected yet, clients still expect to get polyobj data - even if render_type == RT_NONE at this time.
+				break;	// jinx 01-25-13 spec
 			obj->rtype.pobj_info.model_num                = obj_rw->rtype.pobj_info.model_num;
 			for (i=0;i<MAX_SUBMODELS;i++)
 			{
