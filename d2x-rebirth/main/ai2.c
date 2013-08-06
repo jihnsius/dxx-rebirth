@@ -758,7 +758,7 @@ void do_ai_robot_hit_attack(object *robot, object *playerobj, vms_vector *collis
 //#endif
 
 	//	If player is dead, stop firing.
-	if (Objects[Players[Player_num].objnum].type == OBJ_GHOST)
+	if ((Objects[Players[Player_num].objnum].type == OBJ_GHOST) || (Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING))		// jinx 01-25-13 spec
 		return;
 
 	if (robptr->attack_type == 1) {
@@ -910,6 +910,8 @@ void ai_fire_laser_at_player(object *obj, vms_vector *fire_point, int gun_num, v
 	//	If player is exploded, stop firing.
 	if (Player_exploded)
 		return;
+		
+	if (Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING) return;		// jinx 02-01-13 spec
 
 	if (obj->ctype.ai_info.dying_start_time)
 		return;		//	No firing while in death roll.
@@ -1260,7 +1262,8 @@ void ai_move_relative_to_player(object *objp, ai_local *ailp, fix dist_to_player
 
 	//	Green guy selects move around/towards/away based on firing time, not distance.
 	if (robptr->attack_type == 1) {
-		if (((ailp->next_fire > robptr->firing_wait[Difficulty_level]/4) && (dist_to_player < F1_0*30)) || Player_is_dead) {
+		if (((ailp->next_fire > robptr->firing_wait[Difficulty_level]/4) && (dist_to_player < F1_0*30)) || Player_is_dead || Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING) 	// jinx 01-25-13 spec
+		{
 			//	1/4 of time, move around player, 3/4 of time, move away from player
 			if (d_rand() < 8192) {
 				move_around_player(objp, vec_to_player, -1);
@@ -2190,7 +2193,7 @@ void ai_do_actual_firing_stuff(object *obj, ai_static *aip, ai_local *ailp, robo
 
 				if (gun_num < Robot_info[obj->id].n_guns) {
 					if (robptr->attack_type == 1) {
-						if (!Player_exploded && (dist_to_player < obj->size + ConsoleObject->size + F1_0*2)) {		// robptr->circle_distance[Difficulty_level] + ConsoleObject->size) {
+						if (!Player_exploded && !(Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING) && (dist_to_player < obj->size + ConsoleObject->size + F1_0*2)) {		// robptr->circle_distance[Difficulty_level] + ConsoleObject->size) {	// jinx 02-01-13 spec
 							if (!ai_multiplayer_awareness(obj, ROBOT_FIRE_AGITATION-2))
 								return;
 							do_ai_robot_hit_attack(obj, ConsoleObject, &obj->pos);
@@ -2284,7 +2287,7 @@ void ai_do_actual_firing_stuff(object *obj, ai_static *aip, ai_local *ailp, robo
 
 				if (aip->CURRENT_GUN < Robot_info[obj->id].n_guns) {
 					if (robptr->attack_type == 1) {
-						if (!Player_exploded && (dist_to_player < obj->size + ConsoleObject->size + F1_0*2)) {		// robptr->circle_distance[Difficulty_level] + ConsoleObject->size) {
+						if (!Player_exploded && !(Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING) && (dist_to_player < obj->size + ConsoleObject->size + F1_0*2)) {		// robptr->circle_distance[Difficulty_level] + ConsoleObject->size) {	// jinx 02-01-13 spec
 							if (!ai_multiplayer_awareness(obj, ROBOT_FIRE_AGITATION-2))
 								return;
 							do_ai_robot_hit_attack(obj, ConsoleObject, &obj->pos);

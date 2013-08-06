@@ -307,11 +307,14 @@ void collide_player_and_wall( object * playerobj, fix hitspeed, short hitseg, sh
 
 	tmap_num = Segments[hitseg].sides[hitwall].tmap_num;
 
+	if (Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING) return;		// jinx 02-01-13 spec
+	
 	//	If this wall does damage, don't make *BONK* sound, we'll be making another sound.
 	if (TmapInfo[tmap_num].damage > 0)
 		return;
 
-	if (TmapInfo[tmap_num].flags & TMI_FORCE_FIELD) {
+	if ((TmapInfo[tmap_num].flags & TMI_FORCE_FIELD) && (!(Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING))) // jinx 02-01-13 spec
+	{
 		vms_vector force;
 
 		PALETTE_FLASH_ADD(0, 0, 60);	//flash blue
@@ -1808,7 +1811,8 @@ void drop_missile_1_or_4(object *playerobj,int missile_index)
 
 void drop_player_eggs(object *playerobj)
 {
-	if ((playerobj->type == OBJ_PLAYER) || (playerobj->type == OBJ_GHOST)) {
+	if ((playerobj->type == OBJ_PLAYER) || (playerobj->type == OBJ_GHOST) || (playerobj->type == OBJ_CAMERA)) 	// jinx 01-26-13 spec
+	{
 		int	rthresh;
 		int	pnum = playerobj->id;
 		int	objnum;
@@ -1953,6 +1957,8 @@ void drop_player_eggs(object *playerobj)
 		//	Drop the player's missiles in packs of 1 and/or 4
 		drop_missile_1_or_4(playerobj,HOMING_INDEX);
 		drop_missile_1_or_4(playerobj,GUIDED_INDEX);
+		if (Players[pnum].spec_flags & PLAYER_FLAGS_SPECTATING)		// jinx 01-26-13 spec
+			Players[pnum].secondary_ammo[CONCUSSION_INDEX] -= 2 + NDL - Difficulty_level;
 		drop_missile_1_or_4(playerobj,CONCUSSION_INDEX);
 		drop_missile_1_or_4(playerobj,SMISSILE1_INDEX);
 		drop_missile_1_or_4(playerobj,SMISSILE4_INDEX);
@@ -1970,7 +1976,7 @@ void drop_player_eggs(object *playerobj)
 		}
 
 		//	Always drop a shield and energy powerup.
-		if (Game_mode & GM_MULTI) {
+		if ((Game_mode & GM_MULTI) && (!(Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING))) {		// jinx 01-26-13 spec
 			call_object_create_egg(playerobj, 1, OBJ_POWERUP, POW_SHIELD_BOOST);
 			call_object_create_egg(playerobj, 1, OBJ_POWERUP, POW_ENERGY);
 		}
@@ -2042,7 +2048,7 @@ extern fix64 Buddy_sorry_time;
 
 void apply_damage_to_player(object *playerobj, object *killer, fix damage, ubyte possibly_friendly)
 {
-	if (Player_is_dead)
+	if (Player_is_dead || Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING)	// jinx 01-25-13 spec
 		return;
 
 	if (Players[Player_num].flags & PLAYER_FLAGS_INVULNERABLE)
@@ -2206,6 +2212,8 @@ void collide_player_and_materialization_center(object *objp)
 
 	if (objp->id != Player_num)
 		return;
+		
+	if (Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING) return;		// jinx 02-01-13 spec
 
 	for (side=0; side<MAX_SIDES_PER_SEGMENT; side++)
 		if (WALL_IS_DOORWAY(segp, side) & WID_FLY_FLAG) {
@@ -2264,7 +2272,8 @@ void collide_robot_and_materialization_center(object *objp)
 extern int Network_got_powerup; // HACK!!!
 
 void collide_player_and_powerup( object * playerobj, object * powerup, vms_vector *collision_point ) {
-	if (!Endlevel_sequence && !Player_is_dead && (playerobj->id == Player_num )) {
+	if (!Endlevel_sequence && !Player_is_dead && (playerobj->id == Player_num ) && (!(Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING)))		// jinx 01-25-13 spec
+	{
 		int powerup_used;
 
 		powerup_used = do_powerup(powerup);
@@ -2580,6 +2589,7 @@ void collide_init()	{
 
 	ENABLE_COLLISION( OBJ_DEBRIS, OBJ_WALL );
 
+	ENABLE_COLLISION( OBJ_CAMERA, OBJ_WALL );	// jinx 01-28-13 spec
 }
 
 void collide_object_with_wall( object * A, fix hitspeed, short hitseg, short hitwall, vms_vector * hitpt )

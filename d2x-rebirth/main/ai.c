@@ -541,7 +541,7 @@ _exit_cheat:
 		aip->GOAL_STATE = AIS_REST;                     //new: 12/13/94
 
 
-	if (Player_is_dead && (ailp->player_awareness_type == 0))
+	if ((Player_is_dead || Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING) && (ailp->player_awareness_type == 0))			 // jinx 01-25-13 spec
 		if ((dist_to_player < F1_0*200) && (d_rand() < FrameTime/8)) {
 			if ((aip->behavior != AIB_STILL) && (aip->behavior != AIB_RUN_FROM)) {
 				if (!ai_multiplayer_awareness(obj, 30))
