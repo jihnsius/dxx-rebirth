@@ -360,10 +360,12 @@ void do_controlcen_frame(object *obj)
 	}
 #endif
 
-	if (Player_is_dead)
+	if (Player_is_dead || Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING)	// jinx 02-01-13 spec
 		controlcen_death_silence += FrameTime;
 	else
 		controlcen_death_silence = 0;
+	if (Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING)	// jinx 02-01-13 spec
+		controlcen_death_silence = 5000000;
 
 	if ((Control_center_next_fire_time < 0) && !(controlcen_death_silence > F1_0*2)) {
 		reactor *reactor = get_reactor_definition(obj->id);
@@ -393,7 +395,7 @@ void do_controlcen_frame(object *obj)
 			}
 	
 			#ifdef NETWORK
-			if (Game_mode & GM_MULTI)
+			if (Game_mode & GM_MULTI && (!(Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING)))	// jinx 02-01-13 spec
 				multi_send_controlcen_fire(&vec_to_goal, best_gun_num, obj-Objects);	
 			#endif
 			Laser_create_new_easy( &vec_to_goal, &obj->ctype.reactor_info.gun_pos[best_gun_num], obj-Objects, CONTROLCEN_WEAPON_NUM, 1);

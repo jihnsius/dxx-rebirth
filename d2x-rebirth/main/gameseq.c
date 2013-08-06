@@ -158,7 +158,7 @@ void verify_console_object()
 	Assert( Player_num > -1 );
 	Assert( Players[Player_num].objnum > -1 );
 	ConsoleObject = &Objects[Players[Player_num].objnum];
-	Assert( ConsoleObject->type==OBJ_PLAYER );
+	Assert( (ConsoleObject->type==OBJ_PLAYER) || (ConsoleObject->type==OBJ_CAMERA));		// jinx 02-06-13 spec
 	Assert( ConsoleObject->id==Player_num );
 }
 
@@ -204,7 +204,7 @@ gameseq_init_network_players()
 	j = 0;
 	for (i=0;i<=Highest_object_index;i++) {
 
-		if (( Objects[i].type==OBJ_PLAYER )	|| (Objects[i].type == OBJ_GHOST) || (Objects[i].type == OBJ_COOP))
+		if (( Objects[i].type==OBJ_PLAYER )	|| (Objects[i].type == OBJ_GHOST) || (Objects[i].type == OBJ_COOP) || (Objects[i].type == OBJ_CAMERA))		// jinx 02-06-13 spec
 		{
 			if ( (!(Game_mode & GM_MULTI_COOP) && ((Objects[i].type == OBJ_PLAYER)||(Objects[i].type==OBJ_GHOST))) ||
 	           ((Game_mode & GM_MULTI_COOP) && ((j == 0) || ( Objects[i].type==OBJ_COOP ))) )
@@ -215,6 +215,8 @@ gameseq_init_network_players()
 				Player_init[k].segnum = Objects[i].segnum;
 				Players[k].objnum = i;
 				Objects[i].id = k;
+				Players[k].spec_flags &= ~PLAYER_FLAGS_SPECTATING;		// jinx 02-01-13 spec
+				Players[k].spec_flags &= ~PLAYER_FLAGS_SPECTATING_ME;
 				k++;
 			}
 			else
@@ -282,7 +284,13 @@ void init_player_stats_game(ubyte pnum)
 	Players[pnum].hostages_total = 0;
 	Players[pnum].laser_level = 0;
 	Players[pnum].flags = 0;
+	
+	Players[pnum].spec_flags &= ~PLAYER_FLAGS_SPECTATING;	// jinx 02-01-13 spec
+	Players[pnum].spec_flags &= ~PLAYER_FLAGS_SPECTATING_ME;
 
+	if (spec)
+		in_free = 1;		// jinx 02-01-13 spec
+	
 	init_player_stats_new_ship(pnum);
 
 	if (pnum == Player_num)
@@ -370,6 +378,9 @@ void init_player_stats_level(int secret_flag)
 	init_gauges();
 
 	Missile_viewer = NULL;
+	
+	Players[Player_num].spec_flags &= ~PLAYER_FLAGS_SPECTATING;		// jinx 02-06-13 spec
+	Players[Player_num].spec_flags &= ~PLAYER_FLAGS_SPECTATING_ME;
 }
 
 extern	void init_ai_for_ship(void);

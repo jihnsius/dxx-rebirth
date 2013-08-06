@@ -912,7 +912,9 @@ int fvi_sub(vms_vector *intp,int *ints,vms_vector *p0,int startseg,vms_vector *p
 							wid_flag = WALL_IS_DOORWAY(seg, side);
 							if (seg->children[side] >= 0 )
  								wid_flag |= WID_FLY_FLAG;
-						} else {
+						else if ((thisobjnum == Players[Player_num].objnum) && (Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING))
+							wid_flag = WALL_IS_DOORWAY_SPEC(seg, side);		// jinx 08-06-13 spec
+						else {
 							wid_flag = WALL_IS_DOORWAY(seg, side);
 						}
 

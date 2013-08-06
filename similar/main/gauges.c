@@ -728,6 +728,7 @@ static inline void hud_bitblt (int x, int y, grs_bitmap *bm)
 
 void hud_show_score()
 {
+	if (Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING) return;
 	char	score_str[20];
 	int	w, h, aw;
 
@@ -822,6 +823,7 @@ void hud_show_score_added()
 
 void sb_show_score()
 {
+	if (Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING) return;
 	char	score_str[20];
 	int x,y;
 	int	w, h, aw;
@@ -906,7 +908,7 @@ void play_homing_warning(void)
 	fix beep_delay;
 	static fix64 Last_warning_beep_time = 0; // Time we last played homing missile warning beep.
 
-	if (Endlevel_sequence || Player_is_dead)
+	if (Endlevel_sequence || Player_is_dead || Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING)		// jinx 02-06-13 spec
 		return;
 
 	if (Players[Player_num].homing_object_dist >= 0) {
@@ -2646,6 +2648,9 @@ void hud_show_kill_list()
 		{
 			gr_set_fontcolor(BM_XRGB(player_rgb[player_num].r,player_rgb[player_num].g,player_rgb[player_num].b),-1 );
 		}
+		
+		if (Players[player_num].spec_flags & PLAYER_FLAGS_SPECTATING)
+			continue;
 
 		if (Show_kill_list == 3)
 			strcpy(name, Netgame.team_name[i]);
@@ -2880,7 +2885,7 @@ void draw_hud()
 		if (PlayerCfg.CockpitMode[1]==CM_STATUS_BAR || PlayerCfg.CockpitMode[1]==CM_FULL_SCREEN)
 			hud_show_homing_warning();
 
-		if (PlayerCfg.CockpitMode[1]==CM_FULL_SCREEN) {
+		if ((PlayerCfg.CockpitMode[1]==CM_FULL_SCREEN && !(Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING)) 	// jinx 01-28-13 spec		this is where spectatee's stats would be displayed (sent to me only if piggy has my flag PLAYER_FLAGS_SPECTATING_ME)
 			hud_show_energy();
 			hud_show_shield();
 			hud_show_afterburner();
@@ -2901,7 +2906,7 @@ void draw_hud()
 #endif
 
 #if defined(DXX_BUILD_DESCENT_II)
-		if (PlayerCfg.CockpitMode[1] != CM_LETTERBOX && PlayerCfg.CockpitMode[1] != CM_REAR_VIEW)
+		if (PlayerCfg.CockpitMode[1] != CM_LETTERBOX && PlayerCfg.CockpitMode[1] != CM_REAR_VIEW && !(Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING))	// jinx 01-28-13 spec
 		{
 			hud_show_flag();
 			hud_show_orbs();
@@ -2909,11 +2914,11 @@ void draw_hud()
 #endif
 		HUD_render_message_frame();
 
-		if (PlayerCfg.CockpitMode[1]!=CM_STATUS_BAR)
+		if (PlayerCfg.CockpitMode[1]!=CM_STATUS_BAR && !(Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING)) // jinx 01-28-13 spec
 			hud_show_lives();
 		if (Game_mode&GM_MULTI && Show_kill_list)
 			hud_show_kill_list();
-		if (PlayerCfg.CockpitMode[1] != CM_LETTERBOX)
+		if (PlayerCfg.CockpitMode[1] != CM_LETTERBOX && !(Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING))	// jinx 01-28-13 spec
 			show_reticle(PlayerCfg.ReticleType, 1);
 		if (PlayerCfg.CockpitMode[1] != CM_LETTERBOX && Newdemo_state != ND_STATE_PLAYBACK && PlayerCfg.MouseFlightSim && PlayerCfg.MouseFSIndicator)
 			show_mousefs_indicator(Controls.raw_mouse_axis[0], Controls.raw_mouse_axis[1], Controls.raw_mouse_axis[2], GWIDTH/2, GHEIGHT/2, GHEIGHT/4);

@@ -743,6 +743,8 @@ extern void multi_send_capture_bonus (char);
 
 void fuelcen_check_for_goal(segment *segp)
 {
+	if (Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING) return;	// jinx 02-01-13 spec
+
 	segment2	*seg2p = &Segment2s[segp-Segments];
 
 	Assert( segp != NULL );
@@ -775,7 +777,7 @@ void fuelcen_check_for_hoard_goal(segment *segp)
 	Assert( segp != NULL );
 	Assert (Game_mode & GM_HOARD);
 
-   if (Player_is_dead)
+   if (Player_is_dead || Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING)	// jinx 01-25-13 spec
 		return;
 
 	if (seg2p->special==SEGMENT_IS_GOAL_BLUE || seg2p->special==SEGMENT_IS_GOAL_RED  )	

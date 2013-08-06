@@ -666,7 +666,7 @@ int find_exit_segment(void)
 //	-----------------------------------------------------------------------------
 void say_escort_goal(int goal_num)
 {
-	if (Player_is_dead)
+	if (Player_is_dead || Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING)		// jinx 01-25-13 spec
 		return;
 
 	switch (goal_num) {
@@ -1010,7 +1010,7 @@ void do_escort_frame(object *objp, fix dist_to_player, int player_visibility)
 		if (Players[Player_num].flags & PLAYER_FLAGS_HEADLIGHT_ON)	//	DAMN! MK, stupid bug, fixed 12/08/95, changed PLAYER_FLAGS_HEADLIGHT to PLAYER_FLAGS_HEADLIGHT_ON
 			if (f2i(Players[Player_num].energy) < 40)
 				if ((f2i(Players[Player_num].energy)/2) & 2)
-					if (!Player_is_dead)
+					if (!Player_is_dead && (!(Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING)))		// jinx 01-25-13 spec
 						buddy_message("Hey, your headlight's on!");
 
 	}
@@ -1249,7 +1249,7 @@ void do_thief_frame(object *objp, fix dist_to_player, int player_visibility, vms
 	if ((dist_to_player > F1_0*500) && (ailp->next_action_time > 0))
 		return;
 
-	if (Player_is_dead)
+	if (Player_is_dead || (Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING))	// jinx 01-25-13 spec
 		ailp->mode = AIM_THIEF_RETREAT;
 
 	switch (ailp->mode) {

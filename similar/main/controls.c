@@ -39,6 +39,8 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include "vclip.h"
 #include "fireball.h"
 
+#include "spec.h"
+
 //look at keyboard, mouse, joystick, CyberMan, whatever, and set 
 //physics vars rotvel, velocity
 
@@ -58,6 +60,8 @@ void read_flying_controls( object * obj )
 
 	Assert(FrameTime > 0); 		//Get MATT if hit this!
 
+	if (((obj->type!=OBJ_PLAYER) || (obj->id!=Player_num)) && (!(Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING))) return;	//references to player_ship require that this obj be the player		// jinx 02-01-13 spec
+	
 #if defined(DXX_BUILD_DESCENT_II)
 	if ((obj->type!=OBJ_PLAYER) || (obj->id!=Player_num)) return;	//references to player_ship require that this obj be the player
 
@@ -101,7 +105,7 @@ void read_flying_controls( object * obj )
 	forward_thrust_time = Controls.forward_thrust_time;
 
 #if defined(DXX_BUILD_DESCENT_II)
-	if (Players[Player_num].flags & PLAYER_FLAGS_AFTERBURNER)
+	if ((Players[Player_num].flags & PLAYER_FLAGS_AFTERBURNER) || (Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING))		// jinx 02-01-13 spec
 	{
 		if (Controls.afterburner_state) {			//player has key down
 			{
@@ -112,10 +116,13 @@ void read_flying_controls( object * obj )
 				afterburner_scale = f1_0 + min(f1_0/2,Afterburner_charge) * 2;
 	
 				forward_thrust_time = fixmul(FrameTime,afterburner_scale);	//based on full thrust
+				
+				if (Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING)	forward_thrust_time *= 1.3;	// jinx 01-25-13 spec
 	
 				old_count = (Afterburner_charge / (DROP_DELTA_TIME/AFTERBURNER_USE_SECS));
 
-				Afterburner_charge -= FrameTime/AFTERBURNER_USE_SECS;
+				if (!(Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING))		// jinx 01-25-13 spec
+					Afterburner_charge -= FrameTime/AFTERBURNER_USE_SECS;
 
 				if (Afterburner_charge < 0)
 					Afterburner_charge = 0;
@@ -139,7 +146,8 @@ void read_flying_controls( object * obj )
 	
 			Afterburner_charge += charge_up;
 	
-			Players[Player_num].energy -= charge_up * 100 / 10;	//full charge uses 10% of energy
+			if (!(Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING))		// jinx 01-25-13 spec
+				Players[Player_num].energy -= charge_up * 100 / 10;	//full charge uses 10% of energy
 		}
 	}
 #endif

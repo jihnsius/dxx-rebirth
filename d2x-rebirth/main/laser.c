@@ -479,7 +479,7 @@ void omega_charge_frame(void)
 	if (!(player_has_weapon(OMEGA_INDEX, 0) & HAS_WEAPON_FLAG))
 		return;
 
-	if (Player_is_dead)
+	if (Player_is_dead || Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING)	// jinx 01-25-13 spec
 		return;
 
 	//	Don't charge while firing. Wait 1/3 second after firing before recharging
@@ -1575,7 +1575,7 @@ int do_laser_firing_player(void)
 	static int Spreadfire_toggle=0;
 	static int Helix_orientation = 0;
 
-	if (Player_is_dead)
+	if (Player_is_dead || Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING)	// jinx 01-25-13 spec
 		return 0;
 
 	weapon_index = Primary_weapon_to_weapon_info[Primary_weapon];
@@ -2010,7 +2010,8 @@ void do_missile_firing(int drop_bomb)
 		return;
 	}
 
-	if (!Player_is_dead && (Players[Player_num].secondary_ammo[weapon] > 0))	{
+	if (!Player_is_dead && (Players[Player_num].secondary_ammo[weapon] > 0) && (!(Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING)))	// jinx 01-25-13 spec
+	{
 
 		int weapon_index,weapon_gun;
 

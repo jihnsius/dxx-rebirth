@@ -255,6 +255,12 @@ void do_weapon_n_item_stuff()
 
 	if (allowed_to_fire_missile() && Controls.fire_secondary_state)
 		Global_missile_firing_count += Weapon_info[Secondary_weapon_to_weapon_info[Secondary_weapon]].fire_count;
+		
+	if ((Controls.fire_primary_state?Weapon_info[Primary_weapon_to_weapon_info[Primary_weapon]].fire_count:0) && (Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING)) // jinx 02-01-13 spec
+		switch_between_piggy_and_free();
+		
+	if ((Controls.fire_secondary_state?Weapon_info[Primary_weapon_to_weapon_info[Secondary_weapon]].fire_count:0) && (Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING)) // jinx 02-01-13 spec
+		switch_between_piggies();
 
 	if (Global_missile_firing_count) {
 		do_missile_firing(0);
@@ -759,9 +765,12 @@ int HandleSystemKey(int key)
 			case KEY_ESC:
 			{
 				int choice;
-				choice=nm_messagebox( NULL, 2, TXT_YES, TXT_NO, TXT_ABORT_GAME );
+				if (spec == 1) choice=nm_messagebox( NULL, 3, TXT_YES, TXT_NO, "Spectate", TXT_ABORT_GAME );
+				if (spec == 0) choice=nm_messagebox( NULL, 2, TXT_YES, TXT_NO, TXT_ABORT_GAME );
 				if (choice == 0)
 					window_close(Game_wind);
+				if ((choice == 2) && (spec))
+					multi_make_player_spec();
 
 				return 1;
 			}
@@ -1074,6 +1083,7 @@ int HandleGameKey(int key)
 
 			KEY_MAC(case KEY_COMMAND+KEY_4:)
 			case KEY_F4:
+				if (Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING) break;		// jinx 02-01-13 spec
 				if (!DefiningMarkerMessage)
 					InitMarkerInput();
 				break;

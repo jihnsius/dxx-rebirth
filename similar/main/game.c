@@ -575,6 +575,9 @@ extern void multi_send_sound_function (char,char);
 
 void do_afterburner_stuff(void)
 {
+
+	if (Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING) return;		// jinx 02-01-13 spec
+	
 	static sbyte func_play = 0;
 
 	if (!(Players[Player_num].flags & PLAYER_FLAGS_AFTERBURNER))
@@ -748,7 +751,8 @@ extern void dead_player_frame(void);
 //	--------------------------------------------------------------------------------------------------
 int allowed_to_fire_laser(void)
 {
-	if (Player_is_dead) {
+	if ((Player_is_dead) || (Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING)) // jinx 01-25-13 spec
+	{
 		Global_missile_firing_count = 0;
 		return 0;
 	}
@@ -762,6 +766,8 @@ int allowed_to_fire_laser(void)
 
 int allowed_to_fire_flare(void)
 {
+	if (Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING) return 0;	// jinx 01-25-13 spec
+
 	if (Next_flare_fire_time > GameTime64)
 		return 0;
 
@@ -778,6 +784,7 @@ int allowed_to_fire_flare(void)
 
 int allowed_to_fire_missile(void)
 {
+	if (Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING) return 0;	// jinx 01-25-13 spec
 	//	Make sure enough time has elapsed to fire missile
 	if (Next_missile_fire_time > GameTime64)
 		return 0;
@@ -1275,6 +1282,9 @@ void GameProcessFrame(void)
 	int player_was_dead = Player_is_dead;
 
 	update_player_stats();
+	
+	do_spectator_frame();	// jinx 02-04-13
+	
 	diminish_palette_towards_normal();		//	Should leave palette effect up for as long as possible by putting right before render.
 	do_afterburner_stuff();
 	do_cloak_stuff();

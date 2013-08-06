@@ -373,6 +373,7 @@ void game_draw_hud_stuff()
 	}
 
 	render_countdown_gauge();
+	render_spec_status();	// jinx 02-01-13 spec
 
 	if (GameCfg.FPSIndicator && PlayerCfg.CockpitMode[1] != CM_REAR_VIEW)
 		show_framerate();
@@ -698,7 +699,7 @@ void toggle_cockpit()
 {
 	int new_mode=CM_FULL_SCREEN;
 
-	if (Rear_view || Player_is_dead)
+	if (Rear_view || Player_is_dead || Players[Player_num].spec_flags & PLAYER_FLAGS_SPECTATING)		// jinx 01-25-13 spec
 		return;
 
 	switch (PlayerCfg.CockpitMode[1])
